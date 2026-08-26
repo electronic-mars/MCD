@@ -42,9 +42,7 @@ public sealed partial class SettingsWindow : Window
     private readonly LhmProvider _lhm;
     private readonly Action _onExit;
     private readonly ObservableCollection<MonitorRow> _known = [];
-    private readonly ObservableCollection<WidgetCard> _start = [];
-    private readonly ObservableCollection<WidgetCard> _centre = [];
-    private readonly ObservableCollection<WidgetCard> _end = [];
+    private readonly ObservableCollection<WidgetCard> _cards = [];
 
     /// <summary>The dock being edited, by its monitor's stable id.</summary>
     private string? _editing;
@@ -63,7 +61,7 @@ public sealed partial class SettingsWindow : Window
     /// what the bar does are never allowed to differ. This is what makes that
     /// safe - a mistake is one keystroke back rather than a form to abandon.
     /// </remarks>
-    private readonly Stack<(string StableId, DockBands Before, string Label)> _undo = new();
+    private readonly Stack<(string StableId, ImmutableArray<WidgetConfig> Before, string Label)> _undo = new();
     private readonly ObservableCollection<IconRow> _icons = [];
     private readonly ObservableCollection<LauncherRow> _launcher = [];
     private readonly ObservableCollection<SensorRow> _readings = [];
@@ -96,15 +94,8 @@ public sealed partial class SettingsWindow : Window
 
         SizeAndCentre(screen: null);
 
-        StartList.ItemsSource = _start;
-        CenterList.ItemsSource = _centre;
-        EndList.ItemsSource = _end;
+        WidgetList.ItemsSource = _cards;
         MonitorList.ItemsSource = _known;
-
-        // A band's list is reordered by dragging inside it, which moves the item
-        // in the collection and nothing else. Watching the collection is how
-        // that reaches the settings, and it is the only place in-band reordering
-        // is written down.
         IconList.ItemsSource = _icons;
         LauncherList.ItemsSource = _launcher;
         SensorList.ItemsSource = _readings;
@@ -278,7 +269,7 @@ public sealed partial class SettingsWindow : Window
         _filling = true;
 
         DockDetail.Text = live is not null
-            ? $"{live.Width} × {live.Height} · {live.Dpi * 100 / 96}% · {live.Identity.GdiName}"
+            ? $"{live.Width} × {live.Height} · {live.Dpi * 100 / 96}%"
             : "not attached · its layout is kept and comes back with the screen";
 
         DockEnabled.IsOn = dock.Enabled;
@@ -294,14 +285,7 @@ public sealed partial class SettingsWindow : Window
         DockNote.Text = note;
         DockNote.Visibility = note.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 
-        bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
-        StartLabel.Text = horizontal ? "Start — the left end" : "Start — the top";
-        CenterLabel.Text = "Centre";
-        EndLabel.Text = horizontal ? "End — the right end" : "End — the bottom";
-
-        Fill(_start, dock.Bands.Start, Band.Start, StartEmpty);
-        Fill(_centre, dock.Bands.Center, Band.Center, CenterEmpty);
-        Fill(_end, dock.Bands.End, Band.End, EndEmpty);
+        Fill(dock.Widgets);
 
         ShowPreview(dock);
         ShowUndo();
@@ -318,9 +302,6 @@ public sealed partial class SettingsWindow : Window
         }
 
         _preview.Clear();
-        PreviewStart.Children.Clear();
-        PreviewCentre.Children.Clear();
-        PreviewEnd.Children.Clear();
 
         bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
         double thickness = DockMetrics.ThicknessDips(dock.Edge, dock.Density);
@@ -332,20 +313,18 @@ public sealed partial class SettingsWindow : Window
         Preview.Width = horizontal ? double.NaN : thickness;
         Preview.HorizontalAlignment = horizontal ? HorizontalAlignment.Stretch : HorizontalAlignment.Left;
 
-        DockLayout.Apply(dock.Edge, PreviewStart, PreviewCentre, PreviewEnd);
-
-        Draw(dock, dock.Bands.Start, PreviewStart);
-        Draw(dock, dock.Bands.Center, PreviewCentre);
-        Draw(dock, dock.Bands.End, PreviewEnd);
+        Draw(dock);
 
         PreviewEmpty.Visibility = _preview.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
         Tick();
     }
 
-    private void Draw(MonitorConfig dock, ImmutableArray<WidgetConfig> entries, Panel into)
+    private void Draw(MonitorConfig dock)
     {
-        foreach (WidgetConfig entry in entries)
+        var items = new List<(FrameworkElement Element, GridLength Length)>();
+
+        foreach (WidgetConfig entry in dock.Widgets)
         {
             if (Build(entry) is not { } widget)
             {
@@ -368,10 +347,20 @@ public sealed partial class SettingsWindow : Window
             widget.Density = dock.Density;
             widget.Attach();
 
+            if (widget is SpacerWidget spacer)
+            {
+                // In the picture the spacers are always shown: this is where a
+                // person finds out they exist and can be dragged about.
+                spacer.HintVisible = Visibility.Visible;
+            }
+
             var preview = new WidgetPreview(widget, template);
+            DockLayout.Dress(preview, dock.Edge, widget is SpacerWidget);
             _preview.Add(preview);
-            into.Children.Add(preview);
+            items.Add((preview, DockLayout.LengthOf(entry, widget)));
         }
+
+        DockLayout.Arrange(dock.Edge, PreviewStrip, items);
     }
 
     /// <summary>One round of updating whatever this window is showing.</summary>
@@ -397,18 +386,18 @@ public sealed partial class SettingsWindow : Window
 
     private void ShowUndo()
     {
-        UndoButton.Visibility = _undo.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+        // Enabled rather than shown: a control that appears only after the
+        // first mistake is invisible exactly while a person is working out
+        // what is safe to try.
+        UndoButton.IsEnabled = _undo.Count > 0;
 
-        if (_undo.Count > 0)
-        {
-            ToolTipService.SetToolTip(UndoButton, $"Undo: {_undo.Peek().Label}");
-        }
+        UndoButton.Content = _undo.Count > 0 ? $"Undo - {_undo.Peek().Label}" : "Undo";
     }
 
     /// <summary>Puts the last layout back.</summary>
     private void OnUndo(object sender, RoutedEventArgs e)
     {
-        if (!_undo.TryPop(out (string StableId, DockBands Before, string Label) step))
+        if (!_undo.TryPop(out (string StableId, ImmutableArray<WidgetConfig> Before, string Label) step))
         {
             return;
         }
@@ -421,7 +410,7 @@ public sealed partial class SettingsWindow : Window
                 Monitors =
                 [
                     .. current.Monitors.Select(
-                        c => c.StableId == step.StableId ? c with { Bands = step.Before } : c)
+                        c => c.StableId == step.StableId ? c with { Widgets = step.Before } : c)
                 ],
             },
             WriteReason.UserAction);
@@ -449,25 +438,21 @@ public sealed partial class SettingsWindow : Window
         return string.Empty;
     }
 
-    private void Fill(
-        ObservableCollection<WidgetCard> into,
-        ImmutableArray<WidgetConfig> entries,
-        Band band,
-        FrameworkElement empty)
+    private void Fill(ImmutableArray<WidgetConfig> entries)
     {
-        foreach (WidgetCard old in into)
+        foreach (WidgetCard old in _cards)
         {
             old.Dispose();
         }
 
-        into.Clear();
+        _cards.Clear();
 
         foreach (WidgetConfig entry in entries)
         {
-            into.Add(new WidgetCard(entry, band, Build, OnWidgetConfigured));
+            _cards.Add(new WidgetCard(entry, Build, OnWidgetConfigured));
         }
 
-        empty.Visibility = entries.IsEmpty ? Visibility.Visible : Visibility.Collapsed;
+        WidgetsEmpty.Visibility = entries.IsEmpty ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private WidgetViewModel? Build(WidgetConfig entry) => WidgetCatalog.Create(
@@ -551,7 +536,7 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Offers the widgets this build knows, minus any that would duplicate.</summary>
     private void OnAddWidget(object sender, RoutedEventArgs e)
     {
-        if (sender is not Button button || Which(button.Tag) is not { } band || Dock() is not { } dock)
+        if (sender is not Button button || Dock() is not { } dock)
         {
             return;
         }
@@ -563,7 +548,7 @@ public sealed partial class SettingsWindow : Window
         var list = new StackPanel { Spacing = 4, MinWidth = 320 };
         var flyout = new Flyout { Content = list, XamlRoot = Content.XamlRoot };
 
-        string[] already = [.. All(dock.Bands).Select(w => w.TypeId)];
+        string[] already = [.. dock.Widgets.Select(w => w.TypeId)];
 
         foreach (WidgetType type in WidgetCatalog.All)
         {
@@ -585,7 +570,7 @@ public sealed partial class SettingsWindow : Window
                 flyout.Hide();
                 Rearrange(
                     dock.StableId,
-                    bands => Put(bands, band, [.. In(bands, band), WidgetConfig.New(type.TypeId)]),
+                    widgets => [.. widgets, WidgetConfig.New(type.TypeId)],
                     $"added {type.TypeId}");
             };
 
@@ -658,14 +643,7 @@ public sealed partial class SettingsWindow : Window
         var menu = new MenuFlyout();
 
         Add("Move up", () => Shift(card, -1), Index(card) > 0);
-        Add("Move down", () => Shift(card, +1), Index(card) < In(dock.Bands, card.Band).Length - 1);
-        menu.Items.Add(new MenuFlyoutSeparator());
-
-        foreach (Band target in Enum.GetValues<Band>())
-        {
-            Add($"Move to {Name(target)}", () => MoveTo(card, target, at: -1), target != card.Band);
-        }
-
+        Add("Move down", () => Shift(card, +1), Index(card) < dock.Widgets.Length - 1);
         menu.Items.Add(new MenuFlyoutSeparator());
         Add("Remove", () => Remove(card), enabled: true);
 
@@ -690,10 +668,7 @@ public sealed partial class SettingsWindow : Window
 
         Rearrange(
             dock.StableId,
-            bands => Put(
-                bands,
-                card.Band,
-                [.. In(bands, card.Band).Select(w => w.InstanceId == card.Id ? updated : w)]),
+            widgets => [.. widgets.Select(w => w.InstanceId == card.Id ? updated : w)],
             $"configured {card.Entry.TypeId}",
             rebuild: false);
 
@@ -709,41 +684,17 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        List<WidgetConfig> band = [.. In(dock.Bands, card.Band)];
-        int at = band.FindIndex(w => w.InstanceId == card.Id);
+        List<WidgetConfig> run = [.. dock.Widgets];
+        int at = run.FindIndex(w => w.InstanceId == card.Id);
         int to = at + by;
 
-        if (at < 0 || to < 0 || to >= band.Count)
+        if (at < 0 || to < 0 || to >= run.Count)
         {
             return;
         }
 
-        (band[at], band[to]) = (band[to], band[at]);
-        Rearrange(dock.StableId, bands => Put(bands, card.Band, [.. band]), "moved");
-    }
-
-    private void MoveTo(WidgetCard card, Band target, int at)
-    {
-        if (Dock() is not { } dock)
-        {
-            return;
-        }
-
-        WidgetConfig entry = card.Entry;
-
-        Rearrange(
-            dock.StableId,
-            bands =>
-            {
-                DockBands without = Put(
-                    bands, card.Band, [.. In(bands, card.Band).Where(w => w.InstanceId != card.Id)]);
-
-                List<WidgetConfig> into = [.. In(without, target)];
-                into.Insert(at < 0 || at > into.Count ? into.Count : at, entry);
-
-                return Put(without, target, [.. into]);
-            },
-            $"moved to {target}");
+        (run[at], run[to]) = (run[to], run[at]);
+        Rearrange(dock.StableId, _ => [.. run], "moved");
     }
 
     private void Remove(WidgetCard card)
@@ -755,19 +706,22 @@ public sealed partial class SettingsWindow : Window
 
         Rearrange(
             dock.StableId,
-            bands => Put(bands, card.Band, [.. In(bands, card.Band).Where(w => w.InstanceId != card.Id)]),
+            widgets => [.. widgets.Where(w => w.InstanceId != card.Id)],
             $"removed {card.Entry.TypeId}");
     }
 
     /// <summary>The one place a dock's layout is written.</summary>
     private void Rearrange(
-        string stableId, Func<DockBands, DockBands> change, string what, bool rebuild = true)
+        string stableId,
+        Func<ImmutableArray<WidgetConfig>, ImmutableArray<WidgetConfig>> change,
+        string what,
+        bool rebuild = true)
     {
         SettingsModel current = _settings.Current;
 
         if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
         {
-            _undo.Push((stableId, before.Bands, what));
+            _undo.Push((stableId, before.Widgets, what));
 
             while (_undo.Count > 25)
             {
@@ -785,7 +739,7 @@ public sealed partial class SettingsWindow : Window
                 Monitors =
                 [
                     .. current.Monitors.Select(
-                        c => c.StableId == stableId ? c with { Bands = change(c.Bands) } : c)
+                        c => c.StableId == stableId ? c with { Widgets = change(c.Widgets) } : c)
                 ],
             },
             WriteReason.WidgetConfig);
@@ -826,38 +780,10 @@ public sealed partial class SettingsWindow : Window
         _settings.Current.Monitors.FirstOrDefault(m => m.StableId == _editing);
 
     private WidgetCard? Card(string id) =>
-        _start.Concat(_centre).Concat(_end).FirstOrDefault(c => c.Id == id);
+        _cards.FirstOrDefault(c => c.Id == id);
 
     private int Index(WidgetCard card) =>
-        In(Dock()?.Bands ?? new DockBands(), card.Band).ToList().FindIndex(w => w.InstanceId == card.Id);
-
-    private static Band? Which(object? tag) =>
-        Enum.TryParse(tag as string, out Band band) ? band : null;
-
-    private static string Name(Band band) => band switch
-    {
-        Band.Start => "the start",
-        Band.Center => "the centre",
-        _ => "the end",
-    };
-
-    private static ImmutableArray<WidgetConfig> In(DockBands bands, Band which) => which switch
-    {
-        Band.Start => bands.Start,
-        Band.Center => bands.Center,
-        _ => bands.End,
-    };
-
-    private static DockBands Put(DockBands bands, Band which, ImmutableArray<WidgetConfig> items) =>
-        which switch
-        {
-            Band.Start => bands with { Start = items },
-            Band.Center => bands with { Center = items },
-            _ => bands with { End = items },
-        };
-
-    private static IEnumerable<WidgetConfig> All(DockBands bands) =>
-        bands.Start.Concat(bands.Center).Concat(bands.End);
+        (Dock()?.Widgets ?? []).ToList().FindIndex(w => w.InstanceId == card.Id);
 
     private void OnRowEdited(MonitorRow row)
     {

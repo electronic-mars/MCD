@@ -69,6 +69,7 @@
                         MinWidth="{x:Bind ValueWidth, Mode=OneWay}"
                         MaxWidth="{x:Bind ValueWidth, Mode=OneWay}"
                         FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
                         Foreground="{x:Bind Colour, Mode=OneWay}"
                         Text="{x:Bind Text, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis" />
@@ -78,6 +79,7 @@
                          neighbours. -->
                     <TextBlock
                         MaxWidth="100"
+                        Margin="0,-2,0,0"
                         FontSize="{x:Bind LabelFontSize, Mode=OneWay}"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         Text="{x:Bind Label}"
@@ -128,6 +130,32 @@
         <Setter Property="CornerRadius" Value="4" />
     </Style>
 
+    <!-- A stretch of empty bar. Invisible at rest; while a widget is being
+         dragged it shows itself so it can be grabbed too. -->
+    <DataTemplate x:Key="mcd.spacer" x:DataType="widgets:SpacerWidget">
+        <Border
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="Transparent">
+            <Border
+                MinWidth="8"
+                MinHeight="8"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                CornerRadius="4"
+                Visibility="{x:Bind HintVisible, Mode=OneWay}">
+                <FontIcon
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    Glyph="&#xE76F;" />
+            </Border>
+        </Border>
+    </DataTemplate>
+
     <!-- Whatever is playing. The three buttons a media key would press, and on
          the full-size bar the name of the track under them. -->
     <DataTemplate x:Key="mcd.media" x:DataType="widgets:MediaWidget">
@@ -135,7 +163,7 @@
             Margin="{x:Bind Spacing, Mode=OneWay}"
             Orientation="{x:Bind Orientation}"
             Visibility="{x:Bind Visible, Mode=OneWay}">
-            <StackPanel Orientation="Horizontal" Spacing="2">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="0">
                 <Button
                     Command="{x:Bind PreviousCommand}"
                     Style="{StaticResource BarButton}"
@@ -156,7 +184,7 @@
                 <Button
                     Command="{x:Bind PlayPauseCommand}"
                     Style="{StaticResource BarButton}"
-                    ToolTipService.ToolTip="Play or pause">
+                    ToolTipService.ToolTip="{x:Bind PlayTip, Mode=OneWay}">
                     <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
                         <Canvas Width="24" Height="24">
                             <Path
@@ -191,6 +219,7 @@
             <TextBlock
                 MaxWidth="160"
                 Margin="4,0,0,0"
+                VerticalAlignment="Center"
                 FontSize="{x:Bind FontSize, Mode=OneWay}"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 Text="{x:Bind Title, Mode=OneWay}"

@@ -65,7 +65,7 @@ public sealed class LauncherWidget(WidgetContext context, WidgetConfig entry)
     }
 
     private Thickness Gap() =>
-        Orientation == Orientation.Vertical ? new Thickness(0, 0, 0, 2) : new Thickness(0, 0, 2, 0);
+        Orientation == Orientation.Vertical ? new Thickness(0, 1, 0, 1) : new Thickness(1, 0, 1, 0);
 }
 
 /// <summary>One pinned thing: its picture, its name, and what starting it does.</summary>

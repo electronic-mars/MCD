@@ -26,25 +26,12 @@
                 BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}"
                 BorderThickness="0,1,0,0" />
 
-            <StackPanel
-                x:Name="StartBand"
-                Margin="10,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Orientation="Horizontal" />
+            <!-- One track per widget; spacers take the free length. -->
+            <Grid x:Name="Strip" />
 
-            <StackPanel
-                x:Name="CenterBand"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Horizontal" />
-
-            <StackPanel
-                x:Name="EndBand"
-                Margin="10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal" />
+            <!-- Where the drop marker is drawn, above everything and taking no
+                 clicks of its own. -->
+            <Canvas x:Name="Overlay" IsHitTestVisible="False" />
         </Grid>
     </Grid>
 </Window>

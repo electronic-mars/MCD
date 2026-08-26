@@ -33,7 +33,7 @@ public sealed class MonitorReconcilerTests
         result.Plans.Length.ShouldBe(3);
         result.Registry.Length.ShouldBe(3);
         result.Plans.ShouldAllBe(p => p.Config.Enabled);
-        result.Registry.ShouldAllBe(c => !c.Bands.IsEmpty);
+        result.Registry.ShouldAllBe(c => !c.Widgets.IsEmpty);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public sealed class MonitorReconcilerTests
         {
             Edge = AppBarEdge.Top,
             Density = DockDensity.Compact,
-            Bands = new DockBands { End = [WidgetConfig.New("mcd.load"), WidgetConfig.New("mcd.temperature")] },
+            Widgets = [WidgetConfig.New("mcd.load"), WidgetConfig.New("mcd.temperature")],
         };
 
         ReconcileResult result = MonitorReconciler.Reconcile(
@@ -55,11 +55,11 @@ public sealed class MonitorReconcilerTests
 
         added.Edge.ShouldBe(AppBarEdge.Top);
         added.Density.ShouldBe(DockDensity.Compact);
-        added.Bands.End.Select(w => w.TypeId).ShouldBe(["mcd.load", "mcd.temperature"]);
+        added.Widgets.Select(w => w.TypeId).ShouldBe(["mcd.load", "mcd.temperature"]);
 
         // Same widgets, different instances: two docks must not share per-instance state.
-        added.Bands.End.Select(w => w.InstanceId)
-            .ShouldNotBe(primary.Bands.End.Select(w => w.InstanceId));
+        added.Widgets.Select(w => w.InstanceId)
+            .ShouldNotBe(primary.Widgets.Select(w => w.InstanceId));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public sealed class MonitorReconcilerTests
         // PowerToys prunes at 180 days. A laptop away from its dock for a summer
         // would come back to a blank second screen.
         kept.LastSeenUtc.ShouldBe(seenBefore);
-        kept.Bands.IsEmpty.ShouldBeFalse();
+        kept.Widgets.IsEmpty.ShouldBeFalse();
     }
 
     [Fact]
@@ -208,12 +208,12 @@ public sealed class MonitorReconcilerTests
     {
         // Config files get edited by hand, and older versions of this program may
         // yet write something we would now reject.
-        MonitorConfig broken = Saved(Topology.Laptop()) with { Bands = new DockBands() };
+        MonitorConfig broken = Saved(Topology.Laptop()) with { Widgets = [] };
 
         ReconcileResult result = MonitorReconciler.Reconcile(
             Topology.Snapshot(Topology.Laptop()), [broken], Now);
 
-        result.Plans.Single().Config.Bands.IsEmpty.ShouldBeFalse();
+        result.Plans.Single().Config.Widgets.IsEmpty.ShouldBeFalse();
     }
 
     [Theory]
@@ -227,7 +227,7 @@ public sealed class MonitorReconcilerTests
 
         foreach (DockPlan plan in result.Plans)
         {
-            plan.Config.Bands.IsEmpty.ShouldBeFalse(
+            plan.Config.Widgets.IsEmpty.ShouldBeFalse(
                 $"{plan.Monitor.Identity.FriendlyName} came out with an empty dock");
         }
 
@@ -260,7 +260,7 @@ public sealed class MonitorReconcilerTests
             { [laptop, left, right], all },
             { [Topology.Left(primary: true)], all },
             { [laptop, right], [Saved(laptop)] },
-            { [laptop, left, right], [Saved(laptop) with { Bands = new DockBands() }] },
+            { [laptop, left, right], [Saved(laptop) with { Widgets = [] }] },
         };
     }
 
@@ -272,6 +272,6 @@ public sealed class MonitorReconcilerTests
         FriendlyName = monitor.Identity.FriendlyName,
         ShapeHint = monitor.ShapeKey,
         LastSeenUtc = Now.AddMinutes(-1),
-        Bands = DockBands.Default,
+        Widgets = DockContents.Default,
     };
 }

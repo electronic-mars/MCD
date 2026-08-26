@@ -36,7 +36,7 @@ public sealed partial class HoverChip : ContentControl
         // the pointer would pass straight through to the bar behind it.
         Background = _fill;
         CornerRadius = new CornerRadius(DockMetrics.ItemCornerRadius);
-        Padding = new Thickness(6, 2, 6, 2);
+        Padding = new Thickness(4, 2, 4, 2);
         IsTabStop = false;
         VerticalContentAlignment = VerticalAlignment.Center;
         HorizontalContentAlignment = HorizontalAlignment.Center;

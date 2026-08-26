@@ -38,7 +38,7 @@ public static class DockMetrics
     /// read across a room rather than a label beside an icon.
     /// </remarks>
     public static double ReadingIcon(DockDensity density) =>
-        density == DockDensity.Compact ? 17 : 20;
+        density == DockDensity.Compact ? 18 : 22;
 
     public static double ReadingFont(DockDensity density) =>
         density == DockDensity.Compact ? 13 : 14;

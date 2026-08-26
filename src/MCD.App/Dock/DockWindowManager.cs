@@ -165,8 +165,8 @@ public sealed class DockWindowManager : IDisposable
         }
     }
 
-    /// <summary>Records an arrangement a person made by dragging widgets on the bar.</summary>
-    private void Save(string stableId, DockBands bands)
+    /// <summary>Records an arrangement a person made on the bar itself.</summary>
+    private void Save(string stableId, ImmutableArray<WidgetConfig> widgets)
     {
         SettingsModel current = _settings.Current;
 
@@ -176,7 +176,7 @@ public sealed class DockWindowManager : IDisposable
                 Monitors =
                 [
                     .. current.Monitors.Select(
-                        c => c.StableId == stableId ? c with { Bands = bands } : c)
+                        c => c.StableId == stableId ? c with { Widgets = widgets } : c)
                 ],
             },
             WriteReason.WidgetConfig);
@@ -233,7 +233,7 @@ public sealed class DockWindowManager : IDisposable
             // A bar that has been rearranged by hand says so; writing it down
             // happens here, where the one writer of settings lives.
             string stableId = plan.Config.StableId;
-            window.Rearranged += (_, bands) => Save(stableId, bands);
+            window.Rearranged += (_, widgets) => Save(stableId, widgets);
             _windows[id] = window;
             window.Activate();
         }

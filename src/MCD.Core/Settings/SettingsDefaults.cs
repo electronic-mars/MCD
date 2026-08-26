@@ -10,7 +10,7 @@ namespace Mcd.Core.Settings;
 /// </remarks>
 public static class SettingsDefaults
 {
-    public const int SchemaVersion = 3;
+    public const int SchemaVersion = 4;
 
     public static SettingsModel Model => new();
 }

@@ -30,6 +30,8 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         Content = widget;
         ContentTemplate = template;
         VerticalAlignment = VerticalAlignment.Center;
+        HorizontalContentAlignment = HorizontalAlignment.Stretch;
+        VerticalContentAlignment = VerticalAlignment.Stretch;
         IsTabStop = false;
 
         // A control with no Background takes part in no hit testing at all, so
@@ -42,6 +44,9 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
 
     /// <summary>The settings entry this was built from, so the bar can rearrange itself.</summary>
     public WidgetConfig Entry => _widget.Entry;
+
+    /// <summary>The view model inside, for whoever arranged the bar.</summary>
+    public WidgetViewModel Widget => _widget;
 
     public void Tick(SensorSnapshot snapshot)
     {

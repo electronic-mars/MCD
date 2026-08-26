@@ -141,7 +141,7 @@ public sealed class LoadWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>
-        orientation == Orientation.Vertical ? new Thickness(0, 0, 0, 4) : new Thickness(0, 0, 4, 0);
+        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(2, 0, 2, 0);
 
     private sealed record Reading(string Id, string Icon, string Label, string Unit, SensorKey Key);
 }

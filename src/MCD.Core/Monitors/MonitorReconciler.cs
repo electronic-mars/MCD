@@ -83,7 +83,7 @@ public static class MonitorReconciler
         MonitorInfo primary = snapshot.Monitors.First(m => m.IsPrimary);
         MonitorConfig template = matches.TryGetValue(primary.StableId, out MonitorConfig? existing)
             ? existing
-            : new MonitorConfig { Bands = DockBands.Default };
+            : new MonitorConfig();
 
         foreach (MonitorInfo monitor in pending)
         {
@@ -215,12 +215,7 @@ public static class MonitorReconciler
         Edge = template.Edge,
         Mode = template.Mode,
         Density = template.Density,
-        Bands = new DockBands
-        {
-            Start = [.. template.Bands.Start.Select(w => w.AsNewInstance())],
-            Center = [.. template.Bands.Center.Select(w => w.AsNewInstance())],
-            End = [.. template.Bands.End.Select(w => w.AsNewInstance())],
-        },
+        Widgets = [.. template.Widgets.Select(w => w.AsNewInstance())],
     };
 
     private static ReconcileResult Assemble(
@@ -324,7 +319,7 @@ public static class MonitorReconciler
 
             // The invariant this whole class exists to hold: a dock that is on
             // always has something to show.
-            Bands = config.Bands.IsEmpty ? DockBands.Default : config.Bands,
+            Widgets = config.Widgets.IsEmpty ? DockContents.Default : config.Widgets,
         };
     }
 }

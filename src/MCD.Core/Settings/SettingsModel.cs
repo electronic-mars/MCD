@@ -127,10 +127,24 @@ public sealed record MonitorConfig
 
     public DockDensity Density { get; init; } = DockDensity.Default;
 
-    public DockBands Bands { get; init; } = DockBands.Default;
+    /// <summary>
+    /// Everything on the bar, in display order. Spacers are widgets too.
+    /// </summary>
+    /// <remarks>
+    /// One flat run rather than three regions. Where things sit is decided by
+    /// spacer widgets that stretch to take the free length, so any arrangement
+    /// the regions could express is a particular ordering of this list - and a
+    /// person dragging a widget along the bar is never told "not there".
+    /// </remarks>
+    public ImmutableArray<WidgetConfig> Widgets { get; init; } = DockContents.Default;
+
+    /// <summary>The three regions files before schema 4 were arranged in. Read
+    /// by the migration and never written back.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public DockBands? Bands { get; init; }
 }
 
-/// <summary>The three regions of a dock, in display order.</summary>
+/// <summary>The regions of a dock as they were before schema 4.</summary>
 public sealed record DockBands
 {
     public ImmutableArray<WidgetConfig> Start { get; init; } = [];
@@ -138,18 +152,25 @@ public sealed record DockBands
     public ImmutableArray<WidgetConfig> Center { get; init; } = [];
 
     public ImmutableArray<WidgetConfig> End { get; init; } = [];
+}
 
-    [JsonIgnore]
-    public bool IsEmpty => Start.IsEmpty && Center.IsEmpty && End.IsEmpty;
-
-    [JsonIgnore]
-    public int Count => Start.Length + Center.Length + End.Length;
-
-    public static DockBands Default => new()
-    {
-        Start = [WidgetConfig.New("mcd.launcher")],
-        End = [WidgetConfig.New("mcd.load"), WidgetConfig.New("mcd.temperature")],
-    };
+/// <summary>What a dock holds before anyone has arranged it.</summary>
+public static class DockContents
+{
+    /// <summary>
+    /// Launcher at the start, media transport in the middle, readings at the
+    /// end. The media widget keeps itself off the bar while nothing is playing,
+    /// and the two spacers simply meet where it was.
+    /// </summary>
+    public static ImmutableArray<WidgetConfig> Default =>
+    [
+        WidgetConfig.New("mcd.launcher"),
+        WidgetConfig.Spacer(),
+        WidgetConfig.New("mcd.media"),
+        WidgetConfig.Spacer(),
+        WidgetConfig.New("mcd.load"),
+        WidgetConfig.New("mcd.temperature"),
+    ];
 }
 
 public sealed record WidgetConfig
@@ -166,6 +187,9 @@ public sealed record WidgetConfig
         InstanceId = Guid.NewGuid().ToString("n"),
         TypeId = typeId,
     };
+
+    /// <summary>A stretch of empty bar that takes up the free length.</summary>
+    public static WidgetConfig Spacer() => New("mcd.spacer");
 
     /// <summary>The same widget, configured the same way, as a separate instance.</summary>
     public WidgetConfig AsNewInstance() => this with { InstanceId = Guid.NewGuid().ToString("n") };

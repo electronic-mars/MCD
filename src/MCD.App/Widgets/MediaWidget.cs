@@ -41,6 +41,14 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
     public override string TypeId => Type;
 
+    /// <summary>Whether the name of the track is written on the bar itself.</summary>
+    /// <remarks>
+    /// Off unless asked for. The name is always in the tooltip, and a bar is
+    /// glanced at, not read - a scrolling track title next to three buttons
+    /// makes the whole cluster look busier than anything else on it.
+    /// </remarks>
+    private bool ShowTitle => WidgetOptions.Text(Options, "title") == "shown";
+
     /// <summary>Hidden until something is playing.</summary>
     [ObservableProperty]
     public partial Visibility Visible { get; set; } = Visibility.Collapsed;
@@ -60,6 +68,11 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     public string PreviousIcon => "Previous";
 
     public string NextIcon => "Next";
+
+    /// <summary>What the middle button's tooltip says: the track, when one is known.</summary>
+    public string PlayTip => Title.Length > 0 ? Title : "Play or pause";
+
+    partial void OnTitleChanged(string value) => OnPropertyChanged(nameof(PlayTip));
 
     /// <summary>"Play" or "Pause", by what the buttons would do next.</summary>
     [ObservableProperty]
@@ -82,7 +95,9 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         IconSize = DockMetrics.ReadingIcon(Density);
         FontSize = 10;
         Spacing = LoadWidget.Gap(Orientation);
-        TitleVisible = Density == DockDensity.Default ? Visibility.Visible : Visibility.Collapsed;
+        TitleVisible = ShowTitle && Density == DockDensity.Default
+            ? Visibility.Visible
+            : Visibility.Collapsed;
 
         Listen();
     }
@@ -92,7 +107,25 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     {
     }
 
-    public override string Summarise() => "Whatever is playing, with its buttons";
+    public override string Summarise() => ShowTitle
+        ? "Buttons, with the track written next to them"
+        : "Buttons; the track is in their tooltip";
+
+    public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
+    {
+        var title = new ToggleSwitch
+        {
+            Header = "Write the track on the bar",
+            OnContent = "Written next to the buttons",
+            OffContent = "Only in the tooltip",
+            IsOn = ShowTitle,
+        };
+
+        title.Toggled += (_, _) =>
+            changed(WidgetOptions.Merge(Options, ("title", title.IsOn ? "shown" : null)));
+
+        return title;
+    }
 
     public override void Dispose()
     {

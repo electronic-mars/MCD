@@ -62,6 +62,7 @@ ICONS: dict[str, str] = {
     "Pause": "pause",
     "Next": "next",
     "Music": "music-note-01",
+    "Spacer": "arrow-horizontal",
     "ArrowDown": "arrow-down-01",
     "Folder": "folder-01",
     "Rocket": "rocket-01",

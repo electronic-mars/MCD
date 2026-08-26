@@ -26,6 +26,7 @@ public static class SettingsMigrations
             {
                 1 => ToTwo(current),
                 2 => ToThree(current),
+                3 => ToFour(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -58,6 +59,51 @@ public static class SettingsMigrations
         Monitors = [.. model.Monitors.Select(WithLauncher)],
     };
 
+    /// <summary>
+    /// Version 4 flattens the three regions into one run of widgets, with
+    /// spacers standing where the free stretches of bar used to be.
+    /// </summary>
+    /// <remarks>
+    /// The spacers are placed so the bar looks exactly as it did: one before
+    /// the centre group keeps it centred, one before the end group pushes it to
+    /// the far end, and a centre group with nothing after it gets a trailing
+    /// spacer so it stays in the middle rather than sliding to the end.
+    /// </remarks>
+    private static SettingsModel ToFour(SettingsModel model) => model with
+    {
+        SchemaVersion = 4,
+        Monitors = [.. model.Monitors.Select(Flatten)],
+    };
+
+    private static MonitorConfig Flatten(MonitorConfig monitor)
+    {
+        if (monitor.Bands is not { } bands)
+        {
+            // A fresh entry, already living on the defaults.
+            return monitor;
+        }
+
+        List<WidgetConfig> flat = [.. bands.Start];
+
+        if (!bands.Center.IsEmpty)
+        {
+            flat.Add(WidgetConfig.Spacer());
+            flat.AddRange(bands.Center);
+        }
+
+        if (!bands.End.IsEmpty)
+        {
+            flat.Add(WidgetConfig.Spacer());
+            flat.AddRange(bands.End);
+        }
+        else if (!bands.Center.IsEmpty)
+        {
+            flat.Add(WidgetConfig.Spacer());
+        }
+
+        return monitor with { Widgets = [.. flat], Bands = null };
+    }
+
     private static MonitorConfig WithTemperature(MonitorConfig monitor) =>
         Add(monitor, "mcd.temperature", atStart: false);
 
@@ -67,12 +113,12 @@ public static class SettingsMigrations
     /// <summary>The dock with one more widget, unless it already had one.</summary>
     private static MonitorConfig Add(MonitorConfig monitor, string typeId, bool atStart)
     {
-        if (All(monitor.Bands).Any(w => w.TypeId == typeId))
+        DockBands bands = monitor.Bands ?? new DockBands();
+
+        if (All(bands).Any(w => w.TypeId == typeId))
         {
             return monitor;
         }
-
-        DockBands bands = monitor.Bands;
 
         return monitor with
         {

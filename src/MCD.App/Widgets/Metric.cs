@@ -2,7 +2,6 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
-using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 
@@ -95,6 +94,18 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial Brush Colour { get; set; } = Neutral;
 
+    /// <summary>
+    /// SemiBold while the reading is past its critical point.
+    /// </summary>
+    /// <remarks>
+    /// The shape cue behind the colour cue: on a busy wallpaper behind thin
+    /// acrylic a red can lose a point or two of contrast, and for some eyes
+    /// the amber-to-red step barely exists. Critical speaks; warning whispers.
+    /// </remarks>
+    [ObservableProperty]
+    public partial Windows.UI.Text.FontWeight ValueWeight { get; set; } =
+        Microsoft.UI.Text.FontWeights.Normal;
+
     [ObservableProperty]
     public partial Visibility Visibility { get; set; } = Visibility.Collapsed;
 
@@ -150,7 +161,7 @@ public sealed partial class Metric : ObservableObject
     /// where readings sit above one another.
     /// </remarks>
     [ObservableProperty]
-    public partial Thickness Spacing { get; set; } = new(0, 0, 10, 0);
+    public partial Thickness Spacing { get; set; } = new(2, 0, 2, 0);
 
     /// <summary>
     /// Sizes this reading for the bar it is going on.
@@ -180,7 +191,7 @@ public sealed partial class Metric : ObservableObject
     /// <summary>How many characters the largest sensible value takes.</summary>
     private int Widest() => Unit switch
     {
-        "B/s" => Narrow ? 6 : 10,   // "12.4M" against "999.9 MB/s"
+        "B/s" => Narrow ? 6 : 9,    // "12.4M" against "99.9 MB/s"
         "°C" => 6,                  // "100 °C"
         "MHz" => 8,                 // "5900 MHz"
         _ => 5,                     // "100 %"
@@ -220,6 +231,9 @@ public sealed partial class Metric : ObservableObject
 
         Text = reading.HasValue ? Format(reading.Value) : "--";
         Colour = Paint(reading);
+        ValueWeight = _level == Level.Critical
+            ? Microsoft.UI.Text.FontWeights.SemiBold
+            : Microsoft.UI.Text.FontWeights.Normal;
     }
 
     private string Format(double value) => Unit switch
@@ -288,9 +302,15 @@ public sealed partial class Metric : ObservableObject
     private static Brush Dimmed =>
         (Brush)Application.Current.Resources["TextFillColorTertiaryBrush"];
 
-    private static Brush Warm { get; } = new SolidColorBrush(Colors.Goldenrod);
+    /// <summary>
+    /// Fluent's own caution and critical colours, which follow the theme:
+    /// deep amber and a firm red on a light bar, brighter ones on a dark bar.
+    /// </summary>
+    private static Brush Warm =>
+        (Brush)Application.Current.Resources["SystemFillColorCautionBrush"];
 
-    private static Brush Hot { get; } = new SolidColorBrush(Colors.Tomato);
+    private static Brush Hot =>
+        (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"];
 
     private enum Level
     {

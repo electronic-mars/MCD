@@ -1,6 +1,5 @@
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Mcd.App.Dock;
 using Mcd.App.Widgets;
 using Mcd.Core.Settings;
 using Microsoft.UI.Xaml;
@@ -26,12 +25,10 @@ public sealed partial class WidgetCard : ObservableObject, IDisposable
 
     public WidgetCard(
         WidgetConfig entry,
-        Band band,
         Func<WidgetConfig, WidgetViewModel?> build,
         Action<WidgetCard, JsonElement?> changed)
     {
         Entry = entry;
-        Band = band;
         _build = build;
         _changed = changed;
 
@@ -49,8 +46,6 @@ public sealed partial class WidgetCard : ObservableObject, IDisposable
     public WidgetConfig Entry { get; }
 
     public string Id => Entry.InstanceId;
-
-    public Band Band { get; }
 
     public string Name { get; }
 

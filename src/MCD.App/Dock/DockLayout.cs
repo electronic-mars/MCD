@@ -1,26 +1,21 @@
+using Mcd.App.Widgets;
+using Mcd.Core.Settings;
 using Mcd.Interop.AppBar;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Mcd.App.Dock;
 
-/// <summary>Which of a bar's three regions something sits in.</summary>
-public enum Band
-{
-    Start,
-    Center,
-    End,
-}
-
 /// <summary>
-/// Turns the three regions of a bar to match the edge it sits on.
+/// Lays one run of widgets along a bar.
 /// </summary>
 /// <remarks>
 /// <para>
-/// On a bar down the side of a screen "start" means the top and "end" the
-/// bottom, and the widgets inside run downwards. Left horizontal, everything
-/// after the first reading lands past the right-hand edge of an 86-point-wide
-/// window, where it is simply not drawn.
+/// A grid with one track per widget: widgets take the length they need, and
+/// spacers take a share of whatever is left. That is the whole placement model
+/// - no regions, no coordinates, just the order of the run and where the
+/// stretchy parts sit in it. When something on the bar hides itself, its track
+/// collapses and the spacers absorb the difference; nothing else moves.
 /// </para>
 /// <para>
 /// Shared by the real bar and by the picture of it in the settings, so that the
@@ -30,34 +25,68 @@ public enum Band
 /// </remarks>
 public static class DockLayout
 {
-    public static void Apply(AppBarEdge edge, Panel start, Panel centre, Panel end)
+    /// <summary>The bar's own inset at each end, as PowerToys sets it.</summary>
+    private const double EndInset = 4;
+
+    /// <summary>How much of the bar's length one entry takes.</summary>
+    public static GridLength LengthOf(WidgetConfig entry, WidgetViewModel widget) =>
+        widget is SpacerWidget spacer ? spacer.Length : GridLength.Auto;
+
+    /// <summary>Puts the elements into the strip, one track each.</summary>
+    public static void Arrange(
+        AppBarEdge edge,
+        Grid strip,
+        IReadOnlyList<(FrameworkElement Element, GridLength Length)> items)
     {
         bool horizontal = DockMetrics.IsHorizontal(edge);
-        Orientation flow = horizontal ? Orientation.Horizontal : Orientation.Vertical;
-        Thickness inset = horizontal ? new Thickness(10, 0, 10, 0) : new Thickness(0, 10, 0, 10);
 
-        Turn(start, flow);
-        Turn(centre, flow);
-        Turn(end, flow);
+        strip.Children.Clear();
+        strip.ColumnDefinitions.Clear();
+        strip.RowDefinitions.Clear();
 
-        start.Margin = inset;
-        end.Margin = inset;
+        strip.Margin = horizontal
+            ? new Thickness(EndInset, 0, EndInset, 0)
+            : new Thickness(0, EndInset, 0, EndInset);
 
-        start.HorizontalAlignment = horizontal ? HorizontalAlignment.Left : HorizontalAlignment.Center;
-        start.VerticalAlignment = horizontal ? VerticalAlignment.Center : VerticalAlignment.Top;
+        for (int i = 0; i < items.Count; i++)
+        {
+            (FrameworkElement element, GridLength length) = items[i];
 
-        centre.HorizontalAlignment = HorizontalAlignment.Center;
-        centre.VerticalAlignment = VerticalAlignment.Center;
+            if (horizontal)
+            {
+                strip.ColumnDefinitions.Add(new ColumnDefinition { Width = length });
+                Grid.SetColumn(element, i);
+            }
+            else
+            {
+                strip.RowDefinitions.Add(new RowDefinition { Height = length });
+                Grid.SetRow(element, i);
+            }
 
-        end.HorizontalAlignment = horizontal ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-        end.VerticalAlignment = horizontal ? VerticalAlignment.Center : VerticalAlignment.Bottom;
+            strip.Children.Add(element);
+        }
     }
 
-    private static void Turn(Panel panel, Orientation flow)
+    /// <summary>How a widget sits across the bar, and apart from its neighbours.</summary>
+    public static void Dress(FrameworkElement host, AppBarEdge edge, bool spacer)
     {
-        if (panel is StackPanel stack)
+        bool horizontal = DockMetrics.IsHorizontal(edge);
+
+        if (spacer)
         {
-            stack.Orientation = flow;
+            // A spacer fills its whole track, or there would be nothing to
+            // stretch and nothing to grab during a drag.
+            host.Margin = new Thickness(0);
+            host.HorizontalAlignment = HorizontalAlignment.Stretch;
+            host.VerticalAlignment = VerticalAlignment.Stretch;
+            return;
         }
+
+        // 2 a side here and 2 a side on each reading: widgets sit 8 apart while
+        // their own readings sit 4 apart, which is what makes them read as
+        // groups. The margin vanishes with a hidden widget, so no holes.
+        host.Margin = horizontal ? new Thickness(2, 0, 2, 0) : new Thickness(0, 2, 0, 2);
+        host.HorizontalAlignment = HorizontalAlignment.Center;
+        host.VerticalAlignment = VerticalAlignment.Center;
     }
 }

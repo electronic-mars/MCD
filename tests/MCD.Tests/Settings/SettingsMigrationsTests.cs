@@ -30,9 +30,9 @@ public sealed class SettingsMigrationsTests
         // migration, everyone who ran the previous version would have to delete
         // their settings - and their monitor layout with them - to get the
         // feature the release is about.
-        migrated.Monitors.Single().Bands.End
+        migrated.Monitors.Single().Widgets
             .Select(w => w.TypeId)
-            .ShouldBe(["mcd.load", "mcd.temperature"]);
+            .ShouldBe(["mcd.launcher", "mcd.spacer", "mcd.load", "mcd.temperature"]);
     }
 
     [Fact]
@@ -52,11 +52,11 @@ public sealed class SettingsMigrationsTests
         };
 
         SettingsModel migrated = SettingsMigrations.Apply(already, NullLogger.Instance);
-        DockBands bands = migrated.Monitors.Single().Bands;
 
-        // Someone who moved the widget to another band, or who ran a build that
+        // Someone who moved the widget elsewhere, or who ran a build that
         // already added it, must not end up with two of them.
-        All(bands).Count(t => t == "mcd.temperature").ShouldBe(1);
+        migrated.Monitors.Single().Widgets
+            .Count(w => w.TypeId == "mcd.temperature").ShouldBe(1);
     }
 
     [Fact]
@@ -76,10 +76,10 @@ public sealed class SettingsMigrationsTests
         };
 
         SettingsModel migrated = SettingsMigrations.Apply(old, NullLogger.Instance);
-        DockBands bands = migrated.Monitors.Single().Bands;
 
-        bands.Start.Select(w => w.TypeId).ShouldBe(["mcd.launcher"]);
-        bands.End.Select(w => w.TypeId).ShouldBe(["mcd.load"]);
+        migrated.Monitors.Single().Widgets
+            .Select(w => w.TypeId)
+            .ShouldBe(["mcd.launcher", "mcd.spacer", "mcd.load"]);
     }
 
     [Fact]
@@ -93,13 +93,64 @@ public sealed class SettingsMigrationsTests
             Monitors = [new MonitorConfig { StableId = "abc", Bands = new DockBands() }],
         };
 
-        DockBands bands = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single().Bands;
+        SettingsModel migrated = SettingsMigrations.Apply(old, NullLogger.Instance);
 
-        All(bands).ShouldBe(["mcd.launcher", "mcd.temperature"], ignoreOrder: true);
+        migrated.Monitors.Single().Widgets
+            .Select(w => w.TypeId)
+            .Where(t => t != "mcd.spacer")
+            .ShouldBe(["mcd.launcher", "mcd.temperature"], ignoreOrder: true);
     }
 
-    private static IEnumerable<string> All(DockBands bands) =>
-        bands.Start.Concat(bands.Center).Concat(bands.End).Select(w => w.TypeId);
+    [Fact]
+    public void FlatteningKeepsTheOldAlignment()
+    {
+        // Start stays at the start, a spacer before the centre keeps it centred,
+        // a spacer before the end pushes it to the far end.
+        var old = new SettingsModel
+        {
+            SchemaVersion = 3,
+            Monitors =
+            [
+                new MonitorConfig
+                {
+                    StableId = "abc",
+                    Bands = new DockBands
+                    {
+                        Start = [WidgetConfig.New("mcd.launcher")],
+                        Center = [WidgetConfig.New("mcd.media")],
+                        End = [WidgetConfig.New("mcd.load")],
+                    },
+                },
+            ],
+        };
+
+        MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
+
+        flat.Widgets.Select(w => w.TypeId).ShouldBe(
+            ["mcd.launcher", "mcd.spacer", "mcd.media", "mcd.spacer", "mcd.load"]);
+        flat.Bands.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ACentreWithNothingAfterItStaysCentred()
+    {
+        var old = new SettingsModel
+        {
+            SchemaVersion = 3,
+            Monitors =
+            [
+                new MonitorConfig
+                {
+                    StableId = "abc",
+                    Bands = new DockBands { Center = [WidgetConfig.New("mcd.media")] },
+                },
+            ],
+        };
+
+        MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
+
+        flat.Widgets.Select(w => w.TypeId).ShouldBe(["mcd.spacer", "mcd.media", "mcd.spacer"]);
+    }
 
     [Fact]
     public void AnUpToDateFileIsNotTouched()

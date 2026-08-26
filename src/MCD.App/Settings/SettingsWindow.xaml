@@ -48,7 +48,7 @@
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                 <TextBlock Text="{x:Bind Name}" />
                                 <TextBlock
-                                    FontSize="11"
+                                    FontSize="12"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                     Text="{x:Bind Summary, Mode=OneWay}"
                                     TextWrapping="Wrap" />
@@ -117,7 +117,11 @@
 
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Docks" Icon="View" Tag="docks" />
-                <NavigationViewItem Content="Launcher" Icon="Play" Tag="launcher" />
+                <NavigationViewItem Content="Launcher" Tag="launcher">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Content="Icons" Icon="Emoji2" Tag="icons" />
                 <!-- A glyph rather than a Symbol: the Symbol list is short and has
                      no colour in it, and a name it does not know is not a compile
@@ -128,18 +132,29 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Sensors" Icon="Refresh" Tag="sensors" />
-                <NavigationViewItem Content="Monitors" Icon="Zoom" Tag="monitors" />
-                <NavigationViewItem Content="About" Icon="Help" Tag="about" />
+                <NavigationViewItem Content="Sensors" Tag="sensors">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9D9;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Monitors" Tag="monitors">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
-            <ScrollViewer Padding="24,12,24,24">
-                <StackPanel Spacing="12">
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="About" Icon="Help" Tag="about" />
+            </NavigationView.FooterMenuItems>
+
+            <ScrollViewer Padding="36,24,36,36">
+                <StackPanel HorizontalAlignment="Left" MaxWidth="1000" Spacing="12">
 
                     <!-- Docks -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="Docks" />
                         <TextBlock
@@ -218,7 +233,7 @@
                                             MinWidth="160"
                                             SelectionChanged="OnDockShapeChanged">
                                             <ComboBoxItem Content="Always visible" />
-                                            <ComboBoxItem Content="Hides itself" />
+                                            <ComboBoxItem Content="Hides until you point at it" />
                                         </ComboBox>
                                     </StackPanel>
                                 </StackPanel>
@@ -246,13 +261,13 @@
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold"
-                                    Text="The bar" />
+                                    Text="The bar, live" />
                                 <Button
                                     x:Name="UndoButton"
                                     Grid.Column="1"
                                     Click="OnUndo"
                                     Content="Undo"
-                                    Visibility="Collapsed" />
+                                    IsEnabled="False" />
                             </Grid>
 
                             <Border
@@ -260,18 +275,16 @@
                                 Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
                                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                                 BorderThickness="1"
-                                CornerRadius="6">
+                                CornerRadius="8">
                                 <Grid x:Name="Preview" HorizontalAlignment="Stretch">
-                                    <StackPanel x:Name="PreviewStart" />
-                                    <StackPanel x:Name="PreviewCentre" />
-                                    <StackPanel x:Name="PreviewEnd" />
+                                    <Grid x:Name="PreviewStrip" />
                                     <TextBlock
                                         x:Name="PreviewEmpty"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="This dock is empty."
+                                        Text="This dock is empty. Add a widget below."
                                         Visibility="Collapsed" />
                                 </Grid>
                             </Border>
@@ -284,109 +297,32 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
-                                    x:Name="StartLabel"
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold"
-                                    Text="Start" />
+                                    Text="Widgets" />
                                 <Button
                                     Grid.Column="1"
                                     Click="OnAddWidget"
-                                    Content="Add widget"
-                                    Tag="Start" />
+                                    Content="Add widget" />
                             </Grid>
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="In bar order. Drag widgets on the bar itself, or right-click the bar to add one where you point. Spacers decide where the free length goes."
+                                TextWrapping="Wrap" />
                             <ListView
-                                x:Name="StartList"
+                                x:Name="WidgetList"
                                 ItemContainerStyle="{StaticResource BandItemStyle}"
                                 ItemTemplate="{StaticResource WidgetCardTemplate}"
                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                 ScrollViewer.VerticalScrollMode="Disabled"
-                                SelectionMode="Single"
-                                Tag="Start" />
+                                SelectionMode="Single" />
                             <Border
-                                x:Name="StartEmpty"
+                                x:Name="WidgetsEmpty"
                                 Padding="16,10"
                                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                                 BorderThickness="1"
-                                CornerRadius="8"
-                                Tag="Start">
-                                <TextBlock
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Text="Nothing here yet." />
-                            </Border>
-                        </StackPanel>
-
-                        <StackPanel Margin="0,12,0,0" Spacing="6">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    x:Name="CenterLabel"
-                                    VerticalAlignment="Center"
-                                    FontWeight="SemiBold"
-                                    Text="Center" />
-                                <Button
-                                    Grid.Column="1"
-                                    Click="OnAddWidget"
-                                    Content="Add widget"
-                                    Tag="Center" />
-                            </Grid>
-                            <ListView
-                                x:Name="CenterList"
-                                ItemContainerStyle="{StaticResource BandItemStyle}"
-                                ItemTemplate="{StaticResource WidgetCardTemplate}"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                SelectionMode="Single"
-                                Tag="Center" />
-                            <Border
-                                x:Name="CenterEmpty"
-                                Padding="16,10"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8"
-                                Tag="Center">
-                                <TextBlock
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Text="Nothing here yet." />
-                            </Border>
-                        </StackPanel>
-
-                        <StackPanel Margin="0,12,0,0" Spacing="6">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    x:Name="EndLabel"
-                                    VerticalAlignment="Center"
-                                    FontWeight="SemiBold"
-                                    Text="End" />
-                                <Button
-                                    Grid.Column="1"
-                                    Click="OnAddWidget"
-                                    Content="Add widget"
-                                    Tag="End" />
-                            </Grid>
-                            <ListView
-                                x:Name="EndList"
-                                ItemContainerStyle="{StaticResource BandItemStyle}"
-                                ItemTemplate="{StaticResource WidgetCardTemplate}"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                SelectionMode="Single"
-                                Tag="End" />
-                            <Border
-                                x:Name="EndEmpty"
-                                Padding="16,10"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8"
-                                Tag="End">
+                                CornerRadius="8">
                                 <TextBlock
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
@@ -399,7 +335,7 @@
                     <!-- Launcher -->
                     <StackPanel x:Name="LauncherSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="Launcher" />
                         <TextBlock
@@ -459,7 +395,7 @@
                                             <StackPanel Spacing="2">
                                                 <TextBlock Text="{x:Bind Name}" />
                                                 <TextBlock
-                                                    FontSize="11"
+                                                    FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                     Text="{x:Bind Target}"
                                                     TextTrimming="CharacterEllipsis" />
@@ -491,7 +427,7 @@
                     <!-- Appearance -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="Appearance" />
                         <TextBlock
@@ -567,7 +503,7 @@
                                         <TextBlock
                                             FontSize="12"
                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Text="The accent colour comes from your Windows settings. A reading that is too warm or too hot keeps its own colour either way."
+                                            Text="The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."
                                             TextWrapping="Wrap" />
                                     </StackPanel>
                                     <ComboBox
@@ -588,7 +524,7 @@
                     <!-- Icons -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="Icons" />
                         <TextBlock
@@ -641,12 +577,12 @@
                     <!-- Sensors -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="Sensors" />
                         <TextBlock
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="Graphics and drive temperatures are read directly and need nothing switched on. The processor keeps its own temperature behind a driver, so that one has to come from a program that already has such a driver installed."
+                            Text="Graphics and drive temperatures work out of the box. Processor and board temperatures have to come from one of the programs below."
                             TextWrapping="Wrap" />
 
                         <Border
@@ -742,7 +678,7 @@
                         <TextBlock
                             Margin="0,16,0,0"
                             FontWeight="SemiBold"
-                            Text="What is being read right now" />
+                            Text="Live readings" />
                         <TextBlock
                             x:Name="SensorSummary"
                             FontSize="12"
@@ -763,7 +699,7 @@
                                         <StackPanel>
                                             <TextBlock Text="{x:Bind Label}" />
                                             <TextBlock
-                                                FontSize="11"
+                                                FontSize="12"
                                                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                 Text="{x:Bind Hardware}"
                                                 TextTrimming="CharacterEllipsis" />
@@ -783,7 +719,7 @@
                     <!-- Monitors -->
                     <StackPanel x:Name="MonitorsSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="Monitors" />
                         <TextBlock
@@ -816,13 +752,13 @@
                                                 <TextBlock
                                                     Margin="0,6,0,0"
                                                     FontFamily="Consolas"
-                                                    FontSize="11"
+                                                    FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                     IsTextSelectionEnabled="True"
                                                     Text="{x:Bind StableId}" />
                                                 <TextBlock
                                                     FontFamily="Consolas"
-                                                    FontSize="11"
+                                                    FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                     IsTextSelectionEnabled="True"
                                                     Text="{x:Bind DevicePath}"
@@ -846,7 +782,7 @@
                     <!-- About -->
                     <StackPanel x:Name="AboutSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
-                            FontSize="20"
+                            FontSize="28"
                             FontWeight="SemiBold"
                             Text="About" />
                         <TextBlock x:Name="VersionText" />
@@ -866,7 +802,7 @@
                         <TextBlock
                             Margin="0,24,0,0"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="Closing this window leaves the docks running. Ending the program gives the reserved space back to the desktop, which is why it must not be stopped from Task Manager."
+                            Text="Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."
                             TextWrapping="Wrap" />
 
                         <Button

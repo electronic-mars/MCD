@@ -62,6 +62,14 @@ public static class WidgetCatalog
             "Temperature",
             AllowsMultiple: true,
             (context, entry) => new TemperatureWidget(context, entry)),
+
+        new(
+            SpacerWidget.Type,
+            "Spacer",
+            "Empty bar that pushes its neighbours apart.",
+            "Spacer",
+            AllowsMultiple: true,
+            (context, entry) => new SpacerWidget(context, entry)),
     ];
 
     public static WidgetType? Find(string typeId) =>

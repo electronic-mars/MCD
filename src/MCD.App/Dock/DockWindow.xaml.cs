@@ -65,7 +65,7 @@ public sealed partial class DockWindow : Window
     private WidgetHost? _grabbed;
     private Point _grabbedAt;
     private bool _moving;
-    private Band _caretBand;
+    private int _caretIndex = -1;
     private bool _hiding;
     private bool _tornDown;
 
@@ -161,14 +161,15 @@ public sealed partial class DockWindow : Window
     public event EventHandler<MonitorInfo>? SettingsRequested;
 
     /// <summary>
-    /// Raised when a widget has been dragged somewhere else on this bar.
+    /// Raised when the run of widgets on this bar has been changed by hand -
+    /// something dragged somewhere else, or added from the bar's own menu.
     /// </summary>
     /// <remarks>
-    /// The window rearranges what it is showing and says so; writing that down
-    /// belongs to whoever owns the settings. A dock window that could write
-    /// settings would be a second writer, and there is exactly one.
+    /// The window says what the new run is; writing that down belongs to
+    /// whoever owns the settings. A dock window that could write settings
+    /// would be a second writer, and there is exactly one.
     /// </remarks>
-    public event EventHandler<DockBands>? Rearranged;
+    public event EventHandler<ImmutableArray<WidgetConfig>>? Rearranged;
 
     public MonitorInfo Monitor { get; }
 
@@ -441,10 +442,64 @@ public sealed partial class DockWindow : Window
 
         e.Handled = true;
 
+        Point at = e.GetPosition(Bar);
+
+        var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
+        var add = new MenuFlyoutSubItem { Text = "Add widget" };
+
+        foreach (WidgetType type in WidgetCatalog.All)
+        {
+            var item = new MenuFlyoutItem
+            {
+                Text = type.Name,
+                IsEnabled = type.AllowsMultiple
+                    || Config.Widgets.All(w => w.TypeId != type.TypeId),
+            };
+
+            ToolTipService.SetToolTip(item, type.Description);
+
+            string typeId = type.TypeId;
+            item.Click += (_, _) => Insert(typeId, at);
+            add.Items.Add(item);
+        }
+
+        menu.Items.Add(add);
+        menu.Items.Add(new MenuFlyoutSeparator());
+
+        var settings = new MenuFlyoutItem { Text = "Dock settings" };
+
         // The monitor goes with the request. Settings that open on the primary
         // screen when the click happened on the third one are settings the user
         // has to go and find.
-        SettingsRequested?.Invoke(this, Monitor);
+        settings.Click += (_, _) => SettingsRequested?.Invoke(this, Monitor);
+        menu.Items.Add(settings);
+
+        menu.ShowAt(Bar, at);
+    }
+
+    /// <summary>Puts a new widget where the menu was opened.</summary>
+    private void Insert(string typeId, Point at)
+    {
+        int index = IndexAt(at);
+
+        // The index counts drawn widgets; the new entry goes after the last
+        // drawn widget ahead of that point, so an entry this build cannot draw
+        // keeps its place in the run.
+        List<WidgetHost> drawn = [.. Hosts()];
+        List<WidgetConfig> list = [.. Config.Widgets];
+
+        int where = index == 0 || drawn.Count == 0
+            ? 0
+            : list.FindIndex(
+                w => w.InstanceId == drawn[Math.Min(index, drawn.Count) - 1].Entry.InstanceId) + 1;
+
+        list.Insert(Math.Clamp(where, 0, list.Count), WidgetConfig.New(typeId));
+
+        _log.LogInformation(
+            "dock.added monitor={Monitor} widget={Widget} at={At}",
+            Monitor.Identity.FriendlyName, typeId, where);
+
+        Rearranged?.Invoke(this, [.. list]);
     }
 
     private readonly List<WidgetHost> _hosts = [];
@@ -503,20 +558,9 @@ public sealed partial class DockWindow : Window
     /// <summary>Builds the widgets this monitor's configuration asks for.</summary>
     private void BuildWidgets()
     {
-        LayOutBands();
+        var items = new List<(FrameworkElement Element, GridLength Length)>();
 
-        Fill(StartBand, Config.Bands.Start);
-        Fill(CenterBand, Config.Bands.Center);
-        Fill(EndBand, Config.Bands.End);
-    }
-
-    private void LayOutBands() => DockLayout.Apply(Config.Edge, StartBand, CenterBand, EndBand);
-
-    private void Fill(Panel band, ImmutableArray<WidgetConfig> configured)
-    {
-        band.Children.Clear();
-
-        foreach (WidgetConfig entry in configured)
+        foreach (WidgetConfig entry in Config.Widgets)
         {
             WidgetViewModel? widget = WidgetCatalog.Create(_context, entry);
 
@@ -542,12 +586,18 @@ public sealed partial class DockWindow : Window
             widget.Density = Config.Density;
 
             var host = new WidgetHost(_log, widget, template);
+            DockLayout.Dress(host, Config.Edge, widget is SpacerWidget);
             host.Attach();
 
             _hosts.Add(host);
-            band.Children.Add(host);
+            items.Add((host, DockLayout.LengthOf(entry, widget)));
         }
+
+        DockLayout.Arrange(Config.Edge, Strip, items);
     }
+
+    /// <summary>The widgets as drawn, in bar order.</summary>
+    private IEnumerable<WidgetHost> Hosts() => Strip.Children.OfType<WidgetHost>();
 
 
     /// <summary>
@@ -601,6 +651,7 @@ public sealed partial class DockWindow : Window
             _moving = true;
             _grabbed.Opacity = 0.4;
             Root.CapturePointer(e.Pointer);
+            RevealSpacers(true);
 
             _log.LogInformation(
                 "dock.dragging monitor={Monitor} widget={Widget}",
@@ -614,7 +665,7 @@ public sealed partial class DockWindow : Window
     {
         if (_moving && _grabbed is { } host)
         {
-            Land(host, _caretBand);
+            Land(host);
         }
 
         LetGo();
@@ -629,6 +680,7 @@ public sealed partial class DockWindow : Window
             _grabbed.Opacity = 1;
         }
 
+        RevealSpacers(false);
         HideCaret();
         Root.ReleasePointerCaptures();
 
@@ -667,145 +719,170 @@ public sealed partial class DockWindow : Window
                 host.ActualHeight)
             : null;
 
+    /// <summary>While a widget is in flight, every spacer shows itself.</summary>
+    private void RevealSpacers(bool on)
+    {
+        foreach (WidgetHost host in _hosts)
+        {
+            if (host.Widget is SpacerWidget spacer)
+            {
+                spacer.HintVisible = on ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Where along the run a point falls: the count of drawn widgets whose
+    /// middles it has passed, which is the index it would be inserted at.
+    /// </summary>
+    private int IndexAt(Point at)
+    {
+        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
+        double along = horizontal ? at.X : at.Y;
+
+        int index = 0;
+
+        foreach (WidgetHost host in Hosts())
+        {
+            if (Where(host) is { } rect)
+            {
+                double middle = horizontal
+                    ? rect.X + (rect.Width / 2)
+                    : rect.Y + (rect.Height / 2);
+
+                if (along < middle)
+                {
+                    return index;
+                }
+            }
+
+            index++;
+        }
+
+        return index;
+    }
+
     /// <summary>Puts the marker where the widget would land if it were dropped now.</summary>
     private void ShowCaret(Point at)
     {
         bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-        double along = horizontal ? at.X : at.Y;
-        double length = horizontal ? Bar.ActualWidth : Bar.ActualHeight;
+        int index = IndexAt(at);
 
-        // By thirds of the bar rather than by which region is under the pointer:
-        // an empty region has no width at all, and would otherwise be the one
-        // place a widget could never be dropped.
-        Band was = _caretBand;
-
-        _caretBand = along < length / 3 ? Band.Start
-            : along < length * 2 / 3 ? Band.Center
-            : Band.End;
-
-        if (was != _caretBand)
+        if (index != _caretIndex)
         {
-            _log.LogInformation(
-                "dock.caret band={Band} at={At} of={Length}", _caretBand, (int)along, (int)length);
+            _log.LogInformation("dock.caret index={Index}", index);
         }
 
-        StackPanel panel = PanelFor(_caretBand);
-        int at_ = panel.Children.Count;
+        _caretIndex = index;
 
-        for (int i = 0; i < panel.Children.Count; i++)
+        List<WidgetHost> drawn = [.. Hosts()];
+
+        // The marker sits on the boundary the widget would land on: the middle
+        // of the gap between neighbours, or just past the end of the run.
+        double along;
+
+        if (drawn.Count == 0)
         {
-            if (panel.Children[i] is not WidgetHost host || Where(host) is not { } rect)
+            along = (horizontal ? Bar.ActualWidth : Bar.ActualHeight) / 2;
+        }
+        else if (index >= drawn.Count)
+        {
+            Rect last = Where(drawn[^1]) ?? default;
+            along = (horizontal ? last.X + last.Width : last.Y + last.Height) + 3;
+        }
+        else
+        {
+            Rect next = Where(drawn[index]) ?? default;
+            double edge = horizontal ? next.X : next.Y;
+
+            if (index == 0)
             {
-                continue;
+                along = edge - 3;
             }
-
-            double middle = horizontal ? rect.X + (rect.Width / 2) : rect.Y + (rect.Height / 2);
-
-            if (along < middle)
+            else
             {
-                at_ = i;
-                break;
+                Rect prev = Where(drawn[index - 1]) ?? default;
+                double prevEdge = horizontal ? prev.X + prev.Width : prev.Y + prev.Height;
+                along = (prevEdge + edge) / 2;
             }
         }
 
-        Dress(horizontal);
-        HideCaret();
-        panel.Children.Insert(Math.Min(at_, panel.Children.Count), _caret);
+        DressCaret(horizontal);
+
+        if (!Overlay.Children.Contains(_caret))
+        {
+            Overlay.Children.Add(_caret);
+        }
+
+        if (horizontal)
+        {
+            Canvas.SetLeft(_caret, along - (_caret.Width / 2));
+            Canvas.SetTop(_caret, (Bar.ActualHeight - _caret.Height) / 2);
+        }
+        else
+        {
+            Canvas.SetLeft(_caret, (Bar.ActualWidth - _caret.Width) / 2);
+            Canvas.SetTop(_caret, along - (_caret.Height / 2));
+        }
     }
 
-    private void Dress(bool horizontal)
+    private void DressCaret(bool horizontal)
     {
         _caret.Fill = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
         _caret.RadiusX = 1;
         _caret.RadiusY = 1;
         _caret.Width = horizontal ? 2 : 24;
         _caret.Height = horizontal ? 16 : 2;
-        _caret.Margin = horizontal ? new Thickness(2, 0, 2, 0) : new Thickness(0, 2, 0, 2);
-        _caret.VerticalAlignment = VerticalAlignment.Center;
-        _caret.HorizontalAlignment = HorizontalAlignment.Center;
     }
 
     private void HideCaret()
     {
-        if (_caret.Parent is Panel owner)
-        {
-            owner.Children.Remove(_caret);
-        }
+        Overlay.Children.Remove(_caret);
+        _caretIndex = -1;
     }
 
-    /// <summary>Works out the new arrangement and says so.</summary>
-    private void Land(WidgetHost host, Band band)
+    /// <summary>Works out the new run and says so.</summary>
+    private void Land(WidgetHost host)
     {
-        StackPanel panel = PanelFor(band);
-        int caret = panel.Children.IndexOf(_caret);
-
-        if (caret < 0)
+        if (_caretIndex < 0)
         {
             return;
         }
 
-        // Counted over the widgets that are actually drawn, and not counting the
-        // one being moved: it is still sitting in the row it came from.
+        List<WidgetHost> drawn = [.. Hosts()];
+        WidgetConfig moved = host.Entry;
+
+        // Counted over the widgets that are actually drawn, and not counting
+        // the one being moved: it is still sitting where it came from.
         List<string> before =
         [
-            .. panel.Children.Take(caret).OfType<WidgetHost>()
+            .. drawn.Take(Math.Min(_caretIndex, drawn.Count))
                 .Where(h => h != host)
                 .Select(h => h.Entry.InstanceId)
         ];
 
-        WidgetConfig moved = host.Entry;
-        DockBands bands = Config.Bands;
-
-        DockBands without = bands with
-        {
-            Start = [.. bands.Start.Where(w => w.InstanceId != moved.InstanceId)],
-            Center = [.. bands.Center.Where(w => w.InstanceId != moved.InstanceId)],
-            End = [.. bands.End.Where(w => w.InstanceId != moved.InstanceId)],
-        };
-
-        List<WidgetConfig> into = [.. Contents(without, band)];
+        List<WidgetConfig> list = [.. Config.Widgets.Where(w => w.InstanceId != moved.InstanceId)];
 
         // Placed after the last widget that was ahead of the marker. Counting
-        // positions in the settings instead would put it in the wrong place on a
-        // bar that also holds a widget this build cannot draw.
+        // positions in the settings instead would put it in the wrong place on
+        // a bar that also holds a widget this build cannot draw.
         int where = before.Count == 0
             ? 0
-            : into.FindIndex(w => w.InstanceId == before[^1]) + 1;
+            : list.FindIndex(w => w.InstanceId == before[^1]) + 1;
 
-        into.Insert(Math.Clamp(where, 0, into.Count), moved);
+        list.Insert(Math.Clamp(where, 0, list.Count), moved);
 
-        DockBands next = band switch
-        {
-            Band.Start => without with { Start = [.. into] },
-            Band.Center => without with { Center = [.. into] },
-            _ => without with { End = [.. into] },
-        };
-
-        if (next == Config.Bands)
+        if (list.Select(w => w.InstanceId).SequenceEqual(Config.Widgets.Select(w => w.InstanceId)))
         {
             return;
         }
 
         _log.LogInformation(
-            "dock.rearranged monitor={Monitor} widget={Widget} band={Band}",
-            Monitor.Identity.FriendlyName, moved.TypeId, band);
+            "dock.rearranged monitor={Monitor} widget={Widget} at={At}",
+            Monitor.Identity.FriendlyName, moved.TypeId, where);
 
-        Rearranged?.Invoke(this, next);
+        Rearranged?.Invoke(this, [.. list]);
     }
-
-    private StackPanel PanelFor(Band band) => band switch
-    {
-        Band.Start => StartBand,
-        Band.Center => CenterBand,
-        _ => EndBand,
-    };
-
-    private static ImmutableArray<WidgetConfig> Contents(DockBands bands, Band band) => band switch
-    {
-        Band.Start => bands.Start,
-        Band.Center => bands.Center,
-        _ => bands.End,
-    };
 
     private void Refresh()
     {
