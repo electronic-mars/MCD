@@ -164,6 +164,18 @@
             Orientation="{x:Bind Orientation}"
             Visibility="{x:Bind Visible, Mode=OneWay}">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="0">
+                <Border
+                    Width="20"
+                    Height="20"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    CornerRadius="4"
+                    Visibility="{x:Bind ArtVisible, Mode=OneWay}">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{x:Bind Art, Mode=OneWay}" Stretch="UniformToFill" />
+                    </Border.Background>
+                </Border>
+
                 <Button
                     Command="{x:Bind PreviousCommand}"
                     Style="{StaticResource BarButton}"

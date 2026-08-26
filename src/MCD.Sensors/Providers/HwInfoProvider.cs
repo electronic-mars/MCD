@@ -240,11 +240,12 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
                     "°C",
 
                     // HWiNFO knows each sensor's limits but does not publish
-                    // them here, so these are the ordinary ones for the part.
-                    // A processor is designed to run to about a hundred and to
-                    // slow itself down rather than go past it.
-                    Warning: board ? 70 : 85,
-                    Critical: board ? 90 : 100,
+                    // them here, so these are the ordinary ones for the part:
+                    // sustained 85 is where a processor stops being comfortable
+                    // and 95 is where it slows itself down; a board sensor past
+                    // 75 means the airflow failed.
+                    Warning: board ? 60 : 85,
+                    Critical: board ? 75 : 95,
                     Rank: 80,
                     Prominent: ReferenceEquals(reading, headline)
                                || (board && reading.Label.Equals("Motherboard", StringComparison.OrdinalIgnoreCase))));

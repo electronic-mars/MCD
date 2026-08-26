@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Foundation;
 using Windows.Media.Control;
 
@@ -56,6 +58,13 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     /// <summary>What is playing, for the full-size bar and the tooltip.</summary>
     [ObservableProperty]
     public partial string Title { get; set; } = string.Empty;
+
+    /// <summary>The playing thing's own artwork, when it offers any.</summary>
+    [ObservableProperty]
+    public partial ImageSource? Art { get; set; }
+
+    [ObservableProperty]
+    public partial Visibility ArtVisible { get; set; } = Visibility.Collapsed;
 
     /// <summary>
     /// The two icons that never change, as properties rather than literals.
@@ -256,6 +265,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     private async void ReadTitle(GlobalSystemMediaTransportControlsSession session)
     {
         string title;
+        Windows.Storage.Streams.IRandomAccessStreamReference? art = null;
 
         try
         {
@@ -265,15 +275,61 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             title = properties.Artist.Length > 0
                 ? $"{properties.Artist} — {properties.Title}"
                 : properties.Title;
+
+            art = properties.Thumbnail;
         }
         catch (Exception)
         {
             title = string.Empty;
         }
 
-        if (!_gone && ReferenceEquals(session, _playing))
+        if (_gone || !ReferenceEquals(session, _playing))
         {
-            Title = title;
+            return;
+        }
+
+        Title = title;
+        await ShowArt(session, art);
+    }
+
+    /// <summary>
+    /// Puts the artwork next to the buttons, on the full-size bar.
+    /// </summary>
+    /// <remarks>
+    /// The 20-pixel square is the now-playing cue: real artwork says what the
+    /// buttons will act on without a single letter. A compact bar has no room
+    /// for it, and a track with no artwork simply has none - a placeholder
+    /// note glyph would be a picture of nothing.
+    /// </remarks>
+    private async Task ShowArt(
+        GlobalSystemMediaTransportControlsSession session,
+        Windows.Storage.Streams.IRandomAccessStreamReference? art)
+    {
+        if (art is null || Density == DockDensity.Compact)
+        {
+            Art = null;
+            ArtVisible = Visibility.Collapsed;
+            return;
+        }
+
+        try
+        {
+            using Windows.Storage.Streams.IRandomAccessStreamWithContentType stream =
+                await art.OpenReadAsync();
+
+            var image = new BitmapImage { DecodePixelHeight = 40 };
+            await image.SetSourceAsync(stream);
+
+            if (!_gone && ReferenceEquals(session, _playing))
+            {
+                Art = image;
+                ArtVisible = Visibility.Visible;
+            }
+        }
+        catch (Exception)
+        {
+            // The program that was playing withdrew the stream mid-read.
+            ArtVisible = Visibility.Collapsed;
         }
     }
 

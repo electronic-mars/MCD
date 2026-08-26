@@ -88,11 +88,24 @@ public sealed class LhmProvider(
                 "°C",
 
                 // LibreHardwareMonitor knows each part's limits but does not
-                // publish them here, so these are the ordinary ones: a processor
-                // or a graphics chip is built to run to about a hundred and to
-                // slow itself down rather than pass it.
-                Warning: sensor.Group == HardwareGroup.Motherboard ? 70 : 85,
-                Critical: sensor.Group == HardwareGroup.Motherboard ? 90 : 100,
+                // publish them here, so these are the ordinary ones: sustained
+                // 85 is where a processor stops being comfortable and 95 is
+                // where it slows itself down; graphics chips and drives run
+                // cooler, and a board sensor past 75 means the airflow failed.
+                Warning: sensor.Group switch
+                {
+                    HardwareGroup.Motherboard => 60,
+                    HardwareGroup.Gpu => 80,
+                    HardwareGroup.Storage => 65,
+                    _ => 85,
+                },
+                Critical: sensor.Group switch
+                {
+                    HardwareGroup.Motherboard => 75,
+                    HardwareGroup.Gpu => 90,
+                    HardwareGroup.Storage => 75,
+                    _ => 95,
+                },
                 Rank: 60,
                 Prominent: Headline(sensor)));
         }

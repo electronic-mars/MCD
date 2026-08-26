@@ -172,6 +172,47 @@
                             FontSize="12"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
 
+                        <!-- The bar itself, at the thickness it really is, with
+                             the widgets that are really on it. Not a drawing:
+                             the same templates and the same readings. -->
+                        <StackPanel Margin="0,8,0,8" Spacing="6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Text="The bar, live" />
+                                <Button
+                                    x:Name="UndoButton"
+                                    Grid.Column="1"
+                                    Click="OnUndo"
+                                    Content="Undo"
+                                    IsEnabled="False" />
+                            </Grid>
+
+                            <Border
+                                Padding="0"
+                                Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid x:Name="Preview" HorizontalAlignment="Stretch">
+                                    <Grid x:Name="PreviewStrip" />
+                                    <TextBlock
+                                        x:Name="PreviewEmpty"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                        Text="This dock is empty. Add a widget below."
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
                         <Border
                             Margin="0,4,0,0"
                             Padding="16"
@@ -249,46 +290,6 @@
                             </Grid>
                         </Border>
 
-                        <!-- The bar itself, at the thickness it really is, with
-                             the widgets that are really on it. Not a drawing:
-                             the same templates and the same readings. -->
-                        <StackPanel Margin="0,16,0,0" Spacing="6">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    FontWeight="SemiBold"
-                                    Text="The bar, live" />
-                                <Button
-                                    x:Name="UndoButton"
-                                    Grid.Column="1"
-                                    Click="OnUndo"
-                                    Content="Undo"
-                                    IsEnabled="False" />
-                            </Grid>
-
-                            <Border
-                                Padding="0"
-                                Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <Grid x:Name="Preview" HorizontalAlignment="Stretch">
-                                    <Grid x:Name="PreviewStrip" />
-                                    <TextBlock
-                                        x:Name="PreviewEmpty"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="This dock is empty. Add a widget below."
-                                        Visibility="Collapsed" />
-                                </Grid>
-                            </Border>
-                        </StackPanel>
 
                         <StackPanel Margin="0,12,0,0" Spacing="6">
                             <Grid>
