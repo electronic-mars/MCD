@@ -8,7 +8,12 @@ from tag v1.2.0 shipping a binary that calls itself 1.1.0 - a mismatch nobody
 notices until a user reports a bug against a version that was never built.
 #>
 [CmdletBinding()]
-param([string]$Tag = $env:GITHUB_REF_NAME)
+param(
+    # Only a tag is worth comparing. On a push to a branch GITHUB_REF_NAME is
+    # the branch name, and checking "main" against a version number fails every
+    # build on the branch for no reason.
+    [string]$Tag = $(if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME } else { '' })
+)
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot

@@ -62,7 +62,6 @@ $required = [ordered]@{
     'the dock manager'        = 'dock\.manager docks='
     'the performance counters' = 'sensors\.provider id=pdh state=available'
     'the memory reading'      = 'sensors\.provider id=mem state=available'
-    'a temperature source'    = 'sensors\.provider id=(nvml|disk|hwinfo|lhm) state=available'
 
     # The settings window is built entirely from XAML, and a name XAML does not
     # know is not a compile error - it is a parse failure at run time that takes
@@ -82,6 +81,13 @@ if ($text -match 'start\.refused') {
 
 foreach ($name in $required.Keys) {
     if ($text -notmatch $required[$name]) { $failures += "never got to: $name" }
+}
+
+# Not required, because a build agent has neither a graphics card nor a drive
+# that will report its temperature, and a check that fails on hardware rather
+# than on code is a check people learn to ignore.
+if ($text -notmatch 'sensors\.provider id=(nvml|disk|hwinfo|lhm) state=available') {
+    Write-Host 'note: no temperature source on this machine'
 }
 
 if ($text -match 'LEVEL=(ERROR|FATAL)') { $failures += 'the log contains an error' }
