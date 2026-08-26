@@ -1,0 +1,155 @@
+{
+  "id": 0,
+  "Text": "Sensor",
+  "Children": [
+    {
+      "id": 1,
+      "Text": "DESKTOP-TEST",
+      "Children": [
+        {
+          "id": 2,
+          "Text": "AMD Ryzen 7 5800X",
+          "ImageURL": "images_icon/cpu.png",
+          "Children": [
+            {
+              "id": 3,
+              "Text": "Temperatures",
+              "Children": [
+                {
+                  "id": 4,
+                  "Text": "Core (Tctl/Tdie)",
+                  "Min": "35,0 °C",
+                  "Value": "58,4 °C",
+                  "Max": "81,1 °C",
+                  "SensorId": "/amdcpu/0/temperature/0",
+                  "Type": "Temperature",
+                  "Children": []
+                },
+                {
+                  "id": 5,
+                  "Text": "CCD1 (Tdie)",
+                  "Min": "33,0 °C",
+                  "Value": "54,0 °C",
+                  "Max": "77,0 °C",
+                  "SensorId": "/amdcpu/0/temperature/2",
+                  "Type": "Temperature",
+                  "Children": []
+                }
+              ]
+            },
+            {
+              "id": 6,
+              "Text": "Load",
+              "Children": [
+                {
+                  "id": 7,
+                  "Text": "CPU Total",
+                  "Value": "12,5 %",
+                  "SensorId": "/amdcpu/0/load/0",
+                  "Type": "Load",
+                  "Children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "Text": "ASUS ROG STRIX B550-F",
+          "ImageURL": "images_icon/mainboard.png",
+          "Children": [
+            {
+              "id": 9,
+              "Text": "Nuvoton NCT6798D",
+              "ImageURL": "images_icon/chip.png",
+              "Children": [
+                {
+                  "id": 10,
+                  "Text": "Temperatures",
+                  "Children": [
+                    {
+                      "id": 11,
+                      "Text": "Motherboard Temperature",
+                      "Value": "41,0 °C",
+                      "SensorId": "/lpc/nct6798d/temperature/1",
+                      "Type": "Temperature",
+                      "Children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 12,
+                  "Text": "Fans",
+                  "Children": [
+                    {
+                      "id": 13,
+                      "Text": "Fan #2",
+                      "Value": "884 RPM",
+                      "SensorId": "/lpc/nct6798d/fan/1",
+                      "Type": "Fan",
+                      "Children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "Text": "AMD Radeon RX 6800 XT",
+          "ImageURL": "images_icon/amd.png",
+          "Children": [
+            {
+              "id": 15,
+              "Text": "Temperatures",
+              "Children": [
+                {
+                  "id": 16,
+                  "Text": "GPU Core",
+                  "Value": "62.0 °C",
+                  "SensorId": "/amdgpu/0/temperature/0",
+                  "Type": "Temperature",
+                  "Children": []
+                },
+                {
+                  "id": 17,
+                  "Text": "GPU Hot Spot",
+                  "Value": "78.0 °C",
+                  "SensorId": "/amdgpu/0/temperature/1",
+                  "Type": "Temperature",
+                  "Children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "Text": "Samsung SSD 990 PRO 2TB",
+          "ImageURL": "images_icon/ssd.png",
+          "Children": [
+            {
+              "id": 19,
+              "Text": "Temperatures",
+              "Children": [
+                {
+                  "id": 20,
+                  "Text": "Temperature",
+                  "Value": "44,0 °C",
+                  "SensorId": "/nvme/0/temperature/0",
+                  "Type": "Temperature",
+                  "Children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Min": "Min",
+  "Value": "Value",
+  "Max": "Max",
+  "ImageURL": ""
+}

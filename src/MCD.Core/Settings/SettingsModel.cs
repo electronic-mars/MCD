@@ -1,0 +1,190 @@
+using System.Collections.Immutable;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Mcd.Interop.AppBar;
+
+namespace Mcd.Core.Settings;
+
+/// <summary>How thick the dock is.</summary>
+public enum DockDensity
+{
+    Default,
+    Compact,
+}
+
+/// <summary>Everything the program remembers between runs.</summary>
+public sealed record SettingsModel
+{
+    public int SchemaVersion { get; init; } = SettingsDefaults.SchemaVersion;
+
+    public AppSettings App { get; init; } = new();
+
+    public ImmutableArray<MonitorConfig> Monitors { get; init; } = [];
+
+    public SensorSettings Sensors { get; init; } = new();
+}
+
+public sealed record AppSettings
+{
+    /// <summary>"system", "light" or "dark".</summary>
+    public string Theme { get; init; } = "system";
+
+    /// <summary>
+    /// What the bar is made of: "acrylic" for the translucent finish, "solid"
+    /// for a plain colour.
+    /// </summary>
+    /// <remarks>
+    /// Solid is not only a taste: acrylic costs a little power to draw, and over
+    /// a busy wallpaper some people find numbers on it harder to read.
+    /// </remarks>
+    public string Backdrop { get; init; } = "acrylic";
+
+    /// <summary>
+    /// Where the readings take their colour: "neutral" for the theme's text
+    /// colour, "windows" for the accent colour chosen in Windows.
+    /// </summary>
+    public string Accent { get; init; } = "neutral";
+
+    /// <summary>Empty means "follow Windows".</summary>
+    public string Language { get; init; } = string.Empty;
+
+    public bool Autostart { get; init; }
+
+    /// <summary>
+    /// Which icon each reading is drawn with, by the reading's stable name.
+    /// Anything missing falls back to the widget's own default.
+    /// </summary>
+    public ImmutableDictionary<string, string> Icons { get; init; } =
+        ImmutableDictionary<string, string>.Empty;
+
+    /// <summary>
+    /// What the launcher widget starts, in the order it shows them.
+    /// </summary>
+    /// <remarks>
+    /// One list for every dock rather than one per monitor. Someone who pins a
+    /// program to the bar means the bar, not the bar on this screen, and having
+    /// to pin it again on each monitor would be a chore with nothing to show
+    /// for it.
+    /// </remarks>
+    public ImmutableArray<LaunchItem> Launcher { get; init; } = [];
+}
+
+/// <summary>One thing the launcher can start.</summary>
+public sealed record LaunchItem
+{
+    public string Id { get; init; } = string.Empty;
+
+    public string Name { get; init; } = string.Empty;
+
+    /// <summary>
+    /// A file, a folder, or an address. Handed to the shell as it stands, so
+    /// whatever works typed into the Run box works here.
+    /// </summary>
+    public string Target { get; init; } = string.Empty;
+
+    public static LaunchItem For(string target, string name) => new()
+    {
+        Id = Guid.NewGuid().ToString("n"),
+        Name = name,
+        Target = target,
+    };
+}
+
+/// <summary>One monitor's dock, remembered by the monitor's stable id.</summary>
+public sealed record MonitorConfig
+{
+    public string StableId { get; init; } = string.Empty;
+
+    /// <summary>
+    /// The raw device path the id was hashed from. Not used for lookup - it is
+    /// here so a person reading config.json or the diagnostics page can tell
+    /// which entry is which screen.
+    /// </summary>
+    public string DevicePath { get; init; } = string.Empty;
+
+    public string EdidKey { get; init; } = string.Empty;
+
+    public string FriendlyName { get; init; } = string.Empty;
+
+    /// <summary>Name, resolution and DPI as last seen. The last-resort match key.</summary>
+    public string ShapeHint { get; init; } = string.Empty;
+
+    /// <summary>Ids this entry has answered to before, kept for auditing a re-association.</summary>
+    public ImmutableArray<string> PreviousStableIds { get; init; } = [];
+
+    public DateTimeOffset LastSeenUtc { get; init; }
+
+    /// <summary>
+    /// False only when a person switched this dock off. A monitor that merely
+    /// failed to match is never written out as disabled - that is the shape of
+    /// PowerToys #49604.
+    /// </summary>
+    public bool Enabled { get; init; } = true;
+
+    public AppBarEdge Edge { get; init; } = AppBarEdge.Bottom;
+
+    public AppBarMode Mode { get; init; } = AppBarMode.Pinned;
+
+    public DockDensity Density { get; init; } = DockDensity.Default;
+
+    public DockBands Bands { get; init; } = DockBands.Default;
+}
+
+/// <summary>The three regions of a dock, in display order.</summary>
+public sealed record DockBands
+{
+    public ImmutableArray<WidgetConfig> Start { get; init; } = [];
+
+    public ImmutableArray<WidgetConfig> Center { get; init; } = [];
+
+    public ImmutableArray<WidgetConfig> End { get; init; } = [];
+
+    [JsonIgnore]
+    public bool IsEmpty => Start.IsEmpty && Center.IsEmpty && End.IsEmpty;
+
+    [JsonIgnore]
+    public int Count => Start.Length + Center.Length + End.Length;
+
+    public static DockBands Default => new()
+    {
+        Start = [WidgetConfig.New("mcd.launcher")],
+        End = [WidgetConfig.New("mcd.load"), WidgetConfig.New("mcd.temperature")],
+    };
+}
+
+public sealed record WidgetConfig
+{
+    public string InstanceId { get; init; } = string.Empty;
+
+    public string TypeId { get; init; } = string.Empty;
+
+    /// <summary>Opaque to everything but the widget that owns it.</summary>
+    public JsonElement? Config { get; init; }
+
+    public static WidgetConfig New(string typeId) => new()
+    {
+        InstanceId = Guid.NewGuid().ToString("n"),
+        TypeId = typeId,
+    };
+
+    /// <summary>The same widget, configured the same way, as a separate instance.</summary>
+    public WidgetConfig AsNewInstance() => this with { InstanceId = Guid.NewGuid().ToString("n") };
+}
+
+public sealed record SensorSettings
+{
+    /// <summary>
+    /// Tier 2 sources are off until someone turns them on: they depend on
+    /// software this program neither ships nor installs.
+    /// </summary>
+    public ImmutableDictionary<string, bool> EnabledProviders { get; init; } =
+        ImmutableDictionary<string, bool>.Empty;
+
+    public ImmutableDictionary<string, string> SourceOverrides { get; init; } =
+        ImmutableDictionary<string, string>.Empty;
+
+    public string LhmHttpEndpoint { get; init; } = "http://localhost:8085/data.json";
+
+    /// <summary>Drives whose temperature IOCTL timed out twice; not asked again.</summary>
+    public ImmutableArray<string> StorageBlacklist { get; init; } = [];
+}

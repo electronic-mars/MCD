@@ -1,0 +1,45 @@
+<Project>
+  <Import Project="Directory.Version.props" />
+
+  <PropertyGroup>
+    <!-- One place to switch the whole solution between runtimes. .NET 8 goes out of
+         support in November 2026 and the runtime ships inside the MSIX, so an
+         unsupported runtime would mean shipping unpatched code to the Store. -->
+    <McdTargetFramework>net10.0-windows10.0.26100.0</McdTargetFramework>
+
+    <!-- Windows 11 22H2. DWMWA_WINDOW_CORNER_PREFERENCE, DWMWA_BORDER_COLOR and
+         DesktopAcrylicKind.Thin are all Win11-only, and the dock's whole look
+         rests on them. Supporting Win10 would mean a second visual branch. -->
+    <McdMinPlatform>10.0.22621.0</McdMinPlatform>
+
+    <TargetFramework>$(McdTargetFramework)</TargetFramework>
+    <TargetPlatformMinVersion>$(McdMinPlatform)</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>$(McdMinPlatform)</SupportedOSPlatformVersion>
+
+    <Version>$(McdVersion)</Version>
+    <AssemblyVersion>$(McdVersion).0</AssemblyVersion>
+    <FileVersion>$(McdVersion).0</FileVersion>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <InvariantGlobalization>false</InvariantGlobalization>
+
+    <Company>electronic-mars</Company>
+    <Product>Master Control Dock</Product>
+    <Copyright>Copyright (C) 2026 electronic-mars. GPL-3.0-or-later.</Copyright>
+
+    <!-- CsWin32 refuses to generate SHAppBarMessage and friends for AnyCPU: the
+         APPBARDATA layout differs between 32- and 64-bit. Override with
+         -p:PlatformTarget=ARM64 for the ARM64 leg of a release build. -->
+    <PlatformTarget Condition="'$(PlatformTarget)' == ''">x64</PlatformTarget>
+
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
+  </ItemGroup>
+</Project>

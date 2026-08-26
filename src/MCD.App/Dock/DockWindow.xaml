@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Mcd.App.Dock.DockWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Master Control Dock">
+
+    <!-- Background is set so the empty parts of the bar are hit-testable: a
+         transparent Grid receives no pointer events, and right-clicking the gap
+         between widgets is how the settings are reached. -->
+    <Grid
+        x:Name="Root"
+        Background="Transparent"
+        RightTapped="OnRightTapped">
+
+        <!-- Everything that is drawn lives in here, one level in from the root.
+             While the bar is hiding this is the part that slides, and the root
+             stays stretched across the window so that the sliver left on screen
+             is hit-testable all the way to its corners. -->
+        <Grid x:Name="Bar">
+
+            <!-- A hairline on the inner side only. The outer side is flush against
+                 the screen edge, where a border reads as a rendering seam. -->
+            <Border
+                x:Name="InnerEdge"
+                BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}"
+                BorderThickness="0,1,0,0" />
+
+            <StackPanel
+                x:Name="StartBand"
+                Margin="10,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Orientation="Horizontal" />
+
+            <StackPanel
+                x:Name="CenterBand"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal" />
+
+            <StackPanel
+                x:Name="EndBand"
+                Margin="10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Orientation="Horizontal" />
+        </Grid>
+    </Grid>
+</Window>

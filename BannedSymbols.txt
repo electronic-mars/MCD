@@ -1,0 +1,5 @@
+M:Microsoft.UI.Xaml.UIElement.TransformToVisual(Microsoft.UI.Xaml.UIElement);Position an element from its own ActualOffset and its parent's - TransformToVisual answers in the coordinates of the XamlRoot, not the window, and a dock is at the origin of neither (PowerToys #48061). See DockWindow.Where. Use ScreenCoordinates.GetElementScreenRect. TransformToVisual returns XamlRoot coordinates, not screen ones - that is PowerToys #48061, where a flyout opened on the primary monitor while the dock lived on a secondary one.
+P:System.DateTime.Now;Use DateTimeOffset.UtcNow. LastSeen timestamps are compared across time zones and DST changes.
+P:System.DateTime.Today;Use DateTimeOffset.UtcNow.
+M:System.IO.File.WriteAllText(System.String,System.String);Settings are written only through SettingsStore, which writes to a temp file and File.Replace's it. A half-written config.json is a dock that comes up empty.
+M:System.IO.File.WriteAllTextAsync(System.String,System.String,System.Threading.CancellationToken);Settings are written only through SettingsStore.

@@ -1,0 +1,142 @@
+// AppBar - the shell protocol that reserves an edge of the work area.
+SHAppBarMessage
+APPBARDATA
+ABM_*
+ABN_*
+ABE_*
+ABS_*
+
+// Window frame: Windows 11 draws a rounded corner and a one-pixel accent border
+// on every top-level window. A dock sits flush against the screen edge, so both
+// have to go.
+DwmSetWindowAttribute
+DWMWINDOWATTRIBUTE
+DWM_WINDOW_CORNER_PREFERENCE
+GetWindowLongPtrW
+SetWindowLongPtrW
+WINDOW_STYLE
+WINDOW_EX_STYLE
+SetWindowPos
+SET_WINDOW_POS_FLAGS
+HWND_TOPMOST
+HWND_NOTOPMOST
+HWND_BOTTOM
+MoveWindow
+GetWindowRect
+ShowWindow
+SHOW_WINDOW_CMD
+
+// Message-only window: the display watcher outlives every dock window, so it
+// owns its own HWND_MESSAGE window rather than borrowing one.
+CreateWindowEx
+CallWindowProc
+DestroyWindow
+DefWindowProc
+RegisterClassEx
+UnregisterClass
+WNDCLASSEXW
+WNDPROC
+HWND_MESSAGE
+RegisterWindowMessage
+PostQuitMessage
+GetModuleHandle
+PostMessage
+GetMessage
+TranslateMessage
+DispatchMessage
+PeekMessage
+MSG
+WM_*
+
+// DPI: the dock's thickness is given in DIP and has to be scaled per monitor.
+GetDpiForWindow
+GetDpiForMonitor
+SetProcessDpiAwarenessContext
+DPI_AWARENESS_CONTEXT
+
+// Monitors.
+EnumDisplayMonitors
+GetMonitorInfo
+MONITORINFOEXW
+MONITORINFO
+MONITOR_FROM_FLAGS
+MonitorFromWindow
+MonitorFromPoint
+QueryDisplayConfig
+GetDisplayConfigBufferSizes
+DisplayConfigGetDeviceInfo
+DISPLAYCONFIG_TARGET_DEVICE_NAME
+DISPLAYCONFIG_SOURCE_DEVICE_NAME
+DISPLAYCONFIG_PATH_INFO
+DISPLAYCONFIG_MODE_INFO
+QUERY_DISPLAY_CONFIG_FLAGS
+DISPLAYCONFIG_DEVICE_INFO_TYPE
+EnumDisplayDevices
+DISPLAY_DEVICEW
+
+// Hot-plugging a monitor does not always broadcast WM_DISPLAYCHANGE, so the
+// listener also subscribes to the monitor device interface directly.
+RegisterDeviceNotification
+UnregisterDeviceNotification
+DEV_BROADCAST_DEVICEINTERFACE_W
+DEV_BROADCAST_HDR
+GUID_DEVINTERFACE_MONITOR
+REGISTER_NOTIFICATION_FLAGS
+
+// Coming back from a locked session can reveal a topology that changed while
+// the screen was off.
+WTSRegisterSessionNotification
+WTSUnRegisterSessionNotification
+NOTIFY_FOR_THIS_SESSION
+
+// Performance counters. PdhAddEnglishCounterW is not optional: on a Russian
+// Windows the counter is called "\Сведения о процессоре(_Total)\% полезного
+// времени процессора", and the English path resolves through nothing else.
+PdhOpenQuery
+PdhAddEnglishCounter
+PdhCollectQueryData
+PDH_HCOUNTER
+PdhGetFormattedCounterValue
+PdhGetFormattedCounterArray
+PDH_FMT_COUNTERVALUE_ITEM_W
+PdhCloseQuery
+PDH_FMT
+PDH_FMT_COUNTERVALUE
+
+// Installed and available memory.
+GlobalMemoryStatusEx
+MEMORYSTATUSEX
+
+// The icon a file, folder or shortcut is shown with in Explorer. Used by the
+// launcher, which has to look like the thing it starts.
+SHGetFileInfo
+SHFILEINFOW
+SHGFI_FLAGS
+DestroyIcon
+GetIconInfo
+ICONINFO
+GetDC
+ReleaseDC
+GetDIBits
+BITMAPINFO
+BITMAPINFOHEADER
+DIB_USAGE
+DeleteObject
+CoInitializeEx
+CoUninitialize
+COINIT
+
+// Where the pointer is. The auto-hiding bar watches for it reaching the screen
+// edge; a two-pixel window does not receive pointer events of its own.
+GetCursorPos
+
+// Bringing the settings window out in front. A window belonging to a process
+// that does not own the foreground cannot simply take it; the input queues have
+// to be joined first.
+GetForegroundWindow
+GetWindowThreadProcessId
+GetCurrentThreadId
+AttachThreadInput
+SetForegroundWindow
+BringWindowToTop
+IsIconic

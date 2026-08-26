@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    x:Class="Mcd.App.Widgets.Views.WidgetTemplates"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:widgets="using:Mcd.App.Widgets">
+
+    <widgets:IconConverter x:Key="Icon" />
+
+    <!--
+        One reading: a drawn icon, then the figure. The numbers use a monospaced
+        face on purpose - with proportional digits the text changes width on
+        every update and the whole bar twitches once a second.
+    -->
+    <DataTemplate x:Key="MetricTemplate" x:DataType="widgets:Metric">
+        <widgets:HoverChip
+            Margin="{x:Bind Spacing, Mode=OneWay}"
+            Visibility="{x:Bind Visibility, Mode=OneWay}">
+            <!-- The reading first, its name under it. A bar is glanced at, and
+                 what someone hovering wants is confirmation of the number and
+                 which part it belongs to - not a second copy of the panel they
+                 are already looking at. -->
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{x:Bind Text, Mode=OneWay}" />
+                        <TextBlock
+                            FontSize="13"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Detail, Mode=OneWay}" />
+                    </StackPanel>
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <!-- A stroked Path, not a PathIcon. PathIcon fills the geometry,
+                     and these shapes are drawn as lines: filled, the processor
+                     becomes a plain square and the network arrows disappear
+                     altogether. -->
+                <Viewbox
+                    Width="{x:Bind IconSize, Mode=OneWay}"
+                    Height="{x:Bind IconSize, Mode=OneWay}"
+                    VerticalAlignment="Center">
+                    <!-- The Canvas fixes the 24-unit grid the icons are drawn on, so
+                         every one scales by the same amount whatever its own bounds
+                         happen to be. -->
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Icon, Converter={StaticResource Icon}, Mode=OneWay}"
+                            Stroke="{x:Bind Colour, Mode=OneWay}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="1.5" />
+                    </Canvas>
+                </Viewbox>
+                <!-- The interface face, as PowerToys uses, rather than a
+                     monospaced one: Consolas draws noticeably smaller digits at
+                     the same point size, which is why ours read smaller than
+                     theirs even after the sizes were raised past theirs.
+                     Proportional digits do change width as the figure changes,
+                     so the width is reserved and capped instead - the number
+                     moves inside its own box and nothing further along the bar
+                     shifts. -->
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock
+                        MinWidth="{x:Bind ValueWidth, Mode=OneWay}"
+                        MaxWidth="{x:Bind ValueWidth, Mode=OneWay}"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        Foreground="{x:Bind Colour, Mode=OneWay}"
+                        Text="{x:Bind Text, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis" />
+                    <!-- Capped, as PowerToys caps theirs. A drive's name is its
+                         model number and runs to twenty characters; left to size
+                         itself it makes one reading three times the width of its
+                         neighbours. -->
+                    <TextBlock
+                        MaxWidth="100"
+                        FontSize="{x:Bind LabelFontSize, Mode=OneWay}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Bind Label}"
+                        TextTrimming="CharacterEllipsis"
+                        Visibility="{x:Bind LabelVisible, Mode=OneWay}" />
+                </StackPanel>
+            </StackPanel>
+        </widgets:HoverChip>
+    </DataTemplate>
+
+    <DataTemplate x:Key="mcd.load" x:DataType="widgets:LoadWidget">
+        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <!-- Classic Binding, not x:Bind: inside an ItemsPanelTemplate
+                         there is no compiled binding target, and the data context
+                         here is the widget itself. -->
+                    <StackPanel Orientation="{Binding Orientation}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </DataTemplate>
+
+    <DataTemplate x:Key="mcd.temperature" x:DataType="widgets:TemperatureWidget">
+        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <!-- Classic Binding, not x:Bind: inside an ItemsPanelTemplate
+                         there is no compiled binding target, and the data context
+                         here is the widget itself. -->
+                    <StackPanel Orientation="{Binding Orientation}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </DataTemplate>
+
+    <!--
+        The launcher. A plain Button with a transparent background: the default
+        style leaves the normal state to the instance and keeps its own brushes
+        for hover and press, so this gets the system's own feedback for free.
+    -->
+    <DataTemplate x:Key="mcd.launcher" x:DataType="widgets:LauncherWidget">
+        <ItemsControl ItemsSource="{x:Bind Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="{Binding Orientation}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="widgets:LaunchButton">
+                    <Button
+                        Margin="{x:Bind Spacing, Mode=OneWay}"
+                        MinWidth="0"
+                        MinHeight="0"
+                        Padding="3"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{x:Bind LaunchCommand}"
+                        CornerRadius="4"
+                        ToolTipService.ToolTip="{x:Bind Name}">
+                        <Grid Width="16" Height="16">
+                            <Image Source="{x:Bind Icon, Mode=OneWay}" Stretch="Uniform" />
+                            <!-- Until the icon arrives, and for a target that has
+                                 none, the first letter of the name. An empty
+                                 square would read as a broken button. -->
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Text="{x:Bind Initial}"
+                                Visibility="{x:Bind Placeholder, Mode=OneWay}" />
+                        </Grid>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DataTemplate>
+
+</ResourceDictionary>

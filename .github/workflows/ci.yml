@@ -1,0 +1,38 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    # The program is Windows through and through: AppBar, DWM, PDH, WinUI.
+    # There is nothing here that could be checked on another platform.
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Check the declared version
+        run: pwsh tools/check-version.ps1
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test tests/MCD.Tests/MCD.Tests.csproj --no-build --configuration Release
+
+      # Unit tests cannot see the order services are built in, a XAML resource
+      # that failed to merge, or a start that hangs. Twenty seconds of running
+      # the real binary can.
+      - name: Smoke
+        run: pwsh tools/smoke.ps1 -Seconds 10
