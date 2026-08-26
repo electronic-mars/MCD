@@ -73,6 +73,24 @@ public sealed class ThinAcrylicBackdrop : SystemBackdrop
         _controller = null;
     }
 
+    /// <summary>
+    /// Ignores the framework's own configuration changing.
+    /// </summary>
+    /// <remarks>
+    /// Deliberately does not call the base. This bar supplies its own
+    /// configuration - always active, whatever the window is doing - so the
+    /// default one is not in use here, and passing the change on makes the
+    /// framework raise "the parameter is incorrect" for a target it was never
+    /// handed. That exception arrives on the interface thread and ends the
+    /// process, which is what was killing the docks at random: the notification
+    /// fires when a window is activated or the theme changes, so it depended
+    /// entirely on what the person happened to click next.
+    /// </remarks>
+    protected override void OnDefaultSystemBackdropConfigurationChanged(
+        ICompositionSupportsSystemBackdrop target, XamlRoot xamlRoot)
+    {
+    }
+
     private void OnThemeChanged(FrameworkElement sender, object args) =>
         _always.Theme = Match(sender.ActualTheme);
 

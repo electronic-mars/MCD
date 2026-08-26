@@ -48,6 +48,14 @@ public static class WidgetCatalog
             (context, entry) => new LoadWidget(context, entry)),
 
         new(
+            MediaWidget.Type,
+            "Media",
+            "Whatever is playing, with buttons for it. Hidden while nothing is.",
+            "Music",
+            AllowsMultiple: false,
+            (context, entry) => new MediaWidget(context, entry)),
+
+        new(
             TemperatureWidget.Type,
             "Temperature",
             "Temperatures of the parts that report one.",

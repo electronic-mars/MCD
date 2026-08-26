@@ -115,6 +115,92 @@
     </DataTemplate>
 
     <!--
+        One button on the bar: no border, no fill of its own, and the system's
+        hover and press brushes underneath. The default Button style leaves the
+        resting state to the instance and keeps its own brushes for the rest.
+    -->
+    <Style x:Key="BarButton" TargetType="Button">
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Padding" Value="4,2" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
+
+    <!-- Whatever is playing. The three buttons a media key would press, and on
+         the full-size bar the name of the track under them. -->
+    <DataTemplate x:Key="mcd.media" x:DataType="widgets:MediaWidget">
+        <StackPanel
+            Margin="{x:Bind Spacing, Mode=OneWay}"
+            Orientation="{x:Bind Orientation}"
+            Visibility="{x:Bind Visible, Mode=OneWay}">
+            <StackPanel Orientation="Horizontal" Spacing="2">
+                <Button
+                    Command="{x:Bind PreviousCommand}"
+                    Style="{StaticResource BarButton}"
+                    ToolTipService.ToolTip="Previous">
+                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind PreviousIcon, Converter={StaticResource Icon}, Mode=OneTime}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+
+                <Button
+                    Command="{x:Bind PlayPauseCommand}"
+                    Style="{StaticResource BarButton}"
+                    ToolTipService.ToolTip="Play or pause">
+                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind PlayIcon, Converter={StaticResource Icon}, Mode=OneWay}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+
+                <Button
+                    Command="{x:Bind NextCommand}"
+                    Style="{StaticResource BarButton}"
+                    ToolTipService.ToolTip="Next">
+                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind NextIcon, Converter={StaticResource Icon}, Mode=OneTime}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+            </StackPanel>
+
+            <TextBlock
+                MaxWidth="160"
+                Margin="4,0,0,0"
+                FontSize="{x:Bind FontSize, Mode=OneWay}"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind Title, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                ToolTipService.ToolTip="{x:Bind Title, Mode=OneWay}"
+                Visibility="{x:Bind TitleVisible, Mode=OneWay}" />
+        </StackPanel>
+    </DataTemplate>
+
+    <!--
         The launcher. A plain Button with a transparent background: the default
         style leaves the normal state to the instance and keeps its own brushes
         for hover and press, so this gets the system's own feedback for free.
