@@ -210,6 +210,42 @@ public sealed class DockWindowManager : IDisposable
         _log.LogInformation("launcher.pinned by drop {Target}", path);
     }
 
+    /// <summary>Puts the pinned items in the order a bar arranged them.</summary>
+    private void ReorderLauncher(ImmutableArray<string> ids)
+    {
+        SettingsModel current = _settings.Current;
+
+        var by = current.App.Launcher.ToDictionary(i => i.Id);
+        List<LaunchItem> ordered = [.. ids.Where(by.ContainsKey).Select(id => by[id])];
+
+        // Anything the bar did not mention - an item added between the drag
+        // and the drop - keeps its place at the end rather than vanishing.
+        ordered.AddRange(current.App.Launcher.Where(i => !ids.Contains(i.Id)));
+
+        _settings.Commit(
+            current with { App = current.App with { Launcher = [.. ordered] } },
+            WriteReason.UserAction);
+
+        _log.LogInformation("launcher.reordered");
+    }
+
+    private void Unpin(string id)
+    {
+        SettingsModel current = _settings.Current;
+
+        _settings.Commit(
+            current with
+            {
+                App = current.App with
+                {
+                    Launcher = [.. current.App.Launcher.Where(i => i.Id != id)],
+                },
+            },
+            WriteReason.UserAction);
+
+        _log.LogInformation("launcher.unpinned {Id}", id);
+    }
+
     private WidgetContext Context()
     {
         AppSettings app = _settings.Current.App;
@@ -266,6 +302,8 @@ public sealed class DockWindowManager : IDisposable
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
             window.PinRequested += (_, path) => Pin(path);
+            window.LauncherReordered += (_, ids) => ReorderLauncher(ids);
+            window.Unpinned += (_, id) => Unpin(id);
             _windows[id] = window;
             window.Activate();
         }

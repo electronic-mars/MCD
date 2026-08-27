@@ -619,4 +619,10 @@
   <data name="PinDropCaption" xml:space="preserve">
     <value>Закрепить на панели</value>
   </data>
+  <data name="WidgetMenuConfigure" xml:space="preserve">
+    <value>Настроить...</value>
+  </data>
+  <data name="WidgetMenuRemove" xml:space="preserve">
+    <value>Убрать с панели</value>
+  </data>
 </root>

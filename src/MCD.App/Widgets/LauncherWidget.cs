@@ -96,12 +96,16 @@ public sealed partial class LaunchButton : ObservableObject, IDisposable
     public LaunchButton(LaunchItem item, ILogger log)
     {
         _log = log;
+        Id = item.Id;
         Name = string.IsNullOrWhiteSpace(item.Name) ? item.Target : item.Name;
         Target = item.Target;
         Initial = Name.Length > 0 ? Name[..1].ToUpperInvariant() : "?";
 
         FindIcon();
     }
+
+    /// <summary>The pinned item's own id, so a dragged icon can say which it is.</summary>
+    public string Id { get; }
 
     public string Name { get; }
 

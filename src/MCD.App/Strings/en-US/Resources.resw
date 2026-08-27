@@ -619,4 +619,10 @@
   <data name="PinDropCaption" xml:space="preserve">
     <value>Pin to the bar</value>
   </data>
+  <data name="WidgetMenuConfigure" xml:space="preserve">
+    <value>Settings...</value>
+  </data>
+  <data name="WidgetMenuRemove" xml:space="preserve">
+    <value>Remove from bar</value>
+  </data>
 </root>
