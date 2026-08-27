@@ -28,9 +28,6 @@
   <data name="NavSensors.Content" xml:space="preserve">
     <value>Датчики</value>
   </data>
-  <data name="NavMonitors.Content" xml:space="preserve">
-    <value>Мониторы</value>
-  </data>
   <data name="NavAbout.Content" xml:space="preserve">
     <value>О программе</value>
   </data>
@@ -73,21 +70,6 @@
   <data name="AppearanceIntro.Text" xml:space="preserve">
     <value>Как отрисовываются панели. Применяется ко всем докам.</value>
   </data>
-  <data name="ThemeLabel.Text" xml:space="preserve">
-    <value>Тема</value>
-  </data>
-  <data name="ThemeHint.Text" xml:space="preserve">
-    <value>Светлая, тёмная или как в Windows.</value>
-  </data>
-  <data name="ThemeSystemItem.Content" xml:space="preserve">
-    <value>Как в Windows</value>
-  </data>
-  <data name="ThemeLightItem.Content" xml:space="preserve">
-    <value>Светлая</value>
-  </data>
-  <data name="ThemeDarkItem.Content" xml:space="preserve">
-    <value>Тёмная</value>
-  </data>
   <data name="BackgroundLabel.Text" xml:space="preserve">
     <value>Фон</value>
   </data>
@@ -117,7 +99,7 @@
     <value>Значки</value>
   </data>
   <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех доках.</value>
+    <value>Каким значком рисуется каждое показание виджетов — на всех доках. Иконку закреплённой программы меняют на странице «Доки»: щёлкните её на картинке панели.</value>
   </data>
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
@@ -151,15 +133,6 @@
     <value>ТЕКУЩИЕ ПОКАЗАНИЯ</value>
   </data>
   <!-- Страница «Мониторы» -->
-  <data name="MonitorsTitle.Text" xml:space="preserve">
-    <value>Мониторы</value>
-  </data>
-  <data name="MonitorsIntro.Text" xml:space="preserve">
-    <value>Все экраны, которые видела программа, и то, как она их узнаёт. Записи хранятся, пока вы не удалите их здесь.</value>
-  </data>
-  <data name="ForgetButton.Content" xml:space="preserve">
-    <value>Забыть</value>
-  </data>
   <!-- Страница «О программе» -->
   <data name="AboutTitle.Text" xml:space="preserve">
     <value>О программе</value>
@@ -440,12 +413,6 @@
   <data name="PinDialog.CloseButtonText" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="BackdropColourItem.Content" xml:space="preserve">
-    <value>Свой цвет</value>
-  </data>
-  <data name="BackdropImageItem.Content" xml:space="preserve">
-    <value>Картинка</value>
-  </data>
   <data name="PickColour" xml:space="preserve">
     <value>Выбрать цвет</value>
   </data>
@@ -527,9 +494,6 @@
   <data name="WidgetMenuRemove" xml:space="preserve">
     <value>Убрать с панели</value>
   </data>
-  <data name="BackdropBraunItem.Content" xml:space="preserve">
-    <value>Корпус прибора (браун)</value>
-  </data>
   <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Предыдущий</value>
   </data>
@@ -559,24 +523,6 @@
   </data>
   <data name="BehaviourTitle.Text" xml:space="preserve">
     <value>ПОВЕДЕНИЕ</value>
-  </data>
-  <data name="EdgeSegLeft.Text" xml:space="preserve">
-    <value>Слева</value>
-  </data>
-  <data name="EdgeSegTop.Text" xml:space="preserve">
-    <value>Сверху</value>
-  </data>
-  <data name="EdgeSegRight.Text" xml:space="preserve">
-    <value>Справа</value>
-  </data>
-  <data name="EdgeSegBottom.Text" xml:space="preserve">
-    <value>Снизу</value>
-  </data>
-  <data name="ThicknessSegDefault.Text" xml:space="preserve">
-    <value>Обычная</value>
-  </data>
-  <data name="ThicknessSegCompact.Text" xml:space="preserve">
-    <value>Компактная</value>
   </data>
   <data name="ThicknessNote.Text" xml:space="preserve">
     <value>У панели вдоль бока экрана толщина одна.</value>
@@ -616,5 +562,83 @@
   </data>
   <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Открыть плеер</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Как в Windows</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Тёмная</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Полупрозрачный</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Сплошной</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>Цвет</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>Картинка</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Браун</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Обычный текст</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Акцент Windows</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Слева</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Сверху</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Справа</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Снизу</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Обычная</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Компактная</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>Насколько горяч процессор.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>Насколько горяча видеокарта.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>Насколько горяч этот накопитель.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>Насколько горяча память.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>Насколько горяча материнская плата.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>Температура, которую сообщает эта машина.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>Насколько занят — в долях от возможного.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>Сколько данных передаётся прямо сейчас.</value>
+  </data>
+  <data name="ThemeHint.Text" xml:space="preserve">
+    <value>Светлая, тёмная или как в Windows.</value>
+  </data>
+  <data name="ThemeLabel.Text" xml:space="preserve">
+    <value>Тема</value>
   </data>
 </root>

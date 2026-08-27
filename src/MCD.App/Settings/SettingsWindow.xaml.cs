@@ -43,7 +43,6 @@ public sealed partial class SettingsWindow : Window
     private readonly HwInfoProvider _hwinfo;
     private readonly LhmProvider _lhm;
     private readonly Action _onExit;
-    private readonly ObservableCollection<MonitorRow> _known = [];
     /// <summary>The widget selected on the bar's picture, for the inspector.</summary>
     private string? _selectedId;
     private WidgetViewModel? _inspected;
@@ -109,7 +108,6 @@ public sealed partial class SettingsWindow : Window
 
         SizeAndCentre(screen: null);
 
-        MonitorList.ItemsSource = _known;
         IconList.ItemsSource = _icons;
         SensorList.ItemsSource = _readings;
         VersionText.Text = string.Format(
@@ -166,25 +164,11 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Rebuilds both lists from the settings and the live topology.</summary>
     public void Reload()
     {
-        Dictionary<string, MonitorInfo> live = _docks.Plans
-            .ToDictionary(p => p.Config.StableId, p => p.Monitor);
-
-        _known.Clear();
         _icons.Clear();
 
         AppSettings look = _settings.Current.App;
 
         _filling = true;
-        ThemeChoice.SelectedIndex = Appearance.Index(look.Theme);
-        BackdropChoice.SelectedIndex = look.Backdrop switch
-        {
-            "solid" => 1,
-            "colour" => 2,
-            "image" => 3,
-            "braun" => 4,
-            _ => 0,
-        };
-        AccentChoice.SelectedIndex = look.Accent == "windows" ? 1 : 0;
         LanguageChoice.SelectedIndex = look.Language switch
         {
             "en-US" => 1,
@@ -194,48 +178,112 @@ public sealed partial class SettingsWindow : Window
         _filling = false;
 
         Root.RequestedTheme = Appearance.Of(look.Theme);
+        RefreshLook();
 
         foreach ((string id, string label, string fallback) in IconChoices.Known)
         {
             _icons.Add(new IconRow(id, label, Chosen(id, fallback), OnIconChosen));
         }
 
-        foreach (MonitorConfig config in _settings.Current.Monitors)
-        {
-            live.TryGetValue(config.StableId, out MonitorInfo? monitor);
-            _known.Add(new MonitorRow(config, monitor, OnRowEdited));
-        }
-
         ReloadDocks();
     }
 
-    /// <summary>Rebuilds the dock picker and shows whichever dock was chosen.</summary>
+    /// <summary>
+    /// The appearance page's rows of tiles, the Master Audio Switcher way:
+    /// every few-way choice is a row of segments, and the chosen one wears
+    /// the accent.
+    /// </summary>
+    private void RefreshLook()
+    {
+        AppSettings look = _settings.Current.App;
+
+        ThemeSeg.Content = Seg.Buttons(
+            [
+                Loc.Tr("SegThemeSystem", "Match Windows"),
+                Loc.Tr("SegThemeLight", "Light"),
+                Loc.Tr("SegThemeDark", "Dark"),
+            ],
+            Appearance.Index(look.Theme),
+            i => ApplyLook(theme: Appearance.FromIndex(i)));
+
+        string[] backdrops = ["acrylic", "solid", "colour", "image", "braun"];
+
+        BackdropSeg.Content = Seg.Buttons(
+            [
+                Loc.Tr("SegBackdropTranslucent", "Translucent"),
+                Loc.Tr("SegBackdropSolid", "Solid"),
+                Loc.Tr("SegBackdropColour", "A colour"),
+                Loc.Tr("SegBackdropImage", "A picture"),
+                Loc.Tr("SegBackdropBraun", "Braun"),
+            ],
+            Math.Max(0, Array.IndexOf(backdrops, look.Backdrop)),
+            i => ApplyLook(backdrop: backdrops[i]));
+
+        AccentSeg.Content = Seg.Buttons(
+            [
+                Loc.Tr("SegAccentNeutral", "Plain text"),
+                Loc.Tr("SegAccentWindows", "Windows accent"),
+            ],
+            look.Accent == "windows" ? 1 : 0,
+            i => ApplyLook(accent: i == 1 ? "windows" : "neutral"));
+
+        ShowBackdropExtras();
+    }
+
+    /// <summary>The one writer of the appearance settings.</summary>
+    private void ApplyLook(string? theme = null, string? backdrop = null, string? accent = null)
+    {
+        SettingsModel current = _settings.Current;
+
+        _settings.Commit(
+            current with
+            {
+                App = current.App with
+                {
+                    Theme = theme ?? current.App.Theme,
+                    Backdrop = backdrop ?? current.App.Backdrop,
+                    Accent = accent ?? current.App.Accent,
+                },
+            },
+            WriteReason.UserAction);
+
+        // The window this is being set from follows it too, or the person is
+        // choosing a theme while looking at the old one.
+        Root.RequestedTheme = Appearance.Of(_settings.Current.App.Theme);
+        RefreshLook();
+
+        _log.LogInformation(
+            "settings.appearance theme={Theme} backdrop={Backdrop} accent={Accent}",
+            _settings.Current.App.Theme,
+            _settings.Current.App.Backdrop,
+            _settings.Current.App.Accent);
+    }
+
+    /// <summary>Rebuilds the display switcher and shows whichever dock was chosen.</summary>
     private void ReloadDocks()
     {
         ImmutableArray<MonitorConfig> monitors = _settings.Current.Monitors;
         Dictionary<string, MonitorInfo> live = _docks.Plans
             .ToDictionary(p => p.Config.StableId, p => p.Monitor);
 
-        _filling = true;
-        DockPicker.Items.Clear();
+        int chosen = Math.Max(0, monitors.ToList().FindIndex(m => m.StableId == _editing));
+        _editing = monitors.Length > 0 ? monitors[chosen].StableId : null;
+
+        var tabs = new List<(string Glyph, string Label)>();
 
         for (int i = 0; i < monitors.Length; i++)
         {
-            DockPicker.Items.Add(new SelectorBarItem
-            {
-                Text = Label(monitors[i], monitors, live, i)
-                    + (monitors[i].Enabled ? string.Empty : Loc.Tr("PickerOff", " — off")),
-                Tag = monitors[i].StableId,
-            });
+            tabs.Add((
+                "",
+                Label(monitors[i], monitors, live, i)
+                    + (monitors[i].Enabled ? string.Empty : Loc.Tr("PickerOff", " — off"))));
         }
 
-        SelectorBarItem? chosen =
-            DockPicker.Items.FirstOrDefault(item => (string?)item.Tag == _editing)
-            ?? DockPicker.Items.FirstOrDefault();
-
-        DockPicker.SelectedItem = chosen;
-        _editing = chosen?.Tag as string;
-        _filling = false;
+        DisplayTabs.Content = Seg.Tabs(tabs, chosen, i =>
+        {
+            _editing = monitors[i].StableId;
+            ReloadDocks();
+        });
 
         ShowDock();
     }
@@ -308,15 +356,40 @@ public sealed partial class SettingsWindow : Window
         DockEnabled.IsOn = dock.Enabled;
         DockTopmost.IsOn = dock.Topmost;
         DockAutoHide.IsOn = dock.Mode == AppBarMode.AutoHide;
-        EdgeChoice.SelectedItem = EdgeChoice.Items[(int)dock.Edge];
-        ThicknessChoice.SelectedItem =
-            ThicknessChoice.Items[dock.Density == DockDensity.Compact ? 1 : 0];
+
+        EdgeSeg.Content = Seg.Buttons(
+            [
+                Loc.Tr("SegEdgeLeft", "Left"),
+                Loc.Tr("SegEdgeTop", "Top"),
+                Loc.Tr("SegEdgeRight", "Right"),
+                Loc.Tr("SegEdgeBottom", "Bottom"),
+            ],
+            (int)dock.Edge,
+            i =>
+            {
+                EditDock(d => d with { Edge = (AppBarEdge)i }, Loc.Tr("UndoEdge", "edge"));
+                ShowDock();
+            });
+
+        ThicknessSeg.Content = Seg.Buttons(
+            [
+                Loc.Tr("SegThickDefault", "Default"),
+                Loc.Tr("SegThickCompact", "Compact"),
+            ],
+            dock.Density == DockDensity.Compact ? 1 : 0,
+            i =>
+            {
+                EditDock(
+                    d => d with { Density = i == 1 ? DockDensity.Compact : DockDensity.Default },
+                    Loc.Tr("UndoThickness", "thickness"));
+                ShowDock();
+            });
 
         // A vertical bar has one thickness; the row is replaced by its
         // explanation rather than offered greyed and mute.
         bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
         ThicknessLabel.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
-        ThicknessChoice.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
+        ThicknessSeg.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
         ThicknessNote.Visibility = horizontal ? Visibility.Collapsed : Visibility.Visible;
 
         HideNote.Visibility =
@@ -963,44 +1036,6 @@ public sealed partial class SettingsWindow : Window
             _log),
         entry);
 
-    private void OnAppearanceChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with
-            {
-                App = current.App with
-                {
-                    Theme = Appearance.FromIndex(ThemeChoice.SelectedIndex),
-                    Backdrop = BackdropChoice.SelectedIndex switch
-                    {
-                        1 => "solid",
-                        2 => "colour",
-                        3 => "image",
-                        4 => "braun",
-                        _ => "acrylic",
-                    },
-                    Accent = AccentChoice.SelectedIndex == 1 ? "windows" : "neutral",
-                },
-            },
-            WriteReason.UserAction);
-
-        // The window this is being set from follows it too, or the person is
-        // choosing a theme while looking at the old one.
-        Root.RequestedTheme = Appearance.Of(Appearance.FromIndex(ThemeChoice.SelectedIndex));
-        ShowBackdropExtras();
-
-        _log.LogInformation(
-            "settings.appearance theme={Theme} backdrop={Backdrop} accent={Accent}",
-            ThemeChoice.SelectedIndex, BackdropChoice.SelectedIndex, AccentChoice.SelectedIndex);
-    }
-
     private void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_filling)
@@ -1056,17 +1091,6 @@ public sealed partial class SettingsWindow : Window
 
         _log.LogInformation("settings.restart requested");
         _onExit();
-    }
-
-    private void OnDockPicked(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        _editing = (sender.SelectedItem?.Tag) as string;
-        ShowDock();
     }
 
     /// <summary>The extra row under Background: the chosen colour, or the picture.</summary>
@@ -1261,32 +1285,6 @@ public sealed partial class SettingsWindow : Window
         ShowDock();
     }
 
-    private void OnEdgeChosen(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        int edge = sender.Items.IndexOf(sender.SelectedItem);
-        EditDock(dock => dock with { Edge = (AppBarEdge)Math.Max(0, edge) }, Loc.Tr("UndoEdge", "edge"));
-        ShowDock();
-    }
-
-    private void OnThicknessChosen(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        bool compact = sender.Items.IndexOf(sender.SelectedItem) == 1;
-        EditDock(
-            dock => dock with { Density = compact ? DockDensity.Compact : DockDensity.Default },
-            Loc.Tr("UndoThickness", "thickness"));
-        ShowDock();
-    }
-
     private void OnDockAutoHideToggled(object sender, RoutedEventArgs e)
     {
         if (_filling)
@@ -1383,23 +1381,6 @@ public sealed partial class SettingsWindow : Window
     private MonitorConfig? Dock() =>
         _settings.Current.Monitors.FirstOrDefault(m => m.StableId == _editing);
 
-    private void OnRowEdited(MonitorRow row)
-    {
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with
-            {
-                Monitors =
-                [
-                    .. current.Monitors.Select(c => c.StableId == row.StableId ? row.Apply(c) : c)
-                ],
-            },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.edited monitor={Monitor}", row.Name);
-    }
-
     private void OnSectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
         string tag = (args.SelectedItem as NavigationViewItem)?.Tag as string ?? "docks";
@@ -1408,7 +1389,6 @@ public sealed partial class SettingsWindow : Window
         AppearanceSection.Visibility = Show(tag == "appearance");
         IconsSection.Visibility = Show(tag == "icons");
         SensorsSection.Visibility = Show(tag == "sensors");
-        MonitorsSection.Visibility = Show(tag == "monitors");
         AboutSection.Visibility = Show(tag == "about");
 
         // Only while a page that shows live figures is on screen. A window
@@ -1684,23 +1664,6 @@ public sealed partial class SettingsWindow : Window
         {
             _log.LogError(ex, "settings.launcher could not open the file picker");
         }
-    }
-
-    private void OnForget(object sender, RoutedEventArgs e)
-    {
-        if ((sender as FrameworkElement)?.Tag is not string stableId)
-        {
-            return;
-        }
-
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with { Monitors = [.. current.Monitors.Where(c => c.StableId != stableId)] },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.forgot monitor={Monitor}", stableId);
-        Reload();
     }
 
     private void OnOpenLogs(object sender, RoutedEventArgs e) => Open(AppPaths.LogDirectory);

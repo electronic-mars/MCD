@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Window
     x:Class="Mcd.App.Settings.SettingsWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -134,11 +134,6 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9D9;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="NavMonitors" Content="Monitors" Tag="monitors">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
@@ -166,10 +161,14 @@
                             Text="One dock per screen. Changes land on the bar as you make them."
                             TextWrapping="Wrap" />
 
-                        <SelectorBar
-                            x:Name="DockPicker"
+                        <!-- The display switcher, tiled the way Master Audio
+                             Switcher tiles its pages: icon above, name below.
+                             Built in code - the screens are not known here. -->
+                        <ContentControl
+                            x:Name="DisplayTabs"
                             Margin="0,8,0,0"
-                            SelectionChanged="OnDockPicked" />
+                            HorizontalContentAlignment="Left"
+                            IsTabStop="False" />
 
                         <TextBlock
                             x:Name="DockDetail"
@@ -206,12 +205,22 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock
-                                        x:Uid="BarLiveTitle"
+                                    <StackPanel
                                         VerticalAlignment="Center"
-                                        Foreground="{ThemeResource BraunTx3}"
-                                        Style="{StaticResource Micro}"
-                                        Text="THE BAR" />
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+                                        <FontIcon
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="13"
+                                            Foreground="{ThemeResource BraunTx3}"
+                                            Glyph="&#xE7F4;" />
+                                        <TextBlock
+                                            x:Uid="BarLiveTitle"
+                                            VerticalAlignment="Center"
+                                            Foreground="{ThemeResource BraunTx3}"
+                                            Style="{StaticResource Micro}"
+                                            Text="THE BAR" />
+                                    </StackPanel>
                                     <Button
                                         x:Name="UndoButton"
                                         Grid.Column="1"
@@ -260,12 +269,22 @@
                                  one chip each. A click adds it (or takes it off);
                                  dragging a chip onto the picture above puts it in
                                  that exact slot. -->
-                            <TextBlock
-                                x:Uid="GalleryTitle"
+                            <StackPanel
                                 Margin="0,8,0,0"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Style="{StaticResource Micro}"
-                                Text="WIDGETS" />
+                                Orientation="Horizontal"
+                                Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe MDL2 Assets"
+                                    FontSize="13"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    Glyph="&#xE71D;" />
+                                <TextBlock
+                                    x:Uid="GalleryTitle"
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    Style="{StaticResource Micro}"
+                                    Text="WIDGETS" />
+                            </StackPanel>
                             <Border
                                 Padding="16"
                                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -305,12 +324,22 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            x:Name="InspectorTitle"
+                                        <StackPanel
                                             VerticalAlignment="Center"
-                                            Foreground="{ThemeResource BraunTx3}"
-                                            Style="{StaticResource Micro}"
-                                            Text="WIDGET" />
+                                            Orientation="Horizontal"
+                                            Spacing="8">
+                                            <FontIcon
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="13"
+                                                Foreground="{ThemeResource BraunTx3}"
+                                                Glyph="&#xE713;" />
+                                            <TextBlock
+                                                x:Name="InspectorTitle"
+                                                VerticalAlignment="Center"
+                                                Foreground="{ThemeResource BraunTx3}"
+                                                Style="{StaticResource Micro}"
+                                                Text="WIDGET" />
+                                        </StackPanel>
                                         <Button
                                             x:Name="InspectorRemove"
                                             Grid.Column="1"
@@ -334,12 +363,22 @@
                                 </StackPanel>
                             </Border>
 
-                            <TextBlock
-                                x:Uid="PlacementTitle"
+                            <StackPanel
                                 Margin="0,8,0,0"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Style="{StaticResource Micro}"
-                                Text="PLACEMENT" />
+                                Orientation="Horizontal"
+                                Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe MDL2 Assets"
+                                    FontSize="13"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    Glyph="&#xE740;" />
+                                <TextBlock
+                                    x:Uid="PlacementTitle"
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    Style="{StaticResource Micro}"
+                                    Text="PLACEMENT" />
+                            </StackPanel>
                             <Border
                                 Padding="16"
                                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -361,17 +400,12 @@
                                         x:Uid="EdgeLabel"
                                         VerticalAlignment="Center"
                                         Text="Edge" />
-                                    <SelectorBar
-                                        x:Name="EdgeChoice"
+                                    <ContentControl
+                                        x:Name="EdgeSeg"
                                         Grid.Column="1"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
-                                        SelectionChanged="OnEdgeChosen">
-                                        <SelectorBarItem x:Uid="EdgeSegLeft" Text="Left" />
-                                        <SelectorBarItem x:Uid="EdgeSegTop" Text="Top" />
-                                        <SelectorBarItem x:Uid="EdgeSegRight" Text="Right" />
-                                        <SelectorBarItem x:Uid="EdgeSegBottom" Text="Bottom" />
-                                    </SelectorBar>
+                                        IsTabStop="False" />
 
                                     <TextBlock
                                         x:Name="ThicknessLabel"
@@ -379,16 +413,13 @@
                                         Grid.Row="1"
                                         VerticalAlignment="Center"
                                         Text="Thickness" />
-                                    <SelectorBar
-                                        x:Name="ThicknessChoice"
+                                    <ContentControl
+                                        x:Name="ThicknessSeg"
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
-                                        SelectionChanged="OnThicknessChosen">
-                                        <SelectorBarItem x:Uid="ThicknessSegDefault" Text="Default" />
-                                        <SelectorBarItem x:Uid="ThicknessSegCompact" Text="Compact" />
-                                    </SelectorBar>
+                                        IsTabStop="False" />
 
                                     <!-- Replaces the row, never greys it: a setting
                                          that cannot act is not offered. -->
@@ -405,12 +436,22 @@
                                 </Grid>
                             </Border>
 
-                            <TextBlock
-                                x:Uid="BehaviourTitle"
+                            <StackPanel
                                 Margin="0,8,0,0"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Style="{StaticResource Micro}"
-                                Text="BEHAVIOUR" />
+                                Orientation="Horizontal"
+                                Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe MDL2 Assets"
+                                    FontSize="13"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    Glyph="&#xE823;" />
+                                <TextBlock
+                                    x:Uid="BehaviourTitle"
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    Style="{StaticResource Micro}"
+                                    Text="BEHAVIOUR" />
+                            </StackPanel>
                             <Border
                                 Padding="16"
                                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -515,45 +556,25 @@
                                             Text="Light or dark, or the same as Windows."
                                             TextWrapping="Wrap" />
                                     </StackPanel>
-                                    <ComboBox
-                                        x:Name="ThemeChoice"
+                                    <ContentControl
+                                        x:Name="ThemeSeg"
                                         Grid.Column="1"
-                                        MinWidth="180"
                                         VerticalAlignment="Center"
-                                        SelectionChanged="OnAppearanceChanged">
-                                        <ComboBoxItem x:Uid="ThemeSystemItem" Content="Same as Windows" />
-                                        <ComboBoxItem x:Uid="ThemeLightItem" Content="Light" />
-                                        <ComboBoxItem x:Uid="ThemeDarkItem" Content="Dark" />
-                                    </ComboBox>
+                                        IsTabStop="False" />
                                 </Grid>
 
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock x:Uid="BackgroundLabel" Text="Background" />
-                                        <TextBlock
-                                            x:Uid="BackgroundHint"
-                                            FontSize="12"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Text="Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw."
-                                            TextWrapping="Wrap" />
-                                    </StackPanel>
-                                    <ComboBox
-                                        x:Name="BackdropChoice"
-                                        Grid.Column="1"
-                                        MinWidth="180"
-                                        VerticalAlignment="Center"
-                                        SelectionChanged="OnAppearanceChanged">
-                                        <ComboBoxItem x:Uid="BackdropTranslucentItem" Content="Translucent" />
-                                        <ComboBoxItem x:Uid="BackdropSolidItem" Content="Solid" />
-                                        <ComboBoxItem x:Uid="BackdropColourItem" Content="A colour of my own" />
-                                        <ComboBoxItem x:Uid="BackdropImageItem" Content="A picture" />
-                                        <ComboBoxItem x:Uid="BackdropBraunItem" Content="Instrument body (Braun)" />
-                                    </ComboBox>
-                                </Grid>
+                                <StackPanel Spacing="8">
+                                    <TextBlock x:Uid="BackgroundLabel" Text="Background" />
+                                    <TextBlock
+                                        x:Uid="BackgroundHint"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw."
+                                        TextWrapping="Wrap" />
+                                    <!-- Five choices need the whole row; the tiles
+                                         sit under their caption instead of beside it. -->
+                                    <ContentControl x:Name="BackdropSeg" IsTabStop="False" />
+                                </StackPanel>
 
                                 <Grid
                                     x:Name="BackdropExtras"
@@ -604,15 +625,11 @@
                                             Text="The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."
                                             TextWrapping="Wrap" />
                                     </StackPanel>
-                                    <ComboBox
-                                        x:Name="AccentChoice"
+                                    <ContentControl
+                                        x:Name="AccentSeg"
                                         Grid.Column="1"
-                                        MinWidth="180"
                                         VerticalAlignment="Center"
-                                        SelectionChanged="OnAppearanceChanged">
-                                        <ComboBoxItem x:Uid="AccentNeutralItem" Content="Plain text colour" />
-                                        <ComboBoxItem x:Uid="AccentWindowsItem" Content="Windows accent colour" />
-                                    </ComboBox>
+                                        IsTabStop="False" />
                                 </Grid>
 
                                 <Grid ColumnSpacing="16">
@@ -728,11 +745,22 @@
                             Text="Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running."
                             TextWrapping="Wrap" />
 
-                        <TextBlock
-                            x:Uid="LiveReadingsTitle"
+                        <StackPanel
                             Margin="0,16,0,0"
-                            Foreground="{ThemeResource BraunTx3}" Style="{StaticResource Micro}"
-                            Text="LIVE READINGS" />
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="13"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Glyph="&#xE9D9;" />
+                            <TextBlock
+                                x:Uid="LiveReadingsTitle"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="LIVE READINGS" />
+                        </StackPanel>
                         <TextBlock
                             x:Name="SensorSummary"
                             FontSize="12"
@@ -754,6 +782,11 @@
                                             <TextBlock Text="{x:Bind Label}" />
                                             <TextBlock
                                                 FontSize="12"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{x:Bind Explain}"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock
+                                                FontSize="12"
                                                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                 Text="{x:Bind Hardware}"
                                                 TextTrimming="CharacterEllipsis" />
@@ -765,76 +798,6 @@
                                             FontFamily="Consolas"
                                             Text="{x:Bind Value, Mode=OneWay}" />
                                     </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-
-                    <!-- Monitors -->
-                    <StackPanel x:Name="MonitorsSection" Spacing="8" Visibility="Collapsed">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE7F4;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
-                            <TextBlock
-                                x:Uid="MonitorsTitle"
-                                VerticalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="SemiBold"
-                                Text="Monitors" />
-                        </StackPanel>
-                        <TextBlock
-                            x:Uid="MonitorsIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="Every screen this program has seen, and how it recognises them. Entries are kept until you remove them here."
-                            TextWrapping="Wrap" />
-
-                        <ItemsControl x:Name="MonitorList" Margin="0,8,0,0">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="local:MonitorRow">
-                                    <Border
-                                        Margin="0,0,0,8"
-                                        Padding="16"
-                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="8">
-                                        <Grid ColumnSpacing="16">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <StackPanel Spacing="2">
-                                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Name}" />
-                                                <TextBlock
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                    Text="{x:Bind Detail}" />
-                                                <TextBlock
-                                                    Margin="0,6,0,0"
-                                                    FontFamily="Consolas"
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                                    IsTextSelectionEnabled="True"
-                                                    Text="{x:Bind StableId}" />
-                                                <TextBlock
-                                                    FontFamily="Consolas"
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                                    IsTextSelectionEnabled="True"
-                                                    Text="{x:Bind DevicePath}"
-                                                    TextTrimming="CharacterEllipsis" />
-                                            </StackPanel>
-
-                                            <Button
-                                                x:Uid="ForgetButton"
-                                                Grid.Column="1"
-                                                VerticalAlignment="Top"
-                                                Click="OnForget"
-                                                Content="Forget"
-                                                IsEnabled="{x:Bind CanForget}"
-                                                Tag="{x:Bind StableId}" />
-                                        </Grid>
-                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

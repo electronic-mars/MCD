@@ -28,9 +28,6 @@
   <data name="NavSensors.Content" xml:space="preserve">
     <value>Sensors</value>
   </data>
-  <data name="NavMonitors.Content" xml:space="preserve">
-    <value>Monitors</value>
-  </data>
   <data name="NavAbout.Content" xml:space="preserve">
     <value>About</value>
   </data>
@@ -73,21 +70,6 @@
   <data name="AppearanceIntro.Text" xml:space="preserve">
     <value>How the bars are drawn. This applies to every dock.</value>
   </data>
-  <data name="ThemeLabel.Text" xml:space="preserve">
-    <value>Theme</value>
-  </data>
-  <data name="ThemeHint.Text" xml:space="preserve">
-    <value>Light or dark, or the same as Windows.</value>
-  </data>
-  <data name="ThemeSystemItem.Content" xml:space="preserve">
-    <value>Same as Windows</value>
-  </data>
-  <data name="ThemeLightItem.Content" xml:space="preserve">
-    <value>Light</value>
-  </data>
-  <data name="ThemeDarkItem.Content" xml:space="preserve">
-    <value>Dark</value>
-  </data>
   <data name="BackgroundLabel.Text" xml:space="preserve">
     <value>Background</value>
   </data>
@@ -117,7 +99,7 @@
     <value>Icons</value>
   </data>
   <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Pick the picture each reading is drawn with. The choice applies to every dock.</value>
+    <value>Pick the picture each widget's reading is drawn with - on every dock. A pinned program's icon is changed on the Docks page: click its icon on the bar picture there.</value>
   </data>
   <!-- Sensors page -->
   <data name="SensorsTitle.Text" xml:space="preserve">
@@ -151,15 +133,6 @@
     <value>LIVE READINGS</value>
   </data>
   <!-- Monitors page -->
-  <data name="MonitorsTitle.Text" xml:space="preserve">
-    <value>Monitors</value>
-  </data>
-  <data name="MonitorsIntro.Text" xml:space="preserve">
-    <value>Every screen this program has seen, and how it recognises them. Entries are kept until you remove them here.</value>
-  </data>
-  <data name="ForgetButton.Content" xml:space="preserve">
-    <value>Forget</value>
-  </data>
   <!-- About page -->
   <data name="AboutTitle.Text" xml:space="preserve">
     <value>About</value>
@@ -440,12 +413,6 @@
   <data name="PinDialog.CloseButtonText" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="BackdropColourItem.Content" xml:space="preserve">
-    <value>A colour of my own</value>
-  </data>
-  <data name="BackdropImageItem.Content" xml:space="preserve">
-    <value>A picture</value>
-  </data>
   <data name="PickColour" xml:space="preserve">
     <value>Choose a colour</value>
   </data>
@@ -527,9 +494,6 @@
   <data name="WidgetMenuRemove" xml:space="preserve">
     <value>Remove from bar</value>
   </data>
-  <data name="BackdropBraunItem.Content" xml:space="preserve">
-    <value>Instrument body (Braun)</value>
-  </data>
   <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>
   </data>
@@ -559,24 +523,6 @@
   </data>
   <data name="BehaviourTitle.Text" xml:space="preserve">
     <value>BEHAVIOUR</value>
-  </data>
-  <data name="EdgeSegLeft.Text" xml:space="preserve">
-    <value>Left</value>
-  </data>
-  <data name="EdgeSegTop.Text" xml:space="preserve">
-    <value>Top</value>
-  </data>
-  <data name="EdgeSegRight.Text" xml:space="preserve">
-    <value>Right</value>
-  </data>
-  <data name="EdgeSegBottom.Text" xml:space="preserve">
-    <value>Bottom</value>
-  </data>
-  <data name="ThicknessSegDefault.Text" xml:space="preserve">
-    <value>Default</value>
-  </data>
-  <data name="ThicknessSegCompact.Text" xml:space="preserve">
-    <value>Compact</value>
   </data>
   <data name="ThicknessNote.Text" xml:space="preserve">
     <value>A bar down the side of the screen has one thickness.</value>
@@ -616,5 +562,83 @@
   </data>
   <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Open the player</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Match Windows</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Translucent</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Solid</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>A colour</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>A picture</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Braun</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Plain text</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows accent</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>How hot the processor is.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>How hot the graphics chip is.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>How hot this drive is.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>How hot the memory is.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>How hot the motherboard is.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>A temperature this machine reports.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>How busy it is, as a share of what it can do.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>How much data is moving right now.</value>
+  </data>
+  <data name="ThemeHint.Text" xml:space="preserve">
+    <value>Light or dark, or the same as Windows.</value>
+  </data>
+  <data name="ThemeLabel.Text" xml:space="preserve">
+    <value>Theme</value>
   </data>
 </root>
