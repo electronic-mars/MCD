@@ -153,6 +153,32 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial double LabelFontSize { get; set; } = 11;
 
+    /// <summary>Shown while the reading is past its critical point.</summary>
+    /// <remarks>
+    /// The shape behind the colour: for some eyes the amber-to-red step
+    /// barely exists, and a triangle is legible to everyone.
+    /// </remarks>
+    [ObservableProperty]
+    public partial Visibility AlertVisible { get; set; } = Visibility.Collapsed;
+
+    /// <summary>
+    /// Blinked three times as the reading crosses into critical, then steady.
+    /// </summary>
+    /// <remarks>
+    /// One beat per tick. A permanent bar lives in peripheral vision, and a
+    /// looping animation there is hostile - the entrance is announced once.
+    /// </remarks>
+    [ObservableProperty]
+    public partial double AlertOpacity { get; set; } = 1;
+
+    private int _alertBeats;
+
+    /// <summary>This widget's own warning point, when one was set for it.</summary>
+    public double? WarnAt { get; set; }
+
+    /// <summary>This widget's own critical point, when one was set for it.</summary>
+    public double? CritAt { get; set; }
+
     /// <summary>
     /// A small optical lift for the two-line block.
     /// </summary>
@@ -251,9 +277,29 @@ public sealed partial class Metric : ObservableObject
         Text = reading.HasValue ? Format(reading.Value) : "--";
         Reserve();
         Colour = Paint(reading);
-        ValueWeight = _level == Level.Critical
+
+        bool critical = _level == Level.Critical;
+
+        ValueWeight = critical
             ? Microsoft.UI.Text.FontWeights.SemiBold
             : Microsoft.UI.Text.FontWeights.Normal;
+
+        if (critical && AlertVisible == Visibility.Collapsed)
+        {
+            _alertBeats = 5;
+        }
+
+        AlertVisible = critical ? Visibility.Visible : Visibility.Collapsed;
+
+        if (critical && _alertBeats > 0)
+        {
+            _alertBeats--;
+            AlertOpacity = _alertBeats % 2 == 0 ? 1 : 0.35;
+        }
+        else
+        {
+            AlertOpacity = 1;
+        }
     }
 
     private string Format(double value) => Unit switch
@@ -297,16 +343,16 @@ public sealed partial class Metric : ObservableObject
     }
 
     private Level Raw(double value) =>
-        Sensor!.Critical is { } critical && value >= critical ? Level.Critical
-        : Sensor.Warning is { } warning && value >= warning ? Level.Warning
+        (CritAt ?? Sensor!.Critical) is { } critical && value >= critical ? Level.Critical
+        : (WarnAt ?? Sensor!.Warning) is { } warning && value >= warning ? Level.Warning
         : Level.Normal;
 
     private Level Falling(double value)
     {
         double? floor = _level switch
         {
-            Level.Critical => Sensor!.Critical,
-            Level.Warning => Sensor!.Warning,
+            Level.Critical => CritAt ?? Sensor!.Critical,
+            Level.Warning => WarnAt ?? Sensor!.Warning,
             _ => null,
         };
 

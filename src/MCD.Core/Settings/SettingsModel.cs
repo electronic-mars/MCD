@@ -31,13 +31,20 @@ public sealed record AppSettings
 
     /// <summary>
     /// What the bar is made of: "acrylic" for the translucent finish, "solid"
-    /// for a plain colour.
+    /// for the theme's plain colour, "colour" for one of the person's own,
+    /// "image" for a picture.
     /// </summary>
     /// <remarks>
     /// Solid is not only a taste: acrylic costs a little power to draw, and over
     /// a busy wallpaper some people find numbers on it harder to read.
     /// </remarks>
     public string Backdrop { get; init; } = "acrylic";
+
+    /// <summary>The bar's colour while Backdrop is "colour", as #AARRGGBB.</summary>
+    public string BackdropColour { get; init; } = "#FF202020";
+
+    /// <summary>The picture behind the bar while Backdrop is "image".</summary>
+    public string BackdropImage { get; init; } = string.Empty;
 
     /// <summary>
     /// Where the readings take their colour: "neutral" for the theme's text
@@ -129,6 +136,12 @@ public sealed record MonitorConfig
     public AppBarMode Mode { get; init; } = AppBarMode.Pinned;
 
     public DockDensity Density { get; init; } = DockDensity.Default;
+
+    /// <summary>
+    /// Whether this bar stays above other windows. On by default; a full-screen
+    /// program steps in front either way.
+    /// </summary>
+    public bool Topmost { get; init; } = true;
 
     /// <summary>
     /// Everything on the bar, in display order. Spacers are widgets too.

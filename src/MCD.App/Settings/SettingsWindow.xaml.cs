@@ -169,7 +169,13 @@ public sealed partial class SettingsWindow : Window
 
         _filling = true;
         ThemeChoice.SelectedIndex = Appearance.Index(look.Theme);
-        BackdropChoice.SelectedIndex = look.Backdrop == "solid" ? 1 : 0;
+        BackdropChoice.SelectedIndex = look.Backdrop switch
+        {
+            "solid" => 1,
+            "colour" => 2,
+            "image" => 3,
+            _ => 0,
+        };
         AccentChoice.SelectedIndex = look.Accent == "windows" ? 1 : 0;
         LanguageChoice.SelectedIndex = look.Language switch
         {
@@ -286,6 +292,7 @@ public sealed partial class SettingsWindow : Window
             : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen");
 
         DockEnabled.IsOn = dock.Enabled;
+        DockTopmost.IsOn = dock.Topmost;
         DockEdge.SelectedIndex = (int)dock.Edge;
         DockThickness.SelectedIndex = (int)dock.Density;
         DockMode.SelectedIndex = (int)dock.Mode;
@@ -498,7 +505,13 @@ public sealed partial class SettingsWindow : Window
                 App = current.App with
                 {
                     Theme = Appearance.FromIndex(ThemeChoice.SelectedIndex),
-                    Backdrop = BackdropChoice.SelectedIndex == 1 ? "solid" : "acrylic",
+                    Backdrop = BackdropChoice.SelectedIndex switch
+                    {
+                        1 => "solid",
+                        2 => "colour",
+                        3 => "image",
+                        _ => "acrylic",
+                    },
                     Accent = AccentChoice.SelectedIndex == 1 ? "windows" : "neutral",
                 },
             },
@@ -507,6 +520,7 @@ public sealed partial class SettingsWindow : Window
         // The window this is being set from follows it too, or the person is
         // choosing a theme while looking at the old one.
         Root.RequestedTheme = Appearance.Of(Appearance.FromIndex(ThemeChoice.SelectedIndex));
+        ShowBackdropExtras();
 
         _log.LogInformation(
             "settings.appearance theme={Theme} backdrop={Backdrop} accent={Accent}",
@@ -545,6 +559,127 @@ public sealed partial class SettingsWindow : Window
 
         _editing = (sender.SelectedItem?.Tag) as string;
         ShowDock();
+    }
+
+    /// <summary>The extra row under Background: the chosen colour, or the picture.</summary>
+    private void ShowBackdropExtras()
+    {
+        AppSettings app = _settings.Current.App;
+
+        switch (app.Backdrop)
+        {
+            case "colour":
+                BackdropExtras.Visibility = Visibility.Visible;
+                BackdropSwatch.Visibility = Visibility.Visible;
+                BackdropSwatch.Background = new SolidColorBrush(Swatch(app.BackdropColour));
+                BackdropDetail.Text = app.BackdropColour;
+                BackdropPick.Content = Loc.Tr("PickColour", "Choose a colour");
+                break;
+
+            case "image":
+                BackdropExtras.Visibility = Visibility.Visible;
+                BackdropSwatch.Visibility = Visibility.Collapsed;
+                BackdropDetail.Text = app.BackdropImage.Length > 0
+                    ? Path.GetFileName(app.BackdropImage)
+                    : Loc.Tr("NoPictureYet", "No picture chosen yet");
+                BackdropPick.Content = Loc.Tr("PickPicture", "Choose a picture");
+                break;
+
+            default:
+                BackdropExtras.Visibility = Visibility.Collapsed;
+                break;
+        }
+    }
+
+    private static Windows.UI.Color Swatch(string text)
+    {
+        string hex = text.TrimStart('#');
+
+        if (hex.Length == 6)
+        {
+            hex = "FF" + hex;
+        }
+
+        return uint.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out uint argb)
+            ? Windows.UI.Color.FromArgb(
+                (byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb)
+            : Windows.UI.Color.FromArgb(255, 32, 32, 32);
+    }
+
+    private async void OnBackdropPick(object sender, RoutedEventArgs e)
+    {
+        AppSettings app = _settings.Current.App;
+
+        if (app.Backdrop == "colour")
+        {
+            var picker = new ColorPicker
+            {
+                IsAlphaEnabled = true,
+                Color = Swatch(app.BackdropColour),
+            };
+
+            var flyout = new Flyout { Content = picker };
+
+            // Written once, when the flyout closes. Committing on every tick of
+            // the picker would rebuild every dock for each pixel of the drag.
+            flyout.Closed += (_, _) =>
+            {
+                Windows.UI.Color c = picker.Color;
+                string chosen = $"#{c.A:X2}{c.R:X2}{c.G:X2}{c.B:X2}";
+
+                SettingsModel current = _settings.Current;
+                _settings.Commit(
+                    current with { App = current.App with { BackdropColour = chosen } },
+                    WriteReason.UserAction);
+
+                _log.LogInformation("settings.backdrop colour={Colour}", chosen);
+                ShowBackdropExtras();
+            };
+
+            flyout.ShowAt(BackdropPick);
+            return;
+        }
+
+        try
+        {
+            var open = new Windows.Storage.Pickers.FileOpenPicker();
+
+            WinRT.Interop.InitializeWithWindow.Initialize(
+                open, WinRT.Interop.WindowNative.GetWindowHandle(this));
+
+            open.FileTypeFilter.Add(".png");
+            open.FileTypeFilter.Add(".jpg");
+            open.FileTypeFilter.Add(".jpeg");
+            open.FileTypeFilter.Add(".bmp");
+            open.FileTypeFilter.Add(".webp");
+
+            if (await open.PickSingleFileAsync() is not { } file)
+            {
+                return;
+            }
+
+            SettingsModel current = _settings.Current;
+            _settings.Commit(
+                current with { App = current.App with { BackdropImage = file.Path } },
+                WriteReason.UserAction);
+
+            _log.LogInformation("settings.backdrop image={Image}", file.Path);
+            ShowBackdropExtras();
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "settings.backdrop could not open the file picker");
+        }
+    }
+
+    private void OnDockTopmostToggled(object sender, RoutedEventArgs e)
+    {
+        if (_filling)
+        {
+            return;
+        }
+
+        EditDock(dock => dock with { Topmost = DockTopmost.IsOn }, "topmost");
     }
 
     private void OnDockEnabledToggled(object sender, RoutedEventArgs e)
@@ -1045,16 +1180,69 @@ public sealed partial class SettingsWindow : Window
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>Pins whatever is in the boxes.</summary>
-    private void OnAddLaunchItem(object sender, RoutedEventArgs e)
+    /// <summary>The pin dialog's fields, alive only while it is open.</summary>
+    private TextBox? _newTarget;
+    private TextBox? _newName;
+
+    /// <summary>Asks what to pin, then pins it.</summary>
+    /// <remarks>
+    /// Built here rather than declared in the window's tree: a ContentDialog
+    /// sitting unopened inside a window has been seen to hang that window's
+    /// close, and a dialog needs no place in a tree it only ever covers.
+    /// </remarks>
+    private async void OnPinDialog(object sender, RoutedEventArgs e)
     {
-        string target = NewTarget.Text.Trim();
+        _newTarget = new TextBox
+        {
+            Header = Loc.Tr("PinTargetHeader", "Program, folder or address"),
+            PlaceholderText = @"C:\Windows\notepad.exe  or  https://example.com",
+        };
+
+        _newName = new TextBox
+        {
+            Header = Loc.Tr("PinNameHeader", "Name"),
+            PlaceholderText = Loc.Tr("PinNameOptional", "optional"),
+        };
+
+        var browse = new Button { Content = Loc.Tr("PinBrowse", "Browse...") };
+        browse.Click += OnBrowse;
+
+        var dialog = new ContentDialog
+        {
+            Title = Loc.Tr("PinTitle", "Pin to the bar"),
+            PrimaryButtonText = Loc.Tr("PinAdd", "Add"),
+            CloseButtonText = Loc.Tr("PinCancel", "Cancel"),
+            DefaultButton = ContentDialogButton.Primary,
+            XamlRoot = Root.XamlRoot,
+            Content = new StackPanel
+            {
+                MinWidth = 360,
+                Spacing = 12,
+                Children = { _newTarget, browse, _newName },
+            },
+        };
+
+        bool add = await dialog.ShowAsync() == ContentDialogResult.Primary;
+
+        if (add)
+        {
+            AddLaunchItem();
+        }
+
+        _newTarget = null;
+        _newName = null;
+    }
+
+    private void AddLaunchItem()
+    {
+        string target = _newTarget?.Text.Trim() ?? string.Empty;
 
         if (target.Length == 0)
         {
             return;
         }
 
-        string name = NewName.Text.Trim();
+        string name = _newName?.Text.Trim() ?? string.Empty;
 
         SettingsModel current = _settings.Current;
 
@@ -1073,9 +1261,6 @@ public sealed partial class SettingsWindow : Window
             WriteReason.UserAction);
 
         _log.LogInformation("settings.launcher added {Target}", target);
-
-        NewName.Text = string.Empty;
-        NewTarget.Text = string.Empty;
         Reload();
     }
 
@@ -1149,11 +1334,14 @@ public sealed partial class SettingsWindow : Window
                 return;
             }
 
-            NewTarget.Text = file.Path;
-
-            if (NewName.Text.Trim().Length == 0)
+            if (_newTarget is not null)
             {
-                NewName.Text = LauncherRow.NameFor(file.Path);
+                _newTarget.Text = file.Path;
+            }
+
+            if (_newName is not null && _newName.Text.Trim().Length == 0)
+            {
+                _newName.Text = LauncherRow.NameFor(file.Path);
             }
         }
         catch (Exception ex)

@@ -517,4 +517,70 @@
   <data name="LanguageSystemItem.Content" xml:space="preserve">
     <value>Как в Windows</value>
   </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>как у самой детали</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Предупреждение при, °C</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Критично при, °C</value>
+  </data>
+  <data name="PinButtonText.Text" xml:space="preserve">
+    <value>Закрепить</value>
+  </data>
+  <data name="PinDialog.Title" xml:space="preserve">
+    <value>Закрепить на панели</value>
+  </data>
+  <data name="PinDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="PinDialog.CloseButtonText" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="BackdropColourItem.Content" xml:space="preserve">
+    <value>Свой цвет</value>
+  </data>
+  <data name="BackdropImageItem.Content" xml:space="preserve">
+    <value>Картинка</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Выбрать цвет</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Выбрать картинку</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>Картинка пока не выбрана</value>
+  </data>
+  <data name="TopmostLabel.Text" xml:space="preserve">
+    <value>Поверх других окон</value>
+  </data>
+  <data name="DockTopmost.OnContent" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="DockTopmost.OffContent" xml:space="preserve">
+    <value>Выкл.</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>Программа, папка или адрес</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>необязательно</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Обзор...</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>Закрепить на панели</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
 </root>

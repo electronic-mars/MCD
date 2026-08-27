@@ -56,6 +56,20 @@
                             StrokeThickness="1.5" />
                     </Canvas>
                 </Viewbox>
+
+                <FontIcon
+                    Margin="-4,0"
+                    VerticalAlignment="Center"
+                    FontSize="11"
+                    Foreground="{x:Bind Colour, Mode=OneWay}"
+                    Glyph="&#xE7BA;"
+                    Opacity="{x:Bind AlertOpacity, Mode=OneWay}"
+                    Visibility="{x:Bind AlertVisible, Mode=OneWay}">
+                    <FontIcon.OpacityTransition>
+                        <ScalarTransition Duration="0:0:0.25" />
+                    </FontIcon.OpacityTransition>
+                </FontIcon>
+
                 <!-- The interface face, as PowerToys uses, rather than a
                      monospaced one: Consolas draws noticeably smaller digits at
                      the same point size, which is why ours read smaller than
@@ -197,22 +211,55 @@
                     </Viewbox>
                 </Button>
 
-                <Button
-                    Command="{x:Bind PlayPauseCommand}"
-                    Style="{StaticResource BarButton}"
-                    ToolTipService.ToolTip="{x:Bind PlayTip, Mode=OneWay}">
-                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
-                        <Canvas Width="24" Height="24">
-                            <Path
-                                Data="{x:Bind PlayIcon, Converter={StaticResource Icon}, Mode=OneWay}"
-                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                StrokeEndLineCap="Round"
-                                StrokeLineJoin="Round"
-                                StrokeStartLineCap="Round"
-                                StrokeThickness="1.5" />
-                        </Canvas>
-                    </Viewbox>
-                </Button>
+                <Grid>
+                    <Button
+                        Command="{x:Bind PlayPauseCommand}"
+                        Style="{StaticResource BarButton}"
+                        ToolTipService.ToolTip="{x:Bind PlayTip, Mode=OneWay}">
+                        <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind PlayGlyph, Converter={StaticResource Icon}, Mode=OneTime}"
+                                    Opacity="{x:Bind PlayShown, Mode=OneWay}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="1.5">
+                                    <Path.OpacityTransition>
+                                        <ScalarTransition Duration="0:0:0.1" />
+                                    </Path.OpacityTransition>
+                                </Path>
+                                <Path
+                                    Data="{x:Bind PauseGlyph, Converter={StaticResource Icon}, Mode=OneTime}"
+                                    Opacity="{x:Bind PauseShown, Mode=OneWay}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="1.5">
+                                    <Path.OpacityTransition>
+                                        <ScalarTransition Duration="0:0:0.1" />
+                                    </Path.OpacityTransition>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+
+                    <!-- The taskbar's own "this one is live" mark, borrowed:
+                         a short accent tick under the button while sound is
+                         actually coming out. -->
+                    <Rectangle
+                        Width="12"
+                        Height="2"
+                        Margin="0,0,0,1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Fill="{ThemeResource AccentFillColorDefaultBrush}"
+                        RadiusX="1"
+                        RadiusY="1"
+                        Visibility="{x:Bind PlayingVisible, Mode=OneWay}" />
+                </Grid>
 
                 <Button
                     x:Uid="MediaNextButton"

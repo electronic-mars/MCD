@@ -27,8 +27,17 @@ public sealed record WidgetContext(
     /// <summary>True when readings are drawn in the accent colour from Windows.</summary>
     public bool Accent { get; init; }
 
-    /// <summary>True for the translucent finish, false for a plain colour.</summary>
+    /// <summary>True for the translucent finish, false for a painted one.</summary>
     public bool Acrylic { get; init; } = true;
+
+    /// <summary>"acrylic", "solid", "colour" or "image".</summary>
+    public string Backdrop { get; init; } = "acrylic";
+
+    /// <summary>The bar's own colour, as #AARRGGBB, while Backdrop is "colour".</summary>
+    public string BackdropColour { get; init; } = "#FF202020";
+
+    /// <summary>The picture behind the bar, while Backdrop is "image".</summary>
+    public string BackdropImage { get; init; } = string.Empty;
 
     /// <summary>Light, dark, or whatever Windows is set to.</summary>
     public ElementTheme Theme { get; init; } = ElementTheme.Default;

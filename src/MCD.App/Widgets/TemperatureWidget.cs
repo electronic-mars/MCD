@@ -151,6 +151,40 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
             panel.Children.Add(Explain());
         }
 
+        // The widget's own limits. Left empty, each part keeps the point its
+        // maker - or the ordinary default for its kind - declares.
+        var limits = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 8,
+            Margin = new Thickness(0, 6, 0, 0),
+        };
+
+        NumberBox Limit(string header, string key)
+        {
+            var box = new NumberBox
+            {
+                Header = header,
+                Width = 150,
+                Minimum = 30,
+                Maximum = 120,
+                SmallChange = 1,
+                SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Compact,
+                PlaceholderText = Loc.Tr("TempLimitAuto", "the part's own"),
+                Value = WidgetOptions.Number(Options, key) ?? double.NaN,
+            };
+
+            box.ValueChanged += (_, _) => changed(WidgetOptions.Merge(
+                Options,
+                (key, double.IsNaN(box.Value) ? null : JsonValue.Create((int)box.Value))));
+
+            return box;
+        }
+
+        limits.Children.Add(Limit(Loc.Tr("TempWarnAt", "Warning at, °C"), "warn"));
+        limits.Children.Add(Limit(Loc.Tr("TempCritAt", "Critical at, °C"), "crit"));
+        panel.Children.Add(limits);
+
         return panel;
 
         void Choose(string key, bool on)
@@ -194,6 +228,11 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
         {
             Spacing = LoadWidget.Gap(Orientation),
             Accent = Context.Accent,
+
+            // This widget's own limits, when the person set any. Null falls
+            // back to what the part itself declares or the ordinary defaults.
+            WarnAt = WidgetOptions.Number(Options, "warn"),
+            CritAt = WidgetOptions.Number(Options, "crit"),
 
             // The sensor may not be there yet - a graphics driver still loading,
             // an external source starting after the dock did - so the icon that

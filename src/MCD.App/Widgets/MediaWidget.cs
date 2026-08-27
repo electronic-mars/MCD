@@ -83,9 +83,27 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
     partial void OnTitleChanged(string value) => OnPropertyChanged(nameof(PlayTip));
 
-    /// <summary>"Play" or "Pause", by what the buttons would do next.</summary>
+    /// <summary>
+    /// The two middle glyphs, cross-faded rather than swapped.
+    /// </summary>
+    /// <remarks>
+    /// Both are always in the tree and trade opacity over a tenth of a
+    /// second, so the button never changes size and the switch reads as a
+    /// morph instead of a jump.
+    /// </remarks>
+    public string PlayGlyph => "Play";
+
+    public string PauseGlyph => "Pause";
+
     [ObservableProperty]
-    public partial string PlayIcon { get; set; } = "Play";
+    public partial double PlayShown { get; set; } = 1;
+
+    [ObservableProperty]
+    public partial double PauseShown { get; set; }
+
+    /// <summary>The accent tick under the middle button while sound is playing.</summary>
+    [ObservableProperty]
+    public partial Visibility PlayingVisible { get; set; } = Visibility.Collapsed;
 
     [ObservableProperty]
     public partial double IconSize { get; set; } = 17;
@@ -250,7 +268,9 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         bool playing = info?.PlaybackStatus
             == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
 
-        PlayIcon = playing ? "Pause" : "Play";
+        PlayShown = playing ? 0 : 1;
+        PauseShown = playing ? 1 : 0;
+        PlayingVisible = playing ? Visibility.Visible : Visibility.Collapsed;
 
         // Stopped and closed both mean there is nothing to control. Paused does
         // not: a paused track is one button away from playing again.

@@ -347,6 +347,15 @@ public partial class App : Application
     /// ProcessExit, the AppBar registration survives, and the build agent's work
     /// area stays shrunk for every job that follows.
     /// </remarks>
+    /// <summary>
+    /// The self-test's timers, held in a field on purpose: a
+    /// DispatcherQueueTimer referenced only by a local is garbage once the
+    /// method returns, and whether its ticks ever fire then depends on when
+    /// the collector happens to run. The eight-second exit tick was lost to
+    /// exactly that.
+    /// </summary>
+    private readonly List<Microsoft.UI.Dispatching.DispatcherQueueTimer> _selfTest = [];
+
     private void ScheduleSelfTestExit(ILogger log)
     {
         int seconds = int.TryParse(Environment.GetEnvironmentVariable("MCD_SELFTEST_SECONDS"), out int s)
@@ -370,6 +379,7 @@ public partial class App : Application
             ShowSettings();
             _settingsWindow?.Close();
         };
+        _selfTest.Add(settings);
         settings.Start();
 
         Microsoft.UI.Dispatching.DispatcherQueueTimer timer =
@@ -383,6 +393,7 @@ public partial class App : Application
             Shutdown();
             Exit();
         };
+        _selfTest.Add(timer);
         timer.Start();
     }
 

@@ -517,4 +517,70 @@
   <data name="LanguageSystemItem.Content" xml:space="preserve">
     <value>Same as Windows</value>
   </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>the part's own</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Warning at, °C</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Critical at, °C</value>
+  </data>
+  <data name="PinButtonText.Text" xml:space="preserve">
+    <value>Pin something</value>
+  </data>
+  <data name="PinDialog.Title" xml:space="preserve">
+    <value>Pin to the bar</value>
+  </data>
+  <data name="PinDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="PinDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BackdropColourItem.Content" xml:space="preserve">
+    <value>A colour of my own</value>
+  </data>
+  <data name="BackdropImageItem.Content" xml:space="preserve">
+    <value>A picture</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Choose a colour</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Choose a picture</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>No picture chosen yet</value>
+  </data>
+  <data name="TopmostLabel.Text" xml:space="preserve">
+    <value>Above other windows</value>
+  </data>
+  <data name="DockTopmost.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="DockTopmost.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>Program, folder or address</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>optional</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>Pin to the bar</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

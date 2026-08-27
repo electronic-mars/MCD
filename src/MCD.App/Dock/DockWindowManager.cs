@@ -193,7 +193,10 @@ public sealed class DockWindowManager : IDisposable
             _loggers.CreateLogger<WidgetContext>())
         {
             Accent = app.Accent == "windows",
-            Acrylic = app.Backdrop != "solid",
+            Acrylic = app.Backdrop == "acrylic",
+            Backdrop = app.Backdrop,
+            BackdropColour = app.BackdropColour,
+            BackdropImage = app.BackdropImage,
             Theme = Appearance.Of(app.Theme),
         };
     }

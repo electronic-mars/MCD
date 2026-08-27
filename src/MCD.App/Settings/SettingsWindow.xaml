@@ -56,13 +56,17 @@
 
                             <Button
                                 Grid.Column="2"
-                                Padding="8,4"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
                                 VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
                                 Click="OnWidgetMenu"
                                 Content="&#xE712;"
                                 x:Uid="WidgetMenuButton"
                                 FontFamily="Segoe MDL2 Assets"
-                                FontSize="14"
+                                FontSize="16"
                                 Tag="{x:Bind Id}"
                                 ToolTipService.ToolTip="Move or remove" />
                         </Grid>
@@ -101,12 +105,21 @@
         <!-- The title bar area is extended into, so this row is what the user
              drags the window by. -->
         <Border x:Name="TitleBar" Height="40">
-            <TextBlock
-                x:Uid="TitleBarText"
+            <StackPanel
                 Margin="16,0,0,0"
-                VerticalAlignment="Center"
-                FontSize="12"
-                Text="Master Control Dock" />
+                Orientation="Horizontal"
+                Spacing="12">
+                <Image
+                    Width="16"
+                    Height="16"
+                    VerticalAlignment="Center"
+                    Source="ms-appx:///Assets/icon-16.png" />
+                <TextBlock
+                    x:Uid="TitleBarText"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Text="Master Control Dock" />
+            </StackPanel>
         </Border>
 
         <NavigationView
@@ -226,14 +239,17 @@
                             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                             BorderThickness="1"
                             CornerRadius="8">
-                            <Grid ColumnSpacing="16" RowSpacing="12">
+                            <Grid ColumnSpacing="16">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" MinHeight="44" />
+                                    <RowDefinition Height="Auto" MinHeight="44" />
+                                    <RowDefinition Height="Auto" MinHeight="44" />
+                                    <RowDefinition Height="Auto" MinHeight="44" />
+                                    <RowDefinition Height="Auto" MinHeight="44" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
@@ -242,54 +258,88 @@
                                     x:Name="DockEnabled"
                                     x:Uid="DockEnabled"
                                     Grid.Column="1"
+                                    MinWidth="0"
                                     HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
                                     OffContent="Off"
                                     OnContent="On"
                                     Toggled="OnDockEnabledToggled" />
 
-                                <StackPanel
+                                <TextBlock
+                                    x:Uid="EdgeLabel"
                                     Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    Orientation="Horizontal"
-                                    Spacing="16">
-                                    <StackPanel Spacing="4">
-                                        <TextBlock x:Uid="EdgeLabel" FontSize="12" Text="Edge" />
-                                        <ComboBox
-                                            x:Name="DockEdge"
-                                            MinWidth="120"
-                                            SelectionChanged="OnDockShapeChanged">
-                                            <ComboBoxItem x:Uid="EdgeLeftItem" Content="Left" />
-                                            <ComboBoxItem x:Uid="EdgeTopItem" Content="Top" />
-                                            <ComboBoxItem x:Uid="EdgeRightItem" Content="Right" />
-                                            <ComboBoxItem x:Uid="EdgeBottomItem" Content="Bottom" />
-                                        </ComboBox>
-                                    </StackPanel>
-                                    <StackPanel Spacing="4">
-                                        <TextBlock x:Uid="SizeLabel" FontSize="12" Text="Size" />
-                                        <ComboBox
-                                            x:Name="DockThickness"
-                                            MinWidth="120"
-                                            SelectionChanged="OnDockShapeChanged">
-                                            <ComboBoxItem x:Uid="SizeDefaultItem" Content="Default" />
-                                            <ComboBoxItem x:Uid="SizeCompactItem" Content="Compact" />
-                                        </ComboBox>
-                                    </StackPanel>
-                                    <StackPanel Spacing="4">
-                                        <TextBlock x:Uid="BehaviourLabel" FontSize="12" Text="Behaviour" />
-                                        <ComboBox
-                                            x:Name="DockMode"
-                                            MinWidth="160"
-                                            SelectionChanged="OnDockShapeChanged">
-                                            <ComboBoxItem x:Uid="ModeVisibleItem" Content="Always visible" />
-                                            <ComboBoxItem x:Uid="ModeAutoHideItem" Content="Hides until you point at it" />
-                                        </ComboBox>
-                                    </StackPanel>
-                                </StackPanel>
+                                    VerticalAlignment="Center"
+                                    Text="Edge" />
+                                <ComboBox
+                                    x:Name="DockEdge"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    SelectionChanged="OnDockShapeChanged">
+                                    <ComboBoxItem x:Uid="EdgeLeftItem" Content="Left" />
+                                    <ComboBoxItem x:Uid="EdgeTopItem" Content="Top" />
+                                    <ComboBoxItem x:Uid="EdgeRightItem" Content="Right" />
+                                    <ComboBoxItem x:Uid="EdgeBottomItem" Content="Bottom" />
+                                </ComboBox>
+
+                                <TextBlock
+                                    x:Uid="SizeLabel"
+                                    Grid.Row="2"
+                                    VerticalAlignment="Center"
+                                    Text="Size" />
+                                <ComboBox
+                                    x:Name="DockThickness"
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    SelectionChanged="OnDockShapeChanged">
+                                    <ComboBoxItem x:Uid="SizeDefaultItem" Content="Default" />
+                                    <ComboBoxItem x:Uid="SizeCompactItem" Content="Compact" />
+                                </ComboBox>
+
+                                <TextBlock
+                                    x:Uid="BehaviourLabel"
+                                    Grid.Row="3"
+                                    VerticalAlignment="Center"
+                                    Text="Behaviour" />
+                                <ComboBox
+                                    x:Name="DockMode"
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    MinWidth="180"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    SelectionChanged="OnDockShapeChanged">
+                                    <ComboBoxItem x:Uid="ModeVisibleItem" Content="Always visible" />
+                                    <ComboBoxItem x:Uid="ModeAutoHideItem" Content="Hides until you point at it" />
+                                </ComboBox>
+
+                                <TextBlock
+                                    x:Uid="TopmostLabel"
+                                    Grid.Row="4"
+                                    VerticalAlignment="Center"
+                                    Text="Above other windows" />
+                                <ToggleSwitch
+                                    x:Name="DockTopmost"
+                                    x:Uid="DockTopmost"
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    MinWidth="0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    OffContent="Off"
+                                    OnContent="On"
+                                    Toggled="OnDockTopmostToggled" />
 
                                 <TextBlock
                                     x:Name="DockNote"
-                                    Grid.Row="2"
+                                    Grid.Row="5"
                                     Grid.ColumnSpan="2"
+                                    Margin="0,4,0,0"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                     TextWrapping="Wrap"
@@ -357,42 +407,16 @@
                             Text="Programs, folders and pages pinned to the bar. They appear on every dock, in this order."
                             TextWrapping="Wrap" />
 
-                        <Grid
+                        <Button
+                            x:Name="PinButton"
                             Margin="0,8,0,0"
-                            ColumnSpacing="8"
-                            RowSpacing="6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBox
-                                x:Name="NewName"
-                                x:Uid="NewName"
-                                Header="Name"
-                                PlaceholderText="optional" />
-                            <TextBox
-                                x:Name="NewTarget"
-                                x:Uid="NewTarget"
-                                Grid.Column="1"
-                                Header="Program, folder or address"
-                                PlaceholderText="C:\Windows\notepad.exe  or  https://example.com" />
-                            <Button
-                                x:Uid="BrowseButton"
-                                Grid.Column="2"
-                                VerticalAlignment="Bottom"
-                                Click="OnBrowse"
-                                Content="Browse..." />
-                            <Button
-                                x:Uid="AddLaunchButton"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Click="OnAddLaunchItem"
-                                Content="Add"
-                                Style="{StaticResource AccentButtonStyle}" />
-                        </Grid>
+                            Click="OnPinDialog"
+                            Style="{StaticResource AccentButtonStyle}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="12" Glyph="&#xE710;" />
+                                <TextBlock x:Uid="PinButtonText" Text="Pin something" />
+                            </StackPanel>
+                        </Button>
 
                         <ItemsControl x:Name="LauncherList" Margin="0,12,0,0">
                             <ItemsControl.ItemTemplate>
@@ -514,7 +538,44 @@
                                         SelectionChanged="OnAppearanceChanged">
                                         <ComboBoxItem x:Uid="BackdropTranslucentItem" Content="Translucent" />
                                         <ComboBoxItem x:Uid="BackdropSolidItem" Content="Solid" />
+                                        <ComboBoxItem x:Uid="BackdropColourItem" Content="A colour of my own" />
+                                        <ComboBoxItem x:Uid="BackdropImageItem" Content="A picture" />
                                     </ComboBox>
+                                </Grid>
+
+                                <Grid
+                                    x:Name="BackdropExtras"
+                                    ColumnSpacing="16"
+                                    Visibility="Collapsed">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+                                        <Border
+                                            x:Name="BackdropSwatch"
+                                            Width="16"
+                                            Height="16"
+                                            VerticalAlignment="Center"
+                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="4" />
+                                        <TextBlock
+                                            x:Name="BackdropDetail"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <Button
+                                        x:Name="BackdropPick"
+                                        Grid.Column="1"
+                                        MinWidth="180"
+                                        HorizontalAlignment="Right"
+                                        Click="OnBackdropPick" />
                                 </Grid>
 
                                 <Grid ColumnSpacing="16">

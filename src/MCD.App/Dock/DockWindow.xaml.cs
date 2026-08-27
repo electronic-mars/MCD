@@ -87,7 +87,7 @@ public sealed partial class DockWindow : Window
         Dress(context);
 
         WindowFrame.MakeChromeless(_hwnd);
-        WindowFrame.SetTopmost(_hwnd, topmost: true);
+        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
 
         InnerEdge.BorderThickness = InnerBorder(config.Edge);
 
@@ -528,7 +528,35 @@ public sealed partial class DockWindow : Window
         // acrylic backdrop and an opaque background on top of it pays for the
         // acrylic and shows none of it.
         SystemBackdrop = null;
-        Root.Background = (Brush)Application.Current.Resources["SolidBackgroundFillColorBaseBrush"];
+
+        Root.Background = context.Backdrop switch
+        {
+            "colour" => new SolidColorBrush(ParseColour(context.BackdropColour)),
+            "image" when context.BackdropImage.Length > 0 && File.Exists(context.BackdropImage) =>
+                new ImageBrush
+                {
+                    ImageSource = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(
+                        new Uri(context.BackdropImage)),
+                    Stretch = Stretch.UniformToFill,
+                },
+            _ => (Brush)Application.Current.Resources["SolidBackgroundFillColorBaseBrush"],
+        };
+    }
+
+    /// <summary>A colour written as #AARRGGBB or #RRGGBB.</summary>
+    private static Windows.UI.Color ParseColour(string text)
+    {
+        string hex = text.TrimStart('#');
+
+        if (hex.Length == 6)
+        {
+            hex = "FF" + hex;
+        }
+
+        return uint.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out uint argb)
+            ? Windows.UI.Color.FromArgb(
+                (byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb)
+            : Windows.UI.Color.FromArgb(255, 32, 32, 32);
     }
 
     /// <summary>
@@ -545,6 +573,7 @@ public sealed partial class DockWindow : Window
         Config = config;
         _context = context;
         Dress(context);
+        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
 
         foreach (WidgetHost host in _hosts)
         {
@@ -926,7 +955,7 @@ public sealed partial class DockWindow : Window
                 }
                 else
                 {
-                    WindowFrame.SetTopmost(_hwnd, topmost: true);
+                    WindowFrame.SetTopmost(_hwnd, topmost: Config.Topmost);
                 }
 
                 break;
