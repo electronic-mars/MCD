@@ -44,16 +44,16 @@
     <value>Docks</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>One dock per screen. Everything here takes effect on the bar as you do it. To move a widget, drag it on the bar.</value>
+    <value>One dock per screen. Changes land on the bar as you make them.</value>
   </data>
   <data name="BarLiveTitle.Text" xml:space="preserve">
-    <value>THE BAR, LIVE</value>
+    <value>THE BAR</value>
   </data>
   <data name="PreviewEmpty.Text" xml:space="preserve">
-    <value>This dock is empty. Add a widget below.</value>
+    <value>Empty. Add a widget, or right-click the bar where you want one.</value>
   </data>
   <data name="ShowDockLabel.Text" xml:space="preserve">
-    <value>Show this dock</value>
+    <value>Show a dock on this display</value>
   </data>
   <data name="DockEnabled.OnContent" xml:space="preserve">
     <value>On</value>
@@ -77,7 +77,7 @@
     <value>Bottom</value>
   </data>
   <data name="SizeLabel.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Thickness</value>
   </data>
   <data name="SizeDefaultItem.Content" xml:space="preserve">
     <value>Default</value>
@@ -86,7 +86,7 @@
     <value>Compact</value>
   </data>
   <data name="BehaviourLabel.Text" xml:space="preserve">
-    <value>Hides until you point at it</value>
+    <value>Hide until you point at its edge</value>
   </data>
   <data name="ModeVisibleItem.Content" xml:space="preserve">
     <value>Always visible</value>
@@ -554,7 +554,7 @@
     <value>No picture chosen yet</value>
   </data>
   <data name="TopmostLabel.Text" xml:space="preserve">
-    <value>Above other windows</value>
+    <value>Keep above other windows</value>
   </data>
   <data name="DockTopmost.OnContent" xml:space="preserve">
     <value>On</value>
@@ -633,5 +633,74 @@
   </data>
   <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Next</value>
+  </data>
+  <data name="BarHelp.Text" xml:space="preserve">
+    <value>Drag to rearrange - here or on the bar itself. Click a widget for its options. Right-click the real bar to add a widget where you point.</value>
+  </data>
+  <data name="RemoveFromBar.Text" xml:space="preserve">
+    <value>Remove from bar</value>
+  </data>
+  <data name="InspectorHint.Text" xml:space="preserve">
+    <value>Click a widget on the bar above to see its options.</value>
+  </data>
+  <data name="InspectorNone" xml:space="preserve">
+    <value>WIDGET</value>
+  </data>
+  <data name="PlacementTitle.Text" xml:space="preserve">
+    <value>PLACEMENT</value>
+  </data>
+  <data name="BehaviourTitle.Text" xml:space="preserve">
+    <value>BEHAVIOUR</value>
+  </data>
+  <data name="EdgeSegLeft.Text" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="EdgeSegTop.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="EdgeSegRight.Text" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="EdgeSegBottom.Text" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="ThicknessSegDefault.Text" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="ThicknessSegCompact.Text" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="ThicknessNote.Text" xml:space="preserve">
+    <value>A bar down the side of the screen has one thickness.</value>
+  </data>
+  <data name="HideNote.Text" xml:space="preserve">
+    <value>The taskbar already hides on this edge, so this dock stays visible.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>This widget has nothing to set up.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>widget options</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>removed</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>edge</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>thickness</value>
+  </data>
+  <data name="UndoHiding" xml:space="preserve">
+    <value>hiding</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>above other windows</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>shown</value>
+  </data>
+  <data name="PickerOff" xml:space="preserve">
+    <value> — off</value>
   </data>
 </root>

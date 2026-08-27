@@ -44,16 +44,16 @@
     <value>Доки</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>Один док на каждый экран. Все изменения сразу применяются к панели. Чтобы переместить виджет, перетащите его прямо на панели.</value>
+    <value>Один док на каждый экран. Изменения попадают на панель сразу.</value>
   </data>
   <data name="BarLiveTitle.Text" xml:space="preserve">
-    <value>ПАНЕЛЬ ВЖИВУЮ</value>
+    <value>ПАНЕЛЬ</value>
   </data>
   <data name="PreviewEmpty.Text" xml:space="preserve">
-    <value>Этот док пуст. Добавьте виджет ниже.</value>
+    <value>Пусто. Добавьте виджет — или щёлкните панель правой кнопкой там, где он нужен.</value>
   </data>
   <data name="ShowDockLabel.Text" xml:space="preserve">
-    <value>Показывать этот док</value>
+    <value>Показывать док на этом дисплее</value>
   </data>
   <data name="DockEnabled.OnContent" xml:space="preserve">
     <value>Вкл.</value>
@@ -77,7 +77,7 @@
     <value>Снизу</value>
   </data>
   <data name="SizeLabel.Text" xml:space="preserve">
-    <value>Размер</value>
+    <value>Толщина</value>
   </data>
   <data name="SizeDefaultItem.Content" xml:space="preserve">
     <value>Обычный</value>
@@ -633,5 +633,74 @@
   </data>
   <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Следующий</value>
+  </data>
+  <data name="BarHelp.Text" xml:space="preserve">
+    <value>Перетаскивайте — здесь или на самой панели. Щёлкните виджет, чтобы открыть его настройки. Правый клик по настоящей панели добавляет виджет в точку клика.</value>
+  </data>
+  <data name="RemoveFromBar.Text" xml:space="preserve">
+    <value>Убрать с панели</value>
+  </data>
+  <data name="InspectorHint.Text" xml:space="preserve">
+    <value>Щёлкните виджет на панели выше, чтобы увидеть его настройки.</value>
+  </data>
+  <data name="InspectorNone" xml:space="preserve">
+    <value>ВИДЖЕТ</value>
+  </data>
+  <data name="PlacementTitle.Text" xml:space="preserve">
+    <value>РАЗМЕЩЕНИЕ</value>
+  </data>
+  <data name="BehaviourTitle.Text" xml:space="preserve">
+    <value>ПОВЕДЕНИЕ</value>
+  </data>
+  <data name="EdgeSegLeft.Text" xml:space="preserve">
+    <value>Слева</value>
+  </data>
+  <data name="EdgeSegTop.Text" xml:space="preserve">
+    <value>Сверху</value>
+  </data>
+  <data name="EdgeSegRight.Text" xml:space="preserve">
+    <value>Справа</value>
+  </data>
+  <data name="EdgeSegBottom.Text" xml:space="preserve">
+    <value>Снизу</value>
+  </data>
+  <data name="ThicknessSegDefault.Text" xml:space="preserve">
+    <value>Обычная</value>
+  </data>
+  <data name="ThicknessSegCompact.Text" xml:space="preserve">
+    <value>Компактная</value>
+  </data>
+  <data name="ThicknessNote.Text" xml:space="preserve">
+    <value>У панели вдоль бока экрана толщина одна.</value>
+  </data>
+  <data name="HideNote.Text" xml:space="preserve">
+    <value>На этом краю уже скрывается панель задач, поэтому док остаётся видимым.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>У этого виджета нет настроек.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>настройки виджета</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>удаление</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>край</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>толщину</value>
+  </data>
+  <data name="UndoHiding" xml:space="preserve">
+    <value>скрытие</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>поверх окон</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>показ дока</value>
+  </data>
+  <data name="PickerOff" xml:space="preserve">
+    <value> — выкл</value>
   </data>
 </root>

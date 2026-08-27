@@ -43,6 +43,9 @@ public sealed partial class WidgetPreview : ContentControl, IDisposable
         AutomationProperties.SetAccessibilityView(this, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
     }
 
+    /// <summary>The view model inside, for the picture that edits.</summary>
+    public WidgetViewModel Widget => _widget;
+
     public void Tick(SensorSnapshot snapshot)
     {
         try

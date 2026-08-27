@@ -89,76 +89,7 @@
                     <Setter Property="FontSize" Value="20" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
-                <!-- A band's rows fill the width and carry no selection chrome of
-                     their own: the card inside already has a border. -->
-                <Style x:Key="BandItemStyle" TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="Margin" Value="0,0,0,6" />
-                <Setter Property="MinHeight" Value="0" />
-            </Style>
 
-            <DataTemplate x:Key="WidgetCardTemplate" x:DataType="local:WidgetCard">
-                <Expander
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    IsExpanded="{x:Bind Expanded, Mode=TwoWay}">
-                    <Expander.Header>
-                        <Grid Padding="0,6" ColumnSpacing="12">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Viewbox
-                                Width="20"
-                                Height="20"
-                                VerticalAlignment="Center">
-                                <Canvas Width="24" Height="24">
-                                    <Path
-                                        Data="{x:Bind Shape}"
-                                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeStartLineCap="Round"
-                                        StrokeThickness="1.5" />
-                                </Canvas>
-                            </Viewbox>
-
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Bind Name}" />
-                                <TextBlock
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Text="{x:Bind Summary, Mode=OneWay}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <Button
-                                Grid.Column="2"
-                                Width="32"
-                                Height="32"
-                                Padding="0"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Click="OnWidgetMenu"
-                                Content="&#xE712;"
-                                x:Uid="WidgetMenuButton"
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="16"
-                                Tag="{x:Bind Id}"
-                                ToolTipService.ToolTip="Move or remove" />
-                        </Grid>
-                    </Expander.Header>
-
-                    <ContentControl
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Content="{x:Bind Editor, Mode=OneWay}" />
-                </Expander>
-            </DataTemplate>
 
             <DataTemplate x:Key="IconChoiceTemplate" x:DataType="local:IconChoice">
                 <Viewbox
@@ -248,7 +179,8 @@
             <ScrollViewer Padding="36,24,36,36">
                 <StackPanel HorizontalAlignment="Left" MaxWidth="1000" Spacing="12">
 
-                    <!-- Docks -->
+                    <!-- Docks. The bar's live picture is the editing surface:
+                         what looks like the bar behaves like the bar. -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
@@ -262,7 +194,7 @@
                         <TextBlock
                             x:Uid="DocksIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="One dock per screen. Everything here takes effect on the bar as you do it. To move a widget, drag it on the bar."
+                            Text="One dock per screen. Changes land on the bar as you make them."
                             TextWrapping="Wrap" />
 
                         <SelectorBar
@@ -275,209 +207,275 @@
                             FontSize="12"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
 
-                        <!-- The bar itself, at the thickness it really is, with
-                             the widgets that are really on it. Not a drawing:
-                             the same templates and the same readings. -->
-                        <StackPanel Margin="0,8,0,8" Spacing="6">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    x:Uid="BarLiveTitle"
-                                    VerticalAlignment="Center"
-                                    Foreground="{ThemeResource BraunTx3}" Style="{StaticResource Micro}"
-                                    Text="THE BAR, LIVE" />
-                                <Button
-                                    x:Name="UndoButton"
-                                    Grid.Column="1"
-                                    Click="OnUndo"
-                                    Content="Undo"
-                                    IsEnabled="False" />
-                            </Grid>
+                        <Grid Margin="0,4,0,0" ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Uid="ShowDockLabel"
+                                VerticalAlignment="Center"
+                                Text="Show a dock on this display" />
+                            <ToggleSwitch
+                                x:Name="DockEnabled"
+                                x:Uid="DockEnabled"
+                                Grid.Column="1"
+                                MinWidth="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                OffContent="Off"
+                                OnContent="On"
+                                Toggled="OnDockEnabledToggled" />
+                        </Grid>
 
+                        <!-- Everything the master switch governs dims with it. -->
+                        <StackPanel x:Name="DockBody" Spacing="8">
+
+                            <StackPanel Margin="0,4,0,4" Spacing="6">
+                                <Grid ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        x:Uid="BarLiveTitle"
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource BraunTx3}"
+                                        Style="{StaticResource Micro}"
+                                        Text="THE BAR" />
+                                    <Button
+                                        x:Uid="AddWidgetButton"
+                                        Grid.Column="1"
+                                        Click="OnAddWidget"
+                                        Content="Add widget" />
+                                    <Button
+                                        x:Name="UndoButton"
+                                        Grid.Column="2"
+                                        Click="OnUndo"
+                                        Content="Undo"
+                                        IsEnabled="False" />
+                                </Grid>
+                                <TextBlock
+                                    x:Uid="BarHelp"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="Drag to rearrange - here or on the bar itself. Click a widget for its options. Right-click the real bar to add a widget where you point."
+                                    TextWrapping="Wrap" />
+
+                                <Border
+                                    Padding="0"
+                                    Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <Grid
+                                        x:Name="Preview"
+                                        Background="Transparent"
+                                        HorizontalAlignment="Stretch"
+                                        PointerCanceled="OnPreviewCancelled"
+                                        PointerMoved="OnPreviewMoved"
+                                        PointerPressed="OnPreviewPressed"
+                                        PointerReleased="OnPreviewReleased"
+                                        RightTapped="OnPreviewRightTapped">
+                                        <Grid x:Name="PreviewStrip" />
+                                        <Canvas x:Name="PreviewOverlay" IsHitTestVisible="False" />
+                                        <TextBlock
+                                            x:Name="PreviewEmpty"
+                                            x:Uid="PreviewEmpty"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            Text="Empty. Add a widget, or right-click the bar where you want one."
+                                            Visibility="Collapsed" />
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- The inspector: whatever widget is selected on the
+                                 picture above, its options live here, beside the
+                                 picture that shows their effect. -->
                             <Border
-                                Padding="0"
-                                Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
+                                Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                                 BorderThickness="1"
                                 CornerRadius="8">
-                                <Grid x:Name="Preview" HorizontalAlignment="Stretch">
-                                    <Grid x:Name="PreviewStrip" />
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnSpacing="16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            x:Name="InspectorTitle"
+                                            VerticalAlignment="Center"
+                                            Foreground="{ThemeResource BraunTx3}"
+                                            Style="{StaticResource Micro}"
+                                            Text="WIDGET" />
+                                        <Button
+                                            x:Name="InspectorRemove"
+                                            Grid.Column="1"
+                                            Click="OnInspectorRemove"
+                                            Visibility="Collapsed">
+                                            <TextBlock x:Uid="RemoveFromBar" Text="Remove from bar" />
+                                        </Button>
+                                    </Grid>
                                     <TextBlock
-                                        x:Name="PreviewEmpty"
-                                        x:Uid="PreviewEmpty"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
+                                        x:Name="InspectorHint"
+                                        x:Uid="InspectorHint"
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="This dock is empty. Add a widget below."
+                                        Text="Click a widget on the bar above to see its options."
+                                        TextWrapping="Wrap" />
+                                    <ContentControl
+                                        x:Name="InspectorEditor"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
+                                        Visibility="Collapsed" />
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock
+                                x:Uid="PlacementTitle"
+                                Margin="0,8,0,0"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="PLACEMENT" />
+                            <Border
+                                Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" MinHeight="44" />
+                                        <RowDefinition Height="Auto" MinHeight="44" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        x:Uid="EdgeLabel"
+                                        VerticalAlignment="Center"
+                                        Text="Edge" />
+                                    <SelectorBar
+                                        x:Name="EdgeChoice"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        SelectionChanged="OnEdgeChosen">
+                                        <SelectorBarItem x:Uid="EdgeSegLeft" Text="Left" />
+                                        <SelectorBarItem x:Uid="EdgeSegTop" Text="Top" />
+                                        <SelectorBarItem x:Uid="EdgeSegRight" Text="Right" />
+                                        <SelectorBarItem x:Uid="EdgeSegBottom" Text="Bottom" />
+                                    </SelectorBar>
+
+                                    <TextBlock
+                                        x:Name="ThicknessLabel"
+                                        x:Uid="SizeLabel"
+                                        Grid.Row="1"
+                                        VerticalAlignment="Center"
+                                        Text="Thickness" />
+                                    <SelectorBar
+                                        x:Name="ThicknessChoice"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        SelectionChanged="OnThicknessChosen">
+                                        <SelectorBarItem x:Uid="ThicknessSegDefault" Text="Default" />
+                                        <SelectorBarItem x:Uid="ThicknessSegCompact" Text="Compact" />
+                                    </SelectorBar>
+
+                                    <!-- Replaces the row, never greys it: a setting
+                                         that cannot act is not offered. -->
+                                    <TextBlock
+                                        x:Name="ThicknessNote"
+                                        x:Uid="ThicknessNote"
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                        Text="A bar down the side of the screen has one thickness."
+                                        TextWrapping="Wrap"
                                         Visibility="Collapsed" />
                                 </Grid>
                             </Border>
-                        </StackPanel>
 
-                        <Border
-                            Margin="0,4,0,0"
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <Grid ColumnSpacing="16">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" MinHeight="44" />
-                                    <RowDefinition Height="Auto" MinHeight="44" />
-                                    <RowDefinition Height="Auto" MinHeight="44" />
-                                    <RowDefinition Height="Auto" MinHeight="44" />
-                                    <RowDefinition Height="Auto" MinHeight="44" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                                <TextBlock x:Uid="ShowDockLabel" VerticalAlignment="Center" Text="Show this dock" />
-                                <ToggleSwitch
-                                    x:Name="DockEnabled"
-                                    x:Uid="DockEnabled"
-                                    Grid.Column="1"
-                                    MinWidth="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    OffContent="Off"
-                                    OnContent="On"
-                                    Toggled="OnDockEnabledToggled" />
-
-                                <TextBlock
-                                    x:Uid="EdgeLabel"
-                                    Grid.Row="1"
-                                    VerticalAlignment="Center"
-                                    Text="Edge" />
-                                <ComboBox
-                                    x:Name="DockEdge"
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    MinWidth="180"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    SelectionChanged="OnDockShapeChanged">
-                                    <ComboBoxItem x:Uid="EdgeLeftItem" Content="Left" />
-                                    <ComboBoxItem x:Uid="EdgeTopItem" Content="Top" />
-                                    <ComboBoxItem x:Uid="EdgeRightItem" Content="Right" />
-                                    <ComboBoxItem x:Uid="EdgeBottomItem" Content="Bottom" />
-                                </ComboBox>
-
-                                <TextBlock
-                                    x:Uid="SizeLabel"
-                                    Grid.Row="2"
-                                    VerticalAlignment="Center"
-                                    Text="Size" />
-                                <ToggleSwitch
-                                    x:Name="DockCompact"
-                                    x:Uid="DockCompact"
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    MinWidth="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    OffContent="Default"
-                                    OnContent="Compact"
-                                    Toggled="OnDockShapeToggled" />
-
-                                <TextBlock
-                                    x:Uid="BehaviourLabel"
-                                    Grid.Row="3"
-                                    VerticalAlignment="Center"
-                                    Text="Hides until you point at it" />
-                                <ToggleSwitch
-                                    x:Name="DockAutoHide"
-                                    x:Uid="DockAutoHide"
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    MinWidth="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    OffContent="Off"
-                                    OnContent="On"
-                                    Toggled="OnDockShapeToggled" />
-
-                                <TextBlock
-                                    x:Uid="TopmostLabel"
-                                    Grid.Row="4"
-                                    VerticalAlignment="Center"
-                                    Text="Above other windows" />
-                                <ToggleSwitch
-                                    x:Name="DockTopmost"
-                                    x:Uid="DockTopmost"
-                                    Grid.Row="4"
-                                    Grid.Column="1"
-                                    MinWidth="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    OffContent="Off"
-                                    OnContent="On"
-                                    Toggled="OnDockTopmostToggled" />
-
-                                <TextBlock
-                                    x:Name="DockNote"
-                                    Grid.Row="5"
-                                    Grid.ColumnSpan="2"
-                                    Margin="0,4,0,0"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    TextWrapping="Wrap"
-                                    Visibility="Collapsed" />
-                            </Grid>
-                        </Border>
-
-
-                        <StackPanel Margin="0,12,0,0" Spacing="6">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    x:Uid="WidgetsTitle"
-                                    VerticalAlignment="Center"
-                                    Foreground="{ThemeResource BraunTx3}" Style="{StaticResource Micro}"
-                                    Text="WIDGETS" />
-                                <Button
-                                    x:Uid="AddWidgetButton"
-                                    Grid.Column="1"
-                                    Click="OnAddWidget"
-                                    Content="Add widget" />
-                            </Grid>
                             <TextBlock
-                                x:Uid="WidgetsIntro"
-                                FontSize="12"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="In bar order. Drag widgets on the bar itself, or right-click the bar to add one where you point. Spacers decide where the free length goes."
-                                TextWrapping="Wrap" />
-                            <ListView
-                                x:Name="WidgetList"
-                                ItemContainerStyle="{StaticResource BandItemStyle}"
-                                ItemTemplate="{StaticResource WidgetCardTemplate}"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollMode="Disabled"
-                                SelectionMode="Single" />
+                                x:Uid="BehaviourTitle"
+                                Margin="0,8,0,0"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="BEHAVIOUR" />
                             <Border
-                                x:Name="WidgetsEmpty"
-                                Padding="16,10"
+                                Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                                 BorderThickness="1"
                                 CornerRadius="8">
-                                <TextBlock
-                                    x:Uid="WidgetsEmptyText"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Text="Nothing here yet." />
+                                <Grid ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" MinHeight="44" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" MinHeight="44" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        x:Uid="BehaviourLabel"
+                                        VerticalAlignment="Center"
+                                        Text="Hide until you point at its edge" />
+                                    <ToggleSwitch
+                                        x:Name="DockAutoHide"
+                                        x:Uid="DockAutoHide"
+                                        Grid.Column="1"
+                                        MinWidth="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        OffContent="Off"
+                                        OnContent="On"
+                                        Toggled="OnDockAutoHideToggled" />
+
+                                    <TextBlock
+                                        x:Name="HideNote"
+                                        x:Uid="HideNote"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                        Text="The taskbar already hides on this edge, so this dock stays visible."
+                                        TextWrapping="Wrap"
+                                        Visibility="Collapsed" />
+
+                                    <TextBlock
+                                        x:Uid="TopmostLabel"
+                                        Grid.Row="2"
+                                        VerticalAlignment="Center"
+                                        Text="Keep above other windows" />
+                                    <ToggleSwitch
+                                        x:Name="DockTopmost"
+                                        x:Uid="DockTopmost"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        MinWidth="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        OffContent="Off"
+                                        OnContent="On"
+                                        Toggled="OnDockTopmostToggled" />
+                                </Grid>
                             </Border>
                         </StackPanel>
-
                     </StackPanel>
 
                     <!-- Launcher -->

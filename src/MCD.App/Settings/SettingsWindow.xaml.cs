@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Mcd.Interop.AppBar;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Windows.Foundation;
 using Mcd.Interop.Display;
 using Mcd.Interop.Windowing;
 using Microsoft.UI.Dispatching;
@@ -42,7 +44,16 @@ public sealed partial class SettingsWindow : Window
     private readonly LhmProvider _lhm;
     private readonly Action _onExit;
     private readonly ObservableCollection<MonitorRow> _known = [];
-    private readonly ObservableCollection<WidgetCard> _cards = [];
+    /// <summary>The widget selected on the bar's picture, for the inspector.</summary>
+    private string? _selectedId;
+    private WidgetViewModel? _inspected;
+
+    /// <summary>Dragging inside the bar's picture.</summary>
+    private WidgetPreview? _pGrab;
+    private Point _pAt;
+    private bool _pMoving;
+    private int _pCaret = -1;
+    private readonly Microsoft.UI.Xaml.Shapes.Rectangle _pMark = new();
 
     /// <summary>The dock being edited, by its monitor's stable id.</summary>
     private string? _editing;
@@ -61,7 +72,7 @@ public sealed partial class SettingsWindow : Window
     /// what the bar does are never allowed to differ. This is what makes that
     /// safe - a mistake is one keystroke back rather than a form to abandon.
     /// </remarks>
-    private readonly Stack<(string StableId, ImmutableArray<WidgetConfig> Before, string Label)> _undo = new();
+    private readonly Stack<(string StableId, MonitorConfig Before, string Label)> _undo = new();
     private readonly ObservableCollection<IconRow> _icons = [];
     private readonly ObservableCollection<LauncherRow> _launcher = [];
     private readonly ObservableCollection<SensorRow> _readings = [];
@@ -99,7 +110,6 @@ public sealed partial class SettingsWindow : Window
 
         SizeAndCentre(screen: null);
 
-        WidgetList.ItemsSource = _cards;
         MonitorList.ItemsSource = _known;
         IconList.ItemsSource = _icons;
         LauncherList.ItemsSource = _launcher;
@@ -221,7 +231,8 @@ public sealed partial class SettingsWindow : Window
         {
             DockPicker.Items.Add(new SelectorBarItem
             {
-                Text = Label(monitors[i], monitors, live, i),
+                Text = Label(monitors[i], monitors, live, i)
+                    + (monitors[i].Enabled ? string.Empty : Loc.Tr("PickerOff", " — off")),
                 Tag = monitors[i].StableId,
             });
         }
@@ -304,24 +315,317 @@ public sealed partial class SettingsWindow : Window
 
         DockEnabled.IsOn = dock.Enabled;
         DockTopmost.IsOn = dock.Topmost;
-        DockEdge.SelectedIndex = (int)dock.Edge;
-        DockCompact.IsOn = dock.Density == DockDensity.Compact;
         DockAutoHide.IsOn = dock.Mode == AppBarMode.AutoHide;
+        EdgeChoice.SelectedItem = EdgeChoice.Items[(int)dock.Edge];
+        ThicknessChoice.SelectedItem =
+            ThicknessChoice.Items[dock.Density == DockDensity.Compact ? 1 : 0];
 
-        // Vertical bars have one width and no compact form, so offering the
-        // choice would be offering a setting that does nothing.
-        DockCompact.IsEnabled = DockMetrics.IsHorizontal(dock.Edge);
+        // A vertical bar has one thickness; the row is replaced by its
+        // explanation rather than offered greyed and mute.
+        bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
+        ThicknessLabel.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
+        ThicknessChoice.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
+        ThicknessNote.Visibility = horizontal ? Visibility.Collapsed : Visibility.Visible;
 
-        string note = Note(dock);
-        DockNote.Text = note;
-        DockNote.Visibility = note.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        HideNote.Visibility =
+            dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
 
-        Fill(dock.Widgets);
+        // The master switch gates visibly: everything it governs dims with it.
+        DockBody.Opacity = dock.Enabled ? 1 : 0.35;
+        DockBody.IsHitTestVisible = dock.Enabled;
 
         ShowPreview(dock);
+        RefreshInspector();
         ShowUndo();
 
         _filling = false;
+    }
+
+    /// <summary>The options of whatever is selected on the picture above.</summary>
+    private void RefreshInspector()
+    {
+        WidgetConfig? entry = Dock()?.Widgets.FirstOrDefault(w => w.InstanceId == _selectedId);
+
+        _inspected?.Dispose();
+        _inspected = null;
+
+        if (entry is null)
+        {
+            _selectedId = null;
+            InspectorTitle.Text = Loc.Tr("InspectorNone", "WIDGET");
+            InspectorHint.Visibility = Visibility.Visible;
+            InspectorEditor.Visibility = Visibility.Collapsed;
+            InspectorEditor.Content = null;
+            InspectorRemove.Visibility = Visibility.Collapsed;
+            return;
+        }
+
+        WidgetType? type = WidgetCatalog.Find(entry.TypeId);
+
+        InspectorTitle.Text = (type?.Name ?? entry.TypeId).ToUpperInvariant();
+        InspectorHint.Visibility = Visibility.Collapsed;
+        InspectorRemove.Visibility = Visibility.Visible;
+
+        _inspected = Build(entry);
+        string id = entry.InstanceId;
+
+        InspectorEditor.Content =
+            _inspected?.CreateEditor(options => OnInspectorConfigured(id, options))
+            ?? new TextBlock
+            {
+                Text = Loc.Tr("NothingToSetUp", "This widget has nothing to set up."),
+                FontSize = 12,
+                Opacity = 0.7,
+                TextWrapping = TextWrapping.Wrap,
+            };
+
+        InspectorEditor.Visibility = Visibility.Visible;
+    }
+
+    private void OnInspectorConfigured(string id, System.Text.Json.JsonElement? options)
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets.Select(w => w.InstanceId == id ? w with { Config = options } : w)],
+            Loc.Tr("UndoOptions", "widget options"),
+            rebuild: false);
+    }
+
+    private void OnInspectorRemove(object sender, RoutedEventArgs e)
+    {
+        if (_selectedId is not { } id || Dock() is not { } dock)
+        {
+            return;
+        }
+
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets.Where(w => w.InstanceId != id)],
+            Loc.Tr("UndoRemovedOne", "removed"));
+    }
+
+    // ---------------- the picture is the editing surface ----------------
+
+    private void OnPreviewPressed(object sender, PointerRoutedEventArgs e)
+    {
+        _pAt = e.GetCurrentPoint(Preview).Position;
+        _pGrab = PreviewUnder(_pAt);
+        _pMoving = false;
+    }
+
+    private void OnPreviewMoved(object sender, PointerRoutedEventArgs e)
+    {
+        if (_pGrab is null)
+        {
+            return;
+        }
+
+        Point at = e.GetCurrentPoint(Preview).Position;
+
+        if (!_pMoving)
+        {
+            if (Math.Abs(at.X - _pAt.X) + Math.Abs(at.Y - _pAt.Y) < 6)
+            {
+                return;
+            }
+
+            _pMoving = true;
+            _pGrab.Opacity = 0.4;
+            Preview.CapturePointer(e.Pointer);
+        }
+
+        ShowPreviewMark(at);
+    }
+
+    private void OnPreviewReleased(object sender, PointerRoutedEventArgs e)
+    {
+        if (_pGrab is { } grabbed)
+        {
+            if (_pMoving)
+            {
+                LandPreview(grabbed);
+            }
+            else
+            {
+                // A plain click selects: the inspector below fills in.
+                _selectedId = grabbed.Widget.Entry.InstanceId;
+                RefreshInspector();
+            }
+        }
+
+        EndPreviewDrag();
+    }
+
+    private void OnPreviewCancelled(object sender, PointerRoutedEventArgs e) => EndPreviewDrag();
+
+    private void OnPreviewRightTapped(object sender, RightTappedRoutedEventArgs e)
+    {
+        if (PreviewUnder(e.GetPosition(Preview)) is not { } target || Dock() is not { } dock)
+        {
+            return;
+        }
+
+        e.Handled = true;
+
+        var menu = new MenuFlyout { XamlRoot = Content.XamlRoot };
+        var remove = new MenuFlyoutItem { Text = Loc.Tr("WidgetMenuRemove", "Remove from bar") };
+        string id = target.Widget.Entry.InstanceId;
+
+        remove.Click += (_, _) => Rearrange(
+            dock.StableId,
+            widgets => [.. widgets.Where(w => w.InstanceId != id)],
+            Loc.Tr("UndoRemovedOne", "removed"));
+
+        menu.Items.Add(remove);
+        menu.ShowAt(Preview, e.GetPosition(Preview));
+    }
+
+    private void EndPreviewDrag()
+    {
+        if (_pGrab is not null)
+        {
+            _pGrab.Opacity = 1;
+        }
+
+        PreviewOverlay.Children.Remove(_pMark);
+        Preview.ReleasePointerCaptures();
+        _pGrab = null;
+        _pMoving = false;
+        _pCaret = -1;
+    }
+
+    private WidgetPreview? PreviewUnder(Point at)
+    {
+        foreach (WidgetPreview child in PreviewStrip.Children.OfType<WidgetPreview>())
+        {
+            var rect = new Rect(
+                PreviewStrip.ActualOffset.X + child.ActualOffset.X,
+                PreviewStrip.ActualOffset.Y + child.ActualOffset.Y,
+                child.ActualWidth,
+                child.ActualHeight);
+
+            if (rect.Contains(at))
+            {
+                return child;
+            }
+        }
+
+        return null;
+    }
+
+    private void ShowPreviewMark(Point at)
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
+        double along = horizontal ? at.X : at.Y;
+
+        List<WidgetPreview> drawn = [.. PreviewStrip.Children.OfType<WidgetPreview>()];
+
+        int index = drawn.Count;
+
+        for (int i = 0; i < drawn.Count; i++)
+        {
+            double start = horizontal
+                ? PreviewStrip.ActualOffset.X + drawn[i].ActualOffset.X
+                : PreviewStrip.ActualOffset.Y + drawn[i].ActualOffset.Y;
+            double middle = start
+                + ((horizontal ? drawn[i].ActualWidth : drawn[i].ActualHeight) / 2);
+
+            if (along < middle)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        _pCaret = index;
+
+        _pMark.Fill = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
+        _pMark.RadiusX = 1;
+        _pMark.RadiusY = 1;
+        _pMark.Width = horizontal ? 2 : 20;
+        _pMark.Height = horizontal ? 20 : 2;
+
+        if (!PreviewOverlay.Children.Contains(_pMark))
+        {
+            PreviewOverlay.Children.Add(_pMark);
+        }
+
+        double edge;
+
+        if (drawn.Count == 0)
+        {
+            edge = (horizontal ? Preview.ActualWidth : Preview.ActualHeight) / 2;
+        }
+        else if (index >= drawn.Count)
+        {
+            WidgetPreview last = drawn[^1];
+            edge = horizontal
+                ? PreviewStrip.ActualOffset.X + last.ActualOffset.X + last.ActualWidth + 2
+                : PreviewStrip.ActualOffset.Y + last.ActualOffset.Y + last.ActualHeight + 2;
+        }
+        else
+        {
+            edge = horizontal
+                ? PreviewStrip.ActualOffset.X + drawn[index].ActualOffset.X - 2
+                : PreviewStrip.ActualOffset.Y + drawn[index].ActualOffset.Y - 2;
+        }
+
+        if (horizontal)
+        {
+            Canvas.SetLeft(_pMark, edge - (_pMark.Width / 2));
+            Canvas.SetTop(_pMark, (Preview.ActualHeight - _pMark.Height) / 2);
+        }
+        else
+        {
+            Canvas.SetLeft(_pMark, (Preview.ActualWidth - _pMark.Width) / 2);
+            Canvas.SetTop(_pMark, edge - (_pMark.Height / 2));
+        }
+    }
+
+    private void LandPreview(WidgetPreview grabbed)
+    {
+        if (_pCaret < 0 || Dock() is not { } dock)
+        {
+            return;
+        }
+
+        List<WidgetPreview> drawn = [.. PreviewStrip.Children.OfType<WidgetPreview>()];
+        string moved = grabbed.Widget.Entry.InstanceId;
+
+        List<string> before =
+        [
+            .. drawn.Take(Math.Min(_pCaret, drawn.Count))
+                .Where(c => !ReferenceEquals(c, grabbed))
+                .Select(c => c.Widget.Entry.InstanceId)
+        ];
+
+        List<WidgetConfig> list = [.. dock.Widgets.Where(w => w.InstanceId != moved)];
+        WidgetConfig entry = dock.Widgets.First(w => w.InstanceId == moved);
+
+        int where = before.Count == 0
+            ? 0
+            : list.FindIndex(w => w.InstanceId == before[^1]) + 1;
+
+        list.Insert(Math.Clamp(where, 0, list.Count), entry);
+
+        if (list.Select(w => w.InstanceId).SequenceEqual(dock.Widgets.Select(w => w.InstanceId)))
+        {
+            return;
+        }
+
+        Rearrange(dock.StableId, _ => [.. list], Loc.Tr("UndoMoved", "moved"));
     }
 
     /// <summary>Draws the bar as it is, at the thickness it really is.</summary>
@@ -431,7 +735,7 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Puts the last layout back.</summary>
     private void OnUndo(object sender, RoutedEventArgs e)
     {
-        if (!_undo.TryPop(out (string StableId, ImmutableArray<WidgetConfig> Before, string Label) step))
+        if (!_undo.TryPop(out (string StableId, MonitorConfig Before, string Label) step))
         {
             return;
         }
@@ -444,7 +748,7 @@ public sealed partial class SettingsWindow : Window
                 Monitors =
                 [
                     .. current.Monitors.Select(
-                        c => c.StableId == step.StableId ? c with { Widgets = step.Before } : c)
+                        c => c.StableId == step.StableId ? step.Before : c)
                 ],
             },
             WriteReason.UserAction);
@@ -455,42 +759,6 @@ public sealed partial class SettingsWindow : Window
         // switching screens has to take you back to what you changed.
         _editing = step.StableId;
         ReloadDocks();
-    }
-
-    private string Note(MonitorConfig dock)
-    {
-        if (!DockMetrics.IsHorizontal(dock.Edge) && dock.Density == DockDensity.Compact)
-        {
-            return Loc.Tr(
-                "NoteCompactVertical",
-                "A bar down the side of a screen has only one width, so Compact does nothing here.");
-        }
-
-        if (dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge))
-        {
-            return Loc.Tr(
-                "NoteTaskbarHides",
-                "The taskbar already hides on this edge, so this dock stays visible.");
-        }
-
-        return string.Empty;
-    }
-
-    private void Fill(ImmutableArray<WidgetConfig> entries)
-    {
-        foreach (WidgetCard old in _cards)
-        {
-            old.Dispose();
-        }
-
-        _cards.Clear();
-
-        foreach (WidgetConfig entry in entries)
-        {
-            _cards.Add(new WidgetCard(entry, Build, OnWidgetConfigured));
-        }
-
-        WidgetsEmpty.Visibility = entries.IsEmpty ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private WidgetViewModel? Build(WidgetConfig entry) => WidgetCatalog.Create(
@@ -776,7 +1044,9 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        EditDock(dock => dock with { Topmost = DockTopmost.IsOn }, "topmost");
+        EditDock(
+            dock => dock with { Topmost = DockTopmost.IsOn },
+            Loc.Tr("UndoTopmost", "above other windows"));
     }
 
     private void OnDockEnabledToggled(object sender, RoutedEventArgs e)
@@ -786,10 +1056,44 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        EditDock(dock => dock with { Enabled = DockEnabled.IsOn }, "enabled");
+        // A Toggled that only repeats what the settings already say writes
+        // nothing - the event can arrive late, after the fill guard has lifted.
+        if (Dock()?.Enabled == DockEnabled.IsOn)
+        {
+            return;
+        }
+
+        EditDock(dock => dock with { Enabled = DockEnabled.IsOn }, Loc.Tr("UndoShown", "shown"));
+        ShowDock();
     }
 
-    private void OnDockShapeChanged(object sender, SelectionChangedEventArgs e)
+    private void OnEdgeChosen(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
+    {
+        if (_filling)
+        {
+            return;
+        }
+
+        int edge = sender.Items.IndexOf(sender.SelectedItem);
+        EditDock(dock => dock with { Edge = (AppBarEdge)Math.Max(0, edge) }, Loc.Tr("UndoEdge", "edge"));
+        ShowDock();
+    }
+
+    private void OnThicknessChosen(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
+    {
+        if (_filling)
+        {
+            return;
+        }
+
+        bool compact = sender.Items.IndexOf(sender.SelectedItem) == 1;
+        EditDock(
+            dock => dock with { Density = compact ? DockDensity.Compact : DockDensity.Default },
+            Loc.Tr("UndoThickness", "thickness"));
+        ShowDock();
+    }
+
+    private void OnDockAutoHideToggled(object sender, RoutedEventArgs e)
     {
         if (_filling)
         {
@@ -797,19 +1101,10 @@ public sealed partial class SettingsWindow : Window
         }
 
         EditDock(
-            dock => dock with
-            {
-                Edge = (AppBarEdge)Math.Max(0, DockEdge.SelectedIndex),
-                Density = DockCompact.IsOn ? DockDensity.Compact : DockDensity.Default,
-                Mode = DockAutoHide.IsOn ? AppBarMode.AutoHide : AppBarMode.Pinned,
-            },
-            "shape");
-
+            dock => dock with { Mode = DockAutoHide.IsOn ? AppBarMode.AutoHide : AppBarMode.Pinned },
+            Loc.Tr("UndoHiding", "hiding"));
         ShowDock();
     }
-
-    private void OnDockShapeToggled(object sender, RoutedEventArgs e) =>
-        OnDockShapeChanged(sender, null!);
 
     /// <summary>Offers the widgets this build knows, minus any that would duplicate.</summary>
     private void OnAddWidget(object sender, RoutedEventArgs e)
@@ -850,7 +1145,7 @@ public sealed partial class SettingsWindow : Window
                     dock.StableId,
                     widgets => [.. widgets, WidgetConfig.New(type.TypeId)],
                     string.Format(
-                        CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), type.TypeId));
+                        CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), type.Name));
             };
 
             list.Children.Add(choice);
@@ -906,91 +1201,6 @@ public sealed partial class SettingsWindow : Window
         return row;
     }
 
-    /// <summary>Moving and removing one widget.</summary>
-    private void OnWidgetMenu(object sender, RoutedEventArgs e)
-    {
-        if (sender is not Button button || button.Tag is not string id || Dock() is not { } dock)
-        {
-            return;
-        }
-
-        if (Card(id) is not { } card)
-        {
-            return;
-        }
-
-        var menu = new MenuFlyout();
-
-        Add(Loc.Tr("MenuMoveUp", "Move up"), () => Shift(card, -1), Index(card) > 0);
-        Add(Loc.Tr("MenuMoveDown", "Move down"), () => Shift(card, +1), Index(card) < dock.Widgets.Length - 1);
-        menu.Items.Add(new MenuFlyoutSeparator());
-        Add(Loc.Tr("MenuRemove", "Remove"), () => Remove(card), enabled: true);
-
-        menu.ShowAt(button);
-
-        void Add(string text, Action act, bool enabled)
-        {
-            var item = new MenuFlyoutItem { Text = text, IsEnabled = enabled };
-            item.Click += (_, _) => act();
-            menu.Items.Add(item);
-        }
-    }
-
-    private void OnWidgetConfigured(WidgetCard card, System.Text.Json.JsonElement? options)
-    {
-        if (Dock() is not { } dock)
-        {
-            return;
-        }
-
-        WidgetConfig updated = card.Entry with { Config = options };
-
-        Rearrange(
-            dock.StableId,
-            widgets => [.. widgets.Select(w => w.InstanceId == card.Id ? updated : w)],
-            string.Format(
-                CultureInfo.CurrentCulture, Loc.Tr("UndoConfigured", "configured {0}"), card.Entry.TypeId),
-            rebuild: false);
-
-        // Only the one line changes. Rebuilding the list would close the very
-        // panel the person is still working in.
-        card.Restate(updated);
-    }
-
-    private void Shift(WidgetCard card, int by)
-    {
-        if (Dock() is not { } dock)
-        {
-            return;
-        }
-
-        List<WidgetConfig> run = [.. dock.Widgets];
-        int at = run.FindIndex(w => w.InstanceId == card.Id);
-        int to = at + by;
-
-        if (at < 0 || to < 0 || to >= run.Count)
-        {
-            return;
-        }
-
-        (run[at], run[to]) = (run[to], run[at]);
-        Rearrange(dock.StableId, _ => [.. run], Loc.Tr("UndoMoved", "moved"));
-    }
-
-    private void Remove(WidgetCard card)
-    {
-        if (Dock() is not { } dock)
-        {
-            return;
-        }
-
-        Rearrange(
-            dock.StableId,
-            widgets => [.. widgets.Where(w => w.InstanceId != card.Id)],
-            string.Format(
-                CultureInfo.CurrentCulture, Loc.Tr("UndoRemoved", "removed {0}"), card.Entry.TypeId));
-    }
-
     /// <summary>The one place a dock's layout is written.</summary>
     private void Rearrange(
         string stableId,
@@ -1002,7 +1212,7 @@ public sealed partial class SettingsWindow : Window
 
         if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
         {
-            _undo.Push((stableId, before.Widgets, what));
+            _undo.Push((stableId, before, what));
 
             while (_undo.Count > 25)
             {
@@ -1047,6 +1257,19 @@ public sealed partial class SettingsWindow : Window
 
         SettingsModel current = _settings.Current;
 
+        // Instant means undoable - every change this page applies at once is
+        // reachable by the same Undo, not only the widget layout.
+        if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
+        {
+            _undo.Push((stableId, before, what));
+
+            while (_undo.Count > 25)
+            {
+                _undo.TrimExcess();
+                break;
+            }
+        }
+
         _settings.Commit(
             current with
             {
@@ -1055,16 +1278,11 @@ public sealed partial class SettingsWindow : Window
             WriteReason.UserAction);
 
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
+        ShowUndo();
     }
 
     private MonitorConfig? Dock() =>
         _settings.Current.Monitors.FirstOrDefault(m => m.StableId == _editing);
-
-    private WidgetCard? Card(string id) =>
-        _cards.FirstOrDefault(c => c.Id == id);
-
-    private int Index(WidgetCard card) =>
-        (Dock()?.Widgets ?? []).ToList().FindIndex(w => w.InstanceId == card.Id);
 
     private void OnRowEdited(MonitorRow row)
     {
