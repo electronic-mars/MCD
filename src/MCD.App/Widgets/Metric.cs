@@ -151,7 +151,20 @@ public sealed partial class Metric : ObservableObject
     public partial Visibility LabelVisible { get; set; } = Visibility.Collapsed;
 
     [ObservableProperty]
-    public partial double LabelFontSize { get; set; } = 10;
+    public partial double LabelFontSize { get; set; } = 11;
+
+    /// <summary>
+    /// A small optical lift for the two-line block.
+    /// </summary>
+    /// <remarks>
+    /// Geometrically the block is centred already, but the value line carries
+    /// an empty ascender zone above its digits and the label line puts its
+    /// descenders below, so the ink sits visibly low - measured at three
+    /// pixels on a full-size bar. Two of margin brings the ink to the middle.
+    /// One line alone is symmetrical and gets no lift.
+    /// </remarks>
+    [ObservableProperty]
+    public partial Thickness Lift { get; set; }
 
     /// <summary>
     /// The gap to the next reading, on whichever side that is.
@@ -177,25 +190,31 @@ public sealed partial class Metric : ObservableObject
         FontSize = font;
         Narrow = narrow;
         LabelVisible = subtitle ? Visibility.Visible : Visibility.Collapsed;
+        Lift = subtitle ? new Thickness(0, -2, 0, 0) : new Thickness(0);
 
-        // Allowance per character for the interface face at this size. Digits
-        // in it run to about 0.55 em and the space and per-cent sign a little
-        // more; the extra keeps the reserved box from cutting a value that
-        // happens to be all eights.
-        ValueWidth = Math.Ceiling(Widest() * font * 0.60);
+        // The box starts empty and grows to the widest value actually seen.
+        ValueWidth = 0;
+        Reserve();
     }
 
     /// <summary>Whether this is on a bar with no room for a unit spelled out.</summary>
     public bool Narrow { get; private set; }
 
-    /// <summary>How many characters the largest sensible value takes.</summary>
-    private int Widest() => Unit switch
-    {
-        "B/s" => Narrow ? 6 : 9,    // "12.4M" against "99.9 MB/s"
-        "°C" => 6,                  // "100 °C"
-        "MHz" => 8,                 // "5900 MHz"
-        _ => 5,                     // "100 %"
-    };
+    /// <summary>
+    /// Keeps the number's box as wide as the widest value seen this session.
+    /// </summary>
+    /// <remarks>
+    /// Wide enough that the row never shuffles sideways when a figure grows,
+    /// and no wider: a box sized in advance for a rate that may never come
+    /// leaves a dead stretch of bar that reads as a ragged gap - which is
+    /// exactly what it did. Growth is immediate and kept; the box never
+    /// shrinks while the dock is up. The value sits centred in whatever slack
+    /// is left, so the slack splits evenly instead of pooling on one side.
+    /// The per-character allowance is the interface face's: digits run to
+    /// about 0.55 em, the space and the per-cent sign a little more.
+    /// </remarks>
+    private void Reserve() =>
+        ValueWidth = Math.Max(ValueWidth, Math.Ceiling((Text.Length * FontSize * 0.62) + 2));
 
     public void Update(SensorHub sensors, SensorSnapshot snapshot)
     {
@@ -230,6 +249,7 @@ public sealed partial class Metric : ObservableObject
         SensorReading reading = snapshot[Sensor.Key];
 
         Text = reading.HasValue ? Format(reading.Value) : "--";
+        Reserve();
         Colour = Paint(reading);
         ValueWeight = _level == Level.Critical
             ? Microsoft.UI.Text.FontWeights.SemiBold

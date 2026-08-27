@@ -38,10 +38,10 @@ public static class DockMetrics
     /// read across a room rather than a label beside an icon.
     /// </remarks>
     public static double ReadingIcon(DockDensity density) =>
-        density == DockDensity.Compact ? 18 : 22;
+        density == DockDensity.Compact ? 20 : 24;
 
     public static double ReadingFont(DockDensity density) =>
-        density == DockDensity.Compact ? 13 : 14;
+        density == DockDensity.Compact ? 14 : 15;
     public const double PressScale = 0.81;
     public static readonly TimeSpan HoverCrossfade = TimeSpan.FromMilliseconds(150);
     public static readonly TimeSpan PressScaleDuration = TimeSpan.FromMilliseconds(90);
