@@ -599,7 +599,7 @@
     <value>Кнопки всегда управляют</value>
   </data>
   <data name="MediaPriorityNone" xml:space="preserve">
-    <value>Тем, кто играет (по правилу)</value>
+    <value>Автоматически: кто сейчас играет</value>
   </data>
   <data name="MediaSummaryNominated" xml:space="preserve">
     <value>Кнопки всегда управляют: {0}</value>

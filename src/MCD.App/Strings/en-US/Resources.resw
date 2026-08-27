@@ -599,7 +599,7 @@
     <value>The buttons always drive</value>
   </data>
   <data name="MediaPriorityNone" xml:space="preserve">
-    <value>Whoever is playing (the rule)</value>
+    <value>Automatic: whoever is playing now</value>
   </data>
   <data name="MediaSummaryNominated" xml:space="preserve">
     <value>The buttons always drive {0}</value>

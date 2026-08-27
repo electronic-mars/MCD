@@ -181,7 +181,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         };
 
         var ids = new List<string> { string.Empty };
-        players.Items.Add(Loc.Tr("MediaPriorityNone", "Whoever is playing (the rule)"));
+        players.Items.Add(Loc.Tr("MediaPriorityNone", "Automatic: whoever is playing now"));
 
         Dictionary<string, string> offer = new(Seen);
 

@@ -47,7 +47,7 @@
                     </StackPanel>
                 </ToolTip>
             </ToolTipService.ToolTip>
-            <StackPanel Orientation="Horizontal" Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="6">
                 <!-- A stroked Path, not a PathIcon. PathIcon fills the geometry,
                      and these shapes are drawn as lines: filled, the processor
                      becomes a plain square and the network arrows disappear
@@ -95,7 +95,7 @@
                     <TextBlock
                         MinWidth="{x:Bind ValueWidth, Mode=OneWay}"
                         MaxWidth="{x:Bind ValueWidth, Mode=OneWay}"
-                        HorizontalTextAlignment="Center"
+                        HorizontalTextAlignment="Left"
                         FontSize="{x:Bind FontSize, Mode=OneWay}"
                         FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
                         Foreground="{x:Bind Colour, Mode=OneWay}"
@@ -108,8 +108,8 @@
                     <TextBlock
                         MaxWidth="100"
                         Margin="0,-2,0,0"
-                        HorizontalAlignment="Center"
-                        HorizontalTextAlignment="Center"
+                        HorizontalAlignment="Left"
+                        HorizontalTextAlignment="Left"
                         FontSize="{x:Bind LabelFontSize, Mode=OneWay}"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         Text="{x:Bind Label}"

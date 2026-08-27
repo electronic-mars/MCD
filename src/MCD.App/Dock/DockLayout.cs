@@ -82,10 +82,11 @@ public static class DockLayout
             return;
         }
 
-        // 2 a side here and 2 a side on each reading: widgets sit 8 apart while
-        // their own readings sit 4 apart, which is what makes them read as
-        // groups. The margin vanishes with a hidden widget, so no holes.
-        host.Margin = horizontal ? new Thickness(2, 0, 2, 0) : new Thickness(0, 2, 0, 2);
+        // No margin of the widget's own: every element on the bar sits in a
+        // uniform slot, reading-to-reading and widget-to-widget alike, the
+        // 4 DIP PowerToys keeps between its items. The chips' own margins
+        // carry the whole gap.
+        host.Margin = new Thickness(0);
         host.HorizontalAlignment = HorizontalAlignment.Center;
         host.VerticalAlignment = VerticalAlignment.Center;
     }
