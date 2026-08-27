@@ -208,16 +208,27 @@ public sealed class DockWindowManager : IDisposable
         {
             if (wanted.TryGetValue(id, out DockPlan? plan) && IsUnchanged(window, plan))
             {
-                // Kept, but not left as it was: the settings may have changed
-                // what belongs on it. Before this, choosing an icon or pinning a
-                // program did nothing until the program was restarted.
+                // Kept, but not necessarily left as it was: the settings may
+                // have changed what belongs on it. Rebuilt only when they
+                // actually did - rearranging one bar must not make every other
+                // bar tear its widgets down and put them back, which is the
+                // stutter a drop used to cost.
+                string signature = Signature(plan.Config);
+
+                if (_dressed.TryGetValue(id, out string? shown) && shown == signature)
+                {
+                    continue;
+                }
+
                 window.RefreshWidgets(plan.Config, Context());
+                _dressed[id] = signature;
                 continue;
             }
 
             window.TearDown();
             window.Close();
             _windows.Remove(id);
+            _dressed.Remove(id);
         }
 
         foreach ((string id, DockPlan plan) in wanted)
@@ -237,6 +248,7 @@ public sealed class DockWindowManager : IDisposable
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
             _windows[id] = window;
+            _dressed[id] = Signature(plan.Config);
             window.Activate();
         }
 
@@ -281,6 +293,40 @@ public sealed class DockWindowManager : IDisposable
 
         _windows.Clear();
         _coalescer.ReadNow(TopologyTrigger.ExplorerRestarted);
+    }
+
+    /// <summary>What each dock window was last built from, by stable id.</summary>
+    private readonly Dictionary<string, string> _dressed = [];
+
+    /// <summary>
+    /// Everything that decides what a dock window shows, flattened to one
+    /// string. Two equal signatures mean a rebuild would change nothing.
+    /// </summary>
+    private string Signature(MonitorConfig config)
+    {
+        AppSettings app = _settings.Current.App;
+
+        var text = new System.Text.StringBuilder()
+            .Append(app.Theme).Append('|')
+            .Append(app.Backdrop).Append('|')
+            .Append(app.BackdropColour).Append('|')
+            .Append(app.BackdropImage).Append('|')
+            .Append(app.Accent).Append('|')
+            .Append(config.Topmost).Append('|');
+
+        foreach (KeyValuePair<string, string> icon in app.Icons)
+        {
+            text.Append(icon.Key).Append('=').Append(icon.Value).Append(';');
+        }
+
+        foreach (WidgetConfig widget in config.Widgets)
+        {
+            text.Append('|').Append(widget.InstanceId)
+                .Append(':').Append(widget.TypeId)
+                .Append(':').Append(widget.Config?.GetRawText());
+        }
+
+        return text.ToString();
     }
 
     private static bool IsUnchanged(DockWindow window, DockPlan plan) =>

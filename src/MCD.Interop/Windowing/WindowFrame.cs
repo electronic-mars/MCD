@@ -137,6 +137,21 @@ public static unsafe class WindowFrame
                 PInvoke.AttachThreadInput(ours, theirs, false);
             }
         }
+
+        // Windows is still free to refuse. When it does, the topmost flash is
+        // the fallback: the window at least rises above what was covering it,
+        // which is what the person asked for - even if the first keystroke
+        // still goes where it was going.
+        if (PInvoke.GetForegroundWindow() != handle)
+        {
+            PInvoke.SetWindowPos(
+                handle, HWND.HWND_TOPMOST, 0, 0, 0, 0,
+                SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                | SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
+            PInvoke.SetWindowPos(
+                handle, HWND.HWND_NOTOPMOST, 0, 0, 0, 0,
+                SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
+        }
     }
 
     /// <summary>Where the window is now, in physical pixels.</summary>

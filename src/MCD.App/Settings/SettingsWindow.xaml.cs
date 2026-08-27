@@ -346,8 +346,9 @@ public sealed partial class SettingsWindow : Window
 
     /// <summary>
     /// One chip per offer: its icon, its name, and a tick when the chosen dock
-    /// already shows it. A click adds or removes; a drag onto the picture above
-    /// puts it in that exact slot.
+    /// already shows it. Dragging a chip onto the picture above puts it in
+    /// that exact slot; taking one off is dragging it off the picture. A chip
+    /// already on the bar sits dimmed - there is nothing more to add.
     /// </summary>
     private void RefreshGallery(MonitorConfig dock)
     {
@@ -414,11 +415,18 @@ public sealed partial class SettingsWindow : Window
 
             ToolTipService.SetToolTip(chip, offer.Description);
 
-            WidgetOffer chosen = offer;
-            chip.PointerPressed += (s, e) => OnChipPressed(chip, chosen, e);
-            chip.PointerMoved += OnChipMoved;
-            chip.PointerReleased += (s, e) => OnChipReleased(chosen, e);
-            chip.PointerCanceled += (_, _) => EndChipDrag();
+            if (on)
+            {
+                chip.Opacity = 0.55;
+            }
+            else
+            {
+                WidgetOffer chosen = offer;
+                chip.PointerPressed += (s, e) => OnChipPressed(chip, chosen, e);
+                chip.PointerMoved += OnChipMoved;
+                chip.PointerReleased += (s, e) => OnChipReleased(chosen, e);
+                chip.PointerCanceled += (_, _) => EndChipDrag();
+            }
 
             Gallery.Children.Add(chip);
         }
@@ -479,11 +487,9 @@ public sealed partial class SettingsWindow : Window
 
         Point at = e.GetCurrentPoint(Preview).Position;
 
-        if (!_gMoving)
-        {
-            ToggleOffer(offer);
-        }
-        else if (OverPreview(at) && _pCaret >= 0 && Dock() is { } dock)
+        // Only a drag adds - a click quietly appending to the far end of the
+        // bar looked like nothing happening.
+        if (_gMoving && OverPreview(at) && _pCaret >= 0 && Dock() is { } dock)
         {
             InsertAtCaret(dock, offer.Make(), offer.Name);
         }
@@ -508,30 +514,6 @@ public sealed partial class SettingsWindow : Window
 
     private bool OverPreview(Point at) =>
         at.X >= 0 && at.Y >= 0 && at.X < Preview.ActualWidth && at.Y < Preview.ActualHeight;
-
-    /// <summary>A plain click on a chip: put it on the bar, or take it off.</summary>
-    private void ToggleOffer(WidgetOffer offer)
-    {
-        if (Dock() is not { } dock)
-        {
-            return;
-        }
-
-        if (dock.Widgets.FirstOrDefault(offer.Matches) is { } present)
-        {
-            Rearrange(
-                dock.StableId,
-                widgets => [.. widgets.Where(w => w.InstanceId != present.InstanceId)],
-                Loc.Tr("UndoRemovedOne", "removed"));
-            return;
-        }
-
-        Rearrange(
-            dock.StableId,
-            widgets => [.. widgets, offer.Make()],
-            string.Format(
-                CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), offer.Name));
-    }
 
     /// <summary>Puts a new entry where the caret in the picture points.</summary>
     private void InsertAtCaret(MonitorConfig dock, WidgetConfig entry, string name)

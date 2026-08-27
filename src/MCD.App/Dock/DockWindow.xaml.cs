@@ -693,7 +693,8 @@ public sealed partial class DockWindow : Window
 
     /// <summary>
     /// The grid the sketch drew: while something is in flight, every occupied
-    /// slot shows its outline, so the bar reads as a row of places.
+    /// slot shows its outline, and the free stretches show as rows of empty
+    /// slots, so the bar reads as a row of places - never as blocks.
     /// </summary>
     private void ShowSlots(bool on)
     {
@@ -709,14 +710,37 @@ public sealed partial class DockWindow : Window
             return;
         }
 
+        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
+
         foreach (WidgetHost host in _hosts)
         {
-            if (host.Widget is SpacerWidget || Where(host) is not { } rect)
+            if (Where(host) is not { } rect)
             {
-                // Spacers already reveal themselves as filled bars.
                 continue;
             }
 
+            if (host.Widget is SpacerWidget)
+            {
+                // The free length, drawn as the empty slots it could hold.
+                double length = horizontal ? rect.Width : rect.Height;
+                int cells = Math.Max(1, (int)Math.Round(length / 30));
+                double each = length / cells;
+
+                for (int i = 0; i < cells; i++)
+                {
+                    Mark(horizontal
+                        ? new Rect(rect.X + (i * each) + 2, rect.Y + 3, each - 4, rect.Height - 6)
+                        : new Rect(rect.X + 3, rect.Y + (i * each) + 2, rect.Width - 6, each - 4));
+                }
+
+                continue;
+            }
+
+            Mark(rect);
+        }
+
+        void Mark(Rect rect)
+        {
             var slot = new Rectangle
             {
                 Stroke = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
@@ -1010,9 +1034,9 @@ public sealed partial class DockWindow : Window
             _grabbed.Opacity = 0.4;
             Root.CapturePointer(e.Pointer);
 
-            // The bar shows its structure for the length of the drag: the
-            // spacers fill in, and every occupied slot draws its outline.
-            RevealSpacers(true);
+            // The bar shows its structure for the length of the drag: every
+            // occupied slot draws its outline, and the free stretches show
+            // as rows of empty slots.
             ShowSlots(true);
 
             _log.LogInformation(
@@ -1067,7 +1091,6 @@ public sealed partial class DockWindow : Window
         _outlined?.Outline(false);
         _outlined = null;
 
-        RevealSpacers(false);
         ShowSlots(false);
         HideCaret();
         Root.ReleasePointerCaptures();
@@ -1121,18 +1144,6 @@ public sealed partial class DockWindow : Window
                 host.ActualWidth,
                 host.ActualHeight)
             : null;
-
-    /// <summary>While a widget is in flight, every spacer shows itself.</summary>
-    private void RevealSpacers(bool on)
-    {
-        foreach (WidgetHost host in _hosts)
-        {
-            if (host.Widget is SpacerWidget spacer)
-            {
-                spacer.HintVisible = on ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-    }
 
     /// <summary>
     /// Where along the run a point falls: the count of drawn widgets whose

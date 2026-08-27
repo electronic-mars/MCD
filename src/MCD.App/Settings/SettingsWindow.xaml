@@ -223,7 +223,7 @@
                                     x:Uid="BarHelp"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="Drag to rearrange - here or on the bar itself. Click a widget for its options. Add widgets from the list below: click one, or drag it straight onto the bar."
+                                    Text="Drag to rearrange - here or on the bar itself. Click a widget for its options. To add one, drag it from the list below straight onto the bar; drag it off the bar to remove it."
                                     TextWrapping="Wrap" />
 
                                 <Border

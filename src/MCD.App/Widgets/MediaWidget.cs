@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -118,50 +118,8 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial double PauseShown { get; set; }
 
-    /// <summary>The accent tick under the middle button while sound is playing.</summary>
-    [ObservableProperty]
-    public partial Visibility PlayingVisible { get; set; } = Visibility.Collapsed;
-
     [ObservableProperty]
     public partial double IconSize { get; set; } = 17;
-
-    // The rail's dimensions, by bar density: a 28-tall rail with 30x21 caps
-    // on the full-size bar, 20 with 24x15 caps on the compact one.
-    [ObservableProperty]
-    public partial double RailHeight { get; set; } = 28;
-
-    [ObservableProperty]
-    public partial CornerRadius RailCorner { get; set; } = new(7);
-
-    [ObservableProperty]
-    public partial CornerRadius RailInnerCorner { get; set; } = new(6);
-
-    [ObservableProperty]
-    public partial Thickness RailPadding { get; set; } = new(2);
-
-    [ObservableProperty]
-    public partial double KeyWidth { get; set; } = 30;
-
-    [ObservableProperty]
-    public partial double KeyHeight { get; set; } = 21;
-
-    [ObservableProperty]
-    public partial CornerRadius KeyCorner { get; set; } = new(5);
-
-    [ObservableProperty]
-    public partial double KeySpacing { get; set; } = 3;
-
-    [ObservableProperty]
-    public partial double GlyphSize { get; set; } = 14;
-
-    [ObservableProperty]
-    public partial double LedSize { get; set; } = 4;
-
-    [ObservableProperty]
-    public partial double HaloSize { get; set; } = 10;
-
-    [ObservableProperty]
-    public partial double LampWidth { get; set; } = 10;
 
     [ObservableProperty]
     public partial double FontSize { get; set; } = 10;
@@ -175,21 +133,6 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     public override void Attach()
     {
         IconSize = DockMetrics.ReadingIcon(Density);
-
-        bool compact = Density == DockDensity.Compact;
-        RailHeight = compact ? 20 : 28;
-        RailCorner = new CornerRadius(compact ? 5 : 7);
-        RailInnerCorner = new CornerRadius(compact ? 4 : 6);
-        RailPadding = new Thickness(compact ? 1 : 2);
-        KeyWidth = compact ? 24 : 30;
-        KeyHeight = compact ? 15 : 21;
-        KeyCorner = new CornerRadius(compact ? 3 : 5);
-        KeySpacing = compact ? 2 : 3;
-        GlyphSize = compact ? 11 : 14;
-        LedSize = compact ? 3 : 4;
-        HaloSize = compact ? 7 : 10;
-        LampWidth = compact ? 8 : 10;
-
         FontSize = 10;
         Spacing = GaugeWidget.Gap(Orientation);
         TitleVisible = ShowTitle && Density == DockDensity.Default
@@ -434,7 +377,6 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         if (_playing is null)
         {
             Dim = 0.35;
-            PlayingVisible = Visibility.Collapsed;
             Title = string.Empty;
             Art = null;
             ArtVisible = Visibility.Collapsed;
@@ -491,7 +433,6 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
         PlayShown = playing ? 0 : 1;
         PauseShown = playing ? 1 : 0;
-        PlayingVisible = playing ? Visibility.Visible : Visibility.Collapsed;
 
         // Stopped and closed both mean there is nothing to control. Paused does
         // not: a paused track is one button away from playing again.

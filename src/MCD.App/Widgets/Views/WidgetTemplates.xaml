@@ -11,31 +11,11 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
             <SolidColorBrush x:Key="McdCriticalBrush" Color="#FF6B6B" />
-            <SolidColorBrush x:Key="McdRailFill" Color="#73000000" />
-            <SolidColorBrush x:Key="McdRailLine" Color="#11FFFFFF" />
-            <SolidColorBrush x:Key="McdRailShade" Color="#40000000" />
-            <SolidColorBrush x:Key="McdKeyInk" Color="#FFE9ECF1" />
-            <SolidColorBrush x:Key="McdLedOn" Color="#FF4ADE80" />
-            <SolidColorBrush x:Key="McdLedSocket" Color="#66000000" />
             <SolidColorBrush x:Key="McdReadingAccent" Color="#FFF26A21" />
-            <RadialGradientBrush x:Key="McdLedHalo">
-                <GradientStop Offset="0" Color="#5A4ADE80" />
-                <GradientStop Offset="1" Color="#004ADE80" />
-            </RadialGradientBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="McdCriticalBrush" Color="#C63B3B" />
-            <SolidColorBrush x:Key="McdRailFill" Color="#21000000" />
-            <SolidColorBrush x:Key="McdRailLine" Color="#17000000" />
-            <SolidColorBrush x:Key="McdRailShade" Color="#1F000000" />
-            <SolidColorBrush x:Key="McdKeyInk" Color="#FF2B2E33" />
-            <SolidColorBrush x:Key="McdLedOn" Color="#FF22A45D" />
-            <SolidColorBrush x:Key="McdLedSocket" Color="#33000000" />
             <SolidColorBrush x:Key="McdReadingAccent" Color="#FFD65A17" />
-            <RadialGradientBrush x:Key="McdLedHalo">
-                <GradientStop Offset="0" Color="#4D22A45D" />
-                <GradientStop Offset="1" Color="#0022A45D" />
-            </RadialGradientBrush>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 

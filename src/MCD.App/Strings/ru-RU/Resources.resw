@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -12,16 +12,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <!-- Окно настроек: заголовок и навигация -->
   <data name="TitleBarText.Text" xml:space="preserve">
     <value>Master Control Dock</value>
   </data>
   <data name="NavDocks.Content" xml:space="preserve">
     <value>Доки</value>
-  </data>
-  <data name="NavLauncher.Content" xml:space="preserve">
-    <value>Запуск</value>
   </data>
   <data name="NavIcons.Content" xml:space="preserve">
     <value>Значки</value>
@@ -38,7 +34,6 @@
   <data name="NavAbout.Content" xml:space="preserve">
     <value>О программе</value>
   </data>
-
   <!-- Страница «Доки» -->
   <data name="DocksTitle.Text" xml:space="preserve">
     <value>Доки</value>
@@ -64,84 +59,13 @@
   <data name="EdgeLabel.Text" xml:space="preserve">
     <value>Край</value>
   </data>
-  <data name="EdgeLeftItem.Content" xml:space="preserve">
-    <value>Слева</value>
-  </data>
-  <data name="EdgeTopItem.Content" xml:space="preserve">
-    <value>Сверху</value>
-  </data>
-  <data name="EdgeRightItem.Content" xml:space="preserve">
-    <value>Справа</value>
-  </data>
-  <data name="EdgeBottomItem.Content" xml:space="preserve">
-    <value>Снизу</value>
-  </data>
   <data name="SizeLabel.Text" xml:space="preserve">
     <value>Толщина</value>
-  </data>
-  <data name="SizeDefaultItem.Content" xml:space="preserve">
-    <value>Обычный</value>
-  </data>
-  <data name="SizeCompactItem.Content" xml:space="preserve">
-    <value>Компактный</value>
   </data>
   <data name="BehaviourLabel.Text" xml:space="preserve">
     <value>Скрывается, пока не наведён указатель</value>
   </data>
-  <data name="ModeVisibleItem.Content" xml:space="preserve">
-    <value>Всегда на экране</value>
-  </data>
-  <data name="ModeAutoHideItem.Content" xml:space="preserve">
-    <value>Скрывается, пока не наведён указатель</value>
-  </data>
-  <data name="WidgetsTitle.Text" xml:space="preserve">
-    <value>ВИДЖЕТЫ</value>
-  </data>
-  <data name="AddWidgetButton.Content" xml:space="preserve">
-    <value>Добавить виджет</value>
-  </data>
-  <data name="WidgetsIntro.Text" xml:space="preserve">
-    <value>В порядке следования на панели. Перетаскивайте виджеты прямо на панели или щёлкните панель правой кнопкой, чтобы добавить виджет в нужное место. Разделители определяют, куда уходит свободное место.</value>
-  </data>
-  <data name="WidgetsEmptyText.Text" xml:space="preserve">
-    <value>Пока здесь пусто.</value>
-  </data>
-  <data name="WidgetMenuButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Переместить или удалить</value>
-  </data>
-
   <!-- Страница «Запуск» -->
-  <data name="LauncherTitle.Text" xml:space="preserve">
-    <value>Запуск</value>
-  </data>
-  <data name="LauncherIntro.Text" xml:space="preserve">
-    <value>Программы, папки и страницы, закреплённые на панели. Они появляются на каждом доке в этом порядке.</value>
-  </data>
-  <data name="NewName.Header" xml:space="preserve">
-    <value>Название</value>
-  </data>
-  <data name="NewName.PlaceholderText" xml:space="preserve">
-    <value>необязательно</value>
-  </data>
-  <data name="NewTarget.Header" xml:space="preserve">
-    <value>Программа, папка или адрес</value>
-  </data>
-  <data name="NewTarget.PlaceholderText" xml:space="preserve">
-    <value>C:\Windows\notepad.exe  или  https://example.com</value>
-  </data>
-  <data name="BrowseButton.Content" xml:space="preserve">
-    <value>Обзор...</value>
-  </data>
-  <data name="AddLaunchButton.Content" xml:space="preserve">
-    <value>Добавить</value>
-  </data>
-  <data name="MoveUpButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Переместить вверх</value>
-  </data>
-  <data name="RemoveLaunchButton.Content" xml:space="preserve">
-    <value>Удалить</value>
-  </data>
-
   <!-- Страница «Оформление» -->
   <data name="AppearanceTitle.Text" xml:space="preserve">
     <value>Оформление</value>
@@ -188,7 +112,6 @@
   <data name="AccentWindowsItem.Content" xml:space="preserve">
     <value>Акцентный цвет Windows</value>
   </data>
-
   <!-- Страница «Значки» -->
   <data name="IconsTitle.Text" xml:space="preserve">
     <value>Значки</value>
@@ -196,7 +119,6 @@
   <data name="IconsIntro.Text" xml:space="preserve">
     <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех доках.</value>
   </data>
-
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
     <value>Датчики</value>
@@ -228,7 +150,6 @@
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>ТЕКУЩИЕ ПОКАЗАНИЯ</value>
   </data>
-
   <!-- Страница «Мониторы» -->
   <data name="MonitorsTitle.Text" xml:space="preserve">
     <value>Мониторы</value>
@@ -239,7 +160,6 @@
   <data name="ForgetButton.Content" xml:space="preserve">
     <value>Забыть</value>
   </data>
-
   <!-- Страница «О программе» -->
   <data name="AboutTitle.Text" xml:space="preserve">
     <value>О программе</value>
@@ -271,7 +191,6 @@
   <data name="ExitButton.Content" xml:space="preserve">
     <value>Выйти из Master Control Dock</value>
   </data>
-
   <!-- Кнопки медиавиджета на панели -->
   <data name="MediaPreviousButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Предыдущий</value>
@@ -279,7 +198,6 @@
   <data name="MediaNextButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Следующий</value>
   </data>
-
   <!-- Окно настроек, строки из кода -->
   <data name="DockNoScreen" xml:space="preserve">
     <value>Ни один экран ещё не настроен.</value>
@@ -311,9 +229,6 @@
   <data name="UndoRemoved" xml:space="preserve">
     <value>удалено: {0}</value>
   </data>
-  <data name="OfferDuplicate" xml:space="preserve">
-    <value>Уже есть на этой панели. Второй показывал бы то же самое.</value>
-  </data>
   <data name="MenuMoveUp" xml:space="preserve">
     <value>Переместить вверх</value>
   </data>
@@ -344,7 +259,6 @@
   <data name="SourceLooking" xml:space="preserve">
     <value>Поиск...</value>
   </data>
-
   <!-- Карточки виджетов в списке настроек -->
   <data name="WidgetUnknownSummary" xml:space="preserve">
     <value>Эта версия программы не знает этот виджет. Он остаётся в настройках нетронутым.</value>
@@ -355,7 +269,6 @@
   <data name="WidgetUnknownNothing" xml:space="preserve">
     <value>Нельзя настроить виджет, который эта версия не знает.</value>
   </data>
-
   <!-- Контекстное меню панели -->
   <data name="MenuAddWidget" xml:space="preserve">
     <value>Добавить виджет</value>
@@ -363,7 +276,6 @@
   <data name="MenuDockSettings" xml:space="preserve">
     <value>Параметры дока</value>
   </data>
-
   <!-- Каталог виджетов: названия и описания -->
   <data name="WidgetGaugeName" xml:space="preserve">
     <value>Показатель</value>
@@ -416,7 +328,6 @@
   <data name="WidgetSpacerDescription" xml:space="preserve">
     <value>Пустой участок панели, раздвигающий соседей.</value>
   </data>
-
   <!-- Подписи показаний, на панели и в настройках -->
   <data name="LabelCpu" xml:space="preserve">
     <value>ЦП</value>
@@ -436,24 +347,13 @@
   <data name="LabelTemperature" xml:space="preserve">
     <value>Температура</value>
   </data>
-
   <!-- Виджет температуры -->
   <data name="TempHottestSummary" xml:space="preserve">
     <value>Самое горячее показание</value>
   </data>
-  <data name="TempManySummary" xml:space="preserve">
-    <value>Показаний: {0} · {1}…</value>
-  </data>
-  <data name="TempAutoOption" xml:space="preserve">
-    <value>Самое горячее показание, какое бы это ни было</value>
-  </data>
-  <data name="TempPickOption" xml:space="preserve">
-    <value>Выбранные мной показания, рядом друг с другом</value>
-  </data>
   <data name="TempExplain" xml:space="preserve">
     <value>Температуры процессора и материнской платы доступны только через драйвер, который приложение из Store содержать не может. Запустите HWiNFO с включённой поддержкой Shared Memory, затем включите её в разделе «Датчики» настроек — и они появятся здесь.</value>
   </data>
-
   <!-- Медиавиджет -->
   <data name="MediaPlayPause" xml:space="preserve">
     <value>Воспроизведение или пауза</value>
@@ -473,7 +373,6 @@
   <data name="MediaTitleOff" xml:space="preserve">
     <value>Только в подсказке</value>
   </data>
-
   <!-- Разделитель -->
   <data name="SpacerStretches" xml:space="preserve">
     <value>Растягивается на всё свободное место</value>
@@ -490,23 +389,8 @@
   <data name="SpacerPixels" xml:space="preserve">
     <value>Ширина в пикселях</value>
   </data>
-
   <!-- Виджет нагрузки -->
-  <data name="LoadNothingChosen" xml:space="preserve">
-    <value>Ничего не выбрано</value>
-  </data>
-
   <!-- Виджет запуска -->
-  <data name="LauncherNonePinned" xml:space="preserve">
-    <value>Пока ничего не закреплено</value>
-  </data>
-  <data name="LauncherOnePinned" xml:space="preserve">
-    <value>1 закреплённый элемент</value>
-  </data>
-  <data name="LauncherManyPinned" xml:space="preserve">
-    <value>Закреплено элементов: {0}</value>
-  </data>
-
   <!-- Строки мониторов -->
   <data name="MonitorUnknown" xml:space="preserve">
     <value>Неизвестный дисплей</value>
@@ -546,9 +430,6 @@
   </data>
   <data name="TempCritAt" xml:space="preserve">
     <value>Критично при, °C</value>
-  </data>
-  <data name="PinButtonText.Text" xml:space="preserve">
-    <value>Закрепить</value>
   </data>
   <data name="PinDialog.Title" xml:space="preserve">
     <value>Закрепить на панели</value>
@@ -656,7 +537,7 @@
     <value>Следующий</value>
   </data>
   <data name="BarHelp.Text" xml:space="preserve">
-    <value>Перетаскивайте — здесь или на самой панели. Щёлкните виджет, чтобы открыть его настройки. Добавляйте виджеты из списка ниже: щёлкните или перетащите прямо на панель.</value>
+    <value>Перетаскивайте — здесь или на самой панели. Щёлкните виджет, чтобы открыть его настройки. Добавить — перетащите виджет из списка ниже прямо на панель; убрать — утащите его с панели.</value>
   </data>
   <data name="GalleryTitle.Text" xml:space="preserve">
     <value>ВИДЖЕТЫ</value>
@@ -729,9 +610,6 @@
   </data>
   <data name="PickerOff" xml:space="preserve">
     <value> — выкл</value>
-  </data>
-  <data name="PickLaunchIcon.Content" xml:space="preserve">
-    <value>Значок</value>
   </data>
   <data name="LaunchIconAuto" xml:space="preserve">
     <value>Собственный значок программы</value>
