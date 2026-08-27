@@ -296,13 +296,13 @@ public partial class App : Application
         services.AddSingleton(sp => new HwInfoProvider(
             sp.GetRequiredService<ILogger<HwInfoProvider>>(),
             () => sp.GetRequiredService<SettingsService>().Current
-                .Sensors.EnabledProviders.GetValueOrDefault(HwInfoProvider.ProviderId)));
+                .Sensors.EnabledProviders.GetValueOrDefault(HwInfoProvider.ProviderId, true)));
         services.AddSingleton<ISensorProvider>(sp => sp.GetRequiredService<HwInfoProvider>());
 
         services.AddSingleton(sp => new LhmProvider(
             sp.GetRequiredService<ILogger<LhmProvider>>(),
             () => sp.GetRequiredService<SettingsService>().Current
-                .Sensors.EnabledProviders.GetValueOrDefault(LhmProvider.ProviderId),
+                .Sensors.EnabledProviders.GetValueOrDefault(LhmProvider.ProviderId, true),
             () => sp.GetRequiredService<SettingsService>().Current.Sensors.LhmHttpEndpoint));
         services.AddSingleton<ISensorProvider>(sp => sp.GetRequiredService<LhmProvider>());
 

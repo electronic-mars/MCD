@@ -202,7 +202,7 @@
     <value>Датчики</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>Температуры видеокарты и дисков работают сразу. Температуры процессора и материнской платы поступают из одной из программ ниже.</value>
+    <value>Температуры видеокарты и дисков работают сразу. Процессор и материнская плата подключаются, пока запущен LibreHardwareMonitor (с включённым Remote Web Server) или HWiNFO (с включённой Shared Memory).</value>
   </data>
   <data name="HwInfoHint.Text" xml:space="preserve">
     <value>Читает температуры процессора и материнской платы из HWiNFO, если она запущена и в её настройках включена поддержка Shared Memory.</value>
@@ -582,5 +582,17 @@
   </data>
   <data name="PinCancel" xml:space="preserve">
     <value>Отмена</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Дисплей {0}</value>
+  </data>
+  <data name="AlreadyOnBar" xml:space="preserve">
+    <value>{0} — уже на панели</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>Насколько прозрачно</value>
+  </data>
+  <data name="RestartNowText.Text" xml:space="preserve">
+    <value>Перезапустить сейчас</value>
   </data>
 </root>

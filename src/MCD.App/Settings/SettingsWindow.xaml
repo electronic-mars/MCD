@@ -616,6 +616,13 @@
                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                             Text="Takes effect the next time the program starts."
                                             TextWrapping="Wrap" />
+                                        <Button
+                                            x:Name="RestartNow"
+                                            Margin="0,6,0,0"
+                                            Click="OnRestartNow"
+                                            Visibility="Collapsed">
+                                            <TextBlock x:Uid="RestartNowText" Text="Restart now" />
+                                        </Button>
                                     </StackPanel>
                                     <ComboBox
                                         x:Name="LanguageChoice"
@@ -698,103 +705,8 @@
                         <TextBlock
                             x:Uid="SensorsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="Graphics and drive temperatures work out of the box. Processor and board temperatures have to come from one of the programs below."
+                            Text="Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running."
                             TextWrapping="Wrap" />
-
-                        <Border
-                            Margin="0,8,0,0"
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <Grid ColumnSpacing="16">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Spacing="2">
-                                    <TextBlock FontWeight="SemiBold" Text="HWiNFO" />
-                                    <TextBlock
-                                        x:Uid="HwInfoHint"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Text="Reads processor and motherboard temperatures from HWiNFO, if it is running with Shared Memory Support switched on in its own settings."
-                                        TextWrapping="Wrap" />
-                                    <TextBlock
-                                        x:Name="HwInfoState"
-                                        Margin="0,6,0,0"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-
-                                <ToggleSwitch
-                                    x:Name="HwInfoSwitch"
-                                    x:Uid="HwInfoSwitch"
-                                    Grid.Column="1"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Right"
-                                    OffContent="Off"
-                                    OnContent="On"
-                                    Toggled="OnHwInfoToggled" />
-                            </Grid>
-                        </Border>
-
-                        <Border
-                            Margin="0,8,0,0"
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <Grid ColumnSpacing="16" RowSpacing="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                                <StackPanel Spacing="2">
-                                    <TextBlock FontWeight="SemiBold" Text="LibreHardwareMonitor" />
-                                    <TextBlock
-                                        x:Uid="LhmHint"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Text="Free and open source, and the way to read AMD and Intel graphics, the motherboard and its fans. Switch on its Remote Web Server under Options."
-                                        TextWrapping="Wrap" />
-                                    <TextBlock
-                                        x:Name="LhmState"
-                                        Margin="0,6,0,0"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-
-                                <ToggleSwitch
-                                    x:Name="LhmSwitch"
-                                    x:Uid="LhmSwitch"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    OffContent="Off"
-                                    OnContent="On"
-                                    Toggled="OnLhmToggled" />
-
-                                <TextBox
-                                    x:Name="LhmAddress"
-                                    x:Uid="LhmAddress"
-                                    Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    Header="Address"
-                                    LostFocus="OnLhmAddressChanged"
-                                    PlaceholderText="http://localhost:8085/data.json" />
-                            </Grid>
-                        </Border>
 
                         <TextBlock
                             x:Uid="LiveReadingsTitle"

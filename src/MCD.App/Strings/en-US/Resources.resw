@@ -202,7 +202,7 @@
     <value>Sensors</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>Graphics and drive temperatures work out of the box. Processor and board temperatures have to come from one of the programs below.</value>
+    <value>Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running.</value>
   </data>
   <data name="HwInfoHint.Text" xml:space="preserve">
     <value>Reads processor and motherboard temperatures from HWiNFO, if it is running with Shared Memory Support switched on in its own settings.</value>
@@ -582,5 +582,17 @@
   </data>
   <data name="PinCancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Display {0}</value>
+  </data>
+  <data name="AlreadyOnBar" xml:space="preserve">
+    <value>{0} — already on this bar</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>How see-through</value>
+  </data>
+  <data name="RestartNowText.Text" xml:space="preserve">
+    <value>Restart now</value>
   </data>
 </root>

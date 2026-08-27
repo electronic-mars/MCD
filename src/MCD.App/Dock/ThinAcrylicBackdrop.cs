@@ -24,6 +24,27 @@ namespace Mcd.App.Dock;
 /// </remarks>
 public sealed class ThinAcrylicBackdrop : SystemBackdrop
 {
+    private readonly Windows.UI.Color? _tint;
+    private readonly float? _opacity;
+
+    public ThinAcrylicBackdrop()
+    {
+    }
+
+    /// <summary>
+    /// Acrylic tinted with the person's own colour.
+    /// </summary>
+    /// <remarks>
+    /// This is what "a colour of my own" is made of. A plain brush with alpha
+    /// composits against the window's own opaque surface - against black, not
+    /// against the desktop - so a translucent colour has to be an acrylic
+    /// tint, where the compositor blends with what is really behind the bar.
+    /// </remarks>
+    public ThinAcrylicBackdrop(Windows.UI.Color tint, float opacity)
+    {
+        _tint = tint;
+        _opacity = Math.Clamp(opacity, 0.05f, 1f);
+    }
     /// <summary>
     /// Always "active", whatever the window is doing.
     /// </summary>
@@ -46,6 +67,13 @@ public sealed class ThinAcrylicBackdrop : SystemBackdrop
         base.OnTargetConnected(target, xamlRoot);
 
         _controller ??= new DesktopAcrylicController { Kind = DesktopAcrylicKind.Thin };
+
+        if (_tint is { } tint && _opacity is { } opacity)
+        {
+            _controller.TintColor = tint;
+            _controller.TintOpacity = opacity;
+            _controller.FallbackColor = tint;
+        }
 
         if (xamlRoot.Content is FrameworkElement content)
         {

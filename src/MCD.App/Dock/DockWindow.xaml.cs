@@ -457,11 +457,21 @@ public sealed partial class DockWindow : Window
 
         foreach (WidgetType type in WidgetCatalog.All)
         {
+            bool free = type.AllowsMultiple
+                || Config.Widgets.All(w => w.TypeId != type.TypeId);
+
             var item = new MenuFlyoutItem
             {
-                Text = type.Name,
-                IsEnabled = type.AllowsMultiple
-                    || Config.Widgets.All(w => w.TypeId != type.TypeId),
+                // Said in the item itself. The media widget keeps itself off
+                // the bar while nothing is playing, so "greyed out" alone
+                // reads as a fault to someone who cannot see it anywhere.
+                Text = free
+                    ? type.Name
+                    : string.Format(
+                        System.Globalization.CultureInfo.CurrentCulture,
+                        Mcd.App.Loc.Tr("AlreadyOnBar", "{0} — already on this bar"),
+                        type.Name),
+                IsEnabled = free,
             };
 
             ToolTipService.SetToolTip(item, type.Description);
@@ -537,9 +547,18 @@ public sealed partial class DockWindow : Window
         // acrylic and shows none of it.
         SystemBackdrop = null;
 
+        if (context.Backdrop == "colour")
+        {
+            // The alpha the person chose becomes the tint's strength: low is
+            // barely-there glass in their hue, full is a solid painted bar.
+            Windows.UI.Color chosen = ParseColour(context.BackdropColour);
+            SystemBackdrop = new ThinAcrylicBackdrop(chosen, chosen.A / 255f);
+            Root.Background = new SolidColorBrush(Colors.Transparent);
+            return;
+        }
+
         Root.Background = context.Backdrop switch
         {
-            "colour" => new SolidColorBrush(ParseColour(context.BackdropColour)),
             "image" when context.BackdropImage.Length > 0 && File.Exists(context.BackdropImage) =>
                 new ImageBrush
                 {

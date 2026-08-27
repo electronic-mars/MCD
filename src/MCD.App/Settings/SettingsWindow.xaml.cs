@@ -187,14 +187,6 @@ public sealed partial class SettingsWindow : Window
 
         Root.RequestedTheme = Appearance.Of(look.Theme);
 
-        HwInfoSwitch.IsOn = _settings.Current.Sensors.EnabledProviders
-            .GetValueOrDefault(HwInfoProvider.ProviderId);
-
-        LhmSwitch.IsOn = _settings.Current.Sensors.EnabledProviders
-            .GetValueOrDefault(LhmProvider.ProviderId);
-
-        LhmAddress.Text = _settings.Current.Sensors.LhmHttpEndpoint;
-
         foreach ((string id, string label, string fallback) in IconChoices.Known)
         {
             _icons.Add(new IconRow(id, label, Chosen(id, fallback), OnIconChosen));
@@ -240,11 +232,13 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>
-    /// A name for the picker that tells two identical screens apart.
+    /// The number Windows itself shows for the screen: "Display 2", the same
+    /// digit as in its own display settings.
     /// </summary>
     /// <remarks>
-    /// Two monitors of the same model report the same friendly name, and a
-    /// picker offering "RTK 2555" twice is a picker nobody can use.
+    /// Not the monitor's EDID name. "RTK 2555" is the model number of the
+    /// panel's controller - it tells two identical screens apart and nothing
+    /// else, and nobody thinks of their monitor by it.
     /// </remarks>
     private static string Label(
         MonitorConfig config,
@@ -252,6 +246,17 @@ public sealed partial class SettingsWindow : Window
         Dictionary<string, MonitorInfo> live,
         int index)
     {
+        if (live.TryGetValue(config.StableId, out MonitorInfo? screen)
+            && new string([.. screen.Identity.GdiName.Where(char.IsDigit)]) is { Length: > 0 } digits)
+        {
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("DisplayNumber", "Display {0}"),
+                int.Parse(digits, CultureInfo.InvariantCulture));
+        }
+
+        // An unplugged screen has no Windows number; its model name is all
+        // that is left to tell it by.
         string name = config.FriendlyName.Length > 0
             ? config.FriendlyName
             : Loc.Tr("ScreenFallback", "Screen");
@@ -548,6 +553,34 @@ public sealed partial class SettingsWindow : Window
             WriteReason.UserAction);
 
         _log.LogInformation("settings.language {Language}", language);
+        RestartNow.Visibility = Visibility.Visible;
+    }
+
+    /// <summary>
+    /// Starts the program again, for the change that only takes at a start.
+    /// </summary>
+    /// <remarks>
+    /// Through a shell one-liner that waits a beat: a copy started while this
+    /// one still holds the single-instance mutex would only signal it and
+    /// leave. Not pretty, but honest about what a restart is.
+    /// </remarks>
+    private void OnRestartNow(object sender, RoutedEventArgs e)
+    {
+        if (Environment.ProcessPath is not { } exe)
+        {
+            return;
+        }
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "cmd.exe",
+            Arguments = $"/c ping -n 3 127.0.0.1 >nul & start \"\" \"{exe}\"",
+            CreateNoWindow = true,
+            UseShellExecute = false,
+        });
+
+        _log.LogInformation("settings.restart requested");
+        _onExit();
     }
 
     private void OnDockPicked(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
@@ -612,28 +645,79 @@ public sealed partial class SettingsWindow : Window
 
         if (app.Backdrop == "colour")
         {
-            var picker = new ColorPicker
+            // A hand of swatches and one slider, the way Master Audio Switcher
+            // offers colours - not a colour laboratory. The slider is how
+            // see-through the bar is; the swatch is its hue.
+            Windows.UI.Color current0 = Swatch(app.BackdropColour);
+
+            string[] swatches =
+            [
+                "#1C1F24", "#23272D", "#101014", "#2D3748", "#1E3A5F", "#14484F",
+                "#1F3D2B", "#4A1E2A", "#322450", "#F26A21", "#EDEAE3", "#F7F5F1",
+            ];
+
+            var grid = new Microsoft.UI.Xaml.Controls.VariableSizedWrapGrid
             {
-                IsAlphaEnabled = true,
-                Color = Swatch(app.BackdropColour),
+                Orientation = Orientation.Horizontal,
+                MaximumRowsOrColumns = 6,
+                ItemWidth = 36,
+                ItemHeight = 36,
             };
 
-            var flyout = new Flyout { Content = picker };
-
-            // Written once, when the flyout closes. Committing on every tick of
-            // the picker would rebuild every dock for each pixel of the drag.
-            flyout.Closed += (_, _) =>
+            var slider = new Slider
             {
-                Windows.UI.Color c = picker.Color;
-                string chosen = $"#{c.A:X2}{c.R:X2}{c.G:X2}{c.B:X2}";
+                Header = Loc.Tr("SeeThroughHeader", "How see-through"),
+                Minimum = 5,
+                Maximum = 100,
+                StepFrequency = 5,
+                Value = Math.Round(current0.A / 255.0 * 100),
+            };
 
-                SettingsModel current = _settings.Current;
+            Windows.UI.Color hue = current0;
+
+            void Save()
+            {
+                byte a = (byte)Math.Round(slider.Value / 100 * 255);
+                string chosen = $"#{a:X2}{hue.R:X2}{hue.G:X2}{hue.B:X2}";
+
+                SettingsModel now = _settings.Current;
                 _settings.Commit(
-                    current with { App = current.App with { BackdropColour = chosen } },
+                    now with { App = now.App with { BackdropColour = chosen } },
                     WriteReason.UserAction);
 
                 _log.LogInformation("settings.backdrop colour={Colour}", chosen);
                 ShowBackdropExtras();
+            }
+
+            foreach (string hex in swatches)
+            {
+                Windows.UI.Color c = Swatch(hex);
+
+                var chip = new Button
+                {
+                    Width = 30,
+                    Height = 30,
+                    Padding = new Thickness(0),
+                    CornerRadius = new CornerRadius(6),
+                    BorderThickness = new Thickness(1),
+                    BorderBrush = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"],
+                    Background = new SolidColorBrush(c),
+                };
+
+                chip.Click += (_, _) => { hue = c; Save(); };
+                grid.Children.Add(chip);
+            }
+
+            slider.ValueChanged += (_, _) => Save();
+
+            var flyout = new Flyout
+            {
+                Content = new StackPanel
+                {
+                    Spacing = 12,
+                    MinWidth = 220,
+                    Children = { grid, slider },
+                },
             };
 
             flyout.ShowAt(BackdropPick);
@@ -1009,31 +1093,6 @@ public sealed partial class SettingsWindow : Window
         }
     }
 
-    private void OnHwInfoToggled(object sender, RoutedEventArgs e) =>
-        Source(HwInfoProvider.ProviderId, HwInfoSwitch.IsOn);
-
-    private void OnLhmToggled(object sender, RoutedEventArgs e) =>
-        Source(LhmProvider.ProviderId, LhmSwitch.IsOn);
-
-    /// <summary>Takes a new address for the source, if it really is a new one.</summary>
-    private void OnLhmAddressChanged(object sender, RoutedEventArgs e)
-    {
-        string address = LhmAddress.Text.Trim();
-        SettingsModel current = _settings.Current;
-
-        if (address.Length == 0 || address == current.Sensors.LhmHttpEndpoint)
-        {
-            return;
-        }
-
-        _settings.Commit(
-            current with { Sensors = current.Sensors with { LhmHttpEndpoint = address } },
-            WriteReason.UserAction);
-
-        _sensors.Reset(LhmProvider.ProviderId);
-        _log.LogInformation("settings.source id=lhm address={Address}", address);
-    }
-
     /// <summary>Switches an external source on or off, and says so at once.</summary>
     private void Source(string providerId, bool on)
     {
@@ -1102,8 +1161,6 @@ public sealed partial class SettingsWindow : Window
                 found.Length,
                 found.Select(d => d.Key.Value.Split('/', 2)[0]).Distinct().Count());
 
-        HwInfoState.Text = State(HwInfoSwitch.IsOn, _hwinfo.Trouble, found, HwInfoProvider.ProviderId);
-        LhmState.Text = State(LhmSwitch.IsOn, _lhm.Trouble, found, LhmProvider.ProviderId);
     }
 
     private string Chosen(string id, string fallback) =>

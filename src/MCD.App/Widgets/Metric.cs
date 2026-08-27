@@ -392,7 +392,7 @@ public sealed partial class Metric : ObservableObject
         (Brush)Application.Current.Resources["SystemFillColorCautionBrush"];
 
     private static Brush Hot =>
-        (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"];
+        (Brush)Application.Current.Resources["McdCriticalBrush"];
 
     private enum Level
     {

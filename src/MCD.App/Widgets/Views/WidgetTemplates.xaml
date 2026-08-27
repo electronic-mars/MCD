@@ -5,7 +5,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:widgets="using:Mcd.App.Widgets">
 
+    <!-- The critical red from Master Audio Switcher: firmer than Fluent's
+         salmon, which washed out over the acrylic. A shade deeper on the
+         light theme, where #FF6B6B has too little against a pale bar. -->
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="McdCriticalBrush" Color="#FF6B6B" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="McdCriticalBrush" Color="#C63B3B" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
     <widgets:IconConverter x:Key="Icon" />
+
 
     <!--
         One reading: a drawn icon, then the figure. The numbers use a monospaced
