@@ -216,7 +216,9 @@ public sealed partial class Metric : ObservableObject
         FontSize = font;
         Narrow = narrow;
         LabelVisible = subtitle ? Visibility.Visible : Visibility.Collapsed;
-        Lift = subtitle ? new Thickness(0, -2, 0, 0) : new Thickness(0);
+        // Minus on top, plus underneath: a negative top margin alone shrinks
+        // the box and the centring eats half the shift.
+        Lift = subtitle ? new Thickness(0, -2, 0, 2) : new Thickness(0, -1, 0, 1);
 
         // The box starts empty and grows to the widest value actually seen.
         ValueWidth = 0;
@@ -234,13 +236,27 @@ public sealed partial class Metric : ObservableObject
     /// and no wider: a box sized in advance for a rate that may never come
     /// leaves a dead stretch of bar that reads as a ragged gap - which is
     /// exactly what it did. Growth is immediate and kept; the box never
-    /// shrinks while the dock is up. The value sits centred in whatever slack
-    /// is left, so the slack splits evenly instead of pooling on one side.
-    /// The per-character allowance is the interface face's: digits run to
-    /// about 0.55 em, the space and the per-cent sign a little more.
+    /// shrinks while the dock is up, and the value sits centred in whatever
+    /// slack is left. Measured with a real TextBlock rather than estimated
+    /// per character: the estimate over-reserved on narrow glyphs and the
+    /// spare width read as more ragged gap. Measured at SemiBold, which is
+    /// what critical readings switch to - a box that fits the ordinary weight
+    /// only would clip the reading at the moment it matters most.
     /// </remarks>
-    private void Reserve() =>
-        ValueWidth = Math.Max(ValueWidth, Math.Ceiling((Text.Length * FontSize * 0.62) + 2));
+    private void Reserve()
+    {
+        Ruler.FontSize = FontSize;
+        Ruler.Text = Text;
+        Ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+
+        ValueWidth = Math.Max(ValueWidth, Math.Ceiling(Ruler.DesiredSize.Width) + 1);
+    }
+
+    /// <summary>One shared, never-shown TextBlock, used only to measure.</summary>
+    private static readonly Microsoft.UI.Xaml.Controls.TextBlock Ruler = new()
+    {
+        FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+    };
 
     public void Update(SensorHub sensors, SensorSnapshot snapshot)
     {

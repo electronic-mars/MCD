@@ -108,6 +108,14 @@ public sealed partial class DockWindow : Window
 
         Bar.RenderTransform = _push;
 
+        // The content island starts one physical pixel below the top of a
+        // chromeless window and its last row is clipped, so everything on the
+        // bar sat a pixel low - found with a ruler, and the presenter's
+        // SetBorderAndTitleBar does not remove it. The margin pulls the
+        // content back onto the window; the row the island cannot paint is
+        // flush against the screen edge, where there is only bar background.
+        Root.Margin = new Thickness(0, -1.0 / Monitor.Scale, 0, 0);
+
         // Watched rather than handled. These run even when a widget's own button
         // has already taken the event, because a press on a launcher button has
         // to be able to become a drag - and they mark nothing as handled, so an
