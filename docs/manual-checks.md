@@ -69,8 +69,10 @@ The log is at `%LOCALAPPDATA%\MCD\logs\mcd.log`.
 
 | # | Do this | Watch for |
 |---|---|---|
-| 27 | Docks → pick a screen → add a widget to each region | It appears on that bar at once, at the right end of it |
-| 28 | Drag a widget along the bar itself, and into another region of it | A marker shows where it will land; on release it is there, and `config.json` agrees |
+| 27 | Right-click a bar → Add widget → pick one | It appears where the click was, at once, and `config.json` agrees |
+| 28 | Drag a widget along the bar itself | A marker stands in the gap it would land in; on release it is there, and `config.json` agrees |
+| 28d | Start dragging any widget | Every spacer lights up with a grip mark; dropping a widget onto a spacer's far side lands it there |
+| 28e | Drag a spacer | It moves like any widget, and the things it was holding apart close up |
 | 28a | Drag a launcher button on the bar | It moves the widget rather than starting the program; a click without moving still starts it |
 | 28b | Hover any reading on the bar | A light fill, and a tooltip below it with the value on the first line and the hardware on the second |
 | 28c | Do 28b on a secondary monitor | The tooltip appears there too - it needs to be told which window it belongs to |
@@ -81,7 +83,7 @@ The log is at `%LOCALAPPDATA%\MCD\logs\mcd.log`.
 | 32a | Switch a dock between Default and Compact | The full size writes each reading's name under its figure; the compact one drops the names, as PowerToys does |
 | 33 | Appearance → Dark while Windows is light | Only the bars and this window change |
 | 33a | Watch the strip under "The bar" while a widget is added or moved | It shows the change at once, with live figures, at the dock's real thickness |
-| 33b | Remove a widget, then press Undo | It comes back in the same band at the same position |
+| 33b | Remove a widget, then press Undo | It comes back at the same position in the run |
 | 33c | Change a dock, switch to another screen in the picker, then press Undo | The picker returns to the screen that was changed |
 
 ## Launcher

@@ -24,17 +24,21 @@ public sealed class LoadWidget(WidgetContext context, WidgetConfig entry)
     /// </remarks>
     private static readonly Reading[] Known =
     [
-        new("cpu", "Cpu", "CPU", "%", SensorKey.Make("pdh", "cpu", SensorKind.Load, "total")),
-        new("ram", "Memory", "Memory", "%", SensorKey.Make("mem", "ram", SensorKind.Load, "used")),
+        new("cpu", "Cpu", Loc.Tr("LabelCpu", "CPU"), "%",
+            SensorKey.Make("pdh", "cpu", SensorKind.Load, "total")),
+        new("ram", "Memory", Loc.Tr("LabelMemory", "Memory"), "%",
+            SensorKey.Make("mem", "ram", SensorKind.Load, "used")),
 
         // Sent and received next to each other, each with the arrow that says
         // which way it goes. One figure with a globe beside it does not say
         // whether the machine is downloading or uploading.
-        new("up", "ArrowUp", "Send", "B/s", SensorKey.Make("pdh", "net", SensorKind.BytesPerSecond, "up")),
-        new("down", "ArrowDown", "Receive", "B/s",
+        new("up", "ArrowUp", Loc.Tr("LabelSend", "Send"), "B/s",
+            SensorKey.Make("pdh", "net", SensorKind.BytesPerSecond, "up")),
+        new("down", "ArrowDown", Loc.Tr("LabelReceive", "Receive"), "B/s",
             SensorKey.Make("pdh", "net", SensorKind.BytesPerSecond, "down")),
 
-        new("gpu", "Gpu", "GPU", "%", SensorKey.Make("pdh", "gpu", SensorKind.Load, "total")),
+        new("gpu", "Gpu", Loc.Tr("LabelGpu", "GPU"), "%",
+            SensorKey.Make("pdh", "gpu", SensorKind.Load, "total")),
     ];
 
     public override string TypeId => Type;
@@ -93,7 +97,7 @@ public sealed class LoadWidget(WidgetContext context, WidgetConfig entry)
         IReadOnlyList<string> chosen = Chosen;
         string[] names = [.. Known.Where(r => chosen.Contains(r.Id)).Select(r => r.Label)];
 
-        return names.Length == 0 ? "Nothing chosen" : string.Join(", ", names);
+        return names.Length == 0 ? Loc.Tr("LoadNothingChosen", "Nothing chosen") : string.Join(", ", names);
     }
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)

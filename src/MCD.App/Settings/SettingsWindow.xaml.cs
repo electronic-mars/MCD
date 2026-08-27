@@ -99,7 +99,12 @@ public sealed partial class SettingsWindow : Window
         IconList.ItemsSource = _icons;
         LauncherList.ItemsSource = _launcher;
         SensorList.ItemsSource = _readings;
-        VersionText.Text = $"Version {AppInfo.Version}";
+        VersionText.Text = string.Format(
+            CultureInfo.CurrentCulture, Loc.Tr("VersionFormat", "Version {0}"), AppInfo.Version);
+
+        _filling = true;
+        AutoStartToggle.IsOn = AutoStart.Enabled;
+        _filling = false;
 
         // Only while the sensors page is on screen. A window sitting behind
         // everything else has no business waking the machine once a second.
@@ -166,6 +171,12 @@ public sealed partial class SettingsWindow : Window
         ThemeChoice.SelectedIndex = Appearance.Index(look.Theme);
         BackdropChoice.SelectedIndex = look.Backdrop == "solid" ? 1 : 0;
         AccentChoice.SelectedIndex = look.Accent == "windows" ? 1 : 0;
+        LanguageChoice.SelectedIndex = look.Language switch
+        {
+            "en-US" => 1,
+            "ru-RU" => 2,
+            _ => 0,
+        };
         _filling = false;
 
         Root.RequestedTheme = Appearance.Of(look.Theme);
@@ -235,7 +246,9 @@ public sealed partial class SettingsWindow : Window
         Dictionary<string, MonitorInfo> live,
         int index)
     {
-        string name = config.FriendlyName.Length > 0 ? config.FriendlyName : "Screen";
+        string name = config.FriendlyName.Length > 0
+            ? config.FriendlyName
+            : Loc.Tr("ScreenFallback", "Screen");
 
         if (all.Count(m => m.FriendlyName == config.FriendlyName) < 2)
         {
@@ -259,7 +272,7 @@ public sealed partial class SettingsWindow : Window
 
         if (dock is null)
         {
-            DockDetail.Text = "No screen has been set up yet.";
+            DockDetail.Text = Loc.Tr("DockNoScreen", "No screen has been set up yet.");
             return;
         }
 
@@ -270,7 +283,7 @@ public sealed partial class SettingsWindow : Window
 
         DockDetail.Text = live is not null
             ? $"{live.Width} × {live.Height} · {live.Dpi * 100 / 96}%"
-            : "not attached · its layout is kept and comes back with the screen";
+            : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen");
 
         DockEnabled.IsOn = dock.Enabled;
         DockEdge.SelectedIndex = (int)dock.Edge;
@@ -391,7 +404,10 @@ public sealed partial class SettingsWindow : Window
         // what is safe to try.
         UndoButton.IsEnabled = _undo.Count > 0;
 
-        UndoButton.Content = _undo.Count > 0 ? $"Undo - {_undo.Peek().Label}" : "Undo";
+        UndoButton.Content = _undo.Count > 0
+            ? string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("UndoWithLabel", "Undo - {0}"), _undo.Peek().Label)
+            : Loc.Tr("Undo", "Undo");
     }
 
     /// <summary>Puts the last layout back.</summary>
@@ -427,12 +443,16 @@ public sealed partial class SettingsWindow : Window
     {
         if (!DockMetrics.IsHorizontal(dock.Edge) && dock.Density == DockDensity.Compact)
         {
-            return "A bar down the side of a screen has only one width, so Compact does nothing here.";
+            return Loc.Tr(
+                "NoteCompactVertical",
+                "A bar down the side of a screen has only one width, so Compact does nothing here.");
         }
 
         if (dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge))
         {
-            return "The taskbar already hides on this edge, so this dock stays visible.";
+            return Loc.Tr(
+                "NoteTaskbarHides",
+                "The taskbar already hides on this edge, so this dock stays visible.");
         }
 
         return string.Empty;
@@ -491,6 +511,29 @@ public sealed partial class SettingsWindow : Window
         _log.LogInformation(
             "settings.appearance theme={Theme} backdrop={Backdrop} accent={Accent}",
             ThemeChoice.SelectedIndex, BackdropChoice.SelectedIndex, AccentChoice.SelectedIndex);
+    }
+
+    private void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_filling)
+        {
+            return;
+        }
+
+        string language = LanguageChoice.SelectedIndex switch
+        {
+            1 => "en-US",
+            2 => "ru-RU",
+            _ => "system",
+        };
+
+        SettingsModel current = _settings.Current;
+
+        _settings.Commit(
+            current with { App = current.App with { Language = language } },
+            WriteReason.UserAction);
+
+        _log.LogInformation("settings.language {Language}", language);
     }
 
     private void OnDockPicked(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
@@ -571,7 +614,8 @@ public sealed partial class SettingsWindow : Window
                 Rearrange(
                     dock.StableId,
                     widgets => [.. widgets, WidgetConfig.New(type.TypeId)],
-                    $"added {type.TypeId}");
+                    string.Format(
+                        CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), type.TypeId));
             };
 
             list.Children.Add(choice);
@@ -613,7 +657,7 @@ public sealed partial class SettingsWindow : Window
         words.Children.Add(new TextBlock
         {
             Text = duplicate
-                ? "Already on this bar. A second one would show the same thing."
+                ? Loc.Tr("OfferDuplicate", "Already on this bar. A second one would show the same thing.")
                 : type.Description,
             FontSize = 12,
             Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"],
@@ -642,10 +686,10 @@ public sealed partial class SettingsWindow : Window
 
         var menu = new MenuFlyout();
 
-        Add("Move up", () => Shift(card, -1), Index(card) > 0);
-        Add("Move down", () => Shift(card, +1), Index(card) < dock.Widgets.Length - 1);
+        Add(Loc.Tr("MenuMoveUp", "Move up"), () => Shift(card, -1), Index(card) > 0);
+        Add(Loc.Tr("MenuMoveDown", "Move down"), () => Shift(card, +1), Index(card) < dock.Widgets.Length - 1);
         menu.Items.Add(new MenuFlyoutSeparator());
-        Add("Remove", () => Remove(card), enabled: true);
+        Add(Loc.Tr("MenuRemove", "Remove"), () => Remove(card), enabled: true);
 
         menu.ShowAt(button);
 
@@ -669,7 +713,8 @@ public sealed partial class SettingsWindow : Window
         Rearrange(
             dock.StableId,
             widgets => [.. widgets.Select(w => w.InstanceId == card.Id ? updated : w)],
-            $"configured {card.Entry.TypeId}",
+            string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("UndoConfigured", "configured {0}"), card.Entry.TypeId),
             rebuild: false);
 
         // Only the one line changes. Rebuilding the list would close the very
@@ -694,7 +739,7 @@ public sealed partial class SettingsWindow : Window
         }
 
         (run[at], run[to]) = (run[to], run[at]);
-        Rearrange(dock.StableId, _ => [.. run], "moved");
+        Rearrange(dock.StableId, _ => [.. run], Loc.Tr("UndoMoved", "moved"));
     }
 
     private void Remove(WidgetCard card)
@@ -707,7 +752,8 @@ public sealed partial class SettingsWindow : Window
         Rearrange(
             dock.StableId,
             widgets => [.. widgets.Where(w => w.InstanceId != card.Id)],
-            $"removed {card.Entry.TypeId}");
+            string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("UndoRemoved", "removed {0}"), card.Entry.TypeId));
     }
 
     /// <summary>The one place a dock's layout is written.</summary>
@@ -914,8 +960,12 @@ public sealed partial class SettingsWindow : Window
         }
 
         SensorSummary.Text = found.Length == 0
-            ? "Nothing is answering yet."
-            : $"{found.Length} readings from {found.Select(d => d.Key.Value.Split('/', 2)[0]).Distinct().Count()} sources.";
+            ? Loc.Tr("SensorsNoneYet", "Nothing is answering yet.")
+            : string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("SensorsSummary", "{0} readings from {1} sources."),
+                found.Length,
+                found.Select(d => d.Key.Value.Split('/', 2)[0]).Distinct().Count());
 
         HwInfoState.Text = State(HwInfoSwitch.IsOn, _hwinfo.Trouble, found, HwInfoProvider.ProviderId);
         LhmState.Text = State(LhmSwitch.IsOn, _lhm.Trouble, found, LhmProvider.ProviderId);
@@ -980,13 +1030,16 @@ public sealed partial class SettingsWindow : Window
     {
         if (!on)
         {
-            return "Off.";
+            return Loc.Tr("SourceOff", "Off.");
         }
 
         int mine = found.Count(
             d => d.Key.Value.StartsWith(providerId + "/", StringComparison.Ordinal));
 
-        return mine > 0 ? $"Reading {mine} temperatures." : trouble ?? "Looking...";
+        return mine > 0
+            ? string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("SourceReading", "Reading {0} temperatures."), mine)
+            : trouble ?? Loc.Tr("SourceLooking", "Looking...");
     }
 
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
@@ -1129,6 +1182,17 @@ public sealed partial class SettingsWindow : Window
     private void OnOpenLogs(object sender, RoutedEventArgs e) => Open(AppPaths.LogDirectory);
 
     private void OnOpenConfig(object sender, RoutedEventArgs e) => Open(AppPaths.Root);
+
+    private void OnAutoStartToggled(object sender, RoutedEventArgs e)
+    {
+        if (_filling)
+        {
+            return;
+        }
+
+        AutoStart.Enabled = AutoStartToggle.IsOn;
+        _log.LogInformation("settings.autostart enabled={Enabled}", AutoStartToggle.IsOn);
+    }
 
     private void OnExit(object sender, RoutedEventArgs e) => _onExit();
 

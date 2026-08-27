@@ -15,12 +15,12 @@ public sealed class IconChoices(ImmutableDictionary<string, string> chosen)
     /// <summary>Every reading a person can pick an icon for, in the order the settings show them.</summary>
     public static IReadOnlyList<(string Id, string Label, string Fallback)> Known { get; } =
     [
-        ("cpu", "CPU", "Cpu"),
-        ("ram", "Memory", "Memory"),
-        ("up", "Send", "ArrowUp"),
-        ("down", "Receive", "ArrowDown"),
-        ("gpu", "GPU", "Gpu"),
-        ("temp", "Temperature", "Temperature"),
+        ("cpu", Loc.Tr("LabelCpu", "CPU"), "Cpu"),
+        ("ram", Loc.Tr("LabelMemory", "Memory"), "Memory"),
+        ("up", Loc.Tr("LabelSend", "Send"), "ArrowUp"),
+        ("down", Loc.Tr("LabelReceive", "Receive"), "ArrowDown"),
+        ("gpu", Loc.Tr("LabelGpu", "GPU"), "Gpu"),
+        ("temp", Loc.Tr("LabelTemperature", "Temperature"), "Temperature"),
     ];
 
     /// <summary>The chosen icon, or the widget's own default when there is none.</summary>

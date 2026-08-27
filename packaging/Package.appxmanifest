@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The MSIX manifest, packed by tools/pack-msix.ps1 from the publish output.
+
+  Identity Name and Publisher are placeholders until the app name is reserved
+  in Partner Center; the packing script patches them in, along with the version
+  from Directory.Version.props. The Store replaces the signature either way -
+  what must match is only what Partner Center says under Product identity.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap5 rescap">
+
+  <Identity
+    Name="ElectronicMars.MasterControlDock"
+    Publisher="CN=00000000-0000-0000-0000-000000000000"
+    Version="0.1.0.0"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Master Control Dock</DisplayName>
+    <PublisherDisplayName>electronic-mars</PublisherDisplayName>
+    <Logo>Assets\Msix\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.22621.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+    <Resource Language="ru-ru" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App" Executable="MasterControlDock.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Master Control Dock"
+        Description="A dock for the edge of every screen: system readings, temperatures, media buttons and pinned programs."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Msix\Square150x150Logo.png"
+        Square44x44Logo="Assets\Msix\Square44x44Logo.png">
+        <uap:DefaultTile
+          Wide310x150Logo="Assets\Msix\Wide310x150Logo.png"
+          Square310x310Logo="Assets\Msix\Square310x310Logo.png" />
+        <uap:SplashScreen Image="Assets\Msix\SplashScreen.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <!-- The packaged form of the Start with Windows toggle. Disabled until
+             the person switches it on; AutoStart.cs takes this branch once the
+             program runs packaged. -->
+        <uap5:Extension Category="windows.startupTask" Executable="MasterControlDock.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap5:StartupTask TaskId="McdStartup" Enabled="false" DisplayName="Master Control Dock" />
+        </uap5:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

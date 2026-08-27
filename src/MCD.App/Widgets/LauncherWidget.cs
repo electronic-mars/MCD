@@ -43,9 +43,12 @@ public sealed class LauncherWidget(WidgetContext context, WidgetConfig entry)
     public override string Summarise() =>
         Context.Launcher.Length switch
         {
-            0 => "Nothing pinned yet",
-            1 => "1 pinned item",
-            int n => $"{n} pinned items",
+            0 => Loc.Tr("LauncherNonePinned", "Nothing pinned yet"),
+            1 => Loc.Tr("LauncherOnePinned", "1 pinned item"),
+            int n => string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("LauncherManyPinned", "{0} pinned items"),
+                n),
         };
 
     /// <summary>Nothing here changes with the readings.</summary>

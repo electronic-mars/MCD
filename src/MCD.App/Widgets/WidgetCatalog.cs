@@ -33,40 +33,40 @@ public static class WidgetCatalog
     [
         new(
             LauncherWidget.Type,
-            "Launcher",
-            "Programs, folders and pages you have pinned.",
+            Loc.Tr("WidgetLauncherName", "Launcher"),
+            Loc.Tr("WidgetLauncherDescription", "Programs, folders and pages you have pinned."),
             "Rocket",
             AllowsMultiple: false,
             (context, entry) => new LauncherWidget(context, entry)),
 
         new(
             LoadWidget.Type,
-            "Load",
-            "How busy the processor, graphics, memory and network are.",
+            Loc.Tr("WidgetLoadName", "Load"),
+            Loc.Tr("WidgetLoadDescription", "How busy the processor, graphics, memory and network are."),
             "Activity",
             AllowsMultiple: true,
             (context, entry) => new LoadWidget(context, entry)),
 
         new(
             MediaWidget.Type,
-            "Media",
-            "Whatever is playing, with buttons for it. Hidden while nothing is.",
+            Loc.Tr("WidgetMediaName", "Media"),
+            Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
             "Music",
             AllowsMultiple: false,
             (context, entry) => new MediaWidget(context, entry)),
 
         new(
             TemperatureWidget.Type,
-            "Temperature",
-            "Temperatures of the parts that report one.",
+            Loc.Tr("WidgetTemperatureName", "Temperature"),
+            Loc.Tr("WidgetTemperatureDescription", "Temperatures of the parts that report one."),
             "Temperature",
             AllowsMultiple: true,
             (context, entry) => new TemperatureWidget(context, entry)),
 
         new(
             SpacerWidget.Type,
-            "Spacer",
-            "Empty bar that pushes its neighbours apart.",
+            Loc.Tr("WidgetSpacerName", "Spacer"),
+            Loc.Tr("WidgetSpacerDescription", "Empty bar that pushes its neighbours apart."),
             "Spacer",
             AllowsMultiple: true,
             (context, entry) => new SpacerWidget(context, entry)),

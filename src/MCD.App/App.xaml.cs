@@ -76,6 +76,8 @@ public partial class App : Application
         _loggers = loggers;
         _services = BuildServices(loggers);
 
+        ApplyLanguage(start);
+
         // The AppBar registration is the one piece of state that outlives a
         // crash: the shell keeps the reserved work area until someone sends
         // ABM_REMOVE. Every exit path has to reach the same teardown.
@@ -104,6 +106,37 @@ public partial class App : Application
         if (Environment.GetEnvironmentVariable("MCD_SELFTEST") == "1")
         {
             ScheduleSelfTestExit(start);
+        }
+    }
+
+    /// <summary>
+    /// Applies the chosen interface language, before any window exists.
+    /// </summary>
+    /// <remarks>
+    /// Through the Windows App SDK's own override, which is the one MRT Core
+    /// reads in an unpackaged program - the Windows.Globalization one needs a
+    /// package identity and does nothing here. MCD_LANG is a seam for checking
+    /// the other language without touching the settings, like MCD_DATA_DIR.
+    /// </remarks>
+    private void ApplyLanguage(ILogger log)
+    {
+        string chosen = Environment.GetEnvironmentVariable("MCD_LANG")
+            ?? _services!.GetRequiredService<SettingsService>().Current.App.Language;
+
+        if (chosen is not { Length: > 0 } || chosen == "system")
+        {
+            return;
+        }
+
+        try
+        {
+            Microsoft.Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = chosen;
+            log.LogInformation("app.language override={Language}", chosen);
+        }
+        catch (Exception e)
+        {
+            // An invalid tag. The program is no worse off in its default language.
+            log.LogWarning(e, "app.language could not apply {Language}", chosen);
         }
     }
 

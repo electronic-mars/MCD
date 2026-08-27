@@ -79,7 +79,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     public string NextIcon => "Next";
 
     /// <summary>What the middle button's tooltip says: the track, when one is known.</summary>
-    public string PlayTip => Title.Length > 0 ? Title : "Play or pause";
+    public string PlayTip => Title.Length > 0 ? Title : Loc.Tr("MediaPlayPause", "Play or pause");
 
     partial void OnTitleChanged(string value) => OnPropertyChanged(nameof(PlayTip));
 
@@ -117,16 +117,16 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     }
 
     public override string Summarise() => ShowTitle
-        ? "Buttons, with the track written next to them"
-        : "Buttons; the track is in their tooltip";
+        ? Loc.Tr("MediaSummaryShown", "Buttons, with the track written next to them")
+        : Loc.Tr("MediaSummaryTooltip", "Buttons; the track is in their tooltip");
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
         var title = new ToggleSwitch
         {
-            Header = "Write the track on the bar",
-            OnContent = "Written next to the buttons",
-            OffContent = "Only in the tooltip",
+            Header = Loc.Tr("MediaTitleHeader", "Write the track on the bar"),
+            OnContent = Loc.Tr("MediaTitleOn", "Written next to the buttons"),
+            OffContent = Loc.Tr("MediaTitleOff", "Only in the tooltip"),
             IsOn = ShowTitle,
         };
 

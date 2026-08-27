@@ -45,8 +45,11 @@ public sealed record AppSettings
     /// </summary>
     public string Accent { get; init; } = "neutral";
 
-    /// <summary>Empty means "follow Windows".</summary>
-    public string Language { get; init; } = string.Empty;
+    /// <summary>
+    /// The interface language: "system" to follow Windows, or a tag such as
+    /// "ru-RU". Takes effect the next time the program starts.
+    /// </summary>
+    public string Language { get; init; } = "system";
 
     public bool Autostart { get; init; }
 

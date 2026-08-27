@@ -1,0 +1,42 @@
+name: release
+
+# A tag like v0.1.0 produces the MSIX the Store submission takes. The tag must
+# agree with Directory.Version.props - check-version.ps1 refuses otherwise.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  msix:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Check the declared version
+        run: pwsh tools/check-version.ps1
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test tests/MCD.Tests/MCD.Tests.csproj --no-build --configuration Release
+
+      - name: Smoke
+        run: pwsh tools/smoke.ps1 -Seconds 10
+
+      - name: Pack MSIX
+        run: pwsh tools/pack-msix.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: msix
+          path: dist/*.msix
+          if-no-files-found: error

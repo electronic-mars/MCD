@@ -45,21 +45,28 @@ public sealed partial class SpacerWidget(WidgetContext context, WidgetConfig ent
     }
 
     public override string Summarise() => Expands
-        ? "Stretches to take the free space"
-        : $"A fixed gap, {Dips:0} across";
+        ? Loc.Tr("SpacerStretches", "Stretches to take the free space")
+        : string.Format(
+            System.Globalization.CultureInfo.CurrentCulture,
+            Loc.Tr("SpacerFixedSummary", "A fixed gap, {0} across"),
+            Dips.ToString("0", System.Globalization.CultureInfo.CurrentCulture));
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
         var mode = new ComboBox
         {
-            Header = "Width",
-            Items = { "Stretches to take the free space", "Fixed" },
+            Header = Loc.Tr("SpacerWidthHeader", "Width"),
+            Items =
+            {
+                Loc.Tr("SpacerStretches", "Stretches to take the free space"),
+                Loc.Tr("SpacerFixed", "Fixed"),
+            },
             SelectedIndex = Expands ? 0 : 1,
         };
 
         var width = new NumberBox
         {
-            Header = "Pixels across",
+            Header = Loc.Tr("SpacerPixels", "Pixels across"),
             Minimum = 4,
             Maximum = 600,
             SmallChange = 4,

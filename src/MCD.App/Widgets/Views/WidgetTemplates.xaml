@@ -177,6 +177,7 @@
                 </Border>
 
                 <Button
+                    x:Uid="MediaPreviousButton"
                     Command="{x:Bind PreviousCommand}"
                     Style="{StaticResource BarButton}"
                     ToolTipService.ToolTip="Previous">
@@ -211,6 +212,7 @@
                 </Button>
 
                 <Button
+                    x:Uid="MediaNextButton"
                     Command="{x:Bind NextCommand}"
                     Style="{StaticResource BarButton}"
                     ToolTipService.ToolTip="Next">

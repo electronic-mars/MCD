@@ -99,16 +99,20 @@ There is no icon in the notification area, on purpose. A program whose whole
 point is a bar of visible controls should not hide its own controls behind a
 chevron in somebody else's bar. Starting the shortcut again while it is already
 running opens the settings as well - which is also the way back in if every dock
-has been switched off.
+has been switched off. **Start with Windows** lives on the About page.
 
-**Arranging a dock.** Settings has a **Docks** page: pick a screen at the top,
-then set which edge its bar is on, how thick it is, and whether it hides itself.
-Below that are the bar's three regions — start, centre and end — with the
-widgets in each. Above them is the bar itself, drawn at the thickness it really is with the
-widgets that are really on it, so you can see the arrangement without turning
-your head. Add one with the button beside a region, and open a widget's own row
-to set it up. **To move a widget, drag it on the bar itself** - a marker shows
-where it will land.
+**Arranging a dock.** A dock is one run of widgets, and where they sit is
+decided by **spacers** - widgets that stretch to take up the free length. One
+spacer in the middle splits the bar in two; two of them centre whatever is
+between. **To move a widget, drag it on the bar itself** - a marker shows where
+it will land, and while a drag is under way the spacers show themselves so they
+can be grabbed too. **Right-click the bar** and choose *Add widget* to put a
+new one exactly where you clicked.
+
+Settings has a **Docks** page besides: pick a screen at the top, see the bar
+itself drawn live at its real thickness, then set which edge it sits on, how
+thick it is, and whether it hides itself. The widget list below is where a
+widget's own settings live - open its row to set it up.
 
 The two sizes differ in more than thickness: the full size writes each reading's
 name under its figure, and the compact one shows the figure alone. Nothing is saved or
@@ -119,8 +123,9 @@ side on the bar.
 
 **Appearance.** The **Appearance** page sets the theme (light, dark, or the same
 as Windows), whether the bars are translucent or solid, and whether the readings
-take the accent colour from your Windows settings. A reading that is too warm or
-too hot keeps its own colour either way.
+take the accent colour from your Windows settings. Readings past their warning
+level keep their warning colour either way, and past the critical level the
+figure turns the system's critical red and goes semibold.
 
 **Hiding the bar.** Each dock can either stay visible or hide itself, under
 Behaviour on the Docks page. A hidden dock reserves no space at all - windows

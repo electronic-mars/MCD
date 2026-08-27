@@ -40,7 +40,9 @@ public sealed partial class WidgetCard : ObservableObject, IDisposable
 
         Summary = Known
             ? Widget?.Summarise() ?? string.Empty
-            : "This version does not know this widget. It stays in your settings and is left alone.";
+            : Loc.Tr(
+                "WidgetUnknownSummary",
+                "This version does not know this widget. It stays in your settings and is left alone.");
     }
 
     public WidgetConfig Entry { get; }
@@ -85,8 +87,10 @@ public sealed partial class WidgetCard : ObservableObject, IDisposable
             ?? new TextBlock
             {
                 Text = Known
-                    ? "This widget has nothing to set up."
-                    : "Nothing can be set up for a widget this version does not know.",
+                    ? Loc.Tr("WidgetNothingToSetUp", "This widget has nothing to set up.")
+                    : Loc.Tr(
+                        "WidgetUnknownNothing",
+                        "Nothing can be set up for a widget this version does not know."),
                 FontSize = 12,
                 Opacity = 0.7,
                 TextWrapping = TextWrapping.Wrap,

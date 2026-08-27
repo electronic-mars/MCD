@@ -69,14 +69,18 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
     {
         if (Mode != Chosen || Wanted.Count == 0)
         {
-            return "The hottest reading";
+            return Loc.Tr("TempHottestSummary", "The hottest reading");
         }
 
         string[] names = [.. Wanted.Select(Name)];
 
         return names.Length <= 3
             ? string.Join(", ", names)
-            : $"{names.Length} readings · {string.Join(", ", names.Take(3))}…";
+            : string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("TempManySummary", "{0} readings · {1}…"),
+                names.Length,
+                string.Join(", ", names.Take(3)));
     }
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
@@ -84,8 +88,16 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
         var panel = new StackPanel { Spacing = 10 };
         List<string> wanted = [.. Wanted];
 
-        var auto = new RadioButton { Content = "The hottest reading, whichever it is", GroupName = InstanceId };
-        var pick = new RadioButton { Content = "The readings I choose, side by side", GroupName = InstanceId };
+        var auto = new RadioButton
+        {
+            Content = Loc.Tr("TempAutoOption", "The hottest reading, whichever it is"),
+            GroupName = InstanceId,
+        };
+        var pick = new RadioButton
+        {
+            Content = Loc.Tr("TempPickOption", "The readings I choose, side by side"),
+            GroupName = InstanceId,
+        };
 
         auto.IsChecked = Mode != Chosen;
         pick.IsChecked = Mode == Chosen;
@@ -174,7 +186,7 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
         var metric = new Metric(
             "temp",
             Icons.For("temp", known is null ? "Temperature" : IconFor(known.Group)),
-            known?.Label ?? "Temperature",
+            known?.Label ?? Loc.Tr("LabelTemperature", "Temperature"),
             "°C",
             key is { } k
                 ? sensors => sensors.Catalog.FirstOrDefault(d => d.Key.Equals(k))
@@ -216,10 +228,12 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
 
     private static TextBlock Explain() => new()
     {
-        Text = "Processor and motherboard temperatures live behind a driver, "
-             + "which a Store app cannot contain. Run HWiNFO with its Shared "
-             + "Memory Support switched on, then turn it on under Sensors in "
-             + "settings, and they will appear here.",
+        Text = Loc.Tr(
+            "TempExplain",
+            "Processor and motherboard temperatures live behind a driver, "
+            + "which a Store app cannot contain. Run HWiNFO with its Shared "
+            + "Memory Support switched on, then turn it on under Sensors in "
+            + "settings, and they will appear here."),
         TextWrapping = TextWrapping.Wrap,
         FontSize = 12,
         Opacity = 0.7,

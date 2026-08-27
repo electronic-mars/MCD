@@ -445,7 +445,7 @@ public sealed partial class DockWindow : Window
         Point at = e.GetPosition(Bar);
 
         var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
-        var add = new MenuFlyoutSubItem { Text = "Add widget" };
+        var add = new MenuFlyoutSubItem { Text = Loc.Tr("MenuAddWidget", "Add widget") };
 
         foreach (WidgetType type in WidgetCatalog.All)
         {
@@ -466,7 +466,7 @@ public sealed partial class DockWindow : Window
         menu.Items.Add(add);
         menu.Items.Add(new MenuFlyoutSeparator());
 
-        var settings = new MenuFlyoutItem { Text = "Dock settings" };
+        var settings = new MenuFlyoutItem { Text = Loc.Tr("MenuDockSettings", "Dock settings") };
 
         // The monitor goes with the request. Settings that open on the primary
         // screen when the click happened on the third one are settings the user

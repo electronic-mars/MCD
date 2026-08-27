@@ -18,11 +18,16 @@ public sealed partial class MonitorRow : ObservableObject
 
         Config = config;
         Attached = attached is not null;
-        Name = config.FriendlyName.Length > 0 ? config.FriendlyName : "Unknown display";
+        Name = config.FriendlyName.Length > 0
+            ? config.FriendlyName
+            : Loc.Tr("MonitorUnknown", "Unknown display");
 
         Detail = attached is not null
             ? $"{attached.Width} × {attached.Height} · {attached.Dpi * 100 / 96}% · {attached.Identity.GdiName}"
-            : $"not attached · last seen {Describe(config.LastSeenUtc)}";
+            : string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("MonitorNotAttached", "not attached · last seen {0}"),
+                Describe(config.LastSeenUtc));
 
         StableId = config.StableId;
         EdidKey = config.EdidKey.Length > 0 ? config.EdidKey : "unreadable";
@@ -130,17 +135,20 @@ public sealed partial class MonitorRow : ObservableObject
     {
         if (when == default)
         {
-            return "never";
+            return Loc.Tr("SeenNever", "never");
         }
 
         TimeSpan ago = DateTimeOffset.UtcNow - when;
 
         return ago switch
         {
-            { TotalMinutes: < 2 } => "a moment ago",
-            { TotalHours: < 1 } => $"{(int)ago.TotalMinutes} minutes ago",
-            { TotalDays: < 1 } => $"{(int)ago.TotalHours} hours ago",
-            { TotalDays: < 30 } => $"{(int)ago.TotalDays} days ago",
+            { TotalMinutes: < 2 } => Loc.Tr("SeenMoment", "a moment ago"),
+            { TotalHours: < 1 } => string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("SeenMinutes", "{0} minutes ago"), (int)ago.TotalMinutes),
+            { TotalDays: < 1 } => string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("SeenHours", "{0} hours ago"), (int)ago.TotalHours),
+            { TotalDays: < 30 } => string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("SeenDays", "{0} days ago"), (int)ago.TotalDays),
             _ => when.ToLocalTime().ToString("d MMMM yyyy", CultureInfo.CurrentCulture),
         };
     }

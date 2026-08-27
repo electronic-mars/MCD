@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Content" xml:space="preserve">
+    <value>Docks</value>
+  </data>
+  <data name="NavLauncher.Content" xml:space="preserve">
+    <value>Launcher</value>
+  </data>
+  <data name="NavIcons.Content" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="NavAppearance.Content" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="NavSensors.Content" xml:space="preserve">
+    <value>Sensors</value>
+  </data>
+  <data name="NavMonitors.Content" xml:space="preserve">
+    <value>Monitors</value>
+  </data>
+  <data name="NavAbout.Content" xml:space="preserve">
+    <value>About</value>
+  </data>
+
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Docks</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>One dock per screen. Everything here takes effect on the bar as you do it. To move a widget, drag it on the bar.</value>
+  </data>
+  <data name="BarLiveTitle.Text" xml:space="preserve">
+    <value>The bar, live</value>
+  </data>
+  <data name="PreviewEmpty.Text" xml:space="preserve">
+    <value>This dock is empty. Add a widget below.</value>
+  </data>
+  <data name="ShowDockLabel.Text" xml:space="preserve">
+    <value>Show this dock</value>
+  </data>
+  <data name="DockEnabled.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="DockEnabled.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="EdgeLabel.Text" xml:space="preserve">
+    <value>Edge</value>
+  </data>
+  <data name="EdgeLeftItem.Content" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="EdgeTopItem.Content" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="EdgeRightItem.Content" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="EdgeBottomItem.Content" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="SizeLabel.Text" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="SizeDefaultItem.Content" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="SizeCompactItem.Content" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="BehaviourLabel.Text" xml:space="preserve">
+    <value>Behaviour</value>
+  </data>
+  <data name="ModeVisibleItem.Content" xml:space="preserve">
+    <value>Always visible</value>
+  </data>
+  <data name="ModeAutoHideItem.Content" xml:space="preserve">
+    <value>Hides until you point at it</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="AddWidgetButton.Content" xml:space="preserve">
+    <value>Add widget</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>In bar order. Drag widgets on the bar itself, or right-click the bar to add one where you point. Spacers decide where the free length goes.</value>
+  </data>
+  <data name="WidgetsEmptyText.Text" xml:space="preserve">
+    <value>Nothing here yet.</value>
+  </data>
+  <data name="WidgetMenuButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Move or remove</value>
+  </data>
+
+  <!-- Launcher page -->
+  <data name="LauncherTitle.Text" xml:space="preserve">
+    <value>Launcher</value>
+  </data>
+  <data name="LauncherIntro.Text" xml:space="preserve">
+    <value>Programs, folders and pages pinned to the bar. They appear on every dock, in this order.</value>
+  </data>
+  <data name="NewName.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NewName.PlaceholderText" xml:space="preserve">
+    <value>optional</value>
+  </data>
+  <data name="NewTarget.Header" xml:space="preserve">
+    <value>Program, folder or address</value>
+  </data>
+  <data name="NewTarget.PlaceholderText" xml:space="preserve">
+    <value>C:\Windows\notepad.exe  or  https://example.com</value>
+  </data>
+  <data name="BrowseButton.Content" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="AddLaunchButton.Content" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="MoveUpButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="RemoveLaunchButton.Content" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>How the bars are drawn. This applies to every dock.</value>
+  </data>
+  <data name="ThemeLabel.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="ThemeHint.Text" xml:space="preserve">
+    <value>Light or dark, or the same as Windows.</value>
+  </data>
+  <data name="ThemeSystemItem.Content" xml:space="preserve">
+    <value>Same as Windows</value>
+  </data>
+  <data name="ThemeLightItem.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ThemeDarkItem.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="BackgroundLabel.Text" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="BackgroundHint.Text" xml:space="preserve">
+    <value>Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw.</value>
+  </data>
+  <data name="BackdropTranslucentItem.Content" xml:space="preserve">
+    <value>Translucent</value>
+  </data>
+  <data name="BackdropSolidItem.Content" xml:space="preserve">
+    <value>Solid</value>
+  </data>
+  <data name="AccentLabel.Text" xml:space="preserve">
+    <value>Colour of the readings</value>
+  </data>
+  <data name="AccentHint.Text" xml:space="preserve">
+    <value>The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way.</value>
+  </data>
+  <data name="AccentNeutralItem.Content" xml:space="preserve">
+    <value>Plain text colour</value>
+  </data>
+  <data name="AccentWindowsItem.Content" xml:space="preserve">
+    <value>Windows accent colour</value>
+  </data>
+
+  <!-- Icons page -->
+  <data name="IconsTitle.Text" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="IconsIntro.Text" xml:space="preserve">
+    <value>Pick the picture each reading is drawn with. The choice applies to every dock.</value>
+  </data>
+
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Sensors</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Graphics and drive temperatures work out of the box. Processor and board temperatures have to come from one of the programs below.</value>
+  </data>
+  <data name="HwInfoHint.Text" xml:space="preserve">
+    <value>Reads processor and motherboard temperatures from HWiNFO, if it is running with Shared Memory Support switched on in its own settings.</value>
+  </data>
+  <data name="HwInfoSwitch.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="HwInfoSwitch.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="LhmHint.Text" xml:space="preserve">
+    <value>Free and open source, and the way to read AMD and Intel graphics, the motherboard and its fans. Switch on its Remote Web Server under Options.</value>
+  </data>
+  <data name="LhmSwitch.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="LhmSwitch.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="LhmAddress.Header" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Live readings</value>
+  </data>
+
+  <!-- Monitors page -->
+  <data name="MonitorsTitle.Text" xml:space="preserve">
+    <value>Monitors</value>
+  </data>
+  <data name="MonitorsIntro.Text" xml:space="preserve">
+    <value>Every screen this program has seen, and how it recognises them. Entries are kept until you remove them here.</value>
+  </data>
+  <data name="ForgetButton.Content" xml:space="preserve">
+    <value>Forget</value>
+  </data>
+
+  <!-- About page -->
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AboutIntro.Text" xml:space="preserve">
+    <value>A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence.</value>
+  </data>
+  <data name="StartWithWindowsLabel.Text" xml:space="preserve">
+    <value>Start with Windows</value>
+  </data>
+  <data name="StartWithWindowsHint.Text" xml:space="preserve">
+    <value>The docks come back when you sign in.</value>
+  </data>
+  <data name="AutoStartToggle.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="AutoStartToggle.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="OpenLogsButton.Content" xml:space="preserve">
+    <value>Open the log folder</value>
+  </data>
+  <data name="OpenConfigButton.Content" xml:space="preserve">
+    <value>Open the settings folder</value>
+  </data>
+  <data name="ExitHint.Text" xml:space="preserve">
+    <value>Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind.</value>
+  </data>
+  <data name="ExitButton.Content" xml:space="preserve">
+    <value>Exit Master Control Dock</value>
+  </data>
+
+  <!-- Media widget buttons on the bar -->
+  <data name="MediaPreviousButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="MediaNextButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Next</value>
+  </data>
+
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>No screen has been set up yet.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>not attached · its layout is kept and comes back with the screen</value>
+  </data>
+  <data name="NoteCompactVertical" xml:space="preserve">
+    <value>A bar down the side of a screen has only one width, so Compact does nothing here.</value>
+  </data>
+  <data name="NoteTaskbarHides" xml:space="preserve">
+    <value>The taskbar already hides on this edge, so this dock stays visible.</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Undo - {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>added {0}</value>
+  </data>
+  <data name="UndoConfigured" xml:space="preserve">
+    <value>configured {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>moved</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>removed {0}</value>
+  </data>
+  <data name="OfferDuplicate" xml:space="preserve">
+    <value>Already on this bar. A second one would show the same thing.</value>
+  </data>
+  <data name="MenuMoveUp" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="MenuMoveDown" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="MenuRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Screen</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Nothing is answering yet.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>{0} readings from {1} sources.</value>
+  </data>
+  <data name="SourceOff" xml:space="preserve">
+    <value>Off.</value>
+  </data>
+  <data name="SourceReading" xml:space="preserve">
+    <value>Reading {0} temperatures.</value>
+  </data>
+  <data name="SourceLooking" xml:space="preserve">
+    <value>Looking...</value>
+  </data>
+
+  <!-- Widget cards in the settings list -->
+  <data name="WidgetUnknownSummary" xml:space="preserve">
+    <value>This version does not know this widget. It stays in your settings and is left alone.</value>
+  </data>
+  <data name="WidgetNothingToSetUp" xml:space="preserve">
+    <value>This widget has nothing to set up.</value>
+  </data>
+  <data name="WidgetUnknownNothing" xml:space="preserve">
+    <value>Nothing can be set up for a widget this version does not know.</value>
+  </data>
+
+  <!-- The bar's right-click menu -->
+  <data name="MenuAddWidget" xml:space="preserve">
+    <value>Add widget</value>
+  </data>
+  <data name="MenuDockSettings" xml:space="preserve">
+    <value>Dock settings</value>
+  </data>
+
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetLauncherName" xml:space="preserve">
+    <value>Launcher</value>
+  </data>
+  <data name="WidgetLauncherDescription" xml:space="preserve">
+    <value>Programs, folders and pages you have pinned.</value>
+  </data>
+  <data name="WidgetLoadName" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="WidgetLoadDescription" xml:space="preserve">
+    <value>How busy the processor, graphics, memory and network are.</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Whatever is playing, with buttons for it. Hidden while nothing is.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Temperatures of the parts that report one.</value>
+  </data>
+  <data name="WidgetSpacerName" xml:space="preserve">
+    <value>Spacer</value>
+  </data>
+  <data name="WidgetSpacerDescription" xml:space="preserve">
+    <value>Empty bar that pushes its neighbours apart.</value>
+  </data>
+
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Receive</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>The hottest reading</value>
+  </data>
+  <data name="TempManySummary" xml:space="preserve">
+    <value>{0} readings · {1}…</value>
+  </data>
+  <data name="TempAutoOption" xml:space="preserve">
+    <value>The hottest reading, whichever it is</value>
+  </data>
+  <data name="TempPickOption" xml:space="preserve">
+    <value>The readings I choose, side by side</value>
+  </data>
+  <data name="TempExplain" xml:space="preserve">
+    <value>Processor and motherboard temperatures live behind a driver, which a Store app cannot contain. Run HWiNFO with its Shared Memory Support switched on, then turn it on under Sensors in settings, and they will appear here.</value>
+  </data>
+
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Play or pause</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Buttons, with the track written next to them</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Buttons; the track is in their tooltip</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Write the track on the bar</value>
+  </data>
+  <data name="MediaTitleOn" xml:space="preserve">
+    <value>Written next to the buttons</value>
+  </data>
+  <data name="MediaTitleOff" xml:space="preserve">
+    <value>Only in the tooltip</value>
+  </data>
+
+  <!-- Spacer widget -->
+  <data name="SpacerStretches" xml:space="preserve">
+    <value>Stretches to take the free space</value>
+  </data>
+  <data name="SpacerFixedSummary" xml:space="preserve">
+    <value>A fixed gap, {0} across</value>
+  </data>
+  <data name="SpacerWidthHeader" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="SpacerFixed" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="SpacerPixels" xml:space="preserve">
+    <value>Pixels across</value>
+  </data>
+
+  <!-- Load widget -->
+  <data name="LoadNothingChosen" xml:space="preserve">
+    <value>Nothing chosen</value>
+  </data>
+
+  <!-- Launcher widget -->
+  <data name="LauncherNonePinned" xml:space="preserve">
+    <value>Nothing pinned yet</value>
+  </data>
+  <data name="LauncherOnePinned" xml:space="preserve">
+    <value>1 pinned item</value>
+  </data>
+  <data name="LauncherManyPinned" xml:space="preserve">
+    <value>{0} pinned items</value>
+  </data>
+
+  <!-- Monitor rows -->
+  <data name="MonitorUnknown" xml:space="preserve">
+    <value>Unknown display</value>
+  </data>
+  <data name="MonitorNotAttached" xml:space="preserve">
+    <value>not attached · last seen {0}</value>
+  </data>
+  <data name="SeenNever" xml:space="preserve">
+    <value>never</value>
+  </data>
+  <data name="SeenMoment" xml:space="preserve">
+    <value>a moment ago</value>
+  </data>
+  <data name="SeenMinutes" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="SeenHours" xml:space="preserve">
+    <value>{0} hours ago</value>
+  </data>
+  <data name="SeenDays" xml:space="preserve">
+    <value>{0} days ago</value>
+  </data>
+  <data name="LanguageLabel.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageHint.Text" xml:space="preserve">
+    <value>Takes effect the next time the program starts.</value>
+  </data>
+  <data name="LanguageSystemItem.Content" xml:space="preserve">
+    <value>Same as Windows</value>
+  </data>
+</root>

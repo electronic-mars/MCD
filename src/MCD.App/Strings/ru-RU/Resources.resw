@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Окно настроек: заголовок и навигация -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Content" xml:space="preserve">
+    <value>Доки</value>
+  </data>
+  <data name="NavLauncher.Content" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="NavIcons.Content" xml:space="preserve">
+    <value>Значки</value>
+  </data>
+  <data name="NavAppearance.Content" xml:space="preserve">
+    <value>Оформление</value>
+  </data>
+  <data name="NavSensors.Content" xml:space="preserve">
+    <value>Датчики</value>
+  </data>
+  <data name="NavMonitors.Content" xml:space="preserve">
+    <value>Мониторы</value>
+  </data>
+  <data name="NavAbout.Content" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+
+  <!-- Страница «Доки» -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Доки</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>Один док на каждый экран. Все изменения сразу применяются к панели. Чтобы переместить виджет, перетащите его прямо на панели.</value>
+  </data>
+  <data name="BarLiveTitle.Text" xml:space="preserve">
+    <value>Панель вживую</value>
+  </data>
+  <data name="PreviewEmpty.Text" xml:space="preserve">
+    <value>Этот док пуст. Добавьте виджет ниже.</value>
+  </data>
+  <data name="ShowDockLabel.Text" xml:space="preserve">
+    <value>Показывать этот док</value>
+  </data>
+  <data name="DockEnabled.OnContent" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="DockEnabled.OffContent" xml:space="preserve">
+    <value>Откл.</value>
+  </data>
+  <data name="EdgeLabel.Text" xml:space="preserve">
+    <value>Край</value>
+  </data>
+  <data name="EdgeLeftItem.Content" xml:space="preserve">
+    <value>Слева</value>
+  </data>
+  <data name="EdgeTopItem.Content" xml:space="preserve">
+    <value>Сверху</value>
+  </data>
+  <data name="EdgeRightItem.Content" xml:space="preserve">
+    <value>Справа</value>
+  </data>
+  <data name="EdgeBottomItem.Content" xml:space="preserve">
+    <value>Снизу</value>
+  </data>
+  <data name="SizeLabel.Text" xml:space="preserve">
+    <value>Размер</value>
+  </data>
+  <data name="SizeDefaultItem.Content" xml:space="preserve">
+    <value>Обычный</value>
+  </data>
+  <data name="SizeCompactItem.Content" xml:space="preserve">
+    <value>Компактный</value>
+  </data>
+  <data name="BehaviourLabel.Text" xml:space="preserve">
+    <value>Поведение</value>
+  </data>
+  <data name="ModeVisibleItem.Content" xml:space="preserve">
+    <value>Всегда на экране</value>
+  </data>
+  <data name="ModeAutoHideItem.Content" xml:space="preserve">
+    <value>Скрывается, пока не наведён указатель</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Виджеты</value>
+  </data>
+  <data name="AddWidgetButton.Content" xml:space="preserve">
+    <value>Добавить виджет</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>В порядке следования на панели. Перетаскивайте виджеты прямо на панели или щёлкните панель правой кнопкой, чтобы добавить виджет в нужное место. Разделители определяют, куда уходит свободное место.</value>
+  </data>
+  <data name="WidgetsEmptyText.Text" xml:space="preserve">
+    <value>Пока здесь пусто.</value>
+  </data>
+  <data name="WidgetMenuButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Переместить или удалить</value>
+  </data>
+
+  <!-- Страница «Запуск» -->
+  <data name="LauncherTitle.Text" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="LauncherIntro.Text" xml:space="preserve">
+    <value>Программы, папки и страницы, закреплённые на панели. Они появляются на каждом доке в этом порядке.</value>
+  </data>
+  <data name="NewName.Header" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="NewName.PlaceholderText" xml:space="preserve">
+    <value>необязательно</value>
+  </data>
+  <data name="NewTarget.Header" xml:space="preserve">
+    <value>Программа, папка или адрес</value>
+  </data>
+  <data name="NewTarget.PlaceholderText" xml:space="preserve">
+    <value>C:\Windows\notepad.exe  или  https://example.com</value>
+  </data>
+  <data name="BrowseButton.Content" xml:space="preserve">
+    <value>Обзор...</value>
+  </data>
+  <data name="AddLaunchButton.Content" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="MoveUpButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Переместить вверх</value>
+  </data>
+  <data name="RemoveLaunchButton.Content" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+
+  <!-- Страница «Оформление» -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Оформление</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>Как отрисовываются панели. Применяется ко всем докам.</value>
+  </data>
+  <data name="ThemeLabel.Text" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="ThemeHint.Text" xml:space="preserve">
+    <value>Светлая, тёмная или как в Windows.</value>
+  </data>
+  <data name="ThemeSystemItem.Content" xml:space="preserve">
+    <value>Как в Windows</value>
+  </data>
+  <data name="ThemeLightItem.Content" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
+  <data name="ThemeDarkItem.Content" xml:space="preserve">
+    <value>Тёмная</value>
+  </data>
+  <data name="BackgroundLabel.Text" xml:space="preserve">
+    <value>Фон</value>
+  </data>
+  <data name="BackgroundHint.Text" xml:space="preserve">
+    <value>Полупрозрачный фон пропускает рабочий стол; сплошной легче читается на пёстрых обоях и чуть дешевле в отрисовке.</value>
+  </data>
+  <data name="BackdropTranslucentItem.Content" xml:space="preserve">
+    <value>Полупрозрачный</value>
+  </data>
+  <data name="BackdropSolidItem.Content" xml:space="preserve">
+    <value>Сплошной</value>
+  </data>
+  <data name="AccentLabel.Text" xml:space="preserve">
+    <value>Цвет показаний</value>
+  </data>
+  <data name="AccentHint.Text" xml:space="preserve">
+    <value>Акцентный цвет берётся из параметров Windows. Показания выше порога предупреждения в любом случае сохраняют предупреждающий цвет.</value>
+  </data>
+  <data name="AccentNeutralItem.Content" xml:space="preserve">
+    <value>Обычный цвет текста</value>
+  </data>
+  <data name="AccentWindowsItem.Content" xml:space="preserve">
+    <value>Акцентный цвет Windows</value>
+  </data>
+
+  <!-- Страница «Значки» -->
+  <data name="IconsTitle.Text" xml:space="preserve">
+    <value>Значки</value>
+  </data>
+  <data name="IconsIntro.Text" xml:space="preserve">
+    <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех доках.</value>
+  </data>
+
+  <!-- Страница «Датчики» -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Датчики</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Температуры видеокарты и дисков работают сразу. Температуры процессора и материнской платы поступают из одной из программ ниже.</value>
+  </data>
+  <data name="HwInfoHint.Text" xml:space="preserve">
+    <value>Читает температуры процессора и материнской платы из HWiNFO, если она запущена и в её настройках включена поддержка Shared Memory.</value>
+  </data>
+  <data name="HwInfoSwitch.OnContent" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="HwInfoSwitch.OffContent" xml:space="preserve">
+    <value>Откл.</value>
+  </data>
+  <data name="LhmHint.Text" xml:space="preserve">
+    <value>Свободная программа с открытым кодом; через неё читаются видеокарты AMD и Intel, материнская плата и её вентиляторы. Включите Remote Web Server в её меню Options.</value>
+  </data>
+  <data name="LhmSwitch.OnContent" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="LhmSwitch.OffContent" xml:space="preserve">
+    <value>Откл.</value>
+  </data>
+  <data name="LhmAddress.Header" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Текущие показания</value>
+  </data>
+
+  <!-- Страница «Мониторы» -->
+  <data name="MonitorsTitle.Text" xml:space="preserve">
+    <value>Мониторы</value>
+  </data>
+  <data name="MonitorsIntro.Text" xml:space="preserve">
+    <value>Все экраны, которые видела программа, и то, как она их узнаёт. Записи хранятся, пока вы не удалите их здесь.</value>
+  </data>
+  <data name="ForgetButton.Content" xml:space="preserve">
+    <value>Забыть</value>
+  </data>
+
+  <!-- Страница «О программе» -->
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="AboutIntro.Text" xml:space="preserve">
+    <value>Док для края экрана. Свободное ПО под лицензией GPL-3.0-or-later; часть кода адаптирована из Microsoft PowerToys по лицензии MIT.</value>
+  </data>
+  <data name="StartWithWindowsLabel.Text" xml:space="preserve">
+    <value>Запускать при входе в Windows</value>
+  </data>
+  <data name="StartWithWindowsHint.Text" xml:space="preserve">
+    <value>Доки возвращаются при входе в систему.</value>
+  </data>
+  <data name="AutoStartToggle.OnContent" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="AutoStartToggle.OffContent" xml:space="preserve">
+    <value>Откл.</value>
+  </data>
+  <data name="OpenLogsButton.Content" xml:space="preserve">
+    <value>Открыть папку журналов</value>
+  </data>
+  <data name="OpenConfigButton.Content" xml:space="preserve">
+    <value>Открыть папку настроек</value>
+  </data>
+  <data name="ExitHint.Text" xml:space="preserve">
+    <value>Закрытие этого окна не останавливает доки. Чтобы остановить их, используйте кнопку ниже — завершение задачи через диспетчер задач оставляет зарезервированное место на экране занятым.</value>
+  </data>
+  <data name="ExitButton.Content" xml:space="preserve">
+    <value>Выйти из Master Control Dock</value>
+  </data>
+
+  <!-- Кнопки медиавиджета на панели -->
+  <data name="MediaPreviousButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Предыдущий</value>
+  </data>
+  <data name="MediaNextButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Следующий</value>
+  </data>
+
+  <!-- Окно настроек, строки из кода -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>Ни один экран ещё не настроен.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>не подключён · раскладка сохранена и вернётся вместе с экраном</value>
+  </data>
+  <data name="NoteCompactVertical" xml:space="preserve">
+    <value>У панели сбоку экрана только одна ширина, поэтому компактный размер здесь ничего не меняет.</value>
+  </data>
+  <data name="NoteTaskbarHides" xml:space="preserve">
+    <value>Панель задач уже скрывается у этого края, поэтому этот док остаётся видимым.</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Отменить — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>добавлено: {0}</value>
+  </data>
+  <data name="UndoConfigured" xml:space="preserve">
+    <value>настроено: {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>перемещено</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>удалено: {0}</value>
+  </data>
+  <data name="OfferDuplicate" xml:space="preserve">
+    <value>Уже есть на этой панели. Второй показывал бы то же самое.</value>
+  </data>
+  <data name="MenuMoveUp" xml:space="preserve">
+    <value>Переместить вверх</value>
+  </data>
+  <data name="MenuMoveDown" xml:space="preserve">
+    <value>Переместить вниз</value>
+  </data>
+  <data name="MenuRemove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Экран</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Версия {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Пока ничего не отвечает.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>Показаний: {0}, источников: {1}.</value>
+  </data>
+  <data name="SourceOff" xml:space="preserve">
+    <value>Откл.</value>
+  </data>
+  <data name="SourceReading" xml:space="preserve">
+    <value>Читается температур: {0}.</value>
+  </data>
+  <data name="SourceLooking" xml:space="preserve">
+    <value>Поиск...</value>
+  </data>
+
+  <!-- Карточки виджетов в списке настроек -->
+  <data name="WidgetUnknownSummary" xml:space="preserve">
+    <value>Эта версия программы не знает этот виджет. Он остаётся в настройках нетронутым.</value>
+  </data>
+  <data name="WidgetNothingToSetUp" xml:space="preserve">
+    <value>У этого виджета нет настроек.</value>
+  </data>
+  <data name="WidgetUnknownNothing" xml:space="preserve">
+    <value>Нельзя настроить виджет, который эта версия не знает.</value>
+  </data>
+
+  <!-- Контекстное меню панели -->
+  <data name="MenuAddWidget" xml:space="preserve">
+    <value>Добавить виджет</value>
+  </data>
+  <data name="MenuDockSettings" xml:space="preserve">
+    <value>Параметры дока</value>
+  </data>
+
+  <!-- Каталог виджетов: названия и описания -->
+  <data name="WidgetLauncherName" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="WidgetLauncherDescription" xml:space="preserve">
+    <value>Закреплённые вами программы, папки и страницы.</value>
+  </data>
+  <data name="WidgetLoadName" xml:space="preserve">
+    <value>Нагрузка</value>
+  </data>
+  <data name="WidgetLoadDescription" xml:space="preserve">
+    <value>Насколько заняты процессор, видеокарта, память и сеть.</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Медиа</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Что сейчас играет, с кнопками управления. Скрыт, пока ничего не играет.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Температуры компонентов, которые её сообщают.</value>
+  </data>
+  <data name="WidgetSpacerName" xml:space="preserve">
+    <value>Разделитель</value>
+  </data>
+  <data name="WidgetSpacerDescription" xml:space="preserve">
+    <value>Пустой участок панели, раздвигающий соседей.</value>
+  </data>
+
+  <!-- Подписи показаний, на панели и в настройках -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>ЦП</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>Память</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Отправка</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Получение</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>ГП</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+
+  <!-- Виджет температуры -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>Самое горячее показание</value>
+  </data>
+  <data name="TempManySummary" xml:space="preserve">
+    <value>Показаний: {0} · {1}…</value>
+  </data>
+  <data name="TempAutoOption" xml:space="preserve">
+    <value>Самое горячее показание, какое бы это ни было</value>
+  </data>
+  <data name="TempPickOption" xml:space="preserve">
+    <value>Выбранные мной показания, рядом друг с другом</value>
+  </data>
+  <data name="TempExplain" xml:space="preserve">
+    <value>Температуры процессора и материнской платы доступны только через драйвер, который приложение из Store содержать не может. Запустите HWiNFO с включённой поддержкой Shared Memory, затем включите её в разделе «Датчики» настроек — и они появятся здесь.</value>
+  </data>
+
+  <!-- Медиавиджет -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Воспроизведение или пауза</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Кнопки, рядом с ними — название трека</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Кнопки; название трека — в подсказке</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Писать название трека на панели</value>
+  </data>
+  <data name="MediaTitleOn" xml:space="preserve">
+    <value>Пишется рядом с кнопками</value>
+  </data>
+  <data name="MediaTitleOff" xml:space="preserve">
+    <value>Только в подсказке</value>
+  </data>
+
+  <!-- Разделитель -->
+  <data name="SpacerStretches" xml:space="preserve">
+    <value>Растягивается на всё свободное место</value>
+  </data>
+  <data name="SpacerFixedSummary" xml:space="preserve">
+    <value>Фиксированный промежуток шириной {0}</value>
+  </data>
+  <data name="SpacerWidthHeader" xml:space="preserve">
+    <value>Ширина</value>
+  </data>
+  <data name="SpacerFixed" xml:space="preserve">
+    <value>Фиксированная</value>
+  </data>
+  <data name="SpacerPixels" xml:space="preserve">
+    <value>Ширина в пикселях</value>
+  </data>
+
+  <!-- Виджет нагрузки -->
+  <data name="LoadNothingChosen" xml:space="preserve">
+    <value>Ничего не выбрано</value>
+  </data>
+
+  <!-- Виджет запуска -->
+  <data name="LauncherNonePinned" xml:space="preserve">
+    <value>Пока ничего не закреплено</value>
+  </data>
+  <data name="LauncherOnePinned" xml:space="preserve">
+    <value>1 закреплённый элемент</value>
+  </data>
+  <data name="LauncherManyPinned" xml:space="preserve">
+    <value>Закреплено элементов: {0}</value>
+  </data>
+
+  <!-- Строки мониторов -->
+  <data name="MonitorUnknown" xml:space="preserve">
+    <value>Неизвестный дисплей</value>
+  </data>
+  <data name="MonitorNotAttached" xml:space="preserve">
+    <value>не подключён · последний раз замечен {0}</value>
+  </data>
+  <data name="SeenNever" xml:space="preserve">
+    <value>ни разу</value>
+  </data>
+  <data name="SeenMoment" xml:space="preserve">
+    <value>только что</value>
+  </data>
+  <data name="SeenMinutes" xml:space="preserve">
+    <value>{0} мин назад</value>
+  </data>
+  <data name="SeenHours" xml:space="preserve">
+    <value>{0} ч назад</value>
+  </data>
+  <data name="SeenDays" xml:space="preserve">
+    <value>{0} дн назад</value>
+  </data>
+  <data name="LanguageLabel.Text" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="LanguageHint.Text" xml:space="preserve">
+    <value>Вступает в силу после перезапуска программы.</value>
+  </data>
+  <data name="LanguageSystemItem.Content" xml:space="preserve">
+    <value>Как в Windows</value>
+  </data>
+</root>

@@ -60,6 +60,7 @@
                                 VerticalAlignment="Center"
                                 Click="OnWidgetMenu"
                                 Content="&#xE712;"
+                                x:Uid="WidgetMenuButton"
                                 FontFamily="Segoe MDL2 Assets"
                                 FontSize="14"
                                 Tag="{x:Bind Id}"
@@ -101,6 +102,7 @@
              drags the window by. -->
         <Border x:Name="TitleBar" Height="40">
             <TextBlock
+                x:Uid="TitleBarText"
                 Margin="16,0,0,0"
                 VerticalAlignment="Center"
                 FontSize="12"
@@ -116,28 +118,28 @@
             SelectionChanged="OnSectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Docks" Icon="View" Tag="docks" />
-                <NavigationViewItem Content="Launcher" Tag="launcher">
+                <NavigationViewItem x:Uid="NavDocks" Content="Docks" Icon="View" Tag="docks" />
+                <NavigationViewItem x:Uid="NavLauncher" Content="Launcher" Tag="launcher">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Icons" Icon="Emoji2" Tag="icons" />
+                <NavigationViewItem x:Uid="NavIcons" Content="Icons" Icon="Emoji2" Tag="icons" />
                 <!-- A glyph rather than a Symbol: the Symbol list is short and has
                      no colour in it, and a name it does not know is not a compile
                      error - it is a parse failure at run time that takes the
                      window, and the process, with it. -->
-                <NavigationViewItem Content="Appearance" Tag="appearance">
+                <NavigationViewItem x:Uid="NavAppearance" Content="Appearance" Tag="appearance">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Sensors" Tag="sensors">
+                <NavigationViewItem x:Uid="NavSensors" Content="Sensors" Tag="sensors">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9D9;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Monitors" Tag="monitors">
+                <NavigationViewItem x:Uid="NavMonitors" Content="Monitors" Tag="monitors">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" />
                     </NavigationViewItem.Icon>
@@ -145,7 +147,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="About" Icon="Help" Tag="about" />
+                <NavigationViewItem x:Uid="NavAbout" Content="About" Icon="Help" Tag="about" />
             </NavigationView.FooterMenuItems>
 
             <ScrollViewer Padding="36,24,36,36">
@@ -154,10 +156,12 @@
                     <!-- Docks -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <TextBlock
+                            x:Uid="DocksTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="Docks" />
                         <TextBlock
+                            x:Uid="DocksIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="One dock per screen. Everything here takes effect on the bar as you do it. To move a widget, drag it on the bar."
                             TextWrapping="Wrap" />
@@ -182,6 +186,7 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
+                                    x:Uid="BarLiveTitle"
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold"
                                     Text="The bar, live" />
@@ -203,6 +208,7 @@
                                     <Grid x:Name="PreviewStrip" />
                                     <TextBlock
                                         x:Name="PreviewEmpty"
+                                        x:Uid="PreviewEmpty"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="12"
@@ -231,9 +237,10 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock VerticalAlignment="Center" Text="Show this dock" />
+                                <TextBlock x:Uid="ShowDockLabel" VerticalAlignment="Center" Text="Show this dock" />
                                 <ToggleSwitch
                                     x:Name="DockEnabled"
+                                    x:Uid="DockEnabled"
                                     Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     OffContent="Off"
@@ -246,35 +253,35 @@
                                     Orientation="Horizontal"
                                     Spacing="16">
                                     <StackPanel Spacing="4">
-                                        <TextBlock FontSize="12" Text="Edge" />
+                                        <TextBlock x:Uid="EdgeLabel" FontSize="12" Text="Edge" />
                                         <ComboBox
                                             x:Name="DockEdge"
                                             MinWidth="120"
                                             SelectionChanged="OnDockShapeChanged">
-                                            <ComboBoxItem Content="Left" />
-                                            <ComboBoxItem Content="Top" />
-                                            <ComboBoxItem Content="Right" />
-                                            <ComboBoxItem Content="Bottom" />
+                                            <ComboBoxItem x:Uid="EdgeLeftItem" Content="Left" />
+                                            <ComboBoxItem x:Uid="EdgeTopItem" Content="Top" />
+                                            <ComboBoxItem x:Uid="EdgeRightItem" Content="Right" />
+                                            <ComboBoxItem x:Uid="EdgeBottomItem" Content="Bottom" />
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel Spacing="4">
-                                        <TextBlock FontSize="12" Text="Size" />
+                                        <TextBlock x:Uid="SizeLabel" FontSize="12" Text="Size" />
                                         <ComboBox
                                             x:Name="DockThickness"
                                             MinWidth="120"
                                             SelectionChanged="OnDockShapeChanged">
-                                            <ComboBoxItem Content="Default" />
-                                            <ComboBoxItem Content="Compact" />
+                                            <ComboBoxItem x:Uid="SizeDefaultItem" Content="Default" />
+                                            <ComboBoxItem x:Uid="SizeCompactItem" Content="Compact" />
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel Spacing="4">
-                                        <TextBlock FontSize="12" Text="Behaviour" />
+                                        <TextBlock x:Uid="BehaviourLabel" FontSize="12" Text="Behaviour" />
                                         <ComboBox
                                             x:Name="DockMode"
                                             MinWidth="160"
                                             SelectionChanged="OnDockShapeChanged">
-                                            <ComboBoxItem Content="Always visible" />
-                                            <ComboBoxItem Content="Hides until you point at it" />
+                                            <ComboBoxItem x:Uid="ModeVisibleItem" Content="Always visible" />
+                                            <ComboBoxItem x:Uid="ModeAutoHideItem" Content="Hides until you point at it" />
                                         </ComboBox>
                                     </StackPanel>
                                 </StackPanel>
@@ -298,15 +305,18 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
+                                    x:Uid="WidgetsTitle"
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold"
                                     Text="Widgets" />
                                 <Button
+                                    x:Uid="AddWidgetButton"
                                     Grid.Column="1"
                                     Click="OnAddWidget"
                                     Content="Add widget" />
                             </Grid>
                             <TextBlock
+                                x:Uid="WidgetsIntro"
                                 FontSize="12"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 Text="In bar order. Drag widgets on the bar itself, or right-click the bar to add one where you point. Spacers decide where the free length goes."
@@ -325,6 +335,7 @@
                                 BorderThickness="1"
                                 CornerRadius="8">
                                 <TextBlock
+                                    x:Uid="WidgetsEmptyText"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                     Text="Nothing here yet." />
@@ -336,10 +347,12 @@
                     <!-- Launcher -->
                     <StackPanel x:Name="LauncherSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
+                            x:Uid="LauncherTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="Launcher" />
                         <TextBlock
+                            x:Uid="LauncherIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="Programs, folders and pages pinned to the bar. They appear on every dock, in this order."
                             TextWrapping="Wrap" />
@@ -357,19 +370,23 @@
 
                             <TextBox
                                 x:Name="NewName"
+                                x:Uid="NewName"
                                 Header="Name"
                                 PlaceholderText="optional" />
                             <TextBox
                                 x:Name="NewTarget"
+                                x:Uid="NewTarget"
                                 Grid.Column="1"
                                 Header="Program, folder or address"
                                 PlaceholderText="C:\Windows\notepad.exe  or  https://example.com" />
                             <Button
+                                x:Uid="BrowseButton"
                                 Grid.Column="2"
                                 VerticalAlignment="Bottom"
                                 Click="OnBrowse"
                                 Content="Browse..." />
                             <Button
+                                x:Uid="AddLaunchButton"
                                 Grid.Column="3"
                                 VerticalAlignment="Bottom"
                                 Click="OnAddLaunchItem"
@@ -407,6 +424,7 @@
                                                 Orientation="Horizontal"
                                                 Spacing="4">
                                                 <Button
+                                                    x:Uid="MoveUpButton"
                                                     Click="OnMoveLaunchItem"
                                                     Content="&#xE74A;"
                                                     FontFamily="Segoe MDL2 Assets"
@@ -414,6 +432,7 @@
                                                     Tag="{x:Bind Id}"
                                                     ToolTipService.ToolTip="Move up" />
                                                 <Button
+                                                    x:Uid="RemoveLaunchButton"
                                                     Click="OnRemoveLaunchItem"
                                                     Content="Remove"
                                                     Tag="{x:Bind Id}" />
@@ -428,10 +447,12 @@
                     <!-- Appearance -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
+                            x:Uid="AppearanceTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="Appearance" />
                         <TextBlock
+                            x:Uid="AppearanceIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="How the bars are drawn. This applies to every dock."
                             TextWrapping="Wrap" />
@@ -451,8 +472,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock Text="Theme" />
+                                        <TextBlock x:Uid="ThemeLabel" Text="Theme" />
                                         <TextBlock
+                                            x:Uid="ThemeHint"
                                             FontSize="12"
                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                             Text="Light or dark, or the same as Windows."
@@ -464,9 +486,9 @@
                                         MinWidth="180"
                                         VerticalAlignment="Center"
                                         SelectionChanged="OnAppearanceChanged">
-                                        <ComboBoxItem Content="Same as Windows" />
-                                        <ComboBoxItem Content="Light" />
-                                        <ComboBoxItem Content="Dark" />
+                                        <ComboBoxItem x:Uid="ThemeSystemItem" Content="Same as Windows" />
+                                        <ComboBoxItem x:Uid="ThemeLightItem" Content="Light" />
+                                        <ComboBoxItem x:Uid="ThemeDarkItem" Content="Dark" />
                                     </ComboBox>
                                 </Grid>
 
@@ -476,8 +498,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock Text="Background" />
+                                        <TextBlock x:Uid="BackgroundLabel" Text="Background" />
                                         <TextBlock
+                                            x:Uid="BackgroundHint"
                                             FontSize="12"
                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                             Text="Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw."
@@ -489,8 +512,8 @@
                                         MinWidth="180"
                                         VerticalAlignment="Center"
                                         SelectionChanged="OnAppearanceChanged">
-                                        <ComboBoxItem Content="Translucent" />
-                                        <ComboBoxItem Content="Solid" />
+                                        <ComboBoxItem x:Uid="BackdropTranslucentItem" Content="Translucent" />
+                                        <ComboBoxItem x:Uid="BackdropSolidItem" Content="Solid" />
                                     </ComboBox>
                                 </Grid>
 
@@ -500,8 +523,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock Text="Colour of the readings" />
+                                        <TextBlock x:Uid="AccentLabel" Text="Colour of the readings" />
                                         <TextBlock
+                                            x:Uid="AccentHint"
                                             FontSize="12"
                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                             Text="The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."
@@ -513,8 +537,34 @@
                                         MinWidth="180"
                                         VerticalAlignment="Center"
                                         SelectionChanged="OnAppearanceChanged">
-                                        <ComboBoxItem Content="Plain text colour" />
-                                        <ComboBoxItem Content="Windows accent colour" />
+                                        <ComboBoxItem x:Uid="AccentNeutralItem" Content="Plain text colour" />
+                                        <ComboBoxItem x:Uid="AccentWindowsItem" Content="Windows accent colour" />
+                                    </ComboBox>
+                                </Grid>
+
+                                <Grid ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                                        <TextBlock x:Uid="LanguageLabel" Text="Language" />
+                                        <TextBlock
+                                            x:Uid="LanguageHint"
+                                            FontSize="12"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="Takes effect the next time the program starts."
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ComboBox
+                                        x:Name="LanguageChoice"
+                                        Grid.Column="1"
+                                        MinWidth="180"
+                                        VerticalAlignment="Center"
+                                        SelectionChanged="OnLanguageChanged">
+                                        <ComboBoxItem x:Uid="LanguageSystemItem" Content="Same as Windows" />
+                                        <ComboBoxItem Content="English" />
+                                        <ComboBoxItem Content="Русский" />
                                     </ComboBox>
                                 </Grid>
 
@@ -525,10 +575,12 @@
                     <!-- Icons -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
+                            x:Uid="IconsTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="Icons" />
                         <TextBlock
+                            x:Uid="IconsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="Pick the picture each reading is drawn with. The choice applies to every dock."
                             TextWrapping="Wrap" />
@@ -578,10 +630,12 @@
                     <!-- Sensors -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
+                            x:Uid="SensorsTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="Sensors" />
                         <TextBlock
+                            x:Uid="SensorsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="Graphics and drive temperatures work out of the box. Processor and board temperatures have to come from one of the programs below."
                             TextWrapping="Wrap" />
@@ -602,6 +656,7 @@
                                 <StackPanel Spacing="2">
                                     <TextBlock FontWeight="SemiBold" Text="HWiNFO" />
                                     <TextBlock
+                                        x:Uid="HwInfoHint"
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                         Text="Reads processor and motherboard temperatures from HWiNFO, if it is running with Shared Memory Support switched on in its own settings."
@@ -616,6 +671,7 @@
 
                                 <ToggleSwitch
                                     x:Name="HwInfoSwitch"
+                                    x:Uid="HwInfoSwitch"
                                     Grid.Column="1"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Right"
@@ -645,6 +701,7 @@
                                 <StackPanel Spacing="2">
                                     <TextBlock FontWeight="SemiBold" Text="LibreHardwareMonitor" />
                                     <TextBlock
+                                        x:Uid="LhmHint"
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                         Text="Free and open source, and the way to read AMD and Intel graphics, the motherboard and its fans. Switch on its Remote Web Server under Options."
@@ -659,6 +716,7 @@
 
                                 <ToggleSwitch
                                     x:Name="LhmSwitch"
+                                    x:Uid="LhmSwitch"
                                     Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
@@ -668,6 +726,7 @@
 
                                 <TextBox
                                     x:Name="LhmAddress"
+                                    x:Uid="LhmAddress"
                                     Grid.Row="1"
                                     Grid.ColumnSpan="2"
                                     Header="Address"
@@ -677,6 +736,7 @@
                         </Border>
 
                         <TextBlock
+                            x:Uid="LiveReadingsTitle"
                             Margin="0,16,0,0"
                             FontWeight="SemiBold"
                             Text="Live readings" />
@@ -720,10 +780,12 @@
                     <!-- Monitors -->
                     <StackPanel x:Name="MonitorsSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
+                            x:Uid="MonitorsTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="Monitors" />
                         <TextBlock
+                            x:Uid="MonitorsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="Every screen this program has seen, and how it recognises them. Entries are kept until you remove them here."
                             TextWrapping="Wrap" />
@@ -767,6 +829,7 @@
                                             </StackPanel>
 
                                             <Button
+                                                x:Uid="ForgetButton"
                                                 Grid.Column="1"
                                                 VerticalAlignment="Top"
                                                 Click="OnForget"
@@ -783,30 +846,66 @@
                     <!-- About -->
                     <StackPanel x:Name="AboutSection" Spacing="8" Visibility="Collapsed">
                         <TextBlock
+                            x:Uid="AboutTitle"
                             FontSize="28"
                             FontWeight="SemiBold"
                             Text="About" />
                         <TextBlock x:Name="VersionText" />
                         <TextBlock
+                            x:Uid="AboutIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."
                             TextWrapping="Wrap" />
+
+                        <Border
+                            Margin="0,8,0,0"
+                            Padding="16,4"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <Grid MinHeight="48" ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock x:Uid="StartWithWindowsLabel" Text="Start with Windows" />
+                                    <TextBlock
+                                        x:Uid="StartWithWindowsHint"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="The docks come back when you sign in." />
+                                </StackPanel>
+                                <ToggleSwitch
+                                    x:Name="AutoStartToggle"
+                                    x:Uid="AutoStartToggle"
+                                    Grid.Column="1"
+                                    MinWidth="0"
+                                    VerticalAlignment="Center"
+                                    OffContent="Off"
+                                    OnContent="On"
+                                    Toggled="OnAutoStartToggled" />
+                            </Grid>
+                        </Border>
 
                         <StackPanel
                             Margin="0,8,0,0"
                             Orientation="Horizontal"
                             Spacing="8">
-                            <Button Click="OnOpenLogs" Content="Open the log folder" />
-                            <Button Click="OnOpenConfig" Content="Open the settings folder" />
+                            <Button x:Uid="OpenLogsButton" Click="OnOpenLogs" Content="Open the log folder" />
+                            <Button x:Uid="OpenConfigButton" Click="OnOpenConfig" Content="Open the settings folder" />
                         </StackPanel>
 
                         <TextBlock
+                            x:Uid="ExitHint"
                             Margin="0,24,0,0"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."
                             TextWrapping="Wrap" />
 
                         <Button
+                            x:Uid="ExitButton"
                             Margin="0,8,0,0"
                             Click="OnExit"
                             Content="Exit Master Control Dock" />
