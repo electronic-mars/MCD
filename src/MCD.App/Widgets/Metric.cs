@@ -287,6 +287,20 @@ public sealed partial class Metric : ObservableObject
         return 6 + Spacing.Left + Spacing.Right + IconSize + 6 + Math.Max(value, label);
     }
 
+    /// <summary>How tall this chip is, in effective pixels.</summary>
+    /// <remarks>
+    /// What a bar down the side of a screen needs to know. The chip is as tall
+    /// as the taller of its icon and its two lines of text, plus the padding
+    /// the template gives it.
+    /// </remarks>
+    public double Height()
+    {
+        double lines = (FontSize * 1.4)
+            + (LabelVisible == Visibility.Visible ? LabelFontSize * 1.4 : 0);
+
+        return 6 + Spacing.Top + Spacing.Bottom + Math.Max(IconSize, lines);
+    }
+
     private static double Wide(string text, double size)
     {
         Ruler.FontSize = size;

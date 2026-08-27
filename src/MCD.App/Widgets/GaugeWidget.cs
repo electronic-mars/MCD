@@ -90,8 +90,11 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     public override string Summarise() => Reading.Label;
 
+    /// <summary>Along the bar: the chip's width across it, its height down it.</summary>
     public override double Length() =>
-        Metrics.Count > 0 ? Metrics[0].Width() : 60;
+        Metrics.Count == 0
+            ? 60
+            : Orientation == Orientation.Vertical ? Metrics[0].Height() : Metrics[0].Width();
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {

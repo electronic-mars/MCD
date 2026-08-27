@@ -156,8 +156,17 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     /// widget that comes and goes on its own, and slots it might need later
     /// have to be its own while it is there.
     /// </remarks>
-    public override double Length() =>
-        4 + 24 + (3 * (IconSize + 8)) + (TitleVisible == Visibility.Visible ? 120 : 0);
+    public override double Length()
+    {
+        // Down a bar at the side of the screen the keys stay in a row and the
+        // track's name goes under them, so its length is that stack's height.
+        if (Orientation == Orientation.Vertical)
+        {
+            return 8 + IconSize + 10 + (TitleVisible == Visibility.Visible ? FontSize + 6 : 0);
+        }
+
+        return 4 + 24 + (3 * (IconSize + 8)) + (TitleVisible == Visibility.Visible ? 120 : 0);
+    }
 
     public override string Summarise() => Nominated.Length > 0
         ? string.Format(
