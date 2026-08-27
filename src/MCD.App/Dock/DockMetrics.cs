@@ -66,6 +66,18 @@ public static class DockMetrics
     public static readonly TimeSpan SlideFrameInterval = TimeSpan.FromMilliseconds(8);
     public const int RevealHitTestMargin = 1;
 
+    /// <summary>
+    /// How long one slot of the bar is.
+    /// </summary>
+    /// <remarks>
+    /// The bar is a row of slots of exactly this size, and every widget occupies
+    /// a whole number of them - one for a pinned icon, more for a reading or the
+    /// player. That is what makes a slot a place: a widget can be put wherever
+    /// there are enough free ones, and nowhere else.
+    /// </remarks>
+    public static double CellDips(AppBarEdge edge, DockDensity density) =>
+        IsHorizontal(edge) && density == DockDensity.Compact ? 26 : 30;
+
     public static bool IsHorizontal(AppBarEdge edge) =>
         edge is AppBarEdge.Top or AppBarEdge.Bottom;
 

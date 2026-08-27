@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Mcd.Core.Monitors;
 using System.Collections.Immutable;
 using Mcd.App.Widgets;
@@ -61,11 +61,21 @@ public sealed partial class DockWindow : Window
     /// <summary>How far the pointer must travel before a press becomes a drag.</summary>
     private const double MinimumDrag = 6;
 
-    private readonly Rectangle _caret = new();
+    /// <summary>The slots the thing in hand would land on.</summary>
+    private readonly Rectangle _aim = new();
     private WidgetHost? _grabbed;
     private Point _grabbedAt;
     private bool _moving;
-    private int _caretIndex = -1;
+
+    /// <summary>How many slots into the widget the hand took hold.</summary>
+    private int _grabOffset;
+
+    /// <summary>Where the drop would put it, or null while it fits nowhere.</summary>
+    private int? _landing;
+
+    /// <summary>How many slots this bar has, and what sits on them.</summary>
+    private int _capacity;
+    private List<Placement> _placed = [];
 
     /// <summary>Press-and-hold, in a field: a timer held only by a local is
     /// garbage, and whether it ever ticks then depends on the collector.</summary>
@@ -114,8 +124,12 @@ public sealed partial class DockWindow : Window
 
         StartHiding();
         ApplyPosition();
-        BuildWidgets();
 
+        // The widgets are not built here. Settling them onto their slots is
+        // something the bar reports, and whoever owns the settings has to be
+        // listening before it happens - so the first arrangement of a new bar
+        // is written down rather than lost between a constructor and its
+        // caller's next line.
         Bar.RenderTransform = _push;
 
         // The content island starts one physical pixel below the top of a
@@ -181,7 +195,7 @@ public sealed partial class DockWindow : Window
     /// notification area: a bar of visible controls that hides its own settings
     /// inside someone else's bar is arguing with itself.
     /// </remarks>
-    public event EventHandler<MonitorInfo>? SettingsRequested;
+    public event EventHandler<DockSettingsRequest>? SettingsRequested;
 
     /// <summary>
     /// Raised when the run of widgets on this bar has been changed by hand -
@@ -466,10 +480,12 @@ public sealed partial class DockWindow : Window
         e.Handled = true;
 
         Point at = e.GetPosition(Bar);
+        int cell = CellAt(at);
 
-        // Over a widget the menu is that widget's; the empty bar keeps the
-        // adding menu. A spacer counts as a widget too - it is removable.
-        if (Under(at) is { } target)
+        // Over a widget the menu is that widget's; an empty slot offers what
+        // could be put in it.
+        if (DockGrid.At(_placed, cell) is { } sitting
+            && _hosts.FirstOrDefault(h => h.Entry.InstanceId == sitting.InstanceId) is { } target)
         {
             var own = new MenuFlyout { XamlRoot = Root.XamlRoot };
 
@@ -477,7 +493,11 @@ public sealed partial class DockWindow : Window
             {
                 Text = Loc.Tr("WidgetMenuConfigure", "Settings..."),
             };
-            configure.Click += (_, _) => SettingsRequested?.Invoke(this, Monitor);
+
+            // The widget travels with the request, so the settings open with
+            // this one's own options in front of the person who asked.
+            configure.Click += (_, _) => SettingsRequested?.Invoke(
+                this, new DockSettingsRequest(Monitor, target.Entry.InstanceId));
             own.Items.Add(configure);
 
             var remove = new MenuFlyoutItem
@@ -494,28 +514,17 @@ public sealed partial class DockWindow : Window
         var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
         var add = new MenuFlyoutSubItem { Text = Loc.Tr("MenuAddWidget", "Add widget") };
 
+        // Every widget can be had more than once - two temperatures, three
+        // copies of the same reading on different parts of the bar. Nothing is
+        // greyed out here; what a slot cannot take is only ever a matter of
+        // whether it is free.
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
-            bool free = !Config.Widgets.Any(offer.Matches);
-
-            var item = new MenuFlyoutItem
-            {
-                // Said in the item itself. The media widget keeps itself off
-                // the bar while nothing is playing, so "greyed out" alone
-                // reads as a fault to someone who cannot see it anywhere.
-                Text = free
-                    ? offer.Name
-                    : string.Format(
-                        System.Globalization.CultureInfo.CurrentCulture,
-                        Mcd.App.Loc.Tr("AlreadyOnBar", "{0} — already on this bar"),
-                        offer.Name),
-                IsEnabled = free,
-            };
-
+            var item = new MenuFlyoutItem { Text = offer.Name };
             ToolTipService.SetToolTip(item, offer.Description);
 
             WidgetOffer chosen = offer;
-            item.Click += (_, _) => Insert(chosen.Make(), at);
+            item.Click += (_, _) => Insert(chosen.Make(), cell);
             add.Items.Add(item);
         }
 
@@ -527,45 +536,25 @@ public sealed partial class DockWindow : Window
         // The monitor goes with the request. Settings that open on the primary
         // screen when the click happened on the third one are settings the user
         // has to go and find.
-        settings.Click += (_, _) => SettingsRequested?.Invoke(this, Monitor);
+        settings.Click += (_, _) => SettingsRequested?.Invoke(this, new DockSettingsRequest(Monitor, null));
         menu.Items.Add(settings);
 
         menu.ShowAt(Bar, at);
     }
 
-    /// <summary>Puts a new widget where the menu was opened, or the file dropped.</summary>
-    private void Insert(WidgetConfig entry, Point at)
-    {
-        List<WidgetConfig> list = [.. Config.Widgets];
-
-        list.Insert(ConfigIndexAt(at, list), entry);
-
-        _log.LogInformation(
-            "dock.added monitor={Monitor} widget={Widget}",
-            Monitor.Identity.FriendlyName, entry.TypeId);
-
-        Rearranged?.Invoke(this, [.. list]);
-    }
-
-    /// <summary>
-    /// Where in the settings run a point on the bar falls.
-    /// </summary>
+    /// <summary>Puts a new widget on the slot it was aimed at.</summary>
     /// <remarks>
-    /// The point is counted over drawn widgets; the answer goes after the last
-    /// drawn widget ahead of it, so an entry this build cannot draw keeps its
-    /// place in the run.
+    /// How wide the new widget will be is not known until it is built, so one
+    /// slot is claimed and the layout settles the rest: if it needs more than
+    /// are free there, it takes the first run that fits.
     /// </remarks>
-    private int ConfigIndexAt(Point at, List<WidgetConfig> list)
+    private void Insert(WidgetConfig entry, int cell)
     {
-        int index = IndexAt(at);
-        List<WidgetHost> drawn = [.. Hosts()];
+        _log.LogInformation(
+            "dock.added monitor={Monitor} widget={Widget} cell={Cell}",
+            Monitor.Identity.FriendlyName, entry.TypeId, cell);
 
-        int where = index == 0 || drawn.Count == 0
-            ? 0
-            : list.FindIndex(
-                w => w.InstanceId == drawn[Math.Min(index, drawn.Count) - 1].Entry.InstanceId) + 1;
-
-        return Math.Clamp(where, 0, list.Count);
+        Rearranged?.Invoke(this, [.. Config.Widgets, entry with { Cell = cell }]);
     }
 
     private readonly List<WidgetHost> _hosts = [];
@@ -579,8 +568,6 @@ public sealed partial class DockWindow : Window
     /// program on the taskbar. The settings window keeps a dialog as the way
     /// to pin an address, which has no file to drag.
     /// </remarks>
-    private readonly Rectangle _dropSlot = new();
-
     private void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
         if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
@@ -596,49 +583,19 @@ public sealed partial class DockWindow : Window
             hint.IsGlyphVisible = false;
         }
 
-        // A lit empty slot under the pointer: the bar saying "this fits here",
-        // instead of the system's forbidding glyph saying nothing. The slot
-        // grid comes up with it, so the bar's structure is visible while
-        // something is being placed.
+        // The slots come up, and the one under the pointer lights: the bar
+        // saying "this goes here", instead of the system's forbidding glyph
+        // saying nothing.
         ShowSlots(true);
-
-        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-        Point at = e.GetPosition(Bar);
-
-        _dropSlot.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x2E, 0xFF, 0xFF, 0xFF));
-        _dropSlot.Stroke = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
-        _dropSlot.StrokeThickness = 1;
-        _dropSlot.RadiusX = 4;
-        _dropSlot.RadiusY = 4;
-        _dropSlot.Width = horizontal ? 26 : Bar.ActualWidth - 8;
-        _dropSlot.Height = horizontal ? Bar.ActualHeight - 8 : 26;
-
-        if (!Overlay.Children.Contains(_dropSlot))
-        {
-            Overlay.Children.Add(_dropSlot);
-        }
-
-        if (horizontal)
-        {
-            Canvas.SetLeft(_dropSlot, at.X - (_dropSlot.Width / 2));
-            Canvas.SetTop(_dropSlot, 4);
-        }
-        else
-        {
-            Canvas.SetLeft(_dropSlot, 4);
-            Canvas.SetTop(_dropSlot, at.Y - (_dropSlot.Height / 2));
-        }
+        Aim(CellAt(e.GetPosition(Bar)), span: 1, ignore: null);
     }
 
-    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
-    {
-        Overlay.Children.Remove(_dropSlot);
+    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e) =>
         ShowSlots(false);
-    }
 
     private async void OnDropFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
-        Overlay.Children.Remove(_dropSlot);
+        int cell = CellAt(e.GetPosition(Bar));
         ShowSlots(false);
 
         if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
@@ -646,12 +603,9 @@ public sealed partial class DockWindow : Window
             return;
         }
 
-        Point at = e.GetPosition(Bar);
-
         try
         {
             List<WidgetConfig> list = [.. Config.Widgets];
-            int where = ConfigIndexAt(at, list);
             bool changed = false;
 
             foreach (Windows.Storage.IStorageItem item in await e.DataView.GetStorageItemsAsync())
@@ -675,8 +629,8 @@ public sealed partial class DockWindow : Window
                     continue;
                 }
 
-                _log.LogInformation("dock.pin dropped {Path}", path);
-                list.Insert(Math.Min(where++, list.Count), pin);
+                _log.LogInformation("dock.pin dropped {Path} cell={Cell}", path, cell);
+                list.Add(pin with { Cell = cell++ });
                 changed = true;
             }
 
@@ -692,9 +646,8 @@ public sealed partial class DockWindow : Window
     }
 
     /// <summary>
-    /// The grid the sketch drew: while something is in flight, every occupied
-    /// slot shows its outline, and the free stretches show as rows of empty
-    /// slots, so the bar reads as a row of places - never as blocks.
+    /// While something is in flight, the bar shows what it is made of: every
+    /// slot outlined, so an empty one is visibly a place a thing can go.
     /// </summary>
     private void ShowSlots(bool on)
     {
@@ -704,48 +657,22 @@ public sealed partial class DockWindow : Window
         }
 
         _slots.Clear();
+        Overlay.Children.Remove(_aim);
 
         if (!on)
         {
             return;
         }
 
-        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-
-        foreach (WidgetHost host in _hosts)
+        for (int cell = 0; cell < _capacity; cell++)
         {
-            if (Where(host) is not { } rect)
-            {
-                continue;
-            }
+            Rect rect = CellRect(cell, 1);
 
-            if (host.Widget is SpacerWidget)
-            {
-                // The free length, drawn as the empty slots it could hold.
-                double length = horizontal ? rect.Width : rect.Height;
-                int cells = Math.Max(1, (int)Math.Round(length / 30));
-                double each = length / cells;
-
-                for (int i = 0; i < cells; i++)
-                {
-                    Mark(horizontal
-                        ? new Rect(rect.X + (i * each) + 2, rect.Y + 3, each - 4, rect.Height - 6)
-                        : new Rect(rect.X + 3, rect.Y + (i * each) + 2, rect.Width - 6, each - 4));
-                }
-
-                continue;
-            }
-
-            Mark(rect);
-        }
-
-        void Mark(Rect rect)
-        {
             var slot = new Rectangle
             {
                 Stroke = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
-                    ? Windows.UI.Color.FromArgb(0x33, 0x00, 0x00, 0x00)
-                    : Windows.UI.Color.FromArgb(0x40, 0xFF, 0xFF, 0xFF)),
+                    ? Windows.UI.Color.FromArgb(0x2B, 0x00, 0x00, 0x00)
+                    : Windows.UI.Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF)),
                 StrokeThickness = 1,
                 RadiusX = 4,
                 RadiusY = 4,
@@ -758,6 +685,88 @@ public sealed partial class DockWindow : Window
             Canvas.SetTop(slot, rect.Y);
             Overlay.Children.Add(slot);
             _slots.Add(slot);
+        }
+    }
+
+    /// <summary>
+    /// Lights the slots the thing in hand would land on, or nothing at all
+    /// when it will not fit anywhere near the pointer.
+    /// </summary>
+    /// <returns>Where it would land, or null when there is no room.</returns>
+    private int? Aim(int wanted, int span, string? ignore)
+    {
+        int? cell = DockGrid.Nearest(_placed, _capacity, wanted, span, ignore);
+
+        if (cell is not { } landing)
+        {
+            Overlay.Children.Remove(_aim);
+            return null;
+        }
+
+        Rect rect = CellRect(landing, span);
+
+        _aim.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x2E, 0xFF, 0xFF, 0xFF));
+        _aim.Stroke = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
+        _aim.StrokeThickness = 1.5;
+        _aim.RadiusX = 4;
+        _aim.RadiusY = 4;
+        _aim.Width = Math.Max(0, rect.Width);
+        _aim.Height = Math.Max(0, rect.Height);
+
+        if (!Overlay.Children.Contains(_aim))
+        {
+            Overlay.Children.Add(_aim);
+        }
+
+        Canvas.SetLeft(_aim, rect.X);
+        Canvas.SetTop(_aim, rect.Y);
+
+        return landing;
+    }
+
+    /// <summary>Which slot a point on the bar falls in.</summary>
+    private int CellAt(Point at)
+    {
+        double along = DockMetrics.IsHorizontal(Config.Edge)
+            ? at.X - DockLayout.EndInset
+            : at.Y - DockLayout.EndInset;
+
+        return Math.Clamp((int)Math.Floor(along / Pitch), 0, Math.Max(0, _capacity - 1));
+    }
+
+    /// <summary>Where a run of slots is, in the bar's own coordinates.</summary>
+    private Rect CellRect(int cell, int span)
+    {
+        double start = DockLayout.EndInset + (cell * Pitch);
+        double length = span * Pitch;
+
+        return DockMetrics.IsHorizontal(Config.Edge)
+            ? new Rect(start + 1, 3, Math.Max(0, length - 2), Math.Max(0, Bar.ActualHeight - 6))
+            : new Rect(3, start + 1, Math.Max(0, Bar.ActualWidth - 6), Math.Max(0, length - 2));
+    }
+
+    /// <summary>How long one slot is meant to be, before the bar is divided up.</summary>
+    private double CellSize => DockMetrics.CellDips(Config.Edge, Config.Density);
+
+    /// <summary>
+    /// How long one slot actually is: the bar's own length shared out between
+    /// the slots that fit in it.
+    /// </summary>
+    /// <remarks>
+    /// A hair wider than <see cref="CellSize"/>, because the slots that do not
+    /// quite fit at the end are shared out among the rest. Drawn and hit-tested
+    /// with this rather than the nominal size, or the outlines drift away from
+    /// the widgets by half a slot across the width of a screen.
+    /// </remarks>
+    private double Pitch
+    {
+        get
+        {
+            double length = (DockMetrics.IsHorizontal(Config.Edge)
+                ? Bar.ActualWidth
+                : Bar.ActualHeight) - (2 * DockLayout.EndInset);
+
+            return _capacity > 0 && length > 0 ? length / _capacity : CellSize;
         }
     }
 
@@ -869,6 +878,9 @@ public sealed partial class DockWindow : Window
             : Windows.UI.Color.FromArgb(255, 32, 32, 32);
     }
 
+    /// <summary>Fills the bar for the first time. Call once, after wiring up.</summary>
+    public void Fill() => BuildWidgets();
+
     /// <summary>
     /// Takes the settings again and rebuilds what is on the bar.
     /// </summary>
@@ -894,10 +906,25 @@ public sealed partial class DockWindow : Window
         BuildWidgets();
     }
 
-    /// <summary>Builds the widgets this monitor's configuration asks for.</summary>
+    /// <summary>
+    /// Builds the widgets this monitor's configuration asks for and puts each
+    /// on the slots it holds.
+    /// </summary>
+    /// <remarks>
+    /// How many slots a widget needs is measured rather than declared: a
+    /// reading's width depends on its label and on the figures it has had to
+    /// show, and a number guessed here would be wrong on somebody's machine.
+    /// </remarks>
     private void BuildWidgets()
     {
-        var items = new List<(FrameworkElement Element, GridLength Length)>();
+        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
+        double thickness = DockMetrics.ThicknessDips(Config.Edge, Config.Density);
+        double length = horizontal ? Monitor.Width / Monitor.Scale : Monitor.Height / Monitor.Scale;
+
+        _capacity = DockLayout.Capacity(length, CellSize);
+
+        var built = new List<(WidgetConfig Entry, int Span)>();
+        var hosts = new Dictionary<string, WidgetHost>(StringComparer.Ordinal);
 
         foreach (WidgetConfig entry in Config.Widgets)
         {
@@ -918,29 +945,69 @@ public sealed partial class DockWindow : Window
                 continue;
             }
 
-            widget.Orientation = DockMetrics.IsHorizontal(Config.Edge)
-                ? Orientation.Horizontal
-                : Orientation.Vertical;
-
+            widget.Orientation = horizontal ? Orientation.Horizontal : Orientation.Vertical;
             widget.Density = Config.Density;
 
-            var host = new WidgetHost(_log, widget, template)
-            {
-                Quiet = widget is SpacerWidget,
-            };
-
-            DockLayout.Dress(host, Config.Edge, widget is SpacerWidget);
+            var host = new WidgetHost(_log, widget, template);
+            DockLayout.Dress(host, Config.Edge);
             host.Attach();
 
             _hosts.Add(host);
-            items.Add((host, DockLayout.LengthOf(entry, widget)));
+            hosts[entry.InstanceId] = host;
+            built.Add((entry, DockLayout.SpanOf(widget.Length(), CellSize)));
         }
 
-        DockLayout.Arrange(Config.Edge, Strip, items);
+        _built = built;
+        _drawn = hosts;
+        Settle();
+        WriteBackCells();
     }
 
-    /// <summary>The widgets as drawn, in bar order.</summary>
-    private IEnumerable<WidgetHost> Hosts() => Strip.Children.OfType<WidgetHost>();
+    /// <summary>What was built for this bar, and where each of it went.</summary>
+    private List<(WidgetConfig Entry, int Span)> _built = [];
+    private Dictionary<string, WidgetHost> _drawn = [];
+
+    /// <summary>Works out where everything goes, and puts it there.</summary>
+    private void Settle()
+    {
+        _placed = DockGrid.Settle(_built, _capacity);
+
+        DockLayout.Arrange(
+            Config.Edge,
+            Strip,
+            _capacity,
+            [.. _placed.Where(p => _drawn.ContainsKey(p.InstanceId))
+                .Select(p => ((FrameworkElement)_drawn[p.InstanceId], p))]);
+    }
+
+    /// <summary>
+    /// Records where the layout actually put things, when that differs from
+    /// what the settings said.
+    /// </summary>
+    /// <remarks>
+    /// Only the bar knows how many slots a screen has, so a widget that has
+    /// never been placed - one just added, or a whole bar arriving from an
+    /// older settings file - is settled here and written down once. Without
+    /// this, everything would re-settle on every start and a bar arranged by
+    /// hand would not stay arranged.
+    /// </remarks>
+    private void WriteBackCells()
+    {
+        var cells = _placed.ToDictionary(p => p.InstanceId, p => p.Cell, StringComparer.Ordinal);
+
+        if (Config.Widgets.All(w => !cells.TryGetValue(w.InstanceId, out int cell) || cell == w.Cell))
+        {
+            return;
+        }
+
+        _log.LogInformation(
+            "dock.settled monitor={Monitor} slots={Slots}", Monitor.Identity.FriendlyName, _capacity);
+
+        Rearranged?.Invoke(
+            this,
+            [.. Config.Widgets.Select(
+                w => cells.TryGetValue(w.InstanceId, out int cell) ? w with { Cell = cell } : w)]);
+    }
 
 
     /// <summary>
@@ -973,6 +1040,13 @@ public sealed partial class DockWindow : Window
         _grabbedAt = e.GetCurrentPoint(Bar).Position;
         _grabbed = Under(_grabbedAt);
         _pointer = e.Pointer;
+
+        // Where in the widget the hand took hold, so a wide one keeps its
+        // grip: a player grabbed by its last button lands with that button
+        // under the pointer, not its first.
+        _grabOffset = _grabbed is null
+            ? 0
+            : CellAt(_grabbedAt) - (DockGrid.At(_placed, CellAt(_grabbedAt))?.Cell ?? 0);
 
         if (_grabbed is not null)
         {
@@ -1052,12 +1126,18 @@ public sealed partial class DockWindow : Window
         if (_offBar)
         {
             _grabbed.Doomed(true);
-            HideCaret();
+            Overlay.Children.Remove(_aim);
+            _landing = null;
             return;
         }
 
         _grabbed.Doomed(false);
-        ShowCaret(at);
+
+        // The slots the widget would take, lit under the pointer. Nothing lights
+        // when it will not fit: a place with no room is not a place, and saying
+        // so by showing nothing is the whole of the rule.
+        int span = DockGrid.At(_placed, CellAt(_grabbedAt))?.Span ?? 1;
+        _landing = Aim(CellAt(at) - _grabOffset, span, _grabbed.Entry.InstanceId);
     }
 
     private void OnDrop(object sender, PointerRoutedEventArgs e)
@@ -1092,14 +1172,39 @@ public sealed partial class DockWindow : Window
         _outlined = null;
 
         ShowSlots(false);
-        HideCaret();
         Root.ReleasePointerCaptures();
 
         _grabbed = null;
         _pointer = null;
         _moving = false;
         _offBar = false;
+        _landing = null;
+        _grabOffset = 0;
     }
+
+    /// <summary>Moves the widget in hand to the slots it was dropped on.</summary>
+    private void Land(WidgetHost host)
+    {
+        if (_landing is not { } cell || cell == host.Entry.Cell)
+        {
+            return;
+        }
+
+        _log.LogInformation(
+            "dock.moved monitor={Monitor} widget={Widget} cell={Cell}",
+            Monitor.Identity.FriendlyName, host.Entry.TypeId, cell);
+
+        Rearranged?.Invoke(
+            this,
+            [.. Config.Widgets.Select(
+                w => w.InstanceId == host.Entry.InstanceId ? w with { Cell = cell } : w)]);
+    }
+
+    /// <summary>The widget covering the slot a point falls in.</summary>
+    private WidgetHost? Under(Point at) =>
+        DockGrid.At(_placed, CellAt(at)) is { } sitting
+            ? _hosts.FirstOrDefault(h => h.Entry.InstanceId == sitting.InstanceId)
+            : null;
 
     /// <summary>Takes a widget off this bar.</summary>
     private void RemoveWidget(WidgetHost host)
@@ -1114,190 +1219,6 @@ public sealed partial class DockWindow : Window
         Rearranged?.Invoke(this, [.. list]);
     }
 
-    /// <summary>The widget under a point, in the bar's own coordinates.</summary>
-    private WidgetHost? Under(Point at)
-    {
-        foreach (WidgetHost host in _hosts)
-        {
-            if (Where(host) is { } rect && rect.Contains(at))
-            {
-                return host;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// Where a widget is within the bar.
-    /// </summary>
-    /// <remarks>
-    /// Built from each element's own offset rather than from TransformToVisual,
-    /// which is banned here: it answers in the coordinates of the XAML root
-    /// rather than of the window, and a dock is not at the origin of either.
-    /// </remarks>
-    private static Rect? Where(WidgetHost host) =>
-        host.Parent is FrameworkElement band
-            ? new Rect(
-                band.ActualOffset.X + host.ActualOffset.X,
-                band.ActualOffset.Y + host.ActualOffset.Y,
-                host.ActualWidth,
-                host.ActualHeight)
-            : null;
-
-    /// <summary>
-    /// Where along the run a point falls: the count of drawn widgets whose
-    /// middles it has passed, which is the index it would be inserted at.
-    /// </summary>
-    private int IndexAt(Point at)
-    {
-        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-        double along = horizontal ? at.X : at.Y;
-
-        int index = 0;
-
-        foreach (WidgetHost host in Hosts())
-        {
-            if (Where(host) is { } rect)
-            {
-                double middle = horizontal
-                    ? rect.X + (rect.Width / 2)
-                    : rect.Y + (rect.Height / 2);
-
-                if (along < middle)
-                {
-                    return index;
-                }
-            }
-
-            index++;
-        }
-
-        return index;
-    }
-
-    /// <summary>Puts the marker where the widget would land if it were dropped now.</summary>
-    private void ShowCaret(Point at)
-    {
-        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-        int index = IndexAt(at);
-
-        if (index != _caretIndex)
-        {
-            _log.LogInformation("dock.caret index={Index}", index);
-        }
-
-        _caretIndex = index;
-
-        List<WidgetHost> drawn = [.. Hosts()];
-
-        // The marker sits on the boundary the widget would land on: the middle
-        // of the gap between neighbours, or just past the end of the run.
-        double along;
-
-        if (drawn.Count == 0)
-        {
-            along = (horizontal ? Bar.ActualWidth : Bar.ActualHeight) / 2;
-        }
-        else if (index >= drawn.Count)
-        {
-            Rect last = Where(drawn[^1]) ?? default;
-            along = (horizontal ? last.X + last.Width : last.Y + last.Height) + 3;
-        }
-        else
-        {
-            Rect next = Where(drawn[index]) ?? default;
-            double edge = horizontal ? next.X : next.Y;
-
-            if (index == 0)
-            {
-                along = edge - 3;
-            }
-            else
-            {
-                Rect prev = Where(drawn[index - 1]) ?? default;
-                double prevEdge = horizontal ? prev.X + prev.Width : prev.Y + prev.Height;
-                along = (prevEdge + edge) / 2;
-            }
-        }
-
-        DressCaret(horizontal);
-
-        if (!Overlay.Children.Contains(_caret))
-        {
-            Overlay.Children.Add(_caret);
-        }
-
-        if (horizontal)
-        {
-            Canvas.SetLeft(_caret, along - (_caret.Width / 2));
-            Canvas.SetTop(_caret, (Bar.ActualHeight - _caret.Height) / 2);
-        }
-        else
-        {
-            Canvas.SetLeft(_caret, (Bar.ActualWidth - _caret.Width) / 2);
-            Canvas.SetTop(_caret, along - (_caret.Height / 2));
-        }
-    }
-
-    private void DressCaret(bool horizontal)
-    {
-        _caret.Fill = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
-        _caret.RadiusX = 1;
-        _caret.RadiusY = 1;
-        _caret.Width = horizontal ? 2 : 24;
-        _caret.Height = horizontal ? 16 : 2;
-    }
-
-    private void HideCaret()
-    {
-        Overlay.Children.Remove(_caret);
-        _caretIndex = -1;
-    }
-
-    /// <summary>Works out the new run and says so.</summary>
-    private void Land(WidgetHost host)
-    {
-        if (_caretIndex < 0)
-        {
-            return;
-        }
-
-        List<WidgetHost> drawn = [.. Hosts()];
-        WidgetConfig moved = host.Entry;
-
-        // Counted over the widgets that are actually drawn, and not counting
-        // the one being moved: it is still sitting where it came from.
-        List<string> before =
-        [
-            .. drawn.Take(Math.Min(_caretIndex, drawn.Count))
-                .Where(h => h != host)
-                .Select(h => h.Entry.InstanceId)
-        ];
-
-        List<WidgetConfig> list = [.. Config.Widgets.Where(w => w.InstanceId != moved.InstanceId)];
-
-        // Placed after the last widget that was ahead of the marker. Counting
-        // positions in the settings instead would put it in the wrong place on
-        // a bar that also holds a widget this build cannot draw.
-        int where = before.Count == 0
-            ? 0
-            : list.FindIndex(w => w.InstanceId == before[^1]) + 1;
-
-        list.Insert(Math.Clamp(where, 0, list.Count), moved);
-
-        if (list.Select(w => w.InstanceId).SequenceEqual(Config.Widgets.Select(w => w.InstanceId)))
-        {
-            return;
-        }
-
-        _log.LogInformation(
-            "dock.rearranged monitor={Monitor} widget={Widget} at={At}",
-            Monitor.Identity.FriendlyName, moved.TypeId, where);
-
-        Rearranged?.Invoke(this, [.. list]);
-    }
-
     private void Refresh()
     {
         SensorSnapshot snapshot = _sensors.Current;
@@ -1305,6 +1226,47 @@ public sealed partial class DockWindow : Window
         foreach (WidgetHost host in _hosts)
         {
             host.Tick(snapshot);
+        }
+
+        Regrow();
+    }
+
+    /// <summary>
+    /// Gives a widget another slot when what it has to show has outgrown the
+    /// ones it holds.
+    /// </summary>
+    /// <remarks>
+    /// A network rate goes from "0 B/s" to "12.4 MB/s" within a second, and a
+    /// figure clipped by its own slot is worse than a bar that shuffles once.
+    /// Nothing ever shrinks back: a bar that gave a slot up the moment the
+    /// number got shorter would shuffle every second of the day.
+    /// </remarks>
+    private void Regrow()
+    {
+        bool grew = false;
+
+        for (int i = 0; i < _built.Count; i++)
+        {
+            (WidgetConfig entry, int span) = _built[i];
+
+            if (!_drawn.TryGetValue(entry.InstanceId, out WidgetHost? host))
+            {
+                continue;
+            }
+
+            int wants = DockLayout.SpanOf(host.Widget.Length(), CellSize);
+
+            if (wants > span)
+            {
+                _built[i] = (entry, wants);
+                grew = true;
+            }
+        }
+
+        if (grew && !_moving)
+        {
+            _log.LogInformation("dock.regrown monitor={Monitor}", Monitor.Identity.FriendlyName);
+            Settle();
         }
     }
 

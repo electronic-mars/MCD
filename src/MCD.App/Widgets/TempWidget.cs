@@ -52,6 +52,7 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             Spacing = GaugeWidget.Gap(Orientation),
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
+            Sample = "100 °C",
 
             // This widget's own limits, when the person set any. Null falls
             // back to what the part itself declares or the ordinary defaults.
@@ -82,6 +83,9 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
     }
 
     public override string Summarise() => Name(Chosen);
+
+    public override double Length() =>
+        Metrics.Count > 0 ? Metrics[0].Width() : 60;
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {

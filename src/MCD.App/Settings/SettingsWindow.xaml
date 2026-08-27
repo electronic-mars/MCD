@@ -232,37 +232,8 @@
                                     x:Uid="BarHelp"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="Drag to rearrange - here or on the bar itself. Click a widget for its options. To add one, drag it from the list below straight onto the bar; drag it off the bar to remove it."
+                                    Text="The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings."
                                     TextWrapping="Wrap" />
-
-                                <Border
-                                    Padding="0"
-                                    Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}"
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="8">
-                                    <Grid
-                                        x:Name="Preview"
-                                        Background="Transparent"
-                                        HorizontalAlignment="Stretch"
-                                        PointerCanceled="OnPreviewCancelled"
-                                        PointerMoved="OnPreviewMoved"
-                                        PointerPressed="OnPreviewPressed"
-                                        PointerReleased="OnPreviewReleased"
-                                        RightTapped="OnPreviewRightTapped">
-                                        <Grid x:Name="PreviewStrip" />
-                                        <Canvas x:Name="PreviewOverlay" IsHitTestVisible="False" />
-                                        <TextBlock
-                                            x:Name="PreviewEmpty"
-                                            x:Uid="PreviewEmpty"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="12"
-                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                            Text="Empty. Add a widget, or right-click the bar where you want one."
-                                            Visibility="Collapsed" />
-                                    </Grid>
-                                </Border>
                             </StackPanel>
 
                             <!-- The gallery: everything that can go on the bar,
@@ -353,7 +324,7 @@
                                         x:Uid="InspectorHint"
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="Click a widget on the bar above to see its options."
+                                        Text="Right-click a widget on the bar and choose Settings to set it up here."
                                         TextWrapping="Wrap" />
                                     <ContentControl
                                         x:Name="InspectorEditor"

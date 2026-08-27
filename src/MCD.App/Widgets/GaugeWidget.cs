@@ -66,6 +66,10 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             Spacing = Gap(Orientation),
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
+
+            // As long as this reading ever gets: a rate runs to "888 MB/s",
+            // and everything else to a three-figure percentage.
+            Sample = reading.Unit == "B/s" ? "888 MB/s" : "100 %",
         };
 
         metric.SizeFor(
@@ -85,6 +89,9 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     }
 
     public override string Summarise() => Reading.Label;
+
+    public override double Length() =>
+        Metrics.Count > 0 ? Metrics[0].Width() : 60;
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {

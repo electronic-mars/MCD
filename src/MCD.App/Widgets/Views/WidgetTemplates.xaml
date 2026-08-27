@@ -165,32 +165,6 @@
         <Setter Property="CornerRadius" Value="4" />
     </Style>
 
-    <!-- A stretch of empty bar. Invisible at rest; while a widget is being
-         dragged it shows itself so it can be grabbed too. -->
-    <DataTemplate x:Key="mcd.spacer" x:DataType="widgets:SpacerWidget">
-        <Border
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="Transparent">
-            <Border
-                MinWidth="8"
-                MinHeight="8"
-                Margin="3"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
-                CornerRadius="4"
-                Visibility="{x:Bind HintVisible, Mode=OneWay}">
-                <FontIcon
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="10"
-                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                    Glyph="&#xE76F;" />
-            </Border>
-        </Border>
-    </DataTemplate>
-
     <!-- Whatever is playing. The three buttons a media key would press, and on
          the full-size bar the name of the track under them. -->
     <DataTemplate x:Key="mcd.media" x:DataType="widgets:MediaWidget">

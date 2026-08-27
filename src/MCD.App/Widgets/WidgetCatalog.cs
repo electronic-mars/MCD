@@ -75,13 +75,6 @@ public static class WidgetCatalog
             Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
             "Music",
             (context, entry) => new MediaWidget(context, entry)),
-
-        new(
-            SpacerWidget.Type,
-            Loc.Tr("WidgetSpacerName", "Spacer"),
-            Loc.Tr("WidgetSpacerDescription", "Empty bar that pushes its neighbours apart."),
-            "Spacer",
-            (context, entry) => new SpacerWidget(context, entry)),
     ];
 
     /// <summary>
@@ -140,13 +133,6 @@ public static class WidgetCatalog
             "Music",
             () => WidgetConfig.New(MediaWidget.Type),
             entry => entry.TypeId == MediaWidget.Type);
-
-        yield return new WidgetOffer(
-            Loc.Tr("WidgetSpacerName", "Spacer"),
-            Loc.Tr("WidgetSpacerDescription", "Empty bar that pushes its neighbours apart."),
-            "Spacer",
-            WidgetConfig.Spacer,
-            _ => false);
     }
 
     public static WidgetType? Find(string typeId) =>

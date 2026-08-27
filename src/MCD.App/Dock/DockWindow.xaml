@@ -34,7 +34,8 @@
                 <Border x:Name="InnerBevel" Visibility="Collapsed" />
             </Border>
 
-            <!-- One track per widget; spacers take the free length. -->
+            <!-- The row of slots. Every column is one slot; a widget spans as
+                 many as it needs. -->
             <Grid x:Name="Strip" />
 
             <!-- Where the drop marker is drawn, above everything and taking no

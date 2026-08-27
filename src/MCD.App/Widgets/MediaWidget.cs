@@ -147,6 +147,18 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     {
     }
 
+    /// <summary>
+    /// The artwork, three keys, and the track's name when it is written out.
+    /// </summary>
+    /// <remarks>
+    /// Sized for the widest it gets rather than for what is playing now, so the
+    /// bar does not re-settle every time a track changes. The player is the one
+    /// widget that comes and goes on its own, and slots it might need later
+    /// have to be its own while it is there.
+    /// </remarks>
+    public override double Length() =>
+        4 + 24 + (3 * (IconSize + 8)) + (TitleVisible == Visibility.Visible ? 120 : 0);
+
     public override string Summarise() => Nominated.Length > 0
         ? string.Format(
             System.Globalization.CultureInfo.CurrentCulture,

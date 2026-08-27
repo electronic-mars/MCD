@@ -65,7 +65,7 @@ public sealed class DockWindowManager : IDisposable
     /// Raised when someone right-clicks an empty part of a dock, with the
     /// monitor that dock is on.
     /// </summary>
-    public event EventHandler<MonitorInfo>? SettingsRequested;
+    public event EventHandler<DockSettingsRequest>? SettingsRequested;
 
     /// <summary>What is on screen right now, one entry per attached monitor.</summary>
     public ImmutableArray<DockPlan> Plans => _plans;
@@ -241,7 +241,7 @@ public sealed class DockWindowManager : IDisposable
             var window = new DockWindow(
                 _loggers.CreateLogger<DockWindow>(), plan.Monitor, plan.Config, Context());
 
-            window.SettingsRequested += (s, monitor) => SettingsRequested?.Invoke(s, monitor);
+            window.SettingsRequested += (s, request) => SettingsRequested?.Invoke(s, request);
 
             // A bar that has been rearranged by hand says so; writing it down
             // happens here, where the one writer of settings lives.
@@ -249,6 +249,10 @@ public sealed class DockWindowManager : IDisposable
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
             _windows[id] = window;
             _dressed[id] = Signature(plan.Config);
+
+            // Filled only now that we are listening: a bar settling its widgets
+            // onto slots for the first time has something to say about it.
+            window.Fill();
             window.Activate();
         }
 

@@ -105,6 +105,17 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     /// <summary>One line saying how this widget is set up, for the settings list.</summary>
     public virtual string Summarise() => string.Empty;
 
+    /// <summary>
+    /// How long this widget is, in effective pixels, before it is drawn.
+    /// </summary>
+    /// <remarks>
+    /// Declared rather than measured. The bar is a row of slots and has to know
+    /// how many each widget takes before it lays anything out - and a control
+    /// that is not yet in the tree measures as nothing, which put every reading
+    /// in a single slot and drew them over one another.
+    /// </remarks>
+    public virtual double Length() => 30;
+
     /// <summary>Called on the UI thread once a second while the dock is visible.</summary>
     public abstract void Tick(SensorSnapshot snapshot);
 

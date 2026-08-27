@@ -43,25 +43,15 @@ public sealed partial class SettingsWindow : Window
     private readonly HwInfoProvider _hwinfo;
     private readonly LhmProvider _lhm;
     private readonly Action _onExit;
-    /// <summary>The widget selected on the bar's picture, for the inspector.</summary>
+    /// <summary>The widget the bar sent here to be set up.</summary>
     private string? _selectedId;
     private WidgetViewModel? _inspected;
-
-    /// <summary>Dragging inside the bar's picture.</summary>
-    private WidgetPreview? _pGrab;
-    private Point _pAt;
-    private bool _pMoving;
-    private int _pCaret = -1;
-    private readonly Microsoft.UI.Xaml.Shapes.Rectangle _pMark = new();
 
     /// <summary>The dock being edited, by its monitor's stable id.</summary>
     private string? _editing;
 
     /// <summary>True while controls are being filled in, so their events mean nothing.</summary>
     private bool _filling;
-
-    /// <summary>The widgets drawn in the picture of the bar, so they can be ticked.</summary>
-    private readonly List<WidgetPreview> _preview = [];
 
     /// <summary>
     /// Layouts as they were before each change, most recent first.
@@ -159,6 +149,25 @@ public sealed partial class SettingsWindow : Window
         AppWindow.Move(new Windows.Graphics.PointInt32(
             bounds.left + ((bounds.right - bounds.left) - size.Width) / 2,
             bounds.top + ((bounds.bottom - bounds.top) - size.Height) / 2));
+    }
+
+    /// <summary>
+    /// Turns to the dock the request came from, and to the widget it named.
+    /// </summary>
+    /// <remarks>
+    /// A widget is pointed at on the bar and set up here; without this the
+    /// person is left to find it again in a window that opened on whatever it
+    /// was last showing.
+    /// </remarks>
+    public void Show(MonitorInfo screen, string? widgetId)
+    {
+        _editing = _docks.Plans
+            .FirstOrDefault(p => p.Monitor.Identity.Equals(screen.Identity))?.Config.StableId
+            ?? _editing;
+
+        _selectedId = widgetId;
+        Nav.SelectedItem = Nav.MenuItems[0];
+        ReloadDocks();
     }
 
     /// <summary>Rebuilds both lists from the settings and the live topology.</summary>
@@ -401,7 +410,6 @@ public sealed partial class SettingsWindow : Window
         DockBody.Opacity = dock.Enabled ? 1 : 0.35;
         DockBody.IsHitTestVisible = dock.Enabled;
 
-        ShowPreview(dock);
         RefreshGallery(dock);
         RefreshInspector();
         ShowUndo();
@@ -409,27 +417,25 @@ public sealed partial class SettingsWindow : Window
         _filling = false;
     }
 
-    // ---------------- the gallery: everything that can go on the bar ----------------
-
-    /// <summary>The offer in hand while a gallery chip is being dragged.</summary>
-    private WidgetOffer? _gOffer;
-    private FrameworkElement? _gChip;
-    private Point _gAt;
-    private bool _gMoving;
-
     /// <summary>
-    /// One chip per offer: its icon, its name, and a tick when the chosen dock
-    /// already shows it. Dragging a chip onto the picture above puts it in
-    /// that exact slot; taking one off is dragging it off the picture. A chip
-    /// already on the bar sits dimmed - there is nothing more to add.
+    /// One chip per thing that can go on the bar: its icon, its name, and how
+    /// many of it the chosen dock already has.
     /// </summary>
+    /// <remarks>
+    /// A press puts one on the first free slot of that dock's bar - the bar
+    /// itself decides which, because only it knows how many slots the screen
+    /// has. Nothing is ever refused here: a second temperature, a third copy
+    /// of a reading somewhere else along the bar, are all ordinary things to
+    /// want. Taking one off is done on the bar, by dragging it off or by its
+    /// own right-click menu.
+    /// </remarks>
     private void RefreshGallery(MonitorConfig dock)
     {
         Gallery.Children.Clear();
 
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
-            bool on = dock.Widgets.Any(offer.Matches);
+            int already = dock.Widgets.Count(offer.Matches);
 
             var shape = new Microsoft.UI.Xaml.Shapes.Path
             {
@@ -449,8 +455,6 @@ public sealed partial class SettingsWindow : Window
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-            var box = new Viewbox { Width = 16, Height = 16, Child = canvas };
-
             var name = new TextBlock
             {
                 Text = offer.Name,
@@ -460,158 +464,50 @@ public sealed partial class SettingsWindow : Window
 
             Grid.SetColumn(name, 1);
 
-            var tick = new FontIcon
+            // How many are on this bar already, rather than a tick that only
+            // says "yes": two of a thing is allowed, and the number is the
+            // only honest way to show it.
+            var count = new TextBlock
             {
-                FontFamily = new FontFamily("Segoe MDL2 Assets"),
-                Glyph = "",
-                FontSize = 12,
+                Text = already > 0 ? already.ToString(CultureInfo.CurrentCulture) : string.Empty,
+                FontSize = 11,
+                VerticalAlignment = VerticalAlignment.Center,
                 Foreground = (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"],
-                Visibility = on ? Visibility.Visible : Visibility.Collapsed,
             };
 
-            Grid.SetColumn(tick, 2);
-            row.Children.Add(box);
+            Grid.SetColumn(count, 2);
+            row.Children.Add(new Viewbox { Width = 16, Height = 16, Child = canvas });
             row.Children.Add(name);
-            row.Children.Add(tick);
+            row.Children.Add(count);
 
-            var chip = new Border
+            var chip = new Button
             {
                 Margin = new Thickness(0, 0, 8, 8),
-                Padding = new Thickness(10, 0, 10, 0),
-                Background = (Brush)Application.Current.Resources[
-                    on ? "SubtleFillColorSecondaryBrush" : "SubtleFillColorTransparentBrush"],
-                BorderBrush = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"],
+                Padding = new Thickness(10, 6, 10, 6),
+                MinWidth = 168,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
-                CornerRadius = new CornerRadius(6),
-                Child = row,
+                BorderBrush = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"],
+                Background = (Brush)Application.Current.Resources["CardBackgroundFillColorDefaultBrush"],
+                Content = row,
             };
 
             ToolTipService.SetToolTip(chip, offer.Description);
 
-            if (on)
-            {
-                chip.Opacity = 0.55;
-            }
-            else
-            {
-                WidgetOffer chosen = offer;
-                chip.PointerPressed += (s, e) => OnChipPressed(chip, chosen, e);
-                chip.PointerMoved += OnChipMoved;
-                chip.PointerReleased += (s, e) => OnChipReleased(chosen, e);
-                chip.PointerCanceled += (_, _) => EndChipDrag();
-            }
+            WidgetOffer chosen = offer;
+
+            chip.Click += (_, _) => Rearrange(
+                dock.StableId,
+                widgets => [.. widgets, chosen.Make()],
+                string.Format(
+                    CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), chosen.Name));
 
             Gallery.Children.Add(chip);
         }
     }
 
-    private void OnChipPressed(FrameworkElement chip, WidgetOffer offer, PointerRoutedEventArgs e)
-    {
-        _gOffer = offer;
-        _gChip = chip;
-        _gAt = e.GetCurrentPoint(Preview).Position;
-        _gMoving = false;
-        chip.CapturePointer(e.Pointer);
-    }
-
-    private void OnChipMoved(object sender, PointerRoutedEventArgs e)
-    {
-        if (_gOffer is null)
-        {
-            return;
-        }
-
-        Point at = e.GetCurrentPoint(Preview).Position;
-
-        if (!_gMoving)
-        {
-            if (Math.Abs(at.X - _gAt.X) + Math.Abs(at.Y - _gAt.Y) < 6)
-            {
-                return;
-            }
-
-            _gMoving = true;
-
-            if (_gChip is not null)
-            {
-                _gChip.Opacity = 0.5;
-            }
-        }
-
-        // The marker lights in the picture while the chip is over it - the
-        // same marker a widget already on the bar drags against.
-        if (OverPreview(at))
-        {
-            ShowPreviewMark(at);
-        }
-        else
-        {
-            PreviewOverlay.Children.Remove(_pMark);
-            _pCaret = -1;
-        }
-    }
-
-    private void OnChipReleased(WidgetOffer offer, PointerRoutedEventArgs e)
-    {
-        if (_gOffer is null)
-        {
-            return;
-        }
-
-        Point at = e.GetCurrentPoint(Preview).Position;
-
-        // Only a drag adds - a click quietly appending to the far end of the
-        // bar looked like nothing happening.
-        if (_gMoving && OverPreview(at) && _pCaret >= 0 && Dock() is { } dock)
-        {
-            InsertAtCaret(dock, offer.Make(), offer.Name);
-        }
-
-        EndChipDrag();
-    }
-
-    private void EndChipDrag()
-    {
-        if (_gChip is not null)
-        {
-            _gChip.Opacity = 1;
-            _gChip.ReleasePointerCaptures();
-        }
-
-        PreviewOverlay.Children.Remove(_pMark);
-        _gOffer = null;
-        _gChip = null;
-        _gMoving = false;
-        _pCaret = -1;
-    }
-
-    private bool OverPreview(Point at) =>
-        at.X >= 0 && at.Y >= 0 && at.X < Preview.ActualWidth && at.Y < Preview.ActualHeight;
-
-    /// <summary>Puts a new entry where the caret in the picture points.</summary>
-    private void InsertAtCaret(MonitorConfig dock, WidgetConfig entry, string name)
-    {
-        List<WidgetPreview> drawn = [.. PreviewStrip.Children.OfType<WidgetPreview>()];
-
-        // Placed after the last drawn widget ahead of the marker, so an entry
-        // this build cannot draw keeps its place in the run.
-        List<WidgetConfig> list = [.. dock.Widgets];
-
-        int where = _pCaret == 0 || drawn.Count == 0
-            ? 0
-            : list.FindIndex(w => w.InstanceId
-                == drawn[Math.Min(_pCaret, drawn.Count) - 1].Widget.Entry.InstanceId) + 1;
-
-        list.Insert(Math.Clamp(where, 0, list.Count), entry);
-
-        Rearrange(
-            dock.StableId,
-            _ => [.. list],
-            string.Format(
-                CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), name));
-    }
-
-    /// <summary>The options of whatever is selected on the picture above.</summary>
+    /// <summary>Shows one widget's own options, or the hint when none is chosen.</summary>
     private void RefreshInspector()
     {
         WidgetConfig? entry = Dock()?.Widgets.FirstOrDefault(w => w.InstanceId == _selectedId);
@@ -679,311 +575,12 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("UndoRemovedOne", "removed"));
     }
 
-    // ---------------- the picture is the editing surface ----------------
-
-    private void OnPreviewPressed(object sender, PointerRoutedEventArgs e)
-    {
-        _pAt = e.GetCurrentPoint(Preview).Position;
-        _pGrab = PreviewUnder(_pAt);
-        _pMoving = false;
-    }
-
-    private void OnPreviewMoved(object sender, PointerRoutedEventArgs e)
-    {
-        if (_pGrab is null)
-        {
-            return;
-        }
-
-        Point at = e.GetCurrentPoint(Preview).Position;
-
-        if (!_pMoving)
-        {
-            if (Math.Abs(at.X - _pAt.X) + Math.Abs(at.Y - _pAt.Y) < 6)
-            {
-                return;
-            }
-
-            _pMoving = true;
-            _pGrab.Opacity = 0.4;
-            Preview.CapturePointer(e.Pointer);
-        }
-
-        ShowPreviewMark(at);
-    }
-
-    private void OnPreviewReleased(object sender, PointerRoutedEventArgs e)
-    {
-        if (_pGrab is { } grabbed)
-        {
-            if (_pMoving)
-            {
-                LandPreview(grabbed);
-            }
-            else
-            {
-                // A plain click selects: the inspector below fills in.
-                _selectedId = grabbed.Widget.Entry.InstanceId;
-                RefreshInspector();
-            }
-        }
-
-        EndPreviewDrag();
-    }
-
-    private void OnPreviewCancelled(object sender, PointerRoutedEventArgs e) => EndPreviewDrag();
-
-    private void OnPreviewRightTapped(object sender, RightTappedRoutedEventArgs e)
-    {
-        if (PreviewUnder(e.GetPosition(Preview)) is not { } target || Dock() is not { } dock)
-        {
-            return;
-        }
-
-        e.Handled = true;
-
-        var menu = new MenuFlyout { XamlRoot = Content.XamlRoot };
-        var remove = new MenuFlyoutItem { Text = Loc.Tr("WidgetMenuRemove", "Remove from bar") };
-        string id = target.Widget.Entry.InstanceId;
-
-        remove.Click += (_, _) => Rearrange(
-            dock.StableId,
-            widgets => [.. widgets.Where(w => w.InstanceId != id)],
-            Loc.Tr("UndoRemovedOne", "removed"));
-
-        menu.Items.Add(remove);
-        menu.ShowAt(Preview, e.GetPosition(Preview));
-    }
-
-    private void EndPreviewDrag()
-    {
-        if (_pGrab is not null)
-        {
-            _pGrab.Opacity = 1;
-        }
-
-        PreviewOverlay.Children.Remove(_pMark);
-        Preview.ReleasePointerCaptures();
-        _pGrab = null;
-        _pMoving = false;
-        _pCaret = -1;
-    }
-
-    private WidgetPreview? PreviewUnder(Point at)
-    {
-        foreach (WidgetPreview child in PreviewStrip.Children.OfType<WidgetPreview>())
-        {
-            var rect = new Rect(
-                PreviewStrip.ActualOffset.X + child.ActualOffset.X,
-                PreviewStrip.ActualOffset.Y + child.ActualOffset.Y,
-                child.ActualWidth,
-                child.ActualHeight);
-
-            if (rect.Contains(at))
-            {
-                return child;
-            }
-        }
-
-        return null;
-    }
-
-    private void ShowPreviewMark(Point at)
-    {
-        if (Dock() is not { } dock)
-        {
-            return;
-        }
-
-        bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
-        double along = horizontal ? at.X : at.Y;
-
-        List<WidgetPreview> drawn = [.. PreviewStrip.Children.OfType<WidgetPreview>()];
-
-        int index = drawn.Count;
-
-        for (int i = 0; i < drawn.Count; i++)
-        {
-            double start = horizontal
-                ? PreviewStrip.ActualOffset.X + drawn[i].ActualOffset.X
-                : PreviewStrip.ActualOffset.Y + drawn[i].ActualOffset.Y;
-            double middle = start
-                + ((horizontal ? drawn[i].ActualWidth : drawn[i].ActualHeight) / 2);
-
-            if (along < middle)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        _pCaret = index;
-
-        _pMark.Fill = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
-        _pMark.RadiusX = 1;
-        _pMark.RadiusY = 1;
-        _pMark.Width = horizontal ? 2 : 20;
-        _pMark.Height = horizontal ? 20 : 2;
-
-        if (!PreviewOverlay.Children.Contains(_pMark))
-        {
-            PreviewOverlay.Children.Add(_pMark);
-        }
-
-        double edge;
-
-        if (drawn.Count == 0)
-        {
-            edge = (horizontal ? Preview.ActualWidth : Preview.ActualHeight) / 2;
-        }
-        else if (index >= drawn.Count)
-        {
-            WidgetPreview last = drawn[^1];
-            edge = horizontal
-                ? PreviewStrip.ActualOffset.X + last.ActualOffset.X + last.ActualWidth + 2
-                : PreviewStrip.ActualOffset.Y + last.ActualOffset.Y + last.ActualHeight + 2;
-        }
-        else
-        {
-            edge = horizontal
-                ? PreviewStrip.ActualOffset.X + drawn[index].ActualOffset.X - 2
-                : PreviewStrip.ActualOffset.Y + drawn[index].ActualOffset.Y - 2;
-        }
-
-        if (horizontal)
-        {
-            Canvas.SetLeft(_pMark, edge - (_pMark.Width / 2));
-            Canvas.SetTop(_pMark, (Preview.ActualHeight - _pMark.Height) / 2);
-        }
-        else
-        {
-            Canvas.SetLeft(_pMark, (Preview.ActualWidth - _pMark.Width) / 2);
-            Canvas.SetTop(_pMark, edge - (_pMark.Height / 2));
-        }
-    }
-
-    private void LandPreview(WidgetPreview grabbed)
-    {
-        if (_pCaret < 0 || Dock() is not { } dock)
-        {
-            return;
-        }
-
-        List<WidgetPreview> drawn = [.. PreviewStrip.Children.OfType<WidgetPreview>()];
-        string moved = grabbed.Widget.Entry.InstanceId;
-
-        List<string> before =
-        [
-            .. drawn.Take(Math.Min(_pCaret, drawn.Count))
-                .Where(c => !ReferenceEquals(c, grabbed))
-                .Select(c => c.Widget.Entry.InstanceId)
-        ];
-
-        List<WidgetConfig> list = [.. dock.Widgets.Where(w => w.InstanceId != moved)];
-        WidgetConfig entry = dock.Widgets.First(w => w.InstanceId == moved);
-
-        int where = before.Count == 0
-            ? 0
-            : list.FindIndex(w => w.InstanceId == before[^1]) + 1;
-
-        list.Insert(Math.Clamp(where, 0, list.Count), entry);
-
-        if (list.Select(w => w.InstanceId).SequenceEqual(dock.Widgets.Select(w => w.InstanceId)))
-        {
-            return;
-        }
-
-        Rearrange(dock.StableId, _ => [.. list], Loc.Tr("UndoMoved", "moved"));
-    }
-
-    /// <summary>Draws the bar as it is, at the thickness it really is.</summary>
-    private void ShowPreview(MonitorConfig dock)
-    {
-        foreach (WidgetPreview old in _preview)
-        {
-            old.Dispose();
-        }
-
-        _preview.Clear();
-
-        bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
-        double thickness = DockMetrics.ThicknessDips(dock.Edge, dock.Density);
-
-        // Thickness is true to the dock; length is whatever the panel has. A
-        // bar's thickness is the thing worth judging, and no settings window is
-        // as wide as a screen.
-        Preview.Height = horizontal ? thickness : 220;
-        Preview.Width = horizontal ? double.NaN : thickness;
-        Preview.HorizontalAlignment = horizontal ? HorizontalAlignment.Stretch : HorizontalAlignment.Left;
-
-        Draw(dock);
-
-        PreviewEmpty.Visibility = _preview.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-
-        Tick();
-    }
-
-    private void Draw(MonitorConfig dock)
-    {
-        var items = new List<(FrameworkElement Element, GridLength Length)>();
-
-        foreach (WidgetConfig entry in dock.Widgets)
-        {
-            if (Build(entry) is not { } widget)
-            {
-                // A kind this build does not know. It holds its place in the
-                // settings list; on the bar there is nothing to draw, and the
-                // picture has to agree with the bar.
-                continue;
-            }
-
-            if (Application.Current.Resources[entry.TypeId] is not DataTemplate template)
-            {
-                widget.Dispose();
-                continue;
-            }
-
-            widget.Orientation = DockMetrics.IsHorizontal(dock.Edge)
-                ? Orientation.Horizontal
-                : Orientation.Vertical;
-
-            widget.Density = dock.Density;
-            widget.Attach();
-
-            if (widget is SpacerWidget spacer)
-            {
-                // In the picture the spacers are always shown: this is where a
-                // person finds out they exist and can be dragged about.
-                spacer.HintVisible = Visibility.Visible;
-            }
-
-            var preview = new WidgetPreview(widget, template);
-            DockLayout.Dress(preview, dock.Edge, widget is SpacerWidget);
-            _preview.Add(preview);
-            items.Add((preview, DockLayout.LengthOf(entry, widget)));
-        }
-
-        DockLayout.Arrange(dock.Edge, PreviewStrip, items);
-    }
-
     /// <summary>One round of updating whatever this window is showing.</summary>
     private void Tick()
     {
         if (SensorsSection.Visibility == Visibility.Visible)
         {
             ShowReadings();
-        }
-
-        if (DocksSection.Visibility != Visibility.Visible)
-        {
-            return;
-        }
-
-        SensorSnapshot snapshot = _sensors.Current;
-
-        foreach (WidgetPreview preview in _preview)
-        {
-            preview.Tick(snapshot);
         }
     }
 
@@ -1340,7 +937,8 @@ public sealed partial class SettingsWindow : Window
         }
         else
         {
-            ShowPreview(Dock() ?? throw new InvalidOperationException("the dock vanished mid-edit"));
+            // A widget's own options changed: the bar redraws itself, and the
+            // page must not rebuild the editor the person is typing into.
             ShowUndo();
         }
     }
@@ -1391,10 +989,10 @@ public sealed partial class SettingsWindow : Window
         SensorsSection.Visibility = Show(tag == "sensors");
         AboutSection.Visibility = Show(tag == "about");
 
-        // Only while a page that shows live figures is on screen. A window
+        // Only while the page that shows live figures is on screen. A window
         // sitting behind everything else has no business waking the machine
         // once a second.
-        if (tag is "sensors" or "docks")
+        if (tag is "sensors")
         {
             Tick();
             _refresh.Start();

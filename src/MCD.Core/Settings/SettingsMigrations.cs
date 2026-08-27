@@ -31,6 +31,7 @@ public static class SettingsMigrations
                 3 => ToFour(current),
                 4 => ToFive(current),
                 5 => ToSix(current),
+                6 => ToSeven(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -79,6 +80,16 @@ public static class SettingsMigrations
         Monitors = [.. model.Monitors.Select(Flatten)],
     };
 
+    /// <summary>
+    /// The invisible widget that held free length open before schema 7.
+    /// </summary>
+    /// <remarks>
+    /// Kept here rather than in the model: version 4 has to go on producing
+    /// exactly what it always produced, and version 7 takes them all out again.
+    /// Nothing outside this file has any business making one.
+    /// </remarks>
+    private static WidgetConfig Spacer() => WidgetConfig.New("mcd.spacer");
+
     private static MonitorConfig Flatten(MonitorConfig monitor)
     {
         if (monitor.Bands is not { } bands)
@@ -91,18 +102,18 @@ public static class SettingsMigrations
 
         if (!bands.Center.IsEmpty)
         {
-            flat.Add(WidgetConfig.Spacer());
+            flat.Add(Spacer());
             flat.AddRange(bands.Center);
         }
 
         if (!bands.End.IsEmpty)
         {
-            flat.Add(WidgetConfig.Spacer());
+            flat.Add(Spacer());
             flat.AddRange(bands.End);
         }
         else if (!bands.Center.IsEmpty)
         {
-            flat.Add(WidgetConfig.Spacer());
+            flat.Add(Spacer());
         }
 
         return monitor with { Widgets = [.. flat], Bands = null };
@@ -140,6 +151,35 @@ public static class SettingsMigrations
             .. model.Monitors.Select(m => m with
             {
                 Widgets = [.. m.Widgets.SelectMany(w => Atoms(w, model.App.Launcher))],
+            })
+        ],
+    };
+
+    /// <summary>
+    /// Version 7 makes the bar a row of slots and drops the spacers.
+    /// </summary>
+    /// <remarks>
+    /// A spacer was an invisible widget that held free length open, which meant
+    /// the only places a widget could go were the ends of those three stretches
+    /// - and a person aiming at what looked like an empty slot was told nothing
+    /// when it refused. Now every widget carries the slot it sits at, empty
+    /// slots are simply empty, and a spacer has nothing left to do. Each dock
+    /// packs its widgets onto the first free slots the next time it is built,
+    /// in the order they were in.
+    /// </remarks>
+    private static SettingsModel ToSeven(SettingsModel model) => model with
+    {
+        SchemaVersion = 7,
+        Monitors =
+        [
+            .. model.Monitors.Select(m => m with
+            {
+                Widgets =
+                [
+                    .. m.Widgets
+                        .Where(w => w.TypeId != "mcd.spacer")
+                        .Select(w => w with { Cell = -1 })
+                ],
             })
         ],
     };

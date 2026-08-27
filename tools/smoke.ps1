@@ -103,10 +103,27 @@ elseif ($lastLive.Groups[2].Value -ne '0') {
     $failures += "AppBar registrations were left behind (live=$($lastLive.Groups[2].Value))"
 }
 
-# One write on a fresh profile: the monitors are new. More than one means the
-# program is writing in response to its own side effects.
-$commits = ([regex]::Matches($text, 'settings\.commit')).Count
-if ($commits -ne 1) { $failures += "expected exactly one settings write on a fresh profile, saw $commits" }
+# On a fresh profile the monitors are new, so the registry is written once; and
+# each bar settles its widgets onto slots for the first time and records where
+# it put them, which is one write per dock and never again. Anything beyond that
+# is the program writing in response to its own side effects - the shape of the
+# bug this whole program was built against.
+$reconciles = ([regex]::Matches($text, 'settings\.commit reason=TopologyReconcile')).Count
+$settles = ([regex]::Matches($text, 'settings\.commit reason=WidgetConfig')).Count
+$docks = ([regex]::Matches($text, 'dock\.manager docks=(\d+)') | Select-Object -Last 1)
+$expected = if ($docks) { [int]$docks.Groups[1].Value } else { 0 }
+
+if ($reconciles -ne 1) {
+    $failures += "expected exactly one monitor-registry write on a fresh profile, saw $reconciles"
+}
+
+if ($settles -gt $expected) {
+    $failures += "the docks wrote their layout $settles times for $expected bars"
+}
+
+if ($text -match 'settings\.commit reason=UserAction') {
+    $failures += 'something wrote settings as though a person had asked'
+}
 
 Remove-Item $profileDir -Recurse -Force -ErrorAction SilentlyContinue
 

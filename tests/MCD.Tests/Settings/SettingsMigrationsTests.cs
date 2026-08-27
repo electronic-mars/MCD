@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Mcd.Core.Settings;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
@@ -29,15 +29,17 @@ public sealed class SettingsMigrationsTests
 
         // The whole ladder in one go: the temperature is added, the launcher is
         // added and then dissolves (nothing was pinned), the regions flatten,
-        // and finally every composite becomes its atoms - one widget per
-        // reading, one per temperature.
+        // every composite becomes its atoms - one widget per reading, one per
+        // temperature - and the spacers go with the arrival of real slots.
         migrated.Monitors.Single().Widgets
             .Select(w => w.TypeId)
             .ShouldBe([
-                "mcd.spacer",
                 "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge",
                 "mcd.temp",
             ]);
+
+        // Nothing carries a slot yet: only a bar knows how many its screen has.
+        migrated.Monitors.Single().Widgets.ShouldAllBe(w => w.Cell == -1);
     }
 
     [Fact]
@@ -65,10 +67,10 @@ public sealed class SettingsMigrationsTests
     }
 
     [Fact]
-    public void FlatteningKeepsTheOldAlignment()
+    public void FlatteningKeepsTheOldOrder()
     {
-        // Start stays at the start, a spacer before the centre keeps it centred,
-        // a spacer before the end pushes it to the far end.
+        // The regions become one run in the order they were drawn in, and the
+        // spacers that held them apart are gone with schema 7.
         var old = new SettingsModel
         {
             SchemaVersion = 3,
@@ -90,13 +92,12 @@ public sealed class SettingsMigrationsTests
         MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
         flat.Widgets.Select(w => w.TypeId).ShouldBe(
-            ["mcd.spacer", "mcd.media", "mcd.spacer",
-             "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge"]);
+            ["mcd.media", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge"]);
         flat.Bands.ShouldBeNull();
     }
 
     [Fact]
-    public void ACentreWithNothingAfterItStaysCentred()
+    public void ACentredWidgetSurvivesOnItsOwn()
     {
         var old = new SettingsModel
         {
@@ -114,7 +115,7 @@ public sealed class SettingsMigrationsTests
         MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
         flat.Widgets.Select(w => w.TypeId)
-            .ShouldBe(["mcd.spacer", "mcd.media", "mcd.spacer"]);
+            .ShouldBe(["mcd.media"]);
     }
 
     [Fact]

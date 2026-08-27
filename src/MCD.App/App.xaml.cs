@@ -100,7 +100,7 @@ public partial class App : Application
         LogTopology(start);
 
         _docks = _services.GetRequiredService<DockWindowManager>();
-        _docks.SettingsRequested += (_, monitor) => ShowSettings(monitor);
+        _docks.SettingsRequested += (_, request) => ShowSettings(request.Screen, request.WidgetId);
         _docks.Start();
 
         if (Environment.GetEnvironmentVariable("MCD_SELFTEST") == "1")
@@ -217,7 +217,7 @@ public partial class App : Application
     /// came from someone starting the program again, which has no screen of its
     /// own to speak of.
     /// </param>
-    private void ShowSettings(MonitorInfo? screen = null)
+    private void ShowSettings(MonitorInfo? screen = null, string? widgetId = null)
     {
         if (_shutDown || _services is null || _docks is null || _loggers is null)
         {
@@ -260,6 +260,7 @@ public partial class App : Application
         if (screen is not null)
         {
             _settingsWindow.SizeAndCentre(screen);
+            _settingsWindow.Show(screen, widgetId);
         }
 
         _settingsWindow.Activate();

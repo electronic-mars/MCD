@@ -146,13 +146,13 @@ public sealed record MonitorConfig
     public bool Topmost { get; init; } = true;
 
     /// <summary>
-    /// Everything on the bar, in display order. Spacers are widgets too.
+    /// Everything on the bar, each at the slot it was put in.
     /// </summary>
     /// <remarks>
-    /// One flat run rather than three regions. Where things sit is decided by
-    /// spacer widgets that stretch to take the free length, so any arrangement
-    /// the regions could express is a particular ordering of this list - and a
-    /// person dragging a widget along the bar is never told "not there".
+    /// The bar is a row of slots, and a widget sits at one of them and takes as
+    /// many as it needs. Where a thing is on the bar is a number, not a place in
+    /// a list - so a gap is simply slots nobody has filled, and there is nothing
+    /// invisible on the bar holding empty space open.
     /// </remarks>
     public ImmutableArray<WidgetConfig> Widgets { get; init; } = DockContents.Default;
 
@@ -176,16 +176,13 @@ public sealed record DockBands
 public static class DockContents
 {
     /// <summary>
-    /// Media transport in the middle, one gauge per reading and a temperature
-    /// at the end. Every entry is a single slot: one reading, one icon, one
-    /// player. The media widget keeps itself off the bar while nothing is
-    /// playing, and the two spacers simply meet where it was.
+    /// The player, then a reading each for the processor, the memory, both
+    /// directions of the network and the graphics chip, and a temperature.
+    /// Every one is placed on the first free slots, in this order.
     /// </summary>
     public static ImmutableArray<WidgetConfig> Default =>
     [
-        WidgetConfig.Spacer(),
         WidgetConfig.New("mcd.media"),
-        WidgetConfig.Spacer(),
         Gauge("cpu"),
         Gauge("ram"),
         Gauge("up"),
@@ -205,6 +202,16 @@ public sealed record WidgetConfig
 
     public string TypeId { get; init; } = string.Empty;
 
+    /// <summary>
+    /// Which slot of the bar this sits at, counted from the near end.
+    /// </summary>
+    /// <remarks>
+    /// -1 means "wherever it lands": the bar puts it on the first free slots
+    /// when it is built and writes the number back. Only the bar knows how many
+    /// slots a screen has, so nothing upstream of it can decide this.
+    /// </remarks>
+    public int Cell { get; init; } = -1;
+
     /// <summary>Opaque to everything but the widget that owns it.</summary>
     public JsonElement? Config { get; init; }
 
@@ -213,9 +220,6 @@ public sealed record WidgetConfig
         InstanceId = Guid.NewGuid().ToString("n"),
         TypeId = typeId,
     };
-
-    /// <summary>A stretch of empty bar that takes up the free length.</summary>
-    public static WidgetConfig Spacer() => New("mcd.spacer");
 
     /// <summary>The same widget, configured the same way, as a separate instance.</summary>
     public WidgetConfig AsNewInstance() => this with { InstanceId = Guid.NewGuid().ToString("n") };

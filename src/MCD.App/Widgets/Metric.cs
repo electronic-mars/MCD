@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
@@ -260,6 +260,41 @@ public sealed partial class Metric : ObservableObject
     {
         FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
     };
+
+    /// <summary>
+    /// A figure as long as this reading is ever likely to show, so the slots it
+    /// takes are decided once rather than the first time it says "--".
+    /// </summary>
+    public string Sample { get; set; } = "100 %";
+
+    /// <summary>How wide this chip is, in effective pixels.</summary>
+    /// <remarks>
+    /// Worked out rather than measured off the screen: what a widget needs has
+    /// to be known before the bar is laid out, and a control that has not been
+    /// drawn yet measures as nothing. The parts are the ones the template puts
+    /// side by side - chip padding, the icon, the gap, and the widest of the
+    /// figure's box, the sample and the reading's name.
+    /// </remarks>
+    public double Width()
+    {
+        double value = Math.Max(ValueWidth, Wide(Sample, FontSize));
+
+        double label = LabelVisible == Visibility.Visible
+            ? Math.Min(100, Wide(Label, LabelFontSize))
+            : 0;
+
+        // Chip padding 3 either side, its margins, icon, the 6-point gap.
+        return 6 + Spacing.Left + Spacing.Right + IconSize + 6 + Math.Max(value, label);
+    }
+
+    private static double Wide(string text, double size)
+    {
+        Ruler.FontSize = size;
+        Ruler.Text = text;
+        Ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+
+        return Math.Ceiling(Ruler.DesiredSize.Width) + 1;
+    }
 
     public void Update(SensorHub sensors, SensorSnapshot snapshot)
     {
