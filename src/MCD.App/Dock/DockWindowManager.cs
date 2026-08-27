@@ -182,6 +182,34 @@ public sealed class DockWindowManager : IDisposable
             WriteReason.WidgetConfig);
     }
 
+    /// <summary>Pins a dropped file to the launcher, once.</summary>
+    private void Pin(string path)
+    {
+        SettingsModel current = _settings.Current;
+
+        if (current.App.Launcher.Any(
+            i => string.Equals(i.Target, path, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        _settings.Commit(
+            current with
+            {
+                App = current.App with
+                {
+                    Launcher =
+                    [
+                        .. current.App.Launcher,
+                        LaunchItem.For(path, Settings.LauncherRow.NameFor(path)),
+                    ],
+                },
+            },
+            WriteReason.UserAction);
+
+        _log.LogInformation("launcher.pinned by drop {Target}", path);
+    }
+
     private WidgetContext Context()
     {
         AppSettings app = _settings.Current.App;
@@ -237,6 +265,7 @@ public sealed class DockWindowManager : IDisposable
             // happens here, where the one writer of settings lives.
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
+            window.PinRequested += (_, path) => Pin(path);
             _windows[id] = window;
             window.Activate();
         }

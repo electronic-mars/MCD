@@ -47,7 +47,7 @@
     <value>One dock per screen. Everything here takes effect on the bar as you do it. To move a widget, drag it on the bar.</value>
   </data>
   <data name="BarLiveTitle.Text" xml:space="preserve">
-    <value>The bar, live</value>
+    <value>THE BAR, LIVE</value>
   </data>
   <data name="PreviewEmpty.Text" xml:space="preserve">
     <value>This dock is empty. Add a widget below.</value>
@@ -86,7 +86,7 @@
     <value>Compact</value>
   </data>
   <data name="BehaviourLabel.Text" xml:space="preserve">
-    <value>Behaviour</value>
+    <value>Hides until you point at it</value>
   </data>
   <data name="ModeVisibleItem.Content" xml:space="preserve">
     <value>Always visible</value>
@@ -95,7 +95,7 @@
     <value>Hides until you point at it</value>
   </data>
   <data name="WidgetsTitle.Text" xml:space="preserve">
-    <value>Widgets</value>
+    <value>WIDGETS</value>
   </data>
   <data name="AddWidgetButton.Content" xml:space="preserve">
     <value>Add widget</value>
@@ -226,7 +226,7 @@
     <value>Address</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
-    <value>Live readings</value>
+    <value>LIVE READINGS</value>
   </data>
 
   <!-- Monitors page -->
@@ -594,5 +594,29 @@
   </data>
   <data name="RestartNowText.Text" xml:space="preserve">
     <value>Restart now</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>The buttons always drive</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Whoever is playing (the rule)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>The buttons always drive {0}</value>
+  </data>
+  <data name="DockCompact.OnContent" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="DockCompact.OffContent" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="DockAutoHide.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="DockAutoHide.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>Pin to the bar</value>
   </data>
 </root>

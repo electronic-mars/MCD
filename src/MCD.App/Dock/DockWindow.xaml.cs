@@ -159,6 +159,12 @@ public sealed partial class DockWindow : Window
     }
 
     /// <summary>
+    /// Raised when something was dropped on the bar to be pinned: a program,
+    /// a folder, a shortcut. The path travels; the settings writer decides.
+    /// </summary>
+    public event EventHandler<string>? PinRequested;
+
+    /// <summary>
     /// Raised on a right-click over an empty part of the bar.
     /// </summary>
     /// <remarks>
@@ -521,6 +527,51 @@ public sealed partial class DockWindow : Window
     }
 
     private readonly List<WidgetHost> _hosts = [];
+
+    /// <summary>
+    /// A file dragged from anywhere onto the bar pins it to the launcher.
+    /// </summary>
+    /// <remarks>
+    /// This is the way in that needs no explaining: the same drop that puts a
+    /// program on the taskbar. The settings window's dialog stays as the way
+    /// to pin an address, which has no file to drag.
+    /// </remarks>
+    private void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+    {
+        if (e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
+        {
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Link;
+
+            if (e.DragUIOverride is { } hint)
+            {
+                hint.Caption = Loc.Tr("PinDropCaption", "Pin to the bar");
+            }
+        }
+    }
+
+    private async void OnDropFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+    {
+        if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
+        {
+            return;
+        }
+
+        try
+        {
+            foreach (Windows.Storage.IStorageItem item in await e.DataView.GetStorageItemsAsync())
+            {
+                if (item.Path is { Length: > 0 } path)
+                {
+                    _log.LogInformation("dock.pin dropped {Path}", path);
+                    PinRequested?.Invoke(this, path);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning(ex, "dock.pin could not read what was dropped");
+        }
+    }
 
     /// <summary>
     /// Applies the chosen theme and finish to this bar.

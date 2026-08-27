@@ -191,8 +191,11 @@
     <DataTemplate x:Key="mcd.media" x:DataType="widgets:MediaWidget">
         <StackPanel
             Margin="{x:Bind Spacing, Mode=OneWay}"
-            Orientation="{x:Bind Orientation}"
-            Visibility="{x:Bind Visible, Mode=OneWay}">
+            Opacity="{x:Bind Dim, Mode=OneWay}"
+            Orientation="{x:Bind Orientation}">
+            <StackPanel.OpacityTransition>
+                <ScalarTransition Duration="0:0:0.2" />
+            </StackPanel.OpacityTransition>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="0">
                 <Border
                     Width="20"

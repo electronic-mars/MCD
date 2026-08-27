@@ -87,7 +87,12 @@ public sealed partial class SettingsWindow : Window
 
         InitializeComponent();
 
-        SystemBackdrop = new MicaBackdrop();
+        SystemBackdrop = null;
+
+        // The Braun body, painted from code: a ThemeResource on the root
+        // element cannot see the root's own dictionary during the parse.
+        PaintBody();
+        Root.ActualThemeChanged += (_, _) => PaintBody();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(TitleBar);
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "icon.ico"));
@@ -299,12 +304,12 @@ public sealed partial class SettingsWindow : Window
         DockEnabled.IsOn = dock.Enabled;
         DockTopmost.IsOn = dock.Topmost;
         DockEdge.SelectedIndex = (int)dock.Edge;
-        DockThickness.SelectedIndex = (int)dock.Density;
-        DockMode.SelectedIndex = (int)dock.Mode;
+        DockCompact.IsOn = dock.Density == DockDensity.Compact;
+        DockAutoHide.IsOn = dock.Mode == AppBarMode.AutoHide;
 
         // Vertical bars have one width and no compact form, so offering the
         // choice would be offering a setting that does nothing.
-        DockThickness.IsEnabled = DockMetrics.IsHorizontal(dock.Edge);
+        DockCompact.IsEnabled = DockMetrics.IsHorizontal(dock.Edge);
 
         string note = Note(dock);
         DockNote.Text = note;
@@ -564,6 +569,12 @@ public sealed partial class SettingsWindow : Window
     /// one still holds the single-instance mutex would only signal it and
     /// leave. Not pretty, but honest about what a restart is.
     /// </remarks>
+    /// <summary>Graphite body, or cream on the light theme - the Braun ground.</summary>
+    private void PaintBody() =>
+        Root.Background = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
+            ? Windows.UI.Color.FromArgb(255, 0xED, 0xEA, 0xE3)
+            : Windows.UI.Color.FromArgb(255, 0x1C, 0x1F, 0x24));
+
     private void OnRestartNow(object sender, RoutedEventArgs e)
     {
         if (Environment.ProcessPath is not { } exe)
@@ -787,13 +798,16 @@ public sealed partial class SettingsWindow : Window
             dock => dock with
             {
                 Edge = (AppBarEdge)Math.Max(0, DockEdge.SelectedIndex),
-                Density = (DockDensity)Math.Max(0, DockThickness.SelectedIndex),
-                Mode = (AppBarMode)Math.Max(0, DockMode.SelectedIndex),
+                Density = DockCompact.IsOn ? DockDensity.Compact : DockDensity.Default,
+                Mode = DockAutoHide.IsOn ? AppBarMode.AutoHide : AppBarMode.Pinned,
             },
             "shape");
 
         ShowDock();
     }
+
+    private void OnDockShapeToggled(object sender, RoutedEventArgs e) =>
+        OnDockShapeChanged(sender, null!);
 
     /// <summary>Offers the widgets this build knows, minus any that would duplicate.</summary>
     private void OnAddWidget(object sender, RoutedEventArgs e)

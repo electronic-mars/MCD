@@ -149,7 +149,31 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        flat.Widgets.Select(w => w.TypeId).ShouldBe(["mcd.spacer", "mcd.media", "mcd.spacer"]);
+        // Schema 5 then puts the launcher at the front of every dock.
+        flat.Widgets.Select(w => w.TypeId)
+            .ShouldBe(["mcd.launcher", "mcd.spacer", "mcd.media", "mcd.spacer"]);
+    }
+
+    [Fact]
+    public void AVersionFourFileGainsTheLauncherOnEveryDock()
+    {
+        var old = new SettingsModel
+        {
+            SchemaVersion = 4,
+            Monitors =
+            [
+                new MonitorConfig { StableId = "a", Widgets = [WidgetConfig.New("mcd.load")] },
+                new MonitorConfig { StableId = "b", Widgets = [WidgetConfig.New("mcd.launcher")] },
+            ],
+        };
+
+        SettingsModel migrated = SettingsMigrations.Apply(old, NullLogger.Instance);
+
+        migrated.Monitors[0].Widgets.Select(w => w.TypeId)
+            .ShouldBe(["mcd.launcher", "mcd.load"]);
+
+        // A dock that already has one is left exactly as it was.
+        migrated.Monitors[1].Widgets.Select(w => w.TypeId).ShouldBe(["mcd.launcher"]);
     }
 
     [Fact]

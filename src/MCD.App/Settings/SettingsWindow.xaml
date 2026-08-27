@@ -8,9 +8,90 @@
 
     <Grid x:Name="Root" RowSpacing="0">
         <Grid.Resources>
-            <!-- A band's rows fill the width and carry no selection chrome of
-                 their own: the card inside already has a border. -->
-            <Style x:Key="BandItemStyle" TargetType="ListViewItem">
+            <!-- Master Audio Switcher's Braun palette: graphite body, one
+                 orange accent, recessed controls; cream on the light theme.
+                 The accent-colour overrides repaint every accent-flavoured
+                 control - toggles, sliders, selection - without touching
+                 their templates. -->
+            <ResourceDictionary>
+                <ResourceDictionary.ThemeDictionaries>
+                    <ResourceDictionary x:Key="Default">
+                        <Color x:Key="SystemAccentColor">#F26A21</Color>
+                        <Color x:Key="SystemAccentColorLight1">#F5854A</Color>
+                        <Color x:Key="SystemAccentColorLight2">#F89F72</Color>
+                        <Color x:Key="SystemAccentColorLight3">#FBBA9B</Color>
+                        <Color x:Key="SystemAccentColorDark1">#D65A17</Color>
+                        <Color x:Key="SystemAccentColorDark2">#B94B10</Color>
+                        <Color x:Key="SystemAccentColorDark3">#9C3D0A</Color>
+                        <SolidColorBrush x:Key="BraunBg" Color="#1C1F24" />
+                        <SolidColorBrush x:Key="BraunPanelHi" Color="#23272D" />
+                        <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
+                        <SolidColorBrush x:Key="BraunLed" Color="#4ADE80" />
+                        <SolidColorBrush x:Key="BraunTx2" Color="#98A0AC" />
+                        <SolidColorBrush x:Key="BraunTx3" Color="#88909B" />
+                        <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#191C21" />
+                        <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#11FFFFFF" />
+                        <SolidColorBrush x:Key="LayerOnAcrylicFillColorDefaultBrush" Color="#212630" />
+                        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="#00000000" />
+                        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#191C21" />
+                        <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="#11FFFFFF" />
+                        <SolidColorBrush x:Key="AccentButtonBackground" Color="#F26A21" />
+                        <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#F5854A" />
+                        <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#D65A17" />
+                        <SolidColorBrush x:Key="AccentButtonForeground" Color="#140702" />
+                        <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#140702" />
+                        <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#140702" />
+                    </ResourceDictionary>
+                    <ResourceDictionary x:Key="Light">
+                        <Color x:Key="SystemAccentColor">#F26A21</Color>
+                        <Color x:Key="SystemAccentColorLight1">#F5854A</Color>
+                        <Color x:Key="SystemAccentColorLight2">#F89F72</Color>
+                        <Color x:Key="SystemAccentColorLight3">#FBBA9B</Color>
+                        <Color x:Key="SystemAccentColorDark1">#D65A17</Color>
+                        <Color x:Key="SystemAccentColorDark2">#B94B10</Color>
+                        <Color x:Key="SystemAccentColorDark3">#9C3D0A</Color>
+                        <SolidColorBrush x:Key="BraunBg" Color="#EDEAE3" />
+                        <SolidColorBrush x:Key="BraunPanelHi" Color="#F5F3EE" />
+                        <SolidColorBrush x:Key="BraunAccBrush" Color="#D65A17" />
+                        <SolidColorBrush x:Key="BraunLed" Color="#22A45D" />
+                        <SolidColorBrush x:Key="BraunTx2" Color="#5C6169" />
+                        <SolidColorBrush x:Key="BraunTx3" Color="#626871" />
+                        <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#F7F5F1" />
+                        <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#17000000" />
+                        <SolidColorBrush x:Key="LayerOnAcrylicFillColorDefaultBrush" Color="#FFFFFF" />
+                        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="#00000000" />
+                        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#F7F5F1" />
+                        <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="#17000000" />
+                        <SolidColorBrush x:Key="AccentButtonBackground" Color="#F26A21" />
+                        <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#F5854A" />
+                        <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#D65A17" />
+                        <SolidColorBrush x:Key="AccentButtonForeground" Color="#140702" />
+                        <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#140702" />
+                        <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#140702" />
+                    </ResourceDictionary>
+                </ResourceDictionary.ThemeDictionaries>
+
+                <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+                <CornerRadius x:Key="OverlayCornerRadius">12</CornerRadius>
+
+                <!-- MAS's micro-caption: small caps, wide tracking, third-level
+                     text. Group names inside a page wear this. -->
+                <Style x:Key="Micro" TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="11" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="CharacterSpacing" Value="180" />
+                </Style>
+
+                <!-- A page title: the section's icon in the accent, then the
+                     name. The icon is the group's own, same as in the pane. -->
+                <Style x:Key="SectionIcon" TargetType="FontIcon">
+                    <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                    <Setter Property="FontSize" Value="20" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+                <!-- A band's rows fill the width and carry no selection chrome of
+                     their own: the card inside already has a border. -->
+                <Style x:Key="BandItemStyle" TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="0,0,0,6" />
@@ -96,6 +177,7 @@
                     </Canvas>
                 </Viewbox>
             </DataTemplate>
+            </ResourceDictionary>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -168,11 +250,15 @@
 
                     <!-- Docks -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
-                        <TextBlock
-                            x:Uid="DocksTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="Docks" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="DocksTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Docks" />
+                        </StackPanel>
                         <TextBlock
                             x:Uid="DocksIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -201,8 +287,8 @@
                                 <TextBlock
                                     x:Uid="BarLiveTitle"
                                     VerticalAlignment="Center"
-                                    FontWeight="SemiBold"
-                                    Text="The bar, live" />
+                                    Foreground="{ThemeResource BraunTx3}" Style="{StaticResource Micro}"
+                                    Text="THE BAR, LIVE" />
                                 <Button
                                     x:Name="UndoButton"
                                     Grid.Column="1"
@@ -289,34 +375,34 @@
                                     Grid.Row="2"
                                     VerticalAlignment="Center"
                                     Text="Size" />
-                                <ComboBox
-                                    x:Name="DockThickness"
+                                <ToggleSwitch
+                                    x:Name="DockCompact"
+                                    x:Uid="DockCompact"
                                     Grid.Row="2"
                                     Grid.Column="1"
-                                    MinWidth="180"
+                                    MinWidth="0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    SelectionChanged="OnDockShapeChanged">
-                                    <ComboBoxItem x:Uid="SizeDefaultItem" Content="Default" />
-                                    <ComboBoxItem x:Uid="SizeCompactItem" Content="Compact" />
-                                </ComboBox>
+                                    OffContent="Default"
+                                    OnContent="Compact"
+                                    Toggled="OnDockShapeToggled" />
 
                                 <TextBlock
                                     x:Uid="BehaviourLabel"
                                     Grid.Row="3"
                                     VerticalAlignment="Center"
-                                    Text="Behaviour" />
-                                <ComboBox
-                                    x:Name="DockMode"
+                                    Text="Hides until you point at it" />
+                                <ToggleSwitch
+                                    x:Name="DockAutoHide"
+                                    x:Uid="DockAutoHide"
                                     Grid.Row="3"
                                     Grid.Column="1"
-                                    MinWidth="180"
+                                    MinWidth="0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    SelectionChanged="OnDockShapeChanged">
-                                    <ComboBoxItem x:Uid="ModeVisibleItem" Content="Always visible" />
-                                    <ComboBoxItem x:Uid="ModeAutoHideItem" Content="Hides until you point at it" />
-                                </ComboBox>
+                                    OffContent="Off"
+                                    OnContent="On"
+                                    Toggled="OnDockShapeToggled" />
 
                                 <TextBlock
                                     x:Uid="TopmostLabel"
@@ -357,8 +443,8 @@
                                 <TextBlock
                                     x:Uid="WidgetsTitle"
                                     VerticalAlignment="Center"
-                                    FontWeight="SemiBold"
-                                    Text="Widgets" />
+                                    Foreground="{ThemeResource BraunTx3}" Style="{StaticResource Micro}"
+                                    Text="WIDGETS" />
                                 <Button
                                     x:Uid="AddWidgetButton"
                                     Grid.Column="1"
@@ -396,11 +482,15 @@
 
                     <!-- Launcher -->
                     <StackPanel x:Name="LauncherSection" Spacing="8" Visibility="Collapsed">
-                        <TextBlock
-                            x:Uid="LauncherTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="Launcher" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE71D;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="LauncherTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Launcher" />
+                        </StackPanel>
                         <TextBlock
                             x:Uid="LauncherIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -470,11 +560,15 @@
 
                     <!-- Appearance -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
-                        <TextBlock
-                            x:Uid="AppearanceTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="Appearance" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="AppearanceTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Appearance" />
+                        </StackPanel>
                         <TextBlock
                             x:Uid="AppearanceIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -642,11 +736,15 @@
 
                     <!-- Icons -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
-                        <TextBlock
-                            x:Uid="IconsTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="Icons" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="IconsTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Icons" />
+                        </StackPanel>
                         <TextBlock
                             x:Uid="IconsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -697,11 +795,15 @@
 
                     <!-- Sensors -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
-                        <TextBlock
-                            x:Uid="SensorsTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="Sensors" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="SensorsTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Sensors" />
+                        </StackPanel>
                         <TextBlock
                             x:Uid="SensorsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -711,8 +813,8 @@
                         <TextBlock
                             x:Uid="LiveReadingsTitle"
                             Margin="0,16,0,0"
-                            FontWeight="SemiBold"
-                            Text="Live readings" />
+                            Foreground="{ThemeResource BraunTx3}" Style="{StaticResource Micro}"
+                            Text="LIVE READINGS" />
                         <TextBlock
                             x:Name="SensorSummary"
                             FontSize="12"
@@ -752,11 +854,15 @@
 
                     <!-- Monitors -->
                     <StackPanel x:Name="MonitorsSection" Spacing="8" Visibility="Collapsed">
-                        <TextBlock
-                            x:Uid="MonitorsTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="Monitors" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE7F4;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="MonitorsTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Monitors" />
+                        </StackPanel>
                         <TextBlock
                             x:Uid="MonitorsIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -818,11 +924,15 @@
 
                     <!-- About -->
                     <StackPanel x:Name="AboutSection" Spacing="8" Visibility="Collapsed">
-                        <TextBlock
-                            x:Uid="AboutTitle"
-                            FontSize="28"
-                            FontWeight="SemiBold"
-                            Text="About" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE897;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <TextBlock
+                                x:Uid="AboutTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="About" />
+                        </StackPanel>
                         <TextBlock x:Name="VersionText" />
                         <TextBlock
                             x:Uid="AboutIntro"

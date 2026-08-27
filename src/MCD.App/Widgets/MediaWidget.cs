@@ -39,7 +39,14 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
     private GlobalSystemMediaTransportControlsSessionManager? _sessions;
     private GlobalSystemMediaTransportControlsSession? _playing;
+    private string? _lastApp;
     private bool _gone;
+
+    /// <summary>Players seen this session, id to short name, for the editor.</summary>
+    private static readonly Dictionary<string, string> Seen = [];
+
+    /// <summary>The player the person nominated to always receive the buttons.</summary>
+    private string Nominated => WidgetOptions.Text(Options, "player") ?? string.Empty;
 
     public override string TypeId => Type;
 
@@ -51,9 +58,18 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     private bool ShowTitle => WidgetOptions.Text(Options, "title") == "shown";
 
-    /// <summary>Hidden until something is playing.</summary>
+    /// <summary>
+    /// Faded while there is nothing to control, never gone.
+    /// </summary>
+    /// <remarks>
+    /// It used to hide itself entirely, and that confused more than it
+    /// tidied: the widget was on the bar and in the settings but nowhere to
+    /// be seen, and the Add menu greyed it out as already present. Half-lit
+    /// buttons say both things at once - this is where the music will be,
+    /// and there is none right now.
+    /// </remarks>
     [ObservableProperty]
-    public partial Visibility Visible { get; set; } = Visibility.Collapsed;
+    public partial double Dim { get; set; } = 0.35;
 
     /// <summary>What is playing, for the full-size bar and the tooltip.</summary>
     [ObservableProperty]
@@ -134,9 +150,14 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     {
     }
 
-    public override string Summarise() => ShowTitle
-        ? Loc.Tr("MediaSummaryShown", "Buttons, with the track written next to them")
-        : Loc.Tr("MediaSummaryTooltip", "Buttons; the track is in their tooltip");
+    public override string Summarise() => Nominated.Length > 0
+        ? string.Format(
+            System.Globalization.CultureInfo.CurrentCulture,
+            Loc.Tr("MediaSummaryNominated", "The buttons always drive {0}"),
+            WidgetOptions.Text(Options, "playerName") ?? Short(Nominated))
+        : ShowTitle
+            ? Loc.Tr("MediaSummaryShown", "Buttons, with the track written next to them")
+            : Loc.Tr("MediaSummaryTooltip", "Buttons; the track is in their tooltip");
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
@@ -151,7 +172,43 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         title.Toggled += (_, _) =>
             changed(WidgetOptions.Merge(Options, ("title", title.IsOn ? "shown" : null)));
 
-        return title;
+        // The nomination. The chosen player is always offered, running or
+        // not, or the setting could not be seen - let alone taken away.
+        var players = new ComboBox
+        {
+            Header = Loc.Tr("MediaPriorityHeader", "The buttons always drive"),
+            MinWidth = 220,
+        };
+
+        var ids = new List<string> { string.Empty };
+        players.Items.Add(Loc.Tr("MediaPriorityNone", "Whoever is playing (the rule)"));
+
+        Dictionary<string, string> offer = new(Seen);
+
+        if (Nominated.Length > 0 && !offer.ContainsKey(Nominated))
+        {
+            offer[Nominated] = WidgetOptions.Text(Options, "playerName") ?? Short(Nominated);
+        }
+
+        foreach ((string id, string name) in offer.OrderBy(kv => kv.Value))
+        {
+            ids.Add(id);
+            players.Items.Add(name);
+        }
+
+        players.SelectedIndex = Math.Max(0, ids.IndexOf(Nominated));
+
+        players.SelectionChanged += (_, _) =>
+        {
+            string id = ids[Math.Max(0, players.SelectedIndex)];
+
+            changed(WidgetOptions.Merge(
+                Options,
+                ("player", id.Length > 0 ? id : null),
+                ("playerName", id.Length > 0 ? Short(id) : null)));
+        };
+
+        return new StackPanel { Spacing = 10, Children = { title, players } };
     }
 
     public override void Dispose()
@@ -161,6 +218,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
         if (_sessions is not null)
         {
+            _sessions.SessionsChanged -= OnSessionsChanged;
             _sessions.CurrentSessionChanged -= OnSessionChanged;
             _sessions = null;
         }
@@ -195,13 +253,113 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             return;
         }
 
+        _sessions.SessionsChanged += OnSessionsChanged;
         _sessions.CurrentSessionChanged += OnSessionChanged;
-        Follow(_sessions.GetCurrentSession());
+        Repick();
     }
+
+    private void OnSessionsChanged(
+        GlobalSystemMediaTransportControlsSessionManager sender, SessionsChangedEventArgs args) =>
+        _ui.TryEnqueue(Repick);
 
     private void OnSessionChanged(
         GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args) =>
-        _ui.TryEnqueue(() => Follow(sender.GetCurrentSession()));
+        _ui.TryEnqueue(Repick);
+
+    /// <summary>
+    /// Chooses which player the buttons control - by a rule you can state,
+    /// not by the system's guess.
+    /// </summary>
+    /// <remarks>
+    /// The rule is Master Audio Switcher's, ported whole, because it was
+    /// measured against the alternative there: Windows hands the keys to
+    /// whoever did something last, and with a browser and a music program
+    /// both open the target hops between them every few seconds. Here: a
+    /// nominated player wins outright; otherwise whoever is playing - and of
+    /// several, the one these buttons drove last; otherwise the one they
+    /// drove last even if silent; otherwise the system's pick.
+    /// </remarks>
+    private void Repick()
+    {
+        if (_gone || _sessions is null)
+        {
+            return;
+        }
+
+        IReadOnlyList<GlobalSystemMediaTransportControlsSession> all = _sessions.GetSessions();
+
+        foreach (GlobalSystemMediaTransportControlsSession s in all)
+        {
+            Seen[s.SourceAppUserModelId] = Short(s.SourceAppUserModelId);
+        }
+
+        Follow(Pick(all));
+    }
+
+    private GlobalSystemMediaTransportControlsSession? Pick(
+        IReadOnlyList<GlobalSystemMediaTransportControlsSession> all)
+    {
+        if (all.Count == 0)
+        {
+            return null;
+        }
+
+        if (Nominated.Length > 0
+            && all.FirstOrDefault(s => s.SourceAppUserModelId == Nominated) is { } chosen)
+        {
+            return chosen;
+        }
+
+        List<GlobalSystemMediaTransportControlsSession> playing = [.. all.Where(IsPlaying)];
+
+        if (playing.Count > 0)
+        {
+            return playing.FirstOrDefault(s => s.SourceAppUserModelId == _lastApp) ?? playing[0];
+        }
+
+        if (all.FirstOrDefault(s => s.SourceAppUserModelId == _lastApp) is { } last)
+        {
+            return last;
+        }
+
+        return _sessions?.GetCurrentSession() ?? all[0];
+    }
+
+    private static bool IsPlaying(GlobalSystemMediaTransportControlsSession session)
+    {
+        try
+        {
+            return session.GetPlaybackInfo().PlaybackStatus
+                == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>"SpotifyAB.SpotifyMusic_...!Spotify" said the way a person would.</summary>
+    private static string Short(string appId)
+    {
+        string name = appId;
+
+        int bang = name.LastIndexOf('!');
+        if (bang >= 0 && bang < name.Length - 1)
+        {
+            name = name[(bang + 1)..];
+        }
+
+        if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+        {
+            name = name[..^4];
+        }
+        else if (name.Contains('.'))
+        {
+            name = name[(name.LastIndexOf('.') + 1)..];
+        }
+
+        return name.Length > 1 ? char.ToUpperInvariant(name[0]) + name[1..] : name;
+    }
 
     private void Follow(GlobalSystemMediaTransportControlsSession? session)
     {
@@ -210,13 +368,22 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             return;
         }
 
+        if (ReferenceEquals(session, _playing))
+        {
+            Refresh();
+            return;
+        }
+
         Forget();
         _playing = session;
 
         if (_playing is null)
         {
-            Visible = Visibility.Collapsed;
+            Dim = 0.35;
+            PlayingVisible = Visibility.Collapsed;
             Title = string.Empty;
+            Art = null;
+            ArtVisible = Visibility.Collapsed;
             return;
         }
 
@@ -274,12 +441,12 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
         // Stopped and closed both mean there is nothing to control. Paused does
         // not: a paused track is one button away from playing again.
-        Visible = info?.PlaybackStatus is
+        Dim = info?.PlaybackStatus is
             GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing
             or GlobalSystemMediaTransportControlsSessionPlaybackStatus.Paused
             or GlobalSystemMediaTransportControlsSessionPlaybackStatus.Changing
-            ? Visibility.Visible
-            : Visibility.Collapsed;
+            ? 1.0
+            : 0.35;
     }
 
     private async void ReadTitle(GlobalSystemMediaTransportControlsSession session)
@@ -357,7 +524,40 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     private void Previous() => Ask(s => s.TrySkipPreviousAsync());
 
     [RelayCommand]
-    private void PlayPause() => Ask(s => s.TryTogglePlayPauseAsync());
+    private void PlayPause()
+    {
+        // Starting the nominated player pauses everyone else first. Without
+        // this a short video in a browser and the music simply play on top
+        // of each other - the very thing nominating is there to end.
+        if (Nominated.Length > 0
+            && _playing is { } mine
+            && mine.SourceAppUserModelId == Nominated
+            && !IsPlaying(mine)
+            && _sessions is not null)
+        {
+            foreach (GlobalSystemMediaTransportControlsSession other in _sessions.GetSessions())
+            {
+                if (other.SourceAppUserModelId != Nominated && IsPlaying(other))
+                {
+                    Hush(other);
+                }
+            }
+        }
+
+        Ask(s => s.TryTogglePlayPauseAsync());
+    }
+
+    private async void Hush(GlobalSystemMediaTransportControlsSession other)
+    {
+        try
+        {
+            await other.TryPauseAsync();
+        }
+        catch (Exception)
+        {
+            // A player that will not pause; its overlap is its own doing.
+        }
+    }
 
     [RelayCommand]
     private void Next() => Ask(s => s.TrySkipNextAsync());
@@ -381,6 +581,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         try
         {
             await what(session);
+            _lastApp = session.SourceAppUserModelId;
         }
         catch (Exception e)
         {

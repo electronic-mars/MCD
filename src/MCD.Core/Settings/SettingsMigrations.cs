@@ -27,6 +27,7 @@ public static class SettingsMigrations
                 1 => ToTwo(current),
                 2 => ToThree(current),
                 3 => ToFour(current),
+                4 => ToFive(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -103,6 +104,24 @@ public static class SettingsMigrations
 
         return monitor with { Widgets = [.. flat], Bands = null };
     }
+
+    /// <summary>
+    /// Version 5 puts the launcher on every dock that lacks one, at the start
+    /// of the run. Pinned programs live inside the launcher widget, and a dock
+    /// without one silently showed none of them - which read as pinning being
+    /// broken, not as a widget being absent. Anyone who does not want it
+    /// removes it in the settings like any other widget.
+    /// </summary>
+    private static SettingsModel ToFive(SettingsModel model) => model with
+    {
+        SchemaVersion = 5,
+        Monitors = [.. model.Monitors.Select(WithLauncherAnywhere)],
+    };
+
+    private static MonitorConfig WithLauncherAnywhere(MonitorConfig monitor) =>
+        monitor.Widgets.Any(w => w.TypeId == "mcd.launcher")
+            ? monitor
+            : monitor with { Widgets = [WidgetConfig.New("mcd.launcher"), .. monitor.Widgets] };
 
     private static MonitorConfig WithTemperature(MonitorConfig monitor) =>
         Add(monitor, "mcd.temperature", atStart: false);

@@ -289,6 +289,7 @@ public partial class App : Application
         services.AddSingleton<ISensorProvider, MemoryProvider>();
         services.AddSingleton<ISensorProvider, NvidiaGpuProvider>();
         services.AddSingleton<ISensorProvider, StorageTemperatureProvider>();
+        services.AddSingleton<ISensorProvider, AcpiThermalProvider>();
 
         // Held by its own type as well, because the settings page has to be able
         // to say why it is not reading anything, and "off" and "HWiNFO is not

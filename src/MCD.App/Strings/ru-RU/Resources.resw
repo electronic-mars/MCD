@@ -47,7 +47,7 @@
     <value>Один док на каждый экран. Все изменения сразу применяются к панели. Чтобы переместить виджет, перетащите его прямо на панели.</value>
   </data>
   <data name="BarLiveTitle.Text" xml:space="preserve">
-    <value>Панель вживую</value>
+    <value>ПАНЕЛЬ ВЖИВУЮ</value>
   </data>
   <data name="PreviewEmpty.Text" xml:space="preserve">
     <value>Этот док пуст. Добавьте виджет ниже.</value>
@@ -86,7 +86,7 @@
     <value>Компактный</value>
   </data>
   <data name="BehaviourLabel.Text" xml:space="preserve">
-    <value>Поведение</value>
+    <value>Скрывается, пока не наведён указатель</value>
   </data>
   <data name="ModeVisibleItem.Content" xml:space="preserve">
     <value>Всегда на экране</value>
@@ -95,7 +95,7 @@
     <value>Скрывается, пока не наведён указатель</value>
   </data>
   <data name="WidgetsTitle.Text" xml:space="preserve">
-    <value>Виджеты</value>
+    <value>ВИДЖЕТЫ</value>
   </data>
   <data name="AddWidgetButton.Content" xml:space="preserve">
     <value>Добавить виджет</value>
@@ -226,7 +226,7 @@
     <value>Адрес</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
-    <value>Текущие показания</value>
+    <value>ТЕКУЩИЕ ПОКАЗАНИЯ</value>
   </data>
 
   <!-- Страница «Мониторы» -->
@@ -594,5 +594,29 @@
   </data>
   <data name="RestartNowText.Text" xml:space="preserve">
     <value>Перезапустить сейчас</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>Кнопки всегда управляют</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Тем, кто играет (по правилу)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>Кнопки всегда управляют: {0}</value>
+  </data>
+  <data name="DockCompact.OnContent" xml:space="preserve">
+    <value>Компактный</value>
+  </data>
+  <data name="DockCompact.OffContent" xml:space="preserve">
+    <value>Обычный</value>
+  </data>
+  <data name="DockAutoHide.OnContent" xml:space="preserve">
+    <value>Вкл.</value>
+  </data>
+  <data name="DockAutoHide.OffContent" xml:space="preserve">
+    <value>Выкл.</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>Закрепить на панели</value>
   </data>
 </root>

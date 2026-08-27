@@ -10,7 +10,10 @@
          between widgets is how the settings are reached. -->
     <Grid
         x:Name="Root"
+        AllowDrop="True"
         Background="Transparent"
+        DragOver="OnDragOverFiles"
+        Drop="OnDropFiles"
         RightTapped="OnRightTapped">
 
         <!-- Everything that is drawn lives in here, one level in from the root.
