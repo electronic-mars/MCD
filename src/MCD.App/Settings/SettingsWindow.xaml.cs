@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -74,7 +74,6 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private readonly Stack<(string StableId, MonitorConfig Before, string Label)> _undo = new();
     private readonly ObservableCollection<IconRow> _icons = [];
-    private readonly ObservableCollection<LauncherRow> _launcher = [];
     private readonly ObservableCollection<SensorRow> _readings = [];
     private readonly DispatcherQueueTimer _refresh;
 
@@ -112,7 +111,6 @@ public sealed partial class SettingsWindow : Window
 
         MonitorList.ItemsSource = _known;
         IconList.ItemsSource = _icons;
-        LauncherList.ItemsSource = _launcher;
         SensorList.ItemsSource = _readings;
         VersionText.Text = string.Format(
             CultureInfo.CurrentCulture, Loc.Tr("VersionFormat", "Version {0}"), AppInfo.Version);
@@ -173,12 +171,6 @@ public sealed partial class SettingsWindow : Window
 
         _known.Clear();
         _icons.Clear();
-        _launcher.Clear();
-
-        foreach (LaunchItem item in _settings.Current.App.Launcher)
-        {
-            _launcher.Add(new LauncherRow(item));
-        }
 
         AppSettings look = _settings.Current.App;
 
@@ -337,10 +329,231 @@ public sealed partial class SettingsWindow : Window
         DockBody.IsHitTestVisible = dock.Enabled;
 
         ShowPreview(dock);
+        RefreshGallery(dock);
         RefreshInspector();
         ShowUndo();
 
         _filling = false;
+    }
+
+    // ---------------- the gallery: everything that can go on the bar ----------------
+
+    /// <summary>The offer in hand while a gallery chip is being dragged.</summary>
+    private WidgetOffer? _gOffer;
+    private FrameworkElement? _gChip;
+    private Point _gAt;
+    private bool _gMoving;
+
+    /// <summary>
+    /// One chip per offer: its icon, its name, and a tick when the chosen dock
+    /// already shows it. A click adds or removes; a drag onto the picture above
+    /// puts it in that exact slot.
+    /// </summary>
+    private void RefreshGallery(MonitorConfig dock)
+    {
+        Gallery.Children.Clear();
+
+        foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
+        {
+            bool on = dock.Widgets.Any(offer.Matches);
+
+            var shape = new Microsoft.UI.Xaml.Shapes.Path
+            {
+                Data = IconRow.Draw(offer.Icon),
+                Stroke = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"],
+                StrokeThickness = 1.5,
+                StrokeLineJoin = PenLineJoin.Round,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Round,
+            };
+
+            var canvas = new Canvas { Width = 24, Height = 24 };
+            canvas.Children.Add(shape);
+
+            var row = new Grid { ColumnSpacing = 8, VerticalAlignment = VerticalAlignment.Center };
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            var box = new Viewbox { Width = 16, Height = 16, Child = canvas };
+
+            var name = new TextBlock
+            {
+                Text = offer.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+            };
+
+            Grid.SetColumn(name, 1);
+
+            var tick = new FontIcon
+            {
+                FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                Glyph = "",
+                FontSize = 12,
+                Foreground = (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"],
+                Visibility = on ? Visibility.Visible : Visibility.Collapsed,
+            };
+
+            Grid.SetColumn(tick, 2);
+            row.Children.Add(box);
+            row.Children.Add(name);
+            row.Children.Add(tick);
+
+            var chip = new Border
+            {
+                Margin = new Thickness(0, 0, 8, 8),
+                Padding = new Thickness(10, 0, 10, 0),
+                Background = (Brush)Application.Current.Resources[
+                    on ? "SubtleFillColorSecondaryBrush" : "SubtleFillColorTransparentBrush"],
+                BorderBrush = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"],
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(6),
+                Child = row,
+            };
+
+            ToolTipService.SetToolTip(chip, offer.Description);
+
+            WidgetOffer chosen = offer;
+            chip.PointerPressed += (s, e) => OnChipPressed(chip, chosen, e);
+            chip.PointerMoved += OnChipMoved;
+            chip.PointerReleased += (s, e) => OnChipReleased(chosen, e);
+            chip.PointerCanceled += (_, _) => EndChipDrag();
+
+            Gallery.Children.Add(chip);
+        }
+    }
+
+    private void OnChipPressed(FrameworkElement chip, WidgetOffer offer, PointerRoutedEventArgs e)
+    {
+        _gOffer = offer;
+        _gChip = chip;
+        _gAt = e.GetCurrentPoint(Preview).Position;
+        _gMoving = false;
+        chip.CapturePointer(e.Pointer);
+    }
+
+    private void OnChipMoved(object sender, PointerRoutedEventArgs e)
+    {
+        if (_gOffer is null)
+        {
+            return;
+        }
+
+        Point at = e.GetCurrentPoint(Preview).Position;
+
+        if (!_gMoving)
+        {
+            if (Math.Abs(at.X - _gAt.X) + Math.Abs(at.Y - _gAt.Y) < 6)
+            {
+                return;
+            }
+
+            _gMoving = true;
+
+            if (_gChip is not null)
+            {
+                _gChip.Opacity = 0.5;
+            }
+        }
+
+        // The marker lights in the picture while the chip is over it - the
+        // same marker a widget already on the bar drags against.
+        if (OverPreview(at))
+        {
+            ShowPreviewMark(at);
+        }
+        else
+        {
+            PreviewOverlay.Children.Remove(_pMark);
+            _pCaret = -1;
+        }
+    }
+
+    private void OnChipReleased(WidgetOffer offer, PointerRoutedEventArgs e)
+    {
+        if (_gOffer is null)
+        {
+            return;
+        }
+
+        Point at = e.GetCurrentPoint(Preview).Position;
+
+        if (!_gMoving)
+        {
+            ToggleOffer(offer);
+        }
+        else if (OverPreview(at) && _pCaret >= 0 && Dock() is { } dock)
+        {
+            InsertAtCaret(dock, offer.Make(), offer.Name);
+        }
+
+        EndChipDrag();
+    }
+
+    private void EndChipDrag()
+    {
+        if (_gChip is not null)
+        {
+            _gChip.Opacity = 1;
+            _gChip.ReleasePointerCaptures();
+        }
+
+        PreviewOverlay.Children.Remove(_pMark);
+        _gOffer = null;
+        _gChip = null;
+        _gMoving = false;
+        _pCaret = -1;
+    }
+
+    private bool OverPreview(Point at) =>
+        at.X >= 0 && at.Y >= 0 && at.X < Preview.ActualWidth && at.Y < Preview.ActualHeight;
+
+    /// <summary>A plain click on a chip: put it on the bar, or take it off.</summary>
+    private void ToggleOffer(WidgetOffer offer)
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        if (dock.Widgets.FirstOrDefault(offer.Matches) is { } present)
+        {
+            Rearrange(
+                dock.StableId,
+                widgets => [.. widgets.Where(w => w.InstanceId != present.InstanceId)],
+                Loc.Tr("UndoRemovedOne", "removed"));
+            return;
+        }
+
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets, offer.Make()],
+            string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), offer.Name));
+    }
+
+    /// <summary>Puts a new entry where the caret in the picture points.</summary>
+    private void InsertAtCaret(MonitorConfig dock, WidgetConfig entry, string name)
+    {
+        List<WidgetPreview> drawn = [.. PreviewStrip.Children.OfType<WidgetPreview>()];
+
+        // Placed after the last drawn widget ahead of the marker, so an entry
+        // this build cannot draw keeps its place in the run.
+        List<WidgetConfig> list = [.. dock.Widgets];
+
+        int where = _pCaret == 0 || drawn.Count == 0
+            ? 0
+            : list.FindIndex(w => w.InstanceId
+                == drawn[Math.Min(_pCaret, drawn.Count) - 1].Widget.Entry.InstanceId) + 1;
+
+        list.Insert(Math.Clamp(where, 0, list.Count), entry);
+
+        Rearrange(
+            dock.StableId,
+            _ => [.. list],
+            string.Format(
+                CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), name));
     }
 
     /// <summary>The options of whatever is selected on the picture above.</summary>
@@ -1105,101 +1318,6 @@ public sealed partial class SettingsWindow : Window
         ShowDock();
     }
 
-    /// <summary>Offers the widgets this build knows, minus any that would duplicate.</summary>
-    private void OnAddWidget(object sender, RoutedEventArgs e)
-    {
-        if (sender is not Button button || Dock() is not { } dock)
-        {
-            return;
-        }
-
-        // A list with the picture and a line about each, rather than three words
-        // in a dropdown. Someone choosing between "Load" and "Temperature" for
-        // the first time cannot tell from the names alone what either one puts
-        // on their bar.
-        var list = new StackPanel { Spacing = 4, MinWidth = 320 };
-        var flyout = new Flyout { Content = list, XamlRoot = Content.XamlRoot };
-
-        foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
-        {
-            bool duplicate = dock.Widgets.Any(offer.Matches);
-
-            var choice = new Button
-            {
-                Padding = new Thickness(12, 10, 12, 10),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-                BorderThickness = new Thickness(0),
-                IsEnabled = !duplicate,
-                Content = Offer(offer, duplicate),
-            };
-
-            WidgetOffer chosen = offer;
-
-            choice.Click += (_, _) =>
-            {
-                flyout.Hide();
-                Rearrange(
-                    dock.StableId,
-                    widgets => [.. widgets, chosen.Make()],
-                    string.Format(
-                        CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), chosen.Name));
-            };
-
-            list.Children.Add(choice);
-        }
-
-        flyout.ShowAt(button);
-    }
-
-    /// <summary>One row of the add-a-widget list: its picture, its name, what it does.</summary>
-    private static FrameworkElement Offer(WidgetOffer type, bool duplicate)
-    {
-        var row = new Grid { ColumnSpacing = 12 };
-        row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
-        var shape = new Microsoft.UI.Xaml.Shapes.Path
-        {
-            Data = IconRow.Draw(type.Icon),
-            Stroke = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"],
-            StrokeThickness = 1.5,
-            StrokeLineJoin = PenLineJoin.Round,
-            StrokeStartLineCap = PenLineCap.Round,
-            StrokeEndLineCap = PenLineCap.Round,
-        };
-
-        var canvas = new Canvas { Width = 24, Height = 24 };
-        canvas.Children.Add(shape);
-
-        var box = new Viewbox
-        {
-            Width = 22,
-            Height = 22,
-            VerticalAlignment = VerticalAlignment.Top,
-            Child = canvas,
-        };
-
-        var words = new StackPanel { Spacing = 2 };
-        words.Children.Add(new TextBlock { Text = type.Name });
-        words.Children.Add(new TextBlock
-        {
-            Text = duplicate
-                ? Loc.Tr("OfferDuplicate", "Already on this bar. A second one would show the same thing.")
-                : type.Description,
-            FontSize = 12,
-            Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"],
-            TextWrapping = TextWrapping.Wrap,
-        });
-
-        Grid.SetColumn(words, 1);
-        row.Children.Add(box);
-        row.Children.Add(words);
-
-        return row;
-    }
-
     /// <summary>The one place a dock's layout is written.</summary>
     private void Rearrange(
         string stableId,
@@ -1306,7 +1424,6 @@ public sealed partial class SettingsWindow : Window
 
         DocksSection.Visibility = Show(tag == "docks");
         AppearanceSection.Visibility = Show(tag == "appearance");
-        LauncherSection.Visibility = Show(tag == "launcher");
         IconsSection.Visibility = Show(tag == "icons");
         SensorsSection.Visibility = Show(tag == "sensors");
         MonitorsSection.Visibility = Show(tag == "monitors");
@@ -1414,72 +1531,6 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>Opens the grid of icons over the button that was pressed.</summary>
-    /// <summary>
-    /// Offers the library for a pinned program's icon, or its own again.
-    /// </summary>
-    private void OnLaunchIconPick(object sender, RoutedEventArgs e)
-    {
-        if (sender is not Button button || button.Tag is not string id)
-        {
-            return;
-        }
-
-        var grid = new GridView
-        {
-            ItemsSource = IconRow.Choices(),
-            SelectionMode = ListViewSelectionMode.Single,
-            MaxWidth = 320,
-            MaxHeight = 300,
-            ItemTemplate = (DataTemplate)Root.Resources["IconChoiceTemplate"],
-        };
-
-        var auto = new Button
-        {
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-        };
-        auto.Content = new TextBlock { Text = Loc.Tr("LaunchIconAuto", "The program's own icon") };
-
-        var flyout = new Flyout
-        {
-            Content = new StackPanel { Spacing = 8, Children = { grid, auto } },
-            XamlRoot = Content.XamlRoot,
-        };
-
-        void Save(string icon)
-        {
-            SettingsModel current = _settings.Current;
-
-            _settings.Commit(
-                current with
-                {
-                    App = current.App with
-                    {
-                        Launcher =
-                        [
-                            .. current.App.Launcher.Select(
-                                i => i.Id == id ? i with { Icon = icon } : i)
-                        ],
-                    },
-                },
-                WriteReason.UserAction);
-
-            _log.LogInformation("settings.launcher icon {Id} -> {Icon}", id, icon);
-            flyout.Hide();
-        }
-
-        grid.SelectionChanged += (_, args) =>
-        {
-            if (args.AddedItems.FirstOrDefault() is IconChoice picked)
-            {
-                Save(picked.Name);
-            }
-        };
-
-        auto.Click += (_, _) => Save(string.Empty);
-
-        flyout.ShowAt(button);
-    }
-
     private void OnPickIcon(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not string id)
@@ -1535,19 +1586,25 @@ public sealed partial class SettingsWindow : Window
 
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
 
-    /// <summary>Pins whatever is in the boxes.</summary>
     /// <summary>The pin dialog's fields, alive only while it is open.</summary>
     private TextBox? _newTarget;
     private TextBox? _newName;
 
-    /// <summary>Asks what to pin, then pins it.</summary>
+    /// <summary>Asks what to pin, then pins it to the chosen dock.</summary>
     /// <remarks>
-    /// Built here rather than declared in the window's tree: a ContentDialog
-    /// sitting unopened inside a window has been seen to hang that window's
-    /// close, and a dialog needs no place in a tree it only ever covers.
+    /// This is the way in for an address, which has no file to drag onto the
+    /// bar. Built here rather than declared in the window's tree: a
+    /// ContentDialog sitting unopened inside a window has been seen to hang
+    /// that window's close, and a dialog needs no place in a tree it only
+    /// ever covers.
     /// </remarks>
     private async void OnPinDialog(object sender, RoutedEventArgs e)
     {
+        if (Dock() is null)
+        {
+            return;
+        }
+
         _newTarget = new TextBox
         {
             Header = Loc.Tr("PinTargetHeader", "Program, folder or address"),
@@ -1580,95 +1637,36 @@ public sealed partial class SettingsWindow : Window
 
         bool add = await dialog.ShowAsync() == ContentDialogResult.Primary;
 
-        if (add)
-        {
-            AddLaunchItem();
-        }
-
+        string target = _newTarget.Text.Trim();
+        string name = _newName.Text.Trim();
         _newTarget = null;
         _newName = null;
-    }
 
-    private void AddLaunchItem()
-    {
-        string target = _newTarget?.Text.Trim() ?? string.Empty;
-
-        if (target.Length == 0)
+        if (!add || target.Length == 0 || Dock() is not { } dock)
         {
             return;
         }
 
-        string name = _newName?.Text.Trim() ?? string.Empty;
+        WidgetConfig pin = IconWidget.Pin(target);
 
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with
+        if (name.Length > 0)
+        {
+            pin = pin with
             {
-                App = current.App with
-                {
-                    Launcher =
-                    [
-                        .. current.App.Launcher,
-                        LaunchItem.For(target, name.Length > 0 ? name : LauncherRow.NameFor(target)),
-                    ],
-                },
-            },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.launcher added {Target}", target);
-        Reload();
-    }
-
-    private void OnRemoveLaunchItem(object sender, RoutedEventArgs e)
-    {
-        if ((sender as FrameworkElement)?.Tag is not string id)
-        {
-            return;
+                Config = WidgetOptions.Merge(
+                    pin.Config, ("name", System.Text.Json.Nodes.JsonValue.Create(name))),
+            };
         }
 
-        SettingsModel current = _settings.Current;
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets, pin],
+            string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("UndoAdded", "added {0}"),
+                name.Length > 0 ? name : IconWidget.NameFor(target)));
 
-        _settings.Commit(
-            current with
-            {
-                App = current.App with { Launcher = [.. current.App.Launcher.Where(i => i.Id != id)] },
-            },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.launcher removed {Id}", id);
-        Reload();
-    }
-
-    /// <summary>Moves one item one place earlier in the list.</summary>
-    /// <remarks>
-    /// A button rather than dragging. The order matters enough to be adjustable
-    /// and not enough to be worth a drag-and-drop that has to work on a list, on
-    /// a bar, and between the two.
-    /// </remarks>
-    private void OnMoveLaunchItem(object sender, RoutedEventArgs e)
-    {
-        if ((sender as FrameworkElement)?.Tag is not string id)
-        {
-            return;
-        }
-
-        SettingsModel current = _settings.Current;
-        List<LaunchItem> items = [.. current.App.Launcher];
-        int at = items.FindIndex(i => i.Id == id);
-
-        if (at <= 0)
-        {
-            return;
-        }
-
-        (items[at - 1], items[at]) = (items[at], items[at - 1]);
-
-        _settings.Commit(
-            current with { App = current.App with { Launcher = [.. items] } },
-            WriteReason.UserAction);
-
-        Reload();
+        _log.LogInformation("settings.pin added {Target}", target);
     }
 
     /// <summary>Fills the address box from a file the user picks.</summary>
@@ -1697,7 +1695,7 @@ public sealed partial class SettingsWindow : Window
 
             if (_newName is not null && _newName.Text.Trim().Length == 0)
             {
-                _newName.Text = LauncherRow.NameFor(file.Path);
+                _newName.Text = IconWidget.NameFor(file.Path);
             }
         }
         catch (Exception ex)

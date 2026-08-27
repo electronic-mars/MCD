@@ -656,7 +656,13 @@
     <value>Следующий</value>
   </data>
   <data name="BarHelp.Text" xml:space="preserve">
-    <value>Перетаскивайте — здесь или на самой панели. Щёлкните виджет, чтобы открыть его настройки. Правый клик по настоящей панели добавляет виджет в точку клика.</value>
+    <value>Перетаскивайте — здесь или на самой панели. Щёлкните виджет, чтобы открыть его настройки. Добавляйте виджеты из списка ниже: щёлкните или перетащите прямо на панель.</value>
+  </data>
+  <data name="GalleryTitle.Text" xml:space="preserve">
+    <value>ВИДЖЕТЫ</value>
+  </data>
+  <data name="PinProgramButton.Text" xml:space="preserve">
+    <value>Закрепить программу…</value>
   </data>
   <data name="RemoveFromBar.Text" xml:space="preserve">
     <value>Убрать с панели</value>

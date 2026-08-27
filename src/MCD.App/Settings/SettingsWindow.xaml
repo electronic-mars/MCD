@@ -119,11 +119,6 @@
 
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="NavDocks" Content="Docks" Icon="View" Tag="docks" />
-                <NavigationViewItem x:Uid="NavLauncher" Content="Launcher" Tag="launcher">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavIcons" Content="Icons" Icon="Emoji2" Tag="icons" />
                 <!-- A glyph rather than a Symbol: the Symbol list is short and has
                      no colour in it, and a name it does not know is not a compile
@@ -210,7 +205,6 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock
                                         x:Uid="BarLiveTitle"
@@ -219,13 +213,8 @@
                                         Style="{StaticResource Micro}"
                                         Text="THE BAR" />
                                     <Button
-                                        x:Uid="AddWidgetButton"
-                                        Grid.Column="1"
-                                        Click="OnAddWidget"
-                                        Content="Add widget" />
-                                    <Button
                                         x:Name="UndoButton"
-                                        Grid.Column="2"
+                                        Grid.Column="1"
                                         Click="OnUndo"
                                         Content="Undo"
                                         IsEnabled="False" />
@@ -234,7 +223,7 @@
                                     x:Uid="BarHelp"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="Drag to rearrange - here or on the bar itself. Click a widget for its options. Right-click the real bar to add a widget where you point."
+                                    Text="Drag to rearrange - here or on the bar itself. Click a widget for its options. Add widgets from the list below: click one, or drag it straight onto the bar."
                                     TextWrapping="Wrap" />
 
                                 <Border
@@ -266,6 +255,40 @@
                                     </Grid>
                                 </Border>
                             </StackPanel>
+
+                            <!-- The gallery: everything that can go on the bar,
+                                 one chip each. A click adds it (or takes it off);
+                                 dragging a chip onto the picture above puts it in
+                                 that exact slot. -->
+                            <TextBlock
+                                x:Uid="GalleryTitle"
+                                Margin="0,8,0,0"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="WIDGETS" />
+                            <Border
+                                Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel Spacing="12">
+                                    <VariableSizedWrapGrid
+                                        x:Name="Gallery"
+                                        ItemHeight="40"
+                                        ItemWidth="176"
+                                        Orientation="Horizontal" />
+                                    <Button Click="OnPinDialog">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="12"
+                                                Glyph="&#xE718;" />
+                                            <TextBlock x:Uid="PinProgramButton" Text="Pin a program..." />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
 
                             <!-- The inspector: whatever widget is selected on the
                                  picture above, its options live here, beside the
@@ -450,89 +473,6 @@
                                 </Grid>
                             </Border>
                         </StackPanel>
-                    </StackPanel>
-
-                    <!-- Launcher -->
-                    <StackPanel x:Name="LauncherSection" Spacing="8" Visibility="Collapsed">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE71D;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
-                            <TextBlock
-                                x:Uid="LauncherTitle"
-                                VerticalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="SemiBold"
-                                Text="Launcher" />
-                        </StackPanel>
-                        <TextBlock
-                            x:Uid="LauncherIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="Programs, folders and pages pinned to the bar. They appear on every dock, in this order."
-                            TextWrapping="Wrap" />
-
-                        <Button
-                            x:Name="PinButton"
-                            Margin="0,8,0,0"
-                            Click="OnPinDialog"
-                            Style="{StaticResource AccentButtonStyle}">
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <FontIcon FontFamily="Segoe MDL2 Assets" FontSize="12" Glyph="&#xE710;" />
-                                <TextBlock x:Uid="PinButtonText" Text="Pin something" />
-                            </StackPanel>
-                        </Button>
-
-                        <ItemsControl x:Name="LauncherList" Margin="0,12,0,0">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="local:LauncherRow">
-                                    <Border
-                                        Margin="0,0,0,8"
-                                        Padding="16,12"
-                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="8">
-                                        <Grid ColumnSpacing="12">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <StackPanel Spacing="2">
-                                                <TextBlock Text="{x:Bind Name}" />
-                                                <TextBlock
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                                    Text="{x:Bind Target}"
-                                                    TextTrimming="CharacterEllipsis" />
-                                            </StackPanel>
-
-                                            <StackPanel
-                                                Grid.Column="1"
-                                                Orientation="Horizontal"
-                                                Spacing="4">
-                                                <Button
-                                                    x:Uid="MoveUpButton"
-                                                    Click="OnMoveLaunchItem"
-                                                    Content="&#xE74A;"
-                                                    FontFamily="Segoe MDL2 Assets"
-                                                    FontSize="12"
-                                                    Tag="{x:Bind Id}"
-                                                    ToolTipService.ToolTip="Move up" />
-                                                <Button
-                                                    x:Uid="PickLaunchIcon"
-                                                    Click="OnLaunchIconPick"
-                                                    Content="Icon"
-                                                    Tag="{x:Bind Id}" />
-                                                <Button
-                                                    x:Uid="RemoveLaunchButton"
-                                                    Click="OnRemoveLaunchItem"
-                                                    Content="Remove"
-                                                    Tag="{x:Bind Id}" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
                     </StackPanel>
 
                     <!-- Appearance -->

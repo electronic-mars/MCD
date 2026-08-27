@@ -656,7 +656,13 @@
     <value>Next</value>
   </data>
   <data name="BarHelp.Text" xml:space="preserve">
-    <value>Drag to rearrange - here or on the bar itself. Click a widget for its options. Right-click the real bar to add a widget where you point.</value>
+    <value>Drag to rearrange - here or on the bar itself. Click a widget for its options. Add widgets from the list below: click one, or drag it straight onto the bar.</value>
+  </data>
+  <data name="GalleryTitle.Text" xml:space="preserve">
+    <value>WIDGETS</value>
+  </data>
+  <data name="PinProgramButton.Text" xml:space="preserve">
+    <value>Pin a program...</value>
   </data>
   <data name="RemoveFromBar.Text" xml:space="preserve">
     <value>Remove from bar</value>
