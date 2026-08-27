@@ -169,7 +169,9 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
 
     private string Name(SensorKey? key) =>
         key is { } k
-            ? Sensors.Catalog.FirstOrDefault(d => d.Key.Equals(k))?.Label ?? k.Value
+            ? Sensors.Catalog.FirstOrDefault(d => d.Key.Equals(k)) is { } sensor
+                ? Names.For(sensor)
+                : k.Value
             : Loc.Tr("LabelTemperature", "Temperature");
 
     internal static string IconFor(HardwareGroup group) => group switch
@@ -182,8 +184,10 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
         _ => "Temperature",
     };
 
-    private static string Describe(SensorDescriptor sensor) =>
-        sensor.Label == sensor.Hardware ? sensor.Label : $"{sensor.Label} — {sensor.Hardware}";
+    private string Describe(SensorDescriptor sensor) =>
+        Names.For(sensor) == sensor.Hardware
+            ? Names.For(sensor)
+            : $"{Names.For(sensor)} — {sensor.Hardware}";
 
     private static TextBlock Explain() => new()
     {

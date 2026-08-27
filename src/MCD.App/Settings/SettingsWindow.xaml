@@ -657,7 +657,24 @@
                             Text="Pick the picture each reading is drawn with. The choice applies to every dock."
                             TextWrapping="Wrap" />
 
-                        <ItemsControl x:Name="IconList" Margin="0,8,0,0">
+                        <StackPanel
+                            Margin="0,16,0,0"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="13"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Glyph="&#xE9D9;" />
+                            <TextBlock
+                                x:Uid="ReadingIconsTitle"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="READINGS" />
+                        </StackPanel>
+
+                        <ItemsControl x:Name="IconList">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="local:IconRow">
                                     <Border
@@ -673,7 +690,14 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock VerticalAlignment="Center" Text="{x:Bind Label}" />
+                                            <StackPanel VerticalAlignment="Center" Spacing="2">
+                                                <TextBlock Text="{x:Bind Label}" />
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind Explain}"
+                                                    TextWrapping="Wrap" />
+                                            </StackPanel>
 
                                             <Button
                                                 Grid.Column="1"
@@ -697,6 +721,39 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+
+                        <!-- Where a pinned program's own icon is changed. It
+                             belongs to one dock, so it is set where that dock
+                             is - not in a list of every icon on the machine. -->
+                        <StackPanel
+                            Margin="0,16,0,0"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="13"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Glyph="&#xE71D;" />
+                            <TextBlock
+                                x:Uid="PinnedIconsTitle"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="PINNED PROGRAMS" />
+                        </StackPanel>
+                        <Border
+                            Padding="16"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <TextBlock
+                                x:Uid="PinnedIconsHint"
+                                FontSize="12"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings."
+                                TextWrapping="Wrap" />
+                        </Border>
                     </StackPanel>
 
                     <!-- Sensors -->
@@ -738,37 +795,49 @@
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             TextWrapping="Wrap" />
 
+                        <!-- Double-click a name to change it: the sensor's own
+                             name is whatever its maker put in the firmware. -->
                         <ItemsControl x:Name="SensorList" Margin="0,8,0,0">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="local:SensorRow">
-                                    <Grid
-                                        Padding="12,7"
-                                        ColumnSpacing="12">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                                    <Border
+                                        Margin="0,0,0,6"
+                                        Padding="16,12"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        DoubleTapped="OnRenameSensor"
+                                        Tag="{x:Bind Key.Value}">
+                                        <Grid ColumnSpacing="12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                        <StackPanel>
-                                            <TextBlock Text="{x:Bind Label}" />
-                                            <TextBlock
-                                                FontSize="12"
-                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                Text="{x:Bind Explain}"
-                                                TextWrapping="Wrap" />
-                                            <TextBlock
-                                                FontSize="12"
-                                                Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                                Text="{x:Bind Hardware}"
-                                                TextTrimming="CharacterEllipsis" />
-                                        </StackPanel>
+                                            <StackPanel Spacing="2">
+                                                <TextBlock
+                                                    Text="{x:Bind Label, Mode=OneWay}"
+                                                    ToolTipService.ToolTip="{x:Bind Key.Value}" />
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind Explain}"
+                                                    TextWrapping="Wrap" />
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                    Text="{x:Bind Hardware}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
 
-                                        <TextBlock
-                                            Grid.Column="1"
-                                            VerticalAlignment="Center"
-                                            FontFamily="Consolas"
-                                            Text="{x:Bind Value, Mode=OneWay}" />
-                                    </Grid>
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{x:Bind Value, Mode=OneWay}" />
+                                        </Grid>
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -785,15 +854,59 @@
                                 FontWeight="SemiBold"
                                 Text="About" />
                         </StackPanel>
-                        <TextBlock x:Name="VersionText" />
                         <TextBlock
                             x:Uid="AboutIntro"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."
                             TextWrapping="Wrap" />
 
+                        <!-- The program's own card, the way Master Audio
+                             Switcher opens its About: the mark, the name, the
+                             version, and nothing else competing with them. -->
                         <Border
                             Margin="0,8,0,0"
+                            Padding="20"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                <Image
+                                    Width="48"
+                                    Height="48"
+                                    VerticalAlignment="Center"
+                                    Source="ms-appx:///Assets/icon.ico" />
+                                <StackPanel VerticalAlignment="Center" Spacing="2">
+                                    <TextBlock
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Text="Master Control Dock" />
+                                    <TextBlock
+                                        x:Name="VersionText"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel
+                            Margin="0,16,0,0"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="13"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Glyph="&#xE7E8;" />
+                            <TextBlock
+                                x:Uid="StartupTitle"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="STARTUP" />
+                        </StackPanel>
+
+                        <Border
                             Padding="16,4"
                             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -825,25 +938,64 @@
                         </Border>
 
                         <StackPanel
-                            Margin="0,8,0,0"
+                            Margin="0,16,0,0"
                             Orientation="Horizontal"
                             Spacing="8">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="13"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Glyph="&#xE8B7;" />
+                            <TextBlock
+                                x:Uid="FilesTitle"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="ITS OWN FILES" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="8">
                             <Button x:Uid="OpenLogsButton" Click="OnOpenLogs" Content="Open the log folder" />
                             <Button x:Uid="OpenConfigButton" Click="OnOpenConfig" Content="Open the settings folder" />
                         </StackPanel>
 
-                        <TextBlock
-                            x:Uid="ExitHint"
-                            Margin="0,24,0,0"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."
-                            TextWrapping="Wrap" />
+                        <StackPanel
+                            Margin="0,16,0,0"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="13"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Glyph="&#xE7E8;" />
+                            <TextBlock
+                                x:Uid="QuitTitle"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource BraunTx3}"
+                                Style="{StaticResource Micro}"
+                                Text="QUITTING" />
+                        </StackPanel>
 
-                        <Button
-                            x:Uid="ExitButton"
-                            Margin="0,8,0,0"
-                            Click="OnExit"
-                            Content="Exit Master Control Dock" />
+                        <Border
+                            Padding="16"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel Spacing="12">
+                                <TextBlock
+                                    x:Uid="ExitHint"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."
+                                    TextWrapping="Wrap" />
+                                <Button
+                                    x:Uid="ExitButton"
+                                    HorizontalAlignment="Left"
+                                    Click="OnExit"
+                                    Content="Exit Master Control Dock" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
 
                 </StackPanel>

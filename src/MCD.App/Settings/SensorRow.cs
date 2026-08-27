@@ -1,5 +1,6 @@
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Mcd.App.Widgets;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
 
@@ -11,25 +12,53 @@ namespace Mcd.App.Settings;
 /// anyone having to open a log file. That question is the whole reason the
 /// PowerToys dock bug was impossible for its users to report usefully.
 /// </remarks>
-public sealed partial class SensorRow(SensorDescriptor sensor) : ObservableObject
+public sealed partial class SensorRow : ObservableObject
 {
-    public SensorKey Key { get; } = sensor.Key;
+    private readonly SensorDescriptor _sensor;
+    private readonly Action<SensorRow, string> _rename;
 
-    public string Label { get; } = sensor.Label;
+    public SensorRow(SensorDescriptor sensor, SensorNames names, Action<SensorRow, string> rename)
+    {
+        _sensor = sensor;
+        _rename = rename;
 
-    /// <summary>The hardware, and the source it came through.</summary>
-    public string Hardware { get; } = $"{sensor.Hardware} · {Source(sensor.Key)}";
+        Key = sensor.Key;
+        Label = names.For(sensor);
+        Explain = ExplainOf(sensor);
+        Hardware = sensor.Hardware;
+        Unit = sensor.Unit;
+    }
+
+    public SensorKey Key { get; }
+
+    /// <summary>What this reading is called - the person's own name, if they gave one.</summary>
+    [ObservableProperty]
+    public partial string Label { get; set; }
+
+    /// <summary>What the part itself is, under the name.</summary>
+    public string Hardware { get; }
 
     /// <summary>
-    /// What this reading means, in ordinary words. The label above it is the
-    /// part's own name, which is a model number as often as not.
+    /// What this reading means, in ordinary words. The name above it is the
+    /// part's, which is a model number as often as not.
     /// </summary>
-    public string Explain { get; } = ExplainOf(sensor);
+    public string Explain { get; }
 
     [ObservableProperty]
     public partial string Value { get; set; } = "--";
 
-    private string Unit { get; } = sensor.Unit;
+    /// <summary>True while the name is being typed rather than read.</summary>
+    [ObservableProperty]
+    public partial bool Renaming { get; set; }
+
+    private string Unit { get; }
+
+    /// <summary>Takes the typed name, or puts the old one back when it is empty.</summary>
+    public void Rename(string typed)
+    {
+        Renaming = false;
+        _rename(this, typed.Trim());
+    }
 
     public void Update(SensorSnapshot snapshot)
     {
@@ -39,10 +68,6 @@ public sealed partial class SensorRow(SensorDescriptor sensor) : ObservableObjec
             ? reading.Value.ToString("F0", CultureInfo.InvariantCulture) + " " + Unit
             : "--";
     }
-
-    /// <summary>The provider's name, which is the first part of every key it makes.</summary>
-    private static string Source(SensorKey key) =>
-        key.Value.Split('/', 2)[0];
 
     private static string ExplainOf(SensorDescriptor sensor) => sensor.Kind switch
     {

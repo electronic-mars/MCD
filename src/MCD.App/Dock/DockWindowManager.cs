@@ -189,6 +189,7 @@ public sealed class DockWindowManager : IDisposable
         return new WidgetContext(
             _sensors,
             new IconChoices(app.Icons),
+            new SensorNames(_settings.Current.Sensors.Names),
             _loggers.CreateLogger<WidgetContext>())
         {
             Accent = app.Accent == "windows",

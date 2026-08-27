@@ -278,14 +278,13 @@ public sealed partial class SettingsWindow : Window
         int chosen = Math.Max(0, monitors.ToList().FindIndex(m => m.StableId == _editing));
         _editing = monitors.Length > 0 ? monitors[chosen].StableId : null;
 
-        var tabs = new List<(string Glyph, string Label)>();
+        var tabs = new List<(string Glyph, string Label, bool On)>();
 
         for (int i = 0; i < monitors.Length; i++)
         {
-            tabs.Add((
-                "",
-                Label(monitors[i], monitors, live, i)
-                    + (monitors[i].Enabled ? string.Empty : Loc.Tr("PickerOff", " — off"))));
+            // A lamp says whether that screen has a bar of its own, so the
+            // tile stays the width of the screen's name.
+            tabs.Add(("", Label(monitors[i], monitors, live, i), monitors[i].Enabled));
         }
 
         DisplayTabs.Content = Seg.Tabs(tabs, chosen, i =>
@@ -630,6 +629,7 @@ public sealed partial class SettingsWindow : Window
         new WidgetContext(
             _sensors,
             new IconChoices(_settings.Current.App.Icons),
+            new SensorNames(_settings.Current.Sensors.Names),
             _log),
         entry);
 
@@ -666,7 +666,15 @@ public sealed partial class SettingsWindow : Window
     /// leave. Not pretty, but honest about what a restart is.
     /// </remarks>
     /// <summary>Graphite body, or cream on the light theme - the Braun ground.</summary>
-    private void PaintBody() =>
+    private void PaintBody()
+    {
+        // The tiles are built in code and cannot reach this window's own
+        // dictionary, so they are told which way round the palette goes.
+        Seg.Theme = Root.ActualTheme;
+        PaintGround();
+    }
+
+    private void PaintGround() =>
         Root.Background = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
             ? Windows.UI.Color.FromArgb(255, 0xED, 0xEA, 0xE3)
             : Windows.UI.Color.FromArgb(255, 0x1C, 0x1F, 0x24));
@@ -1050,9 +1058,11 @@ public sealed partial class SettingsWindow : Window
         {
             _readings.Clear();
 
+            var names = new SensorNames(_settings.Current.Sensors.Names);
+
             foreach (SensorDescriptor sensor in found)
             {
-                _readings.Add(new SensorRow(sensor));
+                _readings.Add(new SensorRow(sensor, names, OnSensorRenamed));
             }
         }
 
@@ -1071,6 +1081,74 @@ public sealed partial class SettingsWindow : Window
                 found.Length,
                 found.Select(d => d.Key.Value.Split('/', 2)[0]).Distinct().Count());
 
+    }
+
+    /// <summary>
+    /// Asks what to call a reading, on a double-click of its row.
+    /// </summary>
+    /// <remarks>
+    /// The name given here is used everywhere the reading appears, the bar
+    /// included: a drive called "Games" on this page is called "Games" on the
+    /// dock, because there is no version of this where two names for one thing
+    /// is the friendlier answer. An empty box gives the part's own name back.
+    /// </remarks>
+    private async void OnRenameSensor(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.Tag is not string key
+            || _readings.FirstOrDefault(r => r.Key.Value == key) is not { } row)
+        {
+            return;
+        }
+
+        var box = new TextBox
+        {
+            Header = Loc.Tr("RenameHeader", "What to call this reading"),
+            Text = row.Label,
+            SelectionStart = 0,
+            SelectionLength = row.Label.Length,
+        };
+
+        var dialog = new ContentDialog
+        {
+            Title = row.Hardware,
+            PrimaryButtonText = Loc.Tr("RenameSave", "Rename"),
+            SecondaryButtonText = Loc.Tr("RenameReset", "Its own name"),
+            CloseButtonText = Loc.Tr("PinCancel", "Cancel"),
+            DefaultButton = ContentDialogButton.Primary,
+            XamlRoot = Root.XamlRoot,
+            Content = new StackPanel { MinWidth = 320, Children = { box } },
+        };
+
+        ContentDialogResult answer = await dialog.ShowAsync();
+
+        if (answer == ContentDialogResult.Primary)
+        {
+            row.Rename(box.Text);
+        }
+        else if (answer == ContentDialogResult.Secondary)
+        {
+            row.Rename(string.Empty);
+        }
+    }
+
+    private void OnSensorRenamed(SensorRow row, string name)
+    {
+        SettingsModel current = _settings.Current;
+
+        ImmutableDictionary<string, string> names = name.Length > 0
+            ? current.Sensors.Names.SetItem(row.Key.Value, name)
+            : current.Sensors.Names.Remove(row.Key.Value);
+
+        _settings.Commit(
+            current with { Sensors = current.Sensors with { Names = names } },
+            WriteReason.UserAction);
+
+        _log.LogInformation("settings.sensor named {Key} -> {Name}", row.Key.Value, name);
+
+        // Rebuilt rather than patched: the row's own name comes from the same
+        // rules the bar uses, and "the part's own name" is one of them.
+        _readings.Clear();
+        ShowReadings();
     }
 
     private string Chosen(string id, string fallback) =>

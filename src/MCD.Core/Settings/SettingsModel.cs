@@ -237,6 +237,18 @@ public sealed record SensorSettings
     public ImmutableDictionary<string, string> SourceOverrides { get; init; } =
         ImmutableDictionary<string, string>.Empty;
 
+    /// <summary>
+    /// What a person has decided to call a reading, by its sensor key.
+    /// </summary>
+    /// <remarks>
+    /// A sensor's own name is whatever its maker wrote in the firmware -
+    /// "Composite", "CPU Package", a drive's model number - and those are for
+    /// people who already know what they are looking at. Anything named here
+    /// is used everywhere the reading appears, the bar included.
+    /// </remarks>
+    public ImmutableDictionary<string, string> Names { get; init; } =
+        ImmutableDictionary<string, string>.Empty;
+
     public string LhmHttpEndpoint { get; init; } = "http://localhost:8085/data.json";
 
     /// <summary>Drives whose temperature IOCTL timed out twice; not asked again.</summary>

@@ -99,7 +99,7 @@
     <value>Icons</value>
   </data>
   <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Pick the picture each widget's reading is drawn with - on every dock. A pinned program's icon is changed on the Docks page: click its icon on the bar picture there.</value>
+    <value>Pick the picture each reading is drawn with. The choice applies to every dock.</value>
   </data>
   <!-- Sensors page -->
   <data name="SensorsTitle.Text" xml:space="preserve">
@@ -501,7 +501,7 @@
     <value>Next</value>
   </data>
   <data name="BarHelp.Text" xml:space="preserve">
-    <value>Drag to rearrange - here or on the bar itself. Click a widget for its options. To add one, drag it from the list below straight onto the bar; drag it off the bar to remove it.</value>
+    <value>The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings.</value>
   </data>
   <data name="GalleryTitle.Text" xml:space="preserve">
     <value>WIDGETS</value>
@@ -513,7 +513,7 @@
     <value>Remove from bar</value>
   </data>
   <data name="InspectorHint.Text" xml:space="preserve">
-    <value>Click a widget on the bar above to see its options.</value>
+    <value>Right-click a widget on the bar and choose Settings to set it up here.</value>
   </data>
   <data name="InspectorNone" xml:space="preserve">
     <value>WIDGET</value>
@@ -640,5 +640,68 @@
   </data>
   <data name="ThemeLabel.Text" xml:space="preserve">
     <value>Theme</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>How busy the processor is.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>How much of the memory is in use.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>What the machine is sending.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>What the machine is receiving.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>How busy the graphics chip is.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Every temperature widget, whichever part it watches.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>Graphics</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Drive</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Motherboard</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>The whole part</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>What to call this reading</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Its own name</value>
+  </data>
+  <data name="ReadingIconsTitle.Text" xml:space="preserve">
+    <value>READINGS</value>
+  </data>
+  <data name="PinnedIconsTitle.Text" xml:space="preserve">
+    <value>PINNED PROGRAMS</value>
+  </data>
+  <data name="PinnedIconsHint.Text" xml:space="preserve">
+    <value>A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings.</value>
+  </data>
+  <data name="StartupTitle.Text" xml:space="preserve">
+    <value>STARTUP</value>
+  </data>
+  <data name="FilesTitle.Text" xml:space="preserve">
+    <value>ITS OWN FILES</value>
+  </data>
+  <data name="QuitTitle.Text" xml:space="preserve">
+    <value>QUITTING</value>
   </data>
 </root>

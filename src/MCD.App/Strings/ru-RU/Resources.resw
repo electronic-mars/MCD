@@ -99,7 +99,7 @@
     <value>Значки</value>
   </data>
   <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Каким значком рисуется каждое показание виджетов — на всех доках. Иконку закреплённой программы меняют на странице «Доки»: щёлкните её на картинке панели.</value>
+    <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех доках.</value>
   </data>
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
@@ -501,7 +501,7 @@
     <value>Следующий</value>
   </data>
   <data name="BarHelp.Text" xml:space="preserve">
-    <value>Перетаскивайте — здесь или на самой панели. Щёлкните виджет, чтобы открыть его настройки. Добавить — перетащите виджет из списка ниже прямо на панель; убрать — утащите его с панели.</value>
+    <value>Панель — это ряд слотов. Тяните виджет вдоль неё, чтобы переставить в свободный слот, или за её пределы, чтобы убрать. Правый клик по слоту добавляет виджет туда, по виджету — открывает его настройки.</value>
   </data>
   <data name="GalleryTitle.Text" xml:space="preserve">
     <value>ВИДЖЕТЫ</value>
@@ -513,7 +513,7 @@
     <value>Убрать с панели</value>
   </data>
   <data name="InspectorHint.Text" xml:space="preserve">
-    <value>Щёлкните виджет на панели выше, чтобы увидеть его настройки.</value>
+    <value>Щёлкните виджет на панели правой кнопкой и выберите «Настройки» — он откроется здесь.</value>
   </data>
   <data name="InspectorNone" xml:space="preserve">
     <value>ВИДЖЕТ</value>
@@ -640,5 +640,68 @@
   </data>
   <data name="ThemeLabel.Text" xml:space="preserve">
     <value>Тема</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>Насколько занят процессор.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>Сколько памяти занято.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>Что машина отправляет.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>Что машина получает.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>Насколько занята видеокарта.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Все виджеты температуры, за какой бы частью они ни следили.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>Процессор</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>Видеокарта</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Накопитель</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Память</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Материнская плата</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>Устройство целиком</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>Как называть это показание</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Переименовать</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Своё имя</value>
+  </data>
+  <data name="ReadingIconsTitle.Text" xml:space="preserve">
+    <value>ПОКАЗАНИЯ</value>
+  </data>
+  <data name="PinnedIconsTitle.Text" xml:space="preserve">
+    <value>ЗАКРЕПЛЁННЫЕ ПРОГРАММЫ</value>
+  </data>
+  <data name="PinnedIconsHint.Text" xml:space="preserve">
+    <value>Закреплённая программа рисуется своей иконкой из Windows. Чтобы заменить её на рисованную, щёлкните программу на панели правой кнопкой и выберите «Настройки».</value>
+  </data>
+  <data name="StartupTitle.Text" xml:space="preserve">
+    <value>ЗАПУСК</value>
+  </data>
+  <data name="FilesTitle.Text" xml:space="preserve">
+    <value>СВОИ ФАЙЛЫ</value>
+  </data>
+  <data name="QuitTitle.Text" xml:space="preserve">
+    <value>ЗАВЕРШЕНИЕ</value>
   </data>
 </root>

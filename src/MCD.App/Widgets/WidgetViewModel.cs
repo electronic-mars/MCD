@@ -20,6 +20,7 @@ namespace Mcd.App.Widgets;
 public sealed record WidgetContext(
     SensorHub Sensors,
     IconChoices Icons,
+    SensorNames Names,
     ILogger Log)
 {
     /// <summary>True when readings are drawn in the accent colour from Windows.</summary>
@@ -134,4 +135,7 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     protected SensorHub Sensors => Context.Sensors;
 
     protected IconChoices Icons => Context.Icons;
+
+    /// <summary>What the readings are called, as the person calls them.</summary>
+    protected SensorNames Names => Context.Names;
 }

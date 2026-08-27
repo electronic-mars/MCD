@@ -35,6 +35,18 @@ public sealed partial class IconRow : ObservableObject
 
     public string Label { get; }
 
+    /// <summary>What this reading is, so a row is not four letters and a button.</summary>
+    public string Explain => Id switch
+    {
+        "cpu" => Loc.Tr("SenseCpuLoad", "How busy the processor is."),
+        "ram" => Loc.Tr("SenseRamLoad", "How much of the memory is in use."),
+        "up" => Loc.Tr("SenseUp", "What the machine is sending."),
+        "down" => Loc.Tr("SenseDown", "What the machine is receiving."),
+        "gpu" => Loc.Tr("SenseGpuLoad", "How busy the graphics chip is."),
+        "temp" => Loc.Tr("SenseAnyTemp", "Every temperature widget, whichever part it watches."),
+        _ => string.Empty,
+    };
+
     public string Icon { get; private set; }
 
     /// <summary>The shape shown on this row's button.</summary>
