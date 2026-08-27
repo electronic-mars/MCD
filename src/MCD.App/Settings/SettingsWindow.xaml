@@ -544,6 +544,11 @@
                                                     Tag="{x:Bind Id}"
                                                     ToolTipService.ToolTip="Move up" />
                                                 <Button
+                                                    x:Uid="PickLaunchIcon"
+                                                    Click="OnLaunchIconPick"
+                                                    Content="Icon"
+                                                    Tag="{x:Bind Id}" />
+                                                <Button
                                                     x:Uid="RemoveLaunchButton"
                                                     Click="OnRemoveLaunchItem"
                                                     Content="Remove"

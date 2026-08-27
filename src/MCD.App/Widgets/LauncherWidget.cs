@@ -100,9 +100,22 @@ public sealed partial class LaunchButton : ObservableObject, IDisposable
         Name = string.IsNullOrWhiteSpace(item.Name) ? item.Target : item.Name;
         Target = item.Target;
         Initial = Name.Length > 0 ? Name[..1].ToUpperInvariant() : "?";
+        Chosen = IconLibrary.Paths.ContainsKey(item.Icon) ? item.Icon : string.Empty;
+        ChosenVisible = Chosen.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        AutoVisible = Chosen.Length > 0 ? Visibility.Collapsed : Visibility.Visible;
 
-        FindIcon();
+        if (Chosen.Length == 0)
+        {
+            FindIcon();
+        }
     }
+
+    /// <summary>A library icon the person chose instead of the extracted one.</summary>
+    public string Chosen { get; }
+
+    public Visibility ChosenVisible { get; }
+
+    public Visibility AutoVisible { get; }
 
     /// <summary>The pinned item's own id, so a dragged icon can say which it is.</summary>
     public string Id { get; }
@@ -119,6 +132,15 @@ public sealed partial class LaunchButton : ObservableObject, IDisposable
 
     [ObservableProperty]
     public partial Visibility Placeholder { get; set; } = Visibility.Visible;
+
+    partial void OnPlaceholderChanged(Visibility value)
+    {
+        // A chosen glyph replaces both the extracted icon and the letter.
+        if (Chosen.Length > 0 && value == Visibility.Visible)
+        {
+            Placeholder = Visibility.Collapsed;
+        }
+    }
 
     [ObservableProperty]
     public partial Thickness Spacing { get; set; }

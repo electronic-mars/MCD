@@ -412,7 +412,21 @@
                         CornerRadius="4"
                         ToolTipService.ToolTip="{x:Bind Name}">
                         <Grid Width="16" Height="16">
-                            <Image Source="{x:Bind Icon, Mode=OneWay}" Stretch="Uniform" />
+                            <Viewbox Visibility="{x:Bind ChosenVisible}">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind Chosen, Converter={StaticResource Icon}, Mode=OneTime}"
+                                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.5" />
+                                </Canvas>
+                            </Viewbox>
+                            <Image
+                                Source="{x:Bind Icon, Mode=OneWay}"
+                                Stretch="Uniform"
+                                Visibility="{x:Bind AutoVisible}" />
                             <!-- Until the icon arrives, and for a target that has
                                  none, the first letter of the name. An empty
                                  square would read as a broken button. -->

@@ -1415,6 +1415,72 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>Opens the grid of icons over the button that was pressed.</summary>
+    /// <summary>
+    /// Offers the library for a pinned program's icon, or its own again.
+    /// </summary>
+    private void OnLaunchIconPick(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not string id)
+        {
+            return;
+        }
+
+        var grid = new GridView
+        {
+            ItemsSource = IconRow.Choices(),
+            SelectionMode = ListViewSelectionMode.Single,
+            MaxWidth = 320,
+            MaxHeight = 300,
+            ItemTemplate = (DataTemplate)Root.Resources["IconChoiceTemplate"],
+        };
+
+        var auto = new Button
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
+        auto.Content = new TextBlock { Text = Loc.Tr("LaunchIconAuto", "The program's own icon") };
+
+        var flyout = new Flyout
+        {
+            Content = new StackPanel { Spacing = 8, Children = { grid, auto } },
+            XamlRoot = Content.XamlRoot,
+        };
+
+        void Save(string icon)
+        {
+            SettingsModel current = _settings.Current;
+
+            _settings.Commit(
+                current with
+                {
+                    App = current.App with
+                    {
+                        Launcher =
+                        [
+                            .. current.App.Launcher.Select(
+                                i => i.Id == id ? i with { Icon = icon } : i)
+                        ],
+                    },
+                },
+                WriteReason.UserAction);
+
+            _log.LogInformation("settings.launcher icon {Id} -> {Icon}", id, icon);
+            flyout.Hide();
+        }
+
+        grid.SelectionChanged += (_, args) =>
+        {
+            if (args.AddedItems.FirstOrDefault() is IconChoice picked)
+            {
+                Save(picked.Name);
+            }
+        };
+
+        auto.Click += (_, _) => Save(string.Empty);
+
+        flyout.ShowAt(button);
+    }
+
     private void OnPickIcon(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not string id)

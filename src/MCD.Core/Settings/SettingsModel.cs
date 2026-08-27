@@ -92,6 +92,12 @@ public sealed record LaunchItem
     /// </summary>
     public string Target { get; init; } = string.Empty;
 
+    /// <summary>
+    /// A drawn icon chosen from the library, by name. Empty means the file's
+    /// own extracted icon, or its first letter when it has none.
+    /// </summary>
+    public string Icon { get; init; } = string.Empty;
+
     public static LaunchItem For(string target, string name) => new()
     {
         Id = Guid.NewGuid().ToString("n"),

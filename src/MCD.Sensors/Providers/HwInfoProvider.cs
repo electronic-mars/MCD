@@ -191,6 +191,8 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
     private HwInfoBlock? Read() =>
         _block?.Copy() is { } bytes ? HwInfoSharedMemory.Parse(bytes) : null;
 
+    private string? _said;
+
     private void Close(string? why)
     {
         _block?.Dispose();
@@ -198,8 +200,12 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
         _sensors = [];
         Trouble = why;
 
-        if (why is not null)
+        // Once per reason, not once per probe: the availability check runs
+        // every half minute for good, and a line it repeats forever is a line
+        // that buries the one that matters.
+        if (why is not null && why != _said)
         {
+            _said = why;
             log.LogInformation("sensors.hwinfo closed: {Why}", why);
         }
     }

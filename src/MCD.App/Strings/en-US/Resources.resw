@@ -703,4 +703,10 @@
   <data name="PickerOff" xml:space="preserve">
     <value> — off</value>
   </data>
+  <data name="PickLaunchIcon.Content" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>The program's own icon</value>
+  </data>
 </root>
