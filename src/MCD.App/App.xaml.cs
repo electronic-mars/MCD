@@ -1,4 +1,4 @@
-using Mcd.App.Dock;
+﻿using Mcd.App.Dock;
 using Mcd.App.Settings;
 using Mcd.Core.Infrastructure;
 using Mcd.Core.Monitors;
@@ -233,8 +233,6 @@ public partial class App : Application
                     _services.GetRequiredService<SettingsService>(),
                     _docks,
                     _services.GetRequiredService<SensorHub>(),
-                    _services.GetRequiredService<HwInfoProvider>(),
-                    _services.GetRequiredService<LhmProvider>(),
                     onExit: () => { Shutdown(); Exit(); });
             }
             catch (Exception e)

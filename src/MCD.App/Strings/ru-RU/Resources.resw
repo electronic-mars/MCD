@@ -108,27 +108,6 @@
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Температуры видеокарты и дисков работают сразу. Процессор и материнская плата подключаются, пока запущен LibreHardwareMonitor (с включённым Remote Web Server) или HWiNFO (с включённой Shared Memory).</value>
   </data>
-  <data name="HwInfoHint.Text" xml:space="preserve">
-    <value>Читает температуры процессора и материнской платы из HWiNFO, если она запущена и в её настройках включена поддержка Shared Memory.</value>
-  </data>
-  <data name="HwInfoSwitch.OnContent" xml:space="preserve">
-    <value>Вкл.</value>
-  </data>
-  <data name="HwInfoSwitch.OffContent" xml:space="preserve">
-    <value>Откл.</value>
-  </data>
-  <data name="LhmHint.Text" xml:space="preserve">
-    <value>Свободная программа с открытым кодом; через неё читаются видеокарты AMD и Intel, материнская плата и её вентиляторы. Включите Remote Web Server в её меню Options.</value>
-  </data>
-  <data name="LhmSwitch.OnContent" xml:space="preserve">
-    <value>Вкл.</value>
-  </data>
-  <data name="LhmSwitch.OffContent" xml:space="preserve">
-    <value>Откл.</value>
-  </data>
-  <data name="LhmAddress.Header" xml:space="preserve">
-    <value>Адрес</value>
-  </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>ТЕКУЩИЕ ПОКАЗАНИЯ</value>
   </data>
@@ -223,15 +202,6 @@
   <data name="SensorsSummary" xml:space="preserve">
     <value>Показаний: {0}, источников: {1}.</value>
   </data>
-  <data name="SourceOff" xml:space="preserve">
-    <value>Откл.</value>
-  </data>
-  <data name="SourceReading" xml:space="preserve">
-    <value>Читается температур: {0}.</value>
-  </data>
-  <data name="SourceLooking" xml:space="preserve">
-    <value>Поиск...</value>
-  </data>
   <!-- Карточки виджетов в списке настроек -->
   <data name="WidgetUnknownSummary" xml:space="preserve">
     <value>Эта версия программы не знает этот виджет. Он остаётся в настройках нетронутым.</value>
@@ -325,7 +295,7 @@
     <value>Самое горячее показание</value>
   </data>
   <data name="TempExplain" xml:space="preserve">
-    <value>Температуры процессора и материнской платы доступны только через драйвер, который приложение из Store содержать не может. Запустите HWiNFO с включённой поддержкой Shared Memory, затем включите её в разделе «Датчики» настроек — и они появятся здесь.</value>
+    <value>Температуры процессора и материнской платы живут за драйвером, который приложение из Store содержать не может. Запустите HWiNFO с включённой Shared Memory или LibreHardwareMonitor с Remote Web Server — и они появятся здесь сами.</value>
   </data>
   <!-- Медиавиджет -->
   <data name="MediaPlayPause" xml:space="preserve">
@@ -553,9 +523,6 @@
   </data>
   <data name="UndoShown" xml:space="preserve">
     <value>показ дока</value>
-  </data>
-  <data name="PickerOff" xml:space="preserve">
-    <value> — выкл</value>
   </data>
   <data name="LaunchIconAuto" xml:space="preserve">
     <value>Собственный значок программы</value>

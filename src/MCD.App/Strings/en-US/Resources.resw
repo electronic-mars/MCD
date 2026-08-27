@@ -108,27 +108,6 @@
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running.</value>
   </data>
-  <data name="HwInfoHint.Text" xml:space="preserve">
-    <value>Reads processor and motherboard temperatures from HWiNFO, if it is running with Shared Memory Support switched on in its own settings.</value>
-  </data>
-  <data name="HwInfoSwitch.OnContent" xml:space="preserve">
-    <value>On</value>
-  </data>
-  <data name="HwInfoSwitch.OffContent" xml:space="preserve">
-    <value>Off</value>
-  </data>
-  <data name="LhmHint.Text" xml:space="preserve">
-    <value>Free and open source, and the way to read AMD and Intel graphics, the motherboard and its fans. Switch on its Remote Web Server under Options.</value>
-  </data>
-  <data name="LhmSwitch.OnContent" xml:space="preserve">
-    <value>On</value>
-  </data>
-  <data name="LhmSwitch.OffContent" xml:space="preserve">
-    <value>Off</value>
-  </data>
-  <data name="LhmAddress.Header" xml:space="preserve">
-    <value>Address</value>
-  </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>LIVE READINGS</value>
   </data>
@@ -223,15 +202,6 @@
   <data name="SensorsSummary" xml:space="preserve">
     <value>{0} readings from {1} sources.</value>
   </data>
-  <data name="SourceOff" xml:space="preserve">
-    <value>Off.</value>
-  </data>
-  <data name="SourceReading" xml:space="preserve">
-    <value>Reading {0} temperatures.</value>
-  </data>
-  <data name="SourceLooking" xml:space="preserve">
-    <value>Looking...</value>
-  </data>
   <!-- Widget cards in the settings list -->
   <data name="WidgetUnknownSummary" xml:space="preserve">
     <value>This version does not know this widget. It stays in your settings and is left alone.</value>
@@ -325,7 +295,7 @@
     <value>The hottest reading</value>
   </data>
   <data name="TempExplain" xml:space="preserve">
-    <value>Processor and motherboard temperatures live behind a driver, which a Store app cannot contain. Run HWiNFO with its Shared Memory Support switched on, then turn it on under Sensors in settings, and they will appear here.</value>
+    <value>Processor and motherboard temperatures live behind a driver, which a Store app cannot contain. Run HWiNFO with its Shared Memory Support switched on, or LibreHardwareMonitor with its Remote Web Server on, and they appear here by themselves.</value>
   </data>
   <!-- Media widget -->
   <data name="MediaPlayPause" xml:space="preserve">
@@ -553,9 +523,6 @@
   </data>
   <data name="UndoShown" xml:space="preserve">
     <value>shown</value>
-  </data>
-  <data name="PickerOff" xml:space="preserve">
-    <value> — off</value>
   </data>
   <data name="LaunchIconAuto" xml:space="preserve">
     <value>The program's own icon</value>

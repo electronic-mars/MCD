@@ -40,8 +40,6 @@ public sealed partial class SettingsWindow : Window
     private readonly SettingsService _settings;
     private readonly DockWindowManager _docks;
     private readonly SensorHub _sensors;
-    private readonly HwInfoProvider _hwinfo;
-    private readonly LhmProvider _lhm;
     private readonly Action _onExit;
     /// <summary>The widget the bar sent here to be set up.</summary>
     private string? _selectedId;
@@ -71,8 +69,6 @@ public sealed partial class SettingsWindow : Window
         SettingsService settings,
         DockWindowManager docks,
         SensorHub sensors,
-        HwInfoProvider hwinfo,
-        LhmProvider lhm,
         Action onExit)
     {
 
@@ -80,8 +76,6 @@ public sealed partial class SettingsWindow : Window
         _settings = settings;
         _docks = docks;
         _sensors = sensors;
-        _hwinfo = hwinfo;
-        _lhm = lhm;
         _onExit = onExit;
 
         InitializeComponent();
@@ -487,8 +481,8 @@ public sealed partial class SettingsWindow : Window
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
-                BorderBrush = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"],
-                Background = (Brush)Application.Current.Resources["CardBackgroundFillColorDefaultBrush"],
+                BorderBrush = Seg.CardEdge,
+                Background = Seg.Card,
                 Content = row,
             };
 
@@ -804,7 +798,7 @@ public sealed partial class SettingsWindow : Window
                     Padding = new Thickness(0),
                     CornerRadius = new CornerRadius(6),
                     BorderThickness = new Thickness(1),
-                    BorderBrush = (Brush)Application.Current.Resources["CardStrokeColorDefaultBrush"],
+                    BorderBrush = Seg.CardEdge,
                     Background = new SolidColorBrush(c),
                 };
 
@@ -1011,35 +1005,6 @@ public sealed partial class SettingsWindow : Window
         }
     }
 
-    /// <summary>Switches an external source on or off, and says so at once.</summary>
-    private void Source(string providerId, bool on)
-    {
-        SettingsModel current = _settings.Current;
-
-        if (current.Sensors.EnabledProviders.GetValueOrDefault(providerId) == on)
-        {
-            return;
-        }
-
-        _settings.Commit(
-            current with
-            {
-                Sensors = current.Sensors with
-                {
-                    EnabledProviders = current.Sensors.EnabledProviders.SetItem(providerId, on),
-                },
-            },
-            WriteReason.UserAction);
-
-        // The hub is told to forget the source rather than left to notice by
-        // itself. It checks every thirty seconds, and a switch that appears to
-        // do nothing for half a minute is a switch people press again.
-        _sensors.Reset(providerId);
-        _log.LogInformation("settings.source id={Id} enabled={Enabled}", providerId, on);
-
-        ShowReadings();
-    }
-
     /// <summary>Fills the sensors page from whatever the hub has right now.</summary>
     private void ShowReadings()
     {
@@ -1204,22 +1169,6 @@ public sealed partial class SettingsWindow : Window
         };
 
         flyout.ShowAt(button);
-    }
-
-    private static string State(bool on, string? trouble, SensorDescriptor[] found, string providerId)
-    {
-        if (!on)
-        {
-            return Loc.Tr("SourceOff", "Off.");
-        }
-
-        int mine = found.Count(
-            d => d.Key.Value.StartsWith(providerId + "/", StringComparison.Ordinal));
-
-        return mine > 0
-            ? string.Format(
-                CultureInfo.CurrentCulture, Loc.Tr("SourceReading", "Reading {0} temperatures."), mine)
-            : trouble ?? Loc.Tr("SourceLooking", "Looking...");
     }
 
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;

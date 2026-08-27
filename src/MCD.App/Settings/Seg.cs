@@ -56,6 +56,17 @@ public static class Seg
     private static Brush Accent =>
         (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
 
+    /// <summary>The console's own card colours, for anything built in code.</summary>
+    /// <remarks>
+    /// The same names exist in the framework, so looking them up through the
+    /// application would not throw - it would quietly return the system's grey
+    /// and leave a hand-built control wearing the wrong palette beside cards
+    /// that wear the right one.
+    /// </remarks>
+    public static Brush Card => Paint(Dark ? 0xFF191C21 : 0xFFF7F5F1);
+
+    public static Brush CardEdge => Edge;
+
     private static SolidColorBrush Paint(uint argb) => new(Windows.UI.Color.FromArgb(
         (byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb));
 

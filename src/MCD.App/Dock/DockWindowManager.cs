@@ -166,20 +166,33 @@ public sealed class DockWindowManager : IDisposable
     }
 
     /// <summary>Records an arrangement a person made on the bar itself.</summary>
-    private void Save(string stableId, ImmutableArray<WidgetConfig> widgets)
+    /// <param name="drawn">
+    /// True when the bar is only saying where it has already put things. The
+    /// layout is then recorded as this window's own, so the write does not
+    /// come back around as a rebuild of a bar that is already correct - a
+    /// rebuild that would land one tick after the dock first appears, right
+    /// where somebody's first drag is.
+    /// </param>
+    private void Save(string stableId, ImmutableArray<WidgetConfig> widgets, bool drawn = false)
     {
         SettingsModel current = _settings.Current;
 
-        _settings.Commit(
-            current with
-            {
-                Monitors =
-                [
-                    .. current.Monitors.Select(
-                        c => c.StableId == stableId ? c with { Widgets = widgets } : c)
-                ],
-            },
-            WriteReason.WidgetConfig);
+        SettingsModel next = current with
+        {
+            Monitors =
+            [
+                .. current.Monitors.Select(
+                    c => c.StableId == stableId ? c with { Widgets = widgets } : c)
+            ],
+        };
+
+        _settings.Commit(next, WriteReason.WidgetConfig);
+
+        if (drawn
+            && next.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } config)
+        {
+            _dressed[stableId] = Signature(config);
+        }
     }
 
     private WidgetContext Context()
@@ -248,6 +261,7 @@ public sealed class DockWindowManager : IDisposable
             // happens here, where the one writer of settings lives.
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
+            window.Settled += (_, widgets) => Save(stableId, widgets, drawn: true);
             _windows[id] = window;
             _dressed[id] = Signature(plan.Config);
 

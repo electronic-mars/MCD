@@ -208,6 +208,18 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     public event EventHandler<ImmutableArray<WidgetConfig>>? Rearranged;
 
+    /// <summary>
+    /// Raised when the bar has settled widgets onto slots by itself and is
+    /// only recording where they went.
+    /// </summary>
+    /// <remarks>
+    /// Kept apart from <see cref="Rearranged"/> because the answer differs:
+    /// a rearrangement has to be drawn, and this has already been drawn. Told
+    /// apart, the bar is not rebuilt one tick after it first appears - which
+    /// is a rebuild that can land in the middle of somebody's first drag.
+    /// </remarks>
+    public event EventHandler<ImmutableArray<WidgetConfig>>? Settled;
+
     public MonitorInfo Monitor { get; }
 
     public MonitorConfig Config { get; private set; }
@@ -892,6 +904,11 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     public void RefreshWidgets(MonitorConfig config, WidgetContext context)
     {
+        // Whatever was in hand is let go of first: the rebuild disposes every
+        // host, and a drag that carried on afterwards would be dragging an
+        // element that is no longer on the bar.
+        LetGo();
+
         Config = config;
         _context = context;
         Dress(context);
@@ -1003,10 +1020,17 @@ public sealed partial class DockWindow : Window
         _log.LogInformation(
             "dock.settled monitor={Monitor} slots={Slots}", Monitor.Identity.FriendlyName, _capacity);
 
-        Rearranged?.Invoke(
-            this,
-            [.. Config.Widgets.Select(
-                w => cells.TryGetValue(w.InstanceId, out int cell) ? w with { Cell = cell } : w)]);
+        ImmutableArray<WidgetConfig> settled =
+        [
+            .. Config.Widgets.Select(
+                w => cells.TryGetValue(w.InstanceId, out int cell) ? w with { Cell = cell } : w)
+        ];
+
+        // Kept here too, so this window's own idea of its layout matches what
+        // was written - otherwise the next thing to read the settings finds a
+        // difference this bar has in fact already applied.
+        Config = Config with { Widgets = settled };
+        Settled?.Invoke(this, settled);
     }
 
 
@@ -1263,7 +1287,10 @@ public sealed partial class DockWindow : Window
             }
         }
 
-        if (grew && !_moving)
+        // Not while anything is in hand - including a press that has not yet
+        // become a drag. Slots moving out from under a held pointer is the
+        // one thing a bar being arranged must never do.
+        if (grew && _grabbed is null)
         {
             _log.LogInformation("dock.regrown monitor={Monitor}", Monitor.Identity.FriendlyName);
             Settle();
