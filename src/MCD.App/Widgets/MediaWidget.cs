@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -570,6 +571,41 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         {
             // The program that was playing withdrew the stream mid-read.
             ArtVisible = Visibility.Collapsed;
+        }
+    }
+
+    /// <summary>
+    /// Brings the playing program forward - the artwork is the door to it.
+    /// </summary>
+    /// <remarks>
+    /// Through the shell's own apps folder, which resolves an AppUserModelId
+    /// to whatever registered it - packaged or plain. A single-instance
+    /// player asked to start again raises its window instead, which is
+    /// exactly the wanted effect; a player this cannot reach simply does not
+    /// come forward, and nothing else happens.
+    /// </remarks>
+    [RelayCommand]
+    private void RaisePlayer()
+    {
+        if (_playing?.SourceAppUserModelId is not { Length: > 0 } app)
+        {
+            return;
+        }
+
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = "shell:AppsFolder\\" + app,
+                UseShellExecute = false,
+            });
+
+            Context.Log.LogInformation("media.raise {App}", app);
+        }
+        catch (Exception e)
+        {
+            Context.Log.LogInformation(e, "media.raise failed");
         }
     }
 

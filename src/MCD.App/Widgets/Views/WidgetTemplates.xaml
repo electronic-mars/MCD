@@ -237,141 +237,97 @@
             <StackPanel.OpacityTransition>
                 <ScalarTransition Duration="0:0:0.2" />
             </StackPanel.OpacityTransition>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="4">
-                <Border
-                    Width="20"
-                    Height="20"
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="0">
+
+                <!-- The playing thing's own artwork. Pressing it brings that
+                     program forward - the picture is the door to the player. -->
+                <Button
+                    x:Uid="MediaArtButton"
+                    Margin="0,0,4,0"
+                    Padding="0"
                     VerticalAlignment="Center"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{x:Bind RaisePlayerCommand}"
                     CornerRadius="4"
+                    ToolTipService.ToolTip="Open the player"
                     Visibility="{x:Bind ArtVisible, Mode=OneWay}">
-                    <Border.Background>
-                        <ImageBrush ImageSource="{x:Bind Art, Mode=OneWay}" Stretch="UniformToFill" />
-                    </Border.Background>
-                </Border>
-
-                <!-- The player block from Master Audio Switcher: a rail recessed
-                     into the body holding three caps, glyphs printed in ink.
-                     Real inset shadows do not exist here; the translucent black
-                     fill plus a darker top hairline inside is the honest
-                     approximation, and it reads over any backdrop. -->
-                <Border
-                    Height="{x:Bind RailHeight, Mode=OneWay}"
-                    Padding="{x:Bind RailPadding, Mode=OneWay}"
-                    VerticalAlignment="Center"
-                    Background="{ThemeResource McdRailFill}"
-                    BorderBrush="{ThemeResource McdRailLine}"
-                    BorderThickness="1"
-                    CornerRadius="{x:Bind RailCorner, Mode=OneWay}">
-                    <Border
-                        BorderBrush="{ThemeResource McdRailShade}"
-                        BorderThickness="0,1,0,0"
-                        CornerRadius="{x:Bind RailInnerCorner, Mode=OneWay}">
-                        <StackPanel Orientation="Horizontal" Spacing="{x:Bind KeySpacing, Mode=OneWay}">
-
-                            <!-- The lamp: an unlit socket that is always there,
-                                 and the green LED with its glow while sound is
-                                 actually coming out. -->
-                            <Grid Width="{x:Bind LampWidth, Mode=OneWay}" VerticalAlignment="Stretch">
-                                <Ellipse
-                                    Width="{x:Bind LedSize, Mode=OneWay}"
-                                    Height="{x:Bind LedSize, Mode=OneWay}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Fill="{ThemeResource McdLedSocket}" />
-                                <Ellipse
-                                    Width="{x:Bind HaloSize, Mode=OneWay}"
-                                    Height="{x:Bind HaloSize, Mode=OneWay}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Fill="{ThemeResource McdLedHalo}"
-                                    Visibility="{x:Bind PlayingVisible, Mode=OneWay}" />
-                                <Ellipse
-                                    Width="{x:Bind LedSize, Mode=OneWay}"
-                                    Height="{x:Bind LedSize, Mode=OneWay}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Fill="{ThemeResource McdLedOn}"
-                                    Visibility="{x:Bind PlayingVisible, Mode=OneWay}" />
-                            </Grid>
-
-                            <widgets:TransportKey
-                                x:Uid="MediaPrevKey"
-                                Width="{x:Bind KeyWidth, Mode=OneWay}"
-                                Height="{x:Bind KeyHeight, Mode=OneWay}"
-                                Command="{x:Bind PreviousCommand}"
-                                CornerRadius="{x:Bind KeyCorner, Mode=OneWay}"
-                                ToolTipService.ToolTip="Previous">
-                                <Viewbox Width="{x:Bind GlyphSize, Mode=OneWay}" Height="{x:Bind GlyphSize, Mode=OneWay}">
-                                    <Canvas Width="24" Height="24">
-                                        <Path
-                                            Data="{x:Bind PreviousIcon, Converter={StaticResource Icon}, Mode=OneTime}"
-                                            Stroke="{ThemeResource McdKeyInk}"
-                                            StrokeEndLineCap="Round"
-                                            StrokeLineJoin="Round"
-                                            StrokeStartLineCap="Round"
-                                            StrokeThickness="2" />
-                                    </Canvas>
-                                </Viewbox>
-                            </widgets:TransportKey>
-
-                            <widgets:TransportKey
-                                Width="{x:Bind KeyWidth, Mode=OneWay}"
-                                Height="{x:Bind KeyHeight, Mode=OneWay}"
-                                Command="{x:Bind PlayPauseCommand}"
-                                CornerRadius="{x:Bind KeyCorner, Mode=OneWay}"
-                                ToolTipService.ToolTip="{x:Bind PlayTip, Mode=OneWay}">
-                                <Viewbox Width="{x:Bind GlyphSize, Mode=OneWay}" Height="{x:Bind GlyphSize, Mode=OneWay}">
-                                    <Canvas Width="24" Height="24">
-                                        <Path
-                                            Data="{x:Bind PlayGlyph, Converter={StaticResource Icon}, Mode=OneTime}"
-                                            Opacity="{x:Bind PlayShown, Mode=OneWay}"
-                                            Stroke="{ThemeResource McdKeyInk}"
-                                            StrokeEndLineCap="Round"
-                                            StrokeLineJoin="Round"
-                                            StrokeStartLineCap="Round"
-                                            StrokeThickness="2">
-                                            <Path.OpacityTransition>
-                                                <ScalarTransition Duration="0:0:0.1" />
-                                            </Path.OpacityTransition>
-                                        </Path>
-                                        <Path
-                                            Data="{x:Bind PauseGlyph, Converter={StaticResource Icon}, Mode=OneTime}"
-                                            Opacity="{x:Bind PauseShown, Mode=OneWay}"
-                                            Stroke="{ThemeResource McdKeyInk}"
-                                            StrokeEndLineCap="Round"
-                                            StrokeLineJoin="Round"
-                                            StrokeStartLineCap="Round"
-                                            StrokeThickness="2">
-                                            <Path.OpacityTransition>
-                                                <ScalarTransition Duration="0:0:0.1" />
-                                            </Path.OpacityTransition>
-                                        </Path>
-                                    </Canvas>
-                                </Viewbox>
-                            </widgets:TransportKey>
-
-                            <widgets:TransportKey
-                                x:Uid="MediaNextKey"
-                                Width="{x:Bind KeyWidth, Mode=OneWay}"
-                                Height="{x:Bind KeyHeight, Mode=OneWay}"
-                                Command="{x:Bind NextCommand}"
-                                CornerRadius="{x:Bind KeyCorner, Mode=OneWay}"
-                                ToolTipService.ToolTip="Next">
-                                <Viewbox Width="{x:Bind GlyphSize, Mode=OneWay}" Height="{x:Bind GlyphSize, Mode=OneWay}">
-                                    <Canvas Width="24" Height="24">
-                                        <Path
-                                            Data="{x:Bind NextIcon, Converter={StaticResource Icon}, Mode=OneTime}"
-                                            Stroke="{ThemeResource McdKeyInk}"
-                                            StrokeEndLineCap="Round"
-                                            StrokeLineJoin="Round"
-                                            StrokeStartLineCap="Round"
-                                            StrokeThickness="2" />
-                                    </Canvas>
-                                </Viewbox>
-                            </widgets:TransportKey>
-                        </StackPanel>
+                    <Border Width="20" Height="20" CornerRadius="4">
+                        <Border.Background>
+                            <ImageBrush ImageSource="{x:Bind Art, Mode=OneWay}" Stretch="UniformToFill" />
+                        </Border.Background>
                     </Border>
-                </Border>
+                </Button>
+
+                <Button
+                    x:Uid="MediaPrevKey"
+                    Command="{x:Bind PreviousCommand}"
+                    Style="{StaticResource BarButton}"
+                    ToolTipService.ToolTip="Previous">
+                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind PreviousIcon, Converter={StaticResource Icon}, Mode=OneTime}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+
+                <Button
+                    Command="{x:Bind PlayPauseCommand}"
+                    Style="{StaticResource BarButton}"
+                    ToolTipService.ToolTip="{x:Bind PlayTip, Mode=OneWay}">
+                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind PlayGlyph, Converter={StaticResource Icon}, Mode=OneTime}"
+                                Opacity="{x:Bind PlayShown, Mode=OneWay}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5">
+                                <Path.OpacityTransition>
+                                    <ScalarTransition Duration="0:0:0.1" />
+                                </Path.OpacityTransition>
+                            </Path>
+                            <Path
+                                Data="{x:Bind PauseGlyph, Converter={StaticResource Icon}, Mode=OneTime}"
+                                Opacity="{x:Bind PauseShown, Mode=OneWay}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5">
+                                <Path.OpacityTransition>
+                                    <ScalarTransition Duration="0:0:0.1" />
+                                </Path.OpacityTransition>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+
+                <Button
+                    x:Uid="MediaNextKey"
+                    Command="{x:Bind NextCommand}"
+                    Style="{StaticResource BarButton}"
+                    ToolTipService.ToolTip="Next">
+                    <Viewbox Width="{x:Bind IconSize, Mode=OneWay}" Height="{x:Bind IconSize, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind NextIcon, Converter={StaticResource Icon}, Mode=OneTime}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="1.5" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
             </StackPanel>
 
             <TextBlock
@@ -411,7 +367,7 @@
                         Command="{x:Bind LaunchCommand}"
                         CornerRadius="4"
                         ToolTipService.ToolTip="{x:Bind Name}">
-                        <Grid Width="16" Height="16">
+                        <Grid Width="22" Height="22">
                             <Viewbox Visibility="{x:Bind ChosenVisible}">
                                 <Canvas Width="24" Height="24">
                                     <Path

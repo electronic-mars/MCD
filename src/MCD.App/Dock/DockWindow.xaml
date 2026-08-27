@@ -12,6 +12,7 @@
         x:Name="Root"
         AllowDrop="True"
         Background="Transparent"
+        DragLeave="OnDragLeaveFiles"
         DragOver="OnDragOverFiles"
         Drop="OnDropFiles"
         RightTapped="OnRightTapped">

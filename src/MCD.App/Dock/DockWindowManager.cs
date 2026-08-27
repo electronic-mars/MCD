@@ -185,6 +185,17 @@ public sealed class DockWindowManager : IDisposable
     /// <summary>Pins a dropped file to the launcher, once.</summary>
     private void Pin(string path)
     {
+        // A shortcut is pinned as what it points at: the extracted icon then
+        // comes without the little link arrow, and tidying the shortcut away
+        // later does not break the pin. The shortcut's own name is kept - it
+        // is usually the friendlier one.
+        string name = Settings.LauncherRow.NameFor(path);
+
+        if (Mcd.Interop.Shell.ShellLinkResolver.Resolve(path) is { } target)
+        {
+            path = target;
+        }
+
         SettingsModel current = _settings.Current;
 
         if (current.App.Launcher.Any(
@@ -201,7 +212,7 @@ public sealed class DockWindowManager : IDisposable
                     Launcher =
                     [
                         .. current.App.Launcher,
-                        LaunchItem.For(path, Settings.LauncherRow.NameFor(path)),
+                        LaunchItem.For(path, name),
                     ],
                 },
             },

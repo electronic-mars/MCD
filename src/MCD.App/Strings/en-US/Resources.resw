@@ -709,4 +709,7 @@
   <data name="LaunchIconAuto" xml:space="preserve">
     <value>The program's own icon</value>
   </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open the player</value>
+  </data>
 </root>

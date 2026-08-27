@@ -16,13 +16,6 @@
             <ResourceDictionary>
                 <ResourceDictionary.ThemeDictionaries>
                     <ResourceDictionary x:Key="Default">
-                        <Color x:Key="SystemAccentColor">#F26A21</Color>
-                        <Color x:Key="SystemAccentColorLight1">#F5854A</Color>
-                        <Color x:Key="SystemAccentColorLight2">#F89F72</Color>
-                        <Color x:Key="SystemAccentColorLight3">#FBBA9B</Color>
-                        <Color x:Key="SystemAccentColorDark1">#D65A17</Color>
-                        <Color x:Key="SystemAccentColorDark2">#B94B10</Color>
-                        <Color x:Key="SystemAccentColorDark3">#9C3D0A</Color>
                         <SolidColorBrush x:Key="BraunBg" Color="#1C1F24" />
                         <SolidColorBrush x:Key="BraunPanelHi" Color="#23272D" />
                         <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
@@ -35,21 +28,8 @@
                         <SolidColorBrush x:Key="NavigationViewContentBackground" Color="#00000000" />
                         <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#191C21" />
                         <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="#11FFFFFF" />
-                        <SolidColorBrush x:Key="AccentButtonBackground" Color="#F26A21" />
-                        <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#F5854A" />
-                        <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#D65A17" />
-                        <SolidColorBrush x:Key="AccentButtonForeground" Color="#140702" />
-                        <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#140702" />
-                        <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#140702" />
                     </ResourceDictionary>
                     <ResourceDictionary x:Key="Light">
-                        <Color x:Key="SystemAccentColor">#F26A21</Color>
-                        <Color x:Key="SystemAccentColorLight1">#F5854A</Color>
-                        <Color x:Key="SystemAccentColorLight2">#F89F72</Color>
-                        <Color x:Key="SystemAccentColorLight3">#FBBA9B</Color>
-                        <Color x:Key="SystemAccentColorDark1">#D65A17</Color>
-                        <Color x:Key="SystemAccentColorDark2">#B94B10</Color>
-                        <Color x:Key="SystemAccentColorDark3">#9C3D0A</Color>
                         <SolidColorBrush x:Key="BraunBg" Color="#EDEAE3" />
                         <SolidColorBrush x:Key="BraunPanelHi" Color="#F5F3EE" />
                         <SolidColorBrush x:Key="BraunAccBrush" Color="#D65A17" />
@@ -62,12 +42,6 @@
                         <SolidColorBrush x:Key="NavigationViewContentBackground" Color="#00000000" />
                         <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#F7F5F1" />
                         <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="#17000000" />
-                        <SolidColorBrush x:Key="AccentButtonBackground" Color="#F26A21" />
-                        <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#F5854A" />
-                        <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#D65A17" />
-                        <SolidColorBrush x:Key="AccentButtonForeground" Color="#140702" />
-                        <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#140702" />
-                        <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#140702" />
                     </ResourceDictionary>
                 </ResourceDictionary.ThemeDictionaries>
 
@@ -183,7 +157,7 @@
                          what looks like the bar behaves like the bar. -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="DocksTitle"
                                 VerticalAlignment="Center"
@@ -481,7 +455,7 @@
                     <!-- Launcher -->
                     <StackPanel x:Name="LauncherSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE71D;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE71D;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="LauncherTitle"
                                 VerticalAlignment="Center"
@@ -564,7 +538,7 @@
                     <!-- Appearance -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="AppearanceTitle"
                                 VerticalAlignment="Center"
@@ -741,7 +715,7 @@
                     <!-- Icons -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="IconsTitle"
                                 VerticalAlignment="Center"
@@ -800,7 +774,7 @@
                     <!-- Sensors -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="SensorsTitle"
                                 VerticalAlignment="Center"
@@ -859,7 +833,7 @@
                     <!-- Monitors -->
                     <StackPanel x:Name="MonitorsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE7F4;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE7F4;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="MonitorsTitle"
                                 VerticalAlignment="Center"
@@ -929,7 +903,7 @@
                     <!-- About -->
                     <StackPanel x:Name="AboutSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE897;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE897;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="AboutTitle"
                                 VerticalAlignment="Center"

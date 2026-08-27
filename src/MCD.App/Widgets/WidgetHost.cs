@@ -95,7 +95,7 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     public void Outline(bool on)
     {
         BorderBrush = on
-            ? new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xF2, 0x6A, 0x21))
+            ? new SolidColorBrush(Windows.UI.Color.FromArgb(0xE6, 0xFF, 0xFF, 0xFF))
             : null;
         BorderThickness = new Thickness(on ? 1 : 0);
     }

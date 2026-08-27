@@ -581,21 +581,60 @@ public sealed partial class DockWindow : Window
     /// program on the taskbar. The settings window's dialog stays as the way
     /// to pin an address, which has no file to drag.
     /// </remarks>
+    private readonly Rectangle _dropSlot = new();
+
     private void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
-        if (e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
+        if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
         {
-            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Link;
+            return;
+        }
 
-            if (e.DragUIOverride is { } hint)
-            {
-                hint.Caption = Loc.Tr("PinDropCaption", "Pin to the bar");
-            }
+        e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+
+        if (e.DragUIOverride is { } hint)
+        {
+            hint.Caption = Loc.Tr("PinDropCaption", "Pin to the bar");
+            hint.IsGlyphVisible = false;
+        }
+
+        // A lit empty slot under the pointer: the bar saying "this fits here",
+        // instead of the system's forbidding glyph saying nothing.
+        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
+        Point at = e.GetPosition(Bar);
+
+        _dropSlot.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x2E, 0xFF, 0xFF, 0xFF));
+        _dropSlot.Stroke = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
+        _dropSlot.StrokeThickness = 1;
+        _dropSlot.RadiusX = 4;
+        _dropSlot.RadiusY = 4;
+        _dropSlot.Width = horizontal ? 26 : Bar.ActualWidth - 8;
+        _dropSlot.Height = horizontal ? Bar.ActualHeight - 8 : 26;
+
+        if (!Overlay.Children.Contains(_dropSlot))
+        {
+            Overlay.Children.Add(_dropSlot);
+        }
+
+        if (horizontal)
+        {
+            Canvas.SetLeft(_dropSlot, at.X - (_dropSlot.Width / 2));
+            Canvas.SetTop(_dropSlot, 4);
+        }
+        else
+        {
+            Canvas.SetLeft(_dropSlot, 4);
+            Canvas.SetTop(_dropSlot, at.Y - (_dropSlot.Height / 2));
         }
     }
 
+    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e) =>
+        Overlay.Children.Remove(_dropSlot);
+
     private async void OnDropFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
+        Overlay.Children.Remove(_dropSlot);
+
         if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
         {
             return;
