@@ -634,6 +634,7 @@
                                         <ComboBoxItem x:Uid="BackdropSolidItem" Content="Solid" />
                                         <ComboBoxItem x:Uid="BackdropColourItem" Content="A colour of my own" />
                                         <ComboBoxItem x:Uid="BackdropImageItem" Content="A picture" />
+                                        <ComboBoxItem x:Uid="BackdropBraunItem" Content="Instrument body (Braun)" />
                                     </ComboBox>
                                 </Grid>
 

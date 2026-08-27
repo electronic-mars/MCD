@@ -625,4 +625,13 @@
   <data name="WidgetMenuRemove" xml:space="preserve">
     <value>Remove from bar</value>
   </data>
+  <data name="BackdropBraunItem.Content" xml:space="preserve">
+    <value>Instrument body (Braun)</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Next</value>
+  </data>
 </root>

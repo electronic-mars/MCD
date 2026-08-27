@@ -34,6 +34,7 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
 
         Content = widget;
         ContentTemplate = template;
+        Template = (ControlTemplate)Application.Current.Resources["BareContent"];
         VerticalAlignment = VerticalAlignment.Center;
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
         VerticalContentAlignment = VerticalAlignment.Stretch;

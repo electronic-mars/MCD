@@ -179,6 +179,7 @@ public sealed partial class SettingsWindow : Window
             "solid" => 1,
             "colour" => 2,
             "image" => 3,
+            "braun" => 4,
             _ => 0,
         };
         AccentChoice.SelectedIndex = look.Accent == "windows" ? 1 : 0;
@@ -520,6 +521,7 @@ public sealed partial class SettingsWindow : Window
                         1 => "solid",
                         2 => "colour",
                         3 => "image",
+                        4 => "braun",
                         _ => "acrylic",
                     },
                     Accent = AccentChoice.SelectedIndex == 1 ? "windows" : "neutral",

@@ -109,6 +109,9 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial Visibility Visibility { get; set; } = Visibility.Collapsed;
 
+    /// <summary>True on a Braun-painted bar, where the accent is the orange.</summary>
+    public bool Braun { get; init; }
+
     /// <summary>
     /// Whether an ordinary reading takes the accent colour Windows is set to.
     /// </summary>
@@ -378,8 +381,9 @@ public sealed partial class Metric : ObservableObject
     private static Brush Neutral =>
         (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
 
-    private static Brush Accented =>
-        (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"];
+    private Brush Accented => Braun
+        ? (Brush)Application.Current.Resources["McdReadingAccent"]
+        : (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"];
 
     private static Brush Dimmed =>
         (Brush)Application.Current.Resources["TextFillColorTertiaryBrush"];

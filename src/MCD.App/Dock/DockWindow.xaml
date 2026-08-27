@@ -27,7 +27,11 @@
             <Border
                 x:Name="InnerEdge"
                 BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}"
-                BorderThickness="0,1,0,0" />
+                BorderThickness="0,1,0,0">
+                <!-- The Braun body's light catch: a hairline of white just
+                     inside the edge, shown only on that finish. -->
+                <Border x:Name="InnerBevel" Visibility="Collapsed" />
+            </Border>
 
             <!-- One track per widget; spacers take the free length. -->
             <Grid x:Name="Strip" />

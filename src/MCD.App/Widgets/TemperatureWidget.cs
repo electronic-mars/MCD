@@ -228,6 +228,7 @@ public sealed class TemperatureWidget(WidgetContext context, WidgetConfig entry)
         {
             Spacing = LoadWidget.Gap(Orientation),
             Accent = Context.Accent,
+            Braun = Context.Backdrop == "braun",
 
             // This widget's own limits, when the person set any. Null falls
             // back to what the part itself declares or the ordinary defaults.

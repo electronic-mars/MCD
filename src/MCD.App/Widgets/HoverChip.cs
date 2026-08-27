@@ -34,6 +34,8 @@ public sealed partial class HoverChip : ContentControl
     {
         // A control with no background takes part in no hit testing at all, so
         // the pointer would pass straight through to the bar behind it.
+        Template = (Microsoft.UI.Xaml.Controls.ControlTemplate)
+            Application.Current.Resources["BareContent"];
         Background = _fill;
         CornerRadius = new CornerRadius(DockMetrics.ItemCornerRadius);
         Padding = new Thickness(3, 2, 3, 2);

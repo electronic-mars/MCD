@@ -73,6 +73,7 @@ public sealed class LoadWidget(WidgetContext context, WidgetConfig entry)
             {
                 Spacing = Gap(Orientation),
                 Accent = Context.Accent,
+                Braun = Context.Backdrop == "braun",
             };
 
             metric.SizeFor(

@@ -643,6 +643,47 @@ public sealed partial class DockWindow : Window
         // acrylic and shows none of it.
         SystemBackdrop = null;
 
+        if (context.Backdrop == "braun")
+        {
+            // A painted instrument body, not glass: Master Audio Switcher's
+            // console gradient, graphite or cream by theme.
+            SystemBackdrop = null;
+            bool dark = Root.ActualTheme != ElementTheme.Light;
+
+            Root.Background = new LinearGradientBrush
+            {
+                StartPoint = new Point(0.5, 0),
+                EndPoint = new Point(0.5, 1),
+                GradientStops =
+                {
+                    new GradientStop
+                    {
+                        Color = dark ? Argb(0xFF23272D) : Argb(0xFFF5F3EE),
+                        Offset = 0,
+                    },
+                    new GradientStop
+                    {
+                        Color = dark ? Argb(0xFF1C1F24) : Argb(0xFFEDEAE3),
+                        Offset = 1,
+                    },
+                },
+            };
+
+            InnerEdge.BorderBrush = new SolidColorBrush(
+                dark ? Argb(0x1FFFFFFF) : Argb(0x29000000));
+
+            // The light catch is a dark-theme thing; on cream it reads as
+            // antialiasing fuzz rather than a bevel.
+            InnerBevel.BorderThickness = InnerBorder(Config.Edge);
+            InnerBevel.BorderBrush = new SolidColorBrush(Argb(0x12FFFFFF));
+            InnerBevel.Visibility = dark ? Visibility.Visible : Visibility.Collapsed;
+            return;
+        }
+
+        InnerEdge.BorderBrush =
+            (Brush)Application.Current.Resources["SurfaceStrokeColorDefaultBrush"];
+        InnerBevel.Visibility = Visibility.Collapsed;
+
         if (context.Backdrop == "colour")
         {
             // The alpha the person chose becomes the tint's strength: low is
@@ -665,6 +706,9 @@ public sealed partial class DockWindow : Window
             _ => (Brush)Application.Current.Resources["SolidBackgroundFillColorBaseBrush"],
         };
     }
+
+    private static Windows.UI.Color Argb(uint argb) => Windows.UI.Color.FromArgb(
+        (byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb);
 
     /// <summary>A colour written as #AARRGGBB or #RRGGBB.</summary>
     private static Windows.UI.Color ParseColour(string text)
