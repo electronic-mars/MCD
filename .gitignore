@@ -18,3 +18,4 @@ build/msix-out/
 /workshop/
 TestResults/
 *.log
+dist/

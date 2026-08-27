@@ -62,7 +62,8 @@ Get-ChildItem $staging -Filter *.pdb | Remove-Item
 $manifest = Get-Content (Join-Path $root 'packaging\Package.appxmanifest') -Raw
 $manifest = $manifest -replace 'Name="ElectronicMars\.MasterControlDock"', "Name=`"$IdentityName`""
 $manifest = $manifest -replace 'Publisher="CN=00000000-0000-0000-0000-000000000000"', "Publisher=`"$Publisher`""
-$manifest = $manifest -replace 'Version="[\d\.]+"', "Version=`"$version.0`""
+# -creplace: -replace is case-blind and would also rewrite version="1.0" in the XML declaration.
+$manifest = $manifest -creplace 'Version="[\d\.]+"', "Version=`"$version.0`""
 $manifest = $manifest -replace 'ProcessorArchitecture="x64"', "ProcessorArchitecture=`"$Architecture`""
 Set-Content -Path (Join-Path $staging 'AppxManifest.xml') -Value $manifest -Encoding utf8
 
@@ -78,7 +79,7 @@ New-Item -ItemType Directory -Path $dist -Force | Out-Null
 $package = Join-Path $dist "MasterControlDock_${version}_$Architecture.msix"
 if (Test-Path $package) { Remove-Item $package -Force }
 
-& $makeappx.FullName pack /o /d $staging /p $package | Out-Null
+& $makeappx.FullName pack /o /d $staging /p $package
 if ($LASTEXITCODE -ne 0) { throw "makeappx failed with $LASTEXITCODE" }
 
 Remove-Item $staging -Recurse -Force
