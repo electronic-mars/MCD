@@ -365,17 +365,38 @@
   </data>
 
   <!-- Каталог виджетов: названия и описания -->
-  <data name="WidgetLauncherName" xml:space="preserve">
-    <value>Запуск</value>
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Показатель</value>
   </data>
-  <data name="WidgetLauncherDescription" xml:space="preserve">
-    <value>Закреплённые вами программы, папки и страницы.</value>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>Одна цифра: насколько занята часть машины.</value>
   </data>
-  <data name="WidgetLoadName" xml:space="preserve">
-    <value>Нагрузка</value>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Закреплённая иконка</value>
   </data>
-  <data name="WidgetLoadDescription" xml:space="preserve">
-    <value>Насколько заняты процессор, видеокарта, память и сеть.</value>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>Программа, папка или страница — в одном нажатии.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>Живая цифра на панели.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>Температура — самая горячая</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Та часть, что сейчас ближе всех к своему пределу.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>Температура этой части.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Какой показатель</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Какой сенсор</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Иконка</value>
   </data>
   <data name="WidgetMediaName" xml:space="preserve">
     <value>Медиа</value>

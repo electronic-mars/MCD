@@ -1,7 +1,8 @@
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mcd.Core.Settings;
@@ -16,59 +17,185 @@ using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace Mcd.App.Widgets;
 
-/// <summary>The things pinned to the bar, in the order they were pinned.</summary>
+/// <summary>
+/// One pinned thing - a single slot of bar.
+/// </summary>
 /// <remarks>
-/// The list is the same on every screen, and lives in the settings rather than
-/// in this widget's own configuration - see <see cref="AppSettings.Launcher"/>.
+/// Each pinned program, folder or address is a widget of its own, living in
+/// its dock's run like any other: dragged between slots, dragged off to
+/// unpin, added by dropping a file on the bar. There is no shared list any
+/// more - what is pinned to a bar is pinned to that bar.
 /// </remarks>
-public sealed class LauncherWidget(WidgetContext context, WidgetConfig entry)
-    : WidgetViewModel(context, entry)
+public sealed class IconWidget : WidgetViewModel
 {
-    public const string Type = "mcd.launcher";
+    public const string Type = "mcd.icon";
+
+    public IconWidget(WidgetContext context, WidgetConfig entry)
+        : base(context, entry)
+    {
+        Item = new LaunchButton(
+            new LaunchItem
+            {
+                Id = entry.InstanceId,
+                Name = WidgetOptions.Text(entry.Config, "name") ?? string.Empty,
+                Target = WidgetOptions.Text(entry.Config, "target") ?? string.Empty,
+                Icon = WidgetOptions.Text(entry.Config, "icon") ?? string.Empty,
+            },
+            context.Log);
+    }
 
     public override string TypeId => Type;
 
-    public ObservableCollection<LaunchButton> Items { get; } = [];
+    /// <summary>The one button this widget is.</summary>
+    public LaunchButton Item { get; }
 
-    public override void Attach()
-    {
-        Items.Clear();
+    public string Target => Item.Target;
 
-        foreach (LaunchItem item in Context.Launcher)
-        {
-            Items.Add(new LaunchButton(item, Context.Log) { Spacing = Gap() });
-        }
-    }
-
-    public override string Summarise() =>
-        Context.Launcher.Length switch
-        {
-            0 => Loc.Tr("LauncherNonePinned", "Nothing pinned yet"),
-            1 => Loc.Tr("LauncherOnePinned", "1 pinned item"),
-            int n => string.Format(
-                System.Globalization.CultureInfo.CurrentCulture,
-                Loc.Tr("LauncherManyPinned", "{0} pinned items"),
-                n),
-        };
+    public override void Attach() =>
+        Item.Spacing = Orientation == Orientation.Vertical
+            ? new Thickness(0, 1, 0, 1)
+            : new Thickness(1, 0, 1, 0);
 
     /// <summary>Nothing here changes with the readings.</summary>
     public override void Tick(SensorSnapshot snapshot)
     {
     }
 
+    public override string Summarise() => Item.Name;
+
     public override void Dispose()
     {
-        foreach (LaunchButton item in Items)
-        {
-            item.Dispose();
-        }
-
-        Items.Clear();
+        Item.Dispose();
         base.Dispose();
     }
 
-    private Thickness Gap() =>
-        Orientation == Orientation.Vertical ? new Thickness(0, 1, 0, 1) : new Thickness(1, 0, 1, 0);
+    public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
+    {
+        var panel = new StackPanel { Spacing = 10 };
+
+        var name = new TextBox
+        {
+            Header = Loc.Tr("PinNameHeader", "Name"),
+            Text = Item.Name,
+            MaxWidth = 320,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            MinWidth = 220,
+        };
+
+        name.LostFocus += (_, _) =>
+        {
+            string typed = name.Text.Trim();
+
+            changed(WidgetOptions.Merge(
+                Options, ("name", typed.Length > 0 ? JsonValue.Create(typed) : null)));
+        };
+
+        panel.Children.Add(name);
+
+        // The drawn icons on offer, and the way back to the program's own.
+        var icons = new VariableSizedWrapGrid
+        {
+            Orientation = Orientation.Horizontal,
+            MaximumRowsOrColumns = 8,
+            ItemWidth = 34,
+            ItemHeight = 34,
+        };
+
+        foreach (string glyph in IconLibrary.Paths.Keys)
+        {
+            var shape = new Microsoft.UI.Xaml.Shapes.Path
+            {
+                Data = (Geometry)Microsoft.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(
+                    typeof(Geometry), IconLibrary.Paths[glyph]),
+                Stroke = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"],
+                StrokeThickness = 1.5,
+                StrokeLineJoin = PenLineJoin.Round,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Round,
+            };
+
+            var canvas = new Canvas { Width = 24, Height = 24 };
+            canvas.Children.Add(shape);
+
+            var button = new Button
+            {
+                Width = 30,
+                Height = 30,
+                Padding = new Thickness(3),
+                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+                BorderThickness = new Thickness(0),
+                Content = new Viewbox { Child = canvas },
+            };
+
+            string chosen = glyph;
+            button.Click += (_, _) =>
+                changed(WidgetOptions.Merge(Options, ("icon", JsonValue.Create(chosen))));
+
+            icons.Children.Add(button);
+        }
+
+        var own = new Button
+        {
+            Content = Loc.Tr("LaunchIconAuto", "The program's own icon"),
+        };
+
+        own.Click += (_, _) => changed(WidgetOptions.Merge(Options, ("icon", null)));
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr("PinIconHeader", "Icon"),
+            FontSize = 12,
+            Opacity = 0.7,
+        });
+        panel.Children.Add(icons);
+        panel.Children.Add(own);
+
+        return panel;
+    }
+
+    /// <summary>
+    /// A readable name for a target the person did not name themselves.
+    /// </summary>
+    /// <remarks>
+    /// The file's own name without its extension, or the site for an address.
+    /// "notepad" and "github.com" are both better than the full string, which on
+    /// the bar is only ever a tooltip anyway.
+    /// </remarks>
+    public static string NameFor(string target)
+    {
+        if (Uri.TryCreate(target, UriKind.Absolute, out Uri? uri) && !uri.IsFile)
+        {
+            return uri.Host.Length > 0 ? uri.Host : target;
+        }
+
+        string name = Path.GetFileNameWithoutExtension(target.TrimEnd('\\', '/'));
+
+        return name.Length > 0 ? name : target;
+    }
+
+    /// <summary>
+    /// The widget entry for a file dropped on a bar.
+    /// </summary>
+    /// <remarks>
+    /// A shortcut is pinned as what it points at: the extracted icon then comes
+    /// without the little link arrow, and tidying the shortcut away later does
+    /// not break the pin. The shortcut's own name is kept - it is usually the
+    /// friendlier one.
+    /// </remarks>
+    public static WidgetConfig Pin(string path)
+    {
+        string name = NameFor(path);
+
+        if (ShellLinkResolver.Resolve(path) is { } target)
+        {
+            path = target;
+        }
+
+        return WidgetConfig.New(Type) with
+        {
+            Config = WidgetJson.Object(("target", path), ("name", name)),
+        };
+    }
 }
 
 /// <summary>One pinned thing: its picture, its name, and what starting it does.</summary>

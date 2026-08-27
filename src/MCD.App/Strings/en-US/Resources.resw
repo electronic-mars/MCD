@@ -365,17 +365,38 @@
   </data>
 
   <!-- Widget catalog: names and descriptions -->
-  <data name="WidgetLauncherName" xml:space="preserve">
-    <value>Launcher</value>
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Reading</value>
   </data>
-  <data name="WidgetLauncherDescription" xml:space="preserve">
-    <value>Programs, folders and pages you have pinned.</value>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>One figure: how busy a part of the machine is.</value>
   </data>
-  <data name="WidgetLoadName" xml:space="preserve">
-    <value>Load</value>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Pinned icon</value>
   </data>
-  <data name="WidgetLoadDescription" xml:space="preserve">
-    <value>How busy the processor, graphics, memory and network are.</value>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>A program, folder or page, one press away.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>A live figure on the bar.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>Temperature — the hottest</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Whichever part is closest to its limit right now.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>This part's temperature.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Which reading</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Which sensor</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Icon</value>
   </data>
   <data name="WidgetMediaName" xml:space="preserve">
     <value>Media</value>

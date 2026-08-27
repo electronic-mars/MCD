@@ -68,14 +68,10 @@ public sealed record AppSettings
         ImmutableDictionary<string, string>.Empty;
 
     /// <summary>
-    /// What the launcher widget starts, in the order it shows them.
+    /// What the launcher widget started, before schema 6. Read by the migration
+    /// that turns each pinned item into an icon widget on every dock, and never
+    /// written to again.
     /// </summary>
-    /// <remarks>
-    /// One list for every dock rather than one per monitor. Someone who pins a
-    /// program to the bar means the bar, not the bar on this screen, and having
-    /// to pin it again on each monitor would be a chore with nothing to show
-    /// for it.
-    /// </remarks>
     public ImmutableArray<LaunchItem> Launcher { get; init; } = [];
 }
 
@@ -180,19 +176,27 @@ public sealed record DockBands
 public static class DockContents
 {
     /// <summary>
-    /// Launcher at the start, media transport in the middle, readings at the
-    /// end. The media widget keeps itself off the bar while nothing is playing,
-    /// and the two spacers simply meet where it was.
+    /// Media transport in the middle, one gauge per reading and a temperature
+    /// at the end. Every entry is a single slot: one reading, one icon, one
+    /// player. The media widget keeps itself off the bar while nothing is
+    /// playing, and the two spacers simply meet where it was.
     /// </summary>
     public static ImmutableArray<WidgetConfig> Default =>
     [
-        WidgetConfig.New("mcd.launcher"),
         WidgetConfig.Spacer(),
         WidgetConfig.New("mcd.media"),
         WidgetConfig.Spacer(),
-        WidgetConfig.New("mcd.load"),
-        WidgetConfig.New("mcd.temperature"),
+        Gauge("cpu"),
+        Gauge("ram"),
+        Gauge("up"),
+        Gauge("down"),
+        Gauge("gpu"),
+        WidgetConfig.New("mcd.temp"),
     ];
+
+    /// <summary>One reading, as a widget of its own.</summary>
+    public static WidgetConfig Gauge(string reading) =>
+        WidgetConfig.New("mcd.gauge") with { Config = WidgetJson.Object(("reading", reading)) };
 }
 
 public sealed record WidgetConfig

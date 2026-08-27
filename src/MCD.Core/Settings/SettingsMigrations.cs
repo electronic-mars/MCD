@@ -1,4 +1,6 @@
 using System.Collections.Immutable;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
 
 namespace Mcd.Core.Settings;
@@ -28,6 +30,7 @@ public static class SettingsMigrations
                 2 => ToThree(current),
                 3 => ToFour(current),
                 4 => ToFive(current),
+                5 => ToSix(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -117,6 +120,132 @@ public static class SettingsMigrations
         SchemaVersion = 5,
         Monitors = [.. model.Monitors.Select(WithLauncherAnywhere)],
     };
+
+    /// <summary>
+    /// Version 6 breaks the composite widgets into atoms: one widget per
+    /// reading, per temperature sensor, per pinned icon. Every slot on the bar
+    /// becomes a thing of its own that can be dragged, added and removed alone.
+    /// </summary>
+    /// <remarks>
+    /// The order of the run is preserved exactly - each composite is replaced
+    /// in place by its parts, in the order it drew them. The launcher expands
+    /// into the shared pinned list as it stood, which from here on lives on
+    /// each dock rather than in one list for all of them.
+    /// </remarks>
+    private static SettingsModel ToSix(SettingsModel model) => model with
+    {
+        SchemaVersion = 6,
+        Monitors =
+        [
+            .. model.Monitors.Select(m => m with
+            {
+                Widgets = [.. m.Widgets.SelectMany(w => Atoms(w, model.App.Launcher))],
+            })
+        ],
+    };
+
+    private static IEnumerable<WidgetConfig> Atoms(
+        WidgetConfig entry, ImmutableArray<LaunchItem> pinned)
+    {
+        switch (entry.TypeId)
+        {
+            case "mcd.load":
+                foreach (string reading in Readings(entry))
+                {
+                    yield return DockContents.Gauge(reading);
+                }
+
+                break;
+
+            case "mcd.temperature":
+                int? warn = Number(entry, "warn");
+                int? crit = Number(entry, "crit");
+
+                string[] sensors = Text(entry, "mode") == "chosen"
+                    ? [.. Strings(entry, "sensors")]
+                    : [];
+
+                if (sensors.Length == 0)
+                {
+                    // The hottest reading, whichever it is - one widget, no key.
+                    yield return Temp(sensor: null, warn, crit);
+                    break;
+                }
+
+                foreach (string sensor in sensors)
+                {
+                    yield return Temp(sensor, warn, crit);
+                }
+
+                break;
+
+            case "mcd.launcher":
+                foreach (LaunchItem item in pinned)
+                {
+                    yield return WidgetConfig.New("mcd.icon") with
+                    {
+                        Config = WidgetJson.Object(
+                            ("target", item.Target),
+                            ("name", item.Name.Length > 0 ? item.Name : null),
+                            ("icon", item.Icon.Length > 0 ? item.Icon : null)),
+                    };
+                }
+
+                break;
+
+            default:
+                yield return entry;
+                break;
+        }
+    }
+
+    private static WidgetConfig Temp(string? sensor, int? warn, int? crit) =>
+        WidgetConfig.New("mcd.temp") with
+        {
+            // Each object gets values of its own: a JsonNode belongs to one
+            // parent, so nothing here may be shared between two configs.
+            Config = WidgetJson.Object(
+                ("sensor", sensor),
+                ("warn", warn is { } w ? JsonValue.Create(w) : null),
+                ("crit", crit is { } c ? JsonValue.Create(c) : null)),
+        };
+
+    /// <summary>The readings the load widget was showing; all of them when unset.</summary>
+    private static IEnumerable<string> Readings(WidgetConfig entry)
+    {
+        if (Property(entry, "readings") is { ValueKind: JsonValueKind.Array } list)
+        {
+            // "net" is what the download reading was called before send and
+            // receive were separated.
+            return list.EnumerateArray()
+                .Where(v => v.ValueKind == JsonValueKind.String)
+                .Select(v => v.GetString() == "net" ? "down" : v.GetString()!);
+        }
+
+        return ["cpu", "ram", "up", "down", "gpu"];
+    }
+
+    private static string? Text(WidgetConfig entry, string name) =>
+        Property(entry, name) is { ValueKind: JsonValueKind.String } value ? value.GetString() : null;
+
+    private static int? Number(WidgetConfig entry, string name) =>
+        Property(entry, name) is { ValueKind: JsonValueKind.Number } value
+        && value.TryGetInt32(out int n)
+            ? n
+            : null;
+
+    private static IEnumerable<string> Strings(WidgetConfig entry, string name = "sensors") =>
+        Property(entry, name) is { ValueKind: JsonValueKind.Array } list
+            ? list.EnumerateArray()
+                .Where(v => v.ValueKind == JsonValueKind.String)
+                .Select(v => v.GetString()!)
+            : [];
+
+    private static JsonElement? Property(WidgetConfig entry, string name) =>
+        entry.Config is { ValueKind: JsonValueKind.Object } config
+        && config.TryGetProperty(name, out JsonElement value)
+            ? value
+            : null;
 
     private static MonitorConfig WithLauncherAnywhere(MonitorConfig monitor) =>
         monitor.Widgets.Any(w => w.TypeId == "mcd.launcher")

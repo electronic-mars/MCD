@@ -72,10 +72,10 @@ public sealed partial class DockWindow : Window
     private readonly DispatcherQueueTimer _hold;
     private Pointer? _pointer;
     private WidgetHost? _outlined;
-    private int _iconIndex = -1;
-    private bool _iconDrag;
-    private int _iconCaret = -1;
     private bool _offBar;
+
+    /// <summary>The slot grid, drawn only while something is in flight.</summary>
+    private readonly List<Rectangle> _slots = [];
     private bool _hiding;
     private bool _tornDown;
 
@@ -172,18 +172,6 @@ public sealed partial class DockWindow : Window
         _tick.Start();
         Refresh();
     }
-
-    /// <summary>
-    /// Raised when something was dropped on the bar to be pinned: a program,
-    /// a folder, a shortcut. The path travels; the settings writer decides.
-    /// </summary>
-    public event EventHandler<string>? PinRequested;
-
-    /// <summary>Raised when the pinned icons were put in a new order by hand.</summary>
-    public event EventHandler<ImmutableArray<string>>? LauncherReordered;
-
-    /// <summary>Raised when a pinned icon was dragged off the bar.</summary>
-    public event EventHandler<string>? Unpinned;
 
     /// <summary>
     /// Raised on a right-click over an empty part of the bar.
@@ -506,10 +494,9 @@ public sealed partial class DockWindow : Window
         var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
         var add = new MenuFlyoutSubItem { Text = Loc.Tr("MenuAddWidget", "Add widget") };
 
-        foreach (WidgetType type in WidgetCatalog.All)
+        foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
-            bool free = type.AllowsMultiple
-                || Config.Widgets.All(w => w.TypeId != type.TypeId);
+            bool free = !Config.Widgets.Any(offer.Matches);
 
             var item = new MenuFlyoutItem
             {
@@ -517,18 +504,18 @@ public sealed partial class DockWindow : Window
                 // the bar while nothing is playing, so "greyed out" alone
                 // reads as a fault to someone who cannot see it anywhere.
                 Text = free
-                    ? type.Name
+                    ? offer.Name
                     : string.Format(
                         System.Globalization.CultureInfo.CurrentCulture,
                         Mcd.App.Loc.Tr("AlreadyOnBar", "{0} — already on this bar"),
-                        type.Name),
+                        offer.Name),
                 IsEnabled = free,
             };
 
-            ToolTipService.SetToolTip(item, type.Description);
+            ToolTipService.SetToolTip(item, offer.Description);
 
-            string typeId = type.TypeId;
-            item.Click += (_, _) => Insert(typeId, at);
+            WidgetOffer chosen = offer;
+            item.Click += (_, _) => Insert(chosen.Make(), at);
             add.Items.Add(item);
         }
 
@@ -546,39 +533,50 @@ public sealed partial class DockWindow : Window
         menu.ShowAt(Bar, at);
     }
 
-    /// <summary>Puts a new widget where the menu was opened.</summary>
-    private void Insert(string typeId, Point at)
+    /// <summary>Puts a new widget where the menu was opened, or the file dropped.</summary>
+    private void Insert(WidgetConfig entry, Point at)
+    {
+        List<WidgetConfig> list = [.. Config.Widgets];
+
+        list.Insert(ConfigIndexAt(at, list), entry);
+
+        _log.LogInformation(
+            "dock.added monitor={Monitor} widget={Widget}",
+            Monitor.Identity.FriendlyName, entry.TypeId);
+
+        Rearranged?.Invoke(this, [.. list]);
+    }
+
+    /// <summary>
+    /// Where in the settings run a point on the bar falls.
+    /// </summary>
+    /// <remarks>
+    /// The point is counted over drawn widgets; the answer goes after the last
+    /// drawn widget ahead of it, so an entry this build cannot draw keeps its
+    /// place in the run.
+    /// </remarks>
+    private int ConfigIndexAt(Point at, List<WidgetConfig> list)
     {
         int index = IndexAt(at);
-
-        // The index counts drawn widgets; the new entry goes after the last
-        // drawn widget ahead of that point, so an entry this build cannot draw
-        // keeps its place in the run.
         List<WidgetHost> drawn = [.. Hosts()];
-        List<WidgetConfig> list = [.. Config.Widgets];
 
         int where = index == 0 || drawn.Count == 0
             ? 0
             : list.FindIndex(
                 w => w.InstanceId == drawn[Math.Min(index, drawn.Count) - 1].Entry.InstanceId) + 1;
 
-        list.Insert(Math.Clamp(where, 0, list.Count), WidgetConfig.New(typeId));
-
-        _log.LogInformation(
-            "dock.added monitor={Monitor} widget={Widget} at={At}",
-            Monitor.Identity.FriendlyName, typeId, where);
-
-        Rearranged?.Invoke(this, [.. list]);
+        return Math.Clamp(where, 0, list.Count);
     }
 
     private readonly List<WidgetHost> _hosts = [];
 
     /// <summary>
-    /// A file dragged from anywhere onto the bar pins it to the launcher.
+    /// A file dragged from anywhere onto the bar becomes an icon widget in the
+    /// slot it was dropped on.
     /// </summary>
     /// <remarks>
     /// This is the way in that needs no explaining: the same drop that puts a
-    /// program on the taskbar. The settings window's dialog stays as the way
+    /// program on the taskbar. The settings window keeps a dialog as the way
     /// to pin an address, which has no file to drag.
     /// </remarks>
     private readonly Rectangle _dropSlot = new();
@@ -599,7 +597,11 @@ public sealed partial class DockWindow : Window
         }
 
         // A lit empty slot under the pointer: the bar saying "this fits here",
-        // instead of the system's forbidding glyph saying nothing.
+        // instead of the system's forbidding glyph saying nothing. The slot
+        // grid comes up with it, so the bar's structure is visible while
+        // something is being placed.
+        ShowSlots(true);
+
         bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
         Point at = e.GetPosition(Bar);
 
@@ -628,32 +630,110 @@ public sealed partial class DockWindow : Window
         }
     }
 
-    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e) =>
+    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+    {
         Overlay.Children.Remove(_dropSlot);
+        ShowSlots(false);
+    }
 
     private async void OnDropFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
         Overlay.Children.Remove(_dropSlot);
+        ShowSlots(false);
 
         if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
         {
             return;
         }
 
+        Point at = e.GetPosition(Bar);
+
         try
         {
+            List<WidgetConfig> list = [.. Config.Widgets];
+            int where = ConfigIndexAt(at, list);
+            bool changed = false;
+
             foreach (Windows.Storage.IStorageItem item in await e.DataView.GetStorageItemsAsync())
             {
-                if (item.Path is { Length: > 0 } path)
+                if (item.Path is not { Length: > 0 } path)
                 {
-                    _log.LogInformation("dock.pin dropped {Path}", path);
-                    PinRequested?.Invoke(this, path);
+                    continue;
                 }
+
+                WidgetConfig pin = IconWidget.Pin(path);
+                string target = Mcd.App.Widgets.WidgetOptions.Text(pin.Config, "target") ?? path;
+
+                // Already on this bar - the same file dropped twice makes one
+                // icon, the way the taskbar treats it.
+                if (list.Any(w => w.TypeId == IconWidget.Type
+                    && string.Equals(
+                        Mcd.App.Widgets.WidgetOptions.Text(w.Config, "target"),
+                        target,
+                        StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
+                _log.LogInformation("dock.pin dropped {Path}", path);
+                list.Insert(Math.Min(where++, list.Count), pin);
+                changed = true;
+            }
+
+            if (changed)
+            {
+                Rearranged?.Invoke(this, [.. list]);
             }
         }
         catch (Exception ex)
         {
             _log.LogWarning(ex, "dock.pin could not read what was dropped");
+        }
+    }
+
+    /// <summary>
+    /// The grid the sketch drew: while something is in flight, every occupied
+    /// slot shows its outline, so the bar reads as a row of places.
+    /// </summary>
+    private void ShowSlots(bool on)
+    {
+        foreach (Rectangle slot in _slots)
+        {
+            Overlay.Children.Remove(slot);
+        }
+
+        _slots.Clear();
+
+        if (!on)
+        {
+            return;
+        }
+
+        foreach (WidgetHost host in _hosts)
+        {
+            if (host.Widget is SpacerWidget || Where(host) is not { } rect)
+            {
+                // Spacers already reveal themselves as filled bars.
+                continue;
+            }
+
+            var slot = new Rectangle
+            {
+                Stroke = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
+                    ? Windows.UI.Color.FromArgb(0x33, 0x00, 0x00, 0x00)
+                    : Windows.UI.Color.FromArgb(0x40, 0xFF, 0xFF, 0xFF)),
+                StrokeThickness = 1,
+                RadiusX = 4,
+                RadiusY = 4,
+                Width = Math.Max(0, rect.Width),
+                Height = Math.Max(0, rect.Height),
+                IsHitTestVisible = false,
+            };
+
+            Canvas.SetLeft(slot, rect.X);
+            Canvas.SetTop(slot, rect.Y);
+            Overlay.Children.Add(slot);
+            _slots.Add(slot);
         }
     }
 
@@ -878,14 +958,15 @@ public sealed partial class DockWindow : Window
 
     /// <summary>
     /// The press has been held still long enough: the element under it is in
-    /// hand. An orange outline says so, and from here it can be dragged - or
-    /// dragged off the bar to be removed, launcher icons included.
+    /// hand. A white outline says so, and from here it can be dragged - or
+    /// dragged off the bar to be removed.
     /// </summary>
     /// <remarks>
-    /// Widgets drag without the hold too; the hold exists for the launcher's
-    /// icons, whose plain click is taken by starting the program. Capturing
-    /// the pointer here also takes the coming release away from that button,
-    /// so holding an icon never launches anything.
+    /// Widgets drag without the hold too; the hold exists for the buttons -
+    /// pinned icons, the transport keys - whose plain click is taken by what
+    /// the button does. Capturing the pointer here also takes the coming
+    /// release away from that button, so holding an icon never launches
+    /// anything.
     /// </remarks>
     private void EnterEdit()
     {
@@ -902,14 +983,9 @@ public sealed partial class DockWindow : Window
             Root.CapturePointer(_pointer);
         }
 
-        if (_grabbed.Widget is LauncherWidget)
-        {
-            _iconIndex = IconIndexAt(_grabbed, _grabbedAt);
-        }
-
         _log.LogInformation(
-            "dock.hold monitor={Monitor} widget={Widget} icon={Icon}",
-            Monitor.Identity.FriendlyName, _grabbed.Entry.TypeId, _iconIndex);
+            "dock.hold monitor={Monitor} widget={Widget}",
+            Monitor.Identity.FriendlyName, _grabbed.Entry.TypeId);
     }
 
     private void OnDrag(object sender, PointerRoutedEventArgs e)
@@ -931,18 +1007,17 @@ public sealed partial class DockWindow : Window
 
             _moving = true;
             _hold.Stop();
-            _iconDrag = _iconIndex >= 0;
             _grabbed.Opacity = 0.4;
             Root.CapturePointer(e.Pointer);
 
-            if (!_iconDrag)
-            {
-                RevealSpacers(true);
-            }
+            // The bar shows its structure for the length of the drag: the
+            // spacers fill in, and every occupied slot draws its outline.
+            RevealSpacers(true);
+            ShowSlots(true);
 
             _log.LogInformation(
-                "dock.dragging monitor={Monitor} widget={Widget} icon={Icon}",
-                Monitor.Identity.FriendlyName, _grabbed.Entry.TypeId, _iconIndex);
+                "dock.dragging monitor={Monitor} widget={Widget}",
+                Monitor.Identity.FriendlyName, _grabbed.Entry.TypeId);
         }
 
         // Off the bar means "remove on release": the element goes ghostly and
@@ -958,15 +1033,7 @@ public sealed partial class DockWindow : Window
         }
 
         _grabbed.Doomed(false);
-
-        if (_iconDrag)
-        {
-            ShowIconCaret(_grabbed, at);
-        }
-        else
-        {
-            ShowCaret(at);
-        }
+        ShowCaret(at);
     }
 
     private void OnDrop(object sender, PointerRoutedEventArgs e)
@@ -975,18 +1042,7 @@ public sealed partial class DockWindow : Window
         {
             if (_offBar)
             {
-                if (_iconDrag)
-                {
-                    UnpinIcon(host);
-                }
-                else
-                {
-                    RemoveWidget(host);
-                }
-            }
-            else if (_iconDrag)
-            {
-                LandIcon(host);
+                RemoveWidget(host);
             }
             else
             {
@@ -1012,15 +1068,13 @@ public sealed partial class DockWindow : Window
         _outlined = null;
 
         RevealSpacers(false);
+        ShowSlots(false);
         HideCaret();
         Root.ReleasePointerCaptures();
 
         _grabbed = null;
         _pointer = null;
         _moving = false;
-        _iconDrag = false;
-        _iconIndex = -1;
-        _iconCaret = -1;
         _offBar = false;
     }
 
@@ -1035,195 +1089,6 @@ public sealed partial class DockWindow : Window
             Monitor.Identity.FriendlyName, host.Entry.TypeId);
 
         Rearranged?.Invoke(this, [.. list]);
-    }
-
-    /// <summary>The pinned icons of a launcher host, with where each one is.</summary>
-    private List<(string Id, Rect Where)> IconRects(WidgetHost host)
-    {
-        var found = new List<(string, Rect)>();
-
-        if (host.Widget is not LauncherWidget launcher)
-        {
-            return found;
-        }
-
-        ItemsControl? list = Descend<ItemsControl>(host);
-
-        if (list is null)
-        {
-            return found;
-        }
-
-        for (int i = 0; i < launcher.Items.Count; i++)
-        {
-            if (list.ContainerFromIndex(i) is FrameworkElement container
-                && RectInBar(container) is { } rect)
-            {
-                found.Add((launcher.Items[i].Id, rect));
-            }
-        }
-
-        return found;
-    }
-
-    private static T? Descend<T>(DependencyObject from)
-        where T : DependencyObject
-    {
-        for (int i = 0; i < Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(from); i++)
-        {
-            DependencyObject child = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(from, i);
-
-            if (child is T match)
-            {
-                return match;
-            }
-
-            if (Descend<T>(child) is { } deeper)
-            {
-                return deeper;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>Where an element is, in the bar's own coordinates.</summary>
-    /// <remarks>Walked up by each element's own offset; TransformToVisual is
-    /// banned here for answering in the wrong coordinate space.</remarks>
-    private Rect? RectInBar(FrameworkElement element)
-    {
-        double x = 0, y = 0;
-        DependencyObject? current = element;
-
-        while (current is FrameworkElement fe && !ReferenceEquals(fe, Bar))
-        {
-            x += fe.ActualOffset.X;
-            y += fe.ActualOffset.Y;
-            current = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(fe);
-        }
-
-        return ReferenceEquals(current, Bar)
-            ? new Rect(x, y, element.ActualWidth, element.ActualHeight)
-            : null;
-    }
-
-    private int IconIndexAt(WidgetHost host, Point at)
-    {
-        List<(string Id, Rect Where)> icons = IconRects(host);
-
-        for (int i = 0; i < icons.Count; i++)
-        {
-            if (icons[i].Where.Contains(at))
-            {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    /// <summary>The marker between two pinned icons, where the one in hand lands.</summary>
-    private void ShowIconCaret(WidgetHost host, Point at)
-    {
-        List<(string Id, Rect Where)> icons = IconRects(host);
-
-        if (icons.Count == 0)
-        {
-            return;
-        }
-
-        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-        double along = horizontal ? at.X : at.Y;
-
-        int index = icons.Count;
-
-        for (int i = 0; i < icons.Count; i++)
-        {
-            double middle = horizontal
-                ? icons[i].Where.X + (icons[i].Where.Width / 2)
-                : icons[i].Where.Y + (icons[i].Where.Height / 2);
-
-            if (along < middle)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        _iconCaret = index;
-
-        double edge = index >= icons.Count
-            ? (horizontal
-                ? icons[^1].Where.X + icons[^1].Where.Width + 2
-                : icons[^1].Where.Y + icons[^1].Where.Height + 2)
-            : (horizontal ? icons[index].Where.X - 2 : icons[index].Where.Y - 2);
-
-        DressCaret(horizontal);
-
-        if (!Overlay.Children.Contains(_caret))
-        {
-            Overlay.Children.Add(_caret);
-        }
-
-        if (horizontal)
-        {
-            Canvas.SetLeft(_caret, edge - (_caret.Width / 2));
-            Canvas.SetTop(_caret, (Bar.ActualHeight - _caret.Height) / 2);
-        }
-        else
-        {
-            Canvas.SetLeft(_caret, (Bar.ActualWidth - _caret.Width) / 2);
-            Canvas.SetTop(_caret, edge - (_caret.Height / 2));
-        }
-    }
-
-    /// <summary>Says what the new order of pinned icons is.</summary>
-    private void LandIcon(WidgetHost host)
-    {
-        if (_iconCaret < 0 || host.Widget is not LauncherWidget launcher)
-        {
-            return;
-        }
-
-        List<string> ids = [.. launcher.Items.Select(i => i.Id)];
-
-        if (_iconIndex < 0 || _iconIndex >= ids.Count)
-        {
-            return;
-        }
-
-        string moved = ids[_iconIndex];
-        ids.RemoveAt(_iconIndex);
-
-        int where = Math.Clamp(_iconCaret > _iconIndex ? _iconCaret - 1 : _iconCaret, 0, ids.Count);
-        ids.Insert(where, moved);
-
-        if (ids.SequenceEqual(launcher.Items.Select(i => i.Id)))
-        {
-            return;
-        }
-
-        _log.LogInformation(
-            "dock.launcher reordered monitor={Monitor}", Monitor.Identity.FriendlyName);
-
-        LauncherReordered?.Invoke(this, [.. ids]);
-    }
-
-    private void UnpinIcon(WidgetHost host)
-    {
-        if (host.Widget is not LauncherWidget launcher
-            || _iconIndex < 0 || _iconIndex >= launcher.Items.Count)
-        {
-            return;
-        }
-
-        string id = launcher.Items[_iconIndex].Id;
-
-        _log.LogInformation(
-            "dock.launcher unpinned monitor={Monitor} id={Id}",
-            Monitor.Identity.FriendlyName, id);
-
-        Unpinned?.Invoke(this, id);
     }
 
     /// <summary>The widget under a point, in the bar's own coordinates.</summary>

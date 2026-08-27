@@ -161,30 +161,14 @@
         </widgets:HoverChip>
     </DataTemplate>
 
-    <DataTemplate x:Key="mcd.load" x:DataType="widgets:LoadWidget">
-        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <!-- Classic Binding, not x:Bind: inside an ItemsPanelTemplate
-                         there is no compiled binding target, and the data context
-                         here is the widget itself. -->
-                    <StackPanel Orientation="{Binding Orientation}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+    <!-- One reading in one slot. Still an ItemsControl over a one-entry list:
+         the metric chip template serves both widgets unchanged. -->
+    <DataTemplate x:Key="mcd.gauge" x:DataType="widgets:GaugeWidget">
+        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}" />
     </DataTemplate>
 
-    <DataTemplate x:Key="mcd.temperature" x:DataType="widgets:TemperatureWidget">
-        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <!-- Classic Binding, not x:Bind: inside an ItemsPanelTemplate
-                         there is no compiled binding target, and the data context
-                         here is the widget itself. -->
-                    <StackPanel Orientation="{Binding Orientation}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+    <DataTemplate x:Key="mcd.temp" x:DataType="widgets:TempWidget">
+        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}" />
     </DataTemplate>
 
     <!--
@@ -344,59 +328,49 @@
     </DataTemplate>
 
     <!--
-        The launcher. A plain Button with a transparent background: the default
-        style leaves the normal state to the instance and keeps its own brushes
-        for hover and press, so this gets the system's own feedback for free.
+        One pinned icon in one slot. A plain Button with a transparent
+        background: the default style leaves the normal state to the instance
+        and keeps its own brushes for hover and press, so this gets the
+        system's own feedback for free.
     -->
-    <DataTemplate x:Key="mcd.launcher" x:DataType="widgets:LauncherWidget">
-        <ItemsControl ItemsSource="{x:Bind Items}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="{Binding Orientation}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="widgets:LaunchButton">
-                    <Button
-                        Margin="{x:Bind Spacing, Mode=OneWay}"
-                        MinWidth="0"
-                        MinHeight="0"
-                        Padding="3"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Command="{x:Bind LaunchCommand}"
-                        CornerRadius="4"
-                        ToolTipService.ToolTip="{x:Bind Name}">
-                        <Grid Width="22" Height="22">
-                            <Viewbox Visibility="{x:Bind ChosenVisible}">
-                                <Canvas Width="24" Height="24">
-                                    <Path
-                                        Data="{x:Bind Chosen, Converter={StaticResource Icon}, Mode=OneTime}"
-                                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeStartLineCap="Round"
-                                        StrokeThickness="1.5" />
-                                </Canvas>
-                            </Viewbox>
-                            <Image
-                                Source="{x:Bind Icon, Mode=OneWay}"
-                                Stretch="Uniform"
-                                Visibility="{x:Bind AutoVisible}" />
-                            <!-- Until the icon arrives, and for a target that has
-                                 none, the first letter of the name. An empty
-                                 square would read as a broken button. -->
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="11"
-                                Text="{x:Bind Initial}"
-                                Visibility="{x:Bind Placeholder, Mode=OneWay}" />
-                        </Grid>
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <DataTemplate x:Key="mcd.icon" x:DataType="widgets:IconWidget">
+        <Button
+            Margin="{x:Bind Item.Spacing, Mode=OneWay}"
+            MinWidth="0"
+            MinHeight="0"
+            Padding="3"
+            Background="Transparent"
+            BorderThickness="0"
+            Command="{x:Bind Item.LaunchCommand}"
+            CornerRadius="4"
+            ToolTipService.ToolTip="{x:Bind Item.Name}">
+            <Grid Width="22" Height="22">
+                <Viewbox Visibility="{x:Bind Item.ChosenVisible}">
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Item.Chosen, Converter={StaticResource Icon}, Mode=OneTime}"
+                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="1.5" />
+                    </Canvas>
+                </Viewbox>
+                <Image
+                    Source="{x:Bind Item.Icon, Mode=OneWay}"
+                    Stretch="Uniform"
+                    Visibility="{x:Bind Item.AutoVisible}" />
+                <!-- Until the icon arrives, and for a target that has
+                     none, the first letter of the name. An empty
+                     square would read as a broken button. -->
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="11"
+                    Text="{x:Bind Item.Initial}"
+                    Visibility="{x:Bind Item.Placeholder, Mode=OneWay}" />
+            </Grid>
+        </Button>
     </DataTemplate>
 
 </ResourceDictionary>

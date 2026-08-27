@@ -765,7 +765,6 @@ public sealed partial class SettingsWindow : Window
         new WidgetContext(
             _sensors,
             new IconChoices(_settings.Current.App.Icons),
-            _settings.Current.App.Launcher,
             _log),
         entry);
 
@@ -1121,11 +1120,9 @@ public sealed partial class SettingsWindow : Window
         var list = new StackPanel { Spacing = 4, MinWidth = 320 };
         var flyout = new Flyout { Content = list, XamlRoot = Content.XamlRoot };
 
-        string[] already = [.. dock.Widgets.Select(w => w.TypeId)];
-
-        foreach (WidgetType type in WidgetCatalog.All)
+        foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
-            bool duplicate = !type.AllowsMultiple && already.Contains(type.TypeId);
+            bool duplicate = dock.Widgets.Any(offer.Matches);
 
             var choice = new Button
             {
@@ -1135,17 +1132,19 @@ public sealed partial class SettingsWindow : Window
                 Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
                 BorderThickness = new Thickness(0),
                 IsEnabled = !duplicate,
-                Content = Offer(type, duplicate),
+                Content = Offer(offer, duplicate),
             };
+
+            WidgetOffer chosen = offer;
 
             choice.Click += (_, _) =>
             {
                 flyout.Hide();
                 Rearrange(
                     dock.StableId,
-                    widgets => [.. widgets, WidgetConfig.New(type.TypeId)],
+                    widgets => [.. widgets, chosen.Make()],
                     string.Format(
-                        CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), type.Name));
+                        CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), chosen.Name));
             };
 
             list.Children.Add(choice);
@@ -1155,7 +1154,7 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>One row of the add-a-widget list: its picture, its name, what it does.</summary>
-    private static FrameworkElement Offer(WidgetType type, bool duplicate)
+    private static FrameworkElement Offer(WidgetOffer type, bool duplicate)
     {
         var row = new Grid { ColumnSpacing = 12 };
         row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });

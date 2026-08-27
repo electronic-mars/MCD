@@ -191,7 +191,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         LampWidth = compact ? 8 : 10;
 
         FontSize = 10;
-        Spacing = LoadWidget.Gap(Orientation);
+        Spacing = GaugeWidget.Gap(Orientation);
         TitleVisible = ShowTitle && Density == DockDensity.Default
             ? Visibility.Visible
             : Visibility.Collapsed;

@@ -182,81 +182,6 @@ public sealed class DockWindowManager : IDisposable
             WriteReason.WidgetConfig);
     }
 
-    /// <summary>Pins a dropped file to the launcher, once.</summary>
-    private void Pin(string path)
-    {
-        // A shortcut is pinned as what it points at: the extracted icon then
-        // comes without the little link arrow, and tidying the shortcut away
-        // later does not break the pin. The shortcut's own name is kept - it
-        // is usually the friendlier one.
-        string name = Settings.LauncherRow.NameFor(path);
-
-        if (Mcd.Interop.Shell.ShellLinkResolver.Resolve(path) is { } target)
-        {
-            path = target;
-        }
-
-        SettingsModel current = _settings.Current;
-
-        if (current.App.Launcher.Any(
-            i => string.Equals(i.Target, path, StringComparison.OrdinalIgnoreCase)))
-        {
-            return;
-        }
-
-        _settings.Commit(
-            current with
-            {
-                App = current.App with
-                {
-                    Launcher =
-                    [
-                        .. current.App.Launcher,
-                        LaunchItem.For(path, name),
-                    ],
-                },
-            },
-            WriteReason.UserAction);
-
-        _log.LogInformation("launcher.pinned by drop {Target}", path);
-    }
-
-    /// <summary>Puts the pinned items in the order a bar arranged them.</summary>
-    private void ReorderLauncher(ImmutableArray<string> ids)
-    {
-        SettingsModel current = _settings.Current;
-
-        var by = current.App.Launcher.ToDictionary(i => i.Id);
-        List<LaunchItem> ordered = [.. ids.Where(by.ContainsKey).Select(id => by[id])];
-
-        // Anything the bar did not mention - an item added between the drag
-        // and the drop - keeps its place at the end rather than vanishing.
-        ordered.AddRange(current.App.Launcher.Where(i => !ids.Contains(i.Id)));
-
-        _settings.Commit(
-            current with { App = current.App with { Launcher = [.. ordered] } },
-            WriteReason.UserAction);
-
-        _log.LogInformation("launcher.reordered");
-    }
-
-    private void Unpin(string id)
-    {
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with
-            {
-                App = current.App with
-                {
-                    Launcher = [.. current.App.Launcher.Where(i => i.Id != id)],
-                },
-            },
-            WriteReason.UserAction);
-
-        _log.LogInformation("launcher.unpinned {Id}", id);
-    }
-
     private WidgetContext Context()
     {
         AppSettings app = _settings.Current.App;
@@ -264,7 +189,6 @@ public sealed class DockWindowManager : IDisposable
         return new WidgetContext(
             _sensors,
             new IconChoices(app.Icons),
-            app.Launcher,
             _loggers.CreateLogger<WidgetContext>())
         {
             Accent = app.Accent == "windows",
@@ -312,9 +236,6 @@ public sealed class DockWindowManager : IDisposable
             // happens here, where the one writer of settings lives.
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
-            window.PinRequested += (_, path) => Pin(path);
-            window.LauncherReordered += (_, ids) => ReorderLauncher(ids);
-            window.Unpinned += (_, id) => Unpin(id);
             _windows[id] = window;
             window.Activate();
         }

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
@@ -21,7 +20,6 @@ namespace Mcd.App.Widgets;
 public sealed record WidgetContext(
     SensorHub Sensors,
     IconChoices Icons,
-    ImmutableArray<LaunchItem> Launcher,
     ILogger Log)
 {
     /// <summary>True when readings are drawn in the accent colour from Windows.</summary>
