@@ -377,6 +377,21 @@ public partial class App : Application
         settings.Tick += (_, _) =>
         {
             ShowSettings();
+
+            // Left open, and walked through, when pages were asked for: a
+            // visual change is verified by looking at the window it changed,
+            // and the window that gets looked at must not be the one on
+            // somebody's desk while they are working. Each page is announced
+            // in the log so whatever is photographing can keep in step
+            // instead of guessing at a cadence.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_PAGE") is { Length: > 0 } pages)
+            {
+                Walk(log, [.. pages.Split(',', StringSplitOptions.RemoveEmptyEntries
+                    | StringSplitOptions.TrimEntries)]);
+
+                return;
+            }
+
             _settingsWindow?.Close();
         };
         _selfTest.Add(settings);
@@ -395,6 +410,33 @@ public partial class App : Application
         };
         _selfTest.Add(timer);
         timer.Start();
+    }
+
+    /// <summary>Shows each page in turn, announcing every one it reaches.</summary>
+    private void Walk(ILogger log, IReadOnlyList<string> pages)
+    {
+        int at = 0;
+
+        Microsoft.UI.Dispatching.DispatcherQueueTimer step =
+            Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().CreateTimer();
+
+        step.Interval = TimeSpan.FromMilliseconds(1400);
+
+        step.Tick += (_, _) =>
+        {
+            if (at >= pages.Count || _settingsWindow is null)
+            {
+                step.Stop();
+                return;
+            }
+
+            _settingsWindow.GoTo(pages[at]);
+            log.LogInformation("selftest.page {Page}", pages[at]);
+            at++;
+        };
+
+        _selfTest.Add(step);
+        step.Start();
     }
 
     private void Shutdown()

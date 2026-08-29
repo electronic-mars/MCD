@@ -38,28 +38,19 @@
   <data name="DocksIntro.Text" xml:space="preserve">
     <value>Один док на каждый экран. Изменения попадают на панель сразу.</value>
   </data>
-  <data name="BarLiveTitle.Text" xml:space="preserve">
-    <value>ПАНЕЛЬ</value>
+  <data name="BarLiveTitle" xml:space="preserve">
+    <value>Сама панель</value>
   </data>
-  <data name="PreviewEmpty.Text" xml:space="preserve">
-    <value>Пусто. Добавьте виджет — или щёлкните панель правой кнопкой там, где он нужен.</value>
-  </data>
-  <data name="ShowDockLabel.Text" xml:space="preserve">
+  <data name="ShowDockLabel" xml:space="preserve">
     <value>Показывать док на этом дисплее</value>
   </data>
-  <data name="DockEnabled.OnContent" xml:space="preserve">
-    <value>Вкл.</value>
-  </data>
-  <data name="DockEnabled.OffContent" xml:space="preserve">
-    <value>Откл.</value>
-  </data>
-  <data name="EdgeLabel.Text" xml:space="preserve">
+  <data name="EdgeLabel" xml:space="preserve">
     <value>Край</value>
   </data>
-  <data name="SizeLabel.Text" xml:space="preserve">
+  <data name="SizeLabel" xml:space="preserve">
     <value>Толщина</value>
   </data>
-  <data name="BehaviourLabel.Text" xml:space="preserve">
+  <data name="BehaviourLabel" xml:space="preserve">
     <value>Скрывается, пока не наведён указатель</value>
   </data>
   <!-- Страница «Запуск» -->
@@ -70,29 +61,17 @@
   <data name="AppearanceIntro.Text" xml:space="preserve">
     <value>Как отрисовываются панели. Применяется ко всем докам.</value>
   </data>
-  <data name="BackgroundLabel.Text" xml:space="preserve">
+  <data name="BackgroundLabel" xml:space="preserve">
     <value>Фон</value>
   </data>
-  <data name="BackgroundHint.Text" xml:space="preserve">
+  <data name="BackgroundHint" xml:space="preserve">
     <value>Полупрозрачный фон пропускает рабочий стол; сплошной легче читается на пёстрых обоях и чуть дешевле в отрисовке.</value>
   </data>
-  <data name="BackdropTranslucentItem.Content" xml:space="preserve">
-    <value>Полупрозрачный</value>
-  </data>
-  <data name="BackdropSolidItem.Content" xml:space="preserve">
-    <value>Сплошной</value>
-  </data>
-  <data name="AccentLabel.Text" xml:space="preserve">
+  <data name="AccentLabel" xml:space="preserve">
     <value>Цвет показаний</value>
   </data>
-  <data name="AccentHint.Text" xml:space="preserve">
+  <data name="AccentHint" xml:space="preserve">
     <value>Акцентный цвет берётся из параметров Windows. Показания выше порога предупреждения в любом случае сохраняют предупреждающий цвет.</value>
-  </data>
-  <data name="AccentNeutralItem.Content" xml:space="preserve">
-    <value>Обычный цвет текста</value>
-  </data>
-  <data name="AccentWindowsItem.Content" xml:space="preserve">
-    <value>Акцентный цвет Windows</value>
   </data>
   <!-- Страница «Значки» -->
   <data name="IconsTitle.Text" xml:space="preserve">
@@ -108,48 +87,27 @@
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Температуры видеокарты и дисков работают сразу. Процессор и материнская плата подключаются, пока запущен LibreHardwareMonitor (с включённым Remote Web Server) или HWiNFO (с включённой Shared Memory).</value>
   </data>
-  <data name="LiveReadingsTitle.Text" xml:space="preserve">
-    <value>ТЕКУЩИЕ ПОКАЗАНИЯ</value>
+  <data name="LiveReadingsTitle" xml:space="preserve">
+    <value>Показания сейчас</value>
   </data>
   <!-- Страница «Мониторы» -->
   <!-- Страница «О программе» -->
-  <data name="AboutTitle.Text" xml:space="preserve">
-    <value>О программе</value>
-  </data>
-  <data name="AboutIntro.Text" xml:space="preserve">
+  <data name="AboutIntro" xml:space="preserve">
     <value>Док для края экрана. Свободное ПО под лицензией GPL-3.0-or-later; часть кода адаптирована из Microsoft PowerToys по лицензии MIT.</value>
   </data>
-  <data name="StartWithWindowsLabel.Text" xml:space="preserve">
+  <data name="StartWithWindowsLabel" xml:space="preserve">
     <value>Запускать при входе в Windows</value>
   </data>
-  <data name="StartWithWindowsHint.Text" xml:space="preserve">
+  <data name="StartWithWindowsHint" xml:space="preserve">
     <value>Доки возвращаются при входе в систему.</value>
   </data>
-  <data name="AutoStartToggle.OnContent" xml:space="preserve">
-    <value>Вкл.</value>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Закрытие этого окна оставляет панели работать. Чтобы остановить их, нажмите эту кнопку — снятие задачи через диспетчер задач оставит зарезервированное место на экране занятым.</value>
   </data>
-  <data name="AutoStartToggle.OffContent" xml:space="preserve">
-    <value>Откл.</value>
-  </data>
-  <data name="OpenLogsButton.Content" xml:space="preserve">
-    <value>Открыть папку журналов</value>
-  </data>
-  <data name="OpenConfigButton.Content" xml:space="preserve">
-    <value>Открыть папку настроек</value>
-  </data>
-  <data name="ExitHint.Text" xml:space="preserve">
-    <value>Закрытие этого окна не останавливает доки. Чтобы остановить их, используйте кнопку ниже — завершение задачи через диспетчер задач оставляет зарезервированное место на экране занятым.</value>
-  </data>
-  <data name="ExitButton.Content" xml:space="preserve">
+  <data name="ExitButton" xml:space="preserve">
     <value>Выйти из Master Control Dock</value>
   </data>
   <!-- Кнопки медиавиджета на панели -->
-  <data name="MediaPreviousButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Предыдущий</value>
-  </data>
-  <data name="MediaNextButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Следующий</value>
-  </data>
   <!-- Окно настроек, строки из кода -->
   <data name="DockNoScreen" xml:space="preserve">
     <value>Ни один экран ещё не настроен.</value>
@@ -356,13 +314,13 @@
   <data name="SeenDays" xml:space="preserve">
     <value>{0} дн назад</value>
   </data>
-  <data name="LanguageLabel.Text" xml:space="preserve">
+  <data name="LanguageLabel" xml:space="preserve">
     <value>Язык</value>
   </data>
-  <data name="LanguageHint.Text" xml:space="preserve">
+  <data name="LanguageHint" xml:space="preserve">
     <value>Вступает в силу после перезапуска программы.</value>
   </data>
-  <data name="LanguageSystemItem.Content" xml:space="preserve">
+  <data name="LanguageSystemItem" xml:space="preserve">
     <value>Как в Windows</value>
   </data>
   <data name="TempLimitAuto" xml:space="preserve">
@@ -374,15 +332,6 @@
   <data name="TempCritAt" xml:space="preserve">
     <value>Критично при, °C</value>
   </data>
-  <data name="PinDialog.Title" xml:space="preserve">
-    <value>Закрепить на панели</value>
-  </data>
-  <data name="PinDialog.PrimaryButtonText" xml:space="preserve">
-    <value>Добавить</value>
-  </data>
-  <data name="PinDialog.CloseButtonText" xml:space="preserve">
-    <value>Отмена</value>
-  </data>
   <data name="PickColour" xml:space="preserve">
     <value>Выбрать цвет</value>
   </data>
@@ -392,14 +341,8 @@
   <data name="NoPictureYet" xml:space="preserve">
     <value>Картинка пока не выбрана</value>
   </data>
-  <data name="TopmostLabel.Text" xml:space="preserve">
+  <data name="TopmostLabel" xml:space="preserve">
     <value>Поверх других окон</value>
-  </data>
-  <data name="DockTopmost.OnContent" xml:space="preserve">
-    <value>Вкл.</value>
-  </data>
-  <data name="DockTopmost.OffContent" xml:space="preserve">
-    <value>Выкл.</value>
   </data>
   <data name="PinTargetHeader" xml:space="preserve">
     <value>Программа, папка или адрес</value>
@@ -431,7 +374,7 @@
   <data name="SeeThroughHeader" xml:space="preserve">
     <value>Насколько прозрачно</value>
   </data>
-  <data name="RestartNowText.Text" xml:space="preserve">
+  <data name="RestartNowText" xml:space="preserve">
     <value>Перезапустить сейчас</value>
   </data>
   <data name="MediaPriorityHeader" xml:space="preserve">
@@ -442,18 +385,6 @@
   </data>
   <data name="MediaSummaryNominated" xml:space="preserve">
     <value>Кнопки всегда управляют: {0}</value>
-  </data>
-  <data name="DockCompact.OnContent" xml:space="preserve">
-    <value>Компактный</value>
-  </data>
-  <data name="DockCompact.OffContent" xml:space="preserve">
-    <value>Обычный</value>
-  </data>
-  <data name="DockAutoHide.OnContent" xml:space="preserve">
-    <value>Вкл.</value>
-  </data>
-  <data name="DockAutoHide.OffContent" xml:space="preserve">
-    <value>Выкл.</value>
   </data>
   <data name="PinDropCaption" xml:space="preserve">
     <value>Закрепить на панели</value>
@@ -470,34 +401,31 @@
   <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Следующий</value>
   </data>
-  <data name="BarHelp.Text" xml:space="preserve">
+  <data name="BarHelp" xml:space="preserve">
     <value>Панель — это ряд слотов. Тяните виджет вдоль неё, чтобы переставить в свободный слот, или за её пределы, чтобы убрать. Правый клик по слоту добавляет виджет туда, по виджету — открывает его настройки.</value>
   </data>
-  <data name="GalleryTitle.Text" xml:space="preserve">
-    <value>ВИДЖЕТЫ</value>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>Виджеты</value>
   </data>
-  <data name="PinProgramButton.Text" xml:space="preserve">
+  <data name="PinProgramButton" xml:space="preserve">
     <value>Закрепить программу…</value>
   </data>
-  <data name="RemoveFromBar.Text" xml:space="preserve">
+  <data name="RemoveFromBar" xml:space="preserve">
     <value>Убрать с панели</value>
   </data>
-  <data name="InspectorHint.Text" xml:space="preserve">
-    <value>Щёлкните виджет на панели правой кнопкой и выберите «Настройки» — он откроется здесь.</value>
-  </data>
   <data name="InspectorNone" xml:space="preserve">
-    <value>ВИДЖЕТ</value>
+    <value>Виджет</value>
   </data>
-  <data name="PlacementTitle.Text" xml:space="preserve">
-    <value>РАЗМЕЩЕНИЕ</value>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Расположение</value>
   </data>
-  <data name="BehaviourTitle.Text" xml:space="preserve">
-    <value>ПОВЕДЕНИЕ</value>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Поведение</value>
   </data>
-  <data name="ThicknessNote.Text" xml:space="preserve">
+  <data name="ThicknessNote" xml:space="preserve">
     <value>У панели вдоль бока экрана толщина одна.</value>
   </data>
-  <data name="HideNote.Text" xml:space="preserve">
+  <data name="HideNote" xml:space="preserve">
     <value>На этом краю уже скрывается панель задач, поэтому док остаётся видимым.</value>
   </data>
   <data name="NothingToSetUp" xml:space="preserve">
@@ -602,10 +530,10 @@
   <data name="SenseBytes" xml:space="preserve">
     <value>Сколько данных передаётся прямо сейчас.</value>
   </data>
-  <data name="ThemeHint.Text" xml:space="preserve">
+  <data name="ThemeHint" xml:space="preserve">
     <value>Светлая, тёмная или как в Windows.</value>
   </data>
-  <data name="ThemeLabel.Text" xml:space="preserve">
+  <data name="ThemeLabel" xml:space="preserve">
     <value>Тема</value>
   </data>
   <data name="SenseCpuLoad" xml:space="preserve">
@@ -653,22 +581,196 @@
   <data name="RenameReset" xml:space="preserve">
     <value>Своё имя</value>
   </data>
-  <data name="ReadingIconsTitle.Text" xml:space="preserve">
-    <value>ПОКАЗАНИЯ</value>
+  <data name="ReadingIconsTitle" xml:space="preserve">
+    <value>Показания</value>
   </data>
-  <data name="PinnedIconsTitle.Text" xml:space="preserve">
-    <value>ЗАКРЕПЛЁННЫЕ ПРОГРАММЫ</value>
+  <data name="PinnedIconsTitle" xml:space="preserve">
+    <value>Закреплённые программы</value>
   </data>
   <data name="PinnedIconsHint.Text" xml:space="preserve">
     <value>Закреплённая программа рисуется своей иконкой из Windows. Чтобы заменить её на рисованную, щёлкните программу на панели правой кнопкой и выберите «Настройки».</value>
   </data>
-  <data name="StartupTitle.Text" xml:space="preserve">
-    <value>ЗАПУСК</value>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Запуск</value>
   </data>
-  <data name="FilesTitle.Text" xml:space="preserve">
-    <value>СВОИ ФАЙЛЫ</value>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Собственные файлы</value>
   </data>
-  <data name="QuitTitle.Text" xml:space="preserve">
-    <value>ЗАВЕРШЕНИЕ</value>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Активность диска</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Всего памяти</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Занято памяти</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>Частота процессора</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>Мощность видеокарты</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>На какой частоте он работает.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>С какой скоростью крутится этот вентилятор.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>Сколько энергии он потребляет.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>Сколько оперативной памяти установлено в компьютере.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>Сколько оперативной памяти занято прямо сейчас.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>Величина, о которой сообщает компьютер.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>Панель</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>Язык изменён</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>Панели заговорят на новом языке после перезапуска программы.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>Цвет</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>Картинка</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>Этот экран</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>С какой стороны экрана стоит панель.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>Сколько места занимает панель.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Поставить на панель</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>Нажатие ставит виджет в первый свободный слот. Ограничений нет: два одинаковых показания в разных местах — обычное дело.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>Своя программа</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Закреплённые программы стоят на панели значками. Файл, брошенный прямо на панель, закрепляется в том слоте, куда попал.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>Стандартный набор</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Вернёт панель к тому, что на ней стоит после установки: проигрыватель, процессор, память, оба направления сети, видеокарта и температура. Отмена вернёт вашу расстановку.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Вернуть стандартную панель</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>стандартная панель</value>
+  </data>
+  <data name="BehaviourHint" xml:space="preserve">
+    <value>Панель уходит за край экрана и возвращается, когда курсор доходит до этого края.</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Если выключить, развёрнутое окно сможет закрыть панель.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Его настройки</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Убрать с панели</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>То же самое, что перетащить виджет с панели на рабочий стол.</value>
+  </data>
+  <data name="UndoAutoHide" xml:space="preserve">
+    <value>скрытие</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>Журнал</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>Что программа записала о собственной работе.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>Файл настроек</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Всё с этих страниц — так, как оно лежит на диске.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Остановить программу</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Двойной щелчок — дать этому показанию своё имя</value>
+  </data>
+  <data name="PinnedIconsRow" xml:space="preserve">
+    <value>Закреплённая программа сохраняет свой значок</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>На какой частоте он работает — в долях от паспортной.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Всё, чем занята видеоподсистема, по счётчикам Windows.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>Графический чип</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>Насколько занят сам чип — прямо от драйвера.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>Видеопамять</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>Насколько занята память на видеокарте.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>Частота видеопамяти</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>На какой частоте работает память видеокарты.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>На какой частоте работает графический чип.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>Вентилятор видеокарты</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>С какой скоростью крутится вентилятор видеокарты.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>Сколько энергии потребляет видеокарта.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>Частота графики</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>Какую долю времени накопитель занят работой.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>Сколько данных уходит прямо сейчас.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>Сколько данных приходит прямо сейчас.</value>
   </data>
 </root>

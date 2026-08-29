@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Mcd.Core.Settings;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
@@ -108,16 +108,30 @@ public static class WidgetCatalog
             entry => entry.TypeId == TempWidget.Type
                 && string.IsNullOrEmpty(WidgetOptions.Text(entry.Config, "sensor")));
 
-        foreach (SensorDescriptor sensor in sensors.Catalog
-            .Where(d => d.Kind == SensorKind.Temperature && d.Prominent)
-            .OrderBy(d => d.Group)
-            .ThenBy(d => d.Label, StringComparer.CurrentCulture))
+        // Named the way the sensors page names them, not the way the firmware
+        // does: a chip reading "PVC10 SK hynix 1024GB" tells nobody it is the
+        // drive's temperature. Where two parts end up with the same plain
+        // name - two drives - the model is put back on to tell them apart,
+        // because that is the only thing that does.
+        List<SensorDescriptor> parts =
+        [
+            .. sensors.Catalog
+                .Where(d => d.Kind == SensorKind.Temperature && d.Prominent)
+                .OrderBy(d => d.Group)
+                .ThenBy(d => d.Label, StringComparer.CurrentCulture)
+        ];
+
+        var plain = parts.ToLookup(SensorNames.Plain);
+
+        foreach (SensorDescriptor sensor in parts)
         {
             string key = sensor.Key.Value;
+            string name = SensorNames.Plain(sensor);
+            string detail = SensorNames.Detail(sensor);
 
             yield return new WidgetOffer(
-                sensor.Label,
-                Loc.Tr("OfferSensor", "This part's temperature."),
+                plain[name].Count() > 1 && detail.Length > 0 ? $"{name} — {detail}" : name,
+                detail.Length > 0 ? detail : Loc.Tr("OfferSensor", "This part's temperature."),
                 TempWidget.IconFor(sensor.Group),
                 () => WidgetConfig.New(TempWidget.Type) with
                 {

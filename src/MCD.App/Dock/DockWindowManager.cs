@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Mcd.Core.Monitors;
 using Mcd.Core.Settings;
 using Microsoft.Extensions.Logging;
@@ -191,7 +191,8 @@ public sealed class DockWindowManager : IDisposable
         if (drawn
             && next.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } config)
         {
-            _dressed[stableId] = Signature(config);
+            _dressed[stableId] = Look(config);
+            _held[stableId] = Contents(config);
         }
     }
 
@@ -222,20 +223,27 @@ public sealed class DockWindowManager : IDisposable
         {
             if (wanted.TryGetValue(id, out DockPlan? plan) && IsUnchanged(window, plan))
             {
-                // Kept, but not necessarily left as it was: the settings may
-                // have changed what belongs on it. Rebuilt only when they
-                // actually did - rearranging one bar must not make every other
-                // bar tear its widgets down and put them back, which is the
-                // stutter a drop used to cost.
-                string signature = Signature(plan.Config);
+                // Kept, but not necessarily left as it was. Two questions,
+                // deliberately separate: has the way the bar is drawn changed,
+                // or only what is on it? The first needs every widget built
+                // again in the new colours; the second needs the ones that
+                // arrived built and the ones that left disposed, and nothing
+                // else touched. Treating them as one question is what made
+                // moving a single widget blank the whole bar for a second.
+                string look = Look(plan.Config);
+                string held = Contents(plan.Config);
 
-                if (_dressed.TryGetValue(id, out string? shown) && shown == signature)
+                if (!_dressed.TryGetValue(id, out string? dressed) || dressed != look)
                 {
-                    continue;
+                    window.RefreshWidgets(plan.Config, Context());
+                }
+                else if (!_held.TryGetValue(id, out string? shown) || shown != held)
+                {
+                    window.RefreshContents(plan.Config);
                 }
 
-                window.RefreshWidgets(plan.Config, Context());
-                _dressed[id] = signature;
+                _dressed[id] = look;
+                _held[id] = held;
                 continue;
             }
 
@@ -243,6 +251,7 @@ public sealed class DockWindowManager : IDisposable
             window.Close();
             _windows.Remove(id);
             _dressed.Remove(id);
+            _held.Remove(id);
         }
 
         foreach ((string id, DockPlan plan) in wanted)
@@ -263,7 +272,8 @@ public sealed class DockWindowManager : IDisposable
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
             window.Settled += (_, widgets) => Save(stableId, widgets, drawn: true);
             _windows[id] = window;
-            _dressed[id] = Signature(plan.Config);
+            _dressed[id] = Look(plan.Config);
+            _held[id] = Contents(plan.Config);
 
             // Filled only now that we are listening: a bar settling its widgets
             // onto slots for the first time has something to say about it.
@@ -314,14 +324,21 @@ public sealed class DockWindowManager : IDisposable
         _coalescer.ReadNow(TopologyTrigger.ExplorerRestarted);
     }
 
-    /// <summary>What each dock window was last built from, by stable id.</summary>
+    /// <summary>How each dock window was last dressed, by stable id.</summary>
     private readonly Dictionary<string, string> _dressed = [];
 
+    /// <summary>What each dock window was last holding, by stable id.</summary>
+    private readonly Dictionary<string, string> _held = [];
+
     /// <summary>
-    /// Everything that decides what a dock window shows, flattened to one
-    /// string. Two equal signatures mean a rebuild would change nothing.
+    /// Everything that decides how a bar is drawn, flattened to one string.
     /// </summary>
-    private string Signature(MonitorConfig config)
+    /// <remarks>
+    /// A change here means every widget on that bar has to be built again:
+    /// the colours, the icons and the density are baked into each one as it
+    /// is made.
+    /// </remarks>
+    private string Look(MonitorConfig config)
     {
         AppSettings app = _settings.Current.App;
 
@@ -338,10 +355,25 @@ public sealed class DockWindowManager : IDisposable
             text.Append(icon.Key).Append('=').Append(icon.Value).Append(';');
         }
 
+        return text.ToString();
+    }
+
+    /// <summary>
+    /// What is on a bar and where, flattened to one string.
+    /// </summary>
+    /// <remarks>
+    /// The slot is part of it: a widget that only moved still needs the bar
+    /// laid out again, even though nothing has to be rebuilt to do it.
+    /// </remarks>
+    private static string Contents(MonitorConfig config)
+    {
+        var text = new System.Text.StringBuilder();
+
         foreach (WidgetConfig widget in config.Widgets)
         {
             text.Append('|').Append(widget.InstanceId)
                 .Append(':').Append(widget.TypeId)
+                .Append(':').Append(widget.Cell)
                 .Append(':').Append(widget.Config?.GetRawText());
         }
 

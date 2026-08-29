@@ -38,28 +38,19 @@
   <data name="DocksIntro.Text" xml:space="preserve">
     <value>One dock per screen. Changes land on the bar as you make them.</value>
   </data>
-  <data name="BarLiveTitle.Text" xml:space="preserve">
-    <value>THE BAR</value>
+  <data name="BarLiveTitle" xml:space="preserve">
+    <value>The bar itself</value>
   </data>
-  <data name="PreviewEmpty.Text" xml:space="preserve">
-    <value>Empty. Add a widget, or right-click the bar where you want one.</value>
-  </data>
-  <data name="ShowDockLabel.Text" xml:space="preserve">
+  <data name="ShowDockLabel" xml:space="preserve">
     <value>Show a dock on this display</value>
   </data>
-  <data name="DockEnabled.OnContent" xml:space="preserve">
-    <value>On</value>
-  </data>
-  <data name="DockEnabled.OffContent" xml:space="preserve">
-    <value>Off</value>
-  </data>
-  <data name="EdgeLabel.Text" xml:space="preserve">
+  <data name="EdgeLabel" xml:space="preserve">
     <value>Edge</value>
   </data>
-  <data name="SizeLabel.Text" xml:space="preserve">
+  <data name="SizeLabel" xml:space="preserve">
     <value>Thickness</value>
   </data>
-  <data name="BehaviourLabel.Text" xml:space="preserve">
+  <data name="BehaviourLabel" xml:space="preserve">
     <value>Hide until you point at its edge</value>
   </data>
   <!-- Launcher page -->
@@ -70,29 +61,17 @@
   <data name="AppearanceIntro.Text" xml:space="preserve">
     <value>How the bars are drawn. This applies to every dock.</value>
   </data>
-  <data name="BackgroundLabel.Text" xml:space="preserve">
+  <data name="BackgroundLabel" xml:space="preserve">
     <value>Background</value>
   </data>
-  <data name="BackgroundHint.Text" xml:space="preserve">
+  <data name="BackgroundHint" xml:space="preserve">
     <value>Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw.</value>
   </data>
-  <data name="BackdropTranslucentItem.Content" xml:space="preserve">
-    <value>Translucent</value>
-  </data>
-  <data name="BackdropSolidItem.Content" xml:space="preserve">
-    <value>Solid</value>
-  </data>
-  <data name="AccentLabel.Text" xml:space="preserve">
+  <data name="AccentLabel" xml:space="preserve">
     <value>Colour of the readings</value>
   </data>
-  <data name="AccentHint.Text" xml:space="preserve">
+  <data name="AccentHint" xml:space="preserve">
     <value>The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way.</value>
-  </data>
-  <data name="AccentNeutralItem.Content" xml:space="preserve">
-    <value>Plain text colour</value>
-  </data>
-  <data name="AccentWindowsItem.Content" xml:space="preserve">
-    <value>Windows accent colour</value>
   </data>
   <!-- Icons page -->
   <data name="IconsTitle.Text" xml:space="preserve">
@@ -108,48 +87,27 @@
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running.</value>
   </data>
-  <data name="LiveReadingsTitle.Text" xml:space="preserve">
-    <value>LIVE READINGS</value>
+  <data name="LiveReadingsTitle" xml:space="preserve">
+    <value>Live readings</value>
   </data>
   <!-- Monitors page -->
   <!-- About page -->
-  <data name="AboutTitle.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="AboutIntro.Text" xml:space="preserve">
+  <data name="AboutIntro" xml:space="preserve">
     <value>A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence.</value>
   </data>
-  <data name="StartWithWindowsLabel.Text" xml:space="preserve">
+  <data name="StartWithWindowsLabel" xml:space="preserve">
     <value>Start with Windows</value>
   </data>
-  <data name="StartWithWindowsHint.Text" xml:space="preserve">
+  <data name="StartWithWindowsHint" xml:space="preserve">
     <value>The docks come back when you sign in.</value>
   </data>
-  <data name="AutoStartToggle.OnContent" xml:space="preserve">
-    <value>On</value>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Closing this window leaves the docks running. To stop them, use the button here - ending the task from Task Manager leaves the reserved screen space behind.</value>
   </data>
-  <data name="AutoStartToggle.OffContent" xml:space="preserve">
-    <value>Off</value>
-  </data>
-  <data name="OpenLogsButton.Content" xml:space="preserve">
-    <value>Open the log folder</value>
-  </data>
-  <data name="OpenConfigButton.Content" xml:space="preserve">
-    <value>Open the settings folder</value>
-  </data>
-  <data name="ExitHint.Text" xml:space="preserve">
-    <value>Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind.</value>
-  </data>
-  <data name="ExitButton.Content" xml:space="preserve">
+  <data name="ExitButton" xml:space="preserve">
     <value>Exit Master Control Dock</value>
   </data>
   <!-- Media widget buttons on the bar -->
-  <data name="MediaPreviousButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Previous</value>
-  </data>
-  <data name="MediaNextButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Next</value>
-  </data>
   <!-- Settings window, strings built in code -->
   <data name="DockNoScreen" xml:space="preserve">
     <value>No screen has been set up yet.</value>
@@ -356,13 +314,13 @@
   <data name="SeenDays" xml:space="preserve">
     <value>{0} days ago</value>
   </data>
-  <data name="LanguageLabel.Text" xml:space="preserve">
+  <data name="LanguageLabel" xml:space="preserve">
     <value>Language</value>
   </data>
-  <data name="LanguageHint.Text" xml:space="preserve">
+  <data name="LanguageHint" xml:space="preserve">
     <value>Takes effect the next time the program starts.</value>
   </data>
-  <data name="LanguageSystemItem.Content" xml:space="preserve">
+  <data name="LanguageSystemItem" xml:space="preserve">
     <value>Same as Windows</value>
   </data>
   <data name="TempLimitAuto" xml:space="preserve">
@@ -374,15 +332,6 @@
   <data name="TempCritAt" xml:space="preserve">
     <value>Critical at, °C</value>
   </data>
-  <data name="PinDialog.Title" xml:space="preserve">
-    <value>Pin to the bar</value>
-  </data>
-  <data name="PinDialog.PrimaryButtonText" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="PinDialog.CloseButtonText" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
   <data name="PickColour" xml:space="preserve">
     <value>Choose a colour</value>
   </data>
@@ -392,14 +341,8 @@
   <data name="NoPictureYet" xml:space="preserve">
     <value>No picture chosen yet</value>
   </data>
-  <data name="TopmostLabel.Text" xml:space="preserve">
+  <data name="TopmostLabel" xml:space="preserve">
     <value>Keep above other windows</value>
-  </data>
-  <data name="DockTopmost.OnContent" xml:space="preserve">
-    <value>On</value>
-  </data>
-  <data name="DockTopmost.OffContent" xml:space="preserve">
-    <value>Off</value>
   </data>
   <data name="PinTargetHeader" xml:space="preserve">
     <value>Program, folder or address</value>
@@ -431,7 +374,7 @@
   <data name="SeeThroughHeader" xml:space="preserve">
     <value>How see-through</value>
   </data>
-  <data name="RestartNowText.Text" xml:space="preserve">
+  <data name="RestartNowText" xml:space="preserve">
     <value>Restart now</value>
   </data>
   <data name="MediaPriorityHeader" xml:space="preserve">
@@ -442,18 +385,6 @@
   </data>
   <data name="MediaSummaryNominated" xml:space="preserve">
     <value>The buttons always drive {0}</value>
-  </data>
-  <data name="DockCompact.OnContent" xml:space="preserve">
-    <value>Compact</value>
-  </data>
-  <data name="DockCompact.OffContent" xml:space="preserve">
-    <value>Default</value>
-  </data>
-  <data name="DockAutoHide.OnContent" xml:space="preserve">
-    <value>On</value>
-  </data>
-  <data name="DockAutoHide.OffContent" xml:space="preserve">
-    <value>Off</value>
   </data>
   <data name="PinDropCaption" xml:space="preserve">
     <value>Pin to the bar</value>
@@ -470,34 +401,31 @@
   <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Next</value>
   </data>
-  <data name="BarHelp.Text" xml:space="preserve">
+  <data name="BarHelp" xml:space="preserve">
     <value>The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings.</value>
   </data>
-  <data name="GalleryTitle.Text" xml:space="preserve">
-    <value>WIDGETS</value>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>Widgets</value>
   </data>
-  <data name="PinProgramButton.Text" xml:space="preserve">
+  <data name="PinProgramButton" xml:space="preserve">
     <value>Pin a program...</value>
   </data>
-  <data name="RemoveFromBar.Text" xml:space="preserve">
+  <data name="RemoveFromBar" xml:space="preserve">
     <value>Remove from bar</value>
   </data>
-  <data name="InspectorHint.Text" xml:space="preserve">
-    <value>Right-click a widget on the bar and choose Settings to set it up here.</value>
-  </data>
   <data name="InspectorNone" xml:space="preserve">
-    <value>WIDGET</value>
+    <value>Widget</value>
   </data>
-  <data name="PlacementTitle.Text" xml:space="preserve">
-    <value>PLACEMENT</value>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Placement</value>
   </data>
-  <data name="BehaviourTitle.Text" xml:space="preserve">
-    <value>BEHAVIOUR</value>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Behaviour</value>
   </data>
-  <data name="ThicknessNote.Text" xml:space="preserve">
+  <data name="ThicknessNote" xml:space="preserve">
     <value>A bar down the side of the screen has one thickness.</value>
   </data>
-  <data name="HideNote.Text" xml:space="preserve">
+  <data name="HideNote" xml:space="preserve">
     <value>The taskbar already hides on this edge, so this dock stays visible.</value>
   </data>
   <data name="NothingToSetUp" xml:space="preserve">
@@ -602,10 +530,10 @@
   <data name="SenseBytes" xml:space="preserve">
     <value>How much data is moving right now.</value>
   </data>
-  <data name="ThemeHint.Text" xml:space="preserve">
+  <data name="ThemeHint" xml:space="preserve">
     <value>Light or dark, or the same as Windows.</value>
   </data>
-  <data name="ThemeLabel.Text" xml:space="preserve">
+  <data name="ThemeLabel" xml:space="preserve">
     <value>Theme</value>
   </data>
   <data name="SenseCpuLoad" xml:space="preserve">
@@ -653,22 +581,196 @@
   <data name="RenameReset" xml:space="preserve">
     <value>Its own name</value>
   </data>
-  <data name="ReadingIconsTitle.Text" xml:space="preserve">
-    <value>READINGS</value>
+  <data name="ReadingIconsTitle" xml:space="preserve">
+    <value>Readings</value>
   </data>
-  <data name="PinnedIconsTitle.Text" xml:space="preserve">
-    <value>PINNED PROGRAMS</value>
+  <data name="PinnedIconsTitle" xml:space="preserve">
+    <value>Pinned programs</value>
   </data>
   <data name="PinnedIconsHint.Text" xml:space="preserve">
     <value>A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings.</value>
   </data>
-  <data name="StartupTitle.Text" xml:space="preserve">
-    <value>STARTUP</value>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Startup</value>
   </data>
-  <data name="FilesTitle.Text" xml:space="preserve">
-    <value>ITS OWN FILES</value>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Its own files</value>
   </data>
-  <data name="QuitTitle.Text" xml:space="preserve">
-    <value>QUITTING</value>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Quitting</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Drive activity</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Memory installed</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Memory in use</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>Processor speed</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>Graphics power</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>What speed it is running at.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>How fast this fan is turning.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>How much power it is drawing.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>How much memory is fitted in this machine.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>How much memory is taken up right now.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>An amount this machine reports.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>The bar</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>The language has changed</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>The bars will read in the new language once the program starts again.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>The colour</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>The picture</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>This screen</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>Which side of the screen the bar sits on.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>How much room the bar takes up.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Put one on the bar</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>A press adds it to the first free slot. There is no limit: two of the same reading in different places is an ordinary thing to want.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>A program of your own</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Pinned programs sit on the bar as icons. A file dropped straight onto the bar is pinned to the slot it lands on.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>The standard set</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip and a temperature. Undo brings your own arrangement back.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Restore the standard bar</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>the standard bar</value>
+  </data>
+  <data name="BehaviourHint" xml:space="preserve">
+    <value>The bar steps off the screen and comes back when the pointer reaches that edge.</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Off lets a maximised window cover the bar.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Its own settings</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Take it off the bar</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>The same as dragging it off the bar onto the desktop.</value>
+  </data>
+  <data name="UndoAutoHide" xml:space="preserve">
+    <value>hiding</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>The log</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>What the program wrote down about its own run.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>The settings file</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Everything on these pages, as it is stored on disk.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Open the folder</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Stop the program</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Double-click to give this reading a name of your own</value>
+  </data>
+  <data name="PinnedIconsRow" xml:space="preserve">
+    <value>A pinned program keeps its own icon</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>How fast it is running, as a share of the speed it is rated for.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Everything the graphics hardware is doing, as Windows counts it.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>Graphics chip</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>How busy the chip itself is, straight from the driver.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>Graphics memory</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>How busy the memory on the graphics card is.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>Graphics memory speed</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>What speed the memory on the graphics card is running at.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>What speed the graphics chip is running at.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>Graphics fan</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>How fast the graphics card's fan is turning.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>How much power the graphics card is drawing.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>Graphics speed</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>How much of the time this drive is busy.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>How much data is going out right now.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>How much data is coming in right now.</value>
   </data>
 </root>

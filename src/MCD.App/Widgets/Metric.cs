@@ -370,23 +370,10 @@ public sealed partial class Metric : ObservableObject
         }
     }
 
-    private string Format(double value) => Unit switch
-    {
-        // Rates are the only reading that needs a unit chosen per value; a
-        // network figure spends most of its life in the kilobytes and its
-        // interesting moments in the megabytes.
-        "B/s" => Rate(value),
-        _ => value.ToString("F0", CultureInfo.InvariantCulture) + " " + Unit,
-    };
-
-    private string Rate(double bytesPerSecond) => bytesPerSecond switch
-    {
-        >= 1024 * 1024 => (bytesPerSecond / (1024 * 1024)).ToString("F1", CultureInfo.InvariantCulture)
-                          + (Narrow ? "M" : " MB/s"),
-        >= 1024 => (bytesPerSecond / 1024).ToString("F0", CultureInfo.InvariantCulture)
-                   + (Narrow ? "k" : " kB/s"),
-        _ => bytesPerSecond.ToString("F0", CultureInfo.InvariantCulture) + (Narrow ? string.Empty : " B/s"),
-    };
+    // Anything counted in bytes - a rate, or the memory installed in the
+    // machine - picks its unit from the value. Shared with the settings
+    // window, which shows the same readings in a list.
+    private string Format(double value) => Readable.Value(value, Unit, Narrow);
 
     private Brush Paint(SensorReading reading)
     {

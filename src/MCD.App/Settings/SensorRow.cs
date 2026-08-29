@@ -1,5 +1,4 @@
-using System.Globalization;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Widgets;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
@@ -24,8 +23,8 @@ public sealed partial class SensorRow : ObservableObject
 
         Key = sensor.Key;
         Label = names.For(sensor);
-        Explain = ExplainOf(sensor);
-        Hardware = sensor.Hardware;
+        Explain = SensorNames.Explain(sensor);
+        Hardware = SensorNames.Detail(sensor);
         Unit = sensor.Unit;
     }
 
@@ -35,8 +34,24 @@ public sealed partial class SensorRow : ObservableObject
     [ObservableProperty]
     public partial string Label { get; set; }
 
-    /// <summary>What the part itself is, under the name.</summary>
+    /// <summary>
+    /// Which part this came off - a model number, or nothing at all.
+    /// </summary>
+    /// <remarks>
+    /// A source's own shorthand for itself is not printed: "ram" under
+    /// "Memory" says nothing and repeats down the page. A real model does the
+    /// one job this line has, which is telling two drives apart.
+    /// </remarks>
     public string Hardware { get; }
+
+    /// <summary>Whether there is a part worth naming under the name.</summary>
+    public Microsoft.UI.Xaml.Visibility HardwareShown => Hardware.Length > 0
+        ? Microsoft.UI.Xaml.Visibility.Visible
+        : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+    /// <summary>What a double-click on this row does.</summary>
+    public string RenameHint =>
+        Loc.Tr("RenameTip", "Double-click to give this reading a name of your own");
 
     /// <summary>
     /// What this reading means, in ordinary words. The name above it is the
@@ -64,24 +79,6 @@ public sealed partial class SensorRow : ObservableObject
     {
         SensorReading reading = snapshot[Key];
 
-        Value = reading.HasValue
-            ? reading.Value.ToString("F0", CultureInfo.InvariantCulture) + " " + Unit
-            : "--";
+        Value = reading.HasValue ? Readable.Value(reading.Value, Unit) : "--";
     }
-
-    private static string ExplainOf(SensorDescriptor sensor) => sensor.Kind switch
-    {
-        SensorKind.Temperature => sensor.Group switch
-        {
-            HardwareGroup.Cpu => Loc.Tr("SenseCpuTemp", "How hot the processor is."),
-            HardwareGroup.Gpu => Loc.Tr("SenseGpuTemp", "How hot the graphics chip is."),
-            HardwareGroup.Storage => Loc.Tr("SenseDiskTemp", "How hot this drive is."),
-            HardwareGroup.Memory => Loc.Tr("SenseRamTemp", "How hot the memory is."),
-            HardwareGroup.Motherboard => Loc.Tr("SenseBoardTemp", "How hot the motherboard is."),
-            _ => Loc.Tr("SenseTemp", "A temperature this machine reports."),
-        },
-        SensorKind.Load => Loc.Tr("SenseLoad", "How busy it is, as a share of what it can do."),
-        SensorKind.BytesPerSecond => Loc.Tr("SenseBytes", "How much data is moving right now."),
-        _ => string.Empty,
-    };
 }

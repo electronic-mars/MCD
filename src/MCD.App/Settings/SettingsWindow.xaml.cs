@@ -94,12 +94,9 @@ public sealed partial class SettingsWindow : Window
 
         IconList.ItemsSource = _icons;
         SensorList.ItemsSource = _readings;
-        VersionText.Text = string.Format(
+        _version = string.Format(
             CultureInfo.CurrentCulture, Loc.Tr("VersionFormat", "Version {0}"), AppInfo.Version);
 
-        _filling = true;
-        AutoStartToggle.IsOn = AutoStart.Enabled;
-        _filling = false;
 
         // Only while the sensors page is on screen. A window sitting behind
         // everything else has no business waking the machine once a second.
@@ -164,6 +161,34 @@ public sealed partial class SettingsWindow : Window
         ReloadDocks();
     }
 
+    /// <summary>
+    /// Opens one page by its tag, for the unattended visual check. A tag
+    /// ending in "!" also scrolls to the foot of the page, so the parts below
+    /// the window can be photographed too.
+    /// </summary>
+    public void GoTo(string tag)
+    {
+        bool foot = tag.EndsWith('!');
+        string wanted = foot ? tag[..^1] : tag;
+
+        foreach (object item in Nav.MenuItems.Concat(Nav.FooterMenuItems))
+        {
+            if (item is not NavigationViewItem entry || (entry.Tag as string) != wanted)
+            {
+                continue;
+            }
+
+            Nav.SelectedItem = entry;
+
+            // After the pages have been laid out, not before: the page just
+            // switched to has no extent yet.
+            DispatcherQueue.TryEnqueue(() => Pages.ChangeView(
+                null, foot ? Pages.ScrollableHeight : 0, null, disableAnimation: true));
+
+            return;
+        }
+    }
+
     /// <summary>Rebuilds both lists from the settings and the live topology.</summary>
     public void Reload()
     {
@@ -172,12 +197,6 @@ public sealed partial class SettingsWindow : Window
         AppSettings look = _settings.Current.App;
 
         _filling = true;
-        LanguageChoice.SelectedIndex = look.Language switch
-        {
-            "en-US" => 1,
-            "ru-RU" => 2,
-            _ => 0,
-        };
         _filling = false;
 
         Root.RequestedTheme = Appearance.Of(look.Theme);
@@ -192,46 +211,177 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>
-    /// The appearance page's rows of tiles, the Master Audio Switcher way:
-    /// every few-way choice is a row of segments, and the chosen one wears
-    /// the accent.
+    /// The appearance page, built the way Master Audio Switcher builds its
+    /// settings tab: a heading, then one panel whose rows are divided by
+    /// hairlines, each row a name, an explanation and the keys that act.
     /// </summary>
+    /// <remarks>
+    /// Built in code rather than declared. Three of these choices are three,
+    /// five and two keys wide, and a row that puts a control of unknown width
+    /// in an <c>Auto</c> column beside a starred one starves the explanation:
+    /// the text ends up a column of single letters, which is exactly what
+    /// this page did.
+    /// </remarks>
     private void RefreshLook()
     {
         AppSettings look = _settings.Current.App;
+        Braun.Theme = Root.ActualTheme;
 
-        ThemeSeg.Content = Seg.Buttons(
-            [
-                Loc.Tr("SegThemeSystem", "Match Windows"),
-                Loc.Tr("SegThemeLight", "Light"),
-                Loc.Tr("SegThemeDark", "Dark"),
-            ],
-            Appearance.Index(look.Theme),
-            i => ApplyLook(theme: Appearance.FromIndex(i)));
+        LookBody.Children.Clear();
+
+        LookBody.Children.Add(Braun.Heading("", Loc.Tr("LookGroupBar", "The bar")));
 
         string[] backdrops = ["acrylic", "solid", "colour", "image", "braun"];
 
-        BackdropSeg.Content = Seg.Buttons(
-            [
-                Loc.Tr("SegBackdropTranslucent", "Translucent"),
-                Loc.Tr("SegBackdropSolid", "Solid"),
-                Loc.Tr("SegBackdropColour", "A colour"),
-                Loc.Tr("SegBackdropImage", "A picture"),
-                Loc.Tr("SegBackdropBraun", "Braun"),
-            ],
-            Math.Max(0, Array.IndexOf(backdrops, look.Backdrop)),
-            i => ApplyLook(backdrop: backdrops[i]));
+        LookBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("ThemeLabel", "Theme"),
+                Loc.Tr("ThemeHint", "Light or dark, or the same as Windows."),
+                Braun.Segs(
+                    [
+                        Loc.Tr("SegThemeSystem", "Match Windows"),
+                        Loc.Tr("SegThemeLight", "Light"),
+                        Loc.Tr("SegThemeDark", "Dark"),
+                    ],
+                    Appearance.Index(look.Theme),
+                    i => ApplyLook(theme: Appearance.FromIndex(i)),
+                    wide: true),
+                stack: true),
 
-        AccentSeg.Content = Seg.Buttons(
-            [
-                Loc.Tr("SegAccentNeutral", "Plain text"),
-                Loc.Tr("SegAccentWindows", "Windows accent"),
-            ],
-            look.Accent == "windows" ? 1 : 0,
-            i => ApplyLook(accent: i == 1 ? "windows" : "neutral"));
+            Braun.Row(
+                Loc.Tr("BackgroundLabel", "Background"),
+                Loc.Tr(
+                    "BackgroundHint",
+                    "Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw."),
+                Braun.Segs(
+                    [
+                        Loc.Tr("SegBackdropTranslucent", "Translucent"),
+                        Loc.Tr("SegBackdropSolid", "Solid"),
+                        Loc.Tr("SegBackdropColour", "A colour"),
+                        Loc.Tr("SegBackdropImage", "A picture"),
+                        Loc.Tr("SegBackdropBraun", "Braun"),
+                    ],
+                    Math.Max(0, Array.IndexOf(backdrops, look.Backdrop)),
+                    i => ApplyLook(backdrop: backdrops[i]),
+                    wide: true),
+                stack: true),
 
-        ShowBackdropExtras();
+            BackdropExtraRow(look),
+
+            Braun.Row(
+                Loc.Tr("AccentLabel", "Colour of the readings"),
+                Loc.Tr(
+                    "AccentHint",
+                    "The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."),
+                Braun.Segs(
+                    [
+                        Loc.Tr("SegAccentNeutral", "Plain text"),
+                        Loc.Tr("SegAccentWindows", "Windows accent"),
+                    ],
+                    look.Accent == "windows" ? 1 : 0,
+                    i => ApplyLook(accent: i == 1 ? "windows" : "neutral"),
+                    wide: true),
+                stack: true)));
+
+        LookBody.Children.Add(Braun.Heading("", Loc.Tr("LookGroupLanguage", "Language")));
+
+        string[] languages = ["system", "en-US", "ru-RU"];
+
+        LookBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("LanguageLabel", "Language"),
+                Loc.Tr("LanguageHint", "Takes effect the next time the program starts."),
+                Braun.Segs(
+                    [Loc.Tr("LanguageSystemItem", "Same as Windows"), "English", "Русский"],
+                    Math.Max(0, Array.IndexOf(languages, look.Language)),
+                    i => PickLanguage(languages[i]),
+                    wide: true),
+                stack: true),
+
+            // Offered only once a language has actually been chosen: people
+            // reasonably think closing this window is a restart.
+            _restartOffered
+                ? Braun.Row(
+                    Loc.Tr("RestartRow", "The language has changed"),
+                    Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
+                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, ""))
+                : null));
     }
+
+    /// <summary>
+    /// The row under Background that says which colour or which picture -
+    /// and nothing at all for the backgrounds that need neither.
+    /// </summary>
+    private FrameworkElement? BackdropExtraRow(AppSettings app)
+    {
+        if (app.Backdrop is not ("colour" or "image"))
+        {
+            return null;
+        }
+
+        bool colour = app.Backdrop == "colour";
+
+        var shown = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 9,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        if (colour)
+        {
+            shown.Children.Add(new Border
+            {
+                Width = 18,
+                Height = 18,
+                VerticalAlignment = VerticalAlignment.Center,
+                CornerRadius = new CornerRadius(5),
+                BorderThickness = new Thickness(1),
+                BorderBrush = Braun.LineHi,
+                Background = new SolidColorBrush(Swatch(app.BackdropColour)),
+            });
+        }
+
+        shown.Children.Add(new TextBlock
+        {
+            Text = colour
+                ? app.BackdropColour
+                : app.BackdropImage.Length > 0
+                    ? Path.GetFileName(app.BackdropImage)
+                    : Loc.Tr("NoPictureYet", "No picture chosen yet"),
+            FontSize = 12,
+            Foreground = Braun.Tx2,
+            VerticalAlignment = VerticalAlignment.Center,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+        });
+
+        shown.Children.Add(Braun.Action(
+            colour ? Loc.Tr("PickColour", "Choose a colour") : Loc.Tr("PickPicture", "Choose a picture"),
+            () => _ = PickBackdrop(),
+            ""));
+
+        return Braun.Row(
+            colour ? Loc.Tr("ColourRow", "The colour") : Loc.Tr("PictureRow", "The picture"),
+            null,
+            shown);
+    }
+
+    /// <summary>Writes the chosen language down and offers the restart it needs.</summary>
+    private void PickLanguage(string language)
+    {
+        SettingsModel current = _settings.Current;
+
+        _settings.Commit(
+            current with { App = current.App with { Language = language } },
+            WriteReason.UserAction);
+
+        _log.LogInformation("settings.language {Language}", language);
+        _restartOffered = true;
+        RefreshLook();
+    }
+
+    /// <summary>True once the language has been changed in this sitting.</summary>
+    private bool _restartOffered;
 
     /// <summary>The one writer of the appearance settings.</summary>
     private void ApplyLook(string? theme = null, string? backdrop = null, string? accent = null)
@@ -281,7 +431,7 @@ public sealed partial class SettingsWindow : Window
             tabs.Add(("", Label(monitors[i], monitors, live, i), monitors[i].Enabled));
         }
 
-        DisplayTabs.Content = Seg.Tabs(tabs, chosen, i =>
+        DisplayTabs.Content = Braun.Tabs(tabs, chosen, i =>
         {
             _editing = monitors[i].StableId;
             ReloadDocks();
@@ -332,9 +482,18 @@ public sealed partial class SettingsWindow : Window
         return $"{name} #{tail}";
     }
 
-    /// <summary>Fills every control on the Docks page from the chosen dock.</summary>
+    /// <summary>Builds the whole Docks page from the chosen dock.</summary>
+    /// <remarks>
+    /// In the order somebody asks the questions in: which screen, where the
+    /// bar sits on it, what is on the bar, how it behaves. Each of those is
+    /// one panel of hairline-divided rows, so the controls line themselves up
+    /// down the right-hand edge with no fixed width anywhere.
+    /// </remarks>
     private void ShowDock()
     {
+        Braun.Theme = Root.ActualTheme;
+        DockBody.Children.Clear();
+
         MonitorConfig? dock = _settings.Current.Monitors
             .FirstOrDefault(m => m.StableId == _editing);
 
@@ -342,7 +501,9 @@ public sealed partial class SettingsWindow : Window
 
         if (dock is null)
         {
-            DockDetail.Text = Loc.Tr("DockNoScreen", "No screen has been set up yet.");
+            DockBody.Children.Add(Braun.Group(Braun.Row(
+                Loc.Tr("DockNoScreen", "No screen has been set up yet."), null, null)));
+
             return;
         }
 
@@ -351,64 +512,203 @@ public sealed partial class SettingsWindow : Window
 
         _filling = true;
 
-        DockDetail.Text = live is not null
-            ? $"{live.Width} × {live.Height} · {live.Dpi * 100 / 96}%"
-            : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen");
+        // ---------------------------------------------------------- the screen
+        DockBody.Children.Add(Braun.Heading("\uE7F4", Loc.Tr("DockGroupScreen", "This screen")));
 
-        DockEnabled.IsOn = dock.Enabled;
-        DockTopmost.IsOn = dock.Topmost;
-        DockAutoHide.IsOn = dock.Mode == AppBarMode.AutoHide;
+        DockBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("ShowDockLabel", "Show a dock on this display"),
+            live is not null
+                ? $"{live.Width} x {live.Height} · {live.Dpi * 100 / 96}%"
+                : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen"),
+            Braun.Switch(
+                dock.Enabled,
+                on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "shown"))))));
 
-        EdgeSeg.Content = Seg.Buttons(
-            [
-                Loc.Tr("SegEdgeLeft", "Left"),
-                Loc.Tr("SegEdgeTop", "Top"),
-                Loc.Tr("SegEdgeRight", "Right"),
-                Loc.Tr("SegEdgeBottom", "Bottom"),
-            ],
-            (int)dock.Edge,
-            i =>
-            {
-                EditDock(d => d with { Edge = (AppBarEdge)i }, Loc.Tr("UndoEdge", "edge"));
-                ShowDock();
-            });
+        // Everything the master switch governs dims with it.
+        var gated = new StackPanel
+        {
+            Opacity = dock.Enabled ? 1 : 0.35,
+            IsHitTestVisible = dock.Enabled,
+        };
 
-        ThicknessSeg.Content = Seg.Buttons(
-            [
-                Loc.Tr("SegThickDefault", "Default"),
-                Loc.Tr("SegThickCompact", "Compact"),
-            ],
-            dock.Density == DockDensity.Compact ? 1 : 0,
-            i =>
-            {
-                EditDock(
-                    d => d with { Density = i == 1 ? DockDensity.Compact : DockDensity.Default },
-                    Loc.Tr("UndoThickness", "thickness"));
-                ShowDock();
-            });
+        DockBody.Children.Add(gated);
 
-        // A vertical bar has one thickness; the row is replaced by its
-        // explanation rather than offered greyed and mute.
+        // ------------------------------------------------------------- placing
         bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
-        ThicknessLabel.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
-        ThicknessSeg.Visibility = horizontal ? Visibility.Visible : Visibility.Collapsed;
-        ThicknessNote.Visibility = horizontal ? Visibility.Collapsed : Visibility.Visible;
 
-        HideNote.Visibility =
-            dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge)
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+        gated.Children.Add(Braun.Heading("\uE740", Loc.Tr("PlacementTitle", "Placement")));
 
-        // The master switch gates visibly: everything it governs dims with it.
-        DockBody.Opacity = dock.Enabled ? 1 : 0.35;
-        DockBody.IsHitTestVisible = dock.Enabled;
+        gated.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("EdgeLabel", "Edge"),
+                Loc.Tr("EdgeHint", "Which side of the screen the bar sits on."),
+                Braun.Segs(
+                    [
+                        Loc.Tr("SegEdgeLeft", "Left"),
+                        Loc.Tr("SegEdgeTop", "Top"),
+                        Loc.Tr("SegEdgeRight", "Right"),
+                        Loc.Tr("SegEdgeBottom", "Bottom"),
+                    ],
+                    (int)dock.Edge,
+                    i => SetDock(d => d with { Edge = (AppBarEdge)i }, Loc.Tr("UndoEdge", "edge")),
+                    wide: true),
+                stack: true),
+
+            // A bar down the side of the screen has one thickness. The row is
+            // replaced by its explanation rather than offered greyed and mute.
+            horizontal
+                ? Braun.Row(
+                    Loc.Tr("SizeLabel", "Thickness"),
+                    Loc.Tr("SizeHint", "How much room the bar takes up."),
+                    Braun.Segs(
+                        [Loc.Tr("SegThickDefault", "Default"), Loc.Tr("SegThickCompact", "Compact")],
+                        dock.Density == DockDensity.Compact ? 1 : 0,
+                        i => SetDock(
+                            d => d with { Density = i == 1 ? DockDensity.Compact : DockDensity.Default },
+                            Loc.Tr("UndoThickness", "thickness")),
+                        wide: true),
+                    stack: true)
+                : Braun.Row(
+                    Loc.Tr("SizeLabel", "Thickness"),
+                    Loc.Tr("ThicknessNote", "A bar down the side of the screen has one thickness."),
+                    null)));
+
+        // ------------------------------------------------------------ contents
+        gated.Children.Add(Braun.Heading("\uE71D", Loc.Tr("GalleryTitle", "Widgets")));
 
         RefreshGallery(dock);
-        RefreshInspector();
         ShowUndo();
+
+        gated.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("BarLiveTitle", "The bar itself"),
+                Loc.Tr(
+                    "BarHelp",
+                    "The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings."),
+                _undoSlot),
+
+            Braun.Row(
+                Loc.Tr("GalleryRow", "Put one on the bar"),
+                Loc.Tr(
+                    "GalleryRowHint",
+                    "A press adds it to the first free slot. There is no limit: two of the same reading in different places is an ordinary thing to want."),
+                _gallery,
+                stack: true),
+
+            Braun.Row(
+                Loc.Tr("PinRow", "A program of your own"),
+                Loc.Tr(
+                    "PinRowHint",
+                    "Pinned programs sit on the bar as icons. A file dropped straight onto the bar is pinned to the slot it lands on."),
+                Braun.Action(
+                    Loc.Tr("PinProgramButton", "Pin a program..."), () => _ = PinDialog(), "\uE718")),
+
+            Braun.Row(
+                Loc.Tr("ResetRow", "The standard set"),
+                Loc.Tr(
+                    "ResetRowHint",
+                    "Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip and a temperature. Undo brings your own arrangement back."),
+                Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "\uE7A7"))));
+
+        // ------------------------------------------------------- chosen widget
+        RefreshInspector();
+
+        if (_inspectorSlot.Content is not null)
+        {
+            gated.Children.Add(Braun.Heading("\uE713", _inspectorName));
+            gated.Children.Add(_inspectorSlot);
+        }
+
+        // ----------------------------------------------------------- behaviour
+        gated.Children.Add(Braun.Heading("\uE823", Loc.Tr("BehaviourTitle", "Behaviour")));
+
+        bool clash = dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge);
+
+        gated.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("BehaviourLabel", "Hide until you point at its edge"),
+                clash
+                    ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this dock stays visible.")
+                    : Loc.Tr("BehaviourHint", "The bar steps off the screen and comes back when the pointer reaches that edge."),
+                Braun.Switch(
+                    dock.Mode == AppBarMode.AutoHide,
+                    on => SetDock(
+                        d => d with { Mode = on ? AppBarMode.AutoHide : AppBarMode.Pinned },
+                        Loc.Tr("UndoAutoHide", "hiding")))),
+
+            Braun.Row(
+                Loc.Tr("TopmostLabel", "Keep above other windows"),
+                Loc.Tr("TopmostHint", "Off lets a maximised window cover the bar."),
+                Braun.Switch(
+                    dock.Topmost,
+                    on => SetDock(d => d with { Topmost = on }, Loc.Tr("UndoTopmost", "topmost"))))));
 
         _filling = false;
     }
+
+    /// <summary>Changes one thing about the dock being edited, and redraws.</summary>
+    private void SetDock(Func<MonitorConfig, MonitorConfig> change, string what)
+    {
+        if (_filling)
+        {
+            return;
+        }
+
+        EditDock(change, what);
+        ShowDock();
+    }
+
+    /// <summary>
+    /// Puts the bar back to what a new installation gives it.
+    /// </summary>
+    /// <remarks>
+    /// Every widget is made afresh, so nothing carries over from the
+    /// arrangement being replaced. It goes on the undo stack like any other
+    /// change - this is the largest edit the page offers, and a large edit is
+    /// exactly the one people want back.
+    /// </remarks>
+    private void ResetDock()
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        _selectedId = null;
+
+        Rearrange(
+            dock.StableId,
+            _ => DockContents.Default,
+            Loc.Tr("UndoReset", "the standard bar"));
+    }
+
+    /// <summary>
+    /// The gallery of things that can go on a bar.
+    /// </summary>
+    /// <remarks>
+    /// Held in a field rather than declared in the page: the page around it
+    /// is rebuilt on every change, and this is filled separately.
+    /// </remarks>
+    private readonly VariableSizedWrapGrid _gallery = new()
+    {
+        ItemHeight = 40,
+        ItemWidth = 204,
+        Orientation = Orientation.Horizontal,
+    };
+
+    /// <summary>Where the undo button lives, so its label can change alone.</summary>
+    private readonly ContentControl _undoSlot = new() { IsTabStop = false };
+
+    /// <summary>Where the chosen widget's own options live.</summary>
+    private readonly ContentControl _inspectorSlot = new()
+    {
+        IsTabStop = false,
+        HorizontalAlignment = HorizontalAlignment.Stretch,
+        HorizontalContentAlignment = HorizontalAlignment.Stretch,
+    };
+
+    /// <summary>What the chosen widget is called, for the heading above it.</summary>
+    private string _inspectorName = string.Empty;
 
     /// <summary>
     /// One chip per thing that can go on the bar: its icon, its name, and how
@@ -424,7 +724,7 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private void RefreshGallery(MonitorConfig dock)
     {
-        Gallery.Children.Clear();
+        _gallery.Children.Clear();
 
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
@@ -433,7 +733,7 @@ public sealed partial class SettingsWindow : Window
             var shape = new Microsoft.UI.Xaml.Shapes.Path
             {
                 Data = IconRow.Draw(offer.Icon),
-                Stroke = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"],
+                Stroke = Braun.Tx,
                 StrokeThickness = 1.5,
                 StrokeLineJoin = PenLineJoin.Round,
                 StrokeStartLineCap = PenLineCap.Round,
@@ -465,7 +765,7 @@ public sealed partial class SettingsWindow : Window
                 Text = already > 0 ? already.ToString(CultureInfo.CurrentCulture) : string.Empty,
                 FontSize = 11,
                 VerticalAlignment = VerticalAlignment.Center,
-                Foreground = (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"],
+                Foreground = Braun.Acc,
             };
 
             Grid.SetColumn(count, 2);
@@ -477,12 +777,12 @@ public sealed partial class SettingsWindow : Window
             {
                 Margin = new Thickness(0, 0, 8, 8),
                 Padding = new Thickness(10, 6, 10, 6),
-                MinWidth = 168,
+                MinWidth = 196,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
-                BorderBrush = Seg.CardEdge,
-                Background = Seg.Card,
+                BorderBrush = Braun.Line,
+                Background = Braun.Card,
                 Content = row,
             };
 
@@ -496,11 +796,19 @@ public sealed partial class SettingsWindow : Window
                 string.Format(
                     CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), chosen.Name));
 
-            Gallery.Children.Add(chip);
+            _gallery.Children.Add(chip);
         }
     }
 
-    /// <summary>Shows one widget's own options, or the hint when none is chosen.</summary>
+    /// <summary>
+    /// The chosen widget's own options, or nothing at all.
+    /// </summary>
+    /// <remarks>
+    /// Nothing at all is the point: an empty panel headed "WIDGET" beside a
+    /// line explaining that no widget is chosen is a room with nothing in it.
+    /// A widget is chosen by right-clicking it on the bar itself, and until
+    /// somebody does that this part of the page does not exist.
+    /// </remarks>
     private void RefreshInspector()
     {
         WidgetConfig? entry = Dock()?.Widgets.FirstOrDefault(w => w.InstanceId == _selectedId);
@@ -511,34 +819,36 @@ public sealed partial class SettingsWindow : Window
         if (entry is null)
         {
             _selectedId = null;
-            InspectorTitle.Text = Loc.Tr("InspectorNone", "WIDGET");
-            InspectorHint.Visibility = Visibility.Visible;
-            InspectorEditor.Visibility = Visibility.Collapsed;
-            InspectorEditor.Content = null;
-            InspectorRemove.Visibility = Visibility.Collapsed;
+            _inspectorName = string.Empty;
+            _inspectorSlot.Content = null;
             return;
         }
 
         WidgetType? type = WidgetCatalog.Find(entry.TypeId);
 
-        InspectorTitle.Text = (type?.Name ?? entry.TypeId).ToUpperInvariant();
-        InspectorHint.Visibility = Visibility.Collapsed;
-        InspectorRemove.Visibility = Visibility.Visible;
-
+        _inspectorName = type?.Name ?? entry.TypeId;
         _inspected = Build(entry);
+
         string id = entry.InstanceId;
 
-        InspectorEditor.Content =
-            _inspected?.CreateEditor(options => OnInspectorConfigured(id, options))
-            ?? new TextBlock
-            {
-                Text = Loc.Tr("NothingToSetUp", "This widget has nothing to set up."),
-                FontSize = 12,
-                Opacity = 0.7,
-                TextWrapping = TextWrapping.Wrap,
-            };
+        FrameworkElement? editor = _inspected?.CreateEditor(
+            options => OnInspectorConfigured(id, options));
 
-        InspectorEditor.Visibility = Visibility.Visible;
+        _inspectorSlot.Content = Braun.Group(
+            editor is null
+                ? Braun.Row(
+                    Loc.Tr("NothingToSetUp", "This widget has nothing to set up."), null, null)
+                : Braun.Row(
+                    Loc.Tr("WidgetOptions", "Its own settings"), null, editor, stack: true),
+
+            Braun.Row(
+                Loc.Tr("RemoveRow", "Take it off the bar"),
+                Loc.Tr("RemoveRowHint", "The same as dragging it off the bar onto the desktop."),
+                Braun.Action(
+                    Loc.Tr("RemoveFromBar", "Remove from bar"),
+                    RemoveSelected,
+                    "",
+                    danger: true)));
     }
 
     private void OnInspectorConfigured(string id, System.Text.Json.JsonElement? options)
@@ -555,7 +865,8 @@ public sealed partial class SettingsWindow : Window
             rebuild: false);
     }
 
-    private void OnInspectorRemove(object sender, RoutedEventArgs e)
+    /// <summary>Takes the chosen widget off the bar.</summary>
+    private void RemoveSelected()
     {
         if (_selectedId is not { } id || Dock() is not { } dock)
         {
@@ -577,21 +888,34 @@ public sealed partial class SettingsWindow : Window
         }
     }
 
+    /// <summary>
+    /// The undo button, always there and only sometimes able to act.
+    /// </summary>
+    /// <remarks>
+    /// Enabled rather than shown: a control that appears after the first
+    /// mistake is invisible exactly while a person is working out what is
+    /// safe to try.
+    /// </remarks>
     private void ShowUndo()
     {
-        // Enabled rather than shown: a control that appears only after the
-        // first mistake is invisible exactly while a person is working out
-        // what is safe to try.
-        UndoButton.IsEnabled = _undo.Count > 0;
+        bool can = _undo.Count > 0;
 
-        UndoButton.Content = _undo.Count > 0
-            ? string.Format(
-                CultureInfo.CurrentCulture, Loc.Tr("UndoWithLabel", "Undo - {0}"), _undo.Peek().Label)
-            : Loc.Tr("Undo", "Undo");
+        Button button = Braun.Action(
+            can
+                ? string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("UndoWithLabel", "Undo - {0}"),
+                    _undo.Peek().Label)
+                : Loc.Tr("Undo", "Undo"),
+            DoUndo,
+            "");
+
+        button.IsEnabled = can;
+        _undoSlot.Content = button;
     }
 
     /// <summary>Puts the last layout back.</summary>
-    private void OnUndo(object sender, RoutedEventArgs e)
+    private void DoUndo()
     {
         if (!_undo.TryPop(out (string StableId, MonitorConfig Before, string Label) step))
         {
@@ -627,30 +951,6 @@ public sealed partial class SettingsWindow : Window
             _log),
         entry);
 
-    private void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        string language = LanguageChoice.SelectedIndex switch
-        {
-            1 => "en-US",
-            2 => "ru-RU",
-            _ => "system",
-        };
-
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with { App = current.App with { Language = language } },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.language {Language}", language);
-        RestartNow.Visibility = Visibility.Visible;
-    }
-
     /// <summary>
     /// Starts the program again, for the change that only takes at a start.
     /// </summary>
@@ -664,7 +964,7 @@ public sealed partial class SettingsWindow : Window
     {
         // The tiles are built in code and cannot reach this window's own
         // dictionary, so they are told which way round the palette goes.
-        Seg.Theme = Root.ActualTheme;
+        Braun.Theme = Root.ActualTheme;
         PaintGround();
     }
 
@@ -673,7 +973,7 @@ public sealed partial class SettingsWindow : Window
             ? Windows.UI.Color.FromArgb(255, 0xED, 0xEA, 0xE3)
             : Windows.UI.Color.FromArgb(255, 0x1C, 0x1F, 0x24));
 
-    private void OnRestartNow(object sender, RoutedEventArgs e)
+    private void Restart()
     {
         if (Environment.ProcessPath is not { } exe)
         {
@@ -692,36 +992,6 @@ public sealed partial class SettingsWindow : Window
         _onExit();
     }
 
-    /// <summary>The extra row under Background: the chosen colour, or the picture.</summary>
-    private void ShowBackdropExtras()
-    {
-        AppSettings app = _settings.Current.App;
-
-        switch (app.Backdrop)
-        {
-            case "colour":
-                BackdropExtras.Visibility = Visibility.Visible;
-                BackdropSwatch.Visibility = Visibility.Visible;
-                BackdropSwatch.Background = new SolidColorBrush(Swatch(app.BackdropColour));
-                BackdropDetail.Text = app.BackdropColour;
-                BackdropPick.Content = Loc.Tr("PickColour", "Choose a colour");
-                break;
-
-            case "image":
-                BackdropExtras.Visibility = Visibility.Visible;
-                BackdropSwatch.Visibility = Visibility.Collapsed;
-                BackdropDetail.Text = app.BackdropImage.Length > 0
-                    ? Path.GetFileName(app.BackdropImage)
-                    : Loc.Tr("NoPictureYet", "No picture chosen yet");
-                BackdropPick.Content = Loc.Tr("PickPicture", "Choose a picture");
-                break;
-
-            default:
-                BackdropExtras.Visibility = Visibility.Collapsed;
-                break;
-        }
-    }
-
     private static Windows.UI.Color Swatch(string text)
     {
         string hex = text.TrimStart('#');
@@ -737,7 +1007,11 @@ public sealed partial class SettingsWindow : Window
             : Windows.UI.Color.FromArgb(255, 32, 32, 32);
     }
 
-    private async void OnBackdropPick(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// A hand of swatches and one slider, or the file picker - whichever the
+    /// chosen background needs.
+    /// </summary>
+    private async Task PickBackdrop()
     {
         AppSettings app = _settings.Current.App;
 
@@ -784,7 +1058,7 @@ public sealed partial class SettingsWindow : Window
                     WriteReason.UserAction);
 
                 _log.LogInformation("settings.backdrop colour={Colour}", chosen);
-                ShowBackdropExtras();
+                RefreshLook();
             }
 
             foreach (string hex in swatches)
@@ -798,7 +1072,7 @@ public sealed partial class SettingsWindow : Window
                     Padding = new Thickness(0),
                     CornerRadius = new CornerRadius(6),
                     BorderThickness = new Thickness(1),
-                    BorderBrush = Seg.CardEdge,
+                    BorderBrush = Braun.Line,
                     Background = new SolidColorBrush(c),
                 };
 
@@ -818,7 +1092,10 @@ public sealed partial class SettingsWindow : Window
                 },
             };
 
-            flyout.ShowAt(BackdropPick);
+            // Anchored on the page rather than on the button: the row that
+            // holds it is rebuilt whenever the colour changes, so the button
+            // this was opened from does not outlive the first swatch clicked.
+            flyout.ShowAt(LookBody);
             return;
         }
 
@@ -846,55 +1123,12 @@ public sealed partial class SettingsWindow : Window
                 WriteReason.UserAction);
 
             _log.LogInformation("settings.backdrop image={Image}", file.Path);
-            ShowBackdropExtras();
+            RefreshLook();
         }
         catch (Exception ex)
         {
             _log.LogError(ex, "settings.backdrop could not open the file picker");
         }
-    }
-
-    private void OnDockTopmostToggled(object sender, RoutedEventArgs e)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        EditDock(
-            dock => dock with { Topmost = DockTopmost.IsOn },
-            Loc.Tr("UndoTopmost", "above other windows"));
-    }
-
-    private void OnDockEnabledToggled(object sender, RoutedEventArgs e)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        // A Toggled that only repeats what the settings already say writes
-        // nothing - the event can arrive late, after the fill guard has lifted.
-        if (Dock()?.Enabled == DockEnabled.IsOn)
-        {
-            return;
-        }
-
-        EditDock(dock => dock with { Enabled = DockEnabled.IsOn }, Loc.Tr("UndoShown", "shown"));
-        ShowDock();
-    }
-
-    private void OnDockAutoHideToggled(object sender, RoutedEventArgs e)
-    {
-        if (_filling)
-        {
-            return;
-        }
-
-        EditDock(
-            dock => dock with { Mode = DockAutoHide.IsOn ? AppBarMode.AutoHide : AppBarMode.Pinned },
-            Loc.Tr("UndoHiding", "hiding"));
-        ShowDock();
     }
 
     /// <summary>The one place a dock's layout is written.</summary>
@@ -990,6 +1224,11 @@ public sealed partial class SettingsWindow : Window
         IconsSection.Visibility = Show(tag == "icons");
         SensorsSection.Visibility = Show(tag == "sensors");
         AboutSection.Visibility = Show(tag == "about");
+
+        if (tag == "about")
+        {
+            ShowAbout();
+        }
 
         // Only while the page that shows live figures is on screen. A window
         // sitting behind everything else has no business waking the machine
@@ -1185,7 +1424,8 @@ public sealed partial class SettingsWindow : Window
     /// that window's close, and a dialog needs no place in a tree it only
     /// ever covers.
     /// </remarks>
-    private async void OnPinDialog(object sender, RoutedEventArgs e)
+    /// <summary>Asks for a program to pin, and pins it.</summary>
+    private async Task PinDialog()
     {
         if (Dock() is null)
         {
@@ -1295,18 +1535,122 @@ public sealed partial class SettingsWindow : Window
 
     private void OnOpenConfig(object sender, RoutedEventArgs e) => Open(AppPaths.Root);
 
-    private void OnAutoStartToggled(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// The About page: what this program is, and the few switches that
+    /// belong to the program rather than to any one bar.
+    /// </summary>
+    private void ShowAbout()
     {
-        if (_filling)
-        {
-            return;
-        }
+        Braun.Theme = Root.ActualTheme;
+        AboutBody.Children.Clear();
 
-        AutoStart.Enabled = AutoStartToggle.IsOn;
-        _log.LogInformation("settings.autostart enabled={Enabled}", AutoStartToggle.IsOn);
+        var mark = new StackPanel
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Margin = new Thickness(0, 10, 0, 4),
+        };
+
+        mark.Children.Add(new Border
+        {
+            Width = 72,
+            Height = 72,
+            CornerRadius = new CornerRadius(18),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Margin = new Thickness(0, 4, 0, 14),
+            Shadow = new ThemeShadow(),
+            Translation = new System.Numerics.Vector3(0, 0, 24),
+            Child = new Image
+            {
+                Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(
+                    new Uri("ms-appx:///Assets/icon.ico")),
+                Stretch = Microsoft.UI.Xaml.Media.Stretch.UniformToFill,
+            },
+        });
+
+        mark.Children.Add(new TextBlock
+        {
+            Text = "MASTER CONTROL DOCK",
+            FontSize = 12,
+            FontWeight = Microsoft.UI.Text.FontWeights.Medium,
+            CharacterSpacing = 200,
+            Foreground = Braun.Tx,
+            HorizontalAlignment = HorizontalAlignment.Center,
+        });
+
+        mark.Children.Add(new TextBlock
+        {
+            Text = _version,
+            FontSize = 11,
+            Foreground = Braun.Tx3,
+            Margin = new Thickness(0, 6, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Center,
+        });
+
+        mark.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr(
+                "AboutIntro",
+                "A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."),
+            FontSize = 12,
+            LineHeight = 20,
+            MaxWidth = 460,
+            Foreground = Braun.Tx2,
+            TextAlignment = TextAlignment.Center,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 14, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Center,
+        });
+
+        AboutBody.Children.Add(mark);
+
+        AboutBody.Children.Add(Braun.Heading("\uE7E8", Loc.Tr("StartupTitle", "Startup")));
+
+        AboutBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
+            Loc.Tr("StartWithWindowsHint", "The docks come back when you sign in."),
+            Braun.Switch(AutoStart.Enabled, on =>
+            {
+                AutoStart.Enabled = on;
+                _log.LogInformation("settings.autostart enabled={Enabled}", on);
+                ShowAbout();
+            }))));
+
+        AboutBody.Children.Add(Braun.Heading("\uE8B7", Loc.Tr("FilesTitle", "Its own files")));
+
+        AboutBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("LogsRow", "The log"),
+                Loc.Tr("LogsRowHint", "What the program wrote down about its own run."),
+                Braun.Action(
+                    Loc.Tr("OpenFolder", "Open the folder"),
+                    () => Open(AppPaths.LogDirectory),
+                    "\uE838")),
+
+            Braun.Row(
+                Loc.Tr("ConfigRow", "The settings file"),
+                Loc.Tr("ConfigRowHint", "Everything on these pages, as it is stored on disk."),
+                Braun.Action(
+                    Loc.Tr("OpenFolder", "Open the folder"),
+                    () => Open(AppPaths.Root),
+                    "\uE838"))));
+
+        AboutBody.Children.Add(Braun.Heading("\uE7E8", Loc.Tr("QuitTitle", "Quitting")));
+
+        AboutBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("ExitRow", "Stop the program"),
+            Loc.Tr(
+                "ExitHint",
+                "Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."),
+            Braun.Action(
+                Loc.Tr("ExitButton", "Exit Master Control Dock"),
+                () => _onExit(),
+                "\uE7E8",
+                danger: true))));
     }
 
-    private void OnExit(object sender, RoutedEventArgs e) => _onExit();
+    /// <summary>This build's version, for the About page.</summary>
+    private string _version = string.Empty;
+
 
     private void Open(string path)
     {

@@ -140,3 +140,9 @@ AttachThreadInput
 SetForegroundWindow
 BringWindowToTop
 IsIconic
+
+// A short ping when something leaves the bar. Plays whatever the person has
+// their system sounds set to, and nothing at all when they have turned them
+// off - which is the right behaviour either way.
+MessageBeep
+MESSAGEBOX_STYLE

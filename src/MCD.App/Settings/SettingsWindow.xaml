@@ -18,10 +18,18 @@
                     <ResourceDictionary x:Key="Default">
                         <SolidColorBrush x:Key="BraunBg" Color="#1C1F24" />
                         <SolidColorBrush x:Key="BraunPanelHi" Color="#23272D" />
-                        <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
-                        <SolidColorBrush x:Key="BraunLed" Color="#4ADE80" />
+                        <SolidColorBrush x:Key="BraunCard" Color="#191C21" />
+                        <SolidColorBrush x:Key="BraunCardHi" Color="#212630" />
+                        <SolidColorBrush x:Key="BraunLine" Color="#11FFFFFF" />
+                        <SolidColorBrush x:Key="BraunLineHi" Color="#1FFFFFFF" />
+                        <SolidColorBrush x:Key="BraunTx" Color="#E9ECF1" />
                         <SolidColorBrush x:Key="BraunTx2" Color="#98A0AC" />
                         <SolidColorBrush x:Key="BraunTx3" Color="#88909B" />
+                        <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
+                        <SolidColorBrush x:Key="BraunOnAcc" Color="#140702" />
+                        <SolidColorBrush x:Key="BraunLed" Color="#4ADE80" />
+                        <SolidColorBrush x:Key="BraunDanger" Color="#FF6B6B" />
+                        <SolidColorBrush x:Key="BraunSunk" Color="#66000000" />
                         <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#191C21" />
                         <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#11FFFFFF" />
                         <SolidColorBrush x:Key="LayerOnAcrylicFillColorDefaultBrush" Color="#212630" />
@@ -32,10 +40,21 @@
                     <ResourceDictionary x:Key="Light">
                         <SolidColorBrush x:Key="BraunBg" Color="#EDEAE3" />
                         <SolidColorBrush x:Key="BraunPanelHi" Color="#F5F3EE" />
-                        <SolidColorBrush x:Key="BraunAccBrush" Color="#D65A17" />
-                        <SolidColorBrush x:Key="BraunLed" Color="#22A45D" />
+                        <SolidColorBrush x:Key="BraunCard" Color="#F7F5F1" />
+                        <SolidColorBrush x:Key="BraunCardHi" Color="#FFFFFF" />
+                        <SolidColorBrush x:Key="BraunLine" Color="#17000000" />
+                        <SolidColorBrush x:Key="BraunLineHi" Color="#29000000" />
+                        <SolidColorBrush x:Key="BraunTx" Color="#23262B" />
                         <SolidColorBrush x:Key="BraunTx2" Color="#5C6169" />
                         <SolidColorBrush x:Key="BraunTx3" Color="#626871" />
+                        <!-- The accent does not change with the theme. It is the
+                             one colour the instrument owns, and a cream body
+                             takes the same orange a graphite one does. -->
+                        <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
+                        <SolidColorBrush x:Key="BraunOnAcc" Color="#140702" />
+                        <SolidColorBrush x:Key="BraunLed" Color="#22A45D" />
+                        <SolidColorBrush x:Key="BraunDanger" Color="#D14343" />
+                        <SolidColorBrush x:Key="BraunSunk" Color="#14000000" />
                         <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#F7F5F1" />
                         <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#17000000" />
                         <SolidColorBrush x:Key="LayerOnAcrylicFillColorDefaultBrush" Color="#FFFFFF" />
@@ -51,9 +70,10 @@
                 <!-- MAS's micro-caption: small caps, wide tracking, third-level
                      text. Group names inside a page wear this. -->
                 <Style x:Key="Micro" TargetType="TextBlock">
-                    <Setter Property="FontSize" Value="11" />
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                    <Setter Property="CharacterSpacing" Value="180" />
+                    <Setter Property="FontSize" Value="10" />
+                    <Setter Property="FontWeight" Value="Medium" />
+                    <Setter Property="CharacterSpacing" Value="220" />
+                    <Setter Property="Foreground" Value="{ThemeResource BraunTx3}" />
                 </Style>
 
                 <!-- A page title: the section's icon in the accent, then the
@@ -140,14 +160,18 @@
                 <NavigationViewItem x:Uid="NavAbout" Content="About" Icon="Help" Tag="about" />
             </NavigationView.FooterMenuItems>
 
-            <ScrollViewer Padding="36,24,36,36">
+            <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
                 <StackPanel HorizontalAlignment="Left" MaxWidth="1000" Spacing="12">
 
                     <!-- Docks. The bar's live picture is the editing surface:
                          what looks like the bar behaves like the bar. -->
+                    <!-- Docks. The screen is chosen at the top; everything
+                         below is built in code, in the order somebody asks
+                         the questions in: which screen, where the bar sits,
+                         what is on it, how it behaves. -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="DocksTitle"
                                 VerticalAlignment="Center"
@@ -157,340 +181,30 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="DocksIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{ThemeResource BraunTx2}"
                             Text="One dock per screen. Changes land on the bar as you make them."
                             TextWrapping="Wrap" />
 
                         <!-- The display switcher, tiled the way Master Audio
-                             Switcher tiles its pages: icon above, name below.
-                             Built in code - the screens are not known here. -->
+                             Switcher tiles its pages: icon above, name below,
+                             and a lamp for whether that screen has a bar. -->
                         <ContentControl
                             x:Name="DisplayTabs"
                             Margin="0,8,0,0"
                             HorizontalContentAlignment="Left"
                             IsTabStop="False" />
 
-                        <TextBlock
-                            x:Name="DockDetail"
-                            FontSize="12"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-
-                        <Grid Margin="0,4,0,0" ColumnSpacing="16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                x:Uid="ShowDockLabel"
-                                VerticalAlignment="Center"
-                                Text="Show a dock on this display" />
-                            <ToggleSwitch
-                                x:Name="DockEnabled"
-                                x:Uid="DockEnabled"
-                                Grid.Column="1"
-                                MinWidth="0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                OffContent="Off"
-                                OnContent="On"
-                                Toggled="OnDockEnabledToggled" />
-                        </Grid>
-
-                        <!-- Everything the master switch governs dims with it. -->
-                        <StackPanel x:Name="DockBody" Spacing="8">
-
-                            <StackPanel Margin="0,4,0,4" Spacing="6">
-                                <Grid ColumnSpacing="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal"
-                                        Spacing="8">
-                                        <FontIcon
-                                            FontFamily="Segoe MDL2 Assets"
-                                            FontSize="13"
-                                            Foreground="{ThemeResource BraunTx3}"
-                                            Glyph="&#xE7F4;" />
-                                        <TextBlock
-                                            x:Uid="BarLiveTitle"
-                                            VerticalAlignment="Center"
-                                            Foreground="{ThemeResource BraunTx3}"
-                                            Style="{StaticResource Micro}"
-                                            Text="THE BAR" />
-                                    </StackPanel>
-                                    <Button
-                                        x:Name="UndoButton"
-                                        Grid.Column="1"
-                                        Click="OnUndo"
-                                        Content="Undo"
-                                        IsEnabled="False" />
-                                </Grid>
-                                <TextBlock
-                                    x:Uid="BarHelp"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings."
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <!-- The gallery: everything that can go on the bar,
-                                 one chip each. A click adds it (or takes it off);
-                                 dragging a chip onto the picture above puts it in
-                                 that exact slot. -->
-                            <StackPanel
-                                Margin="0,8,0,0"
-                                Orientation="Horizontal"
-                                Spacing="8">
-                                <FontIcon
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="13"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    Glyph="&#xE71D;" />
-                                <TextBlock
-                                    x:Uid="GalleryTitle"
-                                    VerticalAlignment="Center"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    Style="{StaticResource Micro}"
-                                    Text="WIDGETS" />
-                            </StackPanel>
-                            <Border
-                                Padding="16"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <StackPanel Spacing="12">
-                                    <VariableSizedWrapGrid
-                                        x:Name="Gallery"
-                                        ItemHeight="40"
-                                        ItemWidth="176"
-                                        Orientation="Horizontal" />
-                                    <Button Click="OnPinDialog">
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <FontIcon
-                                                FontFamily="Segoe MDL2 Assets"
-                                                FontSize="12"
-                                                Glyph="&#xE718;" />
-                                            <TextBlock x:Uid="PinProgramButton" Text="Pin a program..." />
-                                        </StackPanel>
-                                    </Button>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- The inspector: whatever widget is selected on the
-                                 picture above, its options live here, beside the
-                                 picture that shows their effect. -->
-                            <Border
-                                Padding="16"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <StackPanel Spacing="10">
-                                    <Grid ColumnSpacing="16">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal"
-                                            Spacing="8">
-                                            <FontIcon
-                                                FontFamily="Segoe MDL2 Assets"
-                                                FontSize="13"
-                                                Foreground="{ThemeResource BraunTx3}"
-                                                Glyph="&#xE713;" />
-                                            <TextBlock
-                                                x:Name="InspectorTitle"
-                                                VerticalAlignment="Center"
-                                                Foreground="{ThemeResource BraunTx3}"
-                                                Style="{StaticResource Micro}"
-                                                Text="WIDGET" />
-                                        </StackPanel>
-                                        <Button
-                                            x:Name="InspectorRemove"
-                                            Grid.Column="1"
-                                            Click="OnInspectorRemove"
-                                            Visibility="Collapsed">
-                                            <TextBlock x:Uid="RemoveFromBar" Text="Remove from bar" />
-                                        </Button>
-                                    </Grid>
-                                    <TextBlock
-                                        x:Name="InspectorHint"
-                                        x:Uid="InspectorHint"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="Right-click a widget on the bar and choose Settings to set it up here."
-                                        TextWrapping="Wrap" />
-                                    <ContentControl
-                                        x:Name="InspectorEditor"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Stretch"
-                                        Visibility="Collapsed" />
-                                </StackPanel>
-                            </Border>
-
-                            <StackPanel
-                                Margin="0,8,0,0"
-                                Orientation="Horizontal"
-                                Spacing="8">
-                                <FontIcon
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="13"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    Glyph="&#xE740;" />
-                                <TextBlock
-                                    x:Uid="PlacementTitle"
-                                    VerticalAlignment="Center"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    Style="{StaticResource Micro}"
-                                    Text="PLACEMENT" />
-                            </StackPanel>
-                            <Border
-                                Padding="16"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" MinHeight="44" />
-                                        <RowDefinition Height="Auto" MinHeight="44" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock
-                                        x:Uid="EdgeLabel"
-                                        VerticalAlignment="Center"
-                                        Text="Edge" />
-                                    <ContentControl
-                                        x:Name="EdgeSeg"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        IsTabStop="False" />
-
-                                    <TextBlock
-                                        x:Name="ThicknessLabel"
-                                        x:Uid="SizeLabel"
-                                        Grid.Row="1"
-                                        VerticalAlignment="Center"
-                                        Text="Thickness" />
-                                    <ContentControl
-                                        x:Name="ThicknessSeg"
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        IsTabStop="False" />
-
-                                    <!-- Replaces the row, never greys it: a setting
-                                         that cannot act is not offered. -->
-                                    <TextBlock
-                                        x:Name="ThicknessNote"
-                                        x:Uid="ThicknessNote"
-                                        Grid.Row="2"
-                                        Grid.ColumnSpan="2"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="A bar down the side of the screen has one thickness."
-                                        TextWrapping="Wrap"
-                                        Visibility="Collapsed" />
-                                </Grid>
-                            </Border>
-
-                            <StackPanel
-                                Margin="0,8,0,0"
-                                Orientation="Horizontal"
-                                Spacing="8">
-                                <FontIcon
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="13"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    Glyph="&#xE823;" />
-                                <TextBlock
-                                    x:Uid="BehaviourTitle"
-                                    VerticalAlignment="Center"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    Style="{StaticResource Micro}"
-                                    Text="BEHAVIOUR" />
-                            </StackPanel>
-                            <Border
-                                Padding="16"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" MinHeight="44" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" MinHeight="44" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock
-                                        x:Uid="BehaviourLabel"
-                                        VerticalAlignment="Center"
-                                        Text="Hide until you point at its edge" />
-                                    <ToggleSwitch
-                                        x:Name="DockAutoHide"
-                                        x:Uid="DockAutoHide"
-                                        Grid.Column="1"
-                                        MinWidth="0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        OffContent="Off"
-                                        OnContent="On"
-                                        Toggled="OnDockAutoHideToggled" />
-
-                                    <TextBlock
-                                        x:Name="HideNote"
-                                        x:Uid="HideNote"
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="2"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                        Text="The taskbar already hides on this edge, so this dock stays visible."
-                                        TextWrapping="Wrap"
-                                        Visibility="Collapsed" />
-
-                                    <TextBlock
-                                        x:Uid="TopmostLabel"
-                                        Grid.Row="2"
-                                        VerticalAlignment="Center"
-                                        Text="Keep above other windows" />
-                                    <ToggleSwitch
-                                        x:Name="DockTopmost"
-                                        x:Uid="DockTopmost"
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        MinWidth="0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        OffContent="Off"
-                                        OnContent="On"
-                                        Toggled="OnDockTopmostToggled" />
-                                </Grid>
-                            </Border>
-                        </StackPanel>
+                        <StackPanel x:Name="DockBody" />
                     </StackPanel>
 
                     <!-- Appearance -->
+                    <!-- Appearance. The rows are built in code from the Braun
+                         kit: the choices here are three, five and two keys
+                         wide, and a hand-written Auto column starves the
+                         explanation beside it down to one letter a line. -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="AppearanceTitle"
                                 VerticalAlignment="Center"
@@ -500,150 +214,18 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="AppearanceIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{ThemeResource BraunTx2}"
                             Text="How the bars are drawn. This applies to every dock."
                             TextWrapping="Wrap" />
-
-                        <Border
-                            Margin="0,8,0,0"
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <StackPanel Spacing="16">
-
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock x:Uid="ThemeLabel" Text="Theme" />
-                                        <TextBlock
-                                            x:Uid="ThemeHint"
-                                            FontSize="12"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Text="Light or dark, or the same as Windows."
-                                            TextWrapping="Wrap" />
-                                    </StackPanel>
-                                    <ContentControl
-                                        x:Name="ThemeSeg"
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        IsTabStop="False" />
-                                </Grid>
-
-                                <StackPanel Spacing="8">
-                                    <TextBlock x:Uid="BackgroundLabel" Text="Background" />
-                                    <TextBlock
-                                        x:Uid="BackgroundHint"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Text="Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw."
-                                        TextWrapping="Wrap" />
-                                    <!-- Five choices need the whole row; the tiles
-                                         sit under their caption instead of beside it. -->
-                                    <ContentControl x:Name="BackdropSeg" IsTabStop="False" />
-                                </StackPanel>
-
-                                <Grid
-                                    x:Name="BackdropExtras"
-                                    ColumnSpacing="16"
-                                    Visibility="Collapsed">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal"
-                                        Spacing="8">
-                                        <Border
-                                            x:Name="BackdropSwatch"
-                                            Width="16"
-                                            Height="16"
-                                            VerticalAlignment="Center"
-                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                            BorderThickness="1"
-                                            CornerRadius="4" />
-                                        <TextBlock
-                                            x:Name="BackdropDetail"
-                                            VerticalAlignment="Center"
-                                            FontSize="12"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                    <Button
-                                        x:Name="BackdropPick"
-                                        Grid.Column="1"
-                                        MinWidth="180"
-                                        HorizontalAlignment="Right"
-                                        Click="OnBackdropPick" />
-                                </Grid>
-
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock x:Uid="AccentLabel" Text="Colour of the readings" />
-                                        <TextBlock
-                                            x:Uid="AccentHint"
-                                            FontSize="12"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Text="The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."
-                                            TextWrapping="Wrap" />
-                                    </StackPanel>
-                                    <ContentControl
-                                        x:Name="AccentSeg"
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        IsTabStop="False" />
-                                </Grid>
-
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel VerticalAlignment="Center" Spacing="2">
-                                        <TextBlock x:Uid="LanguageLabel" Text="Language" />
-                                        <TextBlock
-                                            x:Uid="LanguageHint"
-                                            FontSize="12"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Text="Takes effect the next time the program starts."
-                                            TextWrapping="Wrap" />
-                                        <Button
-                                            x:Name="RestartNow"
-                                            Margin="0,6,0,0"
-                                            Click="OnRestartNow"
-                                            Visibility="Collapsed">
-                                            <TextBlock x:Uid="RestartNowText" Text="Restart now" />
-                                        </Button>
-                                    </StackPanel>
-                                    <ComboBox
-                                        x:Name="LanguageChoice"
-                                        Grid.Column="1"
-                                        MinWidth="180"
-                                        VerticalAlignment="Center"
-                                        SelectionChanged="OnLanguageChanged">
-                                        <ComboBoxItem x:Uid="LanguageSystemItem" Content="Same as Windows" />
-                                        <ComboBoxItem Content="English" />
-                                        <ComboBoxItem Content="Русский" />
-                                    </ComboBox>
-                                </Grid>
-
-                            </StackPanel>
-                        </Border>
+                        <StackPanel x:Name="LookBody" />
                     </StackPanel>
 
-                    <!-- Icons -->
+                    <!-- Icons. One panel of rows, the way Master Audio Switcher
+                         lists devices: the picture on the left is the button
+                         that changes it, and it carries a pencil to say so. -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="IconsTitle"
                                 VerticalAlignment="Center"
@@ -653,113 +235,154 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="IconsIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{ThemeResource BraunTx2}"
                             Text="Pick the picture each reading is drawn with. The choice applies to every dock."
                             TextWrapping="Wrap" />
 
                         <StackPanel
-                            Margin="0,16,0,0"
+                            Margin="3,14,0,7"
                             Orientation="Horizontal"
-                            Spacing="8">
+                            Spacing="7">
                             <FontIcon
                                 FontFamily="Segoe MDL2 Assets"
-                                FontSize="13"
+                                FontSize="15"
                                 Foreground="{ThemeResource BraunTx3}"
                                 Glyph="&#xE9D9;" />
                             <TextBlock
                                 x:Uid="ReadingIconsTitle"
                                 VerticalAlignment="Center"
-                                Foreground="{ThemeResource BraunTx3}"
                                 Style="{StaticResource Micro}"
                                 Text="READINGS" />
                         </StackPanel>
 
-                        <ItemsControl x:Name="IconList">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="local:IconRow">
-                                    <Border
-                                        Margin="0,0,0,8"
-                                        Padding="16,12"
-                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="8">
-                                        <Grid ColumnSpacing="16">
+                        <Border
+                            Background="{ThemeResource BraunCard}"
+                            BorderBrush="{ThemeResource BraunLine}"
+                            BorderThickness="1"
+                            CornerRadius="12">
+                            <ItemsControl x:Name="IconList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="local:IconRow">
+                                        <Grid Padding="13,10" ColumnSpacing="13">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
 
-                                            <StackPanel VerticalAlignment="Center" Spacing="2">
-                                                <TextBlock Text="{x:Bind Label}" />
+                                            <!-- The tile is the picker. It is
+                                                 large because the drawing is
+                                                 the thing being chosen, and a
+                                                 44-point target is a kind one. -->
+                                            <Button
+                                                Width="46"
+                                                Height="46"
+                                                Padding="0"
+                                                Background="{ThemeResource BraunCardHi}"
+                                                BorderBrush="{ThemeResource BraunLine}"
+                                                BorderThickness="1"
+                                                Click="OnPickIcon"
+                                                CornerRadius="13"
+                                                Tag="{x:Bind Id}"
+                                                ToolTipService.ToolTip="{x:Bind Label}">
+                                                <Grid>
+                                                    <Viewbox
+                                                        Width="26"
+                                                        Height="26"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                        <Canvas Width="24" Height="24">
+                                                            <Path
+                                                                Data="{x:Bind Shape, Mode=OneWay}"
+                                                                Stroke="{ThemeResource BraunTx}"
+                                                                StrokeEndLineCap="Round"
+                                                                StrokeLineJoin="Round"
+                                                                StrokeStartLineCap="Round"
+                                                                StrokeThickness="1.5" />
+                                                        </Canvas>
+                                                    </Viewbox>
+                                                    <Border
+                                                        Width="17"
+                                                        Height="17"
+                                                        Margin="0,0,-6,-6"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Bottom"
+                                                        Background="{ThemeResource BraunPanelHi}"
+                                                        BorderBrush="{ThemeResource BraunLineHi}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="9">
+                                                        <FontIcon
+                                                            FontFamily="Segoe MDL2 Assets"
+                                                            FontSize="8"
+                                                            Foreground="{ThemeResource BraunTx2}"
+                                                            Glyph="&#xE70F;" />
+                                                    </Border>
+                                                </Grid>
+                                            </Button>
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                                 <TextBlock
+                                                    FontSize="14"
+                                                    Foreground="{ThemeResource BraunTx}"
+                                                    Text="{x:Bind Label}" />
+                                                <TextBlock
+                                                    Margin="0,3,0,0"
                                                     FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Foreground="{ThemeResource BraunTx3}"
+                                                    LineHeight="17"
                                                     Text="{x:Bind Explain}"
                                                     TextWrapping="Wrap" />
                                             </StackPanel>
-
-                                            <Button
-                                                Grid.Column="1"
-                                                Padding="10,6"
-                                                Click="OnPickIcon"
-                                                Tag="{x:Bind Id}">
-                                                <Viewbox Width="22" Height="22">
-                                                    <Canvas Width="24" Height="24">
-                                                        <Path
-                                                            Data="{x:Bind Shape, Mode=OneWay}"
-                                                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                                            StrokeEndLineCap="Round"
-                                                            StrokeLineJoin="Round"
-                                                            StrokeStartLineCap="Round"
-                                                            StrokeThickness="1.5" />
-                                                    </Canvas>
-                                                </Viewbox>
-                                            </Button>
                                         </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
 
-                        <!-- Where a pinned program's own icon is changed. It
-                             belongs to one dock, so it is set where that dock
-                             is - not in a list of every icon on the machine. -->
                         <StackPanel
-                            Margin="0,16,0,0"
+                            Margin="3,14,0,7"
                             Orientation="Horizontal"
-                            Spacing="8">
+                            Spacing="7">
                             <FontIcon
                                 FontFamily="Segoe MDL2 Assets"
-                                FontSize="13"
+                                FontSize="15"
                                 Foreground="{ThemeResource BraunTx3}"
                                 Glyph="&#xE71D;" />
                             <TextBlock
                                 x:Uid="PinnedIconsTitle"
                                 VerticalAlignment="Center"
-                                Foreground="{ThemeResource BraunTx3}"
                                 Style="{StaticResource Micro}"
                                 Text="PINNED PROGRAMS" />
                         </StackPanel>
                         <Border
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            Padding="13,10"
+                            Background="{ThemeResource BraunCard}"
+                            BorderBrush="{ThemeResource BraunLine}"
                             BorderThickness="1"
-                            CornerRadius="8">
-                            <TextBlock
-                                x:Uid="PinnedIconsHint"
-                                FontSize="12"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings."
-                                TextWrapping="Wrap" />
+                            CornerRadius="12">
+                            <StackPanel>
+                                <TextBlock
+                                    x:Uid="PinnedIconsRow"
+                                    FontSize="14"
+                                    Foreground="{ThemeResource BraunTx}"
+                                    Text="A pinned program keeps its own icon" />
+                                <TextBlock
+                                    x:Uid="PinnedIconsHint"
+                                    Margin="0,3,0,0"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BraunTx3}"
+                                    LineHeight="17"
+                                    Text="A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings."
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
                         </Border>
                     </StackPanel>
 
-                    <!-- Sensors -->
+                    <!-- Sensors. Name, what it means, and what it says now.
+                         Double-click a name to change it: the one the source
+                         ships is whatever its maker put in the firmware. -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="SensorsTitle"
                                 VerticalAlignment="Center"
@@ -769,234 +392,101 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="SensorsIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{ThemeResource BraunTx2}"
                             Text="Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running."
                             TextWrapping="Wrap" />
 
                         <StackPanel
-                            Margin="0,16,0,0"
+                            Margin="3,14,0,7"
                             Orientation="Horizontal"
-                            Spacing="8">
+                            Spacing="7">
                             <FontIcon
                                 FontFamily="Segoe MDL2 Assets"
-                                FontSize="13"
+                                FontSize="15"
                                 Foreground="{ThemeResource BraunTx3}"
                                 Glyph="&#xE9D9;" />
                             <TextBlock
                                 x:Uid="LiveReadingsTitle"
                                 VerticalAlignment="Center"
-                                Foreground="{ThemeResource BraunTx3}"
                                 Style="{StaticResource Micro}"
                                 Text="LIVE READINGS" />
                         </StackPanel>
                         <TextBlock
                             x:Name="SensorSummary"
+                            Margin="3,0,0,8"
                             FontSize="12"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{ThemeResource BraunTx3}"
+                            LineHeight="17"
                             TextWrapping="Wrap" />
 
-                        <!-- Double-click a name to change it: the sensor's own
-                             name is whatever its maker put in the firmware. -->
-                        <ItemsControl x:Name="SensorList" Margin="0,8,0,0">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="local:SensorRow">
-                                    <Border
-                                        Margin="0,0,0,6"
-                                        Padding="16,12"
-                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="8"
-                                        DoubleTapped="OnRenameSensor"
-                                        Tag="{x:Bind Key.Value}">
-                                        <Grid ColumnSpacing="12">
+                        <Border
+                            Background="{ThemeResource BraunCard}"
+                            BorderBrush="{ThemeResource BraunLine}"
+                            BorderThickness="1"
+                            CornerRadius="12">
+                            <ItemsControl x:Name="SensorList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="local:SensorRow">
+                                        <Grid
+                                            Padding="13,10"
+                                            ColumnSpacing="13"
+                                            Background="Transparent"
+                                            DoubleTapped="OnRenameSensor"
+                                            Tag="{x:Bind Key.Value}"
+                                            ToolTipService.ToolTip="{x:Bind RenameHint}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
-                                            <StackPanel Spacing="2">
+                                            <StackPanel VerticalAlignment="Center">
                                                 <TextBlock
+                                                    FontSize="14"
+                                                    Foreground="{ThemeResource BraunTx}"
                                                     Text="{x:Bind Label, Mode=OneWay}"
-                                                    ToolTipService.ToolTip="{x:Bind Key.Value}" />
-                                                <TextBlock
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                    Text="{x:Bind Explain}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
+                                                    Margin="0,3,0,0"
                                                     FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                    Foreground="{ThemeResource BraunTx3}"
+                                                    LineHeight="17"
+                                                    Text="{x:Bind Explain}"
+                                                    TextWrapping="Wrap" />
+                                                <!-- Which part it came off. Shown
+                                                     only when that is a model
+                                                     somebody owns, never the
+                                                     source's own shorthand. -->
+                                                <TextBlock
+                                                    Margin="0,2,0,0"
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource BraunTx3}"
+                                                    Opacity="0.75"
                                                     Text="{x:Bind Hardware}"
-                                                    TextTrimming="CharacterEllipsis" />
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Visibility="{x:Bind HardwareShown}" />
                                             </StackPanel>
 
                                             <TextBlock
                                                 Grid.Column="1"
                                                 VerticalAlignment="Center"
-                                                FontSize="16"
+                                                FontSize="15"
+                                                Foreground="{ThemeResource BraunTx2}"
                                                 Text="{x:Bind Value, Mode=OneWay}" />
                                         </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-
-                    <!-- About -->
-                    <StackPanel x:Name="AboutSection" Spacing="8" Visibility="Collapsed">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE897;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
-                            <TextBlock
-                                x:Uid="AboutTitle"
-                                VerticalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="SemiBold"
-                                Text="About" />
-                        </StackPanel>
-                        <TextBlock
-                            x:Uid="AboutIntro"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."
-                            TextWrapping="Wrap" />
-
-                        <!-- The program's own card, the way Master Audio
-                             Switcher opens its About: the mark, the name, the
-                             version, and nothing else competing with them. -->
-                        <Border
-                            Margin="0,8,0,0"
-                            Padding="20"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <StackPanel Orientation="Horizontal" Spacing="16">
-                                <Image
-                                    Width="48"
-                                    Height="48"
-                                    VerticalAlignment="Center"
-                                    Source="ms-appx:///Assets/icon.ico" />
-                                <StackPanel VerticalAlignment="Center" Spacing="2">
-                                    <TextBlock
-                                        FontSize="18"
-                                        FontWeight="SemiBold"
-                                        Text="Master Control Dock" />
-                                    <TextBlock
-                                        x:Name="VersionText"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-
-                        <StackPanel
-                            Margin="0,16,0,0"
-                            Orientation="Horizontal"
-                            Spacing="8">
-                            <FontIcon
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="13"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Glyph="&#xE7E8;" />
-                            <TextBlock
-                                x:Uid="StartupTitle"
-                                VerticalAlignment="Center"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Style="{StaticResource Micro}"
-                                Text="STARTUP" />
-                        </StackPanel>
-
-                        <Border
-                            Padding="16,4"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <Grid MinHeight="48" ColumnSpacing="16">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock x:Uid="StartWithWindowsLabel" Text="Start with Windows" />
-                                    <TextBlock
-                                        x:Uid="StartWithWindowsHint"
-                                        FontSize="12"
-                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Text="The docks come back when you sign in." />
-                                </StackPanel>
-                                <ToggleSwitch
-                                    x:Name="AutoStartToggle"
-                                    x:Uid="AutoStartToggle"
-                                    Grid.Column="1"
-                                    MinWidth="0"
-                                    VerticalAlignment="Center"
-                                    OffContent="Off"
-                                    OnContent="On"
-                                    Toggled="OnAutoStartToggled" />
-                            </Grid>
-                        </Border>
-
-                        <StackPanel
-                            Margin="0,16,0,0"
-                            Orientation="Horizontal"
-                            Spacing="8">
-                            <FontIcon
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="13"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Glyph="&#xE8B7;" />
-                            <TextBlock
-                                x:Uid="FilesTitle"
-                                VerticalAlignment="Center"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Style="{StaticResource Micro}"
-                                Text="ITS OWN FILES" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <Button x:Uid="OpenLogsButton" Click="OnOpenLogs" Content="Open the log folder" />
-                            <Button x:Uid="OpenConfigButton" Click="OnOpenConfig" Content="Open the settings folder" />
-                        </StackPanel>
-
-                        <StackPanel
-                            Margin="0,16,0,0"
-                            Orientation="Horizontal"
-                            Spacing="8">
-                            <FontIcon
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="13"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Glyph="&#xE7E8;" />
-                            <TextBlock
-                                x:Uid="QuitTitle"
-                                VerticalAlignment="Center"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Style="{StaticResource Micro}"
-                                Text="QUITTING" />
-                        </StackPanel>
-
-                        <Border
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <StackPanel Spacing="12">
-                                <TextBlock
-                                    x:Uid="ExitHint"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."
-                                    TextWrapping="Wrap" />
-                                <Button
-                                    x:Uid="ExitButton"
-                                    HorizontalAlignment="Left"
-                                    Click="OnExit"
-                                    Content="Exit Master Control Dock" />
-                            </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Border>
                     </StackPanel>
+
+
+                    <!-- About, opened the way Master Audio Switcher opens its
+                         own: the mark, the name, the version, centred, with
+                         nothing beside them competing. -->
+                    <StackPanel x:Name="AboutSection" Visibility="Collapsed">
+                        <StackPanel x:Name="AboutBody" />
+                    </StackPanel>
+
 
                 </StackPanel>
             </ScrollViewer>

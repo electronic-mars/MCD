@@ -676,18 +676,33 @@ public sealed partial class DockWindow : Window
             return;
         }
 
+        // Only the free ones. Ruling a grid across the widgets that are
+        // already there says the bar is graph paper; outlining the gaps
+        // between them says it is a row of sockets with bricks in some of
+        // them, which is what it is. The slots the widget in hand is leaving
+        // count as free - it is on its way out of them.
+        string? leaving = _grabbed?.Entry.InstanceId;
+
         for (int cell = 0; cell < _capacity; cell++)
         {
+            if (DockGrid.At(_placed, cell) is { } sitting && sitting.InstanceId != leaving)
+            {
+                continue;
+            }
+
             Rect rect = CellRect(cell, 1);
 
             var slot = new Rectangle
             {
+                Fill = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
+                    ? Windows.UI.Color.FromArgb(0x0A, 0x00, 0x00, 0x00)
+                    : Windows.UI.Color.FromArgb(0x0D, 0xFF, 0xFF, 0xFF)),
                 Stroke = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
-                    ? Windows.UI.Color.FromArgb(0x2B, 0x00, 0x00, 0x00)
-                    : Windows.UI.Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF)),
+                    ? Windows.UI.Color.FromArgb(0x24, 0x00, 0x00, 0x00)
+                    : Windows.UI.Color.FromArgb(0x2E, 0xFF, 0xFF, 0xFF)),
                 StrokeThickness = 1,
-                RadiusX = 4,
-                RadiusY = 4,
+                RadiusX = 5,
+                RadiusY = 5,
                 Width = Math.Max(0, rect.Width),
                 Height = Math.Max(0, rect.Height),
                 IsHitTestVisible = false,
@@ -717,11 +732,14 @@ public sealed partial class DockWindow : Window
 
         Rect rect = CellRect(landing, span);
 
-        _aim.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x2E, 0xFF, 0xFF, 0xFF));
-        _aim.Stroke = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
+        // The program's own orange, not the system accent: this marker is the
+        // bar talking about itself, and it has to read the same on a desktop
+        // whose accent happens to be the colour of the wallpaper behind it.
+        _aim.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x33, 0xF2, 0x6A, 0x21));
+        _aim.Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xF2, 0x6A, 0x21));
         _aim.StrokeThickness = 1.5;
-        _aim.RadiusX = 4;
-        _aim.RadiusY = 4;
+        _aim.RadiusX = 5;
+        _aim.RadiusY = 5;
         _aim.Width = Math.Max(0, rect.Width);
         _aim.Height = Math.Max(0, rect.Height);
 
@@ -735,6 +753,38 @@ public sealed partial class DockWindow : Window
 
         return landing;
     }
+
+    /// <summary>
+    /// Marks the slots a widget is about to be taken out of, or clears the
+    /// mark.
+    /// </summary>
+    private void Farewell(bool on)
+    {
+        Overlay.Children.Remove(_goodbye);
+
+        if (!on || _grabbed is null || DockGrid.At(_placed, CellAt(_grabbedAt)) is not { } held)
+        {
+            return;
+        }
+
+        Rect rect = CellRect(held.Cell, held.Span);
+
+        _goodbye.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x38, 0xFF, 0x6B, 0x6B));
+        _goodbye.Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(0xCC, 0xFF, 0x6B, 0x6B));
+        _goodbye.StrokeThickness = 1.5;
+        _goodbye.StrokeDashArray = [3, 2];
+        _goodbye.RadiusX = 5;
+        _goodbye.RadiusY = 5;
+        _goodbye.Width = Math.Max(0, rect.Width);
+        _goodbye.Height = Math.Max(0, rect.Height);
+
+        Canvas.SetLeft(_goodbye, rect.X);
+        Canvas.SetTop(_goodbye, rect.Y);
+        Overlay.Children.Add(_goodbye);
+    }
+
+    /// <summary>The mark over a widget on its way off the bar.</summary>
+    private readonly Rectangle _goodbye = new() { IsHitTestVisible = false };
 
     /// <summary>Which slot a point on the bar falls in.</summary>
     private int CellAt(Point at)
@@ -934,44 +984,21 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     private void BuildWidgets()
     {
-        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
-        double thickness = DockMetrics.ThicknessDips(Config.Edge, Config.Density);
-        double length = horizontal ? Monitor.Width / Monitor.Scale : Monitor.Height / Monitor.Scale;
-
-        _capacity = DockLayout.Capacity(length, CellSize);
+        Measure();
 
         var built = new List<(WidgetConfig Entry, int Span)>();
         var hosts = new Dictionary<string, WidgetHost>(StringComparer.Ordinal);
 
         foreach (WidgetConfig entry in Config.Widgets)
         {
-            WidgetViewModel? widget = WidgetCatalog.Create(_context, entry);
-
-            if (widget is null)
+            if (MakeHost(entry) is not { } made)
             {
-                // Written by a later version of the program. Skipping it beats
-                // refusing to show the dock at all.
-                _log.LogWarning("widget.unknown typeId={TypeId}", entry.TypeId);
                 continue;
             }
 
-            if (Application.Current.Resources[entry.TypeId] is not DataTemplate template)
-            {
-                _log.LogWarning("widget.template missing for typeId={TypeId}", entry.TypeId);
-                widget.Dispose();
-                continue;
-            }
-
-            widget.Orientation = horizontal ? Orientation.Horizontal : Orientation.Vertical;
-            widget.Density = Config.Density;
-
-            var host = new WidgetHost(_log, widget, template);
-            DockLayout.Dress(host, Config.Edge);
-            host.Attach();
-
-            _hosts.Add(host);
-            hosts[entry.InstanceId] = host;
-            built.Add((entry, DockLayout.SpanOf(widget.Length(), CellSize)));
+            _hosts.Add(made.Host);
+            hosts[entry.InstanceId] = made.Host;
+            built.Add((entry, made.Span));
         }
 
         _built = built;
@@ -979,6 +1006,140 @@ public sealed partial class DockWindow : Window
         Settle();
         WriteBackCells();
     }
+
+    /// <summary>How long this bar is, and how many slots that comes to.</summary>
+    private void Measure()
+    {
+        bool horizontal = DockMetrics.IsHorizontal(Config.Edge);
+        double length = horizontal ? Monitor.Width / Monitor.Scale : Monitor.Height / Monitor.Scale;
+
+        _capacity = DockLayout.Capacity(length, CellSize);
+    }
+
+    /// <summary>Builds one widget, or nothing when it cannot be built.</summary>
+    private (WidgetHost Host, int Span)? MakeHost(WidgetConfig entry)
+    {
+        WidgetViewModel? widget = WidgetCatalog.Create(_context, entry);
+
+        if (widget is null)
+        {
+            // Written by a later version of the program. Skipping it beats
+            // refusing to show the dock at all.
+            _log.LogWarning("widget.unknown typeId={TypeId}", entry.TypeId);
+            return null;
+        }
+
+        if (Application.Current.Resources[entry.TypeId] is not DataTemplate template)
+        {
+            _log.LogWarning("widget.template missing for typeId={TypeId}", entry.TypeId);
+            widget.Dispose();
+            return null;
+        }
+
+        widget.Orientation = DockMetrics.IsHorizontal(Config.Edge)
+            ? Orientation.Horizontal
+            : Orientation.Vertical;
+
+        widget.Density = Config.Density;
+
+        var host = new WidgetHost(_log, widget, template);
+        DockLayout.Dress(host, Config.Edge);
+        host.Attach();
+
+        return (host, DockLayout.SpanOf(widget.Length(), CellSize));
+    }
+
+    /// <summary>
+    /// Takes a new list of widgets and changes only what actually differs.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A widget that is still there, still the same kind and still set up the
+    /// same way keeps the host it already has - which means it keeps its
+    /// readings, its icon and its history rather than starting again from a
+    /// dash. Only what arrived is built, and only what left is disposed.
+    /// </para>
+    /// <para>
+    /// This is the difference between moving one widget and watching the whole
+    /// bar go blank for a second: rebuilding every host on the bar costs an
+    /// icon extraction and a first sensor tick each, and the bar is empty
+    /// until they finish.
+    /// </para>
+    /// </remarks>
+    public void RefreshContents(MonitorConfig config)
+    {
+        LetGo();
+        Config = config;
+        Measure();
+
+        var wanted = new Dictionary<string, WidgetConfig>(StringComparer.Ordinal);
+
+        foreach (WidgetConfig entry in Config.Widgets)
+        {
+            wanted[entry.InstanceId] = entry;
+        }
+
+        var spans = _built.ToDictionary(b => b.Entry.InstanceId, b => b.Span, StringComparer.Ordinal);
+
+        foreach ((string id, WidgetHost host) in _drawn.ToList())
+        {
+            if (wanted.TryGetValue(id, out WidgetConfig? still) && Same(host.Entry, still))
+            {
+                continue;
+            }
+
+            Strip.Children.Remove(host);
+            _hosts.Remove(host);
+            _drawn.Remove(id);
+            spans.Remove(id);
+            host.Dispose();
+        }
+
+        var built = new List<(WidgetConfig Entry, int Span)>();
+        int fresh = 0;
+
+        foreach (WidgetConfig entry in Config.Widgets)
+        {
+            if (_drawn.ContainsKey(entry.InstanceId))
+            {
+                built.Add((entry, spans[entry.InstanceId]));
+                continue;
+            }
+
+            if (MakeHost(entry) is not { } made)
+            {
+                continue;
+            }
+
+            _hosts.Add(made.Host);
+            _drawn[entry.InstanceId] = made.Host;
+            built.Add((entry, made.Span));
+            fresh++;
+        }
+
+        _built = built;
+
+        _log.LogInformation(
+            "dock.refreshed monitor={Monitor} kept={Kept} built={Built}",
+            Monitor.Identity.FriendlyName, built.Count - fresh, fresh);
+
+        Settle();
+        WriteBackCells();
+    }
+
+    /// <summary>
+    /// Whether two entries describe the same widget, drawn the same way.
+    /// </summary>
+    /// <remarks>
+    /// The slot is deliberately not compared: a widget that only moved is the
+    /// same widget, and re-laying it out is all that a move costs.
+    /// </remarks>
+    private static bool Same(WidgetConfig a, WidgetConfig b) =>
+        a.TypeId == b.TypeId
+        && string.Equals(
+            a.Config?.GetRawText() ?? string.Empty,
+            b.Config?.GetRawText() ?? string.Empty,
+            StringComparison.Ordinal);
 
     /// <summary>What was built for this bar, and where each of it went.</summary>
     private List<(WidgetConfig Entry, int Span)> _built = [];
@@ -1149,13 +1310,18 @@ public sealed partial class DockWindow : Window
 
         if (_offBar)
         {
+            // The widget goes ghostly and the slots it holds go red: dragging
+            // something into empty space and having it silently disappear is
+            // indistinguishable from having broken it.
             _grabbed.Doomed(true);
             Overlay.Children.Remove(_aim);
+            Farewell(true);
             _landing = null;
             return;
         }
 
         _grabbed.Doomed(false);
+        Farewell(false);
 
         // The slots the widget would take, lit under the pointer. Nothing lights
         // when it will not fit: a place with no room is not a place, and saying
@@ -1195,6 +1361,7 @@ public sealed partial class DockWindow : Window
         _outlined?.Outline(false);
         _outlined = null;
 
+        Farewell(false);
         ShowSlots(false);
         Root.ReleasePointerCaptures();
 
@@ -1206,7 +1373,16 @@ public sealed partial class DockWindow : Window
         _grabOffset = 0;
     }
 
-    /// <summary>Moves the widget in hand to the slots it was dropped on.</summary>
+    /// <summary>
+    /// Moves the widget in hand to the slots it was dropped on.
+    /// </summary>
+    /// <remarks>
+    /// Applied here and then reported, rather than reported and waited for. A
+    /// move changes nothing but which slot a widget starts at, so the bar can
+    /// simply put it there; going out through the settings and back would tear
+    /// down every widget on the bar to redraw one of them, which is the blink
+    /// a drop used to end with.
+    /// </remarks>
     private void Land(WidgetHost host)
     {
         if (_landing is not { } cell || cell == host.Entry.Cell)
@@ -1218,10 +1394,21 @@ public sealed partial class DockWindow : Window
             "dock.moved monitor={Monitor} widget={Widget} cell={Cell}",
             Monitor.Identity.FriendlyName, host.Entry.TypeId, cell);
 
-        Rearranged?.Invoke(
-            this,
-            [.. Config.Widgets.Select(
-                w => w.InstanceId == host.Entry.InstanceId ? w with { Cell = cell } : w)]);
+        string moved = host.Entry.InstanceId;
+
+        Config = Config with
+        {
+            Widgets = [.. Config.Widgets.Select(w => w.InstanceId == moved ? w with { Cell = cell } : w)],
+        };
+
+        _built =
+        [
+            .. _built.Select(
+                b => b.Entry.InstanceId == moved ? (b.Entry with { Cell = cell }, b.Span) : b)
+        ];
+
+        Settle();
+        Settled?.Invoke(this, Config.Widgets);
     }
 
     /// <summary>The widget covering the slot a point falls in.</summary>
@@ -1230,17 +1417,35 @@ public sealed partial class DockWindow : Window
             ? _hosts.FirstOrDefault(h => h.Entry.InstanceId == sitting.InstanceId)
             : null;
 
-    /// <summary>Takes a widget off this bar.</summary>
+    /// <summary>
+    /// Takes a widget off this bar.
+    /// </summary>
+    /// <remarks>
+    /// Taken off here and then reported, for the same reason a move is: the
+    /// other widgets on the bar have not changed and must not flinch. The
+    /// short chime is the only thing that says out loud that something is
+    /// gone - a widget dragged onto the desktop simply vanishes otherwise,
+    /// and vanishing is indistinguishable from a bug.
+    /// </remarks>
     private void RemoveWidget(WidgetHost host)
     {
-        List<WidgetConfig> list =
-            [.. Config.Widgets.Where(w => w.InstanceId != host.Entry.InstanceId)];
+        string gone = host.Entry.InstanceId;
 
         _log.LogInformation(
             "dock.removed monitor={Monitor} widget={Widget}",
             Monitor.Identity.FriendlyName, host.Entry.TypeId);
 
-        Rearranged?.Invoke(this, [.. list]);
+        Strip.Children.Remove(host);
+        _hosts.Remove(host);
+        _drawn.Remove(gone);
+        host.Dispose();
+
+        Config = Config with { Widgets = [.. Config.Widgets.Where(w => w.InstanceId != gone)] };
+        _built = [.. _built.Where(b => b.Entry.InstanceId != gone)];
+
+        Settle();
+        Mcd.Interop.Shell.Chime.Removed();
+        Settled?.Invoke(this, Config.Widgets);
     }
 
     private void Refresh()
