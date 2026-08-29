@@ -513,6 +513,45 @@ public sealed partial class DockWindow : Window
         }
     }
 
+    /// <summary>
+    /// Opens this bar's own menu and asks it for the settings, the way a
+    /// right-click does.
+    /// </summary>
+    /// <remarks>
+    /// For the unattended check, and it exists because the check did not have
+    /// it: every other way of opening the settings window builds it with
+    /// nothing else on screen, and the way everybody actually uses builds it
+    /// from inside a menu that is still open on another window's island. That
+    /// is a different thing to ask of the framework, and it was the one that
+    /// ended the program.
+    /// </remarks>
+    public void RehearseMenu()
+    {
+        // The menus themselves, not stand-ins for them: the bare-slot one
+        // builds an entry for everything that could be added, each with a
+        // tooltip of its own, and the widget one is a different shape again.
+        MenuFlyout bar = BarMenu(_capacity - 1);
+        bar.ShowAt(Bar, new Point(8, 8));
+        bar.Hide();
+
+        string? widget = _hosts.Count > 0 ? _hosts[0].Entry.InstanceId : null;
+
+        if (_hosts.Count > 0)
+        {
+            MenuFlyout own = WidgetMenu(_hosts[0]);
+            own.ShowAt(Bar, new Point(8, 8));
+
+            // Asked for the way the menu item asks, while the menu is still
+            // up: the same call, so that whatever the click does to the
+            // framework, this does too.
+            AskForSettings(widget);
+            own.Hide();
+            return;
+        }
+
+        AskForSettings(null);
+    }
+
     private void OnRightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
     {
         // Widgets will mark their own right-clicks handled once they have menus
@@ -532,6 +571,33 @@ public sealed partial class DockWindow : Window
         if (DockGrid.At(_placed, cell) is { } sitting
             && _hosts.FirstOrDefault(h => h.Entry.InstanceId == sitting.InstanceId) is { } target)
         {
+            WidgetMenu(target).ShowAt(Bar, at);
+            return;
+        }
+
+        BarMenu(cell).ShowAt(Bar, at);
+    }
+
+    /// <summary>
+    /// Asks for the settings window, on the turn after the click.
+    /// </summary>
+    /// <remarks>
+    /// Not inside the click itself. A menu item's handler runs in the middle
+    /// of the framework's own input dispatch, with a light-dismiss popup on
+    /// this window's island still open; building a whole second window and
+    /// reading its XAML from in there is asking for two things at once that
+    /// the framework does not reliably survive. On the next turn the menu has
+    /// gone and the input event has returned, and the window is built with
+    /// nothing else in hand.
+    /// </remarks>
+    private void AskForSettings(string? widgetId) =>
+        DispatcherQueue.TryEnqueue(
+            () => SettingsRequested?.Invoke(this, new DockSettingsRequest(Monitor, widgetId)));
+
+    /// <summary>The menu for a widget: its settings, and taking it off.</summary>
+    private MenuFlyout WidgetMenu(WidgetHost target)
+    {
+        {
             var own = new MenuFlyout { XamlRoot = Root.XamlRoot };
 
             var configure = new MenuFlyoutItem
@@ -541,8 +607,7 @@ public sealed partial class DockWindow : Window
 
             // The widget travels with the request, so the settings open with
             // this one's own options in front of the person who asked.
-            configure.Click += (_, _) => SettingsRequested?.Invoke(
-                this, new DockSettingsRequest(Monitor, target.Entry.InstanceId));
+            configure.Click += (_, _) => AskForSettings(target.Entry.InstanceId);
             own.Items.Add(configure);
 
             var remove = new MenuFlyoutItem
@@ -552,10 +617,13 @@ public sealed partial class DockWindow : Window
             remove.Click += (_, _) => RemoveWidget(target);
             own.Items.Add(remove);
 
-            own.ShowAt(Bar, at);
-            return;
+            return own;
         }
+    }
 
+    /// <summary>The menu for a bare slot: what could go in it, and the settings.</summary>
+    private MenuFlyout BarMenu(int cell)
+    {
         var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
         var add = new MenuFlyoutSubItem { Text = Loc.Tr("MenuAddWidget", "Add widget") };
 
@@ -581,10 +649,10 @@ public sealed partial class DockWindow : Window
         // The monitor goes with the request. Settings that open on the primary
         // screen when the click happened on the third one are settings the user
         // has to go and find.
-        settings.Click += (_, _) => SettingsRequested?.Invoke(this, new DockSettingsRequest(Monitor, null));
+        settings.Click += (_, _) => AskForSettings(null);
         menu.Items.Add(settings);
 
-        menu.ShowAt(Bar, at);
+        return menu;
     }
 
     /// <summary>Puts a new widget on the slot it was aimed at.</summary>

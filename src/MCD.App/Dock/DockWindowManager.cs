@@ -226,6 +226,18 @@ public sealed class DockWindowManager : IDisposable
         return hosts;
     }
 
+    /// <summary>Asks the first live bar for its settings, through its own menu.</summary>
+    public bool RehearseMenu()
+    {
+        foreach (DockWindow window in _windows.Values)
+        {
+            window.RehearseMenu();
+            return true;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Whether the system refused this combination to us.
     /// </summary>

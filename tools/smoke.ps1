@@ -20,18 +20,33 @@ param(
     # Which language to check in. A word that fits its key in English can be
     # half again as long in Russian and be cut at both ends, and the check that
     # measures it only ever sees the language it was run in.
-    [string]$Lang = ''
+    [string]$Lang = '',
+
+    # Which build to run. Named rather than guessed: publishing a release into
+    # bin\Release leaves a binary newer than the one just built, and "whichever
+    # is newest" then quietly checks the installed copy instead of the change
+    # being tested. That is how a run of this reported a clean pass over code it
+    # had never loaded.
+    [ValidateSet('Debug', 'Release')]
+    [string]$Configuration = 'Debug'
 )
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 
 if (-not $Exe) {
-    $found = Get-ChildItem -Path (Join-Path $root 'src\MCD.App\bin') -Filter 'MasterControlDock.exe' -Recurse -ErrorAction SilentlyContinue |
+    $where = Join-Path $root "src\MCD.App\bin\$Configuration"
+    $found = Get-ChildItem -Path $where -Filter 'MasterControlDock.exe' -Recurse -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -notlike '*\publish\*' } |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    if (-not $found) { throw 'no build of MasterControlDock.exe was found; build first' }
+    if (-not $found) { throw "no $Configuration build of MasterControlDock.exe under $where; build first" }
     $Exe = $found.FullName
 }
+
+# Printed with its date, because the one thing this check must never do is
+# report a pass over a binary older than the change it was run for.
+Write-Host "binary $Exe"
+Write-Host "built  $((Get-Item $Exe).LastWriteTime)"
 
 # Any copy already running would refuse this one and the check would report ten
 # missing markers for one cause. On a build agent there is nothing to close.
@@ -85,6 +100,11 @@ $required = [ordered]@{
     # the paths that re-parent elements, and re-parenting is what ended the
     # program the last time it went wrong.
     'the bars rebuilt'          = 'selftest\.rehearsed'
+
+    # And the window built the way a person builds it: from a bar's own menu,
+    # with the menu still up. Every other way of opening it has nothing else on
+    # screen, and the way everybody uses is the one that ended the program.
+    'the menu asked for it'     = 'selftest\.menued shown=True'
 
     # And each page looked at with the window as small as it is allowed to be.
     'the pages squeezed'        = 'selftest\.squeezed narrowest='

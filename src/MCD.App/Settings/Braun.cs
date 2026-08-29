@@ -465,7 +465,12 @@ public static class Braun
     /// </remarks>
     private static double Widest(IReadOnlyList<string> labels)
     {
-        _ruler ??= new TextBlock
+        // A new one each time, kept by nobody. A XAML element held in a static
+        // field outlives the window it was made under, and this program has
+        // already been ended once by an element that belonged to a window that
+        // had gone. Measuring a handful of captions costs nothing worth
+        // keeping a hostage for.
+        var ruler = new TextBlock
         {
             FontSize = MicroSize,
             CharacterSpacing = 160,
@@ -480,17 +485,14 @@ public static class Braun
 
         foreach (string label in labels)
         {
-            _ruler.Text = label.ToUpper(CultureInfo.CurrentCulture);
-            _ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
-            widest = Math.Max(widest, _ruler.DesiredSize.Width);
+            ruler.Text = label.ToUpper(CultureInfo.CurrentCulture);
+            ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            widest = Math.Max(widest, ruler.DesiredSize.Width);
         }
 
         // The caption's own margins either side of the word.
         return widest + 8;
     }
-
-    /// <summary>Never shown, never in the tree: it exists to be measured against.</summary>
-    private static TextBlock? _ruler;
 
     /// <summary>
     /// A row of icon-over-name tiles set into a recessed rail.

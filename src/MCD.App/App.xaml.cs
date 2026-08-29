@@ -492,6 +492,25 @@ public partial class App : Application
                 });
             }
 
+            // And the way a person actually opens it: from a bar's own menu,
+            // with the menu still up. The window is closed first, so that this
+            // builds one rather than raising the one already there - building
+            // it is the part that went wrong.
+            Later(1600, () =>
+            {
+                try
+                {
+                    _settingsWindow?.Close();
+                    _settingsWindow = null;
+
+                    log.LogInformation("selftest.menued shown={Shown}", _docks?.RehearseMenu() ?? false);
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e, "selftest.menu failed");
+                }
+            });
+
             // And every path that rebuilds a bar, twice each - after the
             // squeeze, so the two are not laying the same window out at once.
             Later(2000, () =>

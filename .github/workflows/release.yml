@@ -30,13 +30,13 @@ jobs:
         run: dotnet test tests/MCD.Tests/MCD.Tests.csproj --no-build --configuration Release
 
       - name: Smoke
-        run: pwsh tools/smoke.ps1 -Seconds 10
+        run: pwsh tools/smoke.ps1 -Seconds 10 -Configuration Release
 
       # And again in the other language. A caption that fits its key in English
       # can be half again as long in Russian and be cut at both ends; the check
       # that measures it only ever sees the language it was run in.
       - name: Smoke (Russian)
-        run: pwsh tools/smoke.ps1 -Seconds 10 -Lang ru-RU
+        run: pwsh tools/smoke.ps1 -Seconds 10 -Lang ru-RU -Configuration Release
 
       - name: Pack MSIX
         run: pwsh tools/pack-msix.ps1
