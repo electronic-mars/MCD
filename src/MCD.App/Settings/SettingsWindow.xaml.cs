@@ -576,23 +576,20 @@ public sealed partial class SettingsWindow : Window
         // ------------------------------------------------------------ contents
         gated.Children.Add(Braun.Heading("\uE71D", Loc.Tr("GalleryTitle", "Widgets")));
 
-        RefreshGallery(dock);
-        ShowUndo();
-
         gated.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("BarLiveTitle", "The bar itself"),
                 Loc.Tr(
                     "BarHelp",
                     "The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings."),
-                _undoSlot),
+                Undo()),
 
             Braun.Row(
                 Loc.Tr("GalleryRow", "Put one on the bar"),
                 Loc.Tr(
                     "GalleryRowHint",
                     "A press adds it to the first free slot. There is no limit: two of the same reading in different places is an ordinary thing to want."),
-                _gallery,
+                Gallery(dock),
                 stack: true),
 
             Braun.Row(
@@ -611,12 +608,10 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "\uE7A7"))));
 
         // ------------------------------------------------------- chosen widget
-        RefreshInspector();
-
-        if (_inspectorSlot.Content is not null)
+        if (Inspector() is { } inspector)
         {
             gated.Children.Add(Braun.Heading("\uE713", _inspectorName));
-            gated.Children.Add(_inspectorSlot);
+            gated.Children.Add(inspector);
         }
 
         // ----------------------------------------------------------- behaviour
@@ -683,29 +678,18 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>
-    /// The gallery of things that can go on a bar.
+    /// The undo button now on the page, so its label can be changed without
+    /// building the page again.
     /// </summary>
     /// <remarks>
-    /// Held in a field rather than declared in the page: the page around it
-    /// is rebuilt on every change, and this is filled separately.
+    /// A reference to something already in the tree, never something to put
+    /// into a new one. Everything this page draws is built fresh with the
+    /// page: an element that outlives a rebuild has to be taken off its old
+    /// parent before it can be given a new one, and that is a rule easy to
+    /// keep and easy to forget - forgetting it once ended the program on
+    /// every right-click.
     /// </remarks>
-    private readonly VariableSizedWrapGrid _gallery = new()
-    {
-        ItemHeight = 40,
-        ItemWidth = 204,
-        Orientation = Orientation.Horizontal,
-    };
-
-    /// <summary>Where the undo button lives, so its label can change alone.</summary>
-    private readonly ContentControl _undoSlot = new() { IsTabStop = false };
-
-    /// <summary>Where the chosen widget's own options live.</summary>
-    private readonly ContentControl _inspectorSlot = new()
-    {
-        IsTabStop = false,
-        HorizontalAlignment = HorizontalAlignment.Stretch,
-        HorizontalContentAlignment = HorizontalAlignment.Stretch,
-    };
+    private Button? _undoButton;
 
     /// <summary>What the chosen widget is called, for the heading above it.</summary>
     private string _inspectorName = string.Empty;
@@ -722,9 +706,14 @@ public sealed partial class SettingsWindow : Window
     /// want. Taking one off is done on the bar, by dragging it off or by its
     /// own right-click menu.
     /// </remarks>
-    private void RefreshGallery(MonitorConfig dock)
+    private VariableSizedWrapGrid Gallery(MonitorConfig dock)
     {
-        _gallery.Children.Clear();
+        var gallery = new VariableSizedWrapGrid
+        {
+            ItemHeight = 40,
+            ItemWidth = 204,
+            Orientation = Orientation.Horizontal,
+        };
 
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
@@ -796,8 +785,10 @@ public sealed partial class SettingsWindow : Window
                 string.Format(
                     CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), chosen.Name));
 
-            _gallery.Children.Add(chip);
+            gallery.Children.Add(chip);
         }
+
+        return gallery;
     }
 
     /// <summary>
@@ -809,7 +800,7 @@ public sealed partial class SettingsWindow : Window
     /// A widget is chosen by right-clicking it on the bar itself, and until
     /// somebody does that this part of the page does not exist.
     /// </remarks>
-    private void RefreshInspector()
+    private FrameworkElement? Inspector()
     {
         WidgetConfig? entry = Dock()?.Widgets.FirstOrDefault(w => w.InstanceId == _selectedId);
 
@@ -820,8 +811,7 @@ public sealed partial class SettingsWindow : Window
         {
             _selectedId = null;
             _inspectorName = string.Empty;
-            _inspectorSlot.Content = null;
-            return;
+            return null;
         }
 
         WidgetType? type = WidgetCatalog.Find(entry.TypeId);
@@ -834,7 +824,7 @@ public sealed partial class SettingsWindow : Window
         FrameworkElement? editor = _inspected?.CreateEditor(
             options => OnInspectorConfigured(id, options));
 
-        _inspectorSlot.Content = Braun.Group(
+        return Braun.Group(
             editor is null
                 ? Braun.Row(
                     Loc.Tr("NothingToSetUp", "This widget has nothing to set up."), null, null)
@@ -896,23 +886,42 @@ public sealed partial class SettingsWindow : Window
     /// mistake is invisible exactly while a person is working out what is
     /// safe to try.
     /// </remarks>
+    private Button Undo()
+    {
+        _undoButton = Braun.Action(UndoLabel(), DoUndo, "");
+        _undoButton.IsEnabled = _undo.Count > 0;
+
+        return _undoButton;
+    }
+
+    /// <summary>
+    /// Says on the button what undoing would put back, without building the
+    /// page again.
+    /// </summary>
+    /// <remarks>
+    /// The one thing on this page that changes while the rest of it has to
+    /// stand still: a widget's own options are saved as they are typed, and
+    /// rebuilding the page under somebody typing takes the field away
+    /// mid-word.
+    /// </remarks>
     private void ShowUndo()
     {
-        bool can = _undo.Count > 0;
+        if (_undoButton is not { } button)
+        {
+            return;
+        }
 
-        Button button = Braun.Action(
-            can
-                ? string.Format(
-                    CultureInfo.CurrentCulture,
-                    Loc.Tr("UndoWithLabel", "Undo - {0}"),
-                    _undo.Peek().Label)
-                : Loc.Tr("Undo", "Undo"),
-            DoUndo,
-            "");
-
-        button.IsEnabled = can;
-        _undoSlot.Content = button;
+        button.Content = Braun.Legend(UndoLabel(), "", Braun.Tx2);
+        button.IsEnabled = _undo.Count > 0;
     }
+
+    private string UndoLabel() =>
+        _undo.Count > 0
+            ? string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("UndoWithLabel", "Undo - {0}"),
+                _undo.Peek().Label)
+            : Loc.Tr("Undo", "Undo");
 
     /// <summary>Puts the last layout back.</summary>
     private void DoUndo()

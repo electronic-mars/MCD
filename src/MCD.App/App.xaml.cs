@@ -378,6 +378,25 @@ public partial class App : Application
         {
             ShowSettings();
 
+            // Then the page is built a second time, the way a right-click on
+            // a dock builds it: naming a screen, and sometimes a widget. The
+            // second build is where a page made of code goes wrong - an
+            // element it holds on to still belongs to the page before it -
+            // and opening the window with no screen never reaches it, which
+            // is how a crash on every right-click got past a run of this.
+            //
+            // The page is asked directly rather than through ShowSettings:
+            // that one also drags the window to the front, and joining input
+            // queues with whatever is in front has no business happening in
+            // an unattended run.
+            if (_docks?.Plans.FirstOrDefault(p => p.ShouldShow) is { } plan)
+            {
+                _settingsWindow?.Show(
+                    plan.Monitor, plan.Config.Widgets.FirstOrDefault()?.InstanceId);
+
+                log.LogInformation("selftest.reopened");
+            }
+
             // Left open, and walked through, when pages were asked for: a
             // visual change is verified by looking at the window it changed,
             // and the window that gets looked at must not be the one on

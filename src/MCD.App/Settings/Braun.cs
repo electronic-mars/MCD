@@ -169,6 +169,7 @@ public static class Braun
                 continue;
             }
 
+
             if (!first)
             {
                 stack.Children.Add(new Border { Height = 1, Background = Line });
@@ -231,6 +232,13 @@ public static class Braun
         {
             return grid;
         }
+
+        // A page built in code is built again on every change, and some of
+        // what goes on it outlives the page - the gallery keeps its chips,
+        // the undo button its label. Adding an element that still belongs to
+        // the page before this one throws, and it throws on the UI thread,
+        // which ends the program. Anything handed in here is taken off its
+        // old page first.
 
         if (stack)
         {
@@ -493,14 +501,41 @@ public static class Braun
     public static Button Action(
         string text, Action click, string? glyph = null, bool ghost = true, bool danger = false)
     {
+        Brush ink = danger ? Danger : ghost ? Tx2 : OnAcc;
+        StackPanel body = Legend(text, glyph, ink);
+
+        var button = new Button
+        {
+            Content = body,
+            MinWidth = 0,
+            MinHeight = 0,
+            Padding = new Thickness(15, 10, 15, 10),
+            CornerRadius = new CornerRadius(10),
+            BorderThickness = new Thickness(1),
+            BorderBrush = danger ? Paint(0x59FF6B6Bu) : ghost ? Line : Clear,
+            Background = ghost || danger ? Card : Acc,
+        };
+
+        button.Click += (_, _) => click();
+        return button;
+    }
+
+    /// <summary>
+    /// What is printed on a button: a glyph, then the word in small caps.
+    /// </summary>
+    /// <remarks>
+    /// Separate from the button so a label can be changed without building a
+    /// new button - which matters for the one button whose label changes
+    /// while the page around it stays put.
+    /// </remarks>
+    public static StackPanel Legend(string text, string? glyph, Brush ink)
+    {
         var body = new StackPanel
         {
             Orientation = Orientation.Horizontal,
             Spacing = 8,
             HorizontalAlignment = HorizontalAlignment.Center,
         };
-
-        Brush ink = danger ? Danger : ghost ? Tx2 : OnAcc;
 
         if (glyph is { Length: > 0 })
         {
@@ -524,20 +559,7 @@ public static class Braun
             VerticalAlignment = VerticalAlignment.Center,
         });
 
-        var button = new Button
-        {
-            Content = body,
-            MinWidth = 0,
-            MinHeight = 0,
-            Padding = new Thickness(15, 10, 15, 10),
-            CornerRadius = new CornerRadius(10),
-            BorderThickness = new Thickness(1),
-            BorderBrush = danger ? Paint(0x59FF6B6Bu) : ghost ? Line : Clear,
-            Background = ghost || danger ? Card : Acc,
-        };
-
-        button.Click += (_, _) => click();
-        return button;
+        return body;
     }
 
     /// <summary>A tile a picture or a glyph sits in - an icon, a swatch.</summary>

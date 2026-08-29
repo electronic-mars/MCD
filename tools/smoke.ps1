@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Runs the built program for a few seconds and checks the log for signs of life.
 
@@ -63,10 +63,17 @@ $required = [ordered]@{
     'the performance counters' = 'sensors\.provider id=pdh state=available'
     'the memory reading'      = 'sensors\.provider id=mem state=available'
 
-    # The settings window is built entirely from XAML, and a name XAML does not
+    # The settings window is built partly from XAML, and a name XAML does not
     # know is not a compile error - it is a parse failure at run time that takes
     # the whole process with it. Nothing but opening the window finds those.
     'the settings window'     = 'settings\.shown'
+
+    # And built a second time, the way a right-click on a dock builds it. The
+    # pages are made in code, and a page made in code goes wrong on the second
+    # build, not the first: something it holds still belongs to the page before
+    # it. Opening the window once never reaches that.
+    'the settings page rebuilt' = 'selftest\.reopened'
+
     'the AppBar released'     = 'appbar\.removed'
 }
 
