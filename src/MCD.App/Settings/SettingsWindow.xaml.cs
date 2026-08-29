@@ -229,7 +229,7 @@ public sealed partial class SettingsWindow : Window
 
         LookBody.Children.Clear();
 
-        LookBody.Children.Add(Braun.Heading("", Loc.Tr("LookGroupBar", "The bar")));
+        LookBody.Children.Add(Braun.Heading("Brush", Loc.Tr("LookGroupBar", "The bar")));
 
         string[] backdrops = ["acrylic", "solid", "colour", "image", "braun"];
 
@@ -283,7 +283,7 @@ public sealed partial class SettingsWindow : Window
                     wide: true),
                 stack: true)));
 
-        LookBody.Children.Add(Braun.Heading("", Loc.Tr("LookGroupLanguage", "Language")));
+        LookBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
 
         string[] languages = ["system", "en-US", "ru-RU"];
 
@@ -304,7 +304,7 @@ public sealed partial class SettingsWindow : Window
                 ? Braun.Row(
                     Loc.Tr("RestartRow", "The language has changed"),
                     Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
-                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, ""))
+                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, "Undo"))
                 : null));
     }
 
@@ -358,7 +358,7 @@ public sealed partial class SettingsWindow : Window
         shown.Children.Add(Braun.Action(
             colour ? Loc.Tr("PickColour", "Choose a colour") : Loc.Tr("PickPicture", "Choose a picture"),
             () => _ = PickBackdrop(),
-            ""));
+            "Pen"));
 
         return Braun.Row(
             colour ? Loc.Tr("ColourRow", "The colour") : Loc.Tr("PictureRow", "The picture"),
@@ -428,7 +428,7 @@ public sealed partial class SettingsWindow : Window
         {
             // A lamp says whether that screen has a bar of its own, so the
             // tile stays the width of the screen's name.
-            tabs.Add(("", Label(monitors[i], monitors, live, i), monitors[i].Enabled));
+            tabs.Add(("Computer", Label(monitors[i], monitors, live, i), monitors[i].Enabled));
         }
 
         DisplayTabs.Content = Braun.Tabs(tabs, chosen, i =>
@@ -513,7 +513,7 @@ public sealed partial class SettingsWindow : Window
         _filling = true;
 
         // ---------------------------------------------------------- the screen
-        DockBody.Children.Add(Braun.Heading("\uE7F4", Loc.Tr("DockGroupScreen", "This screen")));
+        DockBody.Children.Add(Braun.Heading("Computer", Loc.Tr("DockGroupScreen", "This screen")));
 
         DockBody.Children.Add(Braun.Group(Braun.Row(
             Loc.Tr("ShowDockLabel", "Show a dock on this display"),
@@ -536,7 +536,7 @@ public sealed partial class SettingsWindow : Window
         // ------------------------------------------------------------- placing
         bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
 
-        gated.Children.Add(Braun.Heading("\uE740", Loc.Tr("PlacementTitle", "Placement")));
+        gated.Children.Add(Braun.Heading("Layout", Loc.Tr("PlacementTitle", "Placement")));
 
         gated.Children.Add(Braun.Group(
             Braun.Row(
@@ -574,7 +574,7 @@ public sealed partial class SettingsWindow : Window
                     null)));
 
         // ------------------------------------------------------------ contents
-        gated.Children.Add(Braun.Heading("\uE71D", Loc.Tr("GalleryTitle", "Widgets")));
+        gated.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "Widgets")));
 
         gated.Children.Add(Braun.Group(
             Braun.Row(
@@ -598,24 +598,24 @@ public sealed partial class SettingsWindow : Window
                     "PinRowHint",
                     "Pinned programs sit on the bar as icons. A file dropped straight onto the bar is pinned to the slot it lands on."),
                 Braun.Action(
-                    Loc.Tr("PinProgramButton", "Pin a program..."), () => _ = PinDialog(), "\uE718")),
+                    Loc.Tr("PinProgramButton", "Pin a program..."), () => _ = PinDialog(), "Plus")),
 
             Braun.Row(
                 Loc.Tr("ResetRow", "The standard set"),
                 Loc.Tr(
                     "ResetRowHint",
                     "Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip and a temperature. Undo brings your own arrangement back."),
-                Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "\uE7A7"))));
+                Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "Undo"))));
 
         // ------------------------------------------------------- chosen widget
         if (Inspector() is { } inspector)
         {
-            gated.Children.Add(Braun.Heading("\uE713", _inspectorName));
+            gated.Children.Add(Braun.Heading("Sliders", _inspectorName));
             gated.Children.Add(inspector);
         }
 
         // ----------------------------------------------------------- behaviour
-        gated.Children.Add(Braun.Heading("\uE823", Loc.Tr("BehaviourTitle", "Behaviour")));
+        gated.Children.Add(Braun.Heading("Gear", Loc.Tr("BehaviourTitle", "Behaviour")));
 
         bool clash = dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge);
 
@@ -857,7 +857,7 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("RemoveFromBar", "Remove from bar"),
                     RemoveSelected,
-                    "",
+                    "Delete",
                     danger: true)));
     }
 
@@ -908,7 +908,7 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private Button Undo()
     {
-        _undoButton = Braun.Action(UndoLabel(), DoUndo, "");
+        _undoButton = Braun.Action(UndoLabel(), DoUndo, "Undo");
         _undoButton.IsEnabled = _undo.Count > 0;
 
         return _undoButton;
@@ -931,7 +931,7 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        button.Content = Braun.Legend(UndoLabel(), "", Braun.Tx2);
+        button.Content = Braun.Legend(UndoLabel(), "Undo", Braun.Tx2);
         button.IsEnabled = _undo.Count > 0;
     }
 
@@ -1632,7 +1632,7 @@ public sealed partial class SettingsWindow : Window
 
         AboutBody.Children.Add(mark);
 
-        AboutBody.Children.Add(Braun.Heading("\uE7E8", Loc.Tr("StartupTitle", "Startup")));
+        AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("StartupTitle", "Startup")));
 
         AboutBody.Children.Add(Braun.Group(Braun.Row(
             Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
@@ -1644,7 +1644,7 @@ public sealed partial class SettingsWindow : Window
                 ShowAbout();
             }))));
 
-        AboutBody.Children.Add(Braun.Heading("\uE8B7", Loc.Tr("FilesTitle", "Its own files")));
+        AboutBody.Children.Add(Braun.Heading("Document", Loc.Tr("FilesTitle", "Its own files")));
 
         AboutBody.Children.Add(Braun.Group(
             Braun.Row(
@@ -1653,7 +1653,7 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("OpenFolder", "Open the folder"),
                     () => Open(AppPaths.LogDirectory),
-                    "\uE838")),
+                    "Folder")),
 
             Braun.Row(
                 Loc.Tr("ConfigRow", "The settings file"),
@@ -1661,9 +1661,9 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("OpenFolder", "Open the folder"),
                     () => Open(AppPaths.Root),
-                    "\uE838"))));
+                    "Folder"))));
 
-        AboutBody.Children.Add(Braun.Heading("\uE7E8", Loc.Tr("QuitTitle", "Quitting")));
+        AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("QuitTitle", "Quitting")));
 
         AboutBody.Children.Add(Braun.Group(Braun.Row(
             Loc.Tr("ExitRow", "Stop the program"),
@@ -1673,7 +1673,7 @@ public sealed partial class SettingsWindow : Window
             Braun.Action(
                 Loc.Tr("ExitButton", "Exit Master Control Dock"),
                 () => _onExit(),
-                "\uE7E8",
+                "Power",
                 danger: true))));
     }
 

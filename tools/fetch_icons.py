@@ -87,6 +87,15 @@ ICONS: dict[str, str] = {
     "Shield": "shield-01",
     "Network2": "neural-network",
     "CpuCharge": "cpu-charge",
+    # The settings window draws from this set too, rather than from the
+    # system's glyph font: two icon sets in one program read as two programs.
+    "Undo": "undo",
+    "Delete": "delete-02",
+    "Plus": "plus-sign",
+    "Layout": "layout-01",
+    "Sliders": "sliders-horizontal",
+    "Info": "information-circle",
+    "List": "list-view",
 }
 
 

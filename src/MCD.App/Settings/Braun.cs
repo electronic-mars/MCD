@@ -4,7 +4,9 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
+using Mcd.App.Widgets;
 
 namespace Mcd.App.Settings;
 
@@ -146,15 +148,7 @@ public static class Braun
             Margin = new Thickness(3, 14, 0, 7),
         };
 
-        row.Children.Add(new FontIcon
-        {
-            FontFamily = new FontFamily("Segoe MDL2 Assets"),
-            Glyph = glyph,
-            FontSize = 15,
-            Foreground = Tx3,
-            VerticalAlignment = VerticalAlignment.Center,
-        });
-
+        row.Children.Add(Glyph(glyph, 16, Tx3));
         row.Children.Add(Micro(text));
         return row;
     }
@@ -328,11 +322,10 @@ public static class Braun
             // the thing it is copying does not have.
             var key = new Button
             {
-                Content = Flat(caption, on ? Acc : CardHi, radius: 9, edge: on ? Clear : Line),
+                Content = Flat(caption, on ? Acc : CardHi, radius: 8, edge: on ? Clear : Line),
                 MinWidth = 0,
                 MinHeight = 0,
                 Padding = new Thickness(0),
-                CornerRadius = new CornerRadius(9),
                 BorderThickness = new Thickness(0),
                 Background = Clear,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
@@ -410,17 +403,9 @@ public static class Braun
                 VerticalAlignment = VerticalAlignment.Center,
             };
 
-            body.Children.Add(new FontIcon
-            {
-                FontFamily = new FontFamily("Segoe MDL2 Assets"),
-                Glyph = items[i].Glyph,
-
-                // 24, not 17. The reference's tab icon measures 24.2 on the
-                // rendered page and it is what gives the tile its weight.
-                FontSize = 22,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Foreground = chosen ? Tx : Tx3,
-            });
+            // 24, not 17. The reference's tab icon measures 24.2 on the
+            // rendered page and it is what gives the tile its weight.
+            body.Children.Add(Glyph(items[i].Glyph, 23, chosen ? Tx : Tx3));
 
             var line = new StackPanel
             {
@@ -453,7 +438,7 @@ public static class Braun
             // 0 2px 5px at three tenths, which is what the reference draws
             // and half the blur this had been using.
             FrameworkElement face = chosen
-                ? Raised(body, PanelHi, radius: 9, blur: 5.5, drop: 2, depth: 0.30)
+                ? Raised(body, PanelHi, radius: 8, blur: 5.5, drop: 2, depth: 0.30)
                 : body;
 
             var tile = new Button
@@ -462,7 +447,6 @@ public static class Braun
                 MinWidth = 0,
                 MinHeight = 0,
                 Padding = new Thickness(0),
-                CornerRadius = new CornerRadius(9),
                 BorderThickness = new Thickness(0),
                 Background = Clear,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -579,7 +563,6 @@ public static class Braun
             MinWidth = 0,
             MinHeight = 0,
             Padding = new Thickness(0),
-            CornerRadius = new CornerRadius(10),
             BorderThickness = new Thickness(0),
             Background = Clear,
             HorizontalContentAlignment = HorizontalAlignment.Stretch,
@@ -609,14 +592,7 @@ public static class Braun
 
         if (glyph is { Length: > 0 })
         {
-            body.Children.Add(new FontIcon
-            {
-                FontFamily = new FontFamily("Segoe MDL2 Assets"),
-                Glyph = glyph,
-                FontSize = 13,
-                Foreground = ink,
-                VerticalAlignment = VerticalAlignment.Center,
-            });
+            body.Children.Add(Glyph(glyph, 15, ink));
         }
 
         body.Children.Add(new TextBlock
@@ -717,24 +693,16 @@ public static class Braun
             CornerRadius = new CornerRadius(radius),
         });
 
-        // The far wall of the recess: dark at the top edge, gone within three
-        // points. Inset horizontally so it does not spill past the corner.
+        // The far wall of the recess, along the whole outline for the same
+        // reason the lit edge is: a band across the top alone leaves the
+        // corners flat and the hole stops reading as a hole.
         stack.Children.Add(new Rectangle
         {
-            Height = 4,
-            Margin = new Thickness(radius / 2, 1, radius / 2, 0),
-            VerticalAlignment = VerticalAlignment.Top,
+            RadiusX = radius,
+            RadiusY = radius,
+            StrokeThickness = 1.5,
             IsHitTestVisible = false,
-            Fill = new LinearGradientBrush
-            {
-                StartPoint = new Windows.Foundation.Point(0, 0),
-                EndPoint = new Windows.Foundation.Point(0, 1),
-                GradientStops =
-                {
-                    new GradientStop { Offset = 0, Color = Shade(Dark ? (byte)0x59 : (byte)0x24) },
-                    new GradientStop { Offset = 1, Color = Shade(0) },
-                },
-            },
+            Stroke = Down(Dark ? 0x66000000u : 0x2E000000u, 0.45),
         });
 
         if (content is FrameworkElement inside)
@@ -746,18 +714,49 @@ public static class Braun
         return stack;
     }
 
-    /// <summary>The lit line along the top edge of a raised surface.</summary>
+    /// <summary>
+    /// The lit edge of a raised surface, drawn along its whole outline.
+    /// </summary>
+    /// <remarks>
+    /// A one-point line pinned to the top stops at the straight part and
+    /// leaves the corners dark, which is visible as two nicks. A stroked
+    /// rounded rectangle of the same radius follows the contour and turns the
+    /// corner; the gradient down the stroke is what makes it a highlight on
+    /// top rather than an outline all the way round.
+    /// </remarks>
     private static Rectangle Sheen(double radius) => new()
     {
-        Height = 1,
-        Margin = new Thickness(radius / 2, 1, radius / 2, 0),
-        VerticalAlignment = VerticalAlignment.Top,
+        RadiusX = radius,
+        RadiusY = radius,
+        StrokeThickness = 1,
         IsHitTestVisible = false,
-        Fill = Paint(Dark ? 0x12FFFFFFu : 0x99FFFFFFu),
+        Stroke = Down(Dark ? 0x1FFFFFFFu : 0xB3FFFFFFu, 0.55),
     };
 
-    private static Windows.UI.Color Shade(byte alpha) =>
-        Windows.UI.Color.FromArgb(alpha, 0, 0, 0);
+    /// <summary>
+    /// A brush that is this colour at the top and nothing by the given point
+    /// down the shape.
+    /// </summary>
+    /// <remarks>
+    /// Used as a stroke rather than a fill. Along the top edge of the outline
+    /// it draws at full strength, around the corners it fades, and down the
+    /// sides it is gone - which is what an inset shadow of no blur and one
+    /// point of offset actually looks like.
+    /// </remarks>
+    private static LinearGradientBrush Down(uint argb, double gone) => new()
+    {
+        StartPoint = new Windows.Foundation.Point(0, 0),
+        EndPoint = new Windows.Foundation.Point(0, 1),
+        GradientStops =
+        {
+            new GradientStop { Offset = 0, Color = Hue(argb) },
+            new GradientStop { Offset = gone, Color = Hue(argb & 0x00FFFFFFu) },
+            new GradientStop { Offset = 1, Color = Hue(argb & 0x00FFFFFFu) },
+        },
+    };
+
+    private static Windows.UI.Color Hue(uint argb) => Windows.UI.Color.FromArgb(
+        (byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb);
 
     /// <summary>
     /// Hangs a real shadow under an element, shaped by the element itself.
@@ -796,6 +795,41 @@ public static class Braun
 
         Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.SetElementChildVisual(under, sprite);
     }
+
+    /// <summary>
+    /// One icon from this program's own set.
+    /// </summary>
+    /// <remarks>
+    /// Hugeicons, drawn as strokes on a 24-unit grid at 1.7 with round ends -
+    /// the same set and the same weight the bar draws its readings with. The
+    /// system's glyph font is a different set by a different hand: two icon
+    /// sets in one program read as two programs stitched together, and the
+    /// join is exactly where somebody notices that the thing is a copy.
+    /// </remarks>
+    public static Viewbox Glyph(string name, double size, Brush ink) => new()
+    {
+        Width = size,
+        Height = size,
+        VerticalAlignment = VerticalAlignment.Center,
+        HorizontalAlignment = HorizontalAlignment.Center,
+        Child = new Canvas
+        {
+            Width = IconLibrary.Grid,
+            Height = IconLibrary.Grid,
+            Children =
+            {
+                new Microsoft.UI.Xaml.Shapes.Path
+                {
+                    Data = IconRow.Draw(name),
+                    Stroke = ink,
+                    StrokeThickness = 1.7,
+                    StrokeLineJoin = PenLineJoin.Round,
+                    StrokeStartLineCap = PenLineCap.Round,
+                    StrokeEndLineCap = PenLineCap.Round,
+                },
+            },
+        },
+    };
 
     /// <summary>A tile a picture or a glyph sits in - an icon, a swatch.</summary>
     public static Border Tile(double size, UIElement? content = null) => new()

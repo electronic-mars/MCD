@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Widgets;
 using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
@@ -56,6 +56,31 @@ public sealed partial class IconRow : ObservableObject
     /// <summary>Every icon on offer, freshly drawn. Never reuse the shapes.</summary>
     public static IReadOnlyList<IconChoice> Choices() =>
         [.. IconLibrary.Paths.Keys.Select(IconChoice.Of)];
+
+    /// <summary>
+    /// The few icons the markup itself needs, so that a page can draw one
+    /// without the code-behind reaching in to put it there.
+    /// </summary>
+    /// <remarks>
+    /// x:Bind resolves a static property, which is the whole reason these
+    /// exist. They come from the same set as everything else - the settings
+    /// window draws no glyph from the system's font.
+    /// </remarks>
+    public static Geometry PageDocks => Draw("Computer");
+
+    public static Geometry PageIcons => Draw("Star");
+
+    public static Geometry PageLook => Draw("Brush");
+
+    public static Geometry PageSensors => Draw("Pulse");
+
+    public static Geometry Readings => Draw("Activity");
+
+    public static Geometry Pinned => Draw("Rocket");
+
+    public static Geometry Live => Draw("Pulse");
+
+    public static Geometry Pencil => Draw("Pen");
 
     public static Geometry Draw(string name)
     {

@@ -69,14 +69,6 @@
                     <Setter Property="Foreground" Value="{ThemeResource BraunTx3}" />
                 </Style>
 
-                <!-- A page title: the section's icon in the accent, then the
-                     name. The icon is the group's own, same as in the pane. -->
-                <Style x:Key="SectionIcon" TargetType="FontIcon">
-                    <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-                    <Setter Property="FontSize" Value="20" />
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                </Style>
-
 
             <DataTemplate x:Key="IconChoiceTemplate" x:DataType="local:IconChoice">
                 <Viewbox
@@ -133,10 +125,17 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="NavDocks" Content="Docks" Icon="View" Tag="docks" />
                 <NavigationViewItem x:Uid="NavIcons" Content="Icons" Icon="Emoji2" Tag="icons" />
-                <!-- A glyph rather than a Symbol: the Symbol list is short and has
-                     no colour in it, and a name it does not know is not a compile
-                     error - it is a parse failure at run time that takes the
-                     window, and the process, with it. -->
+                <!-- The one place a glyph from the system's font is still drawn.
+                     A navigation item's Icon slot takes an IconElement, and none
+                     of those can stroke a path - PathIcon fills the geometry,
+                     which turns a drawing made of lines into a blob. The pane
+                     is the framework's own chrome; everything this program
+                     draws itself comes from its own set.
+
+                     A glyph rather than a Symbol: the Symbol list is short and
+                     has no colour in it, and a name it does not know is not a
+                     compile error - it is a parse failure at run time that
+                     takes the window, and the process, with it. -->
                 <NavigationViewItem x:Uid="NavAppearance" Content="Appearance" Tag="appearance">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
@@ -164,7 +163,17 @@
                          what is on it, how it behaves. -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageDocks}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="DocksTitle"
                                 VerticalAlignment="Center"
@@ -198,7 +207,17 @@
                          explanation beside it down to one letter a line. -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageLook}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="AppearanceTitle"
                                 VerticalAlignment="Center"
@@ -219,7 +238,17 @@
                          that changes it, and it carries a pencil to say so. -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageIcons}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="IconsTitle"
                                 VerticalAlignment="Center"
@@ -237,11 +266,17 @@
                             Margin="3,14,0,7"
                             Orientation="Horizontal"
                             Spacing="7">
-                            <FontIcon
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="15"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Glyph="&#xE9D9;" />
+                            <Viewbox Width="16" Height="16" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.Readings}"
+                                        Stroke="{ThemeResource BraunTx3}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="ReadingIconsTitle"
                                 VerticalAlignment="Center"
@@ -304,11 +339,17 @@
                                                         BorderBrush="{ThemeResource BraunLineHi}"
                                                         BorderThickness="1"
                                                         CornerRadius="9">
-                                                        <FontIcon
-                                                            FontFamily="Segoe MDL2 Assets"
-                                                            FontSize="8"
-                                                            Foreground="{ThemeResource BraunTx2}"
-                                                            Glyph="&#xE70F;" />
+                                                        <Viewbox Width="9" Height="9">
+                                                            <Canvas Width="24" Height="24">
+                                                                <Path
+                                                                    Data="{x:Bind local:IconRow.Pencil}"
+                                                                    Stroke="{ThemeResource BraunTx2}"
+                                                                    StrokeEndLineCap="Round"
+                                                                    StrokeLineJoin="Round"
+                                                                    StrokeStartLineCap="Round"
+                                                                    StrokeThickness="2.2" />
+                                                            </Canvas>
+                                                        </Viewbox>
                                                     </Border>
                                                 </Grid>
                                             </Button>
@@ -336,11 +377,17 @@
                             Margin="3,14,0,7"
                             Orientation="Horizontal"
                             Spacing="7">
-                            <FontIcon
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="15"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Glyph="&#xE71D;" />
+                            <Viewbox Width="16" Height="16" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.Pinned}"
+                                        Stroke="{ThemeResource BraunTx3}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="PinnedIconsTitle"
                                 VerticalAlignment="Center"
@@ -376,7 +423,17 @@
                          ships is whatever its maker put in the firmware. -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageSensors}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="SensorsTitle"
                                 VerticalAlignment="Center"
@@ -394,11 +451,17 @@
                             Margin="3,14,0,7"
                             Orientation="Horizontal"
                             Spacing="7">
-                            <FontIcon
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="15"
-                                Foreground="{ThemeResource BraunTx3}"
-                                Glyph="&#xE9D9;" />
+                            <Viewbox Width="16" Height="16" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.Live}"
+                                        Stroke="{ThemeResource BraunTx3}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 x:Uid="LiveReadingsTitle"
                                 VerticalAlignment="Center"
