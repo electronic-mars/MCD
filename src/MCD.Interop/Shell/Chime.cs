@@ -1,4 +1,4 @@
-using Windows.Win32;
+﻿using Windows.Win32;
 using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Mcd.Interop.Shell;
@@ -16,6 +16,9 @@ public static class Chime
 {
     /// <summary>Something was taken away.</summary>
     public static void Removed() => Beep(MESSAGEBOX_STYLE.MB_ICONASTERISK);
+
+    /// <summary>Something would not go where it was put.</summary>
+    public static void Refused() => Beep(MESSAGEBOX_STYLE.MB_ICONEXCLAMATION);
 
     private static void Beep(MESSAGEBOX_STYLE sound)
     {

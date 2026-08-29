@@ -59,8 +59,13 @@ public sealed partial class SettingsWindow : Window
     /// what the bar does are never allowed to differ. This is what makes that
     /// safe - a mistake is one keystroke back rather than a form to abandon.
     /// </remarks>
-    private readonly Stack<(string StableId, MonitorConfig Before, string Label)> _undo = new();
-    private readonly ObservableCollection<IconRow> _icons = [];
+    /// <remarks>
+    /// A list used as a stack, because a stack cannot drop its oldest entry
+    /// and this one has to. What was here before capped nothing: TrimExcess
+    /// reduces capacity, not count, so the "no more than twenty-five" the
+    /// comment promised was twenty-five hundred if somebody worked that long.
+    /// </remarks>
+    private readonly List<(string StableId, MonitorConfig Before, string Label)> _undo = [];
     private readonly ObservableCollection<SensorRow> _readings = [];
     private readonly DispatcherQueueTimer _refresh;
 
@@ -92,7 +97,6 @@ public sealed partial class SettingsWindow : Window
 
         SizeAndCentre(screen: null);
 
-        IconList.ItemsSource = _icons;
         SensorList.ItemsSource = _readings;
         _version = string.Format(
             CultureInfo.CurrentCulture, Loc.Tr("VersionFormat", "Version {0}"), AppInfo.Version);
@@ -105,8 +109,97 @@ public sealed partial class SettingsWindow : Window
         _refresh.Tick += (_, _) => Tick();
         Closed += (_, _) => _refresh.Stop();
 
+        // What happens on a bar is a change to the same settings this window
+        // is showing, and until now the window never heard about it: the chip
+        // counts, the undo label and the chosen widget all went stale the
+        // moment somebody dragged something. Worse, a widget dragged off a
+        // bar - the way the bar's own help text tells people to remove one -
+        // could not be undone from anywhere.
+        _seen = _settings.Current;
+        _settings.Changed += OnSettingsChanged;
+        Closed += (_, _) => _settings.Changed -= OnSettingsChanged;
+
         Reload();
         Nav.SelectedItem = Nav.MenuItems[0];
+    }
+
+    /// <summary>The settings as this window last acted on them.</summary>
+    private SettingsModel _seen;
+
+    /// <summary>True while this window is the one doing the writing.</summary>
+    private bool _writing;
+
+    /// <summary>
+    /// Takes note of a change this window did not make.
+    /// </summary>
+    /// <remarks>
+    /// Which in practice means a bar: a widget moved, dropped or dragged off
+    /// on the screen itself. Each of those is a change to one monitor's
+    /// layout, so each goes on the undo stack the same way a change made
+    /// here would - and then the page is rebuilt, because everything on it
+    /// describing that bar is now a sentence about the past.
+    /// </remarks>
+    private void OnSettingsChanged(object? sender, SettingsModel now)
+    {
+        if (!DispatcherQueue.TryEnqueue(() => Noticed(now)))
+        {
+            _seen = now;
+        }
+    }
+
+    private void Noticed(SettingsModel now)
+    {
+        SettingsModel was = _seen;
+        _seen = now;
+
+        if (_writing)
+        {
+            return;
+        }
+
+        foreach (MonitorConfig before in was.Monitors)
+        {
+            MonitorConfig? after = now.Monitors.FirstOrDefault(m => m.StableId == before.StableId);
+
+            if (after is null || Same(before.Widgets, after.Widgets))
+            {
+                continue;
+            }
+
+            Remember(before.StableId, before, Loc.Tr("UndoOnTheBar", "on the bar"));
+        }
+
+        ReloadDocks();
+    }
+
+    /// <summary>
+    /// Whether two arrangements are the same one.
+    /// </summary>
+    /// <remarks>
+    /// Compared as text because a widget's own options are a JsonElement,
+    /// which has no value equality: two of them over identical JSON are
+    /// never equal, and every layout would look like a change.
+    /// </remarks>
+    private static bool Same(
+        ImmutableArray<WidgetConfig> before, ImmutableArray<WidgetConfig> after)
+    {
+        if (before.Length != after.Length)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < before.Length; i++)
+        {
+            if (before[i].InstanceId != after[i].InstanceId
+                || before[i].TypeId != after[i].TypeId
+                || before[i].Cell != after[i].Cell
+                || before[i].Config?.GetRawText() != after[i].Config?.GetRawText())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -131,14 +224,27 @@ public sealed partial class SettingsWindow : Window
     /// the content still has room for a settings row and its explanation.
     /// </remarks>
     /// <remarks>
-    /// The pane at its open width, the page's own padding either side, and
-    /// enough left for a settings row to keep its words beside its control.
-    /// Measured rather than guessed: below this the explanations start
-    /// wrapping every other word, which the unattended check now looks for.
+    /// <para>
+    /// The floor: the pane at its open width, the page's own padding either
+    /// side, and enough left for a settings row to keep its words beside its
+    /// control. Measured rather than guessed - below this the explanations
+    /// start wrapping every other word, which the unattended check looks for.
+    /// </para>
+    /// <para>
+    /// And a ceiling, which matters as much. A settings page is a column of
+    /// rows; dragged to two thousand points wide it becomes a column of rows
+    /// with a field of empty panel beside it, and dragged short at the same
+    /// time it becomes a letterbox. Neither is a window anybody wanted, and
+    /// the way to not have them is to not offer them.
+    /// </para>
     /// </remarks>
-    private const double MinimumWide = 760;
+    private const double MinimumWide = 820;
 
-    private const double MinimumTall = 520;
+    private const double MinimumTall = 660;
+
+    private const double MaximumWide = 1500;
+
+    private const double MaximumTall = 1200;
 
     public void SizeAndCentre(MonitorInfo? screen)
     {
@@ -148,8 +254,8 @@ public sealed partial class SettingsWindow : Window
         RECT bounds = screen?.Bounds ?? Displays.BoundsFor(hwnd);
 
         var size = new Windows.Graphics.SizeInt32(
-            (int)Math.Round(1000 * scale),
-            (int)Math.Round(760 * scale));
+            (int)Math.Round(Math.Clamp(1000, MinimumWide, MaximumWide) * scale),
+            (int)Math.Round(Math.Clamp(780, MinimumTall, MaximumTall) * scale));
 
         // A floor under the window, in the same physical pixels AppWindow
         // works in. Without one the pane keeps its width while the content
@@ -160,6 +266,8 @@ public sealed partial class SettingsWindow : Window
         {
             presenter.PreferredMinimumWidth = (int)Math.Round(MinimumWide * scale);
             presenter.PreferredMinimumHeight = (int)Math.Round(MinimumTall * scale);
+            presenter.PreferredMaximumWidth = (int)Math.Round(MaximumWide * scale);
+            presenter.PreferredMaximumHeight = (int)Math.Round(MaximumTall * scale);
         }
 
         AppWindow.Resize(size);
@@ -330,8 +438,6 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Rebuilds both lists from the settings and the live topology.</summary>
     public void Reload()
     {
-        _icons.Clear();
-
         AppSettings look = _settings.Current.App;
 
         _filling = true;
@@ -339,11 +445,6 @@ public sealed partial class SettingsWindow : Window
 
         Root.RequestedTheme = Appearance.Of(look.Theme);
         RefreshLook();
-
-        foreach ((string id, string label, string fallback) in IconChoices.Known)
-        {
-            _icons.Add(new IconRow(id, label, Chosen(id, fallback), OnIconChosen));
-        }
 
         ReloadDocks();
     }
@@ -509,7 +610,7 @@ public sealed partial class SettingsWindow : Window
     {
         SettingsModel current = _settings.Current;
 
-        _settings.Commit(
+        Write(
             current with { App = current.App with { Language = language } },
             WriteReason.UserAction);
 
@@ -526,7 +627,7 @@ public sealed partial class SettingsWindow : Window
     {
         SettingsModel current = _settings.Current;
 
-        _settings.Commit(
+        Write(
             current with
             {
                 App = current.App with
@@ -653,14 +754,24 @@ public sealed partial class SettingsWindow : Window
         // ---------------------------------------------------------- the screen
         DockBody.Children.Add(Braun.Heading("Computer", Loc.Tr("DockGroupScreen", "This screen")));
 
-        DockBody.Children.Add(Braun.Group(Braun.Row(
-            Loc.Tr("ShowDockLabel", "Show a dock on this display"),
-            live is not null
-                ? $"{live.Width} x {live.Height} · {live.Dpi * 100 / 96}%"
-                : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen"),
-            Braun.Switch(
-                dock.Enabled,
-                on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "shown"))))));
+        DockBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("ShowDockLabel", "Show a dock on this display"),
+                live is not null
+                    ? $"{live.Width} x {live.Height} · {live.Dpi * 100 / 96}%"
+                    : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen"),
+                Braun.Switch(
+                    dock.Enabled,
+                    on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "shown")))),
+
+            // Outside everything the master switch dims. It was inside, which
+            // meant that switching a dock off left an enabled Undo button in
+            // a panel that could not be clicked - including the undo of
+            // switching it off.
+            Braun.Row(
+                Loc.Tr("UndoRow", "Take the last change back"),
+                Loc.Tr("UndoRowHint", "Everything on this page and everything done on the bar itself."),
+                Undo())));
 
         // Everything the master switch governs dims with it.
         var gated = new StackPanel
@@ -720,13 +831,13 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr(
                     "BarHelp",
                     "The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings."),
-                Undo()),
+                null),
 
             Braun.Row(
                 Loc.Tr("GalleryRow", "Put one on the bar"),
                 Loc.Tr(
                     "GalleryRowHint",
-                    "A press adds it to the first free slot. There is no limit: two of the same reading in different places is an ordinary thing to want."),
+                    "Drag one onto a bar and it lands on the slot you drop it on. Press one to change the picture it is drawn with. There is no limit: two of the same reading in different places is an ordinary thing to want."),
                 Gallery(dock),
                 stack: true),
 
@@ -881,7 +992,7 @@ public sealed partial class SettingsWindow : Window
             {
                 Data = IconRow.Draw(offer.Icon),
                 Stroke = Braun.Tx,
-                StrokeThickness = 1.5,
+                StrokeThickness = 1.7,
                 StrokeLineJoin = PenLineJoin.Round,
                 StrokeStartLineCap = PenLineCap.Round,
                 StrokeEndLineCap = PenLineCap.Round,
@@ -916,37 +1027,125 @@ public sealed partial class SettingsWindow : Window
             };
 
             Grid.SetColumn(count, 2);
-            row.Children.Add(new Viewbox { Width = 16, Height = 16, Child = canvas });
+
+            var picture = new Grid();
+            picture.Children.Add(new Viewbox { Width = 16, Height = 16, Child = canvas });
+
+            // A pencil on the ones whose picture can be changed, and nothing
+            // on the clock and the player, which draw their own faces.
+            if (offer.Chooses is not null)
+            {
+                picture.Children.Add(new Border
+                {
+                    Width = 9,
+                    Height = 9,
+                    Margin = new Thickness(0, 0, -4, -4),
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Background = Braun.PanelHi,
+                    BorderBrush = Braun.LineHi,
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(5),
+                });
+            }
+
+            row.Children.Add(picture);
             row.Children.Add(name);
             row.Children.Add(count);
 
-            var chip = new Button
+            // A chip is dragged onto a bar to put one there, and pressed to
+            // change the picture it wears. It is not pressed to add one: a
+            // press that silently puts a thing on a screen somewhere else is
+            // an action with no visible result, and the bar is the place the
+            // thing is going, so the bar is where the gesture should end.
+            var chip = new Border
             {
                 Margin = new Thickness(0, 0, 8, 8),
                 Padding = new Thickness(10, 6, 10, 6),
                 MinWidth = 196,
-                HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
                 BorderBrush = Braun.Line,
                 Background = Braun.Card,
-                Content = row,
+                Child = row,
+                CanDrag = true,
+                AllowDrop = false,
             };
 
-            ToolTipService.SetToolTip(chip, offer.Description);
+            ToolTipService.SetToolTip(
+                chip,
+                offer.Chooses is null
+                    ? Loc.Tr("ChipDragOnly", "Drag it onto a bar to put one there.")
+                    : Loc.Tr("ChipDragOrPick", "Drag it onto a bar to put one there. Press it to change its picture."));
 
             WidgetOffer chosen = offer;
 
-            chip.Click += (_, _) => Rearrange(
-                dock.StableId,
-                widgets => [.. widgets, chosen.Make()],
-                string.Format(
-                    CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), chosen.Name));
+            chip.DragStarting += (_, args) =>
+            {
+                args.Data.SetText(WidgetDrag.Wrap(chosen.Make()));
+                args.Data.RequestedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+            };
+
+            chip.PointerReleased += (_, _) => PickPicture(chosen, chip);
 
             gallery.Children.Add(chip);
         }
 
         return gallery;
+    }
+
+    /// <summary>
+    /// Offers the pictures this reading can be drawn with.
+    /// </summary>
+    /// <remarks>
+    /// The picture belongs to the reading rather than to one widget: every
+    /// processor gauge on every bar wears the same one. That is why this is
+    /// reached from the thing being drawn rather than from a page of its own.
+    /// </remarks>
+    private void PickPicture(WidgetOffer offer, FrameworkElement at)
+    {
+        if (offer.Chooses is not { } id)
+        {
+            return;
+        }
+
+        var grid = new GridView
+        {
+            ItemsSource = IconRow.Choices(),
+            SelectionMode = ListViewSelectionMode.Single,
+            MaxWidth = 320,
+            MaxHeight = 300,
+            ItemTemplate = (DataTemplate)Root.Resources["IconChoiceTemplate"],
+        };
+
+        var flyout = new Flyout { Content = grid, XamlRoot = Content.XamlRoot };
+
+        grid.SelectionChanged += (_, args) =>
+        {
+            if (args.AddedItems.FirstOrDefault() is IconChoice picked)
+            {
+                ChoosePicture(id, picked.Name);
+                flyout.Hide();
+            }
+        };
+
+        flyout.ShowAt(at);
+    }
+
+    /// <summary>Writes down which picture a reading is drawn with.</summary>
+    private void ChoosePicture(string id, string icon)
+    {
+        SettingsModel current = _settings.Current;
+
+        Write(
+            current with
+            {
+                App = current.App with { Icons = current.App.Icons.SetItem(id, icon) },
+            },
+            WriteReason.UserAction);
+
+        _log.LogInformation("settings.icon {Id} {Icon}", id, icon);
+        ShowDock();
     }
 
     /// <summary>
@@ -1078,20 +1277,59 @@ public sealed partial class SettingsWindow : Window
             ? string.Format(
                 CultureInfo.CurrentCulture,
                 Loc.Tr("UndoWithLabel", "Undo - {0}"),
-                _undo.Peek().Label)
+                _undo[^1].Label)
             : Loc.Tr("Undo", "Undo");
+
+    /// <summary>
+    /// Writes the settings and remembers that this window did it.
+    /// </summary>
+    /// <remarks>
+    /// Without the mark, every change made here comes back through the
+    /// watcher as a change made elsewhere, and lands on the undo stack twice.
+    /// </remarks>
+    private void Write(SettingsModel model, WriteReason reason)
+    {
+        _writing = true;
+
+        try
+        {
+            _settings.Commit(model, reason);
+        }
+        finally
+        {
+            _writing = false;
+        }
+    }
+
+    /// <summary>
+    /// Keeps a layout so it can be put back, and forgets the oldest.
+    /// </summary>
+    private void Remember(string stableId, MonitorConfig before, string what)
+    {
+        _undo.Add((stableId, before, what));
+
+        // Twenty-five is plenty and unbounded is a session's worth of layouts
+        // held for a button nobody presses twenty-six times.
+        while (_undo.Count > 25)
+        {
+            _undo.RemoveAt(0);
+        }
+    }
 
     /// <summary>Puts the last layout back.</summary>
     private void DoUndo()
     {
-        if (!_undo.TryPop(out (string StableId, MonitorConfig Before, string Label) step))
+        if (_undo.Count == 0)
         {
             return;
         }
 
+        (string StableId, MonitorConfig Before, string Label) step = _undo[^1];
+        _undo.RemoveAt(_undo.Count - 1);
+
         SettingsModel current = _settings.Current;
 
-        _settings.Commit(
+        Write(
             current with
             {
                 Monitors =
@@ -1220,7 +1458,7 @@ public sealed partial class SettingsWindow : Window
                 string chosen = $"#{a:X2}{hue.R:X2}{hue.G:X2}{hue.B:X2}";
 
                 SettingsModel now = _settings.Current;
-                _settings.Commit(
+                Write(
                     now with { App = now.App with { BackdropColour = chosen } },
                     WriteReason.UserAction);
 
@@ -1285,7 +1523,7 @@ public sealed partial class SettingsWindow : Window
             }
 
             SettingsModel current = _settings.Current;
-            _settings.Commit(
+            Write(
                 current with { App = current.App with { BackdropImage = file.Path } },
                 WriteReason.UserAction);
 
@@ -1309,19 +1547,10 @@ public sealed partial class SettingsWindow : Window
 
         if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
         {
-            _undo.Push((stableId, before, what));
-
-            while (_undo.Count > 25)
-            {
-                // A stack that grows without limit is a stack holding every
-                // layout of the session in memory for a button nobody will press
-                // twenty-six times.
-                _undo.TrimExcess();
-                break;
-            }
+            Remember(stableId, before, what);
         }
 
-        _settings.Commit(
+        Write(
             current with
             {
                 Monitors =
@@ -1359,16 +1588,10 @@ public sealed partial class SettingsWindow : Window
         // reachable by the same Undo, not only the widget layout.
         if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
         {
-            _undo.Push((stableId, before, what));
-
-            while (_undo.Count > 25)
-            {
-                _undo.TrimExcess();
-                break;
-            }
+            Remember(stableId, before, what);
         }
 
-        _settings.Commit(
+        Write(
             current with
             {
                 Monitors = [.. current.Monitors.Select(c => c.StableId == stableId ? change(c) : c)],
@@ -1388,7 +1611,6 @@ public sealed partial class SettingsWindow : Window
 
         DocksSection.Visibility = Show(tag == "docks");
         AppearanceSection.Visibility = Show(tag == "appearance");
-        IconsSection.Visibility = Show(tag == "icons");
         SensorsSection.Visibility = Show(tag == "sensors");
         AboutSection.Visibility = Show(tag == "about");
 
@@ -1510,7 +1732,7 @@ public sealed partial class SettingsWindow : Window
             ? current.Sensors.Names.SetItem(row.Key.Value, name)
             : current.Sensors.Names.Remove(row.Key.Value);
 
-        _settings.Commit(
+        Write(
             current with { Sensors = current.Sensors with { Names = names } },
             WriteReason.UserAction);
 
@@ -1527,55 +1749,6 @@ public sealed partial class SettingsWindow : Window
         && IconLibrary.Paths.ContainsKey(name)
             ? name
             : fallback;
-
-    private void OnIconChosen(IconRow row)
-    {
-        SettingsModel current = _settings.Current;
-
-        _settings.Commit(
-            current with { App = current.App with { Icons = current.App.Icons.SetItem(row.Id, row.Icon) } },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.icon reading={Reading} icon={Icon}", row.Id, row.Icon);
-    }
-
-    /// <summary>Opens the grid of icons over the button that was pressed.</summary>
-    private void OnPickIcon(object sender, RoutedEventArgs e)
-    {
-        if (sender is not Button button || button.Tag is not string id)
-        {
-            return;
-        }
-
-        IconRow? row = _icons.FirstOrDefault(r => r.Id == id);
-
-        if (row is null)
-        {
-            return;
-        }
-
-        var grid = new GridView
-        {
-            ItemsSource = IconRow.Choices(),
-            SelectionMode = ListViewSelectionMode.Single,
-            MaxWidth = 320,
-            MaxHeight = 300,
-            ItemTemplate = (DataTemplate)Root.Resources["IconChoiceTemplate"],
-        };
-
-        var flyout = new Flyout { Content = grid, XamlRoot = Content.XamlRoot };
-
-        grid.SelectionChanged += (_, args) =>
-        {
-            if (args.AddedItems.FirstOrDefault() is IconChoice picked)
-            {
-                row.Choose(picked.Name);
-                flyout.Hide();
-            }
-        };
-
-        flyout.ShowAt(button);
-    }
 
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
 

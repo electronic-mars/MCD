@@ -663,7 +663,7 @@
     <value>Put one on the bar</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>A press adds it to the first free slot. There is no limit: two of the same reading in different places is an ordinary thing to want.</value>
+    <value>Drag one onto a bar and it lands on the slot you drop it on. Press one to change the picture it is drawn with. There is no limit: two of the same reading in different places is an ordinary thing to want.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
     <value>A program of your own</value>
@@ -811,5 +811,23 @@
   </data>
   <data name="UndoMode" xml:space="preserve">
     <value>how it holds its edge</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>on the bar</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Put it here</value>
+  </data>
+  <data name="ChipDragOnly" xml:space="preserve">
+    <value>Drag it onto a bar to put one there.</value>
+  </data>
+  <data name="ChipDragOrPick" xml:space="preserve">
+    <value>Drag it onto a bar to put one there. Press it to change its picture.</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Take the last change back</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>Everything on this page and everything done on the bar itself.</value>
   </data>
 </root>

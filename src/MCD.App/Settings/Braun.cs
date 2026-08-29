@@ -253,7 +253,12 @@ public static class Braun
         // is given a width.
         void Lay(double width)
         {
-            bool under = stack || width < Roomy;
+            // What decides this is not how wide the row is but how much is
+            // left for the words once the control has taken its share. A
+            // button with a sentence on it can eat three hundred points of a
+            // five-hundred-point row and leave the explanation in a gutter.
+            double taken = Math.Max(control.ActualWidth, control.DesiredSize.Width);
+            bool under = stack || width < Roomy || width - taken - 13 < Wordy;
 
             control.Margin = under ? new Thickness(0, 9, 0, 0) : new Thickness(0);
             control.HorizontalAlignment = under ? HorizontalAlignment.Stretch : HorizontalAlignment.Right;
@@ -284,6 +289,12 @@ public static class Braun
     /// stops reading well before it stops fitting.
     /// </remarks>
     private const double Roomy = 380;
+
+    /// <summary>
+    /// The narrowest column of words worth reading. Below this the control
+    /// goes underneath, however wide the row is.
+    /// </summary>
+    private const double Wordy = 260;
 
     /// <summary>A value read off a row rather than set on it.</summary>
     public static TextBlock Reading(string text) => new()
@@ -326,13 +337,15 @@ public static class Braun
                 Margin = wide ? new Thickness(4, 9, 4, 9) : new Thickness(13, 9, 13, 9),
             };
 
-            // Flat, both ways. The reference gives its chosen key the accent
-            // and no shadow at all - measured, not guessed. A key that stands
-            // off the page here would be this program inventing a difference
-            // the thing it is copying does not have.
+            // The chosen key wears the accent and, like the chosen tab, a lit
+            // line round its top edge. The reference leaves its own keys flat;
+            // this program does not, because the same thing meaning "chosen"
+            // should be drawn the same way wherever it appears.
             var key = new Button
             {
-                Content = Flat(caption, on ? Acc : CardHi, radius: 8, edge: on ? Clear : Line),
+                Content = on
+                    ? Raised(caption, Acc, radius: 8, blur: 5, drop: 1, depth: 0.28)
+                    : Flat(caption, CardHi, radius: 8, edge: Line),
                 MinWidth = 0,
                 MinHeight = 0,
                 Padding = new Thickness(0),
@@ -565,7 +578,12 @@ public static class Braun
 
         track.Children.Add(under);
         track.Children.Add(ball);
-        Shadow(under, ball, blur: 4, drop: 1, depth: 0.45);
+
+        // Small. On a pill this size a four-point blur reads as a dark
+        // crescent under the cap and the cap looks pushed upwards - which is
+        // what it was doing, though the cap is centred to within half a
+        // pixel. The reference blurs two.
+        Shadow(under, ball, blur: 2.5, drop: 1, depth: 0.38);
 
         var pill = new Button
         {

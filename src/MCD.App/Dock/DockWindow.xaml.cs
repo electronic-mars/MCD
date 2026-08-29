@@ -72,6 +72,12 @@ public sealed partial class DockWindow : Window
     /// element a second parent, and it refuses on the UI thread, where there
     /// is nothing to catch it.
     /// </remarks>
+    /// <summary>
+    /// How far past the thin edge of the bar a widget must be taken before it
+    /// counts as leaving.
+    /// </summary>
+    private const double LeaveAcross = 44;
+
     private readonly Rectangle _aim = new()
     {
         IsHitTestVisible = false,
@@ -200,6 +206,7 @@ public sealed partial class DockWindow : Window
         _tick = DispatcherQueue.CreateTimer();
         _tick.Interval = TimeSpan.FromSeconds(1);
         _tick.Tick += (_, _) => Refresh();
+        _refusing.Tick += (_, _) => ShowSlots(false);
         _tick.Start();
         Refresh();
     }
@@ -608,7 +615,13 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     private void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
-        if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
+        bool files = e.DataView.Contains(
+            Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems);
+
+        bool widget = e.DataView.Contains(
+            Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text);
+
+        if (!files && !widget)
         {
             return;
         }
@@ -617,7 +630,10 @@ public sealed partial class DockWindow : Window
 
         if (e.DragUIOverride is { } hint)
         {
-            hint.Caption = Loc.Tr("PinDropCaption", "Pin to the bar");
+            hint.Caption = files
+                ? Loc.Tr("PinDropCaption", "Pin to the bar")
+                : Loc.Tr("WidgetDropCaption", "Put it here");
+
             hint.IsGlyphVisible = false;
         }
 
@@ -635,6 +651,21 @@ public sealed partial class DockWindow : Window
     {
         int cell = CellAt(e.GetPosition(Bar));
         ShowSlots(false);
+
+        // A widget carried over from the settings window. It lands on the slot
+        // it was dropped on, which is the whole point of carrying it: a press
+        // in another window puts a thing on a bar somewhere with nothing to
+        // watch, and a drag ends where the thing is going.
+        if (e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text))
+        {
+            string carried = await e.DataView.GetTextAsync();
+
+            if (WidgetDrag.Unwrap(carried) is { } dropped)
+            {
+                Place(dropped, cell);
+                return;
+            }
+        }
 
         if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
         {
@@ -1429,8 +1460,17 @@ public sealed partial class DockWindow : Window
 
         // Off the bar means "remove on release": the element goes ghostly and
         // the landing marker disappears, the way macOS lets an icon go.
-        _offBar = at.X < -6 || at.Y < -6
-            || at.X > Bar.ActualWidth + 6 || at.Y > Bar.ActualHeight + 6;
+        //
+        // Not the same distance in both directions. Moving a widget means
+        // travelling along the bar, and a bar is a few tens of points thick -
+        // so six points across it is a slip of the hand during the ordinary
+        // gesture, and six points past its end is somebody leaving. Crossing
+        // the thin way has to be a deliberate journey.
+        double along = DockMetrics.IsHorizontal(Config.Edge) ? 8 : LeaveAcross;
+        double across = DockMetrics.IsHorizontal(Config.Edge) ? LeaveAcross : 8;
+
+        _offBar = at.X < -along || at.Y < -across
+            || at.X > Bar.ActualWidth + along || at.Y > Bar.ActualHeight + across;
 
         if (_offBar)
         {
@@ -1456,19 +1496,32 @@ public sealed partial class DockWindow : Window
 
     private void OnDrop(object sender, PointerRoutedEventArgs e)
     {
-        if (_moving && _grabbed is { } host)
+        WidgetHost? held = _grabbed;
+        bool moved = _moving;
+
+        if (moved && held is not null)
         {
             if (_offBar)
             {
-                RemoveWidget(host);
+                RemoveWidget(held);
             }
             else
             {
-                Land(host);
+                Land(held);
             }
         }
 
         LetGo();
+
+        // A press held half a second and released where it started is still a
+        // press. Taking the pointer away from the button to watch for a drag
+        // was swallowing the click of anybody with an unsteady hand or a
+        // trackpad, and a launcher that sometimes does nothing is worse than
+        // one that never did.
+        if (!moved && held is not null)
+        {
+            held.Press();
+        }
     }
 
     private void OnAbandon(object sender, PointerRoutedEventArgs e) => LetGo();
@@ -1534,6 +1587,61 @@ public sealed partial class DockWindow : Window
         Settle();
         Settled?.Invoke(this, Config.Widgets);
     }
+
+    /// <summary>
+    /// Puts a widget on a slot, or says why it could not.
+    /// </summary>
+    /// <remarks>
+    /// The bar is a row of places and a place can be taken. Somewhere near
+    /// the one aimed at will do; nowhere at all is an answer that has to be
+    /// given rather than swallowed, because a thing that does not appear
+    /// looks exactly like a thing that is broken.
+    /// </remarks>
+    private void Place(WidgetConfig entry, int cell)
+    {
+        int span = 1;
+        int? landing = DockGrid.Nearest(_placed, _capacity, cell, span, ignore: null);
+
+        if (landing is null)
+        {
+            _log.LogWarning(
+                "dock.full monitor={Monitor} widget={Widget}",
+                Monitor.Identity.FriendlyName, entry.TypeId);
+
+            Refuse();
+            return;
+        }
+
+        _log.LogInformation(
+            "dock.dropped monitor={Monitor} widget={Widget} cell={Cell}",
+            Monitor.Identity.FriendlyName, entry.TypeId, landing.Value);
+
+        Rearranged?.Invoke(this, [.. Config.Widgets, entry with { Cell = landing.Value }]);
+    }
+
+    /// <summary>
+    /// Says no, in the only two ways a bar can.
+    /// </summary>
+    /// <remarks>
+    /// The slots flash their outlines once and the machine makes the sound it
+    /// makes when something will not go. There is no room and no amount of
+    /// trying will make room; what there must not be is silence.
+    /// </remarks>
+    private void Refuse()
+    {
+        Mcd.Interop.Shell.Chime.Refused();
+
+        ShowSlots(true);
+
+        _refusing.Stop();
+        _refusing.Interval = TimeSpan.FromMilliseconds(700);
+        _refusing.IsRepeating = false;
+        _refusing.Start();
+    }
+
+    /// <summary>Takes the flash of slots down again after a refusal.</summary>
+    private readonly DispatcherQueueTimer _refusing =
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().CreateTimer();
 
     /// <summary>The widget covering the slot a point falls in.</summary>
     private WidgetHost? Under(Point at) =>

@@ -114,20 +114,29 @@
             </StackPanel>
         </Border>
 
+        <!--
+            Never folded. The control's own thresholds are 641 and 1008, so a
+            window narrower than a thousand points quietly collapses its own
+            navigation into an unlabelled hamburger - five pages that do not
+            exist until somebody gambles on a mystery button, which is exactly
+            what happened. The window now has a floor wide enough for the pane,
+            so the folding is not needed and is turned off, toggle and all.
+        -->
         <NavigationView
             x:Name="Nav"
             Grid.Row="1"
             IsBackButtonVisible="Collapsed"
             IsSettingsVisible="False"
             OpenPaneLength="248"
-            CompactModeThresholdWidth="820"
-            ExpandedModeThresholdWidth="980"
-            PaneDisplayMode="Auto"
+            IsPaneOpen="True"
+            CompactModeThresholdWidth="0"
+            ExpandedModeThresholdWidth="0"
+            IsPaneToggleButtonVisible="False"
+            PaneDisplayMode="Left"
             SelectionChanged="OnSectionChanged">
 
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="NavDocks" Content="Docks" Icon="View" Tag="docks" />
-                <NavigationViewItem x:Uid="NavIcons" Content="Icons" Icon="Emoji2" Tag="icons" />
                 <!-- The one place a glyph from the system's font is still drawn.
                      A navigation item's Icon slot takes an IconElement, and none
                      of those can stroke a path - PathIcon fills the geometry,
@@ -239,191 +248,6 @@
                     <!-- Icons. One panel of rows, the way Master Audio Switcher
                          lists devices: the picture on the left is the button
                          that changes it, and it carries a pencil to say so. -->
-                    <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
-                                <Canvas Width="24" Height="24">
-                                    <Path
-                                        Data="{x:Bind local:IconRow.PageIcons}"
-                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeStartLineCap="Round"
-                                        StrokeThickness="1.7" />
-                                </Canvas>
-                            </Viewbox>
-                            <TextBlock
-                                x:Uid="IconsTitle"
-                                VerticalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="SemiBold"
-                                Text="Icons" />
-                        </StackPanel>
-                        <TextBlock
-                            x:Uid="IconsIntro"
-                            Foreground="{ThemeResource BraunTx2}"
-                            Text="Pick the picture each reading is drawn with. The choice applies to every dock."
-                            TextWrapping="Wrap" />
-
-                        <StackPanel
-                            Margin="3,14,0,7"
-                            Orientation="Horizontal"
-                            Spacing="7">
-                            <Viewbox Width="16" Height="16" VerticalAlignment="Center">
-                                <Canvas Width="24" Height="24">
-                                    <Path
-                                        Data="{x:Bind local:IconRow.Readings}"
-                                        Stroke="{ThemeResource BraunTx3}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeStartLineCap="Round"
-                                        StrokeThickness="1.7" />
-                                </Canvas>
-                            </Viewbox>
-                            <TextBlock
-                                x:Uid="ReadingIconsTitle"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource Micro}"
-                                Text="READINGS" />
-                        </StackPanel>
-
-                        <Border
-                            Background="{ThemeResource BraunCard}"
-                            BorderBrush="{ThemeResource BraunLine}"
-                            BorderThickness="1"
-                            CornerRadius="12">
-                            <ItemsControl x:Name="IconList">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="local:IconRow">
-                                        <Grid Padding="13,10" ColumnSpacing="13">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <!-- The tile is the picker. It is
-                                                 large because the drawing is
-                                                 the thing being chosen, and a
-                                                 44-point target is a kind one. -->
-                                            <Button
-                                                Width="46"
-                                                Height="46"
-                                                Padding="0"
-                                                Background="{ThemeResource BraunCardHi}"
-                                                BorderBrush="{ThemeResource BraunLine}"
-                                                BorderThickness="1"
-                                                Click="OnPickIcon"
-                                                CornerRadius="13"
-                                                Tag="{x:Bind Id}"
-                                                ToolTipService.ToolTip="{x:Bind Label}">
-                                                <Grid>
-                                                    <Viewbox
-                                                        Width="26"
-                                                        Height="26"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center">
-                                                        <Canvas Width="24" Height="24">
-                                                            <Path
-                                                                Data="{x:Bind Shape, Mode=OneWay}"
-                                                                Stroke="{ThemeResource BraunTx}"
-                                                                StrokeEndLineCap="Round"
-                                                                StrokeLineJoin="Round"
-                                                                StrokeStartLineCap="Round"
-                                                                StrokeThickness="1.5" />
-                                                        </Canvas>
-                                                    </Viewbox>
-                                                    <Border
-                                                        Width="17"
-                                                        Height="17"
-                                                        Margin="0,0,-6,-6"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Bottom"
-                                                        Background="{ThemeResource BraunPanelHi}"
-                                                        BorderBrush="{ThemeResource BraunLineHi}"
-                                                        BorderThickness="1"
-                                                        CornerRadius="9">
-                                                        <Viewbox Width="9" Height="9">
-                                                            <Canvas Width="24" Height="24">
-                                                                <Path
-                                                                    Data="{x:Bind local:IconRow.Pencil}"
-                                                                    Stroke="{ThemeResource BraunTx2}"
-                                                                    StrokeEndLineCap="Round"
-                                                                    StrokeLineJoin="Round"
-                                                                    StrokeStartLineCap="Round"
-                                                                    StrokeThickness="2.2" />
-                                                            </Canvas>
-                                                        </Viewbox>
-                                                    </Border>
-                                                </Grid>
-                                            </Button>
-
-                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                <TextBlock
-                                                    FontSize="14"
-                                                    Foreground="{ThemeResource BraunTx}"
-                                                    Text="{x:Bind Label}" />
-                                                <TextBlock
-                                                    Margin="0,3,0,0"
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource BraunTx3}"
-                                                    LineHeight="17"
-                                                    Text="{x:Bind Explain}"
-                                                    TextWrapping="Wrap" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Border>
-
-                        <StackPanel
-                            Margin="3,14,0,7"
-                            Orientation="Horizontal"
-                            Spacing="7">
-                            <Viewbox Width="16" Height="16" VerticalAlignment="Center">
-                                <Canvas Width="24" Height="24">
-                                    <Path
-                                        Data="{x:Bind local:IconRow.Pinned}"
-                                        Stroke="{ThemeResource BraunTx3}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeStartLineCap="Round"
-                                        StrokeThickness="1.7" />
-                                </Canvas>
-                            </Viewbox>
-                            <TextBlock
-                                x:Uid="PinnedIconsTitle"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource Micro}"
-                                Text="PINNED PROGRAMS" />
-                        </StackPanel>
-                        <Border
-                            Padding="13,10"
-                            Background="{ThemeResource BraunCard}"
-                            BorderBrush="{ThemeResource BraunLine}"
-                            BorderThickness="1"
-                            CornerRadius="12">
-                            <StackPanel>
-                                <TextBlock
-                                    x:Uid="PinnedIconsRow"
-                                    FontSize="14"
-                                    Foreground="{ThemeResource BraunTx}"
-                                    Text="A pinned program keeps its own icon" />
-                                <TextBlock
-                                    x:Uid="PinnedIconsHint"
-                                    Margin="0,3,0,0"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource BraunTx3}"
-                                    LineHeight="17"
-                                    Text="A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings."
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- Sensors. Name, what it means, and what it says now.
-                         Double-click a name to change it: the one the source
-                         ships is whatever its maker put in the firmware. -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Viewbox Width="22" Height="22" VerticalAlignment="Center">

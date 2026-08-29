@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.Json;
@@ -48,6 +48,12 @@ public sealed class IconWidget : WidgetViewModel
 
     /// <summary>The one button this widget is.</summary>
     public LaunchButton Item { get; }
+
+    /// <summary>
+    /// Starts the program. What the bar hands back when a press turned out
+    /// not to be the beginning of a drag.
+    /// </summary>
+    public override void Press() => Item.LaunchCommand.Execute(null);
 
     public string Target => Item.Target;
 

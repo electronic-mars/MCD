@@ -97,6 +97,15 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     }
 
     /// <summary>
+    /// Does what a click on this widget does, without a pointer.
+    /// </summary>
+    /// <remarks>
+    /// The bar takes the pointer away from its widgets to watch for a drag,
+    /// so a press that turned out not to be one has to be handed back.
+    /// </remarks>
+    public void Press() => _widget.Press();
+
+    /// <summary>
     /// The press-and-hold outline: this element is in hand and can be dragged,
     /// or dragged off the bar to be removed.
     /// </summary>

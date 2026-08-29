@@ -29,12 +29,19 @@ public sealed record WidgetType(
 /// say so instead of quietly making a duplicate. Always false for things worth
 /// having twice, like spacers.
 /// </param>
+/// <param name="Chooses">
+/// Which of the choosable icons this offer wears, or null when it draws
+/// something of its own. A gauge and a temperature are drawn with an icon
+/// somebody picked; the clock draws digits and the player draws its own
+/// buttons, and neither has an icon to change.
+/// </param>
 public sealed record WidgetOffer(
     string Name,
     string Description,
     string Icon,
     Func<WidgetConfig> Make,
-    Func<WidgetConfig, bool> Matches);
+    Func<WidgetConfig, bool> Matches,
+    string? Chooses = null);
 
 /// <summary>
 /// Every widget this build knows about, in the order they are offered.
@@ -104,7 +111,8 @@ public static class WidgetCatalog
                 reading.Icon,
                 () => DockContents.Gauge(reading.Id),
                 entry => entry.TypeId == GaugeWidget.Type
-                    && (WidgetOptions.Text(entry.Config, "reading") ?? "cpu") == reading.Id);
+                    && (WidgetOptions.Text(entry.Config, "reading") ?? "cpu") == reading.Id,
+                Chooses: reading.Id);
         }
 
         yield return new WidgetOffer(
@@ -145,7 +153,8 @@ public static class WidgetCatalog
                     Config = WidgetJson.Object(("sensor", key)),
                 },
                 entry => entry.TypeId == TempWidget.Type
-                    && WidgetOptions.Text(entry.Config, "sensor") == key);
+                    && WidgetOptions.Text(entry.Config, "sensor") == key,
+                Chooses: "temp");
         }
 
         yield return new WidgetOffer(

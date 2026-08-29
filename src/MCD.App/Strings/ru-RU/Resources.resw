@@ -663,7 +663,7 @@
     <value>Поставить на панель</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>Нажатие ставит виджет в первый свободный слот. Ограничений нет: два одинаковых показания в разных местах — обычное дело.</value>
+    <value>Перетащите на панель — виджет встанет в тот слот, куда вы его отпустили. Нажатие меняет значок, которым он нарисован. Ограничений нет: два одинаковых показания в разных местах — обычное дело.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
     <value>Своя программа</value>
@@ -811,5 +811,23 @@
   </data>
   <data name="UndoMode" xml:space="preserve">
     <value>способ удержания края</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>на панели</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Поставить сюда</value>
+  </data>
+  <data name="ChipDragOnly" xml:space="preserve">
+    <value>Перетащите на панель, чтобы поставить.</value>
+  </data>
+  <data name="ChipDragOrPick" xml:space="preserve">
+    <value>Перетащите на панель, чтобы поставить. Нажмите, чтобы сменить значок.</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Вернуть последнее изменение</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>И то, что на этой странице, и то, что сделано на самой панели.</value>
   </data>
 </root>

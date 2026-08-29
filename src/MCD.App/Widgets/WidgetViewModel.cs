@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
 using Mcd.Core.Settings;
@@ -119,6 +119,18 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
 
     /// <summary>Called on the UI thread once a second while the dock is visible.</summary>
     public abstract void Tick(SensorSnapshot snapshot);
+
+    /// <summary>
+    /// What a press on this widget does, for widgets where that is anything.
+    /// </summary>
+    /// <remarks>
+    /// Nothing, for a reading: a number is not a button. A pinned program
+    /// starts; the player's own keys handle themselves, because a press on
+    /// one of three buttons is not a press on the widget.
+    /// </remarks>
+    public virtual void Press()
+    {
+    }
 
     /// <summary>Called once, after the sensor catalogue is known to have settled.</summary>
     public virtual void Attach()
