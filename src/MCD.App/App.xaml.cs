@@ -397,6 +397,23 @@ public partial class App : Application
                 log.LogInformation("selftest.reopened");
             }
 
+            // And every path that rebuilds a bar, twice each.
+            if (_docks is not null)
+            {
+                try
+                {
+                    // Announced before it starts, so whatever is reading the
+                    // log can tell the ordinary run from the rehearsal - the
+                    // rehearsal writes on purpose.
+                    log.LogInformation("selftest.rehearsing");
+                    log.LogInformation("selftest.rehearsed hosts={Hosts}", _docks.Rehearse());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e, "selftest.rehearsal failed");
+                }
+            }
+
             // Left open, and walked through, when pages were asked for: a
             // visual change is verified by looking at the window it changed,
             // and the window that gets looked at must not be the one on

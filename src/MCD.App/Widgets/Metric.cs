@@ -223,8 +223,11 @@ public sealed partial class Metric : ObservableObject
         // the box and the centring eats half the shift.
         Lift = subtitle ? new Thickness(0, -2, 0, 2) : new Thickness(0, -1, 0, 1);
 
-        // The box starts empty and grows to the widest value actually seen.
+        // The box starts empty and grows to the widest value actually seen,
+        // and what the fixed parts measure is asked again at the new size.
         ValueWidth = 0;
+        _sampleWide = null;
+        _labelWide = null;
         Reserve();
     }
 
@@ -255,6 +258,14 @@ public sealed partial class Metric : ObservableObject
         ValueWidth = Math.Max(ValueWidth, Math.Ceiling(Ruler.DesiredSize.Width) + 1);
     }
 
+    /// <summary>
+    /// What the fixed parts of this chip measure, once they have been asked
+    /// for. Cleared by <see cref="SizeFor"/>, which is the only thing that can
+    /// change them.
+    /// </summary>
+    private double? _sampleWide;
+    private double? _labelWide;
+
     /// <summary>One shared, never-shown TextBlock, used only to measure.</summary>
     private static readonly Microsoft.UI.Xaml.Controls.TextBlock Ruler = new()
     {
@@ -277,11 +288,14 @@ public sealed partial class Metric : ObservableObject
     /// </remarks>
     public double Width()
     {
-        double value = Math.Max(ValueWidth, Wide(Sample, FontSize));
+        // The sample and the name are fixed from the moment SizeFor runs, so
+        // they are measured once and kept. Measuring them again on every tick
+        // was two thirds of everything this program did while idle.
+        _sampleWide ??= Wide(Sample, FontSize);
+        _labelWide ??= Math.Min(100, Wide(Label, LabelFontSize));
 
-        double label = LabelVisible == Visibility.Visible
-            ? Math.Min(100, Wide(Label, LabelFontSize))
-            : 0;
+        double value = Math.Max(ValueWidth, _sampleWide.Value);
+        double label = LabelVisible == Visibility.Visible ? _labelWide.Value : 0;
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
         return 6 + Spacing.Left + Spacing.Right + IconSize + 6 + Math.Max(value, label);
@@ -342,8 +356,17 @@ public sealed partial class Metric : ObservableObject
 
         SensorReading reading = snapshot[Sensor.Key];
 
-        Text = reading.HasValue ? Format(reading.Value) : "--";
-        Reserve();
+        string shown = reading.HasValue ? Format(reading.Value) : "--";
+
+        // Measured only when the digits actually moved. A reading that says
+        // the same thing this second as last needs no text layout, and this
+        // runs once a second for every widget on every bar for as long as the
+        // program is up.
+        if (shown != Text)
+        {
+            Text = shown;
+            Reserve();
+        }
         Colour = Paint(reading);
 
         bool critical = _level == Level.Critical;

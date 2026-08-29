@@ -73,11 +73,22 @@ public static class Braun
     /// </summary>
     public static Brush Tx3 => Paint(Dark ? 0xFF88909B : 0xFF626871);
 
-    /// <summary>The one accent this program owns. The same in both themes.</summary>
-    public static Brush Acc => Paint(0xFFF26A21);
+    /// <summary>
+    /// The one accent this program owns.
+    /// </summary>
+    /// <remarks>
+    /// Blue, not the reference program's Braun orange. What was worth taking
+    /// from that program is how it is built - the recesses, the raised keys,
+    /// the type scale - and not the colour it wears, which is that program's
+    /// own. This one is the colour Windows is set to, so the bar agrees with
+    /// the desktop it lives on.
+    /// </remarks>
+    public static Brush Acc =>
+        (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"];
 
     /// <summary>Text and glyphs printed on the accent.</summary>
-    public static Brush OnAcc => Paint(0xFF140702);
+    public static Brush OnAcc =>
+        (Brush)Application.Current.Resources["TextOnAccentFillColorPrimaryBrush"];
 
     /// <summary>A lamp that is lit.</summary>
     public static Brush Led => Paint(Dark ? 0xFF4ADE80 : 0xFF22A45D);
@@ -299,25 +310,36 @@ public static class Braun
         {
             bool on = i == selected;
 
+            var caption = new TextBlock
+            {
+                Text = labels[i].ToUpper(CultureInfo.CurrentCulture),
+                FontSize = SegSize,
+                FontWeight = on ? FontWeights.Medium : FontWeights.Normal,
+                CharacterSpacing = 160,
+                Foreground = on ? OnAcc : Tx3,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = wide ? new Thickness(4, 9, 4, 9) : new Thickness(13, 9, 13, 9),
+            };
+
+            // The chosen one stands off the page; the others are set into it.
+            // That difference is the whole of what "selected" means here, so
+            // it is drawn rather than implied by a shade of grey.
+            FrameworkElement face = on
+                ? Raised(caption, Acc, radius: 8, blur: 9, drop: 2, depth: 0.40)
+                : Flat(caption, CardHi, radius: 8);
+
             var key = new Button
             {
-                Content = new TextBlock
-                {
-                    Text = labels[i].ToUpper(CultureInfo.CurrentCulture),
-                    FontSize = SegSize,
-                    FontWeight = on ? FontWeights.Medium : FontWeights.Normal,
-                    CharacterSpacing = 160,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                },
+                Content = face,
                 MinWidth = 0,
                 MinHeight = 0,
-                Padding = wide ? new Thickness(4, 9, 4, 9) : new Thickness(13, 9, 13, 9),
+                Padding = new Thickness(0),
                 CornerRadius = new CornerRadius(8),
-                BorderThickness = new Thickness(1),
-                BorderBrush = on ? Clear : Line,
-                Background = on ? Acc : CardHi,
-                Foreground = on ? OnAcc : Tx3,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
+                BorderThickness = new Thickness(0),
+                Background = Clear,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalContentAlignment = VerticalAlignment.Stretch,
             };
 
             if (wide)
@@ -365,7 +387,7 @@ public static class Braun
     /// which is a lamp rather than a word, so a tile stays the width of its
     /// name however long "off" happens to be in this language.
     /// </param>
-    public static Border Tabs(
+    public static Grid Tabs(
         IReadOnlyList<(string Glyph, string Label, bool On)> items, int selected, Action<int> pick)
     {
         var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2 };
@@ -377,6 +399,8 @@ public static class Braun
             var body = new StackPanel
             {
                 Spacing = 4,
+                Padding = new Thickness(14, 8, 14, 7),
+                MinWidth = 96,
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
 
@@ -415,39 +439,54 @@ public static class Braun
 
             body.Children.Add(line);
 
+            // The chosen tab is a key standing proud of the rail. Only that
+            // one: a shadow under everything highlights nothing.
+            FrameworkElement face = chosen
+                ? Raised(body, PanelHi, radius: 8, blur: 11, drop: 2, depth: 0.36)
+                : body;
+
             var tile = new Button
             {
-                Content = body,
-                MinWidth = 96,
+                Content = face,
+                MinWidth = 0,
                 MinHeight = 0,
-                Padding = new Thickness(14, 8, 14, 7),
+                Padding = new Thickness(0),
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(0),
-                Background = chosen ? PanelHi : Clear,
+                Background = Clear,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalContentAlignment = VerticalAlignment.Stretch,
             };
-
-            // The chosen tile stands off the rail. Only that one: a shadow
-            // under everything highlights nothing.
-            if (chosen)
-            {
-                tile.Shadow = new ThemeShadow();
-                tile.Translation = new Vector3(0, 0, 12);
-            }
 
             int index = i;
             tile.Click += (_, _) => pick(index);
             row.Children.Add(tile);
         }
 
-        return new Border
-        {
-            Background = Sunk,
-            CornerRadius = new CornerRadius(11),
-            Padding = new Thickness(3),
-            HorizontalAlignment = HorizontalAlignment.Left,
-            Child = row,
-        };
+        // The rail the keys are set into, which is a hole in the body rather
+        // than a panel on top of it.
+        return Recessed(row);
     }
+
+    /// <summary>A surface flush with what it sits on.</summary>
+    private static Grid Flat(UIElement content, Brush fill, double radius)
+    {
+        var stack = new Grid();
+
+        stack.Children.Add(new Rectangle
+        {
+            Fill = fill,
+            Stroke = Line,
+            StrokeThickness = 1,
+            RadiusX = radius,
+            RadiusY = radius,
+            IsHitTestVisible = false,
+        });
+
+        stack.Children.Add(content);
+        return stack;
+    }
+
 
     /// <summary>
     /// A switch, drawn as the pill it is.
@@ -504,16 +543,30 @@ public static class Braun
         Brush ink = danger ? Danger : ghost ? Tx2 : OnAcc;
         StackPanel body = Legend(text, glyph, ink);
 
+        body.Margin = new Thickness(15, 10, 15, 10);
+
+        // A button is a key on an instrument: it has a lit top edge and it
+        // stands off the panel. Even the quiet ones - a key you can press
+        // should look like a key.
+        Grid face = Raised(
+            body,
+            danger ? Paint(Dark ? 0xFF2A1E20u : 0xFFF7EBEB) : ghost ? CardHi : Acc,
+            radius: 10,
+            blur: 8,
+            drop: 1,
+            depth: danger || ghost ? 0.28 : 0.36);
+
         var button = new Button
         {
-            Content = body,
+            Content = face,
             MinWidth = 0,
             MinHeight = 0,
-            Padding = new Thickness(15, 10, 15, 10),
+            Padding = new Thickness(0),
             CornerRadius = new CornerRadius(10),
-            BorderThickness = new Thickness(1),
-            BorderBrush = danger ? Paint(0x59FF6B6Bu) : ghost ? Line : Clear,
-            Background = ghost || danger ? Card : Acc,
+            BorderThickness = new Thickness(0),
+            Background = Clear,
+            HorizontalContentAlignment = HorizontalAlignment.Stretch,
+            VerticalContentAlignment = VerticalAlignment.Stretch,
         };
 
         button.Click += (_, _) => click();
@@ -560,6 +613,167 @@ public static class Braun
         });
 
         return body;
+    }
+
+    // ----------------------------------------------------------------- depth
+    //
+    // The reference program is a web view, and what makes it look machined is
+    // two box-shadows on one element and a third on the thing it sits in:
+    //
+    //   .tabs                  inset 0 1px 3px rgba(0,0,0,.35)      a recess
+    //   .tab[selected]         inset 0 1px 0  rgba(255,255,255,.07) a lit edge
+    //                          0 2px 5px rgba(0,0,0,.3)             standing off
+    //
+    // None of that is ThemeShadow, which is the framework's own shadow for
+    // flyouts: it needs a receiver behind it, it is tuned for a card lifted
+    // eight points off a page, and under a tile on a dark rail it shows
+    // nothing at all. Drawn here as what it is - one lit line, one recess,
+    // one real shadow from the compositor.
+
+    /// <summary>
+    /// A surface that stands off what it sits on.
+    /// </summary>
+    /// <remarks>
+    /// Three layers, because a box-shadow is three things: the fill, a lit
+    /// line along its top edge, and a soft shadow beneath. The shadow comes
+    /// from the compositor with the fill's own alpha mask, so it follows the
+    /// corner radius instead of squaring it off.
+    /// </remarks>
+    /// <param name="content">What is drawn on the surface.</param>
+    /// <param name="fill">Its colour.</param>
+    /// <param name="radius">Its corner.</param>
+    /// <param name="blur">How soft the shadow is.</param>
+    /// <param name="drop">How far it falls.</param>
+    /// <param name="depth">How dark it is, nought to one.</param>
+    public static Grid Raised(
+        UIElement content,
+        Brush fill,
+        double radius = 8,
+        double blur = 10,
+        double drop = 2,
+        double depth = 0.34)
+    {
+        var stack = new Grid();
+
+        // The shadow is drawn into this one, behind everything: a sprite
+        // visual renders inside its host, so the host has to be the layer
+        // underneath rather than the face itself.
+        var under = new Border { IsHitTestVisible = false };
+
+        var face = new Rectangle
+        {
+            Fill = fill,
+            RadiusX = radius,
+            RadiusY = radius,
+            IsHitTestVisible = false,
+        };
+
+        stack.Children.Add(under);
+        stack.Children.Add(face);
+        stack.Children.Add(Sheen(radius));
+        stack.Children.Add(content);
+
+        Shadow(under, face, blur, drop, depth);
+        return stack;
+    }
+
+    /// <summary>
+    /// A recess: the rail a row of keys is set into.
+    /// </summary>
+    /// <remarks>
+    /// An inner shadow, which the compositor will not draw. Approximated the
+    /// way it reads: the ground is darker than the body around it, and a
+    /// short gradient down from the top edge stands in for the light the far
+    /// wall does not get.
+    /// </remarks>
+    public static Grid Recessed(UIElement content, double radius = 11, double padding = 3)
+    {
+        var stack = new Grid { HorizontalAlignment = HorizontalAlignment.Left };
+
+        stack.Children.Add(new Border
+        {
+            Background = Sunk,
+            CornerRadius = new CornerRadius(radius),
+        });
+
+        // The far wall of the recess: dark at the top edge, gone within three
+        // points. Inset horizontally so it does not spill past the corner.
+        stack.Children.Add(new Rectangle
+        {
+            Height = 4,
+            Margin = new Thickness(radius / 2, 1, radius / 2, 0),
+            VerticalAlignment = VerticalAlignment.Top,
+            IsHitTestVisible = false,
+            Fill = new LinearGradientBrush
+            {
+                StartPoint = new Windows.Foundation.Point(0, 0),
+                EndPoint = new Windows.Foundation.Point(0, 1),
+                GradientStops =
+                {
+                    new GradientStop { Offset = 0, Color = Shade(Dark ? (byte)0x59 : (byte)0x24) },
+                    new GradientStop { Offset = 1, Color = Shade(0) },
+                },
+            },
+        });
+
+        if (content is FrameworkElement inside)
+        {
+            inside.Margin = new Thickness(padding);
+        }
+
+        stack.Children.Add(content);
+        return stack;
+    }
+
+    /// <summary>The lit line along the top edge of a raised surface.</summary>
+    private static Rectangle Sheen(double radius) => new()
+    {
+        Height = 1,
+        Margin = new Thickness(radius / 2, 1, radius / 2, 0),
+        VerticalAlignment = VerticalAlignment.Top,
+        IsHitTestVisible = false,
+        Fill = Paint(Dark ? 0x14FFFFFFu : 0x99FFFFFFu),
+    };
+
+    private static Windows.UI.Color Shade(byte alpha) =>
+        Windows.UI.Color.FromArgb(alpha, 0, 0, 0);
+
+    /// <summary>
+    /// Hangs a real shadow under an element, shaped by the element itself.
+    /// </summary>
+    /// <remarks>
+    /// The compositor draws it, so it is a genuine blur rather than a stack
+    /// of rectangles pretending to be one. The mask is the element's own
+    /// alpha, which is why the shadow has the same rounded corners it does.
+    /// Sized on every layout pass: a sprite visual has no idea what its host
+    /// was arranged into.
+    /// </remarks>
+    private static void Shadow(Border under, Rectangle face, double blur, double drop, double depth)
+    {
+        Microsoft.UI.Composition.Visual root =
+            Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(under);
+
+        Microsoft.UI.Composition.Compositor compositor = root.Compositor;
+
+        Microsoft.UI.Composition.DropShadow shadow = compositor.CreateDropShadow();
+        shadow.BlurRadius = (float)blur;
+        shadow.Offset = new Vector3(0, (float)drop, 0);
+        shadow.Opacity = (float)depth;
+        shadow.Color = Windows.UI.Color.FromArgb(255, 0, 0, 0);
+
+        Microsoft.UI.Composition.SpriteVisual sprite = compositor.CreateSpriteVisual();
+        sprite.Shadow = shadow;
+
+        void Fit()
+        {
+            sprite.Size = new Vector2((float)face.ActualWidth, (float)face.ActualHeight);
+            shadow.Mask = face.GetAlphaMask();
+        }
+
+        face.SizeChanged += (_, _) => Fit();
+        face.Loaded += (_, _) => Fit();
+
+        Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.SetElementChildVisual(under, sprite);
     }
 
     /// <summary>A tile a picture or a glyph sits in - an icon, a swatch.</summary>

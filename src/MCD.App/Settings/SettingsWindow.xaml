@@ -25,8 +25,6 @@
                         <SolidColorBrush x:Key="BraunTx" Color="#E9ECF1" />
                         <SolidColorBrush x:Key="BraunTx2" Color="#98A0AC" />
                         <SolidColorBrush x:Key="BraunTx3" Color="#88909B" />
-                        <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
-                        <SolidColorBrush x:Key="BraunOnAcc" Color="#140702" />
                         <SolidColorBrush x:Key="BraunLed" Color="#4ADE80" />
                         <SolidColorBrush x:Key="BraunDanger" Color="#FF6B6B" />
                         <SolidColorBrush x:Key="BraunSunk" Color="#66000000" />
@@ -47,11 +45,6 @@
                         <SolidColorBrush x:Key="BraunTx" Color="#23262B" />
                         <SolidColorBrush x:Key="BraunTx2" Color="#5C6169" />
                         <SolidColorBrush x:Key="BraunTx3" Color="#626871" />
-                        <!-- The accent does not change with the theme. It is the
-                             one colour the instrument owns, and a cream body
-                             takes the same orange a graphite one does. -->
-                        <SolidColorBrush x:Key="BraunAccBrush" Color="#F26A21" />
-                        <SolidColorBrush x:Key="BraunOnAcc" Color="#140702" />
                         <SolidColorBrush x:Key="BraunLed" Color="#22A45D" />
                         <SolidColorBrush x:Key="BraunDanger" Color="#D14343" />
                         <SolidColorBrush x:Key="BraunSunk" Color="#14000000" />
@@ -171,7 +164,7 @@
                          what is on it, how it behaves. -->
                     <StackPanel x:Name="DocksSection" Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE890;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="DocksTitle"
                                 VerticalAlignment="Center"
@@ -204,7 +197,7 @@
                          explanation beside it down to one letter a line. -->
                     <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE790;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="AppearanceTitle"
                                 VerticalAlignment="Center"
@@ -225,7 +218,7 @@
                          that changes it, and it carries a pencil to say so. -->
                     <StackPanel x:Name="IconsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE76E;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="IconsTitle"
                                 VerticalAlignment="Center"
@@ -382,7 +375,7 @@
                          ships is whatever its maker put in the firmware. -->
                     <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource BraunAccBrush}" Style="{StaticResource SectionIcon}" />
+                            <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Style="{StaticResource SectionIcon}" />
                             <TextBlock
                                 x:Uid="SensorsTitle"
                                 VerticalAlignment="Center"

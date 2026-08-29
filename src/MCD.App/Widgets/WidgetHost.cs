@@ -1,4 +1,4 @@
-using Mcd.App.Dock;
+﻿using Mcd.App.Dock;
 using Mcd.Core.Settings;
 using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
@@ -48,11 +48,27 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         // their own brighter response on top.
         Background = _fill;
 
-        PointerEntered += (_, _) => Fade(Hover);
+        // One storyboard, made here and reused. A fresh one per pointer event
+        // is a running animation holding a widget that may already have been
+        // taken off the bar, and the pointer crosses a bar of a dozen widgets
+        // many times a minute.
+        Storyboard.SetTarget(_colour, _fill);
+        Storyboard.SetTargetProperty(_colour, "Color");
+        _fade.Children.Add(_colour);
+
+        PointerEntered += OnHere;
         PointerExited += OnGone;
         PointerCanceled += OnGone;
         PointerCaptureLost += OnGone;
     }
+
+    private readonly ColorAnimation _colour = new()
+    {
+        Duration = DockMetrics.HoverCrossfade,
+        EnableDependentAnimation = true,
+    };
+
+    private readonly Storyboard _fade = new();
 
     /// <summary>
     /// True for a widget that should answer the pointer with nothing - the
@@ -64,28 +80,20 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         ? Windows.UI.Color.FromArgb(0x0F, 0xFF, 0xFF, 0xFF)
         : Windows.UI.Color.FromArgb(0x80, 0xFF, 0xFF, 0xFF);
 
+    private void OnHere(object sender, PointerRoutedEventArgs e) => Fade(Hover);
+
     private void OnGone(object sender, PointerRoutedEventArgs e) => Fade(Colors.Transparent);
 
     private void Fade(Windows.UI.Color to)
     {
-        if (Quiet)
+        if (Quiet || _gone)
         {
             return;
         }
 
-        var colour = new ColorAnimation
-        {
-            To = to,
-            Duration = DockMetrics.HoverCrossfade,
-            EnableDependentAnimation = true,
-        };
-
-        Storyboard.SetTarget(colour, _fill);
-        Storyboard.SetTargetProperty(colour, "Color");
-
-        var story = new Storyboard();
-        story.Children.Add(colour);
-        story.Begin();
+        _fade.Stop();
+        _colour.To = to;
+        _fade.Begin();
     }
 
     /// <summary>
@@ -144,7 +152,28 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
 
     public void Dispose()
     {
+        if (_gone)
+        {
+            return;
+        }
+
+        _gone = true;
+
+        // The handlers and the animation go before the view model does. A
+        // storyboard still running against a disposed host keeps it alive,
+        // and a pointer leaving the bar raises PointerExited on a host that
+        // has already been taken off it.
+        PointerEntered -= OnHere;
+        PointerExited -= OnGone;
+        PointerCanceled -= OnGone;
+        PointerCaptureLost -= OnGone;
+
+        _fade.Stop();
+        Content = null;
         _widget.Dispose();
     }
+
+    /// <summary>True once this has been taken off the bar.</summary>
+    private bool _gone;
 
 }

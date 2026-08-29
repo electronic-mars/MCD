@@ -22,6 +22,10 @@ if (-not (Test-Path $exe)) { throw "not built: $exe" }
 New-Item -ItemType Directory -Force $Out | Out-Null
 Get-ChildItem $Out -Filter *.png -ErrorAction SilentlyContinue | Remove-Item -Force
 
+# A second copy only signals the first and stands down, so it would have no
+# window to photograph. The one already running is asked to stop first.
+& (Join-Path $PSScriptRoot 'close-mcd.ps1')
+
 Add-Type -AssemblyName System.Drawing
 Add-Type @"
 using System;

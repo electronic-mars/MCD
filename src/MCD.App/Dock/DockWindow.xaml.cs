@@ -62,7 +62,24 @@ public sealed partial class DockWindow : Window
     private const double MinimumDrag = 6;
 
     /// <summary>The slots the thing in hand would land on.</summary>
-    private readonly Rectangle _aim = new();
+    /// <summary>
+    /// Where the thing in hand would land.
+    /// </summary>
+    /// <remarks>
+    /// Put on the overlay once and shown or hidden, never taken off and put
+    /// back. An element held in a field and re-parented is the shape of a bug
+    /// this program has already paid for once: XAML refuses to give an
+    /// element a second parent, and it refuses on the UI thread, where there
+    /// is nothing to catch it.
+    /// </remarks>
+    private readonly Rectangle _aim = new()
+    {
+        IsHitTestVisible = false,
+        Visibility = Visibility.Collapsed,
+        RadiusX = 5,
+        RadiusY = 5,
+        StrokeThickness = 1.5,
+    };
     private WidgetHost? _grabbed;
     private Point _grabbedAt;
     private bool _moving;
@@ -238,6 +255,7 @@ public sealed partial class DockWindow : Window
 
         _tornDown = true;
         _tick.Stop();
+        _hold.Stop();
         _slide?.Stop();
         _linger?.Stop();
         _watch?.Stop();
@@ -669,7 +687,7 @@ public sealed partial class DockWindow : Window
         }
 
         _slots.Clear();
-        Overlay.Children.Remove(_aim);
+        _aim.Visibility = Visibility.Collapsed;
 
         if (!on)
         {
@@ -715,7 +733,7 @@ public sealed partial class DockWindow : Window
 
         if (cell is not { } landing)
         {
-            Overlay.Children.Remove(_aim);
+            _aim.Visibility = Visibility.Collapsed;
             return null;
         }
 
@@ -724,18 +742,11 @@ public sealed partial class DockWindow : Window
         // The program's own orange, not the system accent: this marker is the
         // bar talking about itself, and it has to read the same on a desktop
         // whose accent happens to be the colour of the wallpaper behind it.
-        _aim.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x33, 0xF2, 0x6A, 0x21));
-        _aim.Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xF2, 0x6A, 0x21));
-        _aim.StrokeThickness = 1.5;
-        _aim.RadiusX = 5;
-        _aim.RadiusY = 5;
+        _aim.Fill = AimFill;
+        _aim.Stroke = AimEdge;
         _aim.Width = Math.Max(0, rect.Width);
         _aim.Height = Math.Max(0, rect.Height);
-
-        if (!Overlay.Children.Contains(_aim))
-        {
-            Overlay.Children.Add(_aim);
-        }
+        _aim.Visibility = Visibility.Visible;
 
         Canvas.SetLeft(_aim, rect.X);
         Canvas.SetTop(_aim, rect.Y);
@@ -749,31 +760,55 @@ public sealed partial class DockWindow : Window
     /// </summary>
     private void Farewell(bool on)
     {
-        Overlay.Children.Remove(_goodbye);
-
         if (!on || _grabbed is null || DockGrid.At(_placed, CellAt(_grabbedAt)) is not { } held)
         {
+            _goodbye.Visibility = Visibility.Collapsed;
             return;
         }
 
         Rect rect = CellRect(held.Cell, held.Span);
 
-        _goodbye.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x38, 0xFF, 0x6B, 0x6B));
-        _goodbye.Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(0xCC, 0xFF, 0x6B, 0x6B));
-        _goodbye.StrokeThickness = 1.5;
-        _goodbye.StrokeDashArray = [3, 2];
-        _goodbye.RadiusX = 5;
-        _goodbye.RadiusY = 5;
+        _goodbye.Fill = DoomFill;
+        _goodbye.Stroke = DoomEdge;
         _goodbye.Width = Math.Max(0, rect.Width);
         _goodbye.Height = Math.Max(0, rect.Height);
+        _goodbye.Visibility = Visibility.Visible;
 
         Canvas.SetLeft(_goodbye, rect.X);
         Canvas.SetTop(_goodbye, rect.Y);
-        Overlay.Children.Add(_goodbye);
     }
 
     /// <summary>The mark over a widget on its way off the bar.</summary>
-    private readonly Rectangle _goodbye = new() { IsHitTestVisible = false };
+    /// <remarks>Put on the overlay once, like <see cref="_aim"/>.</remarks>
+    private readonly Rectangle _goodbye = new()
+    {
+        IsHitTestVisible = false,
+        Visibility = Visibility.Collapsed,
+        RadiusX = 5,
+        RadiusY = 5,
+        StrokeThickness = 1.5,
+        StrokeDashArray = [3, 2],
+    };
+
+    /// <summary>
+    /// The colours the overlay is drawn in.
+    /// </summary>
+    /// <remarks>
+    /// Held rather than made: the marks are redrawn on every pointer move,
+    /// and a brush per move over a bar of sixty slots is a great deal of
+    /// rubbish for a colour that never changes.
+    /// </remarks>
+    private static readonly SolidColorBrush AimFill =
+        new(Windows.UI.Color.FromArgb(0x38, 0x4C, 0xC2, 0xFF));
+
+    private static readonly SolidColorBrush AimEdge =
+        new(Windows.UI.Color.FromArgb(0xFF, 0x4C, 0xC2, 0xFF));
+
+    private static readonly SolidColorBrush DoomFill =
+        new(Windows.UI.Color.FromArgb(0x38, 0xFF, 0x6B, 0x6B));
+
+    private static readonly SolidColorBrush DoomEdge =
+        new(Windows.UI.Color.FromArgb(0xCC, 0xFF, 0x6B, 0x6B));
 
     /// <summary>Which slot a point on the bar falls in.</summary>
     private int CellAt(Point at)
@@ -929,8 +964,79 @@ public sealed partial class DockWindow : Window
             : Windows.UI.Color.FromArgb(255, 32, 32, 32);
     }
 
+    /// <summary>
+    /// Changes only whether this bar sits above other windows.
+    /// </summary>
+    /// <remarks>
+    /// One P/Invoke. Everything else about the bar is untouched, which is the
+    /// point: this used to go through the rebuild that disposes and remakes
+    /// every widget on it.
+    /// </remarks>
+    public void SetTopmost(MonitorConfig config)
+    {
+        Config = config;
+        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
+    }
+
+    /// <summary>
+    /// Walks every path that takes this bar apart and puts it back, twice.
+    /// </summary>
+    /// <remarks>
+    /// For the unattended check. A page or a bar built in code goes wrong on
+    /// the second build, not the first: something it holds still belongs to
+    /// the build before it, and XAML answers that on the UI thread where
+    /// nothing can catch it. Every one of these paths re-parents elements, so
+    /// every one of them is a place that bug can live.
+    /// </remarks>
+    public int Rehearse(WidgetContext context)
+    {
+        for (int round = 0; round < 2; round++)
+        {
+            RefreshWidgets(Config, context);
+            RefreshContents(Config);
+
+            // Added, moved and taken away again - the three things a person
+            // does to a bar, each of which lays it out afresh.
+            WidgetConfig added = DockContents.Gauge("cpu");
+
+            RefreshContents(Config with { Widgets = [.. Config.Widgets, added] });
+
+            RefreshContents(Config with
+            {
+                Widgets =
+                [
+                    .. Config.Widgets.Select(
+                        w => w.InstanceId == added.InstanceId ? w with { Cell = _capacity - 2 } : w)
+                ],
+            });
+
+            RefreshContents(Config with
+            {
+                Widgets = [.. Config.Widgets.Where(w => w.InstanceId != added.InstanceId)],
+            });
+
+            // And the overlay, which the drag puts up and takes down.
+            ShowSlots(true);
+            Aim(0, 1, null);
+            ShowSlots(false);
+        }
+
+        return _hosts.Count;
+    }
+
     /// <summary>Fills the bar for the first time. Call once, after wiring up.</summary>
-    public void Fill() => BuildWidgets();
+    public void Fill()
+    {
+        // The two marks join the overlay here and stay on it for the life of
+        // the window, shown and hidden rather than added and removed.
+        if (!Overlay.Children.Contains(_aim))
+        {
+            Overlay.Children.Add(_aim);
+            Overlay.Children.Add(_goodbye);
+        }
+
+        BuildWidgets();
+    }
 
     /// <summary>
     /// Takes the settings again and rebuilds what is on the bar.
@@ -1303,7 +1409,7 @@ public sealed partial class DockWindow : Window
             // something into empty space and having it silently disappear is
             // indistinguishable from having broken it.
             _grabbed.Doomed(true);
-            Overlay.Children.Remove(_aim);
+            _aim.Visibility = Visibility.Collapsed;
             Farewell(true);
             _landing = null;
             return;
@@ -1439,6 +1545,14 @@ public sealed partial class DockWindow : Window
 
     private void Refresh()
     {
+        // A bar that has slid off the screen shows nothing, so there is
+        // nothing to bring up to date. It is caught up in one go on the way
+        // back out, which takes 200 milliseconds nobody can read a number in.
+        if (_hiding && _shown <= 0)
+        {
+            return;
+        }
+
         SensorSnapshot snapshot = _sensors.Current;
 
         foreach (WidgetHost host in _hosts)

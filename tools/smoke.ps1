@@ -74,6 +74,12 @@ $required = [ordered]@{
     # it. Opening the window once never reaches that.
     'the settings page rebuilt' = 'selftest\.reopened'
 
+    # And every path that takes a bar apart and puts it back: refresh, refresh
+    # contents, add, move, remove, and the drag overlay - twice each. Those are
+    # the paths that re-parent elements, and re-parenting is what ended the
+    # program the last time it went wrong.
+    'the bars rebuilt'          = 'selftest\.rehearsed'
+
     'the AppBar released'     = 'appbar\.removed'
 }
 
@@ -98,6 +104,23 @@ if ($text -notmatch 'sensors\.provider id=(nvml|disk|hwinfo|lhm) state=available
 }
 
 if ($text -match 'LEVEL=(ERROR|FATAL)') { $failures += 'the log contains an error' }
+
+# Failures that announce themselves at INFO and would otherwise be read by
+# nobody. Each of these means the program carried on with something missing,
+# which is worse than stopping: a widget that silently does not appear looks
+# like a design decision.
+$forbidden = @{
+    'a widget had no template'   = 'widget\.template missing'
+    'a widget threw while ticking' = 'widget\.tick .* failed'
+    'a widget threw while attaching' = 'widget\.attach .* failed'
+    'a widget type was unknown'  = 'widget\.unknown'
+    'the settings could not be saved' = 'settings\.(save|commit) failed'
+    'the settings window did not build' = 'settings\.failed'
+}
+
+foreach ($name in $forbidden.Keys) {
+    if ($text -match $forbidden[$name]) { $failures += $name }
+}
 if ($text -match 'Unhandled exception')  { $failures += 'the log contains an unhandled exception' }
 
 # The AppBar counter is printed with every registration and release. Ending on
@@ -115,8 +138,17 @@ elseif ($lastLive.Groups[2].Value -ne '0') {
 # it put them, which is one write per dock and never again. Anything beyond that
 # is the program writing in response to its own side effects - the shape of the
 # bug this whole program was built against.
-$reconciles = ([regex]::Matches($text, 'settings\.commit reason=TopologyReconcile')).Count
-$settles = ([regex]::Matches($text, 'settings\.commit reason=WidgetConfig')).Count
+# Counted over the ordinary run only. The rehearsal that follows deliberately
+# adds, moves and removes a widget on every bar, and those are real changes a
+# person could have made - they are supposed to be written down. Truncating
+# here keeps the rule this check exists for ("a bar that has just appeared
+# writes once and then stops") instead of weakening it to fit.
+$ordinary = $text
+$rehearsal = $text.IndexOf('selftest.rehearsing')
+if ($rehearsal -ge 0) { $ordinary = $text.Substring(0, $rehearsal) }
+
+$reconciles = ([regex]::Matches($ordinary, 'settings\.commit reason=TopologyReconcile')).Count
+$settles = ([regex]::Matches($ordinary, 'settings\.commit reason=WidgetConfig')).Count
 $docks = ([regex]::Matches($text, 'dock\.manager docks=(\d+)') | Select-Object -Last 1)
 $expected = if ($docks) { [int]$docks.Groups[1].Value } else { 0 }
 

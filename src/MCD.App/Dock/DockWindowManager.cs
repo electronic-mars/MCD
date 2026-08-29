@@ -55,11 +55,23 @@ public sealed class DockWindowManager : IDisposable
         _sensors = sensors;
         _ui = DispatcherQueue.GetForCurrentThread();
 
+        // Kept, so they can be taken off again. A manager that is disposed
+        // while the shell restarts would otherwise put the docks back up
+        // after teardown, and the shell would keep an edge claimed against
+        // windows that no longer exist.
+        _onChanged = (_, _) => _ui.TryEnqueue(ReapplySettings);
+        _onTopology = (_, trigger) => _coalescer.Poke(trigger);
+        _onShell = (_, _) => _ui.TryEnqueue(RebuildEverything);
+
         _coalescer.Settled += OnSettled;
-        _settings.Changed += (_, _) => _ui.TryEnqueue(ReapplySettings);
-        _watcher.TopologyMayHaveChanged += (_, trigger) => _coalescer.Poke(trigger);
-        _watcher.ShellRestarted += (_, _) => _ui.TryEnqueue(RebuildEverything);
+        _settings.Changed += _onChanged;
+        _watcher.TopologyMayHaveChanged += _onTopology;
+        _watcher.ShellRestarted += _onShell;
     }
+
+    private readonly EventHandler<SettingsModel> _onChanged;
+    private readonly EventHandler<TopologyTrigger> _onTopology;
+    private readonly EventHandler _onShell;
 
     /// <summary>
     /// Raised when someone right-clicks an empty part of a dock, with the
@@ -103,6 +115,9 @@ public sealed class DockWindowManager : IDisposable
 
         _disposed = true;
         _coalescer.Settled -= OnSettled;
+        _settings.Changed -= _onChanged;
+        _watcher.TopologyMayHaveChanged -= _onTopology;
+        _watcher.ShellRestarted -= _onShell;
 
         foreach (DockWindow window in _windows.Values)
         {
@@ -196,6 +211,21 @@ public sealed class DockWindowManager : IDisposable
         }
     }
 
+    /// <summary>
+    /// Puts every dock through every rebuild, twice. For the unattended check.
+    /// </summary>
+    public int Rehearse()
+    {
+        int hosts = 0;
+
+        foreach (DockWindow window in _windows.Values)
+        {
+            hosts += window.Rehearse(Context());
+        }
+
+        return hosts;
+    }
+
     private WidgetContext Context()
     {
         AppSettings app = _settings.Current.App;
@@ -236,6 +266,13 @@ public sealed class DockWindowManager : IDisposable
                 if (!_dressed.TryGetValue(id, out string? dressed) || dressed != look)
                 {
                     window.RefreshWidgets(plan.Config, Context());
+                }
+                else if (window.Config.Topmost != plan.Config.Topmost)
+                {
+                    // One window style bit. Rebuilding every widget on the bar
+                    // to change whether it sits above other windows is a great
+                    // deal of work for a call to SetWindowPos.
+                    window.SetTopmost(plan.Config);
                 }
                 else if (!_held.TryGetValue(id, out string? shown) || shown != held)
                 {
@@ -314,6 +351,11 @@ public sealed class DockWindowManager : IDisposable
     /// <summary>Rebuilds every dock from scratch, for when Explorer has restarted.</summary>
     private void RebuildEverything()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         foreach (DockWindow window in _windows.Values)
         {
             window.TearDown();
@@ -347,8 +389,7 @@ public sealed class DockWindowManager : IDisposable
             .Append(app.Backdrop).Append('|')
             .Append(app.BackdropColour).Append('|')
             .Append(app.BackdropImage).Append('|')
-            .Append(app.Accent).Append('|')
-            .Append(config.Topmost).Append('|');
+            .Append(app.Accent).Append('|');
 
         foreach (KeyValuePair<string, string> icon in app.Icons)
         {
