@@ -165,7 +165,7 @@
             </NavigationView.FooterMenuItems>
 
             <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
-                <StackPanel MinWidth="420" MaxWidth="1000" HorizontalAlignment="Left" Spacing="12">
+                <StackPanel MinWidth="420" MaxWidth="1000" HorizontalAlignment="Stretch" Spacing="12">
 
                     <!-- Docks. The bar's live picture is the editing surface:
                          what looks like the bar behaves like the bar. -->
@@ -173,7 +173,7 @@
                          below is built in code, in the order somebody asks
                          the questions in: which screen, where the bar sits,
                          what is on it, how it behaves. -->
-                    <StackPanel x:Name="DocksSection" Spacing="8">
+                    <StackPanel x:Name="DocksSection">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Viewbox Width="22" Height="22" VerticalAlignment="Center">
                                 <Canvas Width="24" Height="24">
@@ -195,6 +195,7 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="DocksIntro"
+                            Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
                             Text="One dock per screen. Changes land on the bar as you make them."
                             TextWrapping="Wrap" />
@@ -204,7 +205,7 @@
                              and a lamp for whether that screen has a bar. -->
                         <ContentControl
                             x:Name="DisplayTabs"
-                            Margin="0,8,0,0"
+                            Margin="0,14,0,0"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
                             IsTabStop="False" />
@@ -217,7 +218,7 @@
                          kit: the choices here are three, five and two keys
                          wide, and a hand-written Auto column starves the
                          explanation beside it down to one letter a line. -->
-                    <StackPanel x:Name="AppearanceSection" Spacing="8" Visibility="Collapsed">
+                    <StackPanel x:Name="AppearanceSection" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Viewbox Width="22" Height="22" VerticalAlignment="Center">
                                 <Canvas Width="24" Height="24">
@@ -239,6 +240,7 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="AppearanceIntro"
+                            Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
                             Text="How the bars are drawn. This applies to every dock."
                             TextWrapping="Wrap" />
@@ -248,7 +250,7 @@
                     <!-- Icons. One panel of rows, the way Master Audio Switcher
                          lists devices: the picture on the left is the button
                          that changes it, and it carries a pencil to say so. -->
-                    <StackPanel x:Name="SensorsSection" Spacing="8" Visibility="Collapsed">
+                    <StackPanel x:Name="SensorsSection" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Viewbox Width="22" Height="22" VerticalAlignment="Center">
                                 <Canvas Width="24" Height="24">
@@ -270,12 +272,13 @@
                         </StackPanel>
                         <TextBlock
                             x:Uid="SensorsIntro"
+                            Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
                             Text="Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running."
                             TextWrapping="Wrap" />
 
                         <StackPanel
-                            Margin="3,14,0,7"
+                            Margin="0,14,0,7"
                             Orientation="Horizontal"
                             Spacing="7">
                             <Viewbox Width="16" Height="16" VerticalAlignment="Center">
@@ -297,7 +300,7 @@
                         </StackPanel>
                         <TextBlock
                             x:Name="SensorSummary"
-                            Margin="3,0,0,8"
+                            Margin="0,-3,0,10"
                             FontSize="12"
                             Foreground="{ThemeResource BraunTx3}"
                             LineHeight="17"
@@ -313,6 +316,8 @@
                                     <DataTemplate x:DataType="local:SensorRow">
                                         <Grid
                                             Padding="13,10"
+                                            BorderBrush="{ThemeResource BraunLine}"
+                                            BorderThickness="0,0,0,1"
                                             ColumnSpacing="13"
                                             Background="Transparent"
                                             DoubleTapped="OnRenameSensor"

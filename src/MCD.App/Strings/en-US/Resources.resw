@@ -830,4 +830,10 @@
   <data name="UndoRowHint" xml:space="preserve">
     <value>Everything on this page and everything done on the bar itself.</value>
   </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Off puts it in the tooltip instead.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>A compact bar has one line, and the time is the line worth having.</value>
+  </data>
 </root>

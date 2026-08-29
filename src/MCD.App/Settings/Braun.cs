@@ -114,7 +114,7 @@ public static class Braun
     private const double MicroSize = 10;
     private const double NameSize = 14;
     private const double NoteSize = 12;
-    private const double SegSize = 11;
+
 
     // ---------------------------------------------------------------- pieces
 
@@ -144,7 +144,7 @@ public static class Braun
         {
             Orientation = Orientation.Horizontal,
             Spacing = 7,
-            Margin = new Thickness(3, 14, 0, 7),
+            Margin = new Thickness(0, 14, 0, 7),
         };
 
         row.Children.Add(Glyph(glyph, 16, Tx3));
@@ -328,7 +328,7 @@ public static class Braun
             var caption = new TextBlock
             {
                 Text = labels[i].ToUpper(CultureInfo.CurrentCulture),
-                FontSize = 10.5,
+                FontSize = MicroSize,
                 FontWeight = on ? FontWeights.Medium : FontWeights.Normal,
                 CharacterSpacing = 160,
                 Foreground = on ? OnAcc : Tx3,
@@ -448,7 +448,7 @@ public static class Braun
             line.Children.Add(new TextBlock
             {
                 Text = items[i].Label.ToUpper(CultureInfo.CurrentCulture),
-                FontSize = 11,
+                FontSize = MicroSize,
                 FontWeight = FontWeights.Medium,
                 CharacterSpacing = 120,
                 Foreground = chosen ? Tx : Tx3,
@@ -525,7 +525,7 @@ public static class Braun
     {
         const double Wide = 38;
         const double Tall = 22;
-        const double Ball = 15;
+        const double Ball = 16;
 
         var track = new Grid { Width = Wide, Height = Tall };
 
@@ -919,6 +919,78 @@ public static class Braun
             new GradientStop { Offset = 1, Color = Hue(bottom) },
         },
     };
+
+    /// <summary>
+    /// A list to choose one thing from, dressed like everything else.
+    /// </summary>
+    /// <remarks>
+    /// The framework's own list is a different grey, a different corner and a
+    /// different height from the keys beside it, and next to them it reads as
+    /// a control borrowed from another program - which it is.
+    /// </remarks>
+    public static ComboBox Choice(IReadOnlyList<string> labels, int selected, Action<int> pick)
+    {
+        var box = new ComboBox
+        {
+            MinWidth = 220,
+            SelectedIndex = Math.Clamp(selected, -1, labels.Count - 1),
+            Background = CardHi,
+            BorderBrush = Line,
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(10),
+            Foreground = Tx,
+            Padding = new Thickness(11, 9, 11, 9),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
+
+        foreach (string label in labels)
+        {
+            box.Items.Add(label);
+        }
+
+        box.SelectionChanged += (_, _) =>
+        {
+            if (box.SelectedIndex >= 0)
+            {
+                pick(box.SelectedIndex);
+            }
+        };
+
+        return box;
+    }
+
+    /// <summary>
+    /// A label above the thing it names, for the inside of a widget's own
+    /// settings - where there is no room for a row's two columns.
+    /// </summary>
+    public static StackPanel Field(string label, FrameworkElement control, string? note = null)
+    {
+        var stack = new StackPanel { Spacing = 6 };
+
+        stack.Children.Add(new TextBlock
+        {
+            Text = label,
+            FontSize = NameSize,
+            Foreground = Tx,
+            TextWrapping = TextWrapping.Wrap,
+        });
+
+        if (note is { Length: > 0 })
+        {
+            stack.Children.Add(new TextBlock
+            {
+                Text = note,
+                FontSize = NoteSize,
+                Foreground = Tx3,
+                LineHeight = 17,
+                TextWrapping = TextWrapping.Wrap,
+            });
+        }
+
+        control.HorizontalAlignment = HorizontalAlignment.Left;
+        stack.Children.Add(control);
+        return stack;
+    }
 
     /// <summary>A tile a picture or a glyph sits in - an icon, a swatch.</summary>
     public static Border Tile(double size, UIElement? content = null) => new()

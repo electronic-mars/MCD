@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Mcd.App.Dock;
@@ -96,30 +96,14 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             ? 60
             : Orientation == Orientation.Vertical ? Metrics[0].Height() : Metrics[0].Width();
 
-    public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
-    {
-        var box = new ComboBox
-        {
-            Header = Loc.Tr("GaugeWhich", "Which reading"),
-            SelectedIndex = Array.FindIndex(Known, r => r.Id == Reading.Id),
-        };
-
-        foreach (GaugeReading reading in Known)
-        {
-            box.Items.Add(reading.Label);
-        }
-
-        box.SelectionChanged += (_, _) =>
-        {
-            if (box.SelectedIndex >= 0)
-            {
-                changed(WidgetOptions.Merge(
-                    Options, ("reading", JsonValue.Create(Known[box.SelectedIndex].Id))));
-            }
-        };
-
-        return box;
-    }
+    public override FrameworkElement CreateEditor(Action<JsonElement?> changed) =>
+        Mcd.App.Settings.Braun.Field(
+            Loc.Tr("GaugeWhich", "Which reading"),
+            Mcd.App.Settings.Braun.Choice(
+                [.. Known.Select(r => r.Label)],
+                Array.FindIndex(Known, r => r.Id == Reading.Id),
+                i => changed(WidgetOptions.Merge(
+                    Options, ("reading", JsonValue.Create(Known[i].Id))))));
 
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>

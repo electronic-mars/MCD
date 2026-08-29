@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
@@ -145,47 +145,25 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     public override string Summarise() =>
         Seconds ? Loc.Tr("ClockWithSeconds", "with seconds") : string.Empty;
 
-    public override FrameworkElement? CreateEditor(Action<JsonElement?> changed)
+    public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
-        var panel = new StackPanel { Spacing = 10 };
+        var panel = new StackPanel { Spacing = 14 };
 
-        panel.Children.Add(Switch(
+        panel.Children.Add(Mcd.App.Settings.Braun.Field(
             Loc.Tr("ClockSeconds", "Show seconds"),
-            Seconds,
-            on => changed(WidgetJson.Object(
-                ("seconds", on ? 1 : 0), ("date", WithDate ? 1 : 0)))));
+            Mcd.App.Settings.Braun.Switch(
+                Seconds,
+                on => changed(WidgetJson.Object(
+                    ("seconds", on ? 1 : 0), ("date", WithDate ? 1 : 0))))));
 
-        panel.Children.Add(Switch(
+        panel.Children.Add(Mcd.App.Settings.Braun.Field(
             Loc.Tr("ClockDate", "Show the date underneath"),
-            WithDate,
-            on => changed(WidgetJson.Object(
-                ("seconds", Seconds ? 1 : 0), ("date", on ? 1 : 0)))));
+            Mcd.App.Settings.Braun.Switch(
+                WithDate,
+                on => changed(WidgetJson.Object(
+                    ("seconds", Seconds ? 1 : 0), ("date", on ? 1 : 0)))),
+            Loc.Tr("ClockDateHint", "A compact bar has one line, and the time is the line worth having.")));
 
         return panel;
-    }
-
-    private static Grid Switch(string label, bool on, Action<bool> set)
-    {
-        var row = new Grid { ColumnSpacing = 12 };
-        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-
-        var text = new TextBlock { Text = label, VerticalAlignment = VerticalAlignment.Center };
-        row.Children.Add(text);
-
-        var toggle = new ToggleSwitch
-        {
-            IsOn = on,
-            OnContent = null,
-            OffContent = null,
-            MinWidth = 0,
-            HorizontalAlignment = HorizontalAlignment.Right,
-        };
-
-        toggle.Toggled += (_, _) => set(toggle.IsOn);
-        Grid.SetColumn(toggle, 1);
-        row.Children.Add(toggle);
-
-        return row;
     }
 }

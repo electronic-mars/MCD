@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Mcd.App.Dock;
@@ -92,42 +92,27 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
-        var panel = new StackPanel { Spacing = 8 };
+        var panel = new StackPanel { Spacing = 14 };
 
         SensorDescriptor[] found = [.. Everything()];
 
-        var box = new ComboBox
-        {
-            Header = Loc.Tr("TempWhich", "Which sensor"),
-            MaxWidth = 320,
-        };
-
         // The first entry is the roving one; each sensor after it is itself.
-        box.Items.Add(Loc.Tr("TempHottestSummary", "The hottest reading"));
-
-        foreach (SensorDescriptor sensor in found)
-        {
-            box.Items.Add(Describe(sensor));
-        }
+        List<string> names =
+        [
+            Loc.Tr("TempHottestSummary", "The hottest reading"),
+            .. found.Select(Describe),
+        ];
 
         SensorKey? chosen = Chosen;
-        box.SelectedIndex = chosen is { } key
-            ? Array.FindIndex(found, s => s.Key.Equals(key)) + 1
-            : 0;
 
-        box.SelectionChanged += (_, _) =>
-        {
-            if (box.SelectedIndex >= 0)
-            {
-                changed(WidgetOptions.Merge(
+        panel.Children.Add(Mcd.App.Settings.Braun.Field(
+            Loc.Tr("TempWhich", "Which sensor"),
+            Mcd.App.Settings.Braun.Choice(
+                names,
+                chosen is { } key ? Array.FindIndex(found, d => d.Key.Equals(key)) + 1 : 0,
+                i => changed(WidgetOptions.Merge(
                     Options,
-                    ("sensor", box.SelectedIndex == 0
-                        ? null
-                        : JsonValue.Create(found[box.SelectedIndex - 1].Key.Value))));
-            }
-        };
-
-        panel.Children.Add(box);
+                    ("sensor", i == 0 ? null : JsonValue.Create(found[i - 1].Key.Value)))))));
 
         if (found.Length > 0 && found.All(s => s.Group != HardwareGroup.Cpu))
         {

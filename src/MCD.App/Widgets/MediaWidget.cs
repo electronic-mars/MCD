@@ -179,27 +179,21 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
-        var title = new ToggleSwitch
-        {
-            Header = Loc.Tr("MediaTitleHeader", "Write the track on the bar"),
-            OnContent = Loc.Tr("MediaTitleOn", "Written next to the buttons"),
-            OffContent = Loc.Tr("MediaTitleOff", "Only in the tooltip"),
-            IsOn = ShowTitle,
-        };
-
-        title.Toggled += (_, _) =>
-            changed(WidgetOptions.Merge(Options, ("title", title.IsOn ? "shown" : null)));
+        // One label that says what being on means, not two that swap with the
+        // state: a caption beside a switch reading "Only in the tooltip" could
+        // be describing where the track is now or where pressing would put it,
+        // and there is no way to tell which.
+        StackPanel title = Mcd.App.Settings.Braun.Field(
+            Loc.Tr("MediaTitleHeader", "Write the track on the bar"),
+            Mcd.App.Settings.Braun.Switch(
+                ShowTitle,
+                on => changed(WidgetOptions.Merge(Options, ("title", on ? "shown" : null)))),
+            Loc.Tr("MediaTitleHint", "Off puts it in the tooltip instead."));
 
         // The nomination. The chosen player is always offered, running or
         // not, or the setting could not be seen - let alone taken away.
-        var players = new ComboBox
-        {
-            Header = Loc.Tr("MediaPriorityHeader", "The buttons always drive"),
-            MinWidth = 220,
-        };
-
         var ids = new List<string> { string.Empty };
-        players.Items.Add(Loc.Tr("MediaPriorityNone", "Automatic: whoever is playing now"));
+        var names = new List<string> { Loc.Tr("MediaPriorityNone", "Automatic: whoever is playing now") };
 
         Dictionary<string, string> offer = new(Seen);
 
@@ -211,22 +205,25 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         foreach ((string id, string name) in offer.OrderBy(kv => kv.Value))
         {
             ids.Add(id);
-            players.Items.Add(name);
+            names.Add(name);
         }
 
-        players.SelectedIndex = Math.Max(0, ids.IndexOf(Nominated));
+        StackPanel players = Mcd.App.Settings.Braun.Field(
+            Loc.Tr("MediaPriorityHeader", "The buttons always drive"),
+            Mcd.App.Settings.Braun.Choice(
+                names,
+                Math.Max(0, ids.IndexOf(Nominated)),
+                i =>
+                {
+                    string id = ids[i];
 
-        players.SelectionChanged += (_, _) =>
-        {
-            string id = ids[Math.Max(0, players.SelectedIndex)];
+                    changed(WidgetOptions.Merge(
+                        Options,
+                        ("player", id.Length > 0 ? id : null),
+                        ("playerName", id.Length > 0 ? Short(id) : null)));
+                }));
 
-            changed(WidgetOptions.Merge(
-                Options,
-                ("player", id.Length > 0 ? id : null),
-                ("playerName", id.Length > 0 ? Short(id) : null)));
-        };
-
-        return new StackPanel { Spacing = 10, Children = { title, players } };
+        return new StackPanel { Spacing = 14, Children = { title, players } };
     }
 
     public override void Dispose()

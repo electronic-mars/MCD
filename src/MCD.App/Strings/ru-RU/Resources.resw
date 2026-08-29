@@ -830,4 +830,10 @@
   <data name="UndoRowHint" xml:space="preserve">
     <value>И то, что на этой странице, и то, что сделано на самой панели.</value>
   </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Если выключено, название уходит во всплывающую подсказку.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>На компактной панели одна строка, и время — та строка, которую стоит занять.</value>
+  </data>
 </root>
