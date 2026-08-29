@@ -773,4 +773,43 @@
   <data name="SenseNetDown" xml:space="preserve">
     <value>Сколько данных приходит прямо сейчас.</value>
   </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Часы</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>Время, а под ним дата — на полноразмерной панели.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Показывать секунды</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Показывать дату под временем</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>с секундами</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>Как панель держит свой край</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Держит место</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Прячется</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>На рабочем столе</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>Панель удерживает свою полосу экрана. Развёрнутое окно останавливается перед ней, а не закрывает её.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>Панель уходит за край экрана и возвращается, когда курсор доходит до этого края.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>Панель лежит на рабочем столе: она не отнимает места у окон, и любое открытое поверх окно её закрывает.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>способ удержания края</value>
+  </data>
 </root>

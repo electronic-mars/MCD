@@ -619,24 +619,44 @@ public sealed partial class SettingsWindow : Window
 
         bool clash = dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge);
 
+        AppBarMode[] modes = [AppBarMode.Pinned, AppBarMode.AutoHide, AppBarMode.Desktop];
+
         gated.Children.Add(Braun.Group(
             Braun.Row(
-                Loc.Tr("BehaviourLabel", "Hide until you point at its edge"),
-                clash
-                    ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this dock stays visible.")
-                    : Loc.Tr("BehaviourHint", "The bar steps off the screen and comes back when the pointer reaches that edge."),
-                Braun.Switch(
-                    dock.Mode == AppBarMode.AutoHide,
-                    on => SetDock(
-                        d => d with { Mode = on ? AppBarMode.AutoHide : AppBarMode.Pinned },
-                        Loc.Tr("UndoAutoHide", "hiding")))),
+                Loc.Tr("ModeLabel", "How the bar holds its edge"),
+                dock.Mode switch
+                {
+                    AppBarMode.AutoHide => clash
+                        ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this dock stays visible.")
+                        : Loc.Tr("ModeHideHint", "The bar steps off the screen and comes back when the pointer reaches that edge."),
+                    AppBarMode.Desktop => Loc.Tr(
+                        "ModeDesktopHint",
+                        "The bar lies on the desktop: it takes no room from other windows, and any window opened over it covers it."),
+                    _ => Loc.Tr(
+                        "ModePinnedHint",
+                        "The bar keeps its strip of screen. A maximised window stops at it rather than covering it."),
+                },
+                Braun.Segs(
+                    [
+                        Loc.Tr("ModePinned", "Keeps its place"),
+                        Loc.Tr("ModeHide", "Hides"),
+                        Loc.Tr("ModeDesktop", "On the desktop"),
+                    ],
+                    Math.Max(0, Array.IndexOf(modes, dock.Mode)),
+                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")),
+                    wide: true),
+                stack: true),
 
-            Braun.Row(
-                Loc.Tr("TopmostLabel", "Keep above other windows"),
-                Loc.Tr("TopmostHint", "Off lets a maximised window cover the bar."),
-                Braun.Switch(
-                    dock.Topmost,
-                    on => SetDock(d => d with { Topmost = on }, Loc.Tr("UndoTopmost", "topmost"))))));
+            // Not offered on the desktop, where it would contradict the mode
+            // rather than qualify it. A setting that cannot act is not shown.
+            dock.Mode == AppBarMode.Desktop
+                ? null
+                : Braun.Row(
+                    Loc.Tr("TopmostLabel", "Keep above other windows"),
+                    Loc.Tr("TopmostHint", "Off lets a maximised window cover the bar."),
+                    Braun.Switch(
+                        dock.Topmost,
+                        on => SetDock(d => d with { Topmost = on }, Loc.Tr("UndoTopmost", "topmost"))))));
 
         _filling = false;
     }

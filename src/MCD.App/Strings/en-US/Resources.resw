@@ -773,4 +773,43 @@
   <data name="SenseNetDown" xml:space="preserve">
     <value>How much data is coming in right now.</value>
   </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Clock</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>The time, and the date under it on a full-size bar.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Show seconds</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Show the date underneath</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>with seconds</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>How the bar holds its edge</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Keeps its place</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Hides</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>On the desktop</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>The bar keeps its strip of screen. A maximised window stops at it rather than covering it.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>The bar steps off the screen and comes back when the pointer reaches that edge.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>The bar lies on the desktop: it takes no room from other windows, and any window opened over it covers it.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>how it holds its edge</value>
+  </data>
 </root>

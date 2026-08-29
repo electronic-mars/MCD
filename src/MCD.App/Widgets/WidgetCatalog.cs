@@ -70,6 +70,13 @@ public static class WidgetCatalog
             (context, entry) => new IconWidget(context, entry)),
 
         new(
+            ClockWidget.Type,
+            Loc.Tr("WidgetClockName", "Clock"),
+            Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
+            "Clock",
+            (context, entry) => new ClockWidget(context, entry)),
+
+        new(
             MediaWidget.Type,
             Loc.Tr("WidgetMediaName", "Media"),
             Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
@@ -140,6 +147,13 @@ public static class WidgetCatalog
                 entry => entry.TypeId == TempWidget.Type
                     && WidgetOptions.Text(entry.Config, "sensor") == key);
         }
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetClockName", "Clock"),
+            Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
+            "Clock",
+            () => WidgetConfig.New(ClockWidget.Type),
+            entry => entry.TypeId == ClockWidget.Type);
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetMediaName", "Media"),

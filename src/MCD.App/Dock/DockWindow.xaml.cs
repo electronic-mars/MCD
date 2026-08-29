@@ -124,7 +124,7 @@ public sealed partial class DockWindow : Window
         Dress(context);
 
         WindowFrame.MakeChromeless(_hwnd);
-        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
+        Raise(config);
 
         InnerEdge.BorderThickness = InnerBorder(config.Edge);
 
@@ -291,16 +291,24 @@ public sealed partial class DockWindow : Window
         // window has not reached its monitor yet the first time this runs.
         int thickness = DockMetrics.ThicknessPixels(Config.Edge, Config.Density, Monitor.Scale);
 
-        if (_hiding)
+        if (_hiding || Config.Mode == AppBarMode.Desktop)
         {
-            // An auto-hiding bar reserves nothing, so there is nothing to ask
-            // the shell about. Where it sits is ours to decide, and it is
-            // decided by how far through the slide it currently is.
+            // Neither of these reserves anything, so there is nothing to ask
+            // the shell about. Where the bar sits is ours to decide: for a
+            // hiding bar, by how far through the slide it is; for one lying
+            // on the desktop, flush against its edge and stays there.
             Place(thickness);
         }
         else
         {
             _appBar.SetPosition(Config.Edge, Monitor.Bounds, thickness);
+        }
+
+        if (Config.Mode == AppBarMode.Desktop)
+        {
+            // Under everything. Asked for again on every position change,
+            // because anything that raises a window can lift this one with it.
+            WindowFrame.SendToBottom(_hwnd);
         }
 
         _log.LogInformation(
@@ -975,7 +983,8 @@ public sealed partial class DockWindow : Window
     public void SetTopmost(MonitorConfig config)
     {
         Config = config;
-        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
+
+        Raise(config);
     }
 
     /// <summary>
@@ -1024,6 +1033,26 @@ public sealed partial class DockWindow : Window
         return _hosts.Count;
     }
 
+    /// <summary>
+    /// Puts the bar where it belongs in the pile of windows.
+    /// </summary>
+    /// <remarks>
+    /// Three answers, and only three: above everything, in with everything,
+    /// or under everything. The last is the bar as a thing lying on the desk,
+    /// which is what "show it on the desktop only" means - it is not hidden,
+    /// it is simply covered by whatever is opened over it.
+    /// </remarks>
+    private void Raise(MonitorConfig config)
+    {
+        if (config.Mode == AppBarMode.Desktop)
+        {
+            WindowFrame.SendToBottom(_hwnd);
+            return;
+        }
+
+        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
+    }
+
     /// <summary>Fills the bar for the first time. Call once, after wiring up.</summary>
     public void Fill()
     {
@@ -1057,7 +1086,7 @@ public sealed partial class DockWindow : Window
         Config = config;
         _context = context;
         Dress(context);
-        WindowFrame.SetTopmost(_hwnd, topmost: config.Topmost);
+        Raise(config);
 
         foreach (WidgetHost host in _hosts)
         {
@@ -1637,7 +1666,7 @@ public sealed partial class DockWindow : Window
                 }
                 else
                 {
-                    WindowFrame.SetTopmost(_hwnd, topmost: Config.Topmost);
+                    Raise(Config);
                 }
 
                 break;

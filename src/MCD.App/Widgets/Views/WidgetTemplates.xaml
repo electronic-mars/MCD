@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary
     x:Class="Mcd.App.Widgets.Views.WidgetTemplates"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -149,6 +149,28 @@
 
     <DataTemplate x:Key="mcd.temp" x:DataType="widgets:TempWidget">
         <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}" />
+    </DataTemplate>
+
+    <!-- The time, and the date under it on a full-size bar. Tabular figures
+         so the minute changing does not shuffle the hour along. -->
+    <DataTemplate x:Key="mcd.clock" x:DataType="widgets:ClockWidget">
+        <StackPanel
+            Margin="6,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontFamily="Consolas"
+                FontSize="{x:Bind TimeSize, Mode=OneWay}"
+                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                Text="{x:Bind Time, Mode=OneWay}" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="{x:Bind DateSize, Mode=OneWay}"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind Date, Mode=OneWay}"
+                Visibility="{x:Bind DateVisible, Mode=OneWay}" />
+        </StackPanel>
     </DataTemplate>
 
     <!--

@@ -315,7 +315,15 @@ public sealed partial class Metric : ObservableObject
         return 6 + Spacing.Top + Spacing.Bottom + Math.Max(IconSize, lines);
     }
 
-    private static double Wide(string text, double size)
+    /// <summary>
+    /// How wide a piece of text is, measured rather than estimated.
+    /// </summary>
+    /// <remarks>
+    /// Shared with anything else that has to declare its length before it is
+    /// drawn - the clock, whose slot must fit the longest time it can ever
+    /// show rather than the one it shows now.
+    /// </remarks>
+    public static double Wide(string text, double size)
     {
         Ruler.FontSize = size;
         Ruler.Text = text;
