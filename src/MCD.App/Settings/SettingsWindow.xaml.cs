@@ -849,6 +849,25 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("PinProgramButton", "Pin a program..."), () => _ = PinDialog(), "Plus")),
 
+            // Only when there are any. A row that says "nothing is missing"
+            // on every ordinary day is a row nobody reads on the day
+            // something is.
+            Crowded(dock) is { Count: > 0 } stranded
+                ? Braun.Row(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr("CrowdedRow", "{0} of these do not fit"),
+                        stranded.Count),
+                    Loc.Tr(
+                        "CrowdedRowHint",
+                        "The bar has run out of places. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it."),
+                    Braun.Action(
+                        Loc.Tr("CrowdedButton", "Take them off"),
+                        () => Shed(dock, stranded),
+                        "Delete",
+                        danger: true))
+                : null,
+
             Braun.Row(
                 Loc.Tr("ResetRow", "The standard set"),
                 Loc.Tr(
@@ -920,6 +939,21 @@ public sealed partial class SettingsWindow : Window
 
         EditDock(change, what);
         ShowDock();
+    }
+
+    /// <summary>What this screen's bar is holding but has no room to show.</summary>
+    private IReadOnlyList<WidgetConfig> Crowded(MonitorConfig dock) =>
+        _docks.Unplaced(dock.StableId);
+
+    /// <summary>Takes off the ones that would not fit.</summary>
+    private void Shed(MonitorConfig dock, IReadOnlyList<WidgetConfig> stranded)
+    {
+        var gone = stranded.Select(w => w.InstanceId).ToHashSet(StringComparer.Ordinal);
+
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets.Where(w => !gone.Contains(w.InstanceId))],
+            Loc.Tr("UndoCrowded", "the ones that did not fit"));
     }
 
     /// <summary>

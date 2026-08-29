@@ -1,0 +1,7 @@
+// The device sound is coming out of, and its volume.
+IMMDeviceEnumerator
+MMDeviceEnumerator
+IAudioEndpointVolume
+EDataFlow
+ERole
+CLSCTX

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MCD.Audio\MCD.Audio.csproj" />
     <ProjectReference Include="..\MCD.Core\MCD.Core.csproj" />
     <ProjectReference Include="..\MCD.Sensors\MCD.Sensors.csproj" />
     <ProjectReference Include="..\MCD.Interop\MCD.Interop.csproj" />

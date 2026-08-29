@@ -226,6 +226,10 @@ public sealed class DockWindowManager : IDisposable
         return hosts;
     }
 
+    /// <summary>What the bar on this screen is holding but cannot show.</summary>
+    public IReadOnlyList<WidgetConfig> Unplaced(string stableId) =>
+        _windows.TryGetValue(stableId, out DockWindow? window) ? window.Unplaced : [];
+
     private WidgetContext Context()
     {
         AppSettings app = _settings.Current.App;

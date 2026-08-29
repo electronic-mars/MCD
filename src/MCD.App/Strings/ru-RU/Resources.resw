@@ -836,4 +836,28 @@
   <data name="ClockDateHint" xml:space="preserve">
     <value>На компактной панели одна строка, и время — та строка, которую стоит занять.</value>
   </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>{0} из них не помещаются</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>На панели кончились места. Они сохранены и вернутся, если панель станет длиннее — повёрнутая иначе или компактная. До тех пор их на ней нет и с неё до них не добраться.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Убрать их</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>непоместившиеся</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Звук</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Выключает звук и показывает, насколько он громкий.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Писать громкость</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>Динамик и сам говорит, есть звук или нет.</value>
+  </data>
 </root>

@@ -77,6 +77,13 @@ public static class WidgetCatalog
             (context, entry) => new IconWidget(context, entry)),
 
         new(
+            SoundWidget.Type,
+            Loc.Tr("WidgetSoundName", "Sound"),
+            Loc.Tr("WidgetSoundDescription", "Silences the machine, and says how loud it is."),
+            "Speaker",
+            (context, entry) => new SoundWidget(context, entry)),
+
+        new(
             ClockWidget.Type,
             Loc.Tr("WidgetClockName", "Clock"),
             Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
@@ -156,6 +163,13 @@ public static class WidgetCatalog
                     && WidgetOptions.Text(entry.Config, "sensor") == key,
                 Chooses: "temp");
         }
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetSoundName", "Sound"),
+            Loc.Tr("WidgetSoundDescription", "Silences the machine, and says how loud it is."),
+            "Speaker",
+            () => WidgetConfig.New(SoundWidget.Type),
+            entry => entry.TypeId == SoundWidget.Type);
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetClockName", "Clock"),

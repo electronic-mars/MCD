@@ -96,6 +96,11 @@ ICONS: dict[str, str] = {
     "Sliders": "sliders-horizontal",
     "Info": "information-circle",
     "List": "list-view",
+    # The sound widget draws one of four, by how loud it is.
+    "Speaker": "volume-high",
+    "SpeakerMid": "volume-up",
+    "SpeakerLow": "volume-low",
+    "SpeakerOff": "volume-mute-01",
 }
 
 

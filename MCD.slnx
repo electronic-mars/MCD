@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/MCD.App/MCD.App.csproj" />
+    <Project Path="src/MCD.Audio/MCD.Audio.csproj" />
     <Project Path="src/MCD.Core/MCD.Core.csproj" />
     <Project Path="src/MCD.Interop/MCD.Interop.csproj" />
     <Project Path="src/MCD.Sensors/MCD.Sensors.csproj" />

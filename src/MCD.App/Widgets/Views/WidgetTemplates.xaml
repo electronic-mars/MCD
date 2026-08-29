@@ -151,6 +151,37 @@
         <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}" />
     </DataTemplate>
 
+    <!-- Sound: a speaker that says how loud, and a press that silences. -->
+    <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
+        <widgets:HoverChip Margin="6,0" Visibility="{x:Bind Shown, Mode=OneWay}">
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="6"
+                VerticalAlignment="Center">
+                <Viewbox
+                    Width="{x:Bind IconSize, Mode=OneWay}"
+                    Height="{x:Bind IconSize, Mode=OneWay}"
+                    VerticalAlignment="Center">
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="1.7" />
+                    </Canvas>
+                </Viewbox>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="{x:Bind FontSize, Mode=OneWay}"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    Text="{x:Bind Level, Mode=OneWay}"
+                    Visibility="{x:Bind LevelVisible, Mode=OneWay}" />
+            </StackPanel>
+        </widgets:HoverChip>
+    </DataTemplate>
+
     <!-- The time, and the date under it on a full-size bar. Tabular figures
          so the minute changing does not shuffle the hour along. -->
     <DataTemplate x:Key="mcd.clock" x:DataType="widgets:ClockWidget">

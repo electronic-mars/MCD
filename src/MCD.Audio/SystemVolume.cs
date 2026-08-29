@@ -1,0 +1,84 @@
+﻿using Windows.Win32.Media.Audio;
+using Windows.Win32.Media.Audio.Endpoints;
+using Windows.Win32.System.Com;
+
+namespace Mcd.Audio;
+
+/// <summary>
+/// The machine's own volume, on the device sound is coming out of.
+/// </summary>
+/// <remarks>
+/// <para>
+/// The endpoint is asked for afresh every time rather than kept. A default
+/// playback device is not a fixed thing: headphones are plugged in, a monitor
+/// with speakers wakes up, somebody switches device in the tray - and a held
+/// interface then quietly controls a device nobody is listening to. Asking
+/// again costs one COM call, and nothing here runs more than once a second.
+/// </para>
+/// <para>
+/// Every call answers with what it managed rather than throwing. A machine
+/// in a rack has no sound device at all, and a bar that shows a speaker
+/// should hide it, not fall over.
+/// </para>
+/// </remarks>
+public static unsafe class SystemVolume
+{
+    /// <summary>Whether sound is silenced, or null when nothing can say.</summary>
+    public static bool? Muted() => With(volume =>
+    {
+        Windows.Win32.Foundation.BOOL muted;
+        volume.GetMute(&muted);
+
+        return (bool)muted;
+    });
+
+    /// <summary>How loud it is, nought to one, or null when nothing can say.</summary>
+    public static float? Level() => With(volume =>
+    {
+        volume.GetMasterVolumeLevelScalar(out float level);
+
+        return level;
+    });
+
+    /// <summary>Silences the machine, or lets it speak again.</summary>
+    public static bool Mute(bool on) => With<bool>(volume =>
+    {
+        volume.SetMute(on, null);
+        return true;
+    }) ?? false;
+
+    /// <summary>Sets how loud it is, nought to one.</summary>
+    public static bool Set(float level) => With<bool>(volume =>
+    {
+        volume.SetMasterVolumeLevelScalar(Math.Clamp(level, 0f, 1f), null);
+        return true;
+    }) ?? false;
+
+    /// <summary>
+    /// Opens the endpoint sound is playing through, does one thing with it,
+    /// and lets it go.
+    /// </summary>
+    private static T? With<T>(Func<IAudioEndpointVolume, T> work)
+        where T : struct
+    {
+        try
+        {
+            var enumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
+
+            enumerator.GetDefaultAudioEndpoint(
+                EDataFlow.eRender, ERole.eMultimedia, out IMMDevice device);
+
+            Guid iid = typeof(IAudioEndpointVolume).GUID;
+
+            device.Activate(&iid, CLSCTX.CLSCTX_INPROC_SERVER, null, out object activated);
+
+            return work((IAudioEndpointVolume)activated);
+        }
+        catch (Exception)
+        {
+            // No playback device, or one that went away between being named
+            // and being opened. Neither is this program's business.
+            return null;
+        }
+    }
+}

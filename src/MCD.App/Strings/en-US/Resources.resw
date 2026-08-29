@@ -836,4 +836,28 @@
   <data name="ClockDateHint" xml:space="preserve">
     <value>A compact bar has one line, and the time is the line worth having.</value>
   </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>{0} of these do not fit</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>The bar has run out of places. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Take them off</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>the ones that did not fit</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Sound</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Silences the machine, and says how loud it is.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Write how loud it is</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>The speaker alone already says whether there is any.</value>
+  </data>
 </root>

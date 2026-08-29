@@ -1,0 +1,141 @@
+using System.Text.Json;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Mcd.App.Dock;
+using Mcd.Audio;
+using Mcd.Core.Settings;
+using Mcd.Sensors.Contracts;
+using Microsoft.UI.Xaml;
+
+namespace Mcd.App.Widgets;
+
+/// <summary>
+/// Sound on or off, and how loud it is.
+/// </summary>
+/// <remarks>
+/// <para>
+/// The most-wanted button on any control surface: every survey of what
+/// people put on one puts silencing the machine first. It is also the one
+/// thing a bar can do that a bar full of readings cannot - a number tells
+/// you something, and this changes something.
+/// </para>
+/// <para>
+/// The whole widget hides on a machine with no playback device rather than
+/// showing a speaker that does nothing. An empty chip that never fills in
+/// looks like a fault; its absence does not.
+/// </para>
+/// </remarks>
+public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entry)
+    : WidgetViewModel(context, entry)
+{
+    public const string Type = "mcd.sound";
+
+    public override string TypeId => Type;
+
+    /// <summary>Which speaker is drawn: silent, quiet, half, loud.</summary>
+    [ObservableProperty]
+    public partial string Icon { get; set; } = "Speaker";
+
+    /// <summary>How loud, as a percentage, or nothing on a compact bar.</summary>
+    [ObservableProperty]
+    public partial string Level { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial Visibility LevelVisible { get; set; } = Visibility.Visible;
+
+    [ObservableProperty]
+    public partial Visibility Shown { get; set; } = Visibility.Visible;
+
+    [ObservableProperty]
+    public partial double IconSize { get; set; } = 16;
+
+    [ObservableProperty]
+    public partial double FontSize { get; set; } = 12;
+
+    /// <summary>Whether the figure is written beside the speaker.</summary>
+    private bool WithLevel => WidgetOptions.Number(Options, "level") is not 0;
+
+    public override void Attach() => Tick(SensorSnapshot.Empty);
+
+    public override void Tick(SensorSnapshot snapshot)
+    {
+        bool? muted = SystemVolume.Muted();
+
+        if (muted is null)
+        {
+            Shown = Visibility.Collapsed;
+            return;
+        }
+
+        Shown = Visibility.Visible;
+        IconSize = DockMetrics.ReadingIcon(Density);
+        FontSize = DockMetrics.ReadingFont(Density);
+
+        float loud = SystemVolume.Level() ?? 0f;
+
+        Icon = muted.Value ? "SpeakerOff"
+            : loud < 0.01f ? "SpeakerOff"
+            : loud < 0.34f ? "SpeakerLow"
+            : loud < 0.67f ? "SpeakerMid"
+            : "Speaker";
+
+        bool room = WithLevel && Density == DockDensity.Default;
+
+        LevelVisible = room ? Visibility.Visible : Visibility.Collapsed;
+
+        Level = room
+            ? Math.Round(loud * 100).ToString("F0", System.Globalization.CultureInfo.InvariantCulture) + " %"
+            : string.Empty;
+    }
+
+    /// <summary>
+    /// A press silences the machine, or lets it speak again.
+    /// </summary>
+    /// <remarks>
+    /// Read back rather than assumed: something else may have changed it
+    /// between the last tick and this press, and a button that toggles what
+    /// it last saw rather than what is true gets out of step and stays there.
+    /// </remarks>
+    public override void Press()
+    {
+        if (SystemVolume.Muted() is not { } muted)
+        {
+            return;
+        }
+
+        SystemVolume.Mute(!muted);
+        Tick(SensorSnapshot.Empty);
+    }
+
+    /// <summary>
+    /// How much bar this takes.
+    /// </summary>
+    /// <remarks>
+    /// Sized for "100 %" whether it says that or not: a slot that grew when
+    /// the volume went from 99 to 100 would shuffle the bar along while
+    /// somebody was turning a knob.
+    /// </remarks>
+    public override double Length()
+    {
+        if (Shown == Visibility.Collapsed)
+        {
+            return 0;
+        }
+
+        double along = DockMetrics.ReadingIcon(Density) + 12;
+
+        if (LevelVisible == Visibility.Visible)
+        {
+            along += Metric.Wide("100 %", DockMetrics.ReadingFont(Density)) + 6;
+        }
+
+        return Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical ? 30 : along;
+    }
+
+    public override FrameworkElement CreateEditor(Action<JsonElement?> changed) =>
+        Mcd.App.Settings.Braun.Field(
+            Loc.Tr("SoundLevelLabel", "Write how loud it is"),
+            Mcd.App.Settings.Braun.Switch(
+                WithLevel,
+                on => changed(WidgetJson.Object(("level", on ? 1 : 0)))),
+            Loc.Tr("SoundLevelHint", "The speaker alone already says whether there is any."));
+}

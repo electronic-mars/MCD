@@ -1296,6 +1296,20 @@ public sealed partial class DockWindow : Window
             b.Config?.GetRawText() ?? string.Empty,
             StringComparison.Ordinal);
 
+    /// <summary>
+    /// The widgets this bar is holding but cannot show.
+    /// </summary>
+    /// <remarks>
+    /// A bar that has run out of room keeps what will not fit rather than
+    /// throwing it away - somebody's pinned program should survive a screen
+    /// being turned sideways for an afternoon. But a thing that is not drawn
+    /// cannot be right-clicked, and right-clicking it was the only way to
+    /// reach it: it was in the settings file, counted by the gallery, and
+    /// removable from nowhere. Naming them is what makes them reachable.
+    /// </remarks>
+    public IReadOnlyList<WidgetConfig> Unplaced =>
+        [.. Config.Widgets.Where(w => !_placed.Any(p => p.InstanceId == w.InstanceId))];
+
     /// <summary>What was built for this bar, and where each of it went.</summary>
     private List<(WidgetConfig Entry, int Span)> _built = [];
     private Dictionary<string, WidgetHost> _drawn = [];
