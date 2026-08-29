@@ -676,20 +676,9 @@ public sealed partial class DockWindow : Window
             return;
         }
 
-        // Only the free ones. Ruling a grid across the widgets that are
-        // already there says the bar is graph paper; outlining the gaps
-        // between them says it is a row of sockets with bricks in some of
-        // them, which is what it is. The slots the widget in hand is leaving
-        // count as free - it is on its way out of them.
-        string? leaving = _grabbed?.Entry.InstanceId;
-
-        for (int cell = 0; cell < _capacity; cell++)
+        // Only the free ones, and the ones the widget in hand is leaving.
+        foreach (int cell in DockGrid.Free(_placed, _capacity, _grabbed?.Entry.InstanceId))
         {
-            if (DockGrid.At(_placed, cell) is { } sitting && sitting.InstanceId != leaving)
-            {
-                continue;
-            }
-
             Rect rect = CellRect(cell, 1);
 
             var slot = new Rectangle

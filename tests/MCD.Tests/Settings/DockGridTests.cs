@@ -1,4 +1,4 @@
-using Mcd.Core.Settings;
+﻿using Mcd.Core.Settings;
 using Shouldly;
 
 namespace Mcd.Tests.Settings;
@@ -137,5 +137,34 @@ public sealed class DockGridTests
         DockGrid.At(placed, 4)!.Value.InstanceId.ShouldBe("a");
         DockGrid.At(placed, 5).ShouldBeNull();
         DockGrid.At(placed, 1).ShouldBeNull();
+    }
+
+    [Fact]
+    public void OnlyTheEmptySlotsAreOfferedDuringADrag()
+    {
+        // What the drag draws. A grid ruled through the widgets already
+        // standing on the bar reads as graph paper, and worse, it offers
+        // places nothing can be dropped on.
+        List<Placement> placed = [new("a", 0, 2), new("b", 5, 1)];
+
+        DockGrid.Free(placed, capacity: 8).ShouldBe([2, 3, 4, 6, 7]);
+    }
+
+    [Fact]
+    public void TheSlotsAWidgetIsLeavingCountAsFree()
+    {
+        // Otherwise a widget picked up cannot be put back where it came from,
+        // and the gap it is about to leave is drawn as though it were solid.
+        List<Placement> placed = [new("a", 0, 2), new("b", 5, 1)];
+
+        DockGrid.Free(placed, capacity: 8, ignore: "a").ShouldBe([0, 1, 2, 3, 4, 6, 7]);
+    }
+
+    [Fact]
+    public void AFullBarOffersNothingAtAll()
+    {
+        List<Placement> placed = [new("a", 0, 3)];
+
+        DockGrid.Free(placed, capacity: 3).ShouldBeEmpty();
     }
 }

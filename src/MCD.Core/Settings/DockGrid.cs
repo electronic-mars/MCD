@@ -92,6 +92,39 @@ public static class DockGrid
     }
 
     /// <summary>Which widget covers this slot, if any.</summary>
+    /// <summary>
+    /// The slots a widget could be put on: the empty ones, plus the ones the
+    /// widget in hand is on its way out of.
+    /// </summary>
+    /// <remarks>
+    /// This is what a drag draws. Outlining every slot on the bar - including
+    /// the ones already occupied - rules a grid straight through the widgets
+    /// standing on them and makes the bar read as graph paper. Outlining
+    /// exactly the free ones makes it read as what it is: a row of sockets
+    /// with bricks in some of them.
+    /// </remarks>
+    /// <param name="ignore">
+    /// The widget being moved. Its own slots are free as far as it is
+    /// concerned - dropping it back where it started has to be allowed, and
+    /// the slots it is leaving have to look like somewhere it can land.
+    /// </param>
+    public static List<int> Free(IReadOnlyList<Placement> placed, int capacity, string? ignore = null)
+    {
+        var free = new List<int>();
+
+        for (int cell = 0; cell < capacity; cell++)
+        {
+            if (At(placed, cell) is { } sitting && sitting.InstanceId != ignore)
+            {
+                continue;
+            }
+
+            free.Add(cell);
+        }
+
+        return free;
+    }
+
     public static Placement? At(IReadOnlyList<Placement> placed, int cell)
     {
         foreach (Placement p in placed)
