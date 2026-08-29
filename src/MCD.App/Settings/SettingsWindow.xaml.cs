@@ -124,6 +124,22 @@ public sealed partial class SettingsWindow : Window
     /// appears somewhere the user is not looking.
     /// </para>
     /// </remarks>
+    /// <summary>The narrowest this window is allowed to be, in effective pixels.</summary>
+    /// <remarks>
+    /// The navigation pane folds to icons below 980 and to a hamburger below
+    /// 820; this is under both, so the pane is a single column of icons and
+    /// the content still has room for a settings row and its explanation.
+    /// </remarks>
+    /// <remarks>
+    /// The pane at its open width, the page's own padding either side, and
+    /// enough left for a settings row to keep its words beside its control.
+    /// Measured rather than guessed: below this the explanations start
+    /// wrapping every other word, which the unattended check now looks for.
+    /// </remarks>
+    private const double MinimumWide = 760;
+
+    private const double MinimumTall = 520;
+
     public void SizeAndCentre(MonitorInfo? screen)
     {
         nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
@@ -134,6 +150,17 @@ public sealed partial class SettingsWindow : Window
         var size = new Windows.Graphics.SizeInt32(
             (int)Math.Round(1000 * scale),
             (int)Math.Round(760 * scale));
+
+        // A floor under the window, in the same physical pixels AppWindow
+        // works in. Without one the pane keeps its width while the content
+        // column is squeezed to nothing, and an explanation ends up set one
+        // word to a line - which is not a thing to notice in a screenshot, it
+        // is a thing the window should refuse to do.
+        if (AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
+        {
+            presenter.PreferredMinimumWidth = (int)Math.Round(MinimumWide * scale);
+            presenter.PreferredMinimumHeight = (int)Math.Round(MinimumTall * scale);
+        }
 
         AppWindow.Resize(size);
 
@@ -187,6 +214,117 @@ public sealed partial class SettingsWindow : Window
 
             return;
         }
+    }
+
+    /// <summary>
+    /// Squeezes the window to the narrowest it allows and reports the
+    /// narrowest wrapping text on each page.
+    /// </summary>
+    /// <remarks>
+    /// For the unattended check. A settings page does not fail at a narrow
+    /// width, it degrades: the pane keeps its column, the content gets what
+    /// is left, and an explanation ends up set one word to a line. Nothing
+    /// throws, no test notices, and it is obvious the moment anybody looks.
+    /// So the window is made as small as it is allowed to be and the text is
+    /// measured - a wrapping line under a hundred points wide is a page that
+    /// has collapsed.
+    /// </remarks>
+    /// <summary>
+    /// Makes the window as small as it is allowed to be.
+    /// </summary>
+    /// <remarks>
+    /// Resizing is a request, not a change: the window is laid out again on a
+    /// later turn of the message loop. Measuring in the same breath measures
+    /// the size it used to be, which is how this check first came back with
+    /// comfortable numbers from a window that had not moved.
+    /// </remarks>
+    public void SqueezeBegin()
+    {
+        nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+        double scale = WindowFrame.GetScale(hwnd);
+
+        AppWindow.Resize(new Windows.Graphics.SizeInt32(
+            (int)Math.Round(MinimumWide * scale), (int)Math.Round(MinimumTall * scale)));
+    }
+
+    /// <summary>Reports the narrowest sentence on each page, as it stands now.</summary>
+    public double Squeeze()
+    {
+        double narrowest = double.MaxValue;
+
+        foreach (object item in Nav.MenuItems.Concat(Nav.FooterMenuItems))
+        {
+            if (item is not NavigationViewItem entry || entry.Tag is not string tag)
+            {
+                continue;
+            }
+
+            GoTo(tag);
+            Pages.UpdateLayout();
+
+            (double width, string text) = Narrowest(Pages);
+
+            // The offending line is named. A number alone says a page is
+            // wrong and leaves whoever reads it to go looking; the first
+            // words of the text that got squeezed say where.
+            _log.LogInformation(
+                "selftest.squeezed page={Page} narrowest={Narrowest} window={Window} text={Text}",
+                tag,
+                Math.Round(width),
+                Math.Round(Root.ActualWidth),
+                text.Length > 40 ? text[..40] : text);
+
+            narrowest = Math.Min(narrowest, width);
+        }
+
+        return narrowest;
+    }
+
+    /// <summary>
+    /// The narrowest wrapping line of text anywhere under this element.
+    /// </summary>
+    /// <remarks>
+    /// Only wrapping text, and only a sentence of it. A name like "The bar
+    /// itself" is legitimately as wide as its own words and no wider, and
+    /// counting it finds a narrow thing that is not a fault. What is being
+    /// looked for is a paragraph squeezed into a column of single words, and
+    /// a paragraph is long.
+    /// </remarks>
+    private static (double Width, string Text) Narrowest(DependencyObject root)
+    {
+        (double Width, string Text) narrowest = (double.MaxValue, string.Empty);
+
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(root, i);
+
+            // A page that is not showing keeps whatever width it was last
+            // arranged at, which is nobody's business: all five pages live
+            // in the same panel, so measuring the whole subtree measures the
+            // four that are hidden as well.
+            if (child is UIElement { Visibility: Visibility.Collapsed })
+            {
+                continue;
+            }
+
+            if (child is TextBlock { TextWrapping: not TextWrapping.NoWrap } text
+                && text.Text.Length > 40
+                && text.Visibility == Visibility.Visible
+                && text.ActualWidth > 0
+                && text.ActualWidth < narrowest.Width)
+            {
+                narrowest = (text.ActualWidth, text.Text);
+            }
+
+            (double Width, string Text) below = Narrowest(child);
+
+            if (below.Width < narrowest.Width)
+            {
+                narrowest = below;
+            }
+        }
+
+        return narrowest;
     }
 
     /// <summary>Rebuilds both lists from the settings and the live topology.</summary>

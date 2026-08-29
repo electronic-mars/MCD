@@ -204,8 +204,11 @@ public static class Braun
     /// </param>
     public static Grid Row(string name, string? note, FrameworkElement? control, bool stack = false)
     {
-        var grid = new Grid { Padding = new Thickness(13, 10, 13, 10) };
+        var grid = new Grid { Padding = new Thickness(13, 10, 13, 10), ColumnSpacing = 13 };
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         var words = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
 
@@ -237,42 +240,50 @@ public static class Braun
             return grid;
         }
 
-        // A page built in code is built again on every change, and some of
-        // what goes on it outlives the page - the gallery keeps its chips,
-        // the undo button its label. Adding an element that still belongs to
-        // the page before this one throws, and it throws on the UI thread,
-        // which ends the program. Anything handed in here is taken off its
-        // old page first.
-
-        if (stack)
-        {
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-            if (control is FrameworkElement wide)
-            {
-                wide.Margin = new Thickness(0, 9, 0, 0);
-                wide.HorizontalAlignment = HorizontalAlignment.Stretch;
-            }
-
-            Grid.SetRow(control, 1);
-            grid.Children.Add(control);
-            return grid;
-        }
-
-        grid.ColumnSpacing = 13;
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-
-        if (control is FrameworkElement beside)
-        {
-            beside.VerticalAlignment = VerticalAlignment.Center;
-            beside.HorizontalAlignment = HorizontalAlignment.Right;
-        }
-
-        Grid.SetColumn(control, 1);
         grid.Children.Add(control);
+
+        // Beside the words while there is room for both, underneath when
+        // there is not.
+        //
+        // An Auto column measures at whatever width its content wants and
+        // leaves the starred one the remainder, which can be almost nothing:
+        // a wrapping explanation next to a switch then comes out set one word
+        // to a line. Deciding once at build time is not enough, because the
+        // window can be resized afterwards - so the row decides every time it
+        // is given a width.
+        void Lay(double width)
+        {
+            bool under = stack || width < Roomy;
+
+            control.Margin = under ? new Thickness(0, 9, 0, 0) : new Thickness(0);
+            control.HorizontalAlignment = under ? HorizontalAlignment.Stretch : HorizontalAlignment.Right;
+            control.VerticalAlignment = under ? VerticalAlignment.Top : VerticalAlignment.Center;
+
+            Grid.SetRow(control, under ? 1 : 0);
+            Grid.SetColumn(control, under ? 0 : 1);
+            Grid.SetColumnSpan(control, under ? 2 : 1);
+        }
+
+        Lay(stack ? 0 : double.MaxValue);
+
+        if (!stack)
+        {
+            grid.SizeChanged += (_, e) => Lay(e.NewSize.Width);
+        }
+
         return grid;
     }
+
+    /// <summary>
+    /// The width below which a row puts its control under the words.
+    /// </summary>
+    /// <remarks>
+    /// Enough for the shortest useful explanation beside the widest ordinary
+    /// control - a segmented pair, or a button with a word on it. Under this
+    /// the two are stacked, which always reads, rather than squeezed, which
+    /// stops reading well before it stops fitting.
+    /// </remarks>
+    private const double Roomy = 380;
 
     /// <summary>A value read off a row rather than set on it.</summary>
     public static TextBlock Reading(string text) => new()
@@ -499,18 +510,62 @@ public static class Braun
     /// </remarks>
     public static Button Switch(bool on, Action<bool> set)
     {
-        var knob = new Ellipse
+        const double Wide = 38;
+        const double Tall = 22;
+        const double Ball = 15;
+
+        var track = new Grid { Width = Wide, Height = Tall };
+
+        // The track is a recess whichever way it is set, and it is drawn the
+        // way every recess in this program is: a fill darker than the panel,
+        // then a stroke round the whole outline that is dark at the top and
+        // gone by halfway down.
+        track.Children.Add(new Rectangle
         {
-            Width = 15,
-            Height = 15,
+            RadiusX = Tall / 2,
+            RadiusY = Tall / 2,
+            Fill = on ? Acc : Sunk,
+            Stroke = on ? Clear : LineHi,
+            StrokeThickness = 1,
+        });
+
+        track.Children.Add(new Rectangle
+        {
+            RadiusX = Tall / 2,
+            RadiusY = Tall / 2,
+            StrokeThickness = 1.5,
+            IsHitTestVisible = false,
+            Stroke = Down(Dark ? 0x59000000u : 0x24000000u, 0.45),
+        });
+
+        // And the knob is a raised thing, drawn the way every raised thing
+        // is: light at the top of its own fill, and a shadow under it.
+        var under = new Border
+        {
+            Width = Ball,
+            Height = Ball,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(on ? 19 : 3, 0, 0, 0),
-            Fill = on ? Paint(0xFFF4F6F9) : Paint(0xFF6D747E),
+            Margin = new Thickness(on ? Wide - Ball - 3 : 3, 0, 0, 0),
+            IsHitTestVisible = false,
         };
 
-        var track = new Grid { Width = 38, Height = 22 };
-        track.Children.Add(knob);
+        var ball = new Ellipse
+        {
+            Width = Ball,
+            Height = Ball,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = under.Margin,
+            IsHitTestVisible = false,
+            Fill = Cylinder(
+                on ? 0xFFFFFFFFu : 0xFF7C838Eu,
+                on ? 0xFFE2E6ECu : 0xFF5A616Bu),
+        };
+
+        track.Children.Add(under);
+        track.Children.Add(ball);
+        Shadow(under, ball, blur: 4, drop: 1, depth: 0.45);
 
         var pill = new Button
         {
@@ -518,10 +573,8 @@ public static class Braun
             MinWidth = 0,
             MinHeight = 0,
             Padding = new Thickness(0),
-            CornerRadius = new CornerRadius(11),
-            BorderThickness = new Thickness(1),
-            BorderBrush = on ? Clear : LineHi,
-            Background = on ? Acc : Sunk,
+            BorderThickness = new Thickness(0),
+            Background = Clear,
         };
 
         pill.Click += (_, _) => set(!on);
@@ -767,7 +820,7 @@ public static class Braun
     /// Sized on every layout pass: a sprite visual has no idea what its host
     /// was arranged into.
     /// </remarks>
-    private static void Shadow(Border under, Rectangle face, double blur, double drop, double depth)
+    private static void Shadow(Border under, Shape face, double blur, double drop, double depth)
     {
         Microsoft.UI.Composition.Visual root =
             Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(under);
@@ -827,6 +880,25 @@ public static class Braun
                     StrokeEndLineCap = PenLineCap.Round,
                 },
             },
+        },
+    };
+
+    /// <summary>
+    /// A fill that is lighter at the top than at the bottom.
+    /// </summary>
+    /// <remarks>
+    /// What makes a small round thing read as a cap rather than a dot. Never
+    /// a flat fill: the reference has no raised surface anywhere that is one
+    /// colour all the way down.
+    /// </remarks>
+    private static LinearGradientBrush Cylinder(uint top, uint bottom) => new()
+    {
+        StartPoint = new Windows.Foundation.Point(0, 0),
+        EndPoint = new Windows.Foundation.Point(0, 1),
+        GradientStops =
+        {
+            new GradientStop { Offset = 0, Color = Hue(top) },
+            new GradientStop { Offset = 1, Color = Hue(bottom) },
         },
     };
 

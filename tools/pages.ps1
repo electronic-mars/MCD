@@ -33,6 +33,12 @@ using System.Runtime.InteropServices;
 public static class Win {
   [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
   [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
+  // Asks the window to draw itself into a bitmap. Grabbing the screen at the
+  // window's coordinates photographs whatever happens to be in front of it -
+  // which on somebody's desk is their browser, and the shot is then a picture
+  // of their browser. PW_RENDERFULLCONTENT (2) is what makes this work for a
+  // composed window rather than returning black.
+  [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr h, IntPtr dc, uint flags);
   [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
   [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
   [DllImport("user32.dll", CharSet=CharSet.Unicode)] public static extern int GetWindowTextW(IntPtr h, System.Text.StringBuilder s, int n);
@@ -92,7 +98,17 @@ while ($seen -lt $wanted.Count -and (Get-Date) -lt $deadline) {
             if ($w -gt 0 -and $ht -gt 0) {
                 $bmp = New-Object System.Drawing.Bitmap($w, $ht)
                 $g = [System.Drawing.Graphics]::FromImage($bmp)
-                $g.CopyFromScreen($r.L, $r.T, 0, 0, $bmp.Size)
+                $dc = $g.GetHdc()
+                $ok = [Win]::PrintWindow($h, $dc, 2)
+                $g.ReleaseHdc($dc)
+
+                if (-not $ok) {
+                    # Some windows refuse; the screen is the fallback, and the
+                    # shot is then only as good as what is in front of it.
+                    $g.CopyFromScreen($r.L, $r.T, 0, 0, $bmp.Size)
+                    Write-Warning "$page was photographed off the screen, not out of the window"
+                }
+
                 $file = Join-Path $Out "$page.png"
                 $bmp.Save($file, [System.Drawing.Imaging.ImageFormat]::Png)
                 $g.Dispose(); $bmp.Dispose()

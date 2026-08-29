@@ -119,7 +119,10 @@
             Grid.Row="1"
             IsBackButtonVisible="Collapsed"
             IsSettingsVisible="False"
-            PaneDisplayMode="Left"
+            OpenPaneLength="248"
+            CompactModeThresholdWidth="820"
+            ExpandedModeThresholdWidth="980"
+            PaneDisplayMode="Auto"
             SelectionChanged="OnSectionChanged">
 
             <NavigationView.MenuItems>
@@ -153,7 +156,7 @@
             </NavigationView.FooterMenuItems>
 
             <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
-                <StackPanel HorizontalAlignment="Left" MaxWidth="1000" Spacing="12">
+                <StackPanel MinWidth="420" MaxWidth="1000" HorizontalAlignment="Left" Spacing="12">
 
                     <!-- Docks. The bar's live picture is the editing surface:
                          what looks like the bar behaves like the bar. -->

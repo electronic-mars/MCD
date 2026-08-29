@@ -395,11 +395,36 @@ public partial class App : Application
                     plan.Monitor, plan.Config.Widgets.FirstOrDefault()?.InstanceId);
 
                 log.LogInformation("selftest.reopened");
+
+                // The window has been shown but not yet arranged: measuring
+                // now reads whatever the first measure guessed. Given a beat,
+                // and then measured.
+                Later(500, () => _settingsWindow?.SqueezeBegin());
+
+                Later(1200, () =>
+                {
+                    try
+                    {
+                        log.LogInformation(
+                            "selftest.squeezed narrowest={Narrowest}",
+                            Math.Round(_settingsWindow?.Squeeze() ?? 0));
+                    }
+                    catch (Exception e)
+                    {
+                        log.LogError(e, "selftest.squeeze failed");
+                    }
+                });
             }
 
-            // And every path that rebuilds a bar, twice each.
-            if (_docks is not null)
+            // And every path that rebuilds a bar, twice each - after the
+            // squeeze, so the two are not laying the same window out at once.
+            Later(2000, () =>
             {
+                if (_docks is null)
+                {
+                    return;
+                }
+
                 try
                 {
                     // Announced before it starts, so whatever is reading the
@@ -412,7 +437,7 @@ public partial class App : Application
                 {
                     log.LogError(e, "selftest.rehearsal failed");
                 }
-            }
+            });
 
             // Left open, and walked through, when pages were asked for: a
             // visual change is verified by looking at the window it changed,
@@ -428,7 +453,10 @@ public partial class App : Application
                 return;
             }
 
-            _settingsWindow?.Close();
+            // Closed last of all. The measuring above happens on later ticks,
+            // and a window closed on this one is gone before any of it runs -
+            // which is how the squeeze came back as nothing at all.
+            Later(2700, () => _settingsWindow?.Close());
         };
         _selfTest.Add(settings);
         settings.Start();
@@ -444,6 +472,20 @@ public partial class App : Application
             Shutdown();
             Exit();
         };
+        _selfTest.Add(timer);
+        timer.Start();
+    }
+
+    /// <summary>Does something once, after a beat, on the interface thread.</summary>
+    private void Later(int milliseconds, Action work)
+    {
+        Microsoft.UI.Dispatching.DispatcherQueueTimer timer =
+            Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().CreateTimer();
+
+        timer.Interval = TimeSpan.FromMilliseconds(milliseconds);
+        timer.IsRepeating = false;
+        timer.Tick += (_, _) => work();
+
         _selfTest.Add(timer);
         timer.Start();
     }

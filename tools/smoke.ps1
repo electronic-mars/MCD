@@ -80,6 +80,9 @@ $required = [ordered]@{
     # program the last time it went wrong.
     'the bars rebuilt'          = 'selftest\.rehearsed'
 
+    # And each page looked at with the window as small as it is allowed to be.
+    'the pages squeezed'        = 'selftest\.squeezed narrowest='
+
     'the AppBar released'     = 'appbar\.removed'
 }
 
@@ -104,6 +107,16 @@ if ($text -notmatch 'sensors\.provider id=(nvml|disk|hwinfo|lhm) state=available
 }
 
 if ($text -match 'LEVEL=(ERROR|FATAL)') { $failures += 'the log contains an error' }
+
+# A wrapping explanation squeezed under this is a page that has collapsed into
+# a column of single words. Nothing throws when that happens, which is why it
+# has to be measured rather than watched for.
+$narrow = ([regex]::Matches($text, 'selftest\.squeezed page=(\S+) narrowest=(\d+)'))
+foreach ($m in $narrow) {
+    if ([int]$m.Groups[2].Value -lt 200) {
+        $failures += "the $($m.Groups[1].Value) page collapsed to $($m.Groups[2].Value) points of text"
+    }
+}
 
 # Failures that announce themselves at INFO and would otherwise be read by
 # nobody. Each of these means the program carried on with something missing,
