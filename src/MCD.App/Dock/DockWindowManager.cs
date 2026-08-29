@@ -226,6 +226,15 @@ public sealed class DockWindowManager : IDisposable
         return hosts;
     }
 
+    /// <summary>
+    /// Whether the system refused this combination to us.
+    /// </summary>
+    /// <remarks>
+    /// Asked of the manager because the settings window has one of those and
+    /// no reference to whatever holds the keys. Answered by whoever set it.
+    /// </remarks>
+    public Func<string, bool> KeyRefused { get; set; } = _ => false;
+
     /// <summary>What the bar on this screen is holding but cannot show.</summary>
     public IReadOnlyList<WidgetConfig> Unplaced(string stableId) =>
         _windows.TryGetValue(stableId, out DockWindow? window) ? window.Unplaced : [];

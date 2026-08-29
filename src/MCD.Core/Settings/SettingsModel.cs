@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mcd.Interop.AppBar;
@@ -59,6 +59,17 @@ public sealed record AppSettings
     public string Language { get; init; } = "system";
 
     public bool Autostart { get; init; }
+
+    /// <summary>
+    /// The combinations the whole machine listens for, by what they do.
+    /// </summary>
+    /// <remarks>
+    /// Written as text - "Ctrl+Alt+B" - rather than as codes, because that is
+    /// what the settings file is for: somebody opening it should be able to
+    /// read what they chose and change it. Anything missing is not bound.
+    /// </remarks>
+    public ImmutableDictionary<string, string> Keys { get; init; } =
+        ImmutableDictionary<string, string>.Empty;
 
     /// <summary>
     /// Which icon each reading is drawn with, by the reading's stable name.

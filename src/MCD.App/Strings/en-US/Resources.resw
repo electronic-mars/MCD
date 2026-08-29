@@ -860,4 +860,43 @@
   <data name="SoundLevelHint" xml:space="preserve">
     <value>The speaker alone already says whether there is any.</value>
   </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Keys</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Show or hide every bar</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>The bars go away and come back. Their layout is kept.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Open this window</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>From anywhere, including over a full-screen program.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Silence the machine</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>The same as the mute key, for keyboards that have not got one.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Use it</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Hold Ctrl, Alt or Win and press a key.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>A key on its own would take it away from every other program. Hold Ctrl, Alt or Win as well.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Another program already holds this combination, so it does nothing here. Choose a different one.</value>
+  </data>
 </root>

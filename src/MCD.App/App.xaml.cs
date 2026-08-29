@@ -3,6 +3,7 @@ using Mcd.App.Settings;
 using Mcd.Core.Infrastructure;
 using Mcd.Core.Monitors;
 using Mcd.Core.Settings;
+using Mcd.Interop.Windowing;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
 using Mcd.Sensors.Providers;
@@ -32,6 +33,7 @@ public partial class App : Application
     private ServiceProvider? _services;
     private DockWindowManager? _docks;
     private Microsoft.UI.Dispatching.DispatcherQueue? _uiQueue;
+    private HotKeys? _keys;
     private bool _shutDown;
 
     public App() => InitializeComponent();
@@ -102,6 +104,15 @@ public partial class App : Application
         _docks = _services.GetRequiredService<DockWindowManager>();
         _docks.SettingsRequested += (_, request) => ShowSettings(request.Screen, request.WidgetId);
         _docks.Start();
+
+        // The keys the whole machine listens for. Taken again whenever the
+        // settings change, because that is the only thing that alters them.
+        _keys = new HotKeys(start);
+        _docks.KeyRefused = chord => _keys?.Refused.Contains(chord) ?? false;
+        TakeKeys();
+
+        _services.GetRequiredService<SettingsService>().Changed += (_, _) =>
+            _uiQueue?.TryEnqueue(TakeKeys);
 
         if (Environment.GetEnvironmentVariable("MCD_SELFTEST") == "1")
         {
@@ -271,6 +282,71 @@ public partial class App : Application
         Mcd.Interop.Windowing.WindowFrame.BringToFront(
             WinRT.Interop.WindowNative.GetWindowHandle(_settingsWindow));
         _loggers.CreateLogger("app").LogInformation("settings.shown");
+    }
+
+    /// <summary>
+    /// Binds every shortcut the settings name.
+    /// </summary>
+    /// <remarks>
+    /// Each one hops back to the interface thread before doing anything: the
+    /// keys arrive on a thread of their own, and everything they act on -
+    /// windows, settings, the bars - belongs to the interface thread.
+    /// </remarks>
+    private void TakeKeys()
+    {
+        if (_keys is null || _services is null)
+        {
+            return;
+        }
+
+        AppSettings app = _services.GetRequiredService<SettingsService>().Current.App;
+
+        List<(Chord Chord, Action Do)> wanted = [];
+
+        foreach (string what in Shortcut.All)
+        {
+            if (!app.Keys.TryGetValue(what, out string? text))
+            {
+                continue;
+            }
+
+            Chord chord = Chord.Parse(text);
+
+            if (!chord.Sane)
+            {
+                continue;
+            }
+
+            Action act = what switch
+            {
+                Shortcut.Bars => () => _uiQueue?.TryEnqueue(ShowOrHideBars),
+                Shortcut.Settings => () => _uiQueue?.TryEnqueue(() => ShowSettings()),
+                Shortcut.Mute => Silence,
+                _ => () => { },
+            };
+
+            wanted.Add((chord, act));
+        }
+
+        _keys.Listen(wanted);
+    }
+
+    /// <summary>Shows every bar, or hides every bar.</summary>
+    private void ShowOrHideBars()
+    {
+        if (_docks is { } docks)
+        {
+            docks.Visible = !docks.Visible;
+        }
+    }
+
+    /// <summary>Silences the machine, or lets it speak again.</summary>
+    private static void Silence()
+    {
+        if (Mcd.Audio.SystemVolume.Muted() is { } muted)
+        {
+            Mcd.Audio.SystemVolume.Mute(!muted);
+        }
     }
 
     private static ServiceProvider BuildServices(ILoggerFactory loggers)
@@ -519,6 +595,9 @@ public partial class App : Application
 
     private void Shutdown()
     {
+        _keys?.Dispose();
+        _keys = null;
+
         if (_shutDown)
         {
             return;

@@ -522,6 +522,23 @@ public sealed partial class SettingsWindow : Window
                     wide: true),
                 stack: true)));
 
+        // --------------------------------------------------------- shortcuts
+        LookBody.Children.Add(Braun.Heading("Sliders", Loc.Tr("KeysGroup", "Keys")));
+
+        LookBody.Children.Add(Braun.Group(
+            KeyRow(
+                Shortcut.Bars,
+                Loc.Tr("KeyBars", "Show or hide every bar"),
+                Loc.Tr("KeyBarsHint", "The bars go away and come back. Their layout is kept.")),
+            KeyRow(
+                Shortcut.Settings,
+                Loc.Tr("KeySettings", "Open this window"),
+                Loc.Tr("KeySettingsHint", "From anywhere, including over a full-screen program.")),
+            KeyRow(
+                Shortcut.Mute,
+                Loc.Tr("KeyMute", "Silence the machine"),
+                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one."))));
+
         LookBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
 
         string[] languages = ["system", "en-US", "ru-RU"];
@@ -545,6 +562,139 @@ public sealed partial class SettingsWindow : Window
                     Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
                     Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, "Undo"))
                 : null));
+    }
+
+    /// <summary>
+    /// One shortcut: what it does, and the keys it answers to.
+    /// </summary>
+    /// <remarks>
+    /// A combination another program already holds is refused by the system,
+    /// and the refusal is shown here rather than swallowed. A key somebody
+    /// chose that quietly does nothing is the worst of the three outcomes.
+    /// </remarks>
+    private Grid KeyRow(string what, string name, string hint)
+    {
+        AppSettings app = _settings.Current.App;
+
+        Chord chord = Chord.Parse(app.Keys.TryGetValue(what, out string? text) ? text : null);
+        bool taken = chord.Set && _docks.KeyRefused(chord.ToString());
+
+        var keys = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 6,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        keys.Children.Add(Braun.Action(
+            chord.Set ? chord.ToString() : Loc.Tr("KeyNone", "Not set"),
+            () => _ = CatchKey(what, name),
+            "Sliders"));
+
+        if (chord.Set)
+        {
+            keys.Children.Add(Braun.Action(
+                Loc.Tr("KeyClear", "Clear"),
+                () => BindKey(what, Chord.None),
+                "Delete"));
+        }
+
+        return Braun.Row(
+            name,
+            taken
+                ? Loc.Tr("KeyTaken", "Another program already holds this combination, so it does nothing here. Choose a different one.")
+                : hint,
+            keys);
+    }
+
+    /// <summary>
+    /// Waits for a combination to be typed.
+    /// </summary>
+    /// <remarks>
+    /// A dialog rather than a field that listens while the window has focus:
+    /// a control that swallows every key it sees is a control somebody gets
+    /// stuck in. Escape leaves it, and leaving it changes nothing.
+    /// </remarks>
+    private async Task CatchKey(string what, string name)
+    {
+        var shown = new TextBlock
+        {
+            Text = Loc.Tr("KeyWaiting", "Hold Ctrl, Alt or Win and press a key."),
+            FontSize = 15,
+            TextWrapping = TextWrapping.Wrap,
+        };
+
+        var caught = Chord.None;
+
+        var dialog = new ContentDialog
+        {
+            XamlRoot = Content.XamlRoot,
+            Title = name,
+            Content = shown,
+            PrimaryButtonText = Loc.Tr("KeyUse", "Use it"),
+            CloseButtonText = Loc.Tr("Cancel", "Cancel"),
+            DefaultButton = ContentDialogButton.Primary,
+            IsPrimaryButtonEnabled = false,
+        };
+
+        void Typed(object sender, KeyRoutedEventArgs e)
+        {
+            var pressed = new Chord(
+                Down(Windows.System.VirtualKey.Control),
+                Down(Windows.System.VirtualKey.Menu),
+                Down(Windows.System.VirtualKey.Shift),
+                Down(Windows.System.VirtualKey.LeftWindows) || Down(Windows.System.VirtualKey.RightWindows),
+                (uint)e.Key);
+
+            // The modifiers on their own are not a combination; they are the
+            // first half of one, and showing "Ctrl" as though it were finished
+            // invites somebody to press the button.
+            if (e.Key is Windows.System.VirtualKey.Control or Windows.System.VirtualKey.Menu
+                or Windows.System.VirtualKey.Shift or Windows.System.VirtualKey.LeftWindows
+                or Windows.System.VirtualKey.RightWindows)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            caught = pressed;
+
+            shown.Text = pressed.Sane
+                ? pressed.ToString()
+                : Loc.Tr("KeyBare", "A key on its own would take it away from every other program. Hold Ctrl, Alt or Win as well.");
+
+            dialog.IsPrimaryButtonEnabled = pressed.Sane;
+        }
+
+        dialog.KeyDown += Typed;
+
+        ContentDialogResult answer = await dialog.ShowAsync();
+        dialog.KeyDown -= Typed;
+
+        if (answer == ContentDialogResult.Primary && caught.Sane)
+        {
+            BindKey(what, caught);
+        }
+    }
+
+    private static bool Down(Windows.System.VirtualKey key) =>
+        Microsoft.UI.Input.InputKeyboardSource
+            .GetKeyStateForCurrentThread(key)
+            .HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+
+    /// <summary>Writes a shortcut down, or takes it away.</summary>
+    private void BindKey(string what, Chord chord)
+    {
+        SettingsModel current = _settings.Current;
+
+        ImmutableDictionary<string, string> keys = chord.Sane
+            ? current.App.Keys.SetItem(what, chord.ToString())
+            : current.App.Keys.Remove(what);
+
+        Write(current with { App = current.App with { Keys = keys } }, WriteReason.UserAction);
+
+        _log.LogInformation("settings.key {What} {Chord}", what, chord);
+        RefreshLook();
     }
 
     /// <summary>

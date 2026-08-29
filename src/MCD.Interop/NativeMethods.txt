@@ -146,3 +146,9 @@ IsIconic
 // off - which is the right behaviour either way.
 MessageBeep
 MESSAGEBOX_STYLE
+
+// Global keys. A bar that can only be reached with the mouse cannot be
+// reached at all while a full-screen program is in front of it.
+RegisterHotKey
+UnregisterHotKey
+HOT_KEY_MODIFIERS

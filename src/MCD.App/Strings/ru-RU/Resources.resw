@@ -860,4 +860,43 @@
   <data name="SoundLevelHint" xml:space="preserve">
     <value>Динамик и сам говорит, есть звук или нет.</value>
   </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Клавиши</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Показать или спрятать все панели</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>Панели уходят и возвращаются. Их расстановка сохраняется.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Открыть это окно</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>Откуда угодно, в том числе поверх полноэкранной программы.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Выключить звук</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>То же, что клавиша отключения звука, для клавиатур, где её нет.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Не назначено</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Назначить</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Удерживайте Ctrl, Alt или Win и нажмите клавишу.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>Клавиша сама по себе отняла бы её у всех остальных программ. Удерживайте ещё Ctrl, Alt или Win.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Эту комбинацию уже держит другая программа, поэтому здесь она ничего не делает. Выберите другую.</value>
+  </data>
 </root>

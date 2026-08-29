@@ -378,14 +378,37 @@ public static class Braun
     /// </remarks>
     private static Grid Spread(StackPanel row)
     {
-        var grid = new Grid { ColumnSpacing = 4, HorizontalAlignment = HorizontalAlignment.Stretch };
+        var grid = new Grid
+        {
+            ColumnSpacing = 4,
+            RowSpacing = 4,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
+
         List<FrameworkElement> keys = [.. row.Children.Cast<FrameworkElement>()];
         row.Children.Clear();
 
+        // Four to a line at most. Five equal shares of a settings column is
+        // narrower than the longest word any of them holds, and the word is
+        // then cut in half - which is what "Translucent" was.
+        int across = Math.Min(keys.Count, 4);
+        int down = (int)Math.Ceiling(keys.Count / (double)across);
+
+        for (int i = 0; i < across; i++)
+        {
+            grid.ColumnDefinitions.Add(
+                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        }
+
+        for (int i = 0; i < down; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
         for (int i = 0; i < keys.Count; i++)
         {
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            Grid.SetColumn(keys[i], i);
+            Grid.SetColumn(keys[i], i % across);
+            Grid.SetRow(keys[i], i / across);
             grid.Children.Add(keys[i]);
         }
 
