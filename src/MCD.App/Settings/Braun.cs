@@ -313,7 +313,7 @@ public static class Braun
             var caption = new TextBlock
             {
                 Text = labels[i].ToUpper(CultureInfo.CurrentCulture),
-                FontSize = SegSize,
+                FontSize = 10.5,
                 FontWeight = on ? FontWeights.Medium : FontWeights.Normal,
                 CharacterSpacing = 160,
                 Foreground = on ? OnAcc : Tx3,
@@ -322,20 +322,17 @@ public static class Braun
                 Margin = wide ? new Thickness(4, 9, 4, 9) : new Thickness(13, 9, 13, 9),
             };
 
-            // The chosen one stands off the page; the others are set into it.
-            // That difference is the whole of what "selected" means here, so
-            // it is drawn rather than implied by a shade of grey.
-            FrameworkElement face = on
-                ? Raised(caption, Acc, radius: 8, blur: 9, drop: 2, depth: 0.40)
-                : Flat(caption, CardHi, radius: 8);
-
+            // Flat, both ways. The reference gives its chosen key the accent
+            // and no shadow at all - measured, not guessed. A key that stands
+            // off the page here would be this program inventing a difference
+            // the thing it is copying does not have.
             var key = new Button
             {
-                Content = face,
+                Content = Flat(caption, on ? Acc : CardHi, radius: 9, edge: on ? Clear : Line),
                 MinWidth = 0,
                 MinHeight = 0,
                 Padding = new Thickness(0),
-                CornerRadius = new CornerRadius(8),
+                CornerRadius = new CornerRadius(9),
                 BorderThickness = new Thickness(0),
                 Background = Clear,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
@@ -390,25 +387,37 @@ public static class Braun
     public static Grid Tabs(
         IReadOnlyList<(string Glyph, string Label, bool On)> items, int selected, Action<int> pick)
     {
-        var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2 };
+        // Equal shares of the rail, and the rail across the whole column.
+        // The reference's tabs are flex:1 inside a tray that fills its
+        // parent; measured on the rendered page, each is 119.5 wide of a
+        // 369.6 rail. Tiles that hug their own labels and huddle at the left
+        // are the single thing that made this read as a copy rather than the
+        // same instrument.
+        var row = new Grid { ColumnSpacing = 2 };
 
         for (int i = 0; i < items.Count; i++)
         {
             bool chosen = i == selected;
 
+            row.ColumnDefinitions.Add(
+                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
             var body = new StackPanel
             {
                 Spacing = 4,
-                Padding = new Thickness(14, 8, 14, 7),
-                MinWidth = 96,
-                HorizontalAlignment = HorizontalAlignment.Center,
+                Padding = new Thickness(0, 8, 0, 7),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Center,
             };
 
             body.Children.Add(new FontIcon
             {
                 FontFamily = new FontFamily("Segoe MDL2 Assets"),
                 Glyph = items[i].Glyph,
-                FontSize = 17,
+
+                // 24, not 17. The reference's tab icon measures 24.2 on the
+                // rendered page and it is what gives the tile its weight.
+                FontSize = 22,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Foreground = chosen ? Tx : Tx3,
             });
@@ -416,14 +425,14 @@ public static class Braun
             var line = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
-                Spacing = 6,
+                Spacing = 5,
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
 
             line.Children.Add(new Ellipse
             {
-                Width = 7,
-                Height = 7,
+                Width = 6,
+                Height = 6,
                 VerticalAlignment = VerticalAlignment.Center,
                 Fill = Lamp(items[i].On),
             });
@@ -431,7 +440,7 @@ public static class Braun
             line.Children.Add(new TextBlock
             {
                 Text = items[i].Label.ToUpper(CultureInfo.CurrentCulture),
-                FontSize = MicroSize,
+                FontSize = 11,
                 FontWeight = FontWeights.Medium,
                 CharacterSpacing = 120,
                 Foreground = chosen ? Tx : Tx3,
@@ -439,10 +448,12 @@ public static class Braun
 
             body.Children.Add(line);
 
-            // The chosen tab is a key standing proud of the rail. Only that
-            // one: a shadow under everything highlights nothing.
+            // The chosen tab is the one thing in this program that stands off
+            // the page: a lit line along its top edge and a short shadow -
+            // 0 2px 5px at three tenths, which is what the reference draws
+            // and half the blur this had been using.
             FrameworkElement face = chosen
-                ? Raised(body, PanelHi, radius: 8, blur: 11, drop: 2, depth: 0.36)
+                ? Raised(body, PanelHi, radius: 9, blur: 5.5, drop: 2, depth: 0.30)
                 : body;
 
             var tile = new Button
@@ -451,32 +462,38 @@ public static class Braun
                 MinWidth = 0,
                 MinHeight = 0,
                 Padding = new Thickness(0),
-                CornerRadius = new CornerRadius(8),
+                CornerRadius = new CornerRadius(9),
                 BorderThickness = new Thickness(0),
                 Background = Clear,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 VerticalContentAlignment = VerticalAlignment.Stretch,
             };
+
+            Grid.SetColumn(tile, i);
 
             int index = i;
             tile.Click += (_, _) => pick(index);
             row.Children.Add(tile);
         }
 
-        // The rail the keys are set into, which is a hole in the body rather
-        // than a panel on top of it.
         return Recessed(row);
     }
 
     /// <summary>A surface flush with what it sits on.</summary>
-    private static Grid Flat(UIElement content, Brush fill, double radius)
+    private static Grid Flat(UIElement content, Brush fill, double radius, Brush? edge = null)
     {
-        var stack = new Grid();
+        var stack = new Grid
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+        };
 
         stack.Children.Add(new Rectangle
         {
             Fill = fill,
-            Stroke = Line,
+            Stroke = edge ?? Line,
             StrokeThickness = 1,
             RadiusX = radius,
             RadiusY = radius,
@@ -653,7 +670,11 @@ public static class Braun
         double drop = 2,
         double depth = 0.34)
     {
-        var stack = new Grid();
+        var stack = new Grid
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+        };
 
         // The shadow is drawn into this one, behind everything: a sprite
         // visual renders inside its host, so the host has to be the layer
@@ -688,7 +709,7 @@ public static class Braun
     /// </remarks>
     public static Grid Recessed(UIElement content, double radius = 11, double padding = 3)
     {
-        var stack = new Grid { HorizontalAlignment = HorizontalAlignment.Left };
+        var stack = new Grid();
 
         stack.Children.Add(new Border
         {
@@ -732,7 +753,7 @@ public static class Braun
         Margin = new Thickness(radius / 2, 1, radius / 2, 0),
         VerticalAlignment = VerticalAlignment.Top,
         IsHitTestVisible = false,
-        Fill = Paint(Dark ? 0x14FFFFFFu : 0x99FFFFFFu),
+        Fill = Paint(Dark ? 0x12FFFFFFu : 0x99FFFFFFu),
     };
 
     private static Windows.UI.Color Shade(byte alpha) =>

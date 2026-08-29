@@ -184,7 +184,8 @@
                         <ContentControl
                             x:Name="DisplayTabs"
                             Margin="0,8,0,0"
-                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
                             IsTabStop="False" />
 
                         <StackPanel x:Name="DockBody" />
