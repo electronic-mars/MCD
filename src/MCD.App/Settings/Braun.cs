@@ -365,18 +365,29 @@ public static class Braun
             row.Children.Add(key);
         }
 
-        return wide ? Spread(row) : row;
+        return wide ? Spread(row, labels) : row;
     }
 
     /// <summary>
-    /// Lays a row of keys out in equal shares of one line.
+    /// Lays a row of keys out in equal shares of one line, or of as many lines
+    /// as the longest word needs.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A stack of keys is as wide as its longest label; on a line of its own
     /// that leaves a ragged tail. Equal shares need star columns, which is a
     /// Grid, so the keys are moved into one.
+    /// </para>
+    /// <para>
+    /// How many share a line is worked out from the longest word and the room
+    /// there is, not fixed. A number picked by hand is a number picked in one
+    /// language: four keys fit "Translucent" and cut "Полупрозрачный" in half,
+    /// with the first letter and the last both gone - which is worse than the
+    /// clipping it was chosen to cure, because a cut word still looks like a
+    /// word and nobody thinks to widen the window.
+    /// </para>
     /// </remarks>
-    private static Grid Spread(StackPanel row)
+    private static Grid Spread(StackPanel row, IReadOnlyList<string> labels)
     {
         var grid = new Grid
         {
@@ -388,32 +399,98 @@ public static class Braun
         List<FrameworkElement> keys = [.. row.Children.Cast<FrameworkElement>()];
         row.Children.Clear();
 
-        // Four to a line at most. Five equal shares of a settings column is
-        // narrower than the longest word any of them holds, and the word is
-        // then cut in half - which is what "Translucent" was.
-        int across = Math.Min(keys.Count, 4);
-        int down = (int)Math.Ceiling(keys.Count / (double)across);
-
-        for (int i = 0; i < across; i++)
+        foreach (FrameworkElement key in keys)
         {
-            grid.ColumnDefinitions.Add(
-                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.Children.Add(key);
         }
 
-        for (int i = 0; i < down; i++)
+        double needed = Widest(labels);
+        int across = 0;
+
+        void Lay(double room)
         {
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            // At least one to a line, never more than there are, and never so
+            // many that the longest of them has to be cut.
+            int fits = room > 1
+                ? Math.Clamp((int)((room + 4) / (needed + 4)), 1, keys.Count)
+                : keys.Count;
+
+            // Balanced rather than filled: five keys where four fit go three
+            // and two, not four and one. A lone key on a line of its own reads
+            // as a mistake, and it is no narrower than sharing.
+            int down = (int)Math.Ceiling(keys.Count / (double)fits);
+            fits = (int)Math.Ceiling(keys.Count / (double)down);
+
+            if (fits == across)
+            {
+                return;
+            }
+
+            across = fits;
+
+            grid.ColumnDefinitions.Clear();
+            grid.RowDefinitions.Clear();
+
+            for (int i = 0; i < across; i++)
+            {
+                grid.ColumnDefinitions.Add(
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            }
+
+            for (int i = 0; i < down; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            }
+
+            for (int i = 0; i < keys.Count; i++)
+            {
+                Grid.SetColumn(keys[i], i % across);
+                Grid.SetRow(keys[i], i / across);
+            }
         }
 
-        for (int i = 0; i < keys.Count; i++)
-        {
-            Grid.SetColumn(keys[i], i % across);
-            Grid.SetRow(keys[i], i / across);
-            grid.Children.Add(keys[i]);
-        }
+        grid.SizeChanged += (_, e) => Lay(e.NewSize.Width);
+        Lay(0);
 
         return grid;
     }
+
+    /// <summary>
+    /// How wide the longest of these keys has to be to hold its word whole.
+    /// </summary>
+    /// <remarks>
+    /// Measured rather than counted in characters. The keys are drawn in small
+    /// capitals with the letters spaced apart, and an estimate that is a
+    /// little short is a word with its ends missing.
+    /// </remarks>
+    private static double Widest(IReadOnlyList<string> labels)
+    {
+        _ruler ??= new TextBlock
+        {
+            FontSize = MicroSize,
+            CharacterSpacing = 160,
+
+            // The heaviest weight any of them can switch to: the chosen key is
+            // Medium, and a width reserved at Normal clips the moment somebody
+            // picks it.
+            FontWeight = FontWeights.Medium,
+        };
+
+        double widest = 0;
+
+        foreach (string label in labels)
+        {
+            _ruler.Text = label.ToUpper(CultureInfo.CurrentCulture);
+            _ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            widest = Math.Max(widest, _ruler.DesiredSize.Width);
+        }
+
+        // The caption's own margins either side of the word.
+        return widest + 8;
+    }
+
+    /// <summary>Never shown, never in the tree: it exists to be measured against.</summary>
+    private static TextBlock? _ruler;
 
     /// <summary>
     /// A row of icon-over-name tiles set into a recessed rail.

@@ -359,6 +359,7 @@ public sealed partial class SettingsWindow : Window
     public double Squeeze()
     {
         double narrowest = double.MaxValue;
+        _clipped = 0;
 
         foreach (object item in Nav.MenuItems.Concat(Nav.FooterMenuItems))
         {
@@ -383,20 +384,146 @@ public sealed partial class SettingsWindow : Window
                 text.Length > 40 ? text[..40] : text);
 
             narrowest = Math.Min(narrowest, width);
+
+            // A word with its ends cut off is a different fault from a
+            // paragraph squeezed thin, and the measure that catches one is
+            // blind to the other. "Полупрозрачный" sat in a key too narrow to
+            // hold it for a whole release, through every check there was,
+            // because nothing here ever asked whether a word fitted its box.
+            (double over, string cut) = Cut(Pages);
+
+            if (over > Tolerance)
+            {
+                _log.LogWarning(
+                    "selftest.clipped page={Page} over={Over} text={Text}",
+                    tag,
+                    Math.Round(over),
+                    cut);
+
+                _clipped = Math.Max(_clipped, over);
+            }
         }
+
+        _log.LogInformation("selftest.clipped worst={Worst}", Math.Round(_clipped));
 
         return narrowest;
     }
 
     /// <summary>
-    /// The narrowest wrapping line of text anywhere under this element.
+    /// A point and a half, which is rounding rather than clipping.
     /// </summary>
     /// <remarks>
+    /// Text is laid out in whole pixels at the screen's scale and measured in
+    /// points; the difference is under a point, and a word losing a letter is
+    /// over ten. There is no useful fault between the two.
+    /// </remarks>
+    private const double Tolerance = 1.5;
+
+    private double _clipped;
+
+    /// <summary>
+    /// The worst-cut line of text anywhere under this element, and by how much.
+    /// </summary>
+    /// <remarks>
+    /// Only text that neither wraps nor trims: those two have somewhere to put
+    /// what will not fit, and are doing what they were told. Anything else with
+    /// more text than box is losing letters off both ends, which reads as a
+    /// shorter word rather than as a fault - nobody widens a window over a word
+    /// that looks like a word.
+    /// </remarks>
+    private static (double Over, string Text) Cut(DependencyObject root)
+    {
+        (double Over, string Text) worst = (0, string.Empty);
+
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(root, i);
+
+            if (child is UIElement { Visibility: Visibility.Collapsed })
+            {
+                continue;
+            }
+
+            if (child is TextBlock
+                {
+                    TextWrapping: TextWrapping.NoWrap,
+                    TextTrimming: TextTrimming.None,
+                    Visibility: Visibility.Visible,
+                } text
+                && text.Text.Length > 0
+                && text.ActualWidth > 0)
+            {
+                // Against the box, not against the text's own width. A line
+                // too long for the place it was given is arranged at the width
+                // it wanted and then clipped by whatever holds it, so its own
+                // width says everything fitted right up to the moment the
+                // letters disappear.
+                double over = Natural(text) - Math.Min(text.ActualWidth, Room(text));
+
+                if (over > worst.Over)
+                {
+                    worst = (over, text.Text);
+                }
+            }
+
+            (double Over, string Text) below = Cut(child);
+
+            if (below.Over > worst.Over)
+            {
+                worst = below;
+            }
+        }
+
+        return worst;
+    }
+
+    /// <summary>How wide this line of text would be if nothing stopped it.</summary>
+    private static double Natural(TextBlock text)
+    {
+        var loose = new TextBlock
+        {
+            Text = text.Text,
+            FontFamily = text.FontFamily,
+            FontSize = text.FontSize,
+            FontWeight = text.FontWeight,
+            FontStyle = text.FontStyle,
+            FontStretch = text.FontStretch,
+            CharacterSpacing = text.CharacterSpacing,
+            TextWrapping = TextWrapping.NoWrap,
+        };
+
+        loose.Measure(new Windows.Foundation.Size(
+            double.PositiveInfinity, double.PositiveInfinity));
+
+        // Letter spacing is added after the last letter as well as between,
+        // and that trailing gap is not part of the word: counting it makes
+        // every spaced caption in the program look a point too big for its
+        // box, and a check that cries wolf on every line catches nothing.
+        double trailing = text.CharacterSpacing / 1000.0 * text.FontSize;
+
+        return loose.DesiredSize.Width - trailing;
+    }
+
+    /// <summary>
+    /// The narrowest column any paragraph was given, anywhere under this
+    /// element.
+    /// </summary>
+    /// <remarks>
+    /// <para>
     /// Only wrapping text, and only a sentence of it. A name like "The bar
     /// itself" is legitimately as wide as its own words and no wider, and
     /// counting it finds a narrow thing that is not a fault. What is being
     /// looked for is a paragraph squeezed into a column of single words, and
     /// a paragraph is long.
+    /// </para>
+    /// <para>
+    /// The column, not the text. A wrapping TextBlock ends up as wide as its
+    /// longest laid-out line, which is shorter than the room it was given by
+    /// however much the last word on that line did not fit - and in a language
+    /// of long words that is a lot. Reading the text's own width called a
+    /// perfectly wide Russian page collapsed, twice, and each time the fault
+    /// was in the ruler.
+    /// </para>
     /// </remarks>
     private static (double Width, string Text) Narrowest(DependencyObject root)
     {
@@ -419,9 +546,9 @@ public sealed partial class SettingsWindow : Window
                 && text.Text.Length > 40
                 && text.Visibility == Visibility.Visible
                 && text.ActualWidth > 0
-                && text.ActualWidth < narrowest.Width)
+                && Room(text) < narrowest.Width)
             {
-                narrowest = (text.ActualWidth, text.Text);
+                narrowest = (Room(text), text.Text);
             }
 
             (double Width, string Text) below = Narrowest(child);
@@ -434,6 +561,17 @@ public sealed partial class SettingsWindow : Window
 
         return narrowest;
     }
+
+    /// <summary>How much width this paragraph was given to wrap inside.</summary>
+    /// <remarks>
+    /// Its parent's, less its own margins. The paragraph is the only thing in
+    /// that column, so what the column has is what it was offered, whether the
+    /// words happened to fill the last line of it or not.
+    /// </remarks>
+    private static double Room(TextBlock text) =>
+        VisualTreeHelper.GetParent(text) is FrameworkElement parent && parent.ActualWidth > 0
+            ? parent.ActualWidth - text.Margin.Left - text.Margin.Right
+            : text.ActualWidth;
 
     /// <summary>Rebuilds both lists from the settings and the live topology.</summary>
     public void Reload()
@@ -498,7 +636,7 @@ public sealed partial class SettingsWindow : Window
                         Loc.Tr("SegBackdropSolid", "Solid"),
                         Loc.Tr("SegBackdropColour", "A colour"),
                         Loc.Tr("SegBackdropImage", "A picture"),
-                        Loc.Tr("SegBackdropBraun", "Braun"),
+                        Loc.Tr("SegBackdropBraun", "Instrument"),
                     ],
                     Math.Max(0, Array.IndexOf(backdrops, look.Backdrop)),
                     i => ApplyLook(backdrop: backdrops[i]),
@@ -698,11 +836,25 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>
-    /// The row under Background that says which colour or which picture -
-    /// and nothing at all for the backgrounds that need neither.
+    /// The row under Background that says which colour or which picture, or
+    /// what a background named after something rather than described is - and
+    /// nothing at all for the ones that need neither.
     /// </summary>
     private FrameworkElement? BackdropExtraRow(AppSettings app)
     {
+        // A button with a name on it that only its author knows is a button
+        // nobody presses. Every other background says what it does; this one
+        // says whose it is, so what it does has to be written underneath.
+        if (app.Backdrop == "braun")
+        {
+            return Braun.Row(
+                Loc.Tr("BraunRow", "What this is"),
+                Loc.Tr(
+                    "BraunHint",
+                    "The bar as a piece of equipment: a graphite body on the dark theme, a cream one on the light, readings in orange. Plain, strict and quiet - the same look these settings are drawn in, after Braun's instruments."),
+                null);
+        }
+
         if (app.Backdrop is not ("colour" or "image"))
         {
             return null;
@@ -906,13 +1058,13 @@ public sealed partial class SettingsWindow : Window
 
         DockBody.Children.Add(Braun.Group(
             Braun.Row(
-                Loc.Tr("ShowDockLabel", "Show a dock on this display"),
+                Loc.Tr("ShowDockLabel", "Show a bar on this display"),
                 live is not null
                     ? $"{live.Width} x {live.Height} · {live.Dpi * 100 / 96}%"
                     : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen"),
                 Braun.Switch(
                     dock.Enabled,
-                    on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "shown")))),
+                    on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "showing the bar")))),
 
             // Outside everything the master switch dims. It was inside, which
             // meant that switching a dock off left an enabled Undo button in
@@ -980,7 +1132,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("BarLiveTitle", "The bar itself"),
                 Loc.Tr(
                     "BarHelp",
-                    "The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings."),
+                    "The bar is a row of slots, and each slot holds one widget: a reading, the clock, a program's icon. Drag a widget along the bar to move it to a free slot, or off the bar to take it away. Right-click a free slot to add something there, or a widget for its own settings."),
                 null),
 
             Braun.Row(
@@ -1012,9 +1164,11 @@ public sealed partial class SettingsWindow : Window
                             stranded.Count),
                     Loc.Tr(
                         "CrowdedRowHint",
-                        "The bar has run out of places. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it."),
+                        "The bar has run out of slots. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it."),
                     Braun.Action(
-                        Loc.Tr("CrowdedButton", "Take them off"),
+                        stranded.Count == 1
+                            ? Loc.Tr("CrowdedButtonOne", "Take it off")
+                            : Loc.Tr("CrowdedButton", "Take them off"),
                         () => Shed(dock, stranded, Loc.Tr("UndoCrowded", "the ones that did not fit")),
                         "Delete",
                         danger: true))
@@ -1038,10 +1192,12 @@ public sealed partial class SettingsWindow : Window
                         CultureInfo.CurrentCulture,
                         Loc.Tr(
                             "QuietRowHint",
-                            "{0} - on the bar, and taking no place on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to where it was left, or to the first free place."),
+                            "{0} - on the bar, and taking no slot on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to the slot it was left on, or to the first free one."),
                         Named(quiet)),
                     Braun.Action(
-                        Loc.Tr("QuietButton", "Take them off"),
+                        quiet.Count == 1
+                            ? Loc.Tr("QuietButtonOne", "Take it off")
+                            : Loc.Tr("QuietButton", "Take them off"),
                         () => Shed(dock, quiet, Loc.Tr("UndoQuiet", "the ones that were waiting")),
                         "Delete",
                         danger: true))
@@ -1074,7 +1230,7 @@ public sealed partial class SettingsWindow : Window
                 dock.Mode switch
                 {
                     AppBarMode.AutoHide => clash
-                        ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this dock stays visible.")
+                        ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this bar stays visible.")
                         : Loc.Tr("ModeHideHint", "The bar steps off the screen and comes back when the pointer reaches that edge."),
                     AppBarMode.Desktop => Loc.Tr(
                         "ModeDesktopHint",
@@ -2161,7 +2317,7 @@ public sealed partial class SettingsWindow : Window
         {
             Text = Loc.Tr(
                 "AboutIntro",
-                "A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."),
+                "A bar for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."),
             FontSize = 12,
             LineHeight = 20,
             MaxWidth = 460,
@@ -2178,7 +2334,7 @@ public sealed partial class SettingsWindow : Window
 
         AboutBody.Children.Add(Braun.Group(Braun.Row(
             Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
-            Loc.Tr("StartWithWindowsHint", "The docks come back when you sign in."),
+            Loc.Tr("StartWithWindowsHint", "The bars come back when you sign in."),
             Braun.Switch(AutoStart.Enabled, on =>
             {
                 AutoStart.Enabled = on;
@@ -2211,7 +2367,7 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("ExitRow", "Stop the program"),
             Loc.Tr(
                 "ExitHint",
-                "Closing this window leaves the docks running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."),
+                "Closing this window leaves the bars running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."),
             Braun.Action(
                 Loc.Tr("ExitButton", "Exit Master Control Dock"),
                 () => _onExit(),

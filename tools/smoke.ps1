@@ -15,7 +15,12 @@ every job after this one.
 [CmdletBinding()]
 param(
     [string]$Exe,
-    [int]$Seconds = 12
+    [int]$Seconds = 12,
+
+    # Which language to check in. A word that fits its key in English can be
+    # half again as long in Russian and be cut at both ends, and the check that
+    # measures it only ever sees the language it was run in.
+    [string]$Lang = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -38,6 +43,7 @@ $profileDir = Join-Path ([System.IO.Path]::GetTempPath()) ("mcd-smoke-" + [guid]
 $env:MCD_DATA_DIR = Join-Path $profileDir 'MCD'
 $env:MCD_SELFTEST = '1'
 $env:MCD_SELFTEST_SECONDS = "$Seconds"
+$env:MCD_LANG = $Lang
 
 Write-Host "running $Exe for $Seconds s"
 $proc = Start-Process $Exe -PassThru
@@ -83,6 +89,9 @@ $required = [ordered]@{
     # And each page looked at with the window as small as it is allowed to be.
     'the pages squeezed'        = 'selftest\.squeezed narrowest='
 
+    # And every word on every page measured against the box it was given.
+    'the pages measured'        = 'selftest\.clipped worst='
+
     'the AppBar released'     = 'appbar\.removed'
 }
 
@@ -116,6 +125,13 @@ foreach ($m in $narrow) {
     if ([int]$m.Groups[2].Value -lt 200) {
         $failures += "the $($m.Groups[1].Value) page collapsed to $($m.Groups[2].Value) points of text"
     }
+}
+
+# A word wider than the box it was drawn in loses letters off both ends and
+# still looks like a word, so nobody reports it and nobody widens the window.
+$cut = ([regex]::Matches($text, 'selftest\.clipped page=(\S+) over=(\d+) text=(.*)'))
+foreach ($m in $cut) {
+    $failures += "the $($m.Groups[1].Value) page cut '$($m.Groups[3].Value.Trim())' by $($m.Groups[2].Value) points"
 }
 
 # Failures that announce themselves at INFO and would otherwise be read by

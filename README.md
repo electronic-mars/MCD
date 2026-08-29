@@ -154,11 +154,17 @@ workload is required.
 dotnet build
 dotnet test tests/MCD.Tests/MCD.Tests.csproj
 pwsh tools/smoke.ps1
+pwsh tools/smoke.ps1 -Lang ru-RU
 ```
 
 `tools/smoke.ps1` runs the built program for a few seconds and checks the log
-for the markers a healthy start leaves behind. `docs/manual-checks.md` lists
-what has to be checked by hand on a real multi-monitor desk.
+for the markers a healthy start leaves behind. It also makes the settings
+window as small as it is allowed to be and measures every page: a paragraph
+given less than two hundred points has collapsed, and a word wider than the box
+it was drawn in has lost letters off both ends. Run it in both languages - a
+caption that fits its key in English can be half again as long in Russian, and
+the check only ever sees the language it was run in. `docs/manual-checks.md`
+lists what has to be checked by hand on a real multi-monitor desk.
 
 ## Icons
 

@@ -576,7 +576,7 @@ public sealed partial class DockWindow : Window
         menu.Items.Add(add);
         menu.Items.Add(new MenuFlyoutSeparator());
 
-        var settings = new MenuFlyoutItem { Text = Loc.Tr("MenuDockSettings", "Dock settings") };
+        var settings = new MenuFlyoutItem { Text = Loc.Tr("MenuDockSettings", "Bar settings") };
 
         // The monitor goes with the request. Settings that open on the primary
         // screen when the click happened on the third one are settings the user

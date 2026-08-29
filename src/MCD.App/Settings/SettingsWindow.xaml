@@ -136,7 +136,7 @@
             SelectionChanged="OnSectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="NavDocks" Content="Docks" Icon="View" Tag="docks" />
+                <NavigationViewItem x:Uid="NavDocks" Content="Bars" Icon="View" Tag="docks" />
                 <!-- The one place a glyph from the system's font is still drawn.
                      A navigation item's Icon slot takes an IconElement, and none
                      of those can stroke a path - PathIcon fills the geometry,
@@ -191,13 +191,13 @@
                                 VerticalAlignment="Center"
                                 FontSize="24"
                                 FontWeight="SemiBold"
-                                Text="Docks" />
+                                Text="Bars" />
                         </StackPanel>
                         <TextBlock
                             x:Uid="DocksIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="One dock per screen. Changes land on the bar as you make them."
+                            Text="One bar per screen. Changes land on it as you make them."
                             TextWrapping="Wrap" />
 
                         <!-- The display switcher, tiled the way Master Audio
@@ -242,7 +242,7 @@
                             x:Uid="AppearanceIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="How the bars are drawn. This applies to every dock."
+                            Text="How the bars are drawn. This applies to every one of them."
                             TextWrapping="Wrap" />
                         <StackPanel x:Name="LookBody" />
                     </StackPanel>

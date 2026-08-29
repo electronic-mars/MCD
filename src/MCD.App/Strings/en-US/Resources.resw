@@ -17,7 +17,7 @@
     <value>Master Control Dock</value>
   </data>
   <data name="NavDocks.Content" xml:space="preserve">
-    <value>Docks</value>
+    <value>Bars</value>
   </data>
   <data name="NavIcons.Content" xml:space="preserve">
     <value>Icons</value>
@@ -33,16 +33,16 @@
   </data>
   <!-- Docks page -->
   <data name="DocksTitle.Text" xml:space="preserve">
-    <value>Docks</value>
+    <value>Bars</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>One dock per screen. Changes land on the bar as you make them.</value>
+    <value>One bar per screen. Changes land on it as you make them.</value>
   </data>
   <data name="BarLiveTitle" xml:space="preserve">
     <value>The bar itself</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
-    <value>Show a dock on this display</value>
+    <value>Show a bar on this display</value>
   </data>
   <data name="EdgeLabel" xml:space="preserve">
     <value>Edge</value>
@@ -59,7 +59,7 @@
     <value>Appearance</value>
   </data>
   <data name="AppearanceIntro.Text" xml:space="preserve">
-    <value>How the bars are drawn. This applies to every dock.</value>
+    <value>How the bars are drawn. This applies to every one of them.</value>
   </data>
   <data name="BackgroundLabel" xml:space="preserve">
     <value>Background</value>
@@ -78,7 +78,7 @@
     <value>Icons</value>
   </data>
   <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Pick the picture each reading is drawn with. The choice applies to every dock.</value>
+    <value>Pick the picture each reading is drawn with. The choice applies to every bar.</value>
   </data>
   <!-- Sensors page -->
   <data name="SensorsTitle.Text" xml:space="preserve">
@@ -93,16 +93,16 @@
   <!-- Monitors page -->
   <!-- About page -->
   <data name="AboutIntro" xml:space="preserve">
-    <value>A dock for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence.</value>
+    <value>A bar for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence.</value>
   </data>
   <data name="StartWithWindowsLabel" xml:space="preserve">
     <value>Start with Windows</value>
   </data>
   <data name="StartWithWindowsHint" xml:space="preserve">
-    <value>The docks come back when you sign in.</value>
+    <value>The bars come back when you sign in.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Closing this window leaves the docks running. To stop them, use the button here - ending the task from Task Manager leaves the reserved screen space behind.</value>
+    <value>Closing this window leaves the bars running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Exit Master Control Dock</value>
@@ -119,7 +119,7 @@
     <value>A bar down the side of a screen has only one width, so Compact does nothing here.</value>
   </data>
   <data name="NoteTaskbarHides" xml:space="preserve">
-    <value>The taskbar already hides on this edge, so this dock stays visible.</value>
+    <value>The taskbar already hides on this edge, so this bar stays visible.</value>
   </data>
   <data name="Undo" xml:space="preserve">
     <value>Undo</value>
@@ -175,7 +175,7 @@
     <value>Add widget</value>
   </data>
   <data name="MenuDockSettings" xml:space="preserve">
-    <value>Dock settings</value>
+    <value>Bar settings</value>
   </data>
   <!-- Widget catalog: names and descriptions -->
   <data name="WidgetGaugeName" xml:space="preserve">
@@ -378,7 +378,7 @@
     <value>Restart now</value>
   </data>
   <data name="MediaPriorityHeader" xml:space="preserve">
-    <value>The buttons always drive</value>
+    <value>Which player the buttons drive</value>
   </data>
   <data name="MediaPriorityNone" xml:space="preserve">
     <value>Automatic: whoever is playing now</value>
@@ -402,7 +402,7 @@
     <value>Next</value>
   </data>
   <data name="BarHelp" xml:space="preserve">
-    <value>The bar is a row of slots. Drag a widget along it to move it between free slots, or off it to take it away. Right-click a slot to add a widget there, or a widget for its own settings.</value>
+    <value>The bar is a row of slots, and each slot holds one widget: a reading, the clock, a program's icon. Drag a widget along the bar to move it to a free slot, or off the bar to take it away. Right-click a free slot to add something there, or a widget for its own settings.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
     <value>Widgets</value>
@@ -426,7 +426,7 @@
     <value>A bar down the side of the screen has one thickness.</value>
   </data>
   <data name="HideNote" xml:space="preserve">
-    <value>The taskbar already hides on this edge, so this dock stays visible.</value>
+    <value>The taskbar already hides on this edge, so this bar stays visible.</value>
   </data>
   <data name="NothingToSetUp" xml:space="preserve">
     <value>This widget has nothing to set up.</value>
@@ -450,7 +450,7 @@
     <value>above other windows</value>
   </data>
   <data name="UndoShown" xml:space="preserve">
-    <value>shown</value>
+    <value>showing the bar</value>
   </data>
   <data name="LaunchIconAuto" xml:space="preserve">
     <value>The program's own icon</value>
@@ -480,7 +480,7 @@
     <value>A picture</value>
   </data>
   <data name="SegBackdropBraun" xml:space="preserve">
-    <value>Braun</value>
+    <value>Instrument</value>
   </data>
   <data name="SegAccentNeutral" xml:space="preserve">
     <value>Plain text</value>
@@ -840,7 +840,7 @@
     <value>{0} of these do not fit</value>
   </data>
   <data name="CrowdedRowHint" xml:space="preserve">
-    <value>The bar has run out of places. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it.</value>
+    <value>The bar has run out of slots. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it.</value>
   </data>
   <data name="CrowdedButton" xml:space="preserve">
     <value>Take them off</value>
@@ -942,7 +942,7 @@
     <value>{0} are waiting for their moment</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} - on the bar, and taking no place on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to where it was left, or to the first free place.</value>
+    <value>{0} - on the bar, and taking no slot on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to the slot it was left on, or to the first free one.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
     <value>Take them off</value>
@@ -955,5 +955,17 @@
   </data>
   <data name="QuietRowOne" xml:space="preserve">
     <value>One is waiting for its moment</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>What this is</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>The bar as a piece of equipment: a graphite body on the dark theme, a cream one on the light, readings in orange. Plain, strict and quiet - the same look these settings are drawn in, after Braun's instruments.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Take it off</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Take it off</value>
   </data>
 </root>

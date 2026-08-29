@@ -36,3 +36,9 @@ jobs:
       # the real binary can.
       - name: Smoke
         run: pwsh tools/smoke.ps1 -Seconds 10
+
+      # And again in the other language. A caption that fits its key in English
+      # can be half again as long in Russian and be cut at both ends; the check
+      # that measures it only ever sees the language it was run in.
+      - name: Smoke (Russian)
+        run: pwsh tools/smoke.ps1 -Seconds 10 -Lang ru-RU

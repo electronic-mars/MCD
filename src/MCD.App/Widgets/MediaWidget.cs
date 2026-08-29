@@ -209,7 +209,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         }
 
         StackPanel players = Mcd.App.Settings.Braun.Field(
-            Loc.Tr("MediaPriorityHeader", "The buttons always drive"),
+            Loc.Tr("MediaPriorityHeader", "Which player the buttons drive"),
             Mcd.App.Settings.Braun.Choice(
                 names,
                 Math.Max(0, ids.IndexOf(Nominated)),

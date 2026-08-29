@@ -17,7 +17,7 @@
     <value>Master Control Dock</value>
   </data>
   <data name="NavDocks.Content" xml:space="preserve">
-    <value>Доки</value>
+    <value>Панели</value>
   </data>
   <data name="NavIcons.Content" xml:space="preserve">
     <value>Значки</value>
@@ -33,16 +33,16 @@
   </data>
   <!-- Страница «Доки» -->
   <data name="DocksTitle.Text" xml:space="preserve">
-    <value>Доки</value>
+    <value>Панели</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>Один док на каждый экран. Изменения попадают на панель сразу.</value>
+    <value>По одной панели на каждый экран. Изменения попадают на неё сразу.</value>
   </data>
   <data name="BarLiveTitle" xml:space="preserve">
     <value>Сама панель</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
-    <value>Показывать док на этом дисплее</value>
+    <value>Показывать панель на этом дисплее</value>
   </data>
   <data name="EdgeLabel" xml:space="preserve">
     <value>Край</value>
@@ -59,7 +59,7 @@
     <value>Оформление</value>
   </data>
   <data name="AppearanceIntro.Text" xml:space="preserve">
-    <value>Как отрисовываются панели. Применяется ко всем докам.</value>
+    <value>Как отрисовываются панели. Применяется ко всем сразу.</value>
   </data>
   <data name="BackgroundLabel" xml:space="preserve">
     <value>Фон</value>
@@ -78,7 +78,7 @@
     <value>Значки</value>
   </data>
   <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех доках.</value>
+    <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех панелях.</value>
   </data>
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
@@ -93,13 +93,13 @@
   <!-- Страница «Мониторы» -->
   <!-- Страница «О программе» -->
   <data name="AboutIntro" xml:space="preserve">
-    <value>Док для края экрана. Свободное ПО под лицензией GPL-3.0-or-later; часть кода адаптирована из Microsoft PowerToys по лицензии MIT.</value>
+    <value>Панель для края экрана. Свободное ПО под лицензией GPL-3.0-or-later; часть кода адаптирована из Microsoft PowerToys по лицензии MIT.</value>
   </data>
   <data name="StartWithWindowsLabel" xml:space="preserve">
     <value>Запускать при входе в Windows</value>
   </data>
   <data name="StartWithWindowsHint" xml:space="preserve">
-    <value>Доки возвращаются при входе в систему.</value>
+    <value>Панели возвращаются при входе в систему.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
     <value>Закрытие этого окна оставляет панели работать. Чтобы остановить их, нажмите эту кнопку — снятие задачи через диспетчер задач оставит зарезервированное место на экране занятым.</value>
@@ -119,7 +119,7 @@
     <value>У панели сбоку экрана только одна ширина, поэтому компактный размер здесь ничего не меняет.</value>
   </data>
   <data name="NoteTaskbarHides" xml:space="preserve">
-    <value>Панель задач уже скрывается у этого края, поэтому этот док остаётся видимым.</value>
+    <value>У этого края уже скрывается панель задач Windows, поэтому эта панель остаётся видимой.</value>
   </data>
   <data name="Undo" xml:space="preserve">
     <value>Отменить</value>
@@ -175,7 +175,7 @@
     <value>Добавить виджет</value>
   </data>
   <data name="MenuDockSettings" xml:space="preserve">
-    <value>Параметры дока</value>
+    <value>Параметры панели</value>
   </data>
   <!-- Каталог виджетов: названия и описания -->
   <data name="WidgetGaugeName" xml:space="preserve">
@@ -378,7 +378,7 @@
     <value>Перезапустить сейчас</value>
   </data>
   <data name="MediaPriorityHeader" xml:space="preserve">
-    <value>Кнопки всегда управляют</value>
+    <value>Каким плеером управляют кнопки</value>
   </data>
   <data name="MediaPriorityNone" xml:space="preserve">
     <value>Автоматически: кто сейчас играет</value>
@@ -402,7 +402,7 @@
     <value>Следующий</value>
   </data>
   <data name="BarHelp" xml:space="preserve">
-    <value>Панель — это ряд слотов. Тяните виджет вдоль неё, чтобы переставить в свободный слот, или за её пределы, чтобы убрать. Правый клик по слоту добавляет виджет туда, по виджету — открывает его настройки.</value>
+    <value>Панель — это ряд мест, и на каждом стоит один виджет: показание, часы, значок программы. Тяните виджет вдоль панели, чтобы переставить на свободное место, или за её пределы, чтобы убрать. Правый клик по свободному месту добавляет туда виджет, по самому виджету — открывает его настройки.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
     <value>Виджеты</value>
@@ -426,7 +426,7 @@
     <value>У панели вдоль бока экрана толщина одна.</value>
   </data>
   <data name="HideNote" xml:space="preserve">
-    <value>На этом краю уже скрывается панель задач, поэтому док остаётся видимым.</value>
+    <value>У этого края уже скрывается панель задач Windows, поэтому эта панель остаётся видимой.</value>
   </data>
   <data name="NothingToSetUp" xml:space="preserve">
     <value>У этого виджета нет настроек.</value>
@@ -450,7 +450,7 @@
     <value>поверх окон</value>
   </data>
   <data name="UndoShown" xml:space="preserve">
-    <value>показ дока</value>
+    <value>показ панели</value>
   </data>
   <data name="LaunchIconAuto" xml:space="preserve">
     <value>Собственный значок программы</value>
@@ -480,7 +480,7 @@
     <value>Картинка</value>
   </data>
   <data name="SegBackdropBraun" xml:space="preserve">
-    <value>Браун</value>
+    <value>Прибор</value>
   </data>
   <data name="SegAccentNeutral" xml:space="preserve">
     <value>Обычный текст</value>
@@ -663,13 +663,13 @@
     <value>Поставить на панель</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>Перетащите на панель — виджет встанет в тот слот, куда вы его отпустили. Нажатие меняет значок, которым он нарисован. Ограничений нет: два одинаковых показания в разных местах — обычное дело.</value>
+    <value>Перетащите на панель — виджет встанет на то место, куда вы его отпустили. Нажатие меняет значок, которым он нарисован. Ограничений нет: два одинаковых показания в разных местах — обычное дело.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
     <value>Своя программа</value>
   </data>
   <data name="PinRowHint" xml:space="preserve">
-    <value>Закреплённые программы стоят на панели значками. Файл, брошенный прямо на панель, закрепляется в том слоте, куда попал.</value>
+    <value>Закреплённые программы стоят на панели значками. Файл, брошенный прямо на панель, закрепляется на том месте, куда попал.</value>
   </data>
   <data name="ResetRow" xml:space="preserve">
     <value>Стандартный набор</value>
@@ -942,7 +942,7 @@
     <value>{0} ждут своего момента</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} — на панели, но места на ней не занимает, пока ему нечего сказать про эту машину: батарея — когда машина работает от сети, Wi-Fi — пока воткнут кабель. Каждый вернётся туда, где его оставили, или на первое свободное место.</value>
+    <value>{0} — на панели, но места на ней не занимает, пока ему нечего сказать про эту машину: батарея — когда машина работает от сети, Wi-Fi — пока воткнут кабель. Каждый вернётся на то место, где его оставили, или на первое свободное.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
     <value>Убрать их</value>
@@ -955,5 +955,17 @@
   </data>
   <data name="QuietRowOne" xml:space="preserve">
     <value>Один ждёт своего момента</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>Что это</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>Панель как прибор: графитовый корпус на тёмной теме, кремовый на светлой, показания оранжевым. Лаконично, строго и спокойно — тот же стиль, в котором нарисованы эти настройки; по мотивам приборов Braun.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Убрать</value>
   </data>
 </root>
