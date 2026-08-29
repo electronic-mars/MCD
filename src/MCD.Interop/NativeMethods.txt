@@ -1,4 +1,4 @@
-// AppBar - the shell protocol that reserves an edge of the work area.
+﻿// AppBar - the shell protocol that reserves an edge of the work area.
 SHAppBarMessage
 APPBARDATA
 ABM_*
