@@ -43,6 +43,16 @@ ICONS: dict[str, str] = {
     "Brush": "thermometer",
     "Fan": "fan-01",
     "Battery": "battery-medium-01",
+    # The battery draws one of four, and Wi-Fi one of four, because a bar is
+    # glanced at: the shape has to carry the reading before the figure beside
+    # it is read, or the figure is the only thing that ever gets read.
+    "BatteryFull": "battery-full",
+    "BatteryLow": "battery-empty",
+    "BatteryCharging": "battery-charging-01",
+    "WifiHigh": "wifi-full-signal",
+    "WifiMid": "wifi-medium-signal",
+    "WifiLow": "wifi-low-signal",
+    "WifiNone": "wifi-no-signal",
     "Power": "power",
     "Computer": "computer",
     "Activity": "activity-01",

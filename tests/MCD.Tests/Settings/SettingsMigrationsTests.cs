@@ -7,6 +7,18 @@ namespace Mcd.Tests.Settings;
 
 public sealed class SettingsMigrationsTests
 {
+    /// <summary>
+    /// What the bar holds apart from the two every bar gained at version 8.
+    /// </summary>
+    /// <remarks>
+    /// These tests are about what became of an old file's own widgets. Writing
+    /// the battery and the Wi-Fi into the end of every expectation here would
+    /// say nothing about the migration each one is describing, and would have
+    /// to be done again the next time something is added to every bar.
+    /// </remarks>
+    private static IReadOnlyList<WidgetConfig> Own(MonitorConfig dock) =>
+        [.. dock.Widgets.Where(w => w.TypeId is not ("mcd.battery" or "mcd.wifi"))];
+
     [Fact]
     public void AVersionOneFileEndsUpAtomised()
     {
@@ -31,7 +43,7 @@ public sealed class SettingsMigrationsTests
         // added and then dissolves (nothing was pinned), the regions flatten,
         // every composite becomes its atoms - one widget per reading, one per
         // temperature - and the spacers go with the arrival of real slots.
-        migrated.Monitors.Single().Widgets
+        Own(migrated.Monitors.Single())
             .Select(w => w.TypeId)
             .ShouldBe([
                 "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge",
@@ -91,7 +103,7 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        flat.Widgets.Select(w => w.TypeId).ShouldBe(
+        Own(flat).Select(w => w.TypeId).ShouldBe(
             ["mcd.media", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.gauge"]);
         flat.Bands.ShouldBeNull();
     }
@@ -114,7 +126,7 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig flat = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        flat.Widgets.Select(w => w.TypeId)
+        Own(flat).Select(w => w.TypeId)
             .ShouldBe(["mcd.media"]);
     }
 
@@ -145,8 +157,8 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig dock = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        dock.Widgets.Select(w => w.TypeId).ShouldBe(["mcd.gauge", "mcd.gauge"]);
-        dock.Widgets.Select(w => w.Config!.Value.GetProperty("reading").GetString())
+        Own(dock).Select(w => w.TypeId).ShouldBe(["mcd.gauge", "mcd.gauge"]);
+        Own(dock).Select(w => w.Config!.Value.GetProperty("reading").GetString())
             .ShouldBe(["cpu", "down"]);
     }
 
@@ -178,11 +190,11 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig dock = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        dock.Widgets.Select(w => w.TypeId).ShouldBe(["mcd.temp", "mcd.temp"]);
-        dock.Widgets.Select(w => w.Config!.Value.GetProperty("sensor").GetString())
+        Own(dock).Select(w => w.TypeId).ShouldBe(["mcd.temp", "mcd.temp"]);
+        Own(dock).Select(w => w.Config!.Value.GetProperty("sensor").GetString())
             .ShouldBe(["hwinfo/ssd", "pdh/gpu"]);
 
-        foreach (WidgetConfig widget in dock.Widgets)
+        foreach (WidgetConfig widget in Own(dock))
         {
             widget.Config!.Value.GetProperty("warn").GetInt32().ShouldBe(70);
             widget.Config!.Value.GetProperty("crit").GetInt32().ShouldBe(90);
@@ -207,7 +219,7 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig dock = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        WidgetConfig widget = dock.Widgets.Single();
+        WidgetConfig widget = Own(dock).Single();
         widget.TypeId.ShouldBe("mcd.temp");
         widget.Config!.Value.TryGetProperty("sensor", out _).ShouldBeFalse();
     }
@@ -238,7 +250,7 @@ public sealed class SettingsMigrationsTests
 
         MonitorConfig dock = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
 
-        dock.Widgets.Select(w => w.TypeId).ShouldBe(["mcd.icon", "mcd.icon", "mcd.media"]);
+        Own(dock).Select(w => w.TypeId).ShouldBe(["mcd.icon", "mcd.icon", "mcd.media"]);
 
         JsonElement first = dock.Widgets[0].Config!.Value;
         first.GetProperty("target").GetString().ShouldBe(@"C:\notepad.exe");
@@ -267,5 +279,31 @@ public sealed class SettingsMigrationsTests
 
         SettingsMigrations.Apply(ahead, NullLogger.Instance).SchemaVersion
             .ShouldBe(SettingsDefaults.SchemaVersion + 3);
+    }
+
+    [Fact]
+    public void EveryBarGainsTheBatteryAndTheWiFiExactlyOnce()
+    {
+        var old = new SettingsModel
+        {
+            SchemaVersion = 7,
+            Monitors =
+            [
+                new MonitorConfig
+                {
+                    StableId = "abc",
+                    Widgets = [WidgetConfig.New("mcd.media"), WidgetConfig.New("mcd.battery")],
+                },
+            ],
+        };
+
+        MonitorConfig dock = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors.Single();
+
+        // The one that was already there is kept, the missing one is added,
+        // and both go after everything so that nothing already arranged moves.
+        dock.Widgets.Select(w => w.TypeId)
+            .ShouldBe(["mcd.media", "mcd.battery", "mcd.wifi"]);
+
+        dock.Widgets.Last().Cell.ShouldBe(-1);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Mcd.Core.Settings;
+using Mcd.Interop.Machine;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
 
@@ -82,6 +83,20 @@ public static class WidgetCatalog
             Loc.Tr("WidgetSoundDescription", "Silences the machine, and says how loud it is."),
             "Speaker",
             (context, entry) => new SoundWidget(context, entry)),
+
+        new(
+            BatteryWidget.Type,
+            Loc.Tr("WidgetBatteryName", "Battery"),
+            Loc.Tr("WidgetBatteryDescription", "How much charge is left. Only on a machine that runs on charge."),
+            "Battery",
+            (context, entry) => new BatteryWidget(context, entry)),
+
+        new(
+            WifiWidget.Type,
+            Loc.Tr("WidgetWifiName", "Wi-Fi"),
+            Loc.Tr("WidgetWifiDescription", "How good the signal is. Only while the machine is on a wireless network."),
+            "WifiHigh",
+            (context, entry) => new WifiWidget(context, entry)),
 
         new(
             ClockWidget.Type,
@@ -170,6 +185,31 @@ public static class WidgetCatalog
             "Speaker",
             () => WidgetConfig.New(SoundWidget.Type),
             entry => entry.TypeId == SoundWidget.Type);
+
+        // Offered only where they are about something. A desktop has no
+        // battery and is never going to grow one, and a machine with no
+        // wireless card cannot join a wireless network: putting either in the
+        // gallery would be offering a widget that lands on the bar, draws
+        // nothing, and cannot be dragged off what it is not on.
+        if (Power.Read().Present)
+        {
+            yield return new WidgetOffer(
+                Loc.Tr("WidgetBatteryName", "Battery"),
+                Loc.Tr("WidgetBatteryDescription", "How much charge is left. Only on a machine that runs on charge."),
+                "Battery",
+                () => WidgetConfig.New(BatteryWidget.Type),
+                entry => entry.TypeId == BatteryWidget.Type);
+        }
+
+        if (Wireless.Fitted())
+        {
+            yield return new WidgetOffer(
+                Loc.Tr("WidgetWifiName", "Wi-Fi"),
+                Loc.Tr("WidgetWifiDescription", "How good the signal is. Only while the machine is on a wireless network."),
+                "WifiHigh",
+                () => WidgetConfig.New(WifiWidget.Type),
+                entry => entry.TypeId == WifiWidget.Type);
+        }
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetClockName", "Clock"),

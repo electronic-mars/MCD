@@ -30,6 +30,37 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void AWidgetAboutNothingTakesNoSlotAndTheBarClosesOver()
+    {
+        // A battery on a machine running from the mains, or Wi-Fi with the
+        // cable in: no span at all. What follows it moves up rather than
+        // leaving a hole nothing can be dropped into.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a"), 2), (Entry("battery"), 0), (Entry("c"), 1)], capacity: 20);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("c", 2)]);
+    }
+
+    [Fact]
+    public void AWidgetAboutNothingKeepsItsPlaceInTheOrder()
+    {
+        // It is not shown, but it has not been given up either: the moment it
+        // is about something again it goes back where it was, not to the end.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("battery", 2), 0), (Entry("c", 3), 1)], capacity: 20);
+
+        placed.ShouldNotContain(p => p.InstanceId == "battery");
+        placed.Single(p => p.InstanceId == "c").Cell.ShouldBe(3);
+
+        // The cable comes out.
+        List<Placement> back = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("battery", 2), 1), (Entry("c", 3), 1)], capacity: 20);
+
+        back.Single(p => p.InstanceId == "battery").Cell.ShouldBe(2);
+        back.Single(p => p.InstanceId == "c").Cell.ShouldBe(3);
+    }
+
+    [Fact]
     public void AWidgetKeepsTheSlotItWasPutOn()
     {
         // A bar arranged by hand comes back exactly as it was left, gaps and

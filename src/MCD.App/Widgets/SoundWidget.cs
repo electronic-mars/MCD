@@ -54,6 +54,16 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// <summary>Whether the figure is written beside the speaker.</summary>
     private bool WithLevel => WidgetOptions.Number(Options, "level") is not 0;
 
+    /// <summary>
+    /// This machine can make a sound.
+    /// </summary>
+    /// <remarks>
+    /// Said here rather than by returning no length, because a length of
+    /// nothing still rounds up to one slot: the widget was invisible and the
+    /// gap it stood in was not.
+    /// </remarks>
+    public override bool Matters => Shown == Visibility.Visible;
+
     public override void Attach() => Tick(SensorSnapshot.Empty);
 
     public override void Tick(SensorSnapshot snapshot)
@@ -116,11 +126,6 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        if (Shown == Visibility.Collapsed)
-        {
-            return 0;
-        }
-
         double along = DockMetrics.ReadingIcon(Density) + 12;
 
         if (LevelVisible == Visibility.Visible)

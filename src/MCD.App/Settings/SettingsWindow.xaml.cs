@@ -1004,16 +1004,45 @@ public sealed partial class SettingsWindow : Window
             // something is.
             Crowded(dock) is { Count: > 0 } stranded
                 ? Braun.Row(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Loc.Tr("CrowdedRow", "{0} of these do not fit"),
-                        stranded.Count),
+                    stranded.Count == 1
+                        ? Loc.Tr("CrowdedRowOne", "One of these does not fit")
+                        : string.Format(
+                            CultureInfo.CurrentCulture,
+                            Loc.Tr("CrowdedRow", "{0} of these do not fit"),
+                            stranded.Count),
                     Loc.Tr(
                         "CrowdedRowHint",
                         "The bar has run out of places. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it."),
                     Braun.Action(
                         Loc.Tr("CrowdedButton", "Take them off"),
-                        () => Shed(dock, stranded),
+                        () => Shed(dock, stranded, Loc.Tr("UndoCrowded", "the ones that did not fit")),
+                        "Delete",
+                        danger: true))
+                : null,
+
+            // Also only when there are any, and worded as waiting rather than
+            // as missing. Somebody who drags a Wi-Fi widget onto the bar of a
+            // machine holding a cable sees nothing happen, and nothing
+            // happening is indistinguishable from broken.
+            Quiet(dock) is { Count: > 0 } quiet
+                ? Braun.Row(
+                    // Counted rows are read as sentences, and a sentence that
+                    // says "1 are waiting" is a sentence written by a machine.
+                    quiet.Count == 1
+                        ? Loc.Tr("QuietRowOne", "One is waiting for its moment")
+                        : string.Format(
+                            CultureInfo.CurrentCulture,
+                            Loc.Tr("QuietRow", "{0} are waiting for their moment"),
+                            quiet.Count),
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr(
+                            "QuietRowHint",
+                            "{0} - on the bar, and taking no place on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to where it was left, or to the first free place."),
+                        Named(quiet)),
+                    Braun.Action(
+                        Loc.Tr("QuietButton", "Take them off"),
+                        () => Shed(dock, quiet, Loc.Tr("UndoQuiet", "the ones that were waiting")),
                         "Delete",
                         danger: true))
                 : null,
@@ -1022,7 +1051,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("ResetRow", "The standard set"),
                 Loc.Tr(
                     "ResetRowHint",
-                    "Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip and a temperature. Undo brings your own arrangement back."),
+                    "Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip, a temperature, and the battery and Wi-Fi where the machine has them. Undo brings your own arrangement back."),
                 Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "Undo"))));
 
         // ------------------------------------------------------- chosen widget
@@ -1095,15 +1124,33 @@ public sealed partial class SettingsWindow : Window
     private IReadOnlyList<WidgetConfig> Crowded(MonitorConfig dock) =>
         _docks.Unplaced(dock.StableId);
 
-    /// <summary>Takes off the ones that would not fit.</summary>
-    private void Shed(MonitorConfig dock, IReadOnlyList<WidgetConfig> stranded)
+    /// <summary>What it is holding that is about nothing on this machine today.</summary>
+    private IReadOnlyList<WidgetConfig> Quiet(MonitorConfig dock) =>
+        _docks.Quiet(dock.StableId);
+
+    /// <summary>
+    /// What they are called, for a line that has to name them.
+    /// </summary>
+    /// <remarks>
+    /// "2 are waiting" is a count; "Battery, Wi-Fi" is an answer. The same
+    /// kind twice is listed once - two clocks are still "Clock".
+    /// </remarks>
+    private static string Named(IReadOnlyList<WidgetConfig> widgets) =>
+        string.Join(
+            ", ",
+            widgets
+                .Select(w => WidgetCatalog.Find(w.TypeId)?.Name ?? w.TypeId)
+                .Distinct(StringComparer.CurrentCulture));
+
+    /// <summary>Takes off the ones named.</summary>
+    private void Shed(MonitorConfig dock, IReadOnlyList<WidgetConfig> stranded, string what)
     {
         var gone = stranded.Select(w => w.InstanceId).ToHashSet(StringComparer.Ordinal);
 
         Rearrange(
             dock.StableId,
             widgets => [.. widgets.Where(w => !gone.Contains(w.InstanceId))],
-            Loc.Tr("UndoCrowded", "the ones that did not fit"));
+            what);
     }
 
     /// <summary>

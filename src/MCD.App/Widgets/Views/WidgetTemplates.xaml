@@ -182,6 +182,82 @@
         </widgets:HoverChip>
     </DataTemplate>
 
+    <!--
+        Battery and Wi-Fi are drawn the same way: an icon that carries the
+        reading on its own, and a figure beside it on a bar with room. Both
+        vanish entirely on a machine they are not about, which the bar arranges
+        by giving them no slot rather than by drawing something invisible.
+    -->
+    <DataTemplate x:Key="mcd.battery" x:DataType="widgets:BatteryWidget">
+        <widgets:HoverChip Margin="6,0">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <StackPanel
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="6">
+                <Viewbox
+                    Width="{x:Bind IconSize, Mode=OneWay}"
+                    Height="{x:Bind IconSize, Mode=OneWay}"
+                    VerticalAlignment="Center">
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Stroke="{x:Bind Colour, Mode=OneWay}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="1.7" />
+                    </Canvas>
+                </Viewbox>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="{x:Bind FontSize, Mode=OneWay}"
+                    Foreground="{x:Bind Colour, Mode=OneWay}"
+                    Text="{x:Bind Level, Mode=OneWay}"
+                    Visibility="{x:Bind LevelVisible, Mode=OneWay}" />
+            </StackPanel>
+        </widgets:HoverChip>
+    </DataTemplate>
+
+    <DataTemplate x:Key="mcd.wifi" x:DataType="widgets:WifiWidget">
+        <widgets:HoverChip Margin="6,0">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <StackPanel
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="6">
+                <Viewbox
+                    Width="{x:Bind IconSize, Mode=OneWay}"
+                    Height="{x:Bind IconSize, Mode=OneWay}"
+                    VerticalAlignment="Center">
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Stroke="{x:Bind Colour, Mode=OneWay}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="1.7" />
+                    </Canvas>
+                </Viewbox>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="{x:Bind FontSize, Mode=OneWay}"
+                    Foreground="{x:Bind Colour, Mode=OneWay}"
+                    Text="{x:Bind Name, Mode=OneWay}"
+                    Visibility="{x:Bind NameVisible, Mode=OneWay}" />
+            </StackPanel>
+        </widgets:HoverChip>
+    </DataTemplate>
+
     <!-- The time, and the date under it on a full-size bar. Tabular figures
          so the minute changing does not shuffle the hour along. -->
     <DataTemplate x:Key="mcd.clock" x:DataType="widgets:ClockWidget">

@@ -239,6 +239,10 @@ public sealed class DockWindowManager : IDisposable
     public IReadOnlyList<WidgetConfig> Unplaced(string stableId) =>
         _windows.TryGetValue(stableId, out DockWindow? window) ? window.Unplaced : [];
 
+    /// <summary>What it is holding that is about nothing on this machine today.</summary>
+    public IReadOnlyList<WidgetConfig> Quiet(string stableId) =>
+        _windows.TryGetValue(stableId, out DockWindow? window) ? window.Quiet : [];
+
     private WidgetContext Context()
     {
         AppSettings app = _settings.Current.App;

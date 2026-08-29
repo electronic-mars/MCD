@@ -1162,6 +1162,23 @@ public sealed partial class DockWindow : Window
         WriteBackCells();
     }
 
+    /// <summary>
+    /// How many slots a widget is asking for.
+    /// </summary>
+    /// <remarks>
+    /// None at all when the widget says it is about nothing on this machine.
+    /// A slot that draws nothing is worse than no slot: it is a gap in the bar
+    /// that cannot be dropped into and cannot be explained.
+    /// </remarks>
+    /// <param name="held">
+    /// How many it already has. A widget never gives a slot back for having a
+    /// shorter number in it - only for having stopped being about anything.
+    /// </param>
+    private int Wants(WidgetViewModel widget, int held) =>
+        widget.Matters
+            ? Math.Max(held, DockLayout.SpanOf(widget.Length(), CellSize))
+            : 0;
+
     /// <summary>How long this bar is, and how many slots that comes to.</summary>
     private void Measure()
     {
@@ -1201,7 +1218,7 @@ public sealed partial class DockWindow : Window
         DockLayout.Dress(host, Config.Edge);
         host.Attach();
 
-        return (host, DockLayout.SpanOf(widget.Length(), CellSize));
+        return (host, Wants(widget, 0));
     }
 
     /// <summary>
@@ -1308,7 +1325,36 @@ public sealed partial class DockWindow : Window
     /// removable from nowhere. Naming them is what makes them reachable.
     /// </remarks>
     public IReadOnlyList<WidgetConfig> Unplaced =>
-        [.. Config.Widgets.Where(w => !_placed.Any(p => p.InstanceId == w.InstanceId))];
+    [
+        .. Config.Widgets.Where(
+            w => !_placed.Any(p => p.InstanceId == w.InstanceId) && !Waiting(w.InstanceId))
+    ];
+
+    /// <summary>
+    /// Whether this widget is off the bar because it is about nothing, rather
+    /// than because there was no room for it.
+    /// </summary>
+    /// <remarks>
+    /// The difference matters to what is said about it. "This did not fit" is
+    /// something to act on - make room, or take it off. A battery widget on a
+    /// machine running from the mains is doing exactly what it was asked to,
+    /// and listing it as a problem would teach somebody to ignore the list.
+    /// </remarks>
+    private bool Waiting(string instanceId) =>
+        _drawn.TryGetValue(instanceId, out WidgetHost? host) && !host.Widget.Matters;
+
+    /// <summary>
+    /// The widgets on this bar that are quiet because they are about nothing.
+    /// </summary>
+    /// <remarks>
+    /// Named for the same reason the ones that do not fit are named. Somebody
+    /// who drags a Wi-Fi widget onto the bar of a machine holding a cable sees
+    /// nothing happen, and nothing happening is indistinguishable from broken.
+    /// It is on the bar; it is simply waiting for the cable to come out, and
+    /// something has to say so.
+    /// </remarks>
+    public IReadOnlyList<WidgetConfig> Quiet =>
+        [.. Config.Widgets.Where(w => Waiting(w.InstanceId))];
 
     /// <summary>What was built for this bar, and where each of it went.</summary>
     private List<(WidgetConfig Entry, int Span)> _built = [];
@@ -1719,10 +1765,18 @@ public sealed partial class DockWindow : Window
     /// ones it holds.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// A network rate goes from "0 B/s" to "12.4 MB/s" within a second, and a
     /// figure clipped by its own slot is worse than a bar that shuffles once.
-    /// Nothing ever shrinks back: a bar that gave a slot up the moment the
-    /// number got shorter would shuffle every second of the day.
+    /// Nothing ever shrinks back for being shorter: a bar that gave a slot up
+    /// the moment the number got smaller would shuffle every second of the day.
+    /// </para>
+    /// <para>
+    /// The one thing that does give a slot back is a widget that has stopped
+    /// being about anything - the cable going in, the battery coming out. That
+    /// is not a number changing, it is the subject going away, and holding a
+    /// slot for it would leave a hole in the bar for as long as it lasted.
+    /// </para>
     /// </remarks>
     private void Regrow()
     {
@@ -1737,13 +1791,27 @@ public sealed partial class DockWindow : Window
                 continue;
             }
 
-            int wants = DockLayout.SpanOf(host.Widget.Length(), CellSize);
+            int wants = Wants(host.Widget, span);
 
-            if (wants > span)
+            if (wants == span)
             {
-                _built[i] = (entry, wants);
-                grew = true;
+                continue;
             }
+
+            // Worth a line when a widget stops being about anything or starts
+            // again - it is the one change on the bar that nobody asked for,
+            // and "my battery disappeared" needs an answer that is not a guess.
+            if (wants == 0 || span == 0)
+            {
+                _log.LogInformation(
+                    "widget.{What} monitor={Monitor} typeId={TypeId}",
+                    wants == 0 ? "quiet" : "back",
+                    Monitor.Identity.FriendlyName,
+                    entry.TypeId);
+            }
+
+            _built[i] = (entry, wants);
+            grew = true;
         }
 
         // Not while anything is in hand - including a press that has not yet

@@ -44,6 +44,16 @@ public static class DockGrid
             .ThenBy(x => x.i)
             .Select(x => x.item))
         {
+            // No span at all: the widget is about nothing on this machine
+            // just now - a battery where there is no battery, Wi-Fi while the
+            // cable is in. It keeps its slot in the settings and takes none on
+            // the bar, and the cursor does not move, so what follows closes
+            // over the gap.
+            if (span <= 0)
+            {
+                continue;
+            }
+
             int cell = Math.Max(entry.Cell < 0 ? 0 : entry.Cell, cursor);
 
             if (cell + span > capacity)

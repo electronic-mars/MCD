@@ -675,7 +675,7 @@
     <value>The standard set</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip and a temperature. Undo brings your own arrangement back.</value>
+    <value>Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip, a temperature, and the battery and Wi-Fi where the machine has them. Undo brings your own arrangement back.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
     <value>Restore the standard bar</value>
@@ -898,5 +898,62 @@
   </data>
   <data name="KeyTaken" xml:space="preserve">
     <value>Another program already holds this combination, so it does nothing here. Choose a different one.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Battery</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>How much charge is left. Only on a machine that runs on charge.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>How good the signal is. Only while the machine is on a wireless network.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0}% of a charge</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>charging</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>on the mains</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>about {0} h {1} min left</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Charge not reported</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>signal {0} of 5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>On a wireless network</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Write the network's name</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Useful where two networks are within reach and both work.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>{0} are waiting for their moment</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0} - on the bar, and taking no place on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to where it was left, or to the first free place.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Take them off</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>the ones that were waiting</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>One of these does not fit</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>One is waiting for its moment</value>
   </data>
 </root>

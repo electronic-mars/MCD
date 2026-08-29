@@ -152,3 +152,7 @@ MESSAGEBOX_STYLE
 RegisterHotKey
 UnregisterHotKey
 HOT_KEY_MODIFIERS
+
+// Whether this machine has a battery, and how much is left in it.
+GetSystemPowerStatus
+SYSTEM_POWER_STATUS

@@ -117,6 +117,24 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     /// </remarks>
     public virtual double Length() => 30;
 
+    /// <summary>
+    /// Whether this widget is about anything on this machine, right now.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A battery on a desktop is about nothing. Wi-Fi on a machine holding a
+    /// cable is about nothing. A widget that says so gives its slot up and the
+    /// bar closes over it; when the answer changes back it takes its slot
+    /// again, or the first free one if somebody has since filled it.
+    /// </para>
+    /// <para>
+    /// This is not the same as being empty. A reading with nothing to report
+    /// yet still matters - it is about the processor, and the processor is
+    /// still there. What is asked here is whether the subject exists.
+    /// </para>
+    /// </remarks>
+    public virtual bool Matters => true;
+
     /// <summary>Called on the UI thread once a second while the dock is visible.</summary>
     public abstract void Tick(SensorSnapshot snapshot);
 

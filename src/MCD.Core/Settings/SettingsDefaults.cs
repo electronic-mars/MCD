@@ -1,4 +1,4 @@
-namespace Mcd.Core.Settings;
+﻿namespace Mcd.Core.Settings;
 
 /// <summary>
 /// The settings a fresh install starts from, in one place.
@@ -10,7 +10,7 @@ namespace Mcd.Core.Settings;
 /// </remarks>
 public static class SettingsDefaults
 {
-    public const int SchemaVersion = 7;
+    public const int SchemaVersion = 8;
 
     public static SettingsModel Model => new();
 }

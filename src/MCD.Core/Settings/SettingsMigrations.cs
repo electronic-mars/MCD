@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
@@ -32,6 +32,7 @@ public static class SettingsMigrations
                 4 => ToFive(current),
                 5 => ToSix(current),
                 6 => ToSeven(current),
+                7 => ToEight(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -167,6 +168,45 @@ public static class SettingsMigrations
     /// packs its widgets onto the first free slots the next time it is built,
     /// in the order they were in.
     /// </remarks>
+    /// <summary>
+    /// Version 8 gives every bar the battery and the Wi-Fi.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Added rather than left to be found. On a laptop the charge is the one
+    /// reading that decides what somebody does next, and a bar arranged before
+    /// these existed would never show it unless its owner went looking for a
+    /// widget they had no reason to know had been added.
+    /// </para>
+    /// <para>
+    /// Nothing already on the bar moves: both arrive unplaced, so they take
+    /// the first free slots after everything else, and on a machine they are
+    /// not about - a desktop, or a machine on a cable - they take none at all
+    /// and cost the arrangement nothing. A bar that already has one keeps the
+    /// one it has rather than gaining a second.
+    /// </para>
+    /// </remarks>
+    private static SettingsModel ToEight(SettingsModel model) => model with
+    {
+        SchemaVersion = 8,
+        Monitors = [.. model.Monitors.Select(WithConditional)],
+    };
+
+    private static MonitorConfig WithConditional(MonitorConfig monitor)
+    {
+        var widgets = monitor.Widgets.ToList();
+
+        foreach (string typeId in (string[])["mcd.battery", "mcd.wifi"])
+        {
+            if (!widgets.Any(w => w.TypeId == typeId))
+            {
+                widgets.Add(WidgetConfig.New(typeId));
+            }
+        }
+
+        return monitor with { Widgets = [.. widgets] };
+    }
+
     private static SettingsModel ToSeven(SettingsModel model) => model with
     {
         SchemaVersion = 7,

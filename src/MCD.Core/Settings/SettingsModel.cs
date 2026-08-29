@@ -188,9 +188,18 @@ public static class DockContents
 {
     /// <summary>
     /// The player, then a reading each for the processor, the memory, both
-    /// directions of the network and the graphics chip, and a temperature.
-    /// Every one is placed on the first free slots, in this order.
+    /// directions of the network and the graphics chip, a temperature, and the
+    /// two that are only about some machines. Every one is placed on the first
+    /// free slots, in this order.
     /// </summary>
+    /// <remarks>
+    /// The battery and the Wi-Fi are in the standard bar on every machine and
+    /// draw on none that they are not about: a desktop never shows a battery,
+    /// and a laptop on a cable shows no aerial until the cable comes out. That
+    /// is the point of putting them here rather than leaving them to be found -
+    /// the thing a laptop most wants on its bar should not have to be looked
+    /// for, and the same list has to be right on a tower as well.
+    /// </remarks>
     public static ImmutableArray<WidgetConfig> Default =>
     [
         WidgetConfig.New("mcd.media"),
@@ -200,6 +209,8 @@ public static class DockContents
         Gauge("down"),
         Gauge("gpu"),
         WidgetConfig.New("mcd.temp"),
+        WidgetConfig.New("mcd.battery"),
+        WidgetConfig.New("mcd.wifi"),
     ];
 
     /// <summary>One reading, as a widget of its own.</summary>

@@ -675,7 +675,7 @@
     <value>Стандартный набор</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Вернёт панель к тому, что на ней стоит после установки: проигрыватель, процессор, память, оба направления сети, видеокарта и температура. Отмена вернёт вашу расстановку.</value>
+    <value>Возвращает панель к тому, что она содержит после установки: плеер, процессор, память, обе стороны сети, видеокарта, температура, а также батарея и Wi-Fi там, где они есть у машины. Отмена вернёт вашу расстановку.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
     <value>Вернуть стандартную панель</value>
@@ -898,5 +898,62 @@
   </data>
   <data name="KeyTaken" xml:space="preserve">
     <value>Эту комбинацию уже держит другая программа, поэтому здесь она ничего не делает. Выберите другую.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Батарея</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>Сколько заряда осталось. Только на машине, которая работает от заряда.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Насколько хорош сигнал. Только пока машина в беспроводной сети.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0}% заряда</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>заряжается</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>от сети</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>осталось примерно {0} ч {1} мин</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Заряд не сообщается</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>сигнал {0} из 5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>В беспроводной сети</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Писать имя сети</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Пригодится там, где в досягаемости две сети и работают обе.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>{0} ждут своего момента</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0} — на панели, но места на ней не занимает, пока ему нечего сказать про эту машину: батарея — когда машина работает от сети, Wi-Fi — пока воткнут кабель. Каждый вернётся туда, где его оставили, или на первое свободное место.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Убрать их</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>те, что ждали</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>Одно из них не помещается</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>Один ждёт своего момента</value>
   </data>
 </root>
