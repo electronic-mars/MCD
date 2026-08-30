@@ -213,6 +213,17 @@ public sealed partial class SettingsWindow : Window
 
     private const double MaximumTall = 1200;
 
+    /// <summary>
+    /// Room left round the window on a screen that has none to spare.
+    /// </summary>
+    /// <remarks>
+    /// Enough for the taskbar and for the window's own shadow, so that the
+    /// bar this window is meant to be dragged onto is still reachable behind
+    /// it. The screen rectangle is the whole display rather than the working
+    /// area, because that is what the monitor list hands over.
+    /// </remarks>
+    private const double Spare = 80;
+
     public void SizeAndCentre(MonitorInfo? screen)
     {
         nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
@@ -220,9 +231,21 @@ public sealed partial class SettingsWindow : Window
         double scale = screen?.Scale ?? WindowFrame.GetScale(hwnd);
         RECT bounds = screen?.Bounds ?? Displays.BoundsFor(hwnd);
 
+        // What the screen has, in the same units the sizes are written in.
+        // Without this the window asked for 780 points of height whatever it
+        // was opening on: on a 1920 by 1080 screen at 150 per cent that is a
+        // window taller than the display it is centred on, with its foot off
+        // the bottom - and the bar it is meant to be dragged onto underneath
+        // it. The commonest laptop screen there is.
+        double roomWide = (bounds.right - bounds.left) / scale;
+        double roomTall = (bounds.bottom - bounds.top) / scale;
+
+        double widest = Math.Max(MinimumWide, Math.Min(MaximumWide, roomWide - Spare));
+        double tallest = Math.Max(MinimumTall, Math.Min(MaximumTall, roomTall - Spare));
+
         var size = new Windows.Graphics.SizeInt32(
-            (int)Math.Round(Math.Clamp(1000, MinimumWide, MaximumWide) * scale),
-            (int)Math.Round(Math.Clamp(780, MinimumTall, MaximumTall) * scale));
+            (int)Math.Round(Math.Clamp(1000, MinimumWide, widest) * scale),
+            (int)Math.Round(Math.Clamp(780, MinimumTall, tallest) * scale));
 
         // A floor under the window, in the same physical pixels AppWindow
         // works in. Without one the pane keeps its width while the content
@@ -231,10 +254,14 @@ public sealed partial class SettingsWindow : Window
         // is a thing the window should refuse to do.
         if (AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
         {
-            presenter.PreferredMinimumWidth = (int)Math.Round(MinimumWide * scale);
-            presenter.PreferredMinimumHeight = (int)Math.Round(MinimumTall * scale);
-            presenter.PreferredMaximumWidth = (int)Math.Round(MaximumWide * scale);
-            presenter.PreferredMaximumHeight = (int)Math.Round(MaximumTall * scale);
+            presenter.PreferredMinimumWidth =
+                (int)Math.Round(Math.Min(MinimumWide, widest) * scale);
+
+            presenter.PreferredMinimumHeight =
+                (int)Math.Round(Math.Min(MinimumTall, tallest) * scale);
+
+            presenter.PreferredMaximumWidth = (int)Math.Round(widest * scale);
+            presenter.PreferredMaximumHeight = (int)Math.Round(tallest * scale);
         }
 
         AppWindow.Resize(size);
