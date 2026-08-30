@@ -1,4 +1,4 @@
-using Mcd.Core.Settings;
+﻿using Mcd.Core.Settings;
 using Mcd.Interop.AppBar;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -39,7 +39,8 @@ public static class DockLayout
         AppBarEdge edge,
         Grid strip,
         int capacity,
-        IReadOnlyList<(FrameworkElement Element, Placement Where)> items)
+        IReadOnlyList<(FrameworkElement Element, Placement Where)> items,
+        int offset = 0)
     {
         bool horizontal = DockMetrics.IsHorizontal(edge);
 
@@ -69,12 +70,12 @@ public static class DockLayout
         {
             if (horizontal)
             {
-                Grid.SetColumn(element, where.Cell);
+                Grid.SetColumn(element, where.Cell + offset);
                 Grid.SetColumnSpan(element, where.Span);
             }
             else
             {
-                Grid.SetRow(element, where.Cell);
+                Grid.SetRow(element, where.Cell + offset);
                 Grid.SetRowSpan(element, where.Span);
             }
 

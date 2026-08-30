@@ -222,7 +222,15 @@ public sealed class DockWindowManager : IDisposable
             ],
         };
 
-        _settings.Commit(next, WriteReason.WidgetConfig);
+        // A bar saying where it has already put things asked nobody, so it
+        // cannot be taken back. A bar somebody rearranged with their hands is
+        // the one change most worth taking back, and until now it was the one
+        // change never written down - the history lived in a settings window
+        // that is usually shut while somebody is dragging.
+        _settings.Commit(
+            next,
+            WriteReason.WidgetConfig,
+            drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar"));
 
         if (drawn
             && next.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } config)

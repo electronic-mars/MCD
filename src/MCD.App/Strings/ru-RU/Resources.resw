@@ -1007,4 +1007,22 @@
   <data name="ListEmpty" xml:space="preserve">
     <value>На этой панели пока ничего нет.</value>
   </data>
+  <data name="AnchorLabel" xml:space="preserve">
+    <value>Где стоят виджеты</value>
+  </data>
+  <data name="AnchorHint" xml:space="preserve">
+    <value>Панель длиной во весь экран, а то, что на ней, обычно нет. Это выбор, с какой стороны остаётся пустое место.</value>
+  </data>
+  <data name="SegAnchorStart" xml:space="preserve">
+    <value>В начале</value>
+  </data>
+  <data name="SegAnchorCentre" xml:space="preserve">
+    <value>По центру</value>
+  </data>
+  <data name="SegAnchorEnd" xml:space="preserve">
+    <value>В конце</value>
+  </data>
+  <data name="UndoAnchor" xml:space="preserve">
+    <value>где стоят виджеты</value>
+  </data>
 </root>

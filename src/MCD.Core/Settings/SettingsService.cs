@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Mcd.Core.Settings;
 
@@ -80,9 +80,57 @@ public sealed class SettingsService : IDisposable
 
     public event EventHandler<SettingsModel>? Changed;
 
-    /// <summary>Replaces the settings and schedules a write.</summary>
-    public void Commit(SettingsModel model, WriteReason reason)
+    /// <summary>
+    /// What can be taken back, oldest first.
+    /// </summary>
+    /// <remarks>
+    /// Here rather than in the settings window, which is where it used to be
+    /// and where it did not work: the window is built when it is opened and
+    /// destroyed when it is closed, so the history went with it - and a widget
+    /// dragged off a bar while the window was shut was never written down at
+    /// all, which is exactly the change somebody wants back.
+    /// </remarks>
+    private readonly List<(SettingsModel Model, string What)> _undo = [];
+
+    /// <summary>Whether there is anything to take back.</summary>
+    public bool CanUndo => _undo.Count > 0;
+
+    /// <summary>What the next undo would take back, in words.</summary>
+    public string? UndoWhat => _undo.Count > 0 ? _undo[^1].What : null;
+
+    /// <summary>
+    /// Puts the settings back to before the last change, if there was one.
+    /// </summary>
+    public bool Undo()
     {
+        if (_undo.Count == 0)
+        {
+            return false;
+        }
+
+        (SettingsModel model, string what) = _undo[^1];
+        _undo.RemoveAt(_undo.Count - 1);
+
+        _log.LogInformation("settings.undone {What}", what);
+
+        // Committed without a name of its own, so undoing does not itself go
+        // on the stack and leave the button rocking between two states.
+        Commit(model, WriteReason.UserAction);
+
+        return true;
+    }
+
+    /// <summary>Replaces the settings and schedules a write.</summary>
+    /// <param name="what">
+    /// What the change is called, when it is one a person could want back.
+    /// Null for the program's own housekeeping - a topology reconcile, a
+    /// schema upgrade, a bar writing down where it settled its widgets - none
+    /// of which anybody asked for and none of which they can undo.
+    /// </param>
+    public void Commit(SettingsModel model, WriteReason reason, string? what = null)
+    {
+        SettingsModel previous;
+
         lock (_gate)
         {
             if (model == _current)
@@ -90,9 +138,24 @@ public sealed class SettingsService : IDisposable
                 return;
             }
 
+            previous = _current;
             _current = model;
             _dirty = true;
             _flushTimer.Change(WriteDelay, Timeout.InfiniteTimeSpan);
+        }
+
+        // Only a change that actually happened, and only one somebody could
+        // ask for back.
+        if (what is not null)
+        {
+            _undo.Add((previous, what));
+
+            // Twenty-five is plenty, and unbounded is a session's worth of
+            // settings held for a button nobody presses twenty-six times.
+            while (_undo.Count > 25)
+            {
+                _undo.RemoveAt(0);
+            }
         }
 
         _log.LogInformation("settings.commit reason={Reason}", reason);

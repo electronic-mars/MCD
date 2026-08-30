@@ -150,6 +150,9 @@ public sealed record MonitorConfig
 
     public DockDensity Density { get; init; } = DockDensity.Default;
 
+    /// <summary>Which end of the bar its contents are gathered at.</summary>
+    public DockAnchor Anchor { get; init; } = DockAnchor.Start;
+
     /// <summary>
     /// Whether this bar stays above other windows. On by default; a full-screen
     /// program steps in front either way.

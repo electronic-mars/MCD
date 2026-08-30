@@ -865,13 +865,14 @@ public sealed partial class DockWindow : Window
             ? at.X - DockLayout.EndInset
             : at.Y - DockLayout.EndInset;
 
-        return Math.Clamp((int)Math.Floor(along / Pitch), 0, Math.Max(0, _capacity - 1));
+        return Math.Clamp(
+            (int)Math.Floor(along / Pitch) - _offset, 0, Math.Max(0, _capacity - 1));
     }
 
     /// <summary>Where a run of slots is, in the bar's own coordinates.</summary>
     private Rect CellRect(int cell, int span)
     {
-        double start = DockLayout.EndInset + (cell * Pitch);
+        double start = DockLayout.EndInset + ((cell + _offset) * Pitch);
         double length = span * Pitch;
 
         return DockMetrics.IsHorizontal(Config.Edge)
@@ -1424,13 +1425,23 @@ public sealed partial class DockWindow : Window
     {
         _placed = DockGrid.Settle(_built, _capacity);
 
+        // Where the row is drawn, not where it is. The slots stay as they were
+        // settled - so nothing is rewritten, and moving the anchor back puts
+        // everything exactly where it was - and only the drawing, the pointer
+        // arithmetic and the slot outlines are shifted along together.
+        _offset = DockGrid.Offset(_placed, _capacity, Config.Anchor);
+
         DockLayout.Arrange(
             Config.Edge,
             Strip,
             _capacity,
             [.. _placed.Where(p => _drawn.ContainsKey(p.InstanceId))
-                .Select(p => ((FrameworkElement)_drawn[p.InstanceId], p))]);
+                .Select(p => ((FrameworkElement)_drawn[p.InstanceId], p))],
+            _offset);
     }
+
+    /// <summary>How far along the bar its contents are drawn.</summary>
+    private int _offset;
 
     /// <summary>
     /// Records where the layout actually put things, when that differs from

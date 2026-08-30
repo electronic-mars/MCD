@@ -1007,4 +1007,22 @@
   <data name="ListEmpty" xml:space="preserve">
     <value>Nothing on this bar yet.</value>
   </data>
+  <data name="AnchorLabel" xml:space="preserve">
+    <value>Where the widgets sit</value>
+  </data>
+  <data name="AnchorHint" xml:space="preserve">
+    <value>A bar is as long as the screen and what is on it usually is not. This is which end the empty part goes.</value>
+  </data>
+  <data name="SegAnchorStart" xml:space="preserve">
+    <value>At the start</value>
+  </data>
+  <data name="SegAnchorCentre" xml:space="preserve">
+    <value>In the middle</value>
+  </data>
+  <data name="SegAnchorEnd" xml:space="preserve">
+    <value>At the end</value>
+  </data>
+  <data name="UndoAnchor" xml:space="preserve">
+    <value>where the widgets sit</value>
+  </data>
 </root>

@@ -1,5 +1,20 @@
 ﻿namespace Mcd.Core.Settings;
 
+/// <summary>
+/// Which end of the bar its contents are gathered at.
+/// </summary>
+/// <remarks>
+/// A bar is as long as the screen and what is on it rarely is. Nine widgets
+/// on a screen 68 slots long leave 39 empty slots, and until there was a way
+/// to say otherwise all 39 of them were in one strip at the far end.
+/// </remarks>
+public enum DockAnchor
+{
+    Start,
+    Centre,
+    End,
+}
+
 /// <summary>Where one widget sits: its first slot, and how many it takes.</summary>
 public readonly record struct Placement(string InstanceId, int Cell, int Span)
 {
@@ -70,6 +85,33 @@ public static class DockGrid
         }
 
         return placed;
+    }
+
+    /// <summary>
+    /// How far along to draw everything, to gather it at the wanted end.
+    /// </summary>
+    /// <remarks>
+    /// Drawing only. The slots a widget holds are written down as they were
+    /// settled, so moving the whole row along does not rewrite anybody's
+    /// arrangement, and turning the anchor back puts it exactly where it was.
+    /// </remarks>
+    public static int Offset(IReadOnlyList<Placement> placed, int capacity, DockAnchor anchor)
+    {
+        if (anchor == DockAnchor.Start || placed.Count == 0)
+        {
+            return 0;
+        }
+
+        int end = 0;
+
+        foreach (Placement p in placed)
+        {
+            end = Math.Max(end, p.End);
+        }
+
+        int spare = Math.Max(0, capacity - end);
+
+        return anchor == DockAnchor.End ? spare : spare / 2;
     }
 
     /// <summary>The first run of free slots long enough, or null when there is none.</summary>

@@ -65,7 +65,6 @@ public sealed partial class SettingsWindow : Window
     /// reduces capacity, not count, so the "no more than twenty-five" the
     /// comment promised was twenty-five hundred if somebody worked that long.
     /// </remarks>
-    private readonly List<(string StableId, MonitorConfig Before, string Label)> _undo = [];
     private readonly ObservableCollection<SensorRow> _readings = [];
     private readonly DispatcherQueueTimer _refresh;
 
@@ -160,7 +159,6 @@ public sealed partial class SettingsWindow : Window
 
     private void Noticed(SettingsModel now)
     {
-        SettingsModel was = _seen;
         _seen = now;
 
         if (ReferenceEquals(now, _mine))
@@ -168,49 +166,7 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        foreach (MonitorConfig before in was.Monitors)
-        {
-            MonitorConfig? after = now.Monitors.FirstOrDefault(m => m.StableId == before.StableId);
-
-            if (after is null || Same(before.Widgets, after.Widgets))
-            {
-                continue;
-            }
-
-            Remember(before.StableId, before, Loc.Tr("UndoOnTheBar", "on the bar"));
-        }
-
         ReloadDocks();
-    }
-
-    /// <summary>
-    /// Whether two arrangements are the same one.
-    /// </summary>
-    /// <remarks>
-    /// Compared as text because a widget's own options are a JsonElement,
-    /// which has no value equality: two of them over identical JSON are
-    /// never equal, and every layout would look like a change.
-    /// </remarks>
-    private static bool Same(
-        ImmutableArray<WidgetConfig> before, ImmutableArray<WidgetConfig> after)
-    {
-        if (before.Length != after.Length)
-        {
-            return false;
-        }
-
-        for (int i = 0; i < before.Length; i++)
-        {
-            if (before[i].InstanceId != after[i].InstanceId
-                || before[i].TypeId != after[i].TypeId
-                || before[i].Cell != after[i].Cell
-                || before[i].Config?.GetRawText() != after[i].Config?.GetRawText())
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /// <summary>
@@ -1095,6 +1051,24 @@ public sealed partial class SettingsWindow : Window
                     wide: true),
                 stack: true),
 
+            Braun.Row(
+                Loc.Tr("AnchorLabel", "Where the widgets sit"),
+                Loc.Tr(
+                    "AnchorHint",
+                    "A bar is as long as the screen and what is on it usually is not. This is which end the empty part goes."),
+                Braun.Segs(
+                    [
+                        Loc.Tr("SegAnchorStart", "At the start"),
+                        Loc.Tr("SegAnchorCentre", "In the middle"),
+                        Loc.Tr("SegAnchorEnd", "At the end"),
+                    ],
+                    (int)dock.Anchor,
+                    i => SetDock(
+                        d => d with { Anchor = (DockAnchor)i },
+                        Loc.Tr("UndoAnchor", "where the widgets sit")),
+                    wide: true),
+                stack: true),
+
             // A bar down the side of the screen has one thickness. The row is
             // replaced by its explanation rather than offered greyed and mute.
             horizontal
@@ -1570,11 +1544,6 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        foreach (MonitorConfig before in others)
-        {
-            Remember(before.StableId, before, Loc.Tr("UndoCopied", "the same widgets"));
-        }
-
         Write(
             current with
             {
@@ -1585,7 +1554,8 @@ public sealed partial class SettingsWindow : Window
                         : m with { Widgets = [.. dock.Widgets.Select(w => w.AsNewInstance())] })
                 ],
             },
-            WriteReason.WidgetConfig);
+            WriteReason.WidgetConfig,
+            Loc.Tr("UndoCopied", "the same widgets"));
 
         _log.LogInformation(
             "settings.copied from={Monitor} to={Count}", dock.StableId, others.Count);
@@ -1964,7 +1934,7 @@ public sealed partial class SettingsWindow : Window
     private Button Undo()
     {
         _undoButton = Braun.Action(UndoLabel(), DoUndo, "Undo");
-        _undoButton.IsEnabled = _undo.Count > 0;
+        _undoButton.IsEnabled = _settings.CanUndo;
 
         return _undoButton;
     }
@@ -1987,15 +1957,15 @@ public sealed partial class SettingsWindow : Window
         }
 
         button.Content = Braun.Legend(UndoLabel(), "Undo", Braun.Tx2);
-        button.IsEnabled = _undo.Count > 0;
+        button.IsEnabled = _settings.CanUndo;
     }
 
     private string UndoLabel() =>
-        _undo.Count > 0
+        _settings.UndoWhat is { } what
             ? string.Format(
                 CultureInfo.CurrentCulture,
                 Loc.Tr("UndoWithLabel", "Undo - {0}"),
-                _undo[^1].Label)
+                what)
             : Loc.Tr("Undo", "Undo");
 
     /// <summary>
@@ -2005,59 +1975,25 @@ public sealed partial class SettingsWindow : Window
     /// Without the mark, every change made here comes back through the
     /// watcher as a change made elsewhere, and lands on the undo stack twice.
     /// </remarks>
-    private void Write(SettingsModel model, WriteReason reason)
+    private void Write(SettingsModel model, WriteReason reason, string? what = null)
     {
         _mine = model;
-        _settings.Commit(model, reason);
+        _settings.Commit(model, reason, what);
     }
 
-    /// <summary>
-    /// Keeps a layout so it can be put back, and forgets the oldest.
-    /// </summary>
-    private void Remember(string stableId, MonitorConfig before, string what)
-    {
-        _undo.Add((stableId, before, what));
-
-        // Twenty-five is plenty and unbounded is a session's worth of layouts
-        // held for a button nobody presses twenty-six times.
-        while (_undo.Count > 25)
-        {
-            _undo.RemoveAt(0);
-        }
-    }
-
-    /// <summary>Puts the last layout back.</summary>
+    /// <summary>Puts the settings back to before the last change.</summary>
     private void DoUndo()
     {
-        if (_undo.Count == 0)
+        if (!_settings.Undo())
         {
             return;
         }
 
-        (string StableId, MonitorConfig Before, string Label) step = _undo[^1];
-        _undo.RemoveAt(_undo.Count - 1);
-
-        SettingsModel current = _settings.Current;
-
-        Write(
-            current with
-            {
-                Monitors =
-                [
-                    .. current.Monitors.Select(
-                        c => c.StableId == step.StableId ? step.Before : c)
-                ],
-            },
-            WriteReason.UserAction);
-
-        _log.LogInformation("settings.dock undone {What} monitor={Monitor}", step.Label, step.StableId);
-
-        // The dock that was changed is not always the one on screen: undo after
-        // switching screens has to take you back to what you changed.
-        _editing = step.StableId;
         ReloadDocks();
+        ShowUndo();
     }
 
+    /// <summary>Builds a widget's view model, to ask it about itself.</summary>
     private WidgetViewModel? Build(WidgetConfig entry) => WidgetCatalog.Create(
         new WidgetContext(
             _sensors,
@@ -2255,11 +2191,6 @@ public sealed partial class SettingsWindow : Window
     {
         SettingsModel current = _settings.Current;
 
-        if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
-        {
-            Remember(stableId, before, what);
-        }
-
         Write(
             current with
             {
@@ -2269,7 +2200,8 @@ public sealed partial class SettingsWindow : Window
                         c => c.StableId == stableId ? c with { Widgets = change(c.Widgets) } : c)
                 ],
             },
-            WriteReason.WidgetConfig);
+            WriteReason.WidgetConfig,
+            what);
 
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
 
@@ -2296,17 +2228,13 @@ public sealed partial class SettingsWindow : Window
 
         // Instant means undoable - every change this page applies at once is
         // reachable by the same Undo, not only the widget layout.
-        if (current.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } before)
-        {
-            Remember(stableId, before, what);
-        }
-
         Write(
             current with
             {
                 Monitors = [.. current.Monitors.Select(c => c.StableId == stableId ? change(c) : c)],
             },
-            WriteReason.UserAction);
+            WriteReason.UserAction,
+            what);
 
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
         ShowUndo();

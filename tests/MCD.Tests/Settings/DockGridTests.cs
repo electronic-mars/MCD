@@ -30,6 +30,32 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void TheAnchorMovesTheDrawingAndNotTheArrangement()
+    {
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("b", 5), 1)], capacity: 20);
+
+        // Eighteen of twenty slots are spare: at the start nothing moves, at
+        // the end everything is drawn eighteen along, in the middle nine.
+        DockGrid.Offset(placed, 20, DockAnchor.Start).ShouldBe(0);
+        DockGrid.Offset(placed, 20, DockAnchor.End).ShouldBe(14);
+        DockGrid.Offset(placed, 20, DockAnchor.Centre).ShouldBe(7);
+
+        // And the arrangement itself is untouched, whatever the anchor says.
+        placed.Single(p => p.InstanceId == "a").Cell.ShouldBe(0);
+        placed.Single(p => p.InstanceId == "b").Cell.ShouldBe(5);
+    }
+
+    [Fact]
+    public void AFullBarIsDrawnWhereItStands()
+    {
+        List<Placement> placed = DockGrid.Settle([(Entry("a", 0), 4)], capacity: 4);
+
+        DockGrid.Offset(placed, 4, DockAnchor.End).ShouldBe(0);
+        DockGrid.Offset(placed, 4, DockAnchor.Centre).ShouldBe(0);
+    }
+
+    [Fact]
     public void AWidgetAboutNothingTakesNoSlotAndTheBarClosesOver()
     {
         // A battery on a machine running from the mains, or Wi-Fi with the
