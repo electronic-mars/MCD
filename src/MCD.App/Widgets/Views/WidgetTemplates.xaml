@@ -189,6 +189,32 @@
         </widgets:HoverChip>
     </DataTemplate>
 
+    <!-- The way in: one wheel, one slot, and a press that opens the window.
+         It draws nothing that changes, so nothing here updates. -->
+    <DataTemplate x:Key="mcd.settings" x:DataType="widgets:SettingsWidget">
+        <widgets:HoverChip Margin="6,0">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock x:Uid="SettingsChipTip" FontSize="13" Text="Settings" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <Viewbox
+                Width="{x:Bind IconSize}"
+                Height="{x:Bind IconSize}"
+                VerticalAlignment="Center">
+                <Canvas Width="24" Height="24">
+                    <Path
+                        Data="{x:Bind Icon, Converter={StaticResource Icon}, Mode=OneTime}"
+                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="1.5" />
+                </Canvas>
+            </Viewbox>
+        </widgets:HoverChip>
+    </DataTemplate>
+
     <!--
         Battery and Wi-Fi are drawn the same way: an icon that carries the
         reading on its own, and a figure beside it on a bar with room. Both

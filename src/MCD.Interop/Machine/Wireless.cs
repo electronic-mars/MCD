@@ -86,22 +86,68 @@ public static class Wireless
     private static WirelessState _last = WirelessState.None;
     private static long _asked = -Fresh;
 
+    /// <summary>
+    /// Whether any wireless card is joined to a network right now.
+    /// </summary>
+    /// <remarks>
+    /// This is the question, and it is not the same as "does the internet
+    /// arrive over Wi-Fi". Turn on a VPN and the way out becomes the tunnel;
+    /// join a cafe network and wait at its sign-in page and there is no way
+    /// out at all. Both are moments when somebody wants to see the signal
+    /// most, and both used to take the widget off the bar.
+    /// </remarks>
+    private static bool Joined()
+    {
+        foreach (NetworkInterface card in NetworkInterface.GetAllNetworkInterfaces())
+        {
+            if (card.NetworkInterfaceType == NetworkInterfaceType.Wireless80211
+                && card.OperationalStatus == OperationalStatus.Up)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static WirelessState Ask()
     {
         try
         {
+            if (!Joined())
+            {
+                return WirelessState.None;
+            }
+
+            // The name and the strength still come from the connection
+            // profile, because that is the only thing that has them. Whichever
+            // profile is the wireless one - the way out to the internet when
+            // that is Wi-Fi, and otherwise whichever wireless profile is
+            // connected underneath whatever is carrying the traffic.
             var profile = Windows.Networking.Connectivity.NetworkInformation
                 .GetInternetConnectionProfile();
 
             if (profile is null || !profile.IsWlanConnectionProfile)
             {
-                return WirelessState.None;
+                profile = null;
+
+                foreach (var other in Windows.Networking.Connectivity.NetworkInformation
+                    .GetConnectionProfiles())
+                {
+                    if (other.IsWlanConnectionProfile
+                        && other.GetNetworkConnectivityLevel()
+                            != Windows.Networking.Connectivity.NetworkConnectivityLevel.None)
+                    {
+                        profile = other;
+                        break;
+                    }
+                }
             }
 
             return new WirelessState(
                 Wireless: true,
-                Name: profile.ProfileName ?? string.Empty,
-                Bars: profile.GetSignalBars() is { } bars ? bars : -1);
+                Name: profile?.ProfileName ?? string.Empty,
+                Bars: profile?.GetSignalBars() is { } bars ? bars : -1);
         }
         catch (Exception)
         {

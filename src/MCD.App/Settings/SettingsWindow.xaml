@@ -148,12 +148,17 @@
                      has no colour in it, and a name it does not know is not a
                      compile error - it is a parse failure at run time that
                      takes the window, and the process, with it. -->
+                <NavigationViewItem x:Uid="NavWidgets" Content="Widgets" Tag="widgets">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8FD;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavAppearance" Content="Appearance" Tag="appearance">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="NavSensors" Content="Sensors" Tag="sensors">
+                <NavigationViewItem x:Uid="NavSensors" Content="Readings" Tag="sensors">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9D9;" />
                     </NavigationViewItem.Icon>
@@ -161,7 +166,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem x:Uid="NavAbout" Content="About" Icon="Help" Tag="about" />
+                <NavigationViewItem x:Uid="NavAbout" Content="The program" Icon="Help" Tag="about" />
             </NavigationView.FooterMenuItems>
 
             <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
@@ -211,6 +216,41 @@
                             IsTabStop="False" />
 
                         <StackPanel x:Name="DockBody" />
+                    </StackPanel>
+
+                    <!-- Widgets. What is on the bar, what can be put on it,
+                         and the settings of whichever one was pointed at. It
+                         is a page of its own because it is the part that grows:
+                         every new kind of widget lands here, and it was
+                         crowding the page about where the bar sits. -->
+                    <StackPanel x:Name="WidgetsSection" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageWidgets}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock
+                                x:Uid="WidgetsTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Widgets" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Uid="WidgetsIntro"
+                            Margin="0,8,0,0"
+                            Foreground="{ThemeResource BraunTx2}"
+                            Text="What is on the bar of the screen chosen under Bars, and what else could be."
+                            TextWrapping="Wrap" />
+
+                        <StackPanel x:Name="WidgetsBody" Margin="0,14,0,0" />
                     </StackPanel>
 
                     <!-- Appearance -->

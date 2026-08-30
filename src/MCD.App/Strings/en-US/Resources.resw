@@ -26,17 +26,17 @@
     <value>Appearance</value>
   </data>
   <data name="NavSensors.Content" xml:space="preserve">
-    <value>Sensors</value>
+    <value>Readings</value>
   </data>
   <data name="NavAbout.Content" xml:space="preserve">
-    <value>About</value>
+    <value>The program</value>
   </data>
   <!-- Docks page -->
   <data name="DocksTitle.Text" xml:space="preserve">
     <value>Bars</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>One bar per screen. Changes land on it as you make them.</value>
+    <value>Each screen has its own bar. This page is the bar of the screen chosen above; changes land on it as you make them.</value>
   </data>
   <data name="BarLiveTitle" xml:space="preserve">
     <value>The bar itself</value>
@@ -59,7 +59,7 @@
     <value>Appearance</value>
   </data>
   <data name="AppearanceIntro.Text" xml:space="preserve">
-    <value>How the bars are drawn. This applies to every one of them.</value>
+    <value>How the bars are painted. Applies to all of them.</value>
   </data>
   <data name="BackgroundLabel" xml:space="preserve">
     <value>Background</value>
@@ -82,7 +82,7 @@
   </data>
   <!-- Sensors page -->
   <data name="SensorsTitle.Text" xml:space="preserve">
-    <value>Sensors</value>
+    <value>Readings</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running.</value>
@@ -171,12 +171,6 @@
     <value>Nothing can be set up for a widget this version does not know.</value>
   </data>
   <!-- The bar's right-click menu -->
-  <data name="MenuAddWidget" xml:space="preserve">
-    <value>Add widget</value>
-  </data>
-  <data name="MenuDockSettings" xml:space="preserve">
-    <value>Bar settings</value>
-  </data>
   <!-- Widget catalog: names and descriptions -->
   <data name="WidgetGaugeName" xml:space="preserve">
     <value>Reading</value>
@@ -389,12 +383,6 @@
   <data name="PinDropCaption" xml:space="preserve">
     <value>Pin to the bar</value>
   </data>
-  <data name="WidgetMenuConfigure" xml:space="preserve">
-    <value>Settings...</value>
-  </data>
-  <data name="WidgetMenuRemove" xml:space="preserve">
-    <value>Remove from bar</value>
-  </data>
   <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>
   </data>
@@ -402,10 +390,10 @@
     <value>Next</value>
   </data>
   <data name="BarHelp" xml:space="preserve">
-    <value>Drag a widget along the bar to move it, off the bar to remove it. Right-click for a menu: what to add on an empty slot, its own settings on a widget.</value>
+    <value>Drag a widget along the bar to move it, off the bar to remove it. A right click anywhere on the bar opens this window - over a widget, with that widget already chosen.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
-    <value>Widgets</value>
+    <value>On the bar</value>
   </data>
   <data name="PinProgramButton" xml:space="preserve">
     <value>Pin a program...</value>
@@ -651,7 +639,7 @@
     <value>The picture</value>
   </data>
   <data name="DockGroupScreen" xml:space="preserve">
-    <value>This screen</value>
+    <value>THIS SCREEN’S BAR</value>
   </data>
   <data name="EdgeHint" xml:space="preserve">
     <value>Which side of the screen the bar sits on.</value>
@@ -822,7 +810,7 @@
     <value>Drag it onto a bar to put one there.</value>
   </data>
   <data name="ChipDragOrPick" xml:space="preserve">
-    <value>Drag it onto a bar to put one there. Press it to change its picture.</value>
+    <value>Drag it onto a bar to put one there. The pencil changes its picture.</value>
   </data>
   <data name="UndoRow" xml:space="preserve">
     <value>Take the last change back</value>
@@ -970,5 +958,29 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Opens this window. The way in, for anybody who has not found the right click.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="NavWidgets.Content" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>What is on the bar of the screen chosen under Bars, and what else could be.</value>
+  </data>
+  <data name="ChipPencil" xml:space="preserve">
+    <value>Change the picture, on every bar.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>The one it came with</value>
   </data>
 </root>

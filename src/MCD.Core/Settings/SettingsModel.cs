@@ -211,6 +211,7 @@ public static class DockContents
         WidgetConfig.New("mcd.temp"),
         WidgetConfig.New("mcd.battery"),
         WidgetConfig.New("mcd.wifi"),
+        WidgetConfig.New("mcd.settings"),
     ];
 
     /// <summary>One reading, as a widget of its own.</summary>

@@ -26,17 +26,17 @@
     <value>Оформление</value>
   </data>
   <data name="NavSensors.Content" xml:space="preserve">
-    <value>Датчики</value>
+    <value>Показания</value>
   </data>
   <data name="NavAbout.Content" xml:space="preserve">
-    <value>О программе</value>
+    <value>Программа</value>
   </data>
   <!-- Страница «Доки» -->
   <data name="DocksTitle.Text" xml:space="preserve">
     <value>Панели</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>По одной панели на каждый экран. Изменения попадают на неё сразу.</value>
+    <value>У каждого экрана своя панель. Здесь — панель выбранного выше экрана; изменения попадают на неё сразу.</value>
   </data>
   <data name="BarLiveTitle" xml:space="preserve">
     <value>Сама панель</value>
@@ -59,7 +59,7 @@
     <value>Оформление</value>
   </data>
   <data name="AppearanceIntro.Text" xml:space="preserve">
-    <value>Как отрисовываются панели. Применяется ко всем сразу.</value>
+    <value>Как раскрашены панели. Применяется ко всем.</value>
   </data>
   <data name="BackgroundLabel" xml:space="preserve">
     <value>Фон</value>
@@ -82,7 +82,7 @@
   </data>
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
-    <value>Датчики</value>
+    <value>Показания</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Температуры видеокарты и дисков работают сразу. Процессор и материнская плата подключаются, пока запущен LibreHardwareMonitor (с включённым Remote Web Server) или HWiNFO (с включённой Shared Memory).</value>
@@ -171,12 +171,6 @@
     <value>Нельзя настроить виджет, который эта версия не знает.</value>
   </data>
   <!-- Контекстное меню панели -->
-  <data name="MenuAddWidget" xml:space="preserve">
-    <value>Добавить виджет</value>
-  </data>
-  <data name="MenuDockSettings" xml:space="preserve">
-    <value>Параметры панели</value>
-  </data>
   <!-- Каталог виджетов: названия и описания -->
   <data name="WidgetGaugeName" xml:space="preserve">
     <value>Показатель</value>
@@ -389,12 +383,6 @@
   <data name="PinDropCaption" xml:space="preserve">
     <value>Закрепить на панели</value>
   </data>
-  <data name="WidgetMenuConfigure" xml:space="preserve">
-    <value>Настроить...</value>
-  </data>
-  <data name="WidgetMenuRemove" xml:space="preserve">
-    <value>Убрать с панели</value>
-  </data>
   <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Предыдущий</value>
   </data>
@@ -402,10 +390,10 @@
     <value>Следующий</value>
   </data>
   <data name="BarHelp" xml:space="preserve">
-    <value>Тяните виджет вдоль панели, чтобы переставить, за её пределы — чтобы убрать. Правый клик открывает меню: на пустом месте — что добавить, на виджете — его настройки.</value>
+    <value>Тяните виджет вдоль панели, чтобы переставить, за её пределы — чтобы убрать. Правый клик по панели открывает это окно, а по виджету — открывает его сразу выбранным.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
-    <value>Виджеты</value>
+    <value>Что на панели</value>
   </data>
   <data name="PinProgramButton" xml:space="preserve">
     <value>Закрепить программу…</value>
@@ -651,7 +639,7 @@
     <value>Картинка</value>
   </data>
   <data name="DockGroupScreen" xml:space="preserve">
-    <value>Этот экран</value>
+    <value>ПАНЕЛЬ ЭТОГО ЭКРАНА</value>
   </data>
   <data name="EdgeHint" xml:space="preserve">
     <value>С какой стороны экрана стоит панель.</value>
@@ -822,7 +810,7 @@
     <value>Перетащите на панель, чтобы поставить.</value>
   </data>
   <data name="ChipDragOrPick" xml:space="preserve">
-    <value>Перетащите на панель, чтобы поставить. Нажмите, чтобы сменить значок.</value>
+    <value>Перетащите на панель, чтобы поставить. Карандаш меняет значок.</value>
   </data>
   <data name="UndoRow" xml:space="preserve">
     <value>Вернуть последнее изменение</value>
@@ -970,5 +958,29 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Открывает это окно. Дверь для тех, кто не нашёл правый клик.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="NavWidgets.Content" xml:space="preserve">
+    <value>Виджеты</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Виджеты</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>Что стоит на панели выбранного на странице «Панели» экрана и что ещё туда можно поставить.</value>
+  </data>
+  <data name="ChipPencil" xml:space="preserve">
+    <value>Поменять значок — сразу на всех панелях.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>Тот, что был изначально</value>
   </data>
 </root>

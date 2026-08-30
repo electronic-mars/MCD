@@ -70,6 +70,8 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry PageIcons => Draw("Star");
 
+    public static Geometry PageWidgets => Draw("Layout");
+
     public static Geometry PageLook => Draw("Brush");
 
     public static Geometry PageSensors => Draw("Pulse");

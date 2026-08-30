@@ -136,6 +136,18 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     public virtual bool Matters => true;
 
     /// <summary>
+    /// Raised when the widget asks for the settings window.
+    /// </summary>
+    /// <remarks>
+    /// The bar owns the way in, not the widget: which screen asked and which
+    /// widget was pointed at are the bar's to say. The widget only knocks.
+    /// </remarks>
+    public event EventHandler? SettingsWanted;
+
+    /// <summary>Knocks on the settings window.</summary>
+    protected void WantSettings() => SettingsWanted?.Invoke(this, EventArgs.Empty);
+
+    /// <summary>
     /// Whether this widget draws buttons of its own.
     /// </summary>
     /// <remarks>

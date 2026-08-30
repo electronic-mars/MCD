@@ -303,9 +303,27 @@ public sealed partial class SettingsWindow : Window
             ?? _editing;
 
         _selectedId = widgetId;
-        Nav.SelectedItem = Nav.MenuItems[0];
+
+        // A widget was pointed at, so the page that has its settings is the
+        // page to open. Pointing at bare bar opens the page about the bar.
+        Nav.SelectedItem = widgetId is null ? Nav.MenuItems[0] : Nav.MenuItems[1];
+
         ReloadDocks();
+
+        // And brought into view. A widget pointed at on the bar used to open
+        // this window at the top of a page a screen and a half long, with its
+        // own settings below the fold - which reads as the wrong window
+        // opening, and the second try is another right click on the same
+        // widget.
+        if (widgetId is not null)
+        {
+            DispatcherQueue.TryEnqueue(() => _inspectorAt?.StartBringIntoView(
+                new BringIntoViewOptions { VerticalAlignmentRatio = 0.15 }));
+        }
     }
+
+    /// <summary>The heading of the chosen widget's own settings, to scroll to.</summary>
+    private FrameworkElement? _inspectorAt;
 
     /// <summary>
     /// Opens one page by its tag, for the unattended visual check. A tag
@@ -671,46 +689,6 @@ public sealed partial class SettingsWindow : Window
                     wide: true),
                 stack: true)));
 
-        // --------------------------------------------------------- shortcuts
-        LookBody.Children.Add(Braun.Heading("Sliders", Loc.Tr("KeysGroup", "Keys")));
-
-        LookBody.Children.Add(Braun.Group(
-            KeyRow(
-                Shortcut.Bars,
-                Loc.Tr("KeyBars", "Show or hide every bar"),
-                Loc.Tr("KeyBarsHint", "The bars go away and come back. Their layout is kept.")),
-            KeyRow(
-                Shortcut.Settings,
-                Loc.Tr("KeySettings", "Open this window"),
-                Loc.Tr("KeySettingsHint", "From anywhere, including over a full-screen program.")),
-            KeyRow(
-                Shortcut.Mute,
-                Loc.Tr("KeyMute", "Silence the machine"),
-                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one."))));
-
-        LookBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
-
-        string[] languages = ["system", "en-US", "ru-RU"];
-
-        LookBody.Children.Add(Braun.Group(
-            Braun.Row(
-                Loc.Tr("LanguageLabel", "Language"),
-                Loc.Tr("LanguageHint", "Takes effect the next time the program starts."),
-                Braun.Segs(
-                    [Loc.Tr("LanguageSystemItem", "Same as Windows"), "English", "Русский"],
-                    Math.Max(0, Array.IndexOf(languages, look.Language)),
-                    i => PickLanguage(languages[i]),
-                    wide: true),
-                stack: true),
-
-            // Offered only once a language has actually been chosen: people
-            // reasonably think closing this window is a restart.
-            _restartOffered
-                ? Braun.Row(
-                    Loc.Tr("RestartRow", "The language has changed"),
-                    Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
-                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, "Undo"))
-                : null));
     }
 
     /// <summary>
@@ -990,6 +968,7 @@ public sealed partial class SettingsWindow : Window
         });
 
         ShowDock();
+        ShowWidgets();
     }
 
     /// <summary>
@@ -1065,7 +1044,7 @@ public sealed partial class SettingsWindow : Window
         _filling = true;
 
         // ---------------------------------------------------------- the screen
-        DockBody.Children.Add(Braun.Heading("Computer", Loc.Tr("DockGroupScreen", "This screen")));
+        DockBody.Children.Add(Braun.Heading("Computer", Loc.Tr("DockGroupScreen", "This screen's bar")));
 
         DockBody.Children.Add(Braun.Group(
             Braun.Row(
@@ -1135,15 +1114,91 @@ public sealed partial class SettingsWindow : Window
                     Loc.Tr("ThicknessNote", "A bar down the side of the screen has one thickness."),
                     null)));
 
-        // ------------------------------------------------------------ contents
-        gated.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "Widgets")));
+        // ----------------------------------------------------------- behaviour
+        gated.Children.Add(Braun.Heading("Gear", Loc.Tr("BehaviourTitle", "Behaviour")));
+
+        bool clash = dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge);
+
+        AppBarMode[] modes = [AppBarMode.Pinned, AppBarMode.AutoHide, AppBarMode.Desktop];
 
         gated.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("ModeLabel", "How the bar holds its edge"),
+                dock.Mode switch
+                {
+                    AppBarMode.AutoHide => clash
+                        ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this bar stays visible.")
+                        : Loc.Tr("ModeHideHint", "The bar steps off the screen and comes back when the pointer reaches that edge."),
+                    AppBarMode.Desktop => Loc.Tr(
+                        "ModeDesktopHint",
+                        "The bar lies on the desktop: it takes no room from other windows, and any window opened over it covers it."),
+                    _ => Loc.Tr(
+                        "ModePinnedHint",
+                        "The bar keeps its strip of screen. A maximised window stops at it rather than covering it."),
+                },
+                Braun.Segs(
+                    [
+                        Loc.Tr("ModePinned", "Keeps its place"),
+                        Loc.Tr("ModeHide", "Hides"),
+                        Loc.Tr("ModeDesktop", "On the desktop"),
+                    ],
+                    Math.Max(0, Array.IndexOf(modes, dock.Mode)),
+                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")),
+                    wide: true),
+                stack: true),
+
+            // Not offered on the desktop, where it would contradict the mode
+            // rather than qualify it. A setting that cannot act is not shown.
+            dock.Mode == AppBarMode.Desktop
+                ? null
+                : Braun.Row(
+                    Loc.Tr("TopmostLabel", "Keep above other windows"),
+                    Loc.Tr("TopmostHint", "Off lets a maximised window cover the bar."),
+                    Braun.Switch(
+                        dock.Topmost,
+                        on => SetDock(d => d with { Topmost = on }, Loc.Tr("UndoTopmost", "topmost"))))));
+
+        _filling = false;
+    }
+
+
+    /// <summary>
+    /// Fills the page about what is on the bar.
+    /// </summary>
+    /// <remarks>
+    /// A page of its own because it is the part that grows. Every new kind of
+    /// widget lands in this list, and the settings of whichever one is chosen
+    /// land under it; both were sitting in the middle of the page about where
+    /// the bar sits, which made that page jump in height whenever somebody
+    /// pointed at a widget on the screen.
+    /// </remarks>
+    private void ShowWidgets()
+    {
+        Braun.Theme = Root.ActualTheme;
+        WidgetsBody.Children.Clear();
+
+        MonitorConfig? dock = _settings.Current.Monitors
+            .FirstOrDefault(m => m.StableId == _editing);
+
+        WidgetsSection.Opacity = dock is null ? 0.5 : 1;
+
+        if (dock is null)
+        {
+            WidgetsBody.Children.Add(Braun.Group(Braun.Row(
+                Loc.Tr("DockNoScreen", "No screen has been set up yet."), null, null)));
+
+            return;
+        }
+
+        // ------------------------------------------------------------ contents
+        WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
+
+        WidgetsBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("BarLiveTitle", "The bar itself"),
                 Loc.Tr(
                     "BarHelp",
-                    "Drag a widget along the bar to move it, off the bar to remove it. Right-click for a menu: what to add on an empty slot, its own settings on a widget."),
+                    "Drag a widget along the bar to move it, off the bar to remove it. A right click anywhere on the bar opens this window - over a widget, with that widget already chosen."),
                 null),
 
             Braun.Row(
@@ -1224,55 +1279,16 @@ public sealed partial class SettingsWindow : Window
         // ------------------------------------------------------- chosen widget
         if (Inspector() is { } inspector)
         {
-            gated.Children.Add(Braun.Heading("Sliders", _inspectorName));
-            gated.Children.Add(inspector);
+            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
+
+            WidgetsBody.Children.Add(_inspectorAt);
+            WidgetsBody.Children.Add(inspector);
+        }
+        else
+        {
+            _inspectorAt = null;
         }
 
-        // ----------------------------------------------------------- behaviour
-        gated.Children.Add(Braun.Heading("Gear", Loc.Tr("BehaviourTitle", "Behaviour")));
-
-        bool clash = dock.Mode == AppBarMode.AutoHide && AppBarHost.TaskbarAutoHidesOn(dock.Edge);
-
-        AppBarMode[] modes = [AppBarMode.Pinned, AppBarMode.AutoHide, AppBarMode.Desktop];
-
-        gated.Children.Add(Braun.Group(
-            Braun.Row(
-                Loc.Tr("ModeLabel", "How the bar holds its edge"),
-                dock.Mode switch
-                {
-                    AppBarMode.AutoHide => clash
-                        ? Loc.Tr("HideNote", "The taskbar already hides on this edge, so this bar stays visible.")
-                        : Loc.Tr("ModeHideHint", "The bar steps off the screen and comes back when the pointer reaches that edge."),
-                    AppBarMode.Desktop => Loc.Tr(
-                        "ModeDesktopHint",
-                        "The bar lies on the desktop: it takes no room from other windows, and any window opened over it covers it."),
-                    _ => Loc.Tr(
-                        "ModePinnedHint",
-                        "The bar keeps its strip of screen. A maximised window stops at it rather than covering it."),
-                },
-                Braun.Segs(
-                    [
-                        Loc.Tr("ModePinned", "Keeps its place"),
-                        Loc.Tr("ModeHide", "Hides"),
-                        Loc.Tr("ModeDesktop", "On the desktop"),
-                    ],
-                    Math.Max(0, Array.IndexOf(modes, dock.Mode)),
-                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")),
-                    wide: true),
-                stack: true),
-
-            // Not offered on the desktop, where it would contradict the mode
-            // rather than qualify it. A setting that cannot act is not shown.
-            dock.Mode == AppBarMode.Desktop
-                ? null
-                : Braun.Row(
-                    Loc.Tr("TopmostLabel", "Keep above other windows"),
-                    Loc.Tr("TopmostHint", "Off lets a maximised window cover the bar."),
-                    Braun.Switch(
-                        dock.Topmost,
-                        on => SetDock(d => d with { Topmost = on }, Loc.Tr("UndoTopmost", "topmost"))))));
-
-        _filling = false;
     }
 
     /// <summary>Changes one thing about the dock being edited, and redraws.</summary>
@@ -1403,6 +1419,7 @@ public sealed partial class SettingsWindow : Window
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             var name = new TextBlock
             {
@@ -1426,25 +1443,41 @@ public sealed partial class SettingsWindow : Window
 
             Grid.SetColumn(count, 2);
 
-            var picture = new Grid();
-            picture.Children.Add(new Viewbox { Width = 16, Height = 16, Child = canvas });
+            var picture = new Viewbox { Width = 16, Height = 16, Child = canvas };
+
+            List<(Button Pencil, WidgetOffer Offer)> pencils = [];
 
             // A pencil on the ones whose picture can be changed, and nothing
             // on the clock and the player, which draw their own faces.
+            //
+            // It is the pencil that changes the picture, not the chip. The
+            // chip is what a widget is carried by, and a press on the thing
+            // you carry should not quietly repaint every copy of it on every
+            // bar - which is what pressing the chip did, and it is how a
+            // processor came to be drawn as a cogwheel.
             if (offer.Chooses is not null)
             {
-                picture.Children.Add(new Border
+                var pencil = new Button
                 {
-                    Width = 9,
-                    Height = 9,
-                    Margin = new Thickness(0, 0, -4, -4),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Width = 22,
+                    Height = 22,
+                    Padding = new Thickness(0),
+                    MinWidth = 0,
+                    MinHeight = 0,
+                    VerticalAlignment = VerticalAlignment.Center,
                     Background = Braun.PanelHi,
                     BorderBrush = Braun.LineHi,
                     BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(5),
-                });
+                    CornerRadius = new CornerRadius(6),
+                    Content = Braun.Glyph("Pen", 11, Braun.Tx2),
+                };
+
+                ToolTipService.SetToolTip(
+                    pencil, Loc.Tr("ChipPencil", "Change the picture, on every bar."));
+
+                Grid.SetColumn(pencil, 3);
+                row.Children.Add(pencil);
+                pencils.Add((pencil, offer));
             }
 
             row.Children.Add(picture);
@@ -1474,7 +1507,7 @@ public sealed partial class SettingsWindow : Window
                 chip,
                 offer.Chooses is null
                     ? Loc.Tr("ChipDragOnly", "Drag it onto a bar to put one there.")
-                    : Loc.Tr("ChipDragOrPick", "Drag it onto a bar to put one there. Press it to change its picture."));
+                    : Loc.Tr("ChipDragOrPick", "Drag it onto a bar to put one there. The pencil changes its picture."));
 
             WidgetOffer chosen = offer;
 
@@ -1484,7 +1517,11 @@ public sealed partial class SettingsWindow : Window
                 args.Data.RequestedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
             };
 
-            chip.PointerReleased += (_, _) => PickPicture(chosen, chip);
+            foreach ((Button pencil, WidgetOffer whose) in pencils)
+            {
+                WidgetOffer picked = whose;
+                pencil.Click += (_, _) => PickPicture(picked, pencil);
+            }
 
             gallery.Children.Add(chip);
         }
@@ -1516,7 +1553,26 @@ public sealed partial class SettingsWindow : Window
             ItemTemplate = (DataTemplate)Root.Resources["IconChoiceTemplate"],
         };
 
-        var flyout = new Flyout { Content = grid, XamlRoot = Content.XamlRoot };
+        // And a way back. A picture chosen by accident - and it is chosen by
+        // accident, because until today the whole chip was the button - could
+        // not be un-chosen: the list offers sixty-nine drawings and none of
+        // them is "the one it came with".
+        var panel = new StackPanel { Spacing = 8, Padding = new Thickness(4) };
+        panel.Children.Add(grid);
+
+        var flyout = new Flyout { Content = panel, XamlRoot = Content.XamlRoot };
+
+        if (_settings.Current.App.Icons.ContainsKey(id))
+        {
+            panel.Children.Add(Braun.Action(
+                Loc.Tr("IconDefault", "The one it came with"),
+                () =>
+                {
+                    ForgetPicture(id);
+                    flyout.Hide();
+                },
+                "Undo"));
+        }
 
         grid.SelectionChanged += (_, args) =>
         {
@@ -1528,6 +1584,22 @@ public sealed partial class SettingsWindow : Window
         };
 
         flyout.ShowAt(at);
+    }
+
+    /// <summary>Forgets a chosen picture, so the reading wears its own again.</summary>
+    private void ForgetPicture(string id)
+    {
+        SettingsModel current = _settings.Current;
+
+        Write(
+            current with
+            {
+                App = current.App with { Icons = current.App.Icons.Remove(id) },
+            },
+            WriteReason.UserAction);
+
+        _log.LogInformation("settings.icon {Id} default", id);
+        ReloadDocks();
     }
 
     /// <summary>Writes down which picture a reading is drawn with.</summary>
@@ -1543,7 +1615,7 @@ public sealed partial class SettingsWindow : Window
             WriteReason.UserAction);
 
         _log.LogInformation("settings.icon {Id} {Icon}", id, icon);
-        ShowDock();
+        ReloadDocks();
     }
 
     /// <summary>
@@ -2000,6 +2072,7 @@ public sealed partial class SettingsWindow : Window
         string tag = (args.SelectedItem as NavigationViewItem)?.Tag as string ?? "docks";
 
         DocksSection.Visibility = Show(tag == "docks");
+        WidgetsSection.Visibility = Show(tag == "widgets");
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
         AboutSection.Visibility = Show(tag == "about");
@@ -2332,6 +2405,51 @@ public sealed partial class SettingsWindow : Window
         });
 
         AboutBody.Children.Add(mark);
+
+        // --------------------------------------------------------- shortcuts
+        // Keys and language live with the program, not with how the bars are
+        // painted: neither is about a bar, and both are about the whole
+        // machine. They sat under Appearance because that was the page that
+        // was not about one screen.
+        AboutBody.Children.Add(Braun.Heading("Sliders", Loc.Tr("KeysGroup", "Keys")));
+
+        AboutBody.Children.Add(Braun.Group(
+            KeyRow(
+                Shortcut.Bars,
+                Loc.Tr("KeyBars", "Show or hide every bar"),
+                Loc.Tr("KeyBarsHint", "The bars go away and come back. Their layout is kept.")),
+            KeyRow(
+                Shortcut.Settings,
+                Loc.Tr("KeySettings", "Open this window"),
+                Loc.Tr("KeySettingsHint", "From anywhere, including over a full-screen program.")),
+            KeyRow(
+                Shortcut.Mute,
+                Loc.Tr("KeyMute", "Silence the machine"),
+                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one."))));
+
+        AboutBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
+
+        string[] languages = ["system", "en-US", "ru-RU"];
+
+        AboutBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("LanguageLabel", "Language"),
+                Loc.Tr("LanguageHint", "Takes effect the next time the program starts."),
+                Braun.Segs(
+                    [Loc.Tr("LanguageSystemItem", "Same as Windows"), "English", "Русский"],
+                    Math.Max(0, Array.IndexOf(languages, _settings.Current.App.Language)),
+                    i => PickLanguage(languages[i]),
+                    wide: true),
+                stack: true),
+
+            // Offered only once a language has actually been chosen: people
+            // reasonably think closing this window is a restart.
+            _restartOffered
+                ? Braun.Row(
+                    Loc.Tr("RestartRow", "The language has changed"),
+                    Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
+                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, "Undo"))
+                : null));
 
         AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("StartupTitle", "Startup")));
 

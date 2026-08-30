@@ -99,6 +99,13 @@ public static class WidgetCatalog
             (context, entry) => new WifiWidget(context, entry)),
 
         new(
+            SettingsWidget.Type,
+            Loc.Tr("WidgetSettingsName", "Settings"),
+            Loc.Tr("WidgetSettingsDescription", "Opens this window. The way in, for anybody who has not found the right click."),
+            "Gear",
+            (context, entry) => new SettingsWidget(context, entry)),
+
+        new(
             ClockWidget.Type,
             Loc.Tr("WidgetClockName", "Clock"),
             Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
@@ -210,6 +217,13 @@ public static class WidgetCatalog
                 () => WidgetConfig.New(WifiWidget.Type),
                 entry => entry.TypeId == WifiWidget.Type);
         }
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetSettingsName", "Settings"),
+            Loc.Tr("WidgetSettingsDescription", "Opens this window. The way in, for anybody who has not found the right click."),
+            "Gear",
+            () => WidgetConfig.New(SettingsWidget.Type),
+            entry => entry.TypeId == SettingsWidget.Type);
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetClockName", "Clock"),
