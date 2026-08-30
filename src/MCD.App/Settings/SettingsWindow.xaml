@@ -426,6 +426,7 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
                                             <StackPanel VerticalAlignment="Center">
@@ -461,6 +462,40 @@
                                                 FontSize="15"
                                                 Foreground="{ThemeResource BraunTx2}"
                                                 Text="{x:Bind Value, Mode=OneWay}" />
+
+                                            <!-- The same pencil the gallery
+                                                 chips wear. Renaming was a
+                                                 double click announced only by
+                                                 a tooltip, which is a gesture
+                                                 nobody finds and a promise
+                                                 only the patient read. -->
+                                            <Button
+                                                x:Uid="SensorRename"
+                                                Grid.Column="2"
+                                                Width="26"
+                                                Height="24"
+                                                MinWidth="0"
+                                                MinHeight="0"
+                                                Padding="0"
+                                                VerticalAlignment="Center"
+                                                Background="{ThemeResource BraunPanelHi}"
+                                                BorderBrush="{ThemeResource BraunLine}"
+                                                BorderThickness="1"
+                                                Click="OnRenameSensor"
+                                                CornerRadius="6"
+                                                Tag="{x:Bind Key.Value}">
+                                                <Viewbox Width="12" Height="12">
+                                                    <Canvas Width="24" Height="24">
+                                                        <Path
+                                                            Data="{x:Bind local:IconRow.Pencil}"
+                                                            Stroke="{ThemeResource BraunTx2}"
+                                                            StrokeEndLineCap="Round"
+                                                            StrokeLineJoin="Round"
+                                                            StrokeStartLineCap="Round"
+                                                            StrokeThickness="1.6" />
+                                                    </Canvas>
+                                                </Viewbox>
+                                            </Button>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

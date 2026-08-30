@@ -1017,6 +1017,7 @@ public sealed partial class SettingsWindow : Window
     {
         Braun.Theme = Root.ActualTheme;
         DockBody.Children.Clear();
+        _undoOnDocks = null;
 
         MonitorConfig? dock = _settings.Current.Monitors
             .FirstOrDefault(m => m.StableId == _editing);
@@ -1049,14 +1050,29 @@ public sealed partial class SettingsWindow : Window
                     dock.Enabled,
                     on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "showing the bar")))),
 
+            // Only for a screen that is not there. A list of screens that only
+            // ever grows is a list somebody stops reading: every projector,
+            // every television, every Win+P arrangement the program has ever
+            // seen stays in it. The comment in the reconciler has promised
+            // this button since the registry was written.
+            live is null
+                ? Braun.Row(
+                    Loc.Tr("ForgetRow", "Forget this screen"),
+                    Loc.Tr(
+                        "ForgetRowHint",
+                        "Takes its bar and its arrangement out of the settings. If the screen comes back it arrives as a new one."),
+                    Braun.Action(
+                        Loc.Tr("ForgetButton", "Forget it"), ForgetScreen, "Delete", danger: true))
+                : null,
+
             // Outside everything the master switch dims. It was inside, which
             // meant that switching a dock off left an enabled Undo button in
             // a panel that could not be clicked - including the undo of
             // switching it off.
             Braun.Row(
                 Loc.Tr("UndoRow", "Take the last change back"),
-                Loc.Tr("UndoRowHint", "Everything on this page and everything done on the bar itself."),
-                Undo())));
+                Loc.Tr("UndoRowHint", "Anything changed here or on a bar itself, on any screen."),
+                _undoOnDocks = Undo())));
 
         // Everything the master switch governs dims with it.
         var gated = new StackPanel
@@ -1187,6 +1203,7 @@ public sealed partial class SettingsWindow : Window
     {
         Braun.Theme = Root.ActualTheme;
         WidgetsBody.Children.Clear();
+        _undoOnWidgets = null;
 
         MonitorConfig? dock = _settings.Current.Monitors
             .FirstOrDefault(m => m.StableId == _editing);
@@ -1203,6 +1220,14 @@ public sealed partial class SettingsWindow : Window
 
         // ------------------------------------------------------------ contents
         WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
+
+        // The page that makes most of the changes worth taking back, and it
+        // had no way to take one back: the button was on the page next door,
+        // and the destructive things - the crosses, the reset - are all here.
+        WidgetsBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("UndoRow", "Take the last change back"),
+            Loc.Tr("UndoRowHint", "Anything changed here or on a bar itself, on any screen."),
+            _undoOnWidgets = Undo())));
 
         WidgetsBody.Children.Add(BarList(dock));
 
@@ -1328,6 +1353,37 @@ public sealed partial class SettingsWindow : Window
 
     }
 
+    /// <summary>
+    /// Takes a screen that is not here out of the settings.
+    /// </summary>
+    /// <remarks>
+    /// Only offered for a screen that is not attached, because for one that
+    /// is the answer would be undone by the next reconcile. Undoable like
+    /// anything else, so a wrong press costs one click rather than a layout.
+    /// </remarks>
+    private void ForgetScreen()
+    {
+        if (_editing is not { } stableId)
+        {
+            return;
+        }
+
+        SettingsModel current = _settings.Current;
+
+        Write(
+            current with
+            {
+                Monitors = [.. current.Monitors.Where(m => m.StableId != stableId)],
+            },
+            WriteReason.UserAction,
+            Loc.Tr("UndoForgot", "a screen forgotten"));
+
+        _log.LogInformation("settings.forgot monitor={Monitor}", stableId);
+
+        _editing = null;
+        ReloadDocks();
+    }
+
     /// <summary>Changes one thing about the dock being edited, and redraws.</summary>
     private void SetDock(Func<MonitorConfig, MonitorConfig> change, string what)
     {
@@ -1424,6 +1480,7 @@ public sealed partial class SettingsWindow : Window
             line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             var name = new TextBlock
             {
@@ -1435,6 +1492,27 @@ public sealed partial class SettingsWindow : Window
             };
 
             line.Children.Add(name);
+
+            // Where it stands, or that it is not standing. Two widgets of the
+            // same kind are allowed and common - the list said "CPU" twice
+            // with nothing to tell them apart, so neither arrow nor cross
+            // could be aimed.
+            var place = new TextBlock
+            {
+                Text = entry.Cell >= 0
+                    ? string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr("ListAtSlot", "slot {0}"),
+                        entry.Cell)
+                    : Loc.Tr("ListNoSlot", "waiting"),
+                FontSize = 11,
+                Margin = new Thickness(0, 0, 6, 0),
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = Braun.Tx3,
+            };
+
+            Grid.SetColumn(place, 1);
+            line.Children.Add(place);
 
             Button Small(string glyph, string tip, Action click, bool danger = false)
             {
@@ -1471,8 +1549,8 @@ public sealed partial class SettingsWindow : Window
             up.IsEnabled = at > 0 && entry.Cell >= 0 && order[at - 1].Cell >= 0;
             down.IsEnabled = at < order.Count - 1 && entry.Cell >= 0 && order[at + 1].Cell >= 0;
 
-            Grid.SetColumn(up, 1);
-            Grid.SetColumn(down, 2);
+            Grid.SetColumn(up, 2);
+            Grid.SetColumn(down, 3);
             line.Children.Add(up);
             line.Children.Add(down);
 
@@ -1485,7 +1563,7 @@ public sealed partial class SettingsWindow : Window
                     Loc.Tr("UndoRemoved", "a widget taken off")),
                 danger: true);
 
-            Grid.SetColumn(off, 3);
+            Grid.SetColumn(off, 4);
             line.Children.Add(off);
 
             // The whole line chooses it, so its own settings appear below
@@ -1661,8 +1739,6 @@ public sealed partial class SettingsWindow : Window
     /// keep and easy to forget - forgetting it once ended the program on
     /// every right-click.
     /// </remarks>
-    private Button? _undoButton;
-
     /// <summary>What the chosen widget is called, for the heading above it.</summary>
     private string _inspectorName = string.Empty;
 
@@ -2006,11 +2082,24 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private Button Undo()
     {
-        _undoButton = Braun.Action(UndoLabel(), DoUndo, "Undo");
-        _undoButton.IsEnabled = _settings.CanUndo;
+        var button = Braun.Action(UndoLabel(), DoUndo, "Undo");
+        button.IsEnabled = _settings.CanUndo;
 
-        return _undoButton;
+        return button;
     }
+
+    /// <summary>
+    /// The undo buttons now in the tree, one per page that has one.
+    /// </summary>
+    /// <remarks>
+    /// Two, because there are two pages that make changes worth taking back -
+    /// and the one that makes most of them was the one without a button.
+    /// Held as references to what a page has already built, never as
+    /// something to put into the next one: an element that outlives a rebuild
+    /// has two parents, and that ended the program once.
+    /// </remarks>
+    private Button? _undoOnDocks;
+    private Button? _undoOnWidgets;
 
     /// <summary>
     /// Says on the button what undoing would put back, without building the
@@ -2024,13 +2113,16 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private void ShowUndo()
     {
-        if (_undoButton is not { } button)
+        foreach (Button? button in new[] { _undoOnDocks, _undoOnWidgets })
         {
-            return;
-        }
+            if (button is null)
+            {
+                continue;
+            }
 
-        button.Content = Braun.Legend(UndoLabel(), "Undo", Braun.Tx2);
-        button.IsEnabled = _settings.CanUndo;
+            button.Content = Braun.Legend(UndoLabel(), "Undo", Braun.Tx2);
+            button.IsEnabled = _settings.CanUndo;
+        }
     }
 
     private string UndoLabel() =>
@@ -2400,7 +2492,15 @@ public sealed partial class SettingsWindow : Window
     /// dock, because there is no version of this where two names for one thing
     /// is the friendlier answer. An empty box gives the part's own name back.
     /// </remarks>
-    private async void OnRenameSensor(object sender, DoubleTappedRoutedEventArgs e)
+    /// <summary>
+    /// Asks what to call a reading.
+    /// </summary>
+    /// <remarks>
+    /// Reached two ways on purpose: the pencil, which can be seen, and the
+    /// double click, which was the only way and was announced by a tooltip.
+    /// The handler takes the plain event args so both can call it.
+    /// </remarks>
+    private async void OnRenameSensor(object sender, RoutedEventArgs e)
     {
         if ((sender as FrameworkElement)?.Tag is not string key
             || _readings.FirstOrDefault(r => r.Key.Value == key) is not { } row)

@@ -702,7 +702,7 @@
     <value>Take the last change back</value>
   </data>
   <data name="UndoRowHint" xml:space="preserve">
-    <value>Everything on this page and everything done on the bar itself.</value>
+    <value>Anything changed here or on a bar itself, on any screen.</value>
   </data>
   <data name="MediaTitleHint" xml:space="preserve">
     <value>Off puts it in the tooltip instead.</value>
@@ -955,5 +955,29 @@
   </data>
   <data name="CopyButtonCount" xml:space="preserve">
     <value>Make {0} the same</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>slot {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>waiting</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Rename this reading</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Give this reading a name of your own.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Forget this screen</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Takes its bar and its arrangement out of the settings. If the screen comes back it arrives as a new one.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Forget it</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>a screen forgotten</value>
   </data>
 </root>

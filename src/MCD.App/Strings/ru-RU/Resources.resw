@@ -702,7 +702,7 @@
     <value>Вернуть последнее изменение</value>
   </data>
   <data name="UndoRowHint" xml:space="preserve">
-    <value>И то, что на этой странице, и то, что сделано на самой панели.</value>
+    <value>Всё, что изменено здесь или на самой панели, на любом экране.</value>
   </data>
   <data name="MediaTitleHint" xml:space="preserve">
     <value>Если выключено, название уходит во всплывающую подсказку.</value>
@@ -955,5 +955,29 @@
   </data>
   <data name="CopyButtonCount" xml:space="preserve">
     <value>Сделать такими же: {0}</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>место {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>ждёт</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Переименовать показание</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Дать этому показанию своё имя.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Забыть этот экран</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Убирает его панель и расстановку из настроек. Если экран вернётся, он придёт как новый.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Забыть</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>забытый экран</value>
   </data>
 </root>
