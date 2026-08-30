@@ -1106,4 +1106,10 @@
   <data name="SoundPressMuteTip" xml:space="preserve">
     <value>нажатие выключит звук</value>
   </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Размер значков и цифр</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>Насколько крупно рисуются значки и цифры. Толщина самой панели задаётся на её странице.</value>
+  </data>
 </root>

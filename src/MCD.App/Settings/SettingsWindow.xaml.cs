@@ -672,9 +672,9 @@ public sealed partial class SettingsWindow : Window
             BackdropExtraRow(look),
 
             Braun.Row(
-                Loc.Tr("SizeLabel", "Size of the readings"),
+                Loc.Tr("ReadingSizeLabel", "Size of the readings"),
                 Loc.Tr(
-                    "SizeHint",
+                    "ReadingSizeHint",
                     "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
                 Braun.Segs(
                     [

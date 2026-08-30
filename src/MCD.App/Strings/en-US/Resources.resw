@@ -1106,4 +1106,10 @@
   <data name="SoundPressMuteTip" xml:space="preserve">
     <value>a press silences it</value>
   </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Size of the readings</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page.</value>
+  </data>
 </root>
