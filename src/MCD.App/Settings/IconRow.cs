@@ -72,6 +72,27 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry PageWidgets => Draw("Layout");
 
+    public static Geometry PageProgram => Draw("Info");
+
+    /// <summary>
+    /// The same four drawings again, for the pane.
+    /// </summary>
+    /// <remarks>
+    /// Separate properties rather than the page ones used twice. A compiled
+    /// binding evaluates a path once and hands the result to every target
+    /// bound to it, and a Geometry has one owner - so the second Path given
+    /// the same drawing threw, and the settings window did not open at all.
+    /// </remarks>
+    public static Geometry TabDocks => Draw("Computer");
+
+    public static Geometry TabWidgets => Draw("Layout");
+
+    public static Geometry TabLook => Draw("Brush");
+
+    public static Geometry TabSensors => Draw("Pulse");
+
+    public static Geometry TabProgram => Draw("Info");
+
     public static Geometry PageLook => Draw("Brush");
 
     public static Geometry PageSensors => Draw("Pulse");

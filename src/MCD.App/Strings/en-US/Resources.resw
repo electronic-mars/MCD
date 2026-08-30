@@ -16,19 +16,19 @@
   <data name="TitleBarText.Text" xml:space="preserve">
     <value>Master Control Dock</value>
   </data>
-  <data name="NavDocks.Content" xml:space="preserve">
+  <data name="NavDocks.Text" xml:space="preserve">
     <value>Bars</value>
   </data>
   <data name="NavIcons.Content" xml:space="preserve">
     <value>Icons</value>
   </data>
-  <data name="NavAppearance.Content" xml:space="preserve">
+  <data name="NavAppearance.Text" xml:space="preserve">
     <value>Appearance</value>
   </data>
-  <data name="NavSensors.Content" xml:space="preserve">
+  <data name="NavSensors.Text" xml:space="preserve">
     <value>Readings</value>
   </data>
-  <data name="NavAbout.Content" xml:space="preserve">
+  <data name="NavAbout.Text" xml:space="preserve">
     <value>The program</value>
   </data>
   <!-- Docks page -->
@@ -968,7 +968,7 @@
   <data name="SettingsChipTip.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="NavWidgets.Content" xml:space="preserve">
+  <data name="NavWidgets.Text" xml:space="preserve">
     <value>Widgets</value>
   </data>
   <data name="WidgetsTitle.Text" xml:space="preserve">

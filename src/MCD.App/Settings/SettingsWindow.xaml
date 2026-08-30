@@ -136,37 +136,97 @@
             SelectionChanged="OnSectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="NavDocks" Content="Bars" Icon="View" Tag="docks" />
-                <!-- The one place a glyph from the system's font is still drawn.
-                     A navigation item's Icon slot takes an IconElement, and none
-                     of those can stroke a path - PathIcon fills the geometry,
-                     which turns a drawing made of lines into a blob. The pane
-                     is the framework's own chrome; everything this program
-                     draws itself comes from its own set.
-
-                     A glyph rather than a Symbol: the Symbol list is short and
-                     has no colour in it, and a name it does not know is not a
-                     compile error - it is a parse failure at run time that
-                     takes the window, and the process, with it. -->
-                <NavigationViewItem x:Uid="NavWidgets" Content="Widgets" Tag="widgets">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8FD;" />
-                    </NavigationViewItem.Icon>
+                <!-- The pane's items draw from this program's own set, like
+                     everything else in the window. A NavigationViewItem's Icon
+                     slot takes an IconElement and none of those can stroke a
+                     path - PathIcon fills the geometry, which turns a drawing
+                     made of lines into a blob - so the drawing and the name go
+                     in the item's content together, and the name keeps its own
+                     x:Uid. Two icon sets in one window read as two programs,
+                     and the join was the first four things on the page. -->
+                <NavigationViewItem Tag="docks">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabDocks}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavDocks" VerticalAlignment="Center" Text="Bars" />
+                    </StackPanel>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="NavAppearance" Content="Appearance" Tag="appearance">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
-                    </NavigationViewItem.Icon>
+                <NavigationViewItem Tag="widgets">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabWidgets}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavWidgets" VerticalAlignment="Center" Text="Widgets" />
+                    </StackPanel>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="NavSensors" Content="Readings" Tag="sensors">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE9D9;" />
-                    </NavigationViewItem.Icon>
+                <NavigationViewItem Tag="appearance">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabLook}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavAppearance" VerticalAlignment="Center" Text="Appearance" />
+                    </StackPanel>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="sensors">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabSensors}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavSensors" VerticalAlignment="Center" Text="Readings" />
+                    </StackPanel>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem x:Uid="NavAbout" Content="The program" Icon="Help" Tag="about" />
+                <NavigationViewItem Tag="about">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabProgram}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavAbout" VerticalAlignment="Center" Text="The program" />
+                    </StackPanel>
+                </NavigationViewItem>
             </NavigationView.FooterMenuItems>
 
             <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
