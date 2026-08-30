@@ -128,7 +128,7 @@
     <value>Nothing is answering yet.</value>
   </data>
   <data name="SensorsSummary" xml:space="preserve">
-    <value>{0} readings from {1} sources.</value>
+    <value>{0} readings. Sources: {1}.</value>
   </data>
   <!-- Widget cards in the settings list -->
   <!-- The bar's right-click menu -->
@@ -979,5 +979,29 @@
   </data>
   <data name="UndoForgot" xml:space="preserve">
     <value>a screen forgotten</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows counters</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows memory</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI thermal zones</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>drive temperatures</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA driver</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>answering ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>not running</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>not on this machine</value>
   </data>
 </root>

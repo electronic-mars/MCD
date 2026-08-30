@@ -1,4 +1,4 @@
-# Photographs every page of the settings window from a run of its own.
+﻿# Photographs every page of the settings window from a run of its own.
 #
 # A visual change is verified by looking at the window it changed. The window
 # that gets looked at must not be the one on somebody's desk while they are
@@ -77,6 +77,7 @@ $env:MCD_SELFTEST_PAGE = $Pages
 $p = Start-Process -FilePath $exe -PassThru
 $wanted = $Pages.Split(',')
 $seen = 0
+$tries = 0
 $deadline = (Get-Date).AddSeconds($Seconds + 4)
 
 while ($seen -lt $wanted.Count -and (Get-Date) -lt $deadline) {
@@ -88,7 +89,7 @@ while ($seen -lt $wanted.Count -and (Get-Date) -lt $deadline) {
     $lines = @(Select-String -Path $log.FullName -Pattern 'selftest\.page (\S+)' -ErrorAction SilentlyContinue)
     while ($seen -lt $lines.Count) {
         $page = $lines[$seen].Matches[0].Groups[1].Value
-        Start-Sleep -Milliseconds 450   # let the page finish laying itself out
+        if ($tries -eq 0) { Start-Sleep -Milliseconds 450 }  # let it lay itself out
 
         $h = [Win]::Biggest($p.Id)
         if ($h -ne [IntPtr]::Zero) {
@@ -109,10 +110,39 @@ while ($seen -lt $wanted.Count -and (Get-Date) -lt $deadline) {
                     Write-Warning "$page was photographed off the screen, not out of the window"
                 }
 
+                # A window that has been told to change page can be
+                # photographed before it has drawn the new one, and hands back
+                # a sheet of black that looks exactly like a page that failed
+                # to render. Counting the colours in a coarse grid tells the
+                # two apart: a real page has dozens, an unpainted one has one.
+                $seenColours = @{}
+                for ($sx = 20; $sx -lt $w - 20; $sx += 40) {
+                    for ($sy = 40; $sy -lt $ht - 20; $sy += 40) {
+                        $seenColours[$bmp.GetPixel($sx, $sy).ToArgb()] = $true
+                    }
+                }
+
+                # Waiting is bounded well inside the 1400 ms the program
+                # spends on each page: wait past that and the next page is on
+                # screen, and the photograph is filed under the wrong name -
+                # which is worse than a black one, because it looks right.
+                if ($seenColours.Count -lt 4 -and $tries -lt 2) {
+                    $g.Dispose(); $bmp.Dispose()
+                    $tries++
+                    Write-Warning "$page had not drawn itself yet; waiting"
+                    Start-Sleep -Milliseconds 300
+                    continue
+                }
+
+                if ($seenColours.Count -lt 4) {
+                    Write-Warning "$page is blank in the photograph, not just late"
+                }
+
                 $file = Join-Path $Out "$page.png"
                 $bmp.Save($file, [System.Drawing.Imaging.ImageFormat]::Png)
                 $g.Dispose(); $bmp.Dispose()
                 "saved $file  ($w x $ht)"
+                $tries = 0
             }
         } else { Write-Warning "no window when $page was shown" }
 

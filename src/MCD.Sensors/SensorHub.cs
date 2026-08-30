@@ -84,6 +84,7 @@ public sealed class SensorHub : IDisposable
     {
         _log = log;
         _sources.AddRange(providers.Select(p => new Source(p)));
+        RebuildRoll();
 
         if (!pumpItself)
         {
@@ -105,6 +106,17 @@ public sealed class SensorHub : IDisposable
 
     /// <summary>Every sensor known to be available right now.</summary>
     public ImmutableArray<SensorDescriptor> Catalog => _catalog;
+
+    /// <summary>
+    /// Every source the program knows how to ask, and whether it is answering.
+    /// </summary>
+    /// <remarks>
+    /// A count of sources answers nothing. The question people bring to that
+    /// page is about one source by name - whether the program has found the
+    /// monitoring program they installed for it - and a number cannot say.
+    /// The ones that are not answering are the point, so they stay in the list.
+    /// </remarks>
+    public ImmutableArray<SourceRoll> Sources => _roll;
 
     /// <summary>Raised on the hub's thread after each round of polling.</summary>
     public event EventHandler<SensorSnapshot>? Updated;
@@ -359,6 +371,8 @@ public sealed class SensorHub : IDisposable
     /// </remarks>
     private void RebuildCatalog()
     {
+        RebuildRoll();
+
         List<SensorDescriptor> all = [.. _sources.Where(s => s.Ready).SelectMany(s => s.Descriptors)];
 
         Dictionary<(HardwareGroup, SensorKind, string), SensorKey> best = all
@@ -379,6 +393,13 @@ public sealed class SensorHub : IDisposable
                     : d)
         ];
     }
+
+    private void RebuildRoll() =>
+        _roll =
+        [
+            .. _sources.Select(s => new SourceRoll(
+                s.Provider.Id, s.Provider.Tier, s.Ready, s.Descriptors.Length))
+        ];
 
     private T? Safely<T>(Source source, Func<T> work, string what, T? whenItFails = default)
     {
@@ -431,6 +452,8 @@ public sealed class SensorHub : IDisposable
         }
     }
 
+    private ImmutableArray<SourceRoll> _roll = [];
+
     private sealed class Source(ISensorProvider provider)
     {
         public ISensorProvider Provider { get; } = provider;
@@ -448,3 +471,10 @@ public sealed class SensorHub : IDisposable
         public DateTimeOffset NextPoll { get; set; } = DateTimeOffset.MinValue;
     }
 }
+
+/// <summary>One source of readings, and what it is doing.</summary>
+/// <param name="Id">The short name the source calls itself, and the first part of its keys.</param>
+/// <param name="Tier">What it needs before it can work at all.</param>
+/// <param name="Answering">Whether it is here and being read right now.</param>
+/// <param name="Readings">How many things it offers to measure.</param>
+public readonly record struct SourceRoll(string Id, Tier Tier, bool Answering, int Readings);

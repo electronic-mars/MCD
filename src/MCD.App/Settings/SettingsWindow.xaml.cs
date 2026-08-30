@@ -373,6 +373,12 @@ public sealed partial class SettingsWindow : Window
         double narrowest = double.MaxValue;
         _clipped = 0;
 
+        // Put back afterwards. Something else is photographing these pages by
+        // name, from the log; a measuring pass that leaves the window on a
+        // different page than the one announced files the photograph under
+        // the wrong name, and a picture of the wrong page looks right.
+        object? was = Nav.SelectedItem;
+
         foreach (object item in Nav.MenuItems.Concat(Nav.FooterMenuItems))
         {
             if (item is not NavigationViewItem entry || entry.Tag is not string tag)
@@ -417,6 +423,9 @@ public sealed partial class SettingsWindow : Window
         }
 
         _log.LogInformation("selftest.clipped worst={Worst}", Math.Round(_clipped));
+
+        Nav.SelectedItem = was;
+        Pages.UpdateLayout();
 
         return narrowest;
     }
@@ -2477,11 +2486,51 @@ public sealed partial class SettingsWindow : Window
             ? Loc.Tr("SensorsNoneYet", "Nothing is answering yet.")
             : string.Format(
                 CultureInfo.CurrentCulture,
-                Loc.Tr("SensorsSummary", "{0} readings from {1} sources."),
+                Loc.Tr("SensorsSummary", "{0} readings. Sources: {1}."),
                 found.Length,
-                found.Select(d => d.Key.Value.Split('/', 2)[0]).Distinct().Count());
-
+                Roll());
     }
+
+    /// <summary>
+    /// Names every source and says what it is doing.
+    /// </summary>
+    /// <remarks>
+    /// A count answered nothing. The question people bring to this page is
+    /// about one source by name - whether the program has found the monitoring
+    /// program they installed for it - so the ones that are silent are the
+    /// point and stay in the list.
+    /// </remarks>
+    private string Roll() =>
+        string.Join(
+            "; ",
+            _sensors.Sources
+                .OrderBy(s => s.Tier)
+                .ThenBy(s => SourceName(s.Id), StringComparer.CurrentCulture)
+                .Select(s => $"{SourceName(s.Id)} — {SourceState(s)}"));
+
+    /// <summary>What a source is called, rather than the tag in its keys.</summary>
+    private static string SourceName(string id) => id switch
+    {
+        "pdh" => Loc.Tr("SourcePdh", "Windows counters"),
+        "mem" => Loc.Tr("SourceMem", "Windows memory"),
+        "acpi" => Loc.Tr("SourceAcpi", "ACPI thermal zones"),
+        "disk" => Loc.Tr("SourceDisk", "drive temperatures"),
+        "nvml" => Loc.Tr("SourceNvml", "NVIDIA driver"),
+        "lhm" => "LibreHardwareMonitor",
+        "hwinfo" => "HWiNFO",
+        _ => id,
+    };
+
+    /// <summary>Why a source has nothing to say, when it has nothing to say.</summary>
+    private static string SourceState(SourceRoll source) => source switch
+    {
+        { Answering: true } => string.Format(
+            CultureInfo.CurrentCulture,
+            Loc.Tr("SourceAnswering", "answering ({0})"),
+            source.Readings),
+        { Tier: Tier.External } => Loc.Tr("SourceNotRunning", "not running"),
+        _ => Loc.Tr("SourceNotHere", "not on this machine"),
+    };
 
     /// <summary>
     /// Asks what to call a reading, on a double-click of its row.

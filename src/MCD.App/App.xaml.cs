@@ -542,8 +542,15 @@ public partial class App : Application
             // instead of guessing at a cadence.
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_PAGE") is { Length: > 0 } pages)
             {
-                Walk(log, [.. pages.Split(',', StringSplitOptions.RemoveEmptyEntries
-                    | StringSplitOptions.TrimEntries)]);
+                // After the rehearsals, not alongside them. The rehearsal at
+                // 1600 ms closes this window and builds another one on the
+                // widgets page; a walk running at the same time announces a
+                // page in the log while a different one is on screen, and the
+                // photograph taken from that announcement is filed under the
+                // wrong name - which is worse than a black one, because it
+                // looks right.
+                Later(2400, () => Walk(log, [.. pages.Split(
+                    ',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)]));
 
                 return;
             }

@@ -128,7 +128,7 @@
     <value>Пока ничего не отвечает.</value>
   </data>
   <data name="SensorsSummary" xml:space="preserve">
-    <value>Показаний: {0}, источников: {1}.</value>
+    <value>Показаний: {0}. Источники: {1}.</value>
   </data>
   <!-- Карточки виджетов в списке настроек -->
   <!-- Контекстное меню панели -->
@@ -979,5 +979,29 @@
   </data>
   <data name="UndoForgot" xml:space="preserve">
     <value>забытый экран</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>счётчики Windows</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>память Windows</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>термозоны ACPI</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>температура дисков</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>драйвер NVIDIA</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>отвечает ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>не запущен</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>нет на этой машине</value>
   </data>
 </root>
