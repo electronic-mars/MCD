@@ -19,9 +19,6 @@
   <data name="NavDocks.Text" xml:space="preserve">
     <value>Панели</value>
   </data>
-  <data name="NavIcons.Content" xml:space="preserve">
-    <value>Значки</value>
-  </data>
   <data name="NavAppearance.Text" xml:space="preserve">
     <value>Оформление</value>
   </data>
@@ -50,9 +47,6 @@
   <data name="SizeLabel" xml:space="preserve">
     <value>Толщина</value>
   </data>
-  <data name="BehaviourLabel" xml:space="preserve">
-    <value>Скрывается, пока не наведён указатель</value>
-  </data>
   <!-- Страница «Запуск» -->
   <!-- Страница «Оформление» -->
   <data name="AppearanceTitle.Text" xml:space="preserve">
@@ -74,12 +68,6 @@
     <value>Акцентный цвет берётся из параметров Windows. Показания выше порога предупреждения в любом случае сохраняют предупреждающий цвет.</value>
   </data>
   <!-- Страница «Значки» -->
-  <data name="IconsTitle.Text" xml:space="preserve">
-    <value>Значки</value>
-  </data>
-  <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Выберите, каким значком рисуется каждое показание. Выбор действует на всех панелях.</value>
-  </data>
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
     <value>Показания</value>
@@ -115,12 +103,6 @@
   <data name="DockNotAttached" xml:space="preserve">
     <value>не подключён · раскладка сохранена и вернётся вместе с экраном</value>
   </data>
-  <data name="NoteCompactVertical" xml:space="preserve">
-    <value>У панели сбоку экрана только одна ширина, поэтому компактный размер здесь ничего не меняет.</value>
-  </data>
-  <data name="NoteTaskbarHides" xml:space="preserve">
-    <value>У этого края уже скрывается панель задач Windows, поэтому эта панель остаётся видимой.</value>
-  </data>
   <data name="Undo" xml:space="preserve">
     <value>Отменить</value>
   </data>
@@ -128,25 +110,13 @@
     <value>Отменить — {0}</value>
   </data>
   <data name="UndoAdded" xml:space="preserve">
-    <value>добавлено: {0}</value>
-  </data>
-  <data name="UndoConfigured" xml:space="preserve">
-    <value>настроено: {0}</value>
+    <value>добавление: {0}</value>
   </data>
   <data name="UndoMoved" xml:space="preserve">
-    <value>перемещено</value>
+    <value>перемещение</value>
   </data>
   <data name="UndoRemoved" xml:space="preserve">
-    <value>удалено: {0}</value>
-  </data>
-  <data name="MenuMoveUp" xml:space="preserve">
-    <value>Переместить вверх</value>
-  </data>
-  <data name="MenuMoveDown" xml:space="preserve">
-    <value>Переместить вниз</value>
-  </data>
-  <data name="MenuRemove" xml:space="preserve">
-    <value>Удалить</value>
+    <value>удаление: {0}</value>
   </data>
   <data name="ScreenFallback" xml:space="preserve">
     <value>Экран</value>
@@ -161,15 +131,6 @@
     <value>Показаний: {0}, источников: {1}.</value>
   </data>
   <!-- Карточки виджетов в списке настроек -->
-  <data name="WidgetUnknownSummary" xml:space="preserve">
-    <value>Эта версия программы не знает этот виджет. Он остаётся в настройках нетронутым.</value>
-  </data>
-  <data name="WidgetNothingToSetUp" xml:space="preserve">
-    <value>У этого виджета нет настроек.</value>
-  </data>
-  <data name="WidgetUnknownNothing" xml:space="preserve">
-    <value>Нельзя настроить виджет, который эта версия не знает.</value>
-  </data>
   <!-- Контекстное меню панели -->
   <!-- Каталог виджетов: названия и описания -->
   <data name="WidgetGaugeName" xml:space="preserve">
@@ -217,12 +178,6 @@
   <data name="WidgetTemperatureDescription" xml:space="preserve">
     <value>Температуры компонентов, которые её сообщают.</value>
   </data>
-  <data name="WidgetSpacerName" xml:space="preserve">
-    <value>Разделитель</value>
-  </data>
-  <data name="WidgetSpacerDescription" xml:space="preserve">
-    <value>Пустой участок панели, раздвигающий соседей.</value>
-  </data>
   <!-- Подписи показаний, на панели и в настройках -->
   <data name="LabelCpu" xml:space="preserve">
     <value>ЦП</value>
@@ -262,52 +217,10 @@
   <data name="MediaTitleHeader" xml:space="preserve">
     <value>Писать название трека на панели</value>
   </data>
-  <data name="MediaTitleOn" xml:space="preserve">
-    <value>Пишется рядом с кнопками</value>
-  </data>
-  <data name="MediaTitleOff" xml:space="preserve">
-    <value>Только в подсказке</value>
-  </data>
   <!-- Разделитель -->
-  <data name="SpacerStretches" xml:space="preserve">
-    <value>Растягивается на всё свободное место</value>
-  </data>
-  <data name="SpacerFixedSummary" xml:space="preserve">
-    <value>Фиксированный промежуток шириной {0}</value>
-  </data>
-  <data name="SpacerWidthHeader" xml:space="preserve">
-    <value>Ширина</value>
-  </data>
-  <data name="SpacerFixed" xml:space="preserve">
-    <value>Фиксированная</value>
-  </data>
-  <data name="SpacerPixels" xml:space="preserve">
-    <value>Ширина в пикселях</value>
-  </data>
   <!-- Виджет нагрузки -->
   <!-- Виджет запуска -->
   <!-- Строки мониторов -->
-  <data name="MonitorUnknown" xml:space="preserve">
-    <value>Неизвестный дисплей</value>
-  </data>
-  <data name="MonitorNotAttached" xml:space="preserve">
-    <value>не подключён · последний раз замечен {0}</value>
-  </data>
-  <data name="SeenNever" xml:space="preserve">
-    <value>ни разу</value>
-  </data>
-  <data name="SeenMoment" xml:space="preserve">
-    <value>только что</value>
-  </data>
-  <data name="SeenMinutes" xml:space="preserve">
-    <value>{0} мин назад</value>
-  </data>
-  <data name="SeenHours" xml:space="preserve">
-    <value>{0} ч назад</value>
-  </data>
-  <data name="SeenDays" xml:space="preserve">
-    <value>{0} дн назад</value>
-  </data>
   <data name="LanguageLabel" xml:space="preserve">
     <value>Язык</value>
   </data>
@@ -362,9 +275,6 @@
   <data name="DisplayNumber" xml:space="preserve">
     <value>Дисплей {0}</value>
   </data>
-  <data name="AlreadyOnBar" xml:space="preserve">
-    <value>{0} — уже на панели</value>
-  </data>
   <data name="SeeThroughHeader" xml:space="preserve">
     <value>Насколько прозрачно</value>
   </data>
@@ -401,9 +311,6 @@
   <data name="RemoveFromBar" xml:space="preserve">
     <value>Убрать с панели</value>
   </data>
-  <data name="InspectorNone" xml:space="preserve">
-    <value>Виджет</value>
-  </data>
   <data name="PlacementTitle" xml:space="preserve">
     <value>Расположение</value>
   </data>
@@ -430,9 +337,6 @@
   </data>
   <data name="UndoThickness" xml:space="preserve">
     <value>толщину</value>
-  </data>
-  <data name="UndoHiding" xml:space="preserve">
-    <value>скрытие</value>
   </data>
   <data name="UndoTopmost" xml:space="preserve">
     <value>поверх окон</value>
@@ -569,15 +473,6 @@
   <data name="RenameReset" xml:space="preserve">
     <value>Своё имя</value>
   </data>
-  <data name="ReadingIconsTitle" xml:space="preserve">
-    <value>Показания</value>
-  </data>
-  <data name="PinnedIconsTitle" xml:space="preserve">
-    <value>Закреплённые программы</value>
-  </data>
-  <data name="PinnedIconsHint.Text" xml:space="preserve">
-    <value>Закреплённая программа рисуется своей иконкой из Windows. Чтобы заменить её на рисованную, щёлкните программу на панели правой кнопкой и выберите «Настройки».</value>
-  </data>
   <data name="StartupTitle" xml:space="preserve">
     <value>Запуск</value>
   </data>
@@ -671,9 +566,6 @@
   <data name="UndoReset" xml:space="preserve">
     <value>стандартная панель</value>
   </data>
-  <data name="BehaviourHint" xml:space="preserve">
-    <value>Панель уходит за край экрана и возвращается, когда курсор доходит до этого края.</value>
-  </data>
   <data name="TopmostHint" xml:space="preserve">
     <value>Если выключить, развёрнутое окно сможет закрыть панель.</value>
   </data>
@@ -685,9 +577,6 @@
   </data>
   <data name="RemoveRowHint" xml:space="preserve">
     <value>То же самое, что перетащить виджет с панели на рабочий стол.</value>
-  </data>
-  <data name="UndoAutoHide" xml:space="preserve">
-    <value>скрытие</value>
   </data>
   <data name="LogsRow" xml:space="preserve">
     <value>Журнал</value>
@@ -710,14 +599,11 @@
   <data name="RenameTip" xml:space="preserve">
     <value>Двойной щелчок — дать этому показанию своё имя</value>
   </data>
-  <data name="PinnedIconsRow" xml:space="preserve">
-    <value>Закреплённая программа сохраняет свой значок</value>
-  </data>
   <data name="SenseCpuClock" xml:space="preserve">
     <value>Насколько быстро он идёт — в долях от паспортной частоты.</value>
   </data>
   <data name="SenseGpuAll" xml:space="preserve">
-    <value>Всё, чем занята видеоподсистема, по счётчикам Windows.</value>
+    <value>Всё, чем занята видеокарта, по счётчикам Windows.</value>
   </data>
   <data name="SenseGpuCoreName" xml:space="preserve">
     <value>Графический чип</value>
@@ -750,7 +636,7 @@
     <value>Сколько мощности потребляет видеокарта.</value>
   </data>
   <data name="SenseGpuClockName" xml:space="preserve">
-    <value>Частота графики</value>
+    <value>Частота видеокарты</value>
   </data>
   <data name="SenseDiskBusy" xml:space="preserve">
     <value>Какую долю времени накопитель занят работой.</value>
@@ -1039,5 +925,35 @@
   </data>
   <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
     <value>Программа</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>оформление панелей</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>язык</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>клавиша</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>значок</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>имя показания</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>сила сигнала не сообщается</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>осталось примерно {0} мин</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>Видеокарта — загрузка</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>Видеокарта — температура</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Сделать такими же: {0}</value>
   </data>
 </root>

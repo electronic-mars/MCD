@@ -47,8 +47,15 @@ public sealed class SettingsWidget(WidgetContext context, WidgetConfig entry)
 
     public override string Summarise() => Loc.Tr("WidgetSettingsName", "Settings");
 
-    /// <summary>One slot, whichever way the bar runs.</summary>
-    public override double Length() => DockMetrics.ReadingIcon(Density) + 14;
+    /// <summary>
+    /// One slot, whichever way the bar runs.
+    /// </summary>
+    /// <remarks>
+    /// The same room a pinned program's icon takes, and for the same picture.
+    /// Fourteen points of padding rounded it up to two slots - sixty points of
+    /// bar for a drawing twenty-four across, on a bar where slots are counted.
+    /// </remarks>
+    public override double Length() => DockMetrics.ReadingIcon(Density) + 6;
 
     public override FrameworkElement? CreateEditor(System.Action<System.Text.Json.JsonElement?> changed) => null;
 }

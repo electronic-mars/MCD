@@ -31,6 +31,32 @@ public sealed class SensorHub : IDisposable
 
     private static readonly TimeSpan Tick = TimeSpan.FromSeconds(1);
 
+    /// <summary>How long the thread sleeps while nobody is looking.</summary>
+    /// <remarks>
+    /// Not stopped altogether: the thread owns the providers, and one of them
+    /// holds a shared-memory handle and another an HTTP client. It wakes rarely
+    /// enough to cost nothing and often enough to notice the session coming
+    /// back even if the message about it is missed.
+    /// </remarks>
+    private static readonly TimeSpan Asleep = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// Whether anybody is looking at what this produces.
+    /// </summary>
+    /// <remarks>
+    /// Stopping the bars from drawing behind a lock screen saved the smaller
+    /// half: reading the sensors is the expensive part - a WMI call into the
+    /// firmware, a summed performance counter with an instance per process, an
+    /// HTTP request to another program - and it went on all night in a bag.
+    /// </remarks>
+    public bool Watched
+    {
+        get => _watched;
+        set => _watched = value;
+    }
+
+    private volatile bool _watched = true;
+
     /// <summary>Samples kept per watched sensor: a minute at one a second.</summary>
     private const int TrendLength = 60;
 
@@ -153,8 +179,12 @@ public sealed class SensorHub : IDisposable
         {
             while (!_stopping.IsCancellationRequested)
             {
-                Pump(DateTimeOffset.UtcNow);
-                _stopping.Token.WaitHandle.WaitOne(Tick);
+                if (_watched)
+                {
+                    Pump(DateTimeOffset.UtcNow);
+                }
+
+                _stopping.Token.WaitHandle.WaitOne(_watched ? Tick : Asleep);
             }
         }
         finally

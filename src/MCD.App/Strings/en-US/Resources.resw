@@ -19,9 +19,6 @@
   <data name="NavDocks.Text" xml:space="preserve">
     <value>Bars</value>
   </data>
-  <data name="NavIcons.Content" xml:space="preserve">
-    <value>Icons</value>
-  </data>
   <data name="NavAppearance.Text" xml:space="preserve">
     <value>Appearance</value>
   </data>
@@ -50,9 +47,6 @@
   <data name="SizeLabel" xml:space="preserve">
     <value>Thickness</value>
   </data>
-  <data name="BehaviourLabel" xml:space="preserve">
-    <value>Hide until you point at its edge</value>
-  </data>
   <!-- Launcher page -->
   <!-- Appearance page -->
   <data name="AppearanceTitle.Text" xml:space="preserve">
@@ -74,12 +68,6 @@
     <value>The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way.</value>
   </data>
   <!-- Icons page -->
-  <data name="IconsTitle.Text" xml:space="preserve">
-    <value>Icons</value>
-  </data>
-  <data name="IconsIntro.Text" xml:space="preserve">
-    <value>Pick the picture each reading is drawn with. The choice applies to every bar.</value>
-  </data>
   <!-- Sensors page -->
   <data name="SensorsTitle.Text" xml:space="preserve">
     <value>Readings</value>
@@ -115,12 +103,6 @@
   <data name="DockNotAttached" xml:space="preserve">
     <value>not attached · its layout is kept and comes back with the screen</value>
   </data>
-  <data name="NoteCompactVertical" xml:space="preserve">
-    <value>A bar down the side of a screen has only one width, so Compact does nothing here.</value>
-  </data>
-  <data name="NoteTaskbarHides" xml:space="preserve">
-    <value>The taskbar already hides on this edge, so this bar stays visible.</value>
-  </data>
   <data name="Undo" xml:space="preserve">
     <value>Undo</value>
   </data>
@@ -130,23 +112,11 @@
   <data name="UndoAdded" xml:space="preserve">
     <value>added {0}</value>
   </data>
-  <data name="UndoConfigured" xml:space="preserve">
-    <value>configured {0}</value>
-  </data>
   <data name="UndoMoved" xml:space="preserve">
     <value>moved</value>
   </data>
   <data name="UndoRemoved" xml:space="preserve">
     <value>removed {0}</value>
-  </data>
-  <data name="MenuMoveUp" xml:space="preserve">
-    <value>Move up</value>
-  </data>
-  <data name="MenuMoveDown" xml:space="preserve">
-    <value>Move down</value>
-  </data>
-  <data name="MenuRemove" xml:space="preserve">
-    <value>Remove</value>
   </data>
   <data name="ScreenFallback" xml:space="preserve">
     <value>Screen</value>
@@ -161,15 +131,6 @@
     <value>{0} readings from {1} sources.</value>
   </data>
   <!-- Widget cards in the settings list -->
-  <data name="WidgetUnknownSummary" xml:space="preserve">
-    <value>This version does not know this widget. It stays in your settings and is left alone.</value>
-  </data>
-  <data name="WidgetNothingToSetUp" xml:space="preserve">
-    <value>This widget has nothing to set up.</value>
-  </data>
-  <data name="WidgetUnknownNothing" xml:space="preserve">
-    <value>Nothing can be set up for a widget this version does not know.</value>
-  </data>
   <!-- The bar's right-click menu -->
   <!-- Widget catalog: names and descriptions -->
   <data name="WidgetGaugeName" xml:space="preserve">
@@ -217,12 +178,6 @@
   <data name="WidgetTemperatureDescription" xml:space="preserve">
     <value>Temperatures of the parts that report one.</value>
   </data>
-  <data name="WidgetSpacerName" xml:space="preserve">
-    <value>Spacer</value>
-  </data>
-  <data name="WidgetSpacerDescription" xml:space="preserve">
-    <value>Empty bar that pushes its neighbours apart.</value>
-  </data>
   <!-- Reading labels, on the bar and in the settings -->
   <data name="LabelCpu" xml:space="preserve">
     <value>CPU</value>
@@ -262,52 +217,10 @@
   <data name="MediaTitleHeader" xml:space="preserve">
     <value>Write the track on the bar</value>
   </data>
-  <data name="MediaTitleOn" xml:space="preserve">
-    <value>Written next to the buttons</value>
-  </data>
-  <data name="MediaTitleOff" xml:space="preserve">
-    <value>Only in the tooltip</value>
-  </data>
   <!-- Spacer widget -->
-  <data name="SpacerStretches" xml:space="preserve">
-    <value>Stretches to take the free space</value>
-  </data>
-  <data name="SpacerFixedSummary" xml:space="preserve">
-    <value>A fixed gap, {0} across</value>
-  </data>
-  <data name="SpacerWidthHeader" xml:space="preserve">
-    <value>Width</value>
-  </data>
-  <data name="SpacerFixed" xml:space="preserve">
-    <value>Fixed</value>
-  </data>
-  <data name="SpacerPixels" xml:space="preserve">
-    <value>Pixels across</value>
-  </data>
   <!-- Load widget -->
   <!-- Launcher widget -->
   <!-- Monitor rows -->
-  <data name="MonitorUnknown" xml:space="preserve">
-    <value>Unknown display</value>
-  </data>
-  <data name="MonitorNotAttached" xml:space="preserve">
-    <value>not attached · last seen {0}</value>
-  </data>
-  <data name="SeenNever" xml:space="preserve">
-    <value>never</value>
-  </data>
-  <data name="SeenMoment" xml:space="preserve">
-    <value>a moment ago</value>
-  </data>
-  <data name="SeenMinutes" xml:space="preserve">
-    <value>{0} minutes ago</value>
-  </data>
-  <data name="SeenHours" xml:space="preserve">
-    <value>{0} hours ago</value>
-  </data>
-  <data name="SeenDays" xml:space="preserve">
-    <value>{0} days ago</value>
-  </data>
   <data name="LanguageLabel" xml:space="preserve">
     <value>Language</value>
   </data>
@@ -362,9 +275,6 @@
   <data name="DisplayNumber" xml:space="preserve">
     <value>Display {0}</value>
   </data>
-  <data name="AlreadyOnBar" xml:space="preserve">
-    <value>{0} — already on this bar</value>
-  </data>
   <data name="SeeThroughHeader" xml:space="preserve">
     <value>How see-through</value>
   </data>
@@ -401,9 +311,6 @@
   <data name="RemoveFromBar" xml:space="preserve">
     <value>Remove from bar</value>
   </data>
-  <data name="InspectorNone" xml:space="preserve">
-    <value>Widget</value>
-  </data>
   <data name="PlacementTitle" xml:space="preserve">
     <value>Placement</value>
   </data>
@@ -430,9 +337,6 @@
   </data>
   <data name="UndoThickness" xml:space="preserve">
     <value>thickness</value>
-  </data>
-  <data name="UndoHiding" xml:space="preserve">
-    <value>hiding</value>
   </data>
   <data name="UndoTopmost" xml:space="preserve">
     <value>above other windows</value>
@@ -569,15 +473,6 @@
   <data name="RenameReset" xml:space="preserve">
     <value>Its own name</value>
   </data>
-  <data name="ReadingIconsTitle" xml:space="preserve">
-    <value>Readings</value>
-  </data>
-  <data name="PinnedIconsTitle" xml:space="preserve">
-    <value>Pinned programs</value>
-  </data>
-  <data name="PinnedIconsHint.Text" xml:space="preserve">
-    <value>A pinned program keeps the icon Windows gives it. To draw it with one of these instead, right-click it on the bar and choose Settings.</value>
-  </data>
   <data name="StartupTitle" xml:space="preserve">
     <value>Startup</value>
   </data>
@@ -671,9 +566,6 @@
   <data name="UndoReset" xml:space="preserve">
     <value>the standard bar</value>
   </data>
-  <data name="BehaviourHint" xml:space="preserve">
-    <value>The bar steps off the screen and comes back when the pointer reaches that edge.</value>
-  </data>
   <data name="TopmostHint" xml:space="preserve">
     <value>Off lets a maximised window cover the bar.</value>
   </data>
@@ -685,9 +577,6 @@
   </data>
   <data name="RemoveRowHint" xml:space="preserve">
     <value>The same as dragging it off the bar onto the desktop.</value>
-  </data>
-  <data name="UndoAutoHide" xml:space="preserve">
-    <value>hiding</value>
   </data>
   <data name="LogsRow" xml:space="preserve">
     <value>The log</value>
@@ -709,9 +598,6 @@
   </data>
   <data name="RenameTip" xml:space="preserve">
     <value>Double-click to give this reading a name of your own</value>
-  </data>
-  <data name="PinnedIconsRow" xml:space="preserve">
-    <value>A pinned program keeps its own icon</value>
   </data>
   <data name="SenseCpuClock" xml:space="preserve">
     <value>How fast it is running, as a share of the speed it is rated for.</value>
@@ -1039,5 +925,35 @@
   </data>
   <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
     <value>The program</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>how the bars are painted</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>the language</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>a key</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>a picture</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>a name</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>signal not reported</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>about {0} min left</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>Graphics - how busy</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>Graphics - temperature</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Make {0} the same</value>
   </data>
 </root>

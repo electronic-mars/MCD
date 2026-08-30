@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Globalization;
 using Mcd.Sensors.Contracts;
 
@@ -104,8 +104,12 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("SenseCpuClockName", "Processor speed"),
                 Loc.Tr("SenseCpuClock", "How fast it is running, as a share of the speed it is rated for.")),
 
+            // Named apart from the temperature below. Two rows called
+            // "Graphics" one under the other, differing only in the sentence
+            // beneath them, is the fault this class exists to avoid - and it
+            // was committing it on its own page.
             (HardwareGroup.Gpu, SensorKind.Load, "total") => (
-                Loc.Tr("PartGpu", "Graphics"),
+                Loc.Tr("SenseGpuBusyName", "Graphics - how busy"),
                 Loc.Tr("SenseGpuAll", "Everything the graphics hardware is doing, as Windows counts it.")),
 
             (HardwareGroup.Gpu, SensorKind.Load, "core") => (
@@ -133,7 +137,7 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("SenseGpuPower", "How much power the graphics card is drawing.")),
 
             (HardwareGroup.Gpu, SensorKind.Temperature, _) => (
-                Loc.Tr("PartGpu", "Graphics"),
+                Loc.Tr("SenseGpuHeatName", "Graphics - temperature"),
                 Loc.Tr("SenseGpuTemp", "How hot the graphics chip is.")),
 
             (HardwareGroup.Memory, SensorKind.Load, _) => (

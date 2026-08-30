@@ -10,7 +10,7 @@
 /// </remarks>
 public static class SettingsDefaults
 {
-    public const int SchemaVersion = 8;
+    public const int SchemaVersion = 9;
 
     public static SettingsModel Model => new();
 }

@@ -33,6 +33,7 @@ public static class SettingsMigrations
                 5 => ToSix(current),
                 6 => ToSeven(current),
                 7 => ToEight(current),
+                8 => ToNine(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -186,6 +187,31 @@ public static class SettingsMigrations
     /// one it has rather than gaining a second.
     /// </para>
     /// </remarks>
+    /// <summary>
+    /// Version 9 puts the settings widget on every bar.
+    /// </summary>
+    /// <remarks>
+    /// The one widget that must not be left to be found. It exists for the
+    /// person who never discovered that a bar answers a right click - and
+    /// that person is, by definition, not going to go looking through a
+    /// settings window for a widget called Settings. Version 8 made this
+    /// argument about the battery and then left the door itself only in the
+    /// set a brand-new screen gets.
+    ///
+    /// It goes on the end, unplaced, so nothing already arranged moves; and
+    /// anyone who has learnt the right click can take it off again.
+    /// </remarks>
+    private static SettingsModel ToNine(SettingsModel model) => model with
+    {
+        SchemaVersion = 9,
+        Monitors = [.. model.Monitors.Select(WithTheDoor)],
+    };
+
+    private static MonitorConfig WithTheDoor(MonitorConfig monitor) =>
+        monitor.Widgets.Any(w => w.TypeId == "mcd.settings")
+            ? monitor
+            : monitor with { Widgets = [.. monitor.Widgets, WidgetConfig.New("mcd.settings")] };
+
     private static SettingsModel ToEight(SettingsModel model) => model with
     {
         SchemaVersion = 8,

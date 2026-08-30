@@ -81,11 +81,19 @@ public sealed class DockWindowManager : IDisposable
     /// </remarks>
     private void Watched(bool watched)
     {
+        // Kept, so that a bar built while the screen is locked - a monitor
+        // waking, a dock station plugged in - starts asleep too. It would
+        // otherwise tick until the next unlock, which may be the morning.
+        _watched = watched;
+        _sensors.Watched = watched;
+
         foreach (DockWindow window in _windows.Values)
         {
             window.Watched = watched;
         }
     }
+
+    private bool _watched = true;
 
     private readonly EventHandler<bool> _onWatched;
 
@@ -209,7 +217,11 @@ public sealed class DockWindowManager : IDisposable
     /// rebuild that would land one tick after the dock first appears, right
     /// where somebody's first drag is.
     /// </param>
-    private void Save(string stableId, ImmutableArray<WidgetConfig> widgets, bool drawn = false)
+    private void Save(
+        string stableId,
+        ImmutableArray<WidgetConfig> widgets,
+        bool drawn = false,
+        string? what = null)
     {
         SettingsModel current = _settings.Current;
 
@@ -230,7 +242,7 @@ public sealed class DockWindowManager : IDisposable
         _settings.Commit(
             next,
             WriteReason.WidgetConfig,
-            drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar"));
+            what ?? (drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar")));
 
         if (drawn
             && next.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } config)
@@ -365,7 +377,13 @@ public sealed class DockWindowManager : IDisposable
             // happens here, where the one writer of settings lives.
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
+            window.Watched = _watched;
             window.Settled += (_, widgets) => Save(stableId, widgets, drawn: true);
+
+            // Drawn, because the bar is already showing it - and named,
+            // because a hand did it.
+            window.Moved += (_, widgets) => Save(
+                stableId, widgets, drawn: true, what: Loc.Tr("UndoOnTheBar", "on the bar"));
             _windows[id] = window;
             _dressed[id] = Look(plan.Config);
             _held[id] = Contents(plan.Config);
@@ -466,7 +484,12 @@ public sealed class DockWindowManager : IDisposable
     /// </remarks>
     private static string Contents(MonitorConfig config)
     {
-        var text = new System.Text.StringBuilder();
+        // The anchor belongs here rather than among the things that rebuild a
+        // bar: it changes where the same widgets are drawn, not what they are.
+        // Left out altogether, as it was, the setting was written down and
+        // nothing on screen moved until something else - a change of edge, a
+        // monitor unplugged, a restart - happened to rebuild the bar.
+        var text = new System.Text.StringBuilder().Append(config.Anchor);
 
         foreach (WidgetConfig widget in config.Widgets)
         {

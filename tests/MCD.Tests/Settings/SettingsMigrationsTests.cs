@@ -17,7 +17,8 @@ public sealed class SettingsMigrationsTests
     /// to be done again the next time something is added to every bar.
     /// </remarks>
     private static IReadOnlyList<WidgetConfig> Own(MonitorConfig dock) =>
-        [.. dock.Widgets.Where(w => w.TypeId is not ("mcd.battery" or "mcd.wifi"))];
+        [.. dock.Widgets.Where(
+            w => w.TypeId is not ("mcd.battery" or "mcd.wifi" or "mcd.settings"))];
 
     [Fact]
     public void AVersionOneFileEndsUpAtomised()
@@ -302,8 +303,33 @@ public sealed class SettingsMigrationsTests
         // The one that was already there is kept, the missing one is added,
         // and both go after everything so that nothing already arranged moves.
         dock.Widgets.Select(w => w.TypeId)
-            .ShouldBe(["mcd.media", "mcd.battery", "mcd.wifi"]);
+            .ShouldBe(["mcd.media", "mcd.battery", "mcd.wifi", "mcd.settings"]);
 
         dock.Widgets.Last().Cell.ShouldBe(-1);
+    }
+
+    [Fact]
+    public void EveryBarGainsTheDoorExactlyOnce()
+    {
+        var old = new SettingsModel
+        {
+            SchemaVersion = 8,
+            Monitors =
+            [
+                new MonitorConfig { StableId = "a", Widgets = [WidgetConfig.New("mcd.media")] },
+                new MonitorConfig
+                {
+                    StableId = "b",
+                    Widgets = [WidgetConfig.New("mcd.settings")],
+                },
+            ],
+        };
+
+        var after = SettingsMigrations.Apply(old, NullLogger.Instance).Monitors;
+
+        // The one without it gains it at the end; the one that has it keeps
+        // the one it has rather than gaining a second.
+        after[0].Widgets.Select(w => w.TypeId).ShouldBe(["mcd.media", "mcd.settings"]);
+        after[1].Widgets.Count(w => w.TypeId == "mcd.settings").ShouldBe(1);
     }
 }

@@ -186,6 +186,17 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
             return charge;
         }
 
+        // Under an hour is said in minutes alone. "About 0 h 25 min left" is
+        // a sentence written by an arithmetic expression, and it is read at
+        // exactly the moment somebody is deciding whether to find a socket.
+        if (_state.Minutes < 60)
+        {
+            return charge + " · " + string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("BatteryLeftMinutes", "about {0} min left"),
+                _state.Minutes);
+        }
+
         return charge + " · " + string.Format(
             CultureInfo.CurrentCulture,
             Loc.Tr("BatteryLeft", "about {0} h {1} min left"),

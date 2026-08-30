@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Mcd.Core.Settings;
 
 namespace Mcd.Core.Monitors;
@@ -215,6 +215,14 @@ public static class MonitorReconciler
         Edge = template.Edge,
         Mode = template.Mode,
         Density = template.Density,
+
+        // Everything about how the bar sits, not only most of it. A screen
+        // plugged in after the others were arranged used to arrive with the
+        // widgets copied and the anchor and the topmost flag left at their
+        // defaults - so it looked like the others until you noticed that its
+        // contents were gathered at the wrong end.
+        Anchor = template.Anchor,
+        Topmost = template.Topmost,
         Widgets = [.. template.Widgets.Select(w => w.AsNewInstance())],
     };
 

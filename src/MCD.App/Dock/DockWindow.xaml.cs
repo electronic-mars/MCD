@@ -244,6 +244,19 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     public event EventHandler<ImmutableArray<WidgetConfig>>? Settled;
 
+    /// <summary>
+    /// Somebody moved or removed something on the bar itself.
+    /// </summary>
+    /// <remarks>
+    /// Separate from <see cref="Settled"/>, which is the bar writing down
+    /// where it put things of its own accord. Both must be saved without
+    /// rebuilding the bar - it is already showing the answer - but only one of
+    /// them is a change a person made and can want back. Sharing one event
+    /// meant the two gestures most worth undoing were the two the undo button
+    /// never saw, while the text beside it promised otherwise.
+    /// </remarks>
+    public event EventHandler<ImmutableArray<WidgetConfig>>? Moved;
+
     public MonitorInfo Monitor { get; }
 
     public MonitorConfig Config { get; private set; }
@@ -1712,7 +1725,16 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     private void Land(WidgetHost host)
     {
-        if (_landing is not { } cell || cell == host.Entry.Cell)
+        // Against where the widget stands now, not where it stood when the
+        // bar was built. Entry is written once at construction and a move
+        // never rewrites it - deliberately, because a move must not rebuild
+        // the bar - so comparing with it swallowed exactly the drop that puts
+        // a widget back where it was picked up from.
+        int standing = _placed.Any(p => p.InstanceId == host.Entry.InstanceId)
+            ? _placed.First(p => p.InstanceId == host.Entry.InstanceId).Cell
+            : host.Entry.Cell;
+
+        if (_landing is not { } cell || cell == standing)
         {
             return;
         }
@@ -1735,7 +1757,7 @@ public sealed partial class DockWindow : Window
         ];
 
         Settle();
-        Settled?.Invoke(this, Config.Widgets);
+        Moved?.Invoke(this, Config.Widgets);
     }
 
     /// <summary>
@@ -1827,7 +1849,7 @@ public sealed partial class DockWindow : Window
 
         Settle();
         Mcd.Interop.Shell.Chime.Removed();
-        Settled?.Invoke(this, Config.Widgets);
+        Moved?.Invoke(this, Config.Widgets);
     }
 
     private void Refresh()

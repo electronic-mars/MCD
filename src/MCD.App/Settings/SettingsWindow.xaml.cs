@@ -801,10 +801,18 @@ public sealed partial class SettingsWindow : Window
             ? current.App.Keys.SetItem(what, chord.ToString())
             : current.App.Keys.Remove(what);
 
-        Write(current with { App = current.App with { Keys = keys } }, WriteReason.UserAction);
+        Write(
+            current with { App = current.App with { Keys = keys } },
+            WriteReason.UserAction,
+            Loc.Tr("UndoKey", "a key"));
 
         _log.LogInformation("settings.key {What} {Chord}", what, chord);
-        RefreshLook();
+
+        // The page these rows live on, which is no longer the one they were
+        // written for. Refreshing the other page left the button reading "not
+        // set" after a key had been set, and the warning about a combination
+        // another program holds never appeared at all.
+        ShowAbout();
     }
 
     /// <summary>
@@ -886,11 +894,12 @@ public sealed partial class SettingsWindow : Window
 
         Write(
             current with { App = current.App with { Language = language } },
-            WriteReason.UserAction);
+            WriteReason.UserAction,
+            Loc.Tr("UndoLanguage", "the language"));
 
         _log.LogInformation("settings.language {Language}", language);
         _restartOffered = true;
-        RefreshLook();
+        ShowAbout();
     }
 
     /// <summary>True once the language has been changed in this sitting.</summary>
@@ -911,7 +920,8 @@ public sealed partial class SettingsWindow : Window
                     Accent = accent ?? current.App.Accent,
                 },
             },
-            WriteReason.UserAction);
+            WriteReason.UserAction,
+            Loc.Tr("UndoLook", "how the bars are painted"));
 
         // The window this is being set from follows it too, or the person is
         // choosing a theme while looking at the old one.
@@ -1280,7 +1290,12 @@ public sealed partial class SettingsWindow : Window
                         "CopyRowHint",
                         "Gives every other screen the same widgets in the same places. Each bar keeps its own copies, and undo puts the others back."),
                     Braun.Action(
-                        Loc.Tr("CopyButton", "Make them the same"), CopyToOthers, "Layout"))
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            Loc.Tr("CopyButtonCount", "Make {0} the same"),
+                            _settings.Current.Monitors.Length - 1),
+                        CopyToOthers,
+                        "Layout"))
                 : null,
 
             Braun.Row(
@@ -1288,7 +1303,15 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr(
                     "ResetRowHint",
                     "Puts back the set the bar came with. Undo brings your own arrangement back."),
-                Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "Undo"))));
+                // Dressed as what it is. It throws away the whole
+                // arrangement of this screen - every pinned program, every
+                // widget's own settings - and it was wearing a quieter coat
+                // than the button that takes off a single widget.
+                Braun.Action(
+                    Loc.Tr("ResetButton", "Restore the standard bar"),
+                    ResetDock,
+                    "Undo",
+                    danger: true))));
 
         // ------------------------------------------------------- chosen widget
         if (Inspector() is { } inspector)
@@ -1435,14 +1458,18 @@ public sealed partial class SettingsWindow : Window
                 return button;
             }
 
+            string where = dock.StableId;
+
             Button up = Small(
-                "ArrowUp", Loc.Tr("ListEarlier", "Move it earlier along the bar"), () => Shift(dock, at, -1));
+                "ArrowUp", Loc.Tr("ListEarlier", "Move it earlier along the bar"), () => Shift(where, at, -1));
 
             Button down = Small(
-                "ArrowDown", Loc.Tr("ListLater", "Move it later along the bar"), () => Shift(dock, at, 1));
+                "ArrowDown", Loc.Tr("ListLater", "Move it later along the bar"), () => Shift(where, at, 1));
 
-            up.IsEnabled = at > 0;
-            down.IsEnabled = at < order.Count - 1;
+            // Not offered where it would do nothing: a widget with no slot of
+            // its own cannot trade places with one that has.
+            up.IsEnabled = at > 0 && entry.Cell >= 0 && order[at - 1].Cell >= 0;
+            down.IsEnabled = at < order.Count - 1 && entry.Cell >= 0 && order[at + 1].Cell >= 0;
 
             Grid.SetColumn(up, 1);
             Grid.SetColumn(down, 2);
@@ -1506,8 +1533,16 @@ public sealed partial class SettingsWindow : Window
     /// deliberate gaps in it keeps them: the two widgets change places and
     /// everything else stays where it was put.
     /// </remarks>
-    private void Shift(MonitorConfig dock, int at, int by)
+    private void Shift(string stableId, int at, int by)
     {
+        // Read now, not from the list the button was built with: the button
+        // outlives its page, and a stale copy made the second press compute
+        // the same swap again and write it as a fresh change.
+        if (_settings.Current.Monitors.FirstOrDefault(m => m.StableId == stableId) is not { } dock)
+        {
+            return;
+        }
+
         List<WidgetConfig> order =
         [
             .. dock.Widgets
@@ -1528,6 +1563,15 @@ public sealed partial class SettingsWindow : Window
         string other = order[to].InstanceId;
         int here = order[at].Cell;
         int there = order[to].Cell;
+
+        // One of them has never been placed - a widget added while it had
+        // nothing to say, and still waiting for its moment. Trading slots with
+        // it would hand a real slot to something invisible and send its
+        // neighbour to the end of the bar.
+        if (here < 0 || there < 0)
+        {
+            return;
+        }
 
         Rearrange(
             dock.StableId,
@@ -1841,7 +1885,8 @@ public sealed partial class SettingsWindow : Window
             {
                 App = current.App with { Icons = current.App.Icons.Remove(id) },
             },
-            WriteReason.UserAction);
+            WriteReason.UserAction,
+            Loc.Tr("UndoIcon", "a picture"));
 
         _log.LogInformation("settings.icon {Id} default", id);
         ReloadDocks();
@@ -1857,7 +1902,8 @@ public sealed partial class SettingsWindow : Window
             {
                 App = current.App with { Icons = current.App.Icons.SetItem(id, icon) },
             },
-            WriteReason.UserAction);
+            WriteReason.UserAction,
+            Loc.Tr("UndoIcon", "a picture"));
 
         _log.LogInformation("settings.icon {Id} {Icon}", id, icon);
         ReloadDocks();
@@ -2133,7 +2179,8 @@ public sealed partial class SettingsWindow : Window
                 SettingsModel now = _settings.Current;
                 Write(
                     now with { App = now.App with { BackdropColour = chosen } },
-                    WriteReason.UserAction);
+                    WriteReason.UserAction,
+                    Loc.Tr("UndoLook", "how the bars are painted"));
 
                 _log.LogInformation("settings.backdrop colour={Colour}", chosen);
                 RefreshLook();
@@ -2198,7 +2245,8 @@ public sealed partial class SettingsWindow : Window
             SettingsModel current = _settings.Current;
             Write(
                 current with { App = current.App with { BackdropImage = file.Path } },
-                WriteReason.UserAction);
+                WriteReason.UserAction,
+                Loc.Tr("UndoLook", "how the bars are painted"));
 
             _log.LogInformation("settings.backdrop image={Image}", file.Path);
             RefreshLook();
@@ -2235,6 +2283,7 @@ public sealed partial class SettingsWindow : Window
         if (rebuild)
         {
             ShowDock();
+            ShowWidgets();
         }
         else
         {
@@ -2400,7 +2449,8 @@ public sealed partial class SettingsWindow : Window
 
         Write(
             current with { Sensors = current.Sensors with { Names = names } },
-            WriteReason.UserAction);
+            WriteReason.UserAction,
+            Loc.Tr("UndoRenamed", "a name"));
 
         _log.LogInformation("settings.sensor named {Key} -> {Name}", row.Key.Value, name);
 

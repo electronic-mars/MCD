@@ -129,13 +129,15 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
         Stroke = 36 / Math.Max(1, IconSize);
         FontSize = DockMetrics.ReadingFont(Density);
 
+        // An unknown strength is drawn as no strength, not as full. The
+        // aerial is read to decide whether to move seats, and "I do not know"
+        // shown as four bars is the one answer that costs somebody the seat.
         Icon = _state.Bars switch
         {
             >= 4 => "WifiHigh",
             3 => "WifiMid",
             >= 1 => "WifiLow",
-            0 => "WifiNone",
-            _ => "WifiHigh",
+            _ => "WifiNone",
         };
 
         // Two bars out of five is where a video call starts stuttering, which
@@ -150,7 +152,9 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
         NameVisible = room ? Visibility.Visible : Visibility.Collapsed;
         Name = room ? Shorten(_state.Name) : string.Empty;
 
-        Detail = _state.Name.Length > 0
+        Detail = _state.Bars < 0 && _state.Name.Length > 0
+            ? _state.Name + " · " + Loc.Tr("WifiBarsUnknown", "signal not reported")
+            : _state.Name.Length > 0
             ? _state.Name + (_state.Bars >= 0
                 ? " · " + string.Format(
                     System.Globalization.CultureInfo.CurrentCulture,
