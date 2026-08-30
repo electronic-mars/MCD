@@ -30,6 +30,27 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void TheAnchorLeavesRoomOnBothSidesOfACentredRow()
+    {
+        // Two widgets holding six of twenty slots, gathered in the middle:
+        // seven slots free before them and seven after. Both halves are real
+        // slots, which is the whole point - the empty part of a centred bar
+        // has to be somewhere a widget can be dropped.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("b", 2), 4)], capacity: 20);
+
+        int offset = DockGrid.Offset(placed, 20, DockAnchor.Centre);
+        offset.ShouldBe(7);
+
+        List<Placement> drawn = [.. placed.Select(p => p with { Cell = p.Cell + offset })];
+
+        DockGrid.Free(drawn, 20).Count.ShouldBe(14);
+        DockGrid.Free(drawn, 20).ShouldContain(0);
+        DockGrid.Free(drawn, 20).ShouldContain(19);
+        DockGrid.Fits(drawn, 20, cell: 0, span: 2).ShouldBeTrue();
+    }
+
+    [Fact]
     public void TheAnchorMovesTheDrawingAndNotTheArrangement()
     {
         List<Placement> placed = DockGrid.Settle(

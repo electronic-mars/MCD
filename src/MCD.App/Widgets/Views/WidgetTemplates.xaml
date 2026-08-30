@@ -192,7 +192,10 @@
     <!-- The way in: one wheel, one slot, and a press that opens the window.
          It draws nothing that changes, so nothing here updates. -->
     <DataTemplate x:Key="mcd.settings" x:DataType="widgets:SettingsWidget">
-        <widgets:HoverChip Margin="6,0">
+        <!-- Three points either side, not six: the drawing is 24 wide and the
+             slot is 30, so the usual margins would ask for 36 and the wheel
+             would be cut off by the end of its own slot. -->
+        <widgets:HoverChip Margin="3,0">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock x:Uid="SettingsChipTip" FontSize="13" Text="Settings" />
@@ -228,22 +231,56 @@
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
                 </ToolTip>
             </ToolTipService.ToolTip>
+            <!-- Down the side of a screen the figure goes under the drawing:
+                 86 points of width is not enough to put them side by side, and
+                 that is the shape somebody picks when the screen is small. -->
             <StackPanel
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Orientation="Horizontal"
-                Spacing="6">
+                Orientation="{x:Bind Orientation}"
+                Spacing="4">
+                <!-- Drawn here rather than chosen from the icon set. The set
+                     has four batteries - empty, two bars, four bars, and a
+                     bolt - so eighty-five per cent and twenty looked the same,
+                     and charging showed no level at all. A body and a bar
+                     inside it read at a glance and at any value, and the bar
+                     is the only thing that moves. -->
                 <Viewbox
                     Width="{x:Bind IconSize, Mode=OneWay}"
                     Height="{x:Bind IconSize, Mode=OneWay}"
                     VerticalAlignment="Center">
                     <Canvas Width="24" Height="24">
-                        <Path
-                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                        <Rectangle
+                            Canvas.Left="2"
+                            Canvas.Top="7.5"
+                            Width="18"
+                            Height="9"
+                            RadiusX="3"
+                            RadiusY="3"
                             Stroke="{x:Bind Colour, Mode=OneWay}"
-                            StrokeEndLineCap="Round"
-                            StrokeLineJoin="Round"
-                            StrokeStartLineCap="Round"
                             StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                        <Rectangle
+                            Canvas.Left="4"
+                            Canvas.Top="9.5"
+                            Width="{x:Bind Fill, Mode=OneWay}"
+                            Height="5"
+                            RadiusX="1.5"
+                            RadiusY="1.5"
+                            Fill="{x:Bind Colour, Mode=OneWay}" />
+                        <Rectangle
+                            Canvas.Left="21"
+                            Canvas.Top="10"
+                            Width="1.6"
+                            Height="4"
+                            RadiusX="0.8"
+                            RadiusY="0.8"
+                            Fill="{x:Bind Colour, Mode=OneWay}" />
+                        <Path
+                            Data="M 13.4 6.2 L 9.6 12.4 L 12.6 12.4 L 11.4 17.8 L 15.2 11.6 L 12.2 11.6 Z"
+                            Fill="{x:Bind Colour, Mode=OneWay}"
+                            Stroke="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                            StrokeThickness="1.2"
+                            Visibility="{x:Bind Charging, Mode=OneWay}" />
                     </Canvas>
                 </Viewbox>
                 <TextBlock

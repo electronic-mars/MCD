@@ -38,9 +38,22 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
 
     public override string TypeId => Type;
 
-    /// <summary>A battery, a battery filling up, or nothing at all.</summary>
+    /// <summary>
+    /// How much of the body is filled, in the units the drawing is made of.
+    /// </summary>
+    /// <remarks>
+    /// The whole point of a battery drawn rather than chosen: the set has
+    /// four of them, so eighty-five per cent and twenty looked the same and
+    /// charging showed no level at all. Fourteen units of room inside the
+    /// body, and never quite nothing, so an almost-flat battery still reads
+    /// as a battery rather than as an empty box.
+    /// </remarks>
     [ObservableProperty]
-    public partial string Icon { get; set; } = "Battery";
+    public partial double Fill { get; set; } = 14;
+
+    /// <summary>Whether the bolt is drawn over the level.</summary>
+    [ObservableProperty]
+    public partial Visibility Charging { get; set; } = Visibility.Collapsed;
 
     /// <summary>How full, as a percentage.</summary>
     [ObservableProperty]
@@ -131,24 +144,33 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
         Stroke = 36 / Math.Max(1, IconSize);
         FontSize = DockMetrics.ReadingFont(Density);
 
-        Icon = _state.Charging ? "BatteryCharging"
-            : _state.Percent < 0 ? "Battery"
-            : _state.Percent <= Low ? "BatteryLow"
-            : _state.Percent >= 90 ? "BatteryFull"
-            : "Battery";
+        // Unknown reads as full rather than as empty: a battery whose level
+        // the firmware will not give is not a flat battery, and drawing it
+        // flat would be the one mistake that sends somebody looking for a
+        // socket they do not need.
+        double share = _state.Percent < 0 ? 1 : _state.Percent / 100.0;
+
+        Fill = Math.Max(1.5, 14 * share);
+        Charging = _state.Charging ? Visibility.Visible : Visibility.Collapsed;
 
         Colour = !_state.Plugged && _state.Percent >= 0 && _state.Percent <= Low
             ? Alarmed
             : Ink;
 
-        bool room = Density == DockDensity.Default
+        // The figure stays on a compact bar and down the side of a screen -
+        // the two shapes somebody chooses when the screen is small, which is
+        // where the charge matters most. Only the per-cent sign goes: three
+        // characters instead of five, and the drawing beside it says what
+        // kind of figure it is.
+        bool roomy = Density == DockDensity.Default
             && Orientation == Microsoft.UI.Xaml.Controls.Orientation.Horizontal;
 
-        LevelVisible = room ? Visibility.Visible : Visibility.Collapsed;
+        LevelVisible = Visibility.Visible;
 
         Level = _state.Percent < 0
             ? "--"
-            : _state.Percent.ToString("F0", CultureInfo.InvariantCulture) + " %";
+            : _state.Percent.ToString("F0", CultureInfo.InvariantCulture)
+                + (roomy ? " %" : string.Empty);
 
         Detail = Says();
     }
@@ -220,20 +242,21 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     /// </summary>
     public override double Length()
     {
+        _figure ??= Metric.Wide(
+            Density == DockDensity.Default
+                && Orientation == Microsoft.UI.Xaml.Controls.Orientation.Horizontal
+                ? "100 %"
+                : "100",
+            DockMetrics.ReadingFont(Density));
+
+        // Down the side of a screen the figure goes under the drawing rather
+        // than beside it, so the length is the height of the two.
         if (Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical)
         {
-            return 30;
+            return DockMetrics.ReadingIcon(Density) + DockMetrics.ReadingFont(Density) + 12;
         }
 
-        double along = DockMetrics.ReadingIcon(Density) + 12;
-
-        if (LevelVisible == Visibility.Visible)
-        {
-            _figure ??= Metric.Wide("100 %", DockMetrics.ReadingFont(Density));
-            along += _figure.Value + 6;
-        }
-
-        return along;
+        return DockMetrics.ReadingIcon(Density) + 12 + _figure.Value + 6;
     }
 
     public override FrameworkElement? CreateEditor(Action<JsonElement?> changed) => null;

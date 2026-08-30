@@ -39,8 +39,7 @@ public static class DockLayout
         AppBarEdge edge,
         Grid strip,
         int capacity,
-        IReadOnlyList<(FrameworkElement Element, Placement Where)> items,
-        int offset = 0)
+        IReadOnlyList<(FrameworkElement Element, Placement Where)> items)
     {
         bool horizontal = DockMetrics.IsHorizontal(edge);
 
@@ -70,12 +69,12 @@ public static class DockLayout
         {
             if (horizontal)
             {
-                Grid.SetColumn(element, where.Cell + offset);
+                Grid.SetColumn(element, where.Cell);
                 Grid.SetColumnSpan(element, where.Span);
             }
             else
             {
-                Grid.SetRow(element, where.Cell + offset);
+                Grid.SetRow(element, where.Cell);
                 Grid.SetRowSpan(element, where.Span);
             }
 
