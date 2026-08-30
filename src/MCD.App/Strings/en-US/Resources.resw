@@ -1007,4 +1007,13 @@
   <data name="UndoElsewhereLabel" xml:space="preserve">
     <value>Undo — {0}, {1}</value>
   </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>This is the last way in</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>No key opens this window, and this is the only wheel left on any bar. After this, the way back in is a right click on a bar.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Take it off anyway</value>
+  </data>
 </root>

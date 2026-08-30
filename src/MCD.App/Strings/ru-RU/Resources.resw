@@ -1007,4 +1007,13 @@
   <data name="UndoElsewhereLabel" xml:space="preserve">
     <value>Отменить — {0}, {1}</value>
   </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>Это последний вход</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>Ни одна клавиша не открывает это окно, и это последняя шестерёнка на всех панелях. После этого вернуться сюда можно правым кликом по панели.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Всё равно убрать</value>
+  </data>
 </root>

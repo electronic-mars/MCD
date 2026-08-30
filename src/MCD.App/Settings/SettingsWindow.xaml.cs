@@ -1381,6 +1381,61 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>
+    /// Takes a widget off the bar, asking first if it is the way back in.
+    /// </summary>
+    /// <remarks>
+    /// One widget on the whole machine is not about a reading: the wheel is
+    /// the door. Taking off the last one, with no key bound, leaves the right
+    /// click on a bar as the only way into this window - which is fine for
+    /// somebody who knows it and a locked door for somebody who does not.
+    /// Asked once, in that one case, and never for anything else.
+    /// </remarks>
+    private async void TakeOff(WidgetConfig entry, string what)
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        if (LastWayIn(entry) && !await Sure())
+        {
+            return;
+        }
+
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets.Where(w => w.InstanceId != entry.InstanceId)],
+            what);
+    }
+
+    /// <summary>Whether this widget is the last door into the settings.</summary>
+    private bool LastWayIn(WidgetConfig entry) =>
+        entry.TypeId == SettingsWidget.Type
+        && !_settings.Current.App.Keys.ContainsKey(Shortcut.Settings)
+        && _settings.Current.Monitors
+            .SelectMany(m => m.Widgets)
+            .Count(w => w.TypeId == SettingsWidget.Type) == 1;
+
+    /// <summary>Asks before the door is taken away, and says what is left.</summary>
+    private async Task<bool> Sure()
+    {
+        var dialog = new ContentDialog
+        {
+            XamlRoot = Content.XamlRoot,
+            Title = Loc.Tr("LastDoorTitle", "This is the last way in"),
+            Content = Loc.Tr(
+                "LastDoorBody",
+                "No key opens this window, and this is the only wheel left on any bar. "
+                    + "After this, the way back in is a right click on a bar."),
+            PrimaryButtonText = Loc.Tr("LastDoorGo", "Take it off anyway"),
+            CloseButtonText = Loc.Tr("Cancel", "Cancel"),
+            DefaultButton = ContentDialogButton.Close,
+        };
+
+        return await dialog.ShowAsync() == ContentDialogResult.Primary;
+    }
+
+    /// <summary>
     /// Takes a screen that is not here out of the settings.
     /// </summary>
     /// <remarks>
@@ -1584,10 +1639,7 @@ public sealed partial class SettingsWindow : Window
             Button off = Small(
                 "Delete",
                 Loc.Tr("ListRemove", "Take it off the bar"),
-                () => Rearrange(
-                    dock.StableId,
-                    widgets => [.. widgets.Where(w => w.InstanceId != entry.InstanceId)],
-                    Loc.Tr("UndoRemoved", "a widget taken off")),
+                () => TakeOff(entry, Loc.Tr("UndoRemoved", "a widget taken off")),
                 danger: true);
 
             Grid.SetColumn(off, 4);
@@ -2079,15 +2131,13 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Takes the chosen widget off the bar.</summary>
     private void RemoveSelected()
     {
-        if (_selectedId is not { } id || Dock() is not { } dock)
+        if (_selectedId is not { } id || Dock() is not { } dock
+            || dock.Widgets.FirstOrDefault(w => w.InstanceId == id) is not { } entry)
         {
             return;
         }
 
-        Rearrange(
-            dock.StableId,
-            widgets => [.. widgets.Where(w => w.InstanceId != id)],
-            Loc.Tr("UndoRemovedOne", "removed"));
+        TakeOff(entry, Loc.Tr("UndoRemovedOne", "removed"));
     }
 
     /// <summary>One round of updating whatever this window is showing.</summary>
