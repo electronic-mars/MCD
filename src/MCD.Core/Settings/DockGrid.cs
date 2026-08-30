@@ -73,10 +73,20 @@ public static class DockGrid
 
             if (cell + span > capacity)
             {
-                // The bar is full. The widget keeps its place in the settings
-                // and is simply not drawn - a slot that does not exist cannot
-                // be shown, and dropping it would lose somebody's widget to a
-                // moment of narrowness.
+                // Past the end of this bar, but the gap in front of it may be
+                // the whole reason: an arrangement made on a wide screen, or
+                // copied from one, asks for slot 60 on a bar with 40. Closing
+                // up behind whatever came before keeps the order and loses
+                // only the spacing, which is the smaller loss by far.
+                cell = cursor;
+            }
+
+            if (cell + span > capacity)
+            {
+                // Genuinely no room. The widget keeps its place in the
+                // settings and is simply not drawn - a slot that does not
+                // exist cannot be shown, and dropping it would lose
+                // somebody's widget to a moment of narrowness.
                 continue;
             }
 

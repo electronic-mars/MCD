@@ -166,6 +166,29 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void AnArrangementFromAWiderScreenClosesUpInsteadOfFallingOff()
+    {
+        // What "make the others the same" produces: slots chosen on a bar with
+        // sixty-eight of them, arriving on one with twenty. The spacing cannot
+        // survive that and the order can, so the order is what is kept.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("b", 30), 2), (Entry("c", 55), 2)], capacity: 20);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("b", 2), ("c", 4)]);
+    }
+
+    [Fact]
+    public void GapsThatFitAreLeftAlone()
+    {
+        // Only what cannot be honoured is repaired. A bar arranged in groups
+        // on a screen wide enough for them comes back in groups.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("b", 10), 2)], capacity: 20);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("b", 10)]);
+    }
+
+    [Fact]
     public void SomethingFitsOnlyWhereEveryOneOfItsSlotsIsFree()
     {
         List<Placement> placed = [new("a", 0, 2), new("b", 5, 2)];

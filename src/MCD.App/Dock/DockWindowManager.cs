@@ -242,7 +242,8 @@ public sealed class DockWindowManager : IDisposable
         _settings.Commit(
             next,
             WriteReason.WidgetConfig,
-            what ?? (drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar")));
+            what ?? (drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar")),
+            stableId);
 
         if (drawn
             && next.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } config)

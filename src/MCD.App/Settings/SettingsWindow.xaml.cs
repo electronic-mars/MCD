@@ -973,6 +973,24 @@ public sealed partial class SettingsWindow : Window
         ShowWidgets();
     }
 
+    /// <summary>The name one screen goes by in the switcher, by its id.</summary>
+    private string ScreenName(string stableId)
+    {
+        ImmutableArray<MonitorConfig> monitors = _settings.Current.Monitors;
+        int at = monitors.ToList().FindIndex(m => m.StableId == stableId);
+
+        if (at < 0)
+        {
+            return Loc.Tr("ScreenFallback", "Screen");
+        }
+
+        return Label(
+            monitors[at],
+            monitors,
+            _docks.Plans.ToDictionary(p => p.Config.StableId, p => p.Monitor),
+            at);
+    }
+
     /// <summary>
     /// The number Windows itself shows for the screen: "Display 2", the same
     /// digit as in its own display settings.
@@ -2134,13 +2152,31 @@ public sealed partial class SettingsWindow : Window
         }
     }
 
-    private string UndoLabel() =>
-        _settings.UndoWhat is { } what
-            ? string.Format(
+    private string UndoLabel()
+    {
+        if (_settings.UndoWhat is not { } what)
+        {
+            return Loc.Tr("Undo", "Undo");
+        }
+
+        // Named only when it is somebody else's screen. Saying "on this
+        // screen" on every button teaches people to stop reading it, and the
+        // whole point of the words is the one case where pressing undo moves
+        // something they cannot see.
+        if (_settings.UndoWhere is { } where && where != _editing)
+        {
+            return string.Format(
                 CultureInfo.CurrentCulture,
-                Loc.Tr("UndoWithLabel", "Undo - {0}"),
-                what)
-            : Loc.Tr("Undo", "Undo");
+                Loc.Tr("UndoElsewhereLabel", "Undo - {0}, {1}"),
+                what,
+                ScreenName(where));
+        }
+
+        return string.Format(
+            CultureInfo.CurrentCulture,
+            Loc.Tr("UndoWithLabel", "Undo - {0}"),
+            what);
+    }
 
     /// <summary>
     /// Writes the settings and remembers that this window did it.
@@ -2149,18 +2185,31 @@ public sealed partial class SettingsWindow : Window
     /// Without the mark, every change made here comes back through the
     /// watcher as a change made elsewhere, and lands on the undo stack twice.
     /// </remarks>
-    private void Write(SettingsModel model, WriteReason reason, string? what = null)
+    private void Write(
+        SettingsModel model, WriteReason reason, string? what = null, string? where = null)
     {
         _mine = model;
-        _settings.Commit(model, reason, what);
+        _settings.Commit(model, reason, what, where);
     }
 
     /// <summary>Puts the settings back to before the last change.</summary>
     private void DoUndo()
     {
+        // Read before the undo, which pops it off the stack.
+        string? where = _settings.UndoWhere;
+
         if (!_settings.Undo())
         {
             return;
+        }
+
+        // Shown, not only done. A change taken back on a screen the window is
+        // not looking at moves nothing anybody can see, and a button that
+        // appears to do nothing is a button people press again.
+        if (where is not null && where != _editing
+            && _settings.Current.Monitors.Any(m => m.StableId == where))
+        {
+            _editing = where;
         }
 
         ReloadDocks();
@@ -2377,7 +2426,8 @@ public sealed partial class SettingsWindow : Window
                 ],
             },
             WriteReason.WidgetConfig,
-            what);
+            what,
+            stableId);
 
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
 
@@ -2411,7 +2461,8 @@ public sealed partial class SettingsWindow : Window
                 Monitors = [.. current.Monitors.Select(c => c.StableId == stableId ? change(c) : c)],
             },
             WriteReason.UserAction,
-            what);
+            what,
+            stableId);
 
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
         ShowUndo();

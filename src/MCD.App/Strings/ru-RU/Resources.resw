@@ -1004,4 +1004,7 @@
   <data name="SourceNotHere" xml:space="preserve">
     <value>нет на этой машине</value>
   </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>Отменить — {0}, {1}</value>
+  </data>
 </root>

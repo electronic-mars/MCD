@@ -90,13 +90,25 @@ public sealed class SettingsService : IDisposable
     /// dragged off a bar while the window was shut was never written down at
     /// all, which is exactly the change somebody wants back.
     /// </remarks>
-    private readonly List<(SettingsModel Model, string What)> _undo = [];
+    private readonly List<(SettingsModel Model, string What, string? Where)> _undo = [];
 
     /// <summary>Whether there is anything to take back.</summary>
     public bool CanUndo => _undo.Count > 0;
 
     /// <summary>What the next undo would take back, in words.</summary>
     public string? UndoWhat => _undo.Count > 0 ? _undo[^1].What : null;
+
+    /// <summary>
+    /// The screen the next undo belongs to, when it belongs to one.
+    /// </summary>
+    /// <remarks>
+    /// One button takes back the last change on any screen, which is right -
+    /// a widget dragged off the second bar is wanted back from wherever the
+    /// window happens to be. But it has to say so: pressing undo and watching
+    /// nothing move, because the change was on a screen not being looked at,
+    /// reads as a broken button.
+    /// </remarks>
+    public string? UndoWhere => _undo.Count > 0 ? _undo[^1].Where : null;
 
     /// <summary>
     /// Puts the settings back to before the last change, if there was one.
@@ -108,7 +120,7 @@ public sealed class SettingsService : IDisposable
             return false;
         }
 
-        (SettingsModel model, string what) = _undo[^1];
+        (SettingsModel model, string what, _) = _undo[^1];
         _undo.RemoveAt(_undo.Count - 1);
 
         _log.LogInformation("settings.undone {What}", what);
@@ -127,7 +139,12 @@ public sealed class SettingsService : IDisposable
     /// schema upgrade, a bar writing down where it settled its widgets - none
     /// of which anybody asked for and none of which they can undo.
     /// </param>
-    public void Commit(SettingsModel model, WriteReason reason, string? what = null)
+    /// <param name="where">
+    /// The screen it happened on, when it happened on one - so the button can
+    /// say whose change it is about to take back.
+    /// </param>
+    public void Commit(
+        SettingsModel model, WriteReason reason, string? what = null, string? where = null)
     {
         SettingsModel previous;
 
@@ -148,7 +165,7 @@ public sealed class SettingsService : IDisposable
         // ask for back.
         if (what is not null)
         {
-            _undo.Add((previous, what));
+            _undo.Add((previous, what, where));
 
             // Twenty-five is plenty, and unbounded is a session's worth of
             // settings held for a button nobody presses twenty-six times.
