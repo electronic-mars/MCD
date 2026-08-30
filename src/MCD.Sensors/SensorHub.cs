@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
@@ -29,7 +29,7 @@ public sealed class SensorHub : IDisposable
     /// <summary>How long a source that has failed is left alone before being probed again.</summary>
     private static readonly TimeSpan RetryAfter = TimeSpan.FromSeconds(30);
 
-    private static readonly TimeSpan Tick = TimeSpan.FromMilliseconds(500);
+    private static readonly TimeSpan Tick = TimeSpan.FromSeconds(1);
 
     /// <summary>Samples kept per watched sensor: a minute at one a second.</summary>
     private const int TrendLength = 60;

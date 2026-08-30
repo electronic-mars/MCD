@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
 using Mcd.Core.Settings;
@@ -81,7 +82,25 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
     /// <summary>Whether the network's name is written beside the aerial.</summary>
     private bool WithName => WidgetOptions.Number(Options, "name") is not 0;
 
-    public override void Attach() => Tick(SensorSnapshot.Empty);
+    public override void Attach()
+    {
+        _figure = null;
+        Tick(SensorSnapshot.Empty);
+    }
+
+    /// <summary>
+    /// The width of the figure beside the icon, measured once.
+    /// </summary>
+    /// <remarks>
+    /// Length is asked for every second, and this part of it is a constant:
+    /// the same string in the same size. Measuring text costs a full layout
+    /// pass through the text engine, and doing it on every tick for every
+    /// widget on every bar was two thirds of everything this program did
+    /// while idle - a lesson learnt once in the readings and not carried
+    /// across to here.
+    /// </remarks>
+    private double? _figure;
+
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -156,7 +175,8 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
             // Reserved for the longest name that will be drawn rather than for
             // this one, so that walking from one network to another does not
             // shove everything to the right of it along.
-            along += Metric.Wide(new string('m', Longest), DockMetrics.ReadingFont(Density)) + 6;
+            _figure ??= Metric.Wide(new string('m', Longest), DockMetrics.ReadingFont(Density));
+            along += _figure.Value + 6;
         }
 
         return along;
@@ -167,6 +187,6 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
             Loc.Tr("WifiNameLabel", "Write the network's name"),
             Mcd.App.Settings.Braun.Switch(
                 WithName,
-                on => changed(WidgetJson.Object(("name", on ? 1 : 0)))),
+                on => changed(WidgetOptions.Merge(Options, ("name", JsonValue.Create(on ? 1 : 0))))),
             Loc.Tr("WifiNameHint", "Useful where two networks are within reach and both work."));
 }

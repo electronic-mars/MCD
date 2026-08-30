@@ -15,6 +15,11 @@
          differs between the two modes goes through AppPaths.IsPackaged. -->
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <!-- Compiled ahead of time as well as shipped whole. Without it the
+         runtime compiles the WinUI projection, the service container and the
+         reflection-based settings reader on the way to the first bar, every
+         time the program starts. -->
+    <PublishReadyToRun>true</PublishReadyToRun>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Platforms>x64;ARM64</Platforms>

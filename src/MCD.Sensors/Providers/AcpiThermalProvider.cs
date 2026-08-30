@@ -1,4 +1,4 @@
-using System.Management;
+﻿using System.Management;
 using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
 
@@ -34,7 +34,16 @@ public sealed class AcpiThermalProvider(ILogger<AcpiThermalProvider> log) : ISen
 
     public Tier Tier => Tier.Platform;
 
-    public TimeSpan Interval => TimeSpan.FromSeconds(2);
+    /// <summary>
+    /// How often the firmware's thermal zone is asked.
+    /// </summary>
+    /// <remarks>
+    /// Rarely. Each ask is a call across into the WMI host, which calls into
+    /// the ACPI driver, which runs a method in the firmware - and it keeps
+    /// that host process resident for as long as this program runs. The
+    /// temperature of a case does not move in two seconds.
+    /// </remarks>
+    public TimeSpan Interval => TimeSpan.FromSeconds(10);
 
     public bool IsAvailable()
     {

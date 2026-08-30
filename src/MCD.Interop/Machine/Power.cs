@@ -39,7 +39,39 @@ public static class Power
     /// <summary>255: the state is unknown, which on a desktop it always is.</summary>
     private const byte Unknown = 255;
 
+    /// <summary>
+    /// The battery as it was at most a second ago.
+    /// </summary>
+    /// <remarks>
+    /// One answer serves every bar. The call itself is cheap, but there is a
+    /// bar on every screen and each asked for itself, which is three calls a
+    /// second for a figure that moves a percent every few minutes.
+    /// </remarks>
     public static BatteryState Read()
+    {
+        long now = Environment.TickCount64;
+
+        lock (Gate)
+        {
+            if (now - _asked < Fresh)
+            {
+                return _last;
+            }
+
+            _asked = now;
+            _last = Ask();
+
+            return _last;
+        }
+    }
+
+    private const long Fresh = 900;
+
+    private static readonly Lock Gate = new();
+    private static BatteryState _last = BatteryState.None;
+    private static long _asked = -Fresh;
+
+    private static BatteryState Ask()
     {
         if (!PInvoke.GetSystemPowerStatus(out SYSTEM_POWER_STATUS status))
         {

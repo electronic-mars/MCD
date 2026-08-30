@@ -70,7 +70,18 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     /// and there is none right now.
     /// </remarks>
     [ObservableProperty]
-    public partial double Dim { get; set; } = 0.35;
+    public partial double Dim { get; set; } = Resting;
+
+    /// <summary>
+    /// How lit the keys are when there is nothing to control.
+    /// </summary>
+    /// <remarks>
+    /// Measured against the bar it sits on: at a third, the keys came out at
+    /// 40 per cent of the contrast of everything around them and read as
+    /// switched off rather than as waiting. They work at any moment - a press
+    /// on the middle one starts whatever played last.
+    /// </remarks>
+    private const double Resting = 0.55;
 
     /// <summary>What is playing, for the full-size bar and the tooltip.</summary>
     [ObservableProperty]
@@ -397,7 +408,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
         if (_playing is null)
         {
-            Dim = 0.35;
+            Dim = Resting;
             Title = string.Empty;
             Art = null;
             ArtVisible = Visibility.Collapsed;
@@ -462,7 +473,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             or GlobalSystemMediaTransportControlsSessionPlaybackStatus.Paused
             or GlobalSystemMediaTransportControlsSessionPlaybackStatus.Changing
             ? 1.0
-            : 0.35;
+            : Resting;
     }
 
     private async void ReadTitle(GlobalSystemMediaTransportControlsSession session)

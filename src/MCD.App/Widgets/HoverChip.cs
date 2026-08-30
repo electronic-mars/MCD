@@ -81,7 +81,7 @@ public sealed partial class HoverChip : ContentControl
 
     private void OnGone(object sender, PointerRoutedEventArgs e)
     {
-        Fade(Colors.Transparent);
+        Fade(Colors.Transparent, lighting: false);
         Squeeze(1f);
     }
 
@@ -92,12 +92,17 @@ public sealed partial class HoverChip : ContentControl
     }
 
     /// <summary>Crossfades the background rather than switching it.</summary>
-    private void Fade(Windows.UI.Color to)
+    /// <param name="lighting">
+    /// True on the way in. Lighting up is quick and letting go is slow: a
+    /// pointer crossing a row of chips at one speed both ways leaves a string
+    /// of lights behind it.
+    /// </param>
+    private void Fade(Windows.UI.Color to, bool lighting = true)
     {
         var colour = new ColorAnimation
         {
             To = to,
-            Duration = DockMetrics.HoverCrossfade,
+            Duration = lighting ? DockMetrics.HoverCrossfade : DockMetrics.HoverFade,
             EnableDependentAnimation = true,
         };
 

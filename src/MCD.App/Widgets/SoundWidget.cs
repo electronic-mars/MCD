@@ -1,4 +1,5 @@
-using System.Text.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
 using Mcd.Audio;
@@ -64,11 +65,29 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override bool Matters => Shown == Visibility.Visible;
 
-    public override void Attach() => Tick(SensorSnapshot.Empty);
+    public override void Attach()
+    {
+        _figure = null;
+        Tick(SensorSnapshot.Empty);
+    }
+
+    /// <summary>
+    /// The width of the figure beside the icon, measured once.
+    /// </summary>
+    /// <remarks>
+    /// Length is asked for every second, and this part of it is a constant:
+    /// the same string in the same size. Measuring text costs a full layout
+    /// pass through the text engine, and doing it on every tick for every
+    /// widget on every bar was two thirds of everything this program did
+    /// while idle - a lesson learnt once in the readings and not carried
+    /// across to here.
+    /// </remarks>
+    private double? _figure;
+
 
     public override void Tick(SensorSnapshot snapshot)
     {
-        bool? muted = SystemVolume.Muted();
+        (bool? muted, float loud) = SystemVolume.State();
 
         if (muted is null)
         {
@@ -79,8 +98,6 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         Shown = Visibility.Visible;
         IconSize = DockMetrics.ReadingIcon(Density);
         FontSize = DockMetrics.ReadingFont(Density);
-
-        float loud = SystemVolume.Level() ?? 0f;
 
         Icon = muted.Value ? "SpeakerOff"
             : loud < 0.01f ? "SpeakerOff"
@@ -130,7 +147,8 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
 
         if (LevelVisible == Visibility.Visible)
         {
-            along += Metric.Wide("100 %", DockMetrics.ReadingFont(Density)) + 6;
+            _figure ??= Metric.Wide("100 %", DockMetrics.ReadingFont(Density));
+            along += _figure.Value + 6;
         }
 
         return Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical ? 30 : along;
@@ -141,6 +159,6 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
             Loc.Tr("SoundLevelLabel", "Write how loud it is"),
             Mcd.App.Settings.Braun.Switch(
                 WithLevel,
-                on => changed(WidgetJson.Object(("level", on ? 1 : 0)))),
+                on => changed(WidgetOptions.Merge(Options, ("level", JsonValue.Create(on ? 1 : 0))))),
             Loc.Tr("SoundLevelHint", "The speaker alone already says whether there is any."));
 }

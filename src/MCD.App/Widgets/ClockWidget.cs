@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
 using Mcd.Core.Settings;
@@ -57,7 +58,24 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     /// <summary>Whether the date is shown under the time.</summary>
     private bool WithDate => WidgetOptions.Number(Options, "date") is not 0;
 
-    public override void Attach() => Tick(SensorSnapshot.Empty);
+    public override void Attach()
+    {
+        _time = null;
+        _date = null;
+        Tick(SensorSnapshot.Empty);
+    }
+
+    /// <summary>
+    /// The widest the time and the date ever get, measured once.
+    /// </summary>
+    /// <remarks>
+    /// Length is asked for every second and both of these are constants - the
+    /// longest a fixed pattern reaches, in a fixed size. Measuring text is a
+    /// full pass through the text engine, and the readings learnt not to do it
+    /// on every tick long before this widget existed.
+    /// </remarks>
+    private double? _time;
+    private double? _date;
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -114,11 +132,14 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        double time = Metric.Wide(Widest(Pattern), DockMetrics.ReadingFont(Density));
+        // Measured once. Both strings are the longest a fixed pattern ever
+        // gets, in a fixed size: asking the text engine for them again every
+        // second was work for an answer that cannot change.
+        _time ??= Metric.Wide(Widest(Pattern), DockMetrics.ReadingFont(Density));
+        _date ??= Metric.Wide(Widest("ddd d MMM"), Math.Max(9, DockMetrics.ReadingFont(Density) - 4));
 
-        double date = DateVisible == Visibility.Visible
-            ? Metric.Wide(Widest("ddd d MMM"), Math.Max(9, DockMetrics.ReadingFont(Density) - 4))
-            : 0;
+        double time = _time.Value;
+        double date = DateVisible == Visibility.Visible ? _date.Value : 0;
 
         double along = Math.Max(time, date) + 14;
 
@@ -153,15 +174,15 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
             Loc.Tr("ClockSeconds", "Show seconds"),
             Mcd.App.Settings.Braun.Switch(
                 Seconds,
-                on => changed(WidgetJson.Object(
-                    ("seconds", on ? 1 : 0), ("date", WithDate ? 1 : 0))))));
+                on => changed(WidgetOptions.Merge(
+                    Options, ("seconds", JsonValue.Create(on ? 1 : 0)))))));
 
         panel.Children.Add(Mcd.App.Settings.Braun.Field(
             Loc.Tr("ClockDate", "Show the date underneath"),
             Mcd.App.Settings.Braun.Switch(
                 WithDate,
-                on => changed(WidgetJson.Object(
-                    ("seconds", Seconds ? 1 : 0), ("date", on ? 1 : 0)))),
+                on => changed(WidgetOptions.Merge(
+                    Options, ("date", JsonValue.Create(on ? 1 : 0))))),
             Loc.Tr("ClockDateHint", "A compact bar has one line, and the time is the line worth having.")));
 
         return panel;

@@ -1,4 +1,4 @@
-using Mcd.Core.Settings;
+﻿using Mcd.Core.Settings;
 using Mcd.Interop.AppBar;
 
 namespace Mcd.App.Dock;
@@ -42,8 +42,24 @@ public static class DockMetrics
 
     public static double ReadingFont(DockDensity density) =>
         density == DockDensity.Compact ? 14 : 15;
-    public const double PressScale = 0.81;
-    public static readonly TimeSpan HoverCrossfade = TimeSpan.FromMilliseconds(150);
+    /// <summary>
+    /// How far a chip gives under the finger.
+    /// </summary>
+    /// <remarks>
+    /// Barely. A fifth of the chip was a figure moving two points sideways on
+    /// a bar whose whole job is to hold figures still; the press has to be
+    /// felt, not watched.
+    /// </remarks>
+    public const double PressScale = 0.96;
+    /// <summary>How fast a chip lights under the pointer, and how slowly it lets go.</summary>
+    /// <remarks>
+    /// Not the same both ways. A pointer crossing a row of seven chips at the
+    /// same speed in and out draws a string of lights behind it; a slower
+    /// release lets the row settle instead.
+    /// </remarks>
+    public static readonly TimeSpan HoverCrossfade = TimeSpan.FromMilliseconds(120);
+
+    public static readonly TimeSpan HoverFade = TimeSpan.FromMilliseconds(250);
     public static readonly TimeSpan PressScaleDuration = TimeSpan.FromMilliseconds(90);
 
     public static readonly TimeSpan AutoHideCollapseDelay = TimeSpan.FromMilliseconds(250);
@@ -63,7 +79,16 @@ public static class DockMetrics
     public static readonly TimeSpan AutoHideLeavePoll = TimeSpan.FromMilliseconds(150);
     public static readonly TimeSpan SlideReveal = TimeSpan.FromMilliseconds(200);
     public static readonly TimeSpan SlideCollapse = TimeSpan.FromMilliseconds(150);
-    public static readonly TimeSpan SlideFrameInterval = TimeSpan.FromMilliseconds(8);
+    /// <summary>
+    /// One frame of the slide.
+    /// </summary>
+    /// <remarks>
+    /// A screen refreshes every 16.7 ms; asking for a step every 8 put two
+    /// steps into some frames and one into others, so the bar arrived at an
+    /// even speed by an uneven route - and moved the window 125 times a
+    /// second to do it.
+    /// </remarks>
+    public static readonly TimeSpan SlideFrameInterval = TimeSpan.FromMilliseconds(16);
     public const int RevealHitTestMargin = 1;
 
     /// <summary>

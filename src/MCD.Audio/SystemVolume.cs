@@ -40,19 +40,72 @@ public static unsafe class SystemVolume
         return level;
     });
 
-    /// <summary>Silences the machine, or lets it speak again.</summary>
-    public static bool Mute(bool on) => With<bool>(volume =>
+    /// <summary>
+    /// Both readings at once, from an answer at most a second old.
+    /// </summary>
+    /// <remarks>
+    /// Opening the endpoint means creating the enumerator, asking it for the
+    /// default device and activating an interface on it - three calls across
+    /// COM. A bar asked for the mute and the level separately, and there is a
+    /// bar on every screen: six openings a second on a three-screen desk, for
+    /// two numbers that nothing can change faster than a hand can move.
+    /// </remarks>
+    public static (bool? Muted, float Level) State()
     {
-        volume.SetMute(on, null);
-        return true;
-    }) ?? false;
+        long now = Environment.TickCount64;
+
+        lock (Gate)
+        {
+            if (now - _asked < Fresh)
+            {
+                return _last;
+            }
+
+            _asked = now;
+            _last = (Muted(), Level() ?? 0f);
+
+            return _last;
+        }
+    }
+
+    private const long Fresh = 900;
+
+    private static readonly Lock Gate = new();
+    private static (bool? Muted, float Level) _last;
+    private static long _asked = -Fresh;
+
+    /// <summary>Forgets the last answer, because this call just changed it.</summary>
+    private static void Moved()
+    {
+        lock (Gate)
+        {
+            _asked = -Fresh;
+        }
+    }
+
+    /// <summary>Silences the machine, or lets it speak again.</summary>
+    public static bool Mute(bool on)
+    {
+        Moved();
+
+        return With<bool>(volume =>
+        {
+            volume.SetMute(on, null);
+            return true;
+        }) ?? false;
+    }
 
     /// <summary>Sets how loud it is, nought to one.</summary>
-    public static bool Set(float level) => With<bool>(volume =>
+    public static bool Set(float level)
     {
-        volume.SetMasterVolumeLevelScalar(Math.Clamp(level, 0f, 1f), null);
-        return true;
-    }) ?? false;
+        Moved();
+
+        return With<bool>(volume =>
+        {
+            volume.SetMasterVolumeLevelScalar(Math.Clamp(level, 0f, 1f), null);
+            return true;
+        }) ?? false;
+    }
 
     /// <summary>
     /// Opens the endpoint sound is playing through, does one thing with it,

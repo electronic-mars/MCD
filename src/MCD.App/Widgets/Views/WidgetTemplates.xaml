@@ -113,9 +113,16 @@
                      moves inside its own box and nothing further along the bar
                      shifts. -->
                 <StackPanel Margin="{x:Bind Lift, Mode=OneWay}" VerticalAlignment="Center">
+                    <!-- Left, and said so on the box as well as inside it: a
+                         MaxWidth without an alignment leaves the default
+                         Stretch, which centres the text in whatever is left
+                         over. The figure then sat left of a short name and
+                         centred under a long one - that is, the rule changed
+                         with the language. -->
                     <TextBlock
                         MinWidth="{x:Bind ValueWidth, Mode=OneWay}"
                         MaxWidth="{x:Bind ValueWidth, Mode=OneWay}"
+                        HorizontalAlignment="Left"
                         HorizontalTextAlignment="Left"
                         FontSize="{x:Bind FontSize, Mode=OneWay}"
                         FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
@@ -265,9 +272,13 @@
             Margin="6,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
+            <!-- The interface face, like everything else on the bar. Consolas
+                 draws noticeably smaller digits at the same point size, so the
+                 clock came out smaller than the readings beside it; the width
+                 is reserved from the longest the pattern ever gets, so nothing
+                 shuffles when the hour changes. -->
             <TextBlock
                 HorizontalAlignment="Center"
-                FontFamily="Consolas"
                 FontSize="{x:Bind TimeSize, Mode=OneWay}"
                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                 Text="{x:Bind Time, Mode=OneWay}" />

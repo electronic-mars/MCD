@@ -84,7 +84,25 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     /// <summary>A machine with no battery is not going to grow one.</summary>
     public override bool Possible => _state.Present;
 
-    public override void Attach() => Tick(SensorSnapshot.Empty);
+    public override void Attach()
+    {
+        _figure = null;
+        Tick(SensorSnapshot.Empty);
+    }
+
+    /// <summary>
+    /// The width of the figure beside the icon, measured once.
+    /// </summary>
+    /// <remarks>
+    /// Length is asked for every second, and this part of it is a constant:
+    /// the same string in the same size. Measuring text costs a full layout
+    /// pass through the text engine, and doing it on every tick for every
+    /// widget on every bar was two thirds of everything this program did
+    /// while idle - a lesson learnt once in the readings and not carried
+    /// across to here.
+    /// </remarks>
+    private double? _figure;
+
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -177,7 +195,8 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
 
         if (LevelVisible == Visibility.Visible)
         {
-            along += Metric.Wide("100 %", DockMetrics.ReadingFont(Density)) + 6;
+            _figure ??= Metric.Wide("100 %", DockMetrics.ReadingFont(Density));
+            along += _figure.Value + 6;
         }
 
         return along;
