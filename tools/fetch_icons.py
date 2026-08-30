@@ -22,7 +22,7 @@ import urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
-from svgpath import normalise
+from svgpath import extent, normalise, scale
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SOURCES = ROOT / "assets" / "icons-src"
@@ -204,7 +204,55 @@ def combine(svg: str) -> str:
 
     # Normalised, because WinUI reads the same commands as SVG but not the
     # compressed spelling Iconify serves. See tools/svgpath.py.
-    return " ".join(normalise(s.strip()) for s in shapes)
+    return grown(" ".join(normalise(s.strip()) for s in shapes))
+
+
+# The grid the icons are drawn on, and the live area they should fill on it.
+GRID = 24.0
+LIVE = 20.0
+
+# Never more than this. A drawing measured small because it is genuinely small
+# is one thing; a measurement that went wrong is another, and half again is as
+# far as the first can honestly need.
+MOST = 1.45
+
+
+def grown(data: str) -> str:
+    """
+    The same drawing, enlarged to fill the grid the way its neighbours do.
+
+    The set is not drawn to one size. Measured, the arrows fill twelve units by
+    fourteen where the processor fills twenty by twenty - so on a bar where the
+    two stand side by side one reads as a smaller, lighter icon than the other,
+    at the same nominal size and the same stroke.
+
+    The measurement over-estimates, never under: a curve stays inside the box
+    of its control points, and an arc inside the radii round its ends. That
+    only ever asks for less enlargement than the drawing could take, so nothing
+    can be pushed off the grid by a measurement that went wide.
+    """
+    left, top, right, bottom = extent(data)
+    widest = max(right - left, bottom - top)
+
+    if widest <= 0:
+        return data
+
+    factor = min(MOST, LIVE / widest)
+
+    # And never past the edge of the grid. A drawing is enlarged about the
+    # middle, and one that does not sit in the middle has a far edge that
+    # moves further than its near one - which pushed the thermometer, a tall
+    # drawing hung low, out of the square it is drawn in.
+    middle = GRID / 2
+
+    for edge in (left, top, right, bottom):
+        room = (GRID - middle) if edge > middle else (0 - middle)
+        reach = edge - middle
+
+        if abs(reach) > 0.01:
+            factor = min(factor, room / reach)
+
+    return data if factor <= 1.01 else scale(data, factor, middle)
 
 
 def _self_check() -> None:
@@ -227,6 +275,14 @@ def _self_check() -> None:
     # Circles and ellipses are shapes too, not just paths.
     assert "A 10 10" in combine('<circle cx="12" cy="12" r="10"/>')
     assert "A 4 10" in combine('<ellipse cx="12" cy="12" rx="4" ry="10"/>')
+
+    # A drawing that already fills the grid is left alone; a small one grows
+    # about the middle and stays inside the grid.
+    assert grown("M 2 2 L 22 2") == "M 2 2 L 22 2"
+
+    # Sixteen units across grows by a quarter, about the middle of the grid.
+    small = grown("M 4 12 L 20 12")
+    assert small == "M 2 12 L 22 12", small
 
 
 def main() -> None:
