@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Mcd.App.Widgets;
 
@@ -41,7 +41,7 @@ public static class Readable
     {
         >= Mega => Trim(bytesPerSecond / Mega) + (narrow ? "M" : " MB/s"),
         >= Kilo => Round(bytesPerSecond / Kilo) + (narrow ? "k" : " kB/s"),
-        _ => Round(bytesPerSecond) + (narrow ? string.Empty : " B/s"),
+        _ => Round(bytesPerSecond) + (narrow ? " B" : " B/s"),
     };
 
     /// <summary>Any reading at all, with the unit its source declared.</summary>

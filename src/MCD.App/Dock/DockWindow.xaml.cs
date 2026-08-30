@@ -681,7 +681,7 @@ public sealed partial class DockWindow : Window
     /// program on the taskbar. The settings window keeps a dialog as the way
     /// to pin an address, which has no file to drag.
     /// </remarks>
-    private void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+    private async void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
         bool files = e.DataView.Contains(
             Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems);
@@ -709,16 +709,59 @@ public sealed partial class DockWindow : Window
         // saying "this goes here", instead of the system's forbidding glyph
         // saying nothing.
         ShowSlots(true);
-        Aim(CellAt(e.GetPosition(Bar)), span: 1, ignore: null);
+
+        // A file becomes an icon, which is one slot; a widget is as long as it
+        // says it is. Asked once for the whole drag rather than on every frame
+        // of it: the answer cannot change while the pointer moves, and reading
+        // the package is not free.
+        if (widget && !_measured)
+        {
+            _measured = true;
+
+            Microsoft.UI.Xaml.DragOperationDeferral held = e.GetDeferral();
+
+            try
+            {
+                string carried = await e.DataView.GetTextAsync();
+
+                if (WidgetDrag.Unwrap(carried) is { } coming)
+                {
+                    _incoming = SpanWanted(coming);
+                }
+            }
+            catch (Exception measuring)
+            {
+                // A package that will not read is a package this bar cannot
+                // size. One slot is the old answer and it is not worse.
+                _log.LogWarning(measuring, "dock.drag could not be measured");
+            }
+            finally
+            {
+                held.Complete();
+            }
+        }
+
+        Aim(CellAt(e.GetPosition(Bar)), _incoming, ignore: null);
     }
 
-    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e) =>
+    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+    {
+        Forget();
         ShowSlots(false);
+    }
+
+    /// <summary>Forgets what the last drag was carrying.</summary>
+    private void Forget()
+    {
+        _incoming = 1;
+        _measured = false;
+    }
 
     private async void OnDropFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
         int cell = CellAt(e.GetPosition(Bar));
         ShowSlots(false);
+        Forget();
 
         // A widget carried over from the settings window. It lands on the slot
         // it was dropped on, which is the whole point of carrying it: a press
@@ -1256,6 +1299,50 @@ public sealed partial class DockWindow : Window
         _capacity = DockLayout.Capacity(length, CellSize);
     }
 
+    /// <summary>
+    /// How many slots this entry will want, worked out before it is built for
+    /// real.
+    /// </summary>
+    /// <remarks>
+    /// The marker under the pointer promised one slot for everything, because
+    /// one was all it knew how to ask for. A clock needs three: the marker lit
+    /// a single gap, the drop was allowed, and the layout then shoved
+    /// everything to the right of it along. A widget can be asked its length
+    /// without a template or a host, so it is asked, once, when the drag
+    /// arrives.
+    /// </remarks>
+    private int SpanWanted(WidgetConfig entry)
+    {
+        WidgetViewModel? widget = WidgetCatalog.Create(_context, entry);
+
+        if (widget is null)
+        {
+            return 1;
+        }
+
+        try
+        {
+            widget.Orientation = DockMetrics.IsHorizontal(Config.Edge)
+                ? Orientation.Horizontal
+                : Orientation.Vertical;
+
+            widget.Density = Config.Density;
+            widget.Attach();
+
+            return DockLayout.SpanOf(widget.Length(), CellSize);
+        }
+        finally
+        {
+            widget.Dispose();
+        }
+    }
+
+    /// <summary>How many slots the thing being dragged in from outside wants.</summary>
+    private int _incoming = 1;
+
+    /// <summary>Whether this drag has already been asked how long it is.</summary>
+    private bool _measured;
+
     /// <summary>Builds one widget, or nothing when it cannot be built.</summary>
     private (WidgetHost Host, int Span)? MakeHost(WidgetConfig entry)
     {
@@ -1409,7 +1496,9 @@ public sealed partial class DockWindow : Window
     /// and listing it as a problem would teach somebody to ignore the list.
     /// </remarks>
     private bool Waiting(string instanceId) =>
-        _drawn.TryGetValue(instanceId, out WidgetHost? host) && !host.Widget.Matters;
+        _drawn.TryGetValue(instanceId, out WidgetHost? host)
+        && !host.Widget.Matters
+        && host.Widget.Possible;
 
     /// <summary>
     /// The widgets on this bar that are quiet because they are about nothing.
@@ -1516,10 +1605,30 @@ public sealed partial class DockWindow : Window
             ? 0
             : CellAt(_grabbedAt) - (DockGrid.At(_placed, CellAt(_grabbedAt))?.Cell ?? 0);
 
-        if (_grabbed is not null)
+        // Not over a widget's own button. The hold takes the pointer away to
+        // watch for a drag, and a widget with three keys in a row cannot be
+        // given that press back afterwards - there is no way to say which key
+        // it was for. Those are dragged by the parts that are not keys.
+        if (_grabbed is not null && !(_grabbed.Widget.OwnButtons && OnAKey(e.OriginalSource)))
         {
             _hold.Start();
         }
+    }
+
+    /// <summary>Whether the press landed on a button drawn by the widget.</summary>
+    private static bool OnAKey(object? source)
+    {
+        for (DependencyObject? at = source as DependencyObject;
+             at is not null;
+             at = VisualTreeHelper.GetParent(at))
+        {
+            if (at is Microsoft.UI.Xaml.Controls.Primitives.ButtonBase)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -1727,7 +1836,7 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     private void Place(WidgetConfig entry, int cell)
     {
-        int span = 1;
+        int span = SpanWanted(entry);
         int? landing = DockGrid.Nearest(_placed, _capacity, cell, span, ignore: null);
 
         if (landing is null)

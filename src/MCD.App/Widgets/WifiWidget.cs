@@ -75,6 +75,9 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
     /// <summary>This machine is reaching the internet wirelessly.</summary>
     public override bool Matters => _state.Wireless;
 
+    /// <summary>There is a wireless card, whether or not it is being used.</summary>
+    public override bool Possible => Mcd.Interop.Machine.Wireless.Fitted();
+
     /// <summary>Whether the network's name is written beside the aerial.</summary>
     private bool WithName => WidgetOptions.Number(Options, "name") is not 0;
 

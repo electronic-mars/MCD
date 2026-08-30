@@ -81,6 +81,9 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     /// </summary>
     public override bool Matters => _state.Present;
 
+    /// <summary>A machine with no battery is not going to grow one.</summary>
+    public override bool Possible => _state.Present;
+
     public override void Attach() => Tick(SensorSnapshot.Empty);
 
     public override void Tick(SensorSnapshot snapshot)

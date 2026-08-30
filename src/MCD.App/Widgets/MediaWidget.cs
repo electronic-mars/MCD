@@ -130,6 +130,9 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial Thickness Spacing { get; set; }
 
+    /// <summary>Three keys in a row, each with its own press.</summary>
+    public override bool OwnButtons => true;
+
     public override void Attach()
     {
         IconSize = DockMetrics.ReadingIcon(Density);

@@ -126,8 +126,19 @@ public sealed partial class SettingsWindow : Window
     /// <summary>The settings as this window last acted on them.</summary>
     private SettingsModel _seen;
 
-    /// <summary>True while this window is the one doing the writing.</summary>
-    private bool _writing;
+    /// <summary>
+    /// The last settings this window committed, by identity.
+    /// </summary>
+    /// <remarks>
+    /// A flag raised around the call did not work: the change comes back
+    /// through the watcher on the same turn, but the work of looking at it is
+    /// put off to the next one, by which time the flag is down again. So every
+    /// change made here was written to the undo stack twice - once with its
+    /// real name and once as "on the bar" - and the button never emptied,
+    /// because undoing also wrote. The model itself is the mark: it is the
+    /// same object coming back, whenever it comes back.
+    /// </remarks>
+    private SettingsModel? _mine;
 
     /// <summary>
     /// Takes note of a change this window did not make.
@@ -152,7 +163,7 @@ public sealed partial class SettingsWindow : Window
         SettingsModel was = _seen;
         _seen = now;
 
-        if (_writing)
+        if (ReferenceEquals(now, _mine))
         {
             return;
         }
@@ -613,7 +624,7 @@ public sealed partial class SettingsWindow : Window
         LookBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("ThemeLabel", "Theme"),
-                Loc.Tr("ThemeHint", "Light or dark, or the same as Windows."),
+                Loc.Tr("ThemeHint", "The bars and this window follow it together."),
                 Braun.Segs(
                     [
                         Loc.Tr("SegThemeSystem", "Match Windows"),
@@ -1132,14 +1143,14 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("BarLiveTitle", "The bar itself"),
                 Loc.Tr(
                     "BarHelp",
-                    "The bar is a row of slots, and each slot holds one widget: a reading, the clock, a program's icon. Drag a widget along the bar to move it to a free slot, or off the bar to take it away. Right-click a free slot to add something there, or a widget for its own settings."),
+                    "Drag a widget along the bar to move it, off the bar to remove it. Right-click for a menu: what to add on an empty slot, its own settings on a widget."),
                 null),
 
             Braun.Row(
                 Loc.Tr("GalleryRow", "Put one on the bar"),
                 Loc.Tr(
                     "GalleryRowHint",
-                    "Drag one onto a bar and it lands on the slot you drop it on. Press one to change the picture it is drawn with. There is no limit: two of the same reading in different places is an ordinary thing to want."),
+                    "Drag one onto a bar and it lands where you drop it. Two of the same is fine."),
                 Gallery(dock),
                 stack: true),
 
@@ -1164,7 +1175,7 @@ public sealed partial class SettingsWindow : Window
                             stranded.Count),
                     Loc.Tr(
                         "CrowdedRowHint",
-                        "The bar has run out of slots. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it."),
+                        "The bar has run out of slots. These are kept and come back when there is room - on another edge, or at compact thickness."),
                     Braun.Action(
                         stranded.Count == 1
                             ? Loc.Tr("CrowdedButtonOne", "Take it off")
@@ -1192,7 +1203,7 @@ public sealed partial class SettingsWindow : Window
                         CultureInfo.CurrentCulture,
                         Loc.Tr(
                             "QuietRowHint",
-                            "{0} - on the bar, and taking no slot on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to the slot it was left on, or to the first free one."),
+                            "{0} - on the bar, taking no slot until it has something to say. It comes back where you left it."),
                         Named(quiet)),
                     Braun.Action(
                         quiet.Count == 1
@@ -1207,7 +1218,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("ResetRow", "The standard set"),
                 Loc.Tr(
                     "ResetRowHint",
-                    "Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip, a temperature, and the battery and Wi-Fi where the machine has them. Undo brings your own arrangement back."),
+                    "Puts back the set the bar came with. Undo brings your own arrangement back."),
                 Braun.Action(Loc.Tr("ResetButton", "Restore the standard bar"), ResetDock, "Undo"))));
 
         // ------------------------------------------------------- chosen widget
@@ -1676,16 +1687,8 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private void Write(SettingsModel model, WriteReason reason)
     {
-        _writing = true;
-
-        try
-        {
-            _settings.Commit(model, reason);
-        }
-        finally
-        {
-            _writing = false;
-        }
+        _mine = model;
+        _settings.Commit(model, reason);
     }
 
     /// <summary>
@@ -2367,7 +2370,7 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("ExitRow", "Stop the program"),
             Loc.Tr(
                 "ExitHint",
-                "Closing this window leaves the bars running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind."),
+                "Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind."),
             Braun.Action(
                 Loc.Tr("ExitButton", "Exit Master Control Dock"),
                 () => _onExit(),

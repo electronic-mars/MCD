@@ -54,6 +54,12 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             Braun = Context.Backdrop == "braun",
             Sample = "100 °C",
 
+            // With no sensor named, this widget is about a question rather
+            // than a part, and the answer is meant to move: the sensor is
+            // chosen again on every tick, and the name under the figure
+            // follows it.
+            Roving = key is null,
+
             // This widget's own limits, when the person set any. Null falls
             // back to what the part itself declares or the ordinary defaults.
             WarnAt = WidgetOptions.Number(Options, "warn"),
@@ -70,7 +76,12 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             DockMetrics.ReadingIcon(Density),
             DockMetrics.ReadingFont(Density),
             narrow: Orientation == Orientation.Vertical,
-            subtitle: Density == DockDensity.Default);
+
+            // Not down the side of a screen. The bar is 86 points wide there,
+            // and a name measured against nothing at all was drawn straight
+            // through the edge: "Receive" fits, "Получение" does not, and the
+            // cut is exactly as wide as the language.
+            subtitle: Density == DockDensity.Default && Orientation == Orientation.Horizontal);
         Metrics.Add(metric);
     }
 
@@ -80,7 +91,34 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
         {
             metric.Update(Sensors, snapshot);
         }
+
+        if (Metrics.Count > 0 && Metrics[0].Sensor is null && _waited < Patience)
+        {
+            _waited++;
+        }
     }
+
+    /// <summary>How many ticks a missing sensor is given before giving up.</summary>
+    /// <remarks>
+    /// A graphics driver finishing its load, or an outside program starting
+    /// after the dock did, fills the chip in a few seconds late. Handing the
+    /// slot back at once would make the bar shuffle twice on every start.
+    /// </remarks>
+    private const int Patience = 10;
+
+    private int _waited;
+
+    /// <summary>
+    /// Whether this machine has the thing this reading is about.
+    /// </summary>
+    /// <remarks>
+    /// A chip with no sensor behind it hides itself, but hiding the chip left
+    /// the slot: an empty rectangle that lit up under the pointer, pressed
+    /// like a button and showed nothing, and was named by neither of the two
+    /// rows that explain what is not on the bar.
+    /// </remarks>
+    public override bool Matters =>
+        Metrics.Count == 0 || Metrics[0].Sensor is not null || _waited < Patience;
 
     public override string Summarise() => Name(Chosen);
 

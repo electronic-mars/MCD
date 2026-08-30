@@ -135,6 +135,31 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     /// </remarks>
     public virtual bool Matters => true;
 
+    /// <summary>
+    /// Whether this widget draws buttons of its own.
+    /// </summary>
+    /// <remarks>
+    /// A pinned program is one button covering the whole chip, so the bar can
+    /// take the pointer away from it to watch for a drag and hand the press
+    /// back afterwards. A player is three buttons in a row, and one press
+    /// handed back cannot say which of the three it was for - so on those the
+    /// bar keeps its hands off, and the widget is dragged by the parts that
+    /// are not buttons.
+    /// </remarks>
+    public virtual bool OwnButtons => false;
+
+    /// <summary>
+    /// Whether this widget could ever be about something on this machine.
+    /// </summary>
+    /// <remarks>
+    /// Different from <see cref="Matters"/> by tense. A Wi-Fi widget on a
+    /// laptop holding a cable is quiet and will speak again; a battery widget
+    /// on a tower is quiet for ever. The first is worth a line saying so; the
+    /// second would be that line on every ordinary day, which is the shape of
+    /// notice nobody reads on the day it means something.
+    /// </remarks>
+    public virtual bool Possible => true;
+
     /// <summary>Called on the UI thread once a second while the dock is visible.</summary>
     public abstract void Tick(SensorSnapshot snapshot);
 

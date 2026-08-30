@@ -87,7 +87,7 @@
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running.</value>
   </data>
-  <data name="LiveReadingsTitle" xml:space="preserve">
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Live readings</value>
   </data>
   <!-- Monitors page -->
@@ -102,7 +102,7 @@
     <value>The bars come back when you sign in.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Closing this window leaves the bars running. To stop them, use the button below - ending the task from Task Manager leaves the reserved screen space behind.</value>
+    <value>Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Exit Master Control Dock</value>
@@ -402,7 +402,7 @@
     <value>Next</value>
   </data>
   <data name="BarHelp" xml:space="preserve">
-    <value>The bar is a row of slots, and each slot holds one widget: a reading, the clock, a program's icon. Drag a widget along the bar to move it to a free slot, or off the bar to take it away. Right-click a free slot to add something there, or a widget for its own settings.</value>
+    <value>Drag a widget along the bar to move it, off the bar to remove it. Right-click for a menu: what to add on an empty slot, its own settings on a widget.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
     <value>Widgets</value>
@@ -531,7 +531,7 @@
     <value>How much data is moving right now.</value>
   </data>
   <data name="ThemeHint" xml:space="preserve">
-    <value>Light or dark, or the same as Windows.</value>
+    <value>The bars and this window follow it together.</value>
   </data>
   <data name="ThemeLabel" xml:space="preserve">
     <value>Theme</value>
@@ -663,7 +663,7 @@
     <value>Put one on the bar</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>Drag one onto a bar and it lands on the slot you drop it on. Press one to change the picture it is drawn with. There is no limit: two of the same reading in different places is an ordinary thing to want.</value>
+    <value>Drag one onto a bar and it lands where you drop it. Two of the same is fine.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
     <value>A program of your own</value>
@@ -675,7 +675,7 @@
     <value>The standard set</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Puts this bar back to what it holds on a new installation: the player, the processor, the memory, both directions of the network, the graphics chip, a temperature, and the battery and Wi-Fi where the machine has them. Undo brings your own arrangement back.</value>
+    <value>Puts back the set the bar came with. Undo brings your own arrangement back.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
     <value>Restore the standard bar</value>
@@ -840,7 +840,7 @@
     <value>{0} of these do not fit</value>
   </data>
   <data name="CrowdedRowHint" xml:space="preserve">
-    <value>The bar has run out of slots. They are kept, and come back if the bar gets longer - turned the other way round, or made compact. Until then they are not on it and cannot be reached from it.</value>
+    <value>The bar has run out of slots. These are kept and come back when there is room - on another edge, or at compact thickness.</value>
   </data>
   <data name="CrowdedButton" xml:space="preserve">
     <value>Take them off</value>
@@ -942,7 +942,7 @@
     <value>{0} are waiting for their moment</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} - on the bar, and taking no slot on it until it is about something on this machine: a battery where the machine runs from the mains, Wi-Fi while the cable is in. Each comes back to the slot it was left on, or to the first free one.</value>
+    <value>{0} - on the bar, taking no slot until it has something to say. It comes back where you left it.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
     <value>Take them off</value>
@@ -967,5 +967,8 @@
   </data>
   <data name="QuietButtonOne" xml:space="preserve">
     <value>Take it off</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

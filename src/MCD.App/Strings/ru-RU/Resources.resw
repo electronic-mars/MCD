@@ -87,7 +87,7 @@
   <data name="SensorsIntro.Text" xml:space="preserve">
     <value>Температуры видеокарты и дисков работают сразу. Процессор и материнская плата подключаются, пока запущен LibreHardwareMonitor (с включённым Remote Web Server) или HWiNFO (с включённой Shared Memory).</value>
   </data>
-  <data name="LiveReadingsTitle" xml:space="preserve">
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Показания сейчас</value>
   </data>
   <!-- Страница «Мониторы» -->
@@ -102,7 +102,7 @@
     <value>Панели возвращаются при входе в систему.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Закрытие этого окна оставляет панели работать. Чтобы остановить их, нажмите эту кнопку — снятие задачи через диспетчер задач оставит зарезервированное место на экране занятым.</value>
+    <value>Закрытие окна оставляет панели работать. Снятие задачи в диспетчере оставит на экране занятое место.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Выйти из Master Control Dock</value>
@@ -402,7 +402,7 @@
     <value>Следующий</value>
   </data>
   <data name="BarHelp" xml:space="preserve">
-    <value>Панель — это ряд мест, и на каждом стоит один виджет: показание, часы, значок программы. Тяните виджет вдоль панели, чтобы переставить на свободное место, или за её пределы, чтобы убрать. Правый клик по свободному месту добавляет туда виджет, по самому виджету — открывает его настройки.</value>
+    <value>Тяните виджет вдоль панели, чтобы переставить, за её пределы — чтобы убрать. Правый клик открывает меню: на пустом месте — что добавить, на виджете — его настройки.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
     <value>Виджеты</value>
@@ -531,7 +531,7 @@
     <value>Сколько данных передаётся прямо сейчас.</value>
   </data>
   <data name="ThemeHint" xml:space="preserve">
-    <value>Светлая, тёмная или как в Windows.</value>
+    <value>Панели и это окно перекрашиваются вместе.</value>
   </data>
   <data name="ThemeLabel" xml:space="preserve">
     <value>Тема</value>
@@ -609,7 +609,7 @@
     <value>Занято памяти</value>
   </data>
   <data name="SenseCpuClockName" xml:space="preserve">
-    <value>Частота процессора</value>
+    <value>Скорость процессора</value>
   </data>
   <data name="SenseGpuPowerName" xml:space="preserve">
     <value>Мощность видеокарты</value>
@@ -621,7 +621,7 @@
     <value>С какой скоростью крутится этот вентилятор.</value>
   </data>
   <data name="SensePower" xml:space="preserve">
-    <value>Сколько энергии он потребляет.</value>
+    <value>Сколько мощности он потребляет.</value>
   </data>
   <data name="SenseRamTotal" xml:space="preserve">
     <value>Сколько оперативной памяти установлено в компьютере.</value>
@@ -663,7 +663,7 @@
     <value>Поставить на панель</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>Перетащите на панель — виджет встанет на то место, куда вы его отпустили. Нажатие меняет значок, которым он нарисован. Ограничений нет: два одинаковых показания в разных местах — обычное дело.</value>
+    <value>Перетащите на панель — виджет встанет туда, куда вы его отпустили. Одинаковых можно ставить сколько угодно.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
     <value>Своя программа</value>
@@ -675,7 +675,7 @@
     <value>Стандартный набор</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Возвращает панель к тому, что она содержит после установки: плеер, процессор, память, обе стороны сети, видеокарта, температура, а также батарея и Wi-Fi там, где они есть у машины. Отмена вернёт вашу расстановку.</value>
+    <value>Вернёт на панель набор из установки. Отмена вернёт вашу расстановку.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
     <value>Вернуть стандартную панель</value>
@@ -726,7 +726,7 @@
     <value>Закреплённая программа сохраняет свой значок</value>
   </data>
   <data name="SenseCpuClock" xml:space="preserve">
-    <value>На какой частоте он работает — в долях от паспортной.</value>
+    <value>Насколько быстро он идёт — в долях от паспортной частоты.</value>
   </data>
   <data name="SenseGpuAll" xml:space="preserve">
     <value>Всё, чем занята видеоподсистема, по счётчикам Windows.</value>
@@ -759,7 +759,7 @@
     <value>С какой скоростью крутится вентилятор видеокарты.</value>
   </data>
   <data name="SenseGpuPower" xml:space="preserve">
-    <value>Сколько энергии потребляет видеокарта.</value>
+    <value>Сколько мощности потребляет видеокарта.</value>
   </data>
   <data name="SenseGpuClockName" xml:space="preserve">
     <value>Частота графики</value>
@@ -840,7 +840,7 @@
     <value>{0} из них не помещаются</value>
   </data>
   <data name="CrowdedRowHint" xml:space="preserve">
-    <value>На панели кончились места. Они сохранены и вернутся, если панель станет длиннее — повёрнутая иначе или компактная. До тех пор их на ней нет и с неё до них не добраться.</value>
+    <value>На панели кончились места. Виджеты сохранены и вернутся, когда места появятся — на другом краю или в компактной толщине.</value>
   </data>
   <data name="CrowdedButton" xml:space="preserve">
     <value>Убрать их</value>
@@ -942,7 +942,7 @@
     <value>{0} ждут своего момента</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} — на панели, но места на ней не занимает, пока ему нечего сказать про эту машину: батарея — когда машина работает от сети, Wi-Fi — пока воткнут кабель. Каждый вернётся на то место, где его оставили, или на первое свободное.</value>
+    <value>{0} — на панели, но места не занимает, пока ему нечего сказать. Вернётся туда, где его оставили.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
     <value>Убрать их</value>
@@ -967,5 +967,8 @@
   </data>
   <data name="QuietButtonOne" xml:space="preserve">
     <value>Убрать</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
   </data>
 </root>

@@ -57,7 +57,16 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial string Icon { get; set; }
 
-    public string Label { get; }
+    /// <summary>
+    /// The name under the figure.
+    /// </summary>
+    /// <remarks>
+    /// Settable, because a roving reading is about whichever part answers the
+    /// question today, and a name that says "Temperature" over a figure whose
+    /// subject keeps changing tells nobody whose temperature it is.
+    /// </remarks>
+    [ObservableProperty]
+    public partial string Label { get; set; }
 
     /// <summary>
     /// What the tooltip says under the value: the hardware when it is known,
@@ -111,6 +120,17 @@ public sealed partial class Metric : ObservableObject
 
     /// <summary>True on a Braun-painted bar, where the accent is the orange.</summary>
     public bool Braun { get; init; }
+
+    /// <summary>
+    /// Whether the sensor is chosen afresh on every tick.
+    /// </summary>
+    /// <remarks>
+    /// False for a reading that is about one named part: found once and kept,
+    /// because the processor does not become a different processor. True where
+    /// the widget is about a question rather than a part - "whichever is
+    /// closest to its limit" - and the answer is meant to change.
+    /// </remarks>
+    public bool Roving { get; init; }
 
     /// <summary>
     /// Whether an ordinary reading takes the accent colour Windows is set to.
@@ -338,7 +358,13 @@ public sealed partial class Metric : ObservableObject
         // driver that finishes loading after the dock is already on screen, or
         // an external monitor program started later, must fill its chip in
         // without the dock being rebuilt.
-        if (Sensor is null && _find(sensors) is { } found)
+        //
+        // And looked up every time when the question itself is "which one",
+        // rather than "where is this one". Kept once, the widget that shows
+        // whichever part is closest to its limit answered that question on the
+        // first second after the program started - on a cold machine doing
+        // nothing - and never asked again.
+        if ((Sensor is null || Roving) && _find(sensors) is { } found && !ReferenceEquals(found, Sensor))
         {
             Sensor = found;
 
@@ -350,6 +376,17 @@ public sealed partial class Metric : ObservableObject
             Detail = found.Hardware.Length > 0 && found.Hardware != found.Label
                 ? $"{found.Label} · {found.Hardware}"
                 : found.Label;
+
+            if (Roving)
+            {
+                Label = found.Label;
+
+                // The name changed, so the width reserved for it is a width for
+                // a word that is no longer there.
+                _labelWide = null;
+            }
+
+            Reserve();
         }
 
         if (Sensor is null)
