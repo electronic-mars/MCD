@@ -73,6 +73,20 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     [ObservableProperty]
     public partial double IconSize { get; set; } = 16;
 
+    /// <summary>
+    /// The stroke to draw the icon with, so that it lands on the same weight
+    /// as the readings however big it is drawn.
+    /// </summary>
+    /// <remarks>
+    /// The icon sits in a Viewbox that scales a 24-unit drawing to whatever
+    /// size the bar's thickness asks for, and the stroke scales with it. A
+    /// fixed 1.7 therefore came out heavier beside a reading drawn at 1.5 -
+    /// seven different weights across the program, from 1.13 to 1.70.
+    /// </remarks>
+    [ObservableProperty]
+    public partial double Stroke { get; set; } = 1.5;
+
+
     [ObservableProperty]
     public partial double FontSize { get; set; } = 12;
 
@@ -114,6 +128,7 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
         }
 
         IconSize = DockMetrics.ReadingIcon(Density);
+        Stroke = 36 / Math.Max(1, IconSize);
         FontSize = DockMetrics.ReadingFont(Density);
 
         Icon = _state.Charging ? "BatteryCharging"
@@ -178,7 +193,15 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
             _state.Minutes % 60);
     }
 
-    public override string Summarise() => Loc.Tr("WidgetBatteryName", "Battery");
+    /// <summary>
+    /// What it is and what it says, in one line.
+    /// </summary>
+    /// <remarks>
+    /// Read out by a screen reader, so it carries the figure as well as the
+    /// name: "Battery" alone is a label on an empty box.
+    /// </remarks>
+    public override string Summarise() =>
+        Loc.Tr("WidgetBatteryName", "Battery") + (Detail.Length > 0 ? " · " + Detail : string.Empty);
 
     /// <summary>
     /// Sized for "100 %" whether it says that or not, so that going from

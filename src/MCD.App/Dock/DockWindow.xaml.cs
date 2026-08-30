@@ -1912,6 +1912,53 @@ public sealed partial class DockWindow : Window
         _ => new Thickness(0),
     };
 
+    /// <summary>
+    /// Whether anybody is looking at this bar.
+    /// </summary>
+    /// <remarks>
+    /// False behind a lock screen. Everything this bar does once a second -
+    /// reading the snapshot, formatting figures, working out whether a slot
+    /// has outgrown itself, watching for the pointer - is done for somebody
+    /// looking at it, and there is nobody. The timers stop rather than the
+    /// work being skipped inside them, because a timer that fires to decide
+    /// not to do anything still wakes the machine.
+    /// </remarks>
+    public bool Watched
+    {
+        get => _watched;
+        set
+        {
+            if (_watched == value || _tornDown)
+            {
+                return;
+            }
+
+            _watched = value;
+
+            if (value)
+            {
+                _tick.Start();
+
+                if (_hiding)
+                {
+                    _watch.Start();
+                }
+
+                // Caught up at once rather than at the end of the next second,
+                // so the first thing seen after unlocking is not a minute-old
+                // figure.
+                Refresh();
+            }
+            else
+            {
+                _tick.Stop();
+                _watch.Stop();
+            }
+        }
+    }
+
+    private bool _watched = true;
+
     private void OnMessage(object? sender, WindowMessageEventArgs e)
     {
         if (e.Message != _appBar.CallbackMessage)

@@ -34,6 +34,9 @@ public sealed class SettingsWidget(WidgetContext context, WidgetConfig entry)
 
     public double IconSize { get; private set; } = 16;
 
+    /// <summary>Same drawn weight as everything else on the bar.</summary>
+    public double Stroke => 36 / Math.Max(1, IconSize);
+
     public override void Attach() => Tick(SensorSnapshot.Empty);
 
     /// <summary>Nothing here follows the readings; it is a door.</summary>

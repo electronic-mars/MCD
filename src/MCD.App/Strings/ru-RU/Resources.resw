@@ -983,4 +983,28 @@
   <data name="IconDefault" xml:space="preserve">
     <value>Тот, что был изначально</value>
   </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>Другие экраны</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Даёт каждому другому экрану те же виджеты на тех же местах. У каждой панели свои копии, отмена вернёт остальные как было.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Сделать такими же</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>те же виджеты</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Передвинуть ближе к началу панели</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Передвинуть дальше по панели</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Убрать с панели</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>На этой панели пока ничего нет.</value>
+  </data>
 </root>

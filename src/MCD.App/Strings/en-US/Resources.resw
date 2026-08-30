@@ -983,4 +983,28 @@
   <data name="IconDefault" xml:space="preserve">
     <value>The one it came with</value>
   </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>The other screens</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Gives every other screen the same widgets in the same places. Each bar keeps its own copies, and undo puts the others back.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Make them the same</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>the same widgets</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Move it earlier along the bar</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Move it later along the bar</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Take it off the bar</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>Nothing on this bar yet.</value>
+  </data>
 </root>

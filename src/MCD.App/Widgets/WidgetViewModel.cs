@@ -107,6 +107,18 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     public virtual string Summarise() => string.Empty;
 
     /// <summary>
+    /// What to call this one in a list of what is on the bar.
+    /// </summary>
+    /// <remarks>
+    /// The kind, unless the widget is one of several of its kind and knows
+    /// which: five readings called "Reading" is a list that cannot be used to
+    /// find anything. Not the same as the summary, which says how a widget is
+    /// set up rather than what it is - "Keys; track name in the tooltip" is
+    /// the right answer to a different question.
+    /// </remarks>
+    public virtual string Called => WidgetCatalog.Find(TypeId)?.Name ?? TypeId;
+
+    /// <summary>
     /// How long this widget is, in effective pixels, before it is drawn.
     /// </summary>
     /// <remarks>

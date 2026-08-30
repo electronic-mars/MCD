@@ -120,6 +120,18 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
     public override bool Matters =>
         Metrics.Count == 0 || Metrics[0].Sensor is not null || _waited < Patience;
 
+    /// <summary>
+    /// Which temperature this is, for a list of what is on the bar.
+    /// </summary>
+    /// <remarks>
+    /// With no part named it is the roving one, and its name says so rather
+    /// than repeating the word twice - the part it happens to be showing this
+    /// second is not what it is called.
+    /// </remarks>
+    public override string Called => Chosen is null
+        ? Loc.Tr("OfferHottest", "Temperature - the hottest")
+        : Loc.Tr("WidgetTemperatureName", "Temperature") + " · " + Name(Chosen);
+
     public override string Summarise() => Name(Chosen);
 
     /// <summary>Along the bar: the chip's width across it, its height down it.</summary>

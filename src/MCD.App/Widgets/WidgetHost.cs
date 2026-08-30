@@ -4,6 +4,7 @@ using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
@@ -126,6 +127,31 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     /// <summary>The view model inside, for whoever arranged the bar.</summary>
     public WidgetViewModel Widget => _widget;
 
+    /// <summary>
+    /// Tells a screen reader what this widget is and what it says.
+    /// </summary>
+    /// <remarks>
+    /// Without it the whole bar is a row of unnamed boxes: the host is a
+    /// ContentControl whose content is a view model, so what gets read out is
+    /// the name of a class. Set from what the widget already writes for its
+    /// own summary, and only when that changes, because this is on the path
+    /// that runs once a second for every widget on every bar.
+    /// </remarks>
+    private void Announce()
+    {
+        string said = _widget.Summarise();
+
+        if (said.Length == 0 || said == _announced)
+        {
+            return;
+        }
+
+        _announced = said;
+        AutomationProperties.SetName(this, said);
+    }
+
+    private string? _announced;
+
     public void Tick(SensorSnapshot snapshot)
     {
         // Three failures in a row and the widget is left alone. One broken
@@ -139,6 +165,7 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         {
             _widget.Tick(snapshot);
             _failures = 0;
+            Announce();
         }
         catch (Exception e)
         {

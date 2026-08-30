@@ -122,6 +122,8 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     public override string Summarise() => Reading.Label;
 
+    public override string Called => Reading.Label;
+
     /// <summary>Along the bar: the chip's width across it, its height down it.</summary>
     public override double Length() =>
         Metrics.Count == 0

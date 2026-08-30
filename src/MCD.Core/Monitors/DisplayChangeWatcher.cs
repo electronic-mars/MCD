@@ -1,4 +1,4 @@
-using Mcd.Interop.Windowing;
+﻿using Mcd.Interop.Windowing;
 using Microsoft.Extensions.Logging;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -40,6 +40,7 @@ public sealed unsafe class DisplayChangeWatcher : IDisposable
     private const uint DbtDeviceRemoveComplete = 0x8004;
     private const uint PbtApmResumeAutomatic = 0x0012;
     private const uint WtsSessionUnlock = 0x8;
+    private const uint WtsSessionLock = 0x7;
 
     private readonly ILogger<DisplayChangeWatcher> _log;
     private readonly BroadcastListener _listener;
@@ -66,6 +67,17 @@ public sealed unsafe class DisplayChangeWatcher : IDisposable
 
     /// <summary>Raised when Explorer restarted and every AppBar must re-register.</summary>
     public event EventHandler? ShellRestarted;
+
+    /// <summary>
+    /// Raised when the session locks or unlocks.
+    /// </summary>
+    /// <remarks>
+    /// True means nobody is looking. A bar goes on reading sensors, laying out
+    /// figures and waking the machine once a second behind a lock screen, for
+    /// an audience of nobody - which on a laptop in a bag is the difference
+    /// between a program running and a program not.
+    /// </remarks>
+    public event EventHandler<bool>? WatchedChanged;
 
     public void Dispose()
     {
@@ -114,6 +126,15 @@ public sealed unsafe class DisplayChangeWatcher : IDisposable
 
     private void OnMessage(object? sender, WindowMessageEventArgs e)
     {
+        if (e.Message == WmSessionChange
+            && (uint)e.WParam is WtsSessionLock or WtsSessionUnlock)
+        {
+            bool watched = (uint)e.WParam == WtsSessionUnlock;
+
+            _log.LogInformation("display.session watched={Watched}", watched);
+            WatchedChanged?.Invoke(this, watched);
+        }
+
         TopologyTrigger? trigger = Classify(e);
         if (trigger is null)
         {

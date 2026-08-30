@@ -1193,6 +1193,8 @@ public sealed partial class SettingsWindow : Window
         // ------------------------------------------------------------ contents
         WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
 
+        WidgetsBody.Children.Add(BarList(dock));
+
         WidgetsBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("BarLiveTitle", "The bar itself"),
@@ -1267,6 +1269,17 @@ public sealed partial class SettingsWindow : Window
                         () => Shed(dock, quiet, Loc.Tr("UndoQuiet", "the ones that were waiting")),
                         "Delete",
                         danger: true))
+                : null,
+
+            // Only where there is somewhere to copy to.
+            _settings.Current.Monitors.Length > 1
+                ? Braun.Row(
+                    Loc.Tr("CopyRow", "The other screens"),
+                    Loc.Tr(
+                        "CopyRowHint",
+                        "Gives every other screen the same widgets in the same places. Each bar keeps its own copies, and undo puts the others back."),
+                    Braun.Action(
+                        Loc.Tr("CopyButton", "Make them the same"), CopyToOthers, "Layout"))
                 : null,
 
             Braun.Row(
@@ -1345,6 +1358,241 @@ public sealed partial class SettingsWindow : Window
     /// change - this is the largest edit the page offers, and a large edit is
     /// exactly the one people want back.
     /// </remarks>
+
+    /// <summary>
+    /// What is on this bar, in the order it stands there.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The bar itself is the better place to arrange things, and it stays the
+    /// better place. But it is not always a reachable place: a bar that hides
+    /// has to be held open with the pointer that is doing the dragging, a bar
+    /// on the third screen is a long way from this window, a bar 86 points
+    /// wide is a small target, and a widget that did not fit is not drawn at
+    /// all - so the one gesture that reaches its settings cannot reach it.
+    /// </para>
+    /// <para>
+    /// So the same widgets are also a list. Choosing one here is the same as
+    /// right-clicking it there, and the two arrows and the cross do what a
+    /// drag and a drag off the bar do.
+    /// </para>
+    /// </remarks>
+    private FrameworkElement BarList(MonitorConfig dock)
+    {
+        List<WidgetConfig> order =
+        [
+            .. dock.Widgets
+                .Select((w, i) => (Widget: w, Index: i))
+                .OrderBy(x => x.Widget.Cell < 0 ? int.MaxValue : x.Widget.Cell)
+                .ThenBy(x => x.Index)
+                .Select(x => x.Widget)
+        ];
+
+        var rows = new List<FrameworkElement?>();
+
+        for (int i = 0; i < order.Count; i++)
+        {
+            WidgetConfig entry = order[i];
+            int at = i;
+
+            var line = new Grid { ColumnSpacing = 6, Padding = new Thickness(13, 7, 13, 7) };
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            var name = new TextBlock
+            {
+                Text = NameOf(entry),
+                FontSize = 14,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = entry.InstanceId == _selectedId ? Braun.Acc : Braun.Tx,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+            };
+
+            line.Children.Add(name);
+
+            Button Small(string glyph, string tip, Action click, bool danger = false)
+            {
+                var button = new Button
+                {
+                    Width = 30,
+                    Height = 26,
+                    Padding = new Thickness(0),
+                    MinWidth = 0,
+                    MinHeight = 0,
+                    Background = Braun.PanelHi,
+                    BorderBrush = Braun.Line,
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(6),
+                    Content = Braun.Glyph(glyph, 13, danger ? Braun.Danger : Braun.Tx2),
+                };
+
+                ToolTipService.SetToolTip(button, tip);
+                button.Click += (_, _) => click();
+
+                return button;
+            }
+
+            Button up = Small(
+                "ArrowUp", Loc.Tr("ListEarlier", "Move it earlier along the bar"), () => Shift(dock, at, -1));
+
+            Button down = Small(
+                "ArrowDown", Loc.Tr("ListLater", "Move it later along the bar"), () => Shift(dock, at, 1));
+
+            up.IsEnabled = at > 0;
+            down.IsEnabled = at < order.Count - 1;
+
+            Grid.SetColumn(up, 1);
+            Grid.SetColumn(down, 2);
+            line.Children.Add(up);
+            line.Children.Add(down);
+
+            Button off = Small(
+                "Delete",
+                Loc.Tr("ListRemove", "Take it off the bar"),
+                () => Rearrange(
+                    dock.StableId,
+                    widgets => [.. widgets.Where(w => w.InstanceId != entry.InstanceId)],
+                    Loc.Tr("UndoRemoved", "a widget taken off")),
+                danger: true);
+
+            Grid.SetColumn(off, 3);
+            line.Children.Add(off);
+
+            // The whole line chooses it, so its own settings appear below
+            // without anybody having to find it on the screen.
+            line.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            line.PointerReleased += (_, _) =>
+            {
+                _selectedId = entry.InstanceId;
+                ShowWidgets();
+            };
+
+            rows.Add(line);
+        }
+
+        return rows.Count > 0
+            ? Braun.Group([.. rows])
+            : Braun.Group(Braun.Row(
+                Loc.Tr("ListEmpty", "Nothing on this bar yet."), null, null));
+    }
+
+    /// <summary>What to call a widget in the list, without drawing it.</summary>
+    private string NameOf(WidgetConfig entry)
+    {
+        WidgetViewModel? widget = Build(entry);
+
+        try
+        {
+            string said = widget?.Called ?? string.Empty;
+
+            return said.Length > 0
+                ? said
+                : WidgetCatalog.Find(entry.TypeId)?.Name ?? entry.TypeId;
+        }
+        finally
+        {
+            widget?.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Moves one widget past its neighbour, by trading places.
+    /// </summary>
+    /// <remarks>
+    /// The slots are swapped rather than the order rewritten, so a bar with
+    /// deliberate gaps in it keeps them: the two widgets change places and
+    /// everything else stays where it was put.
+    /// </remarks>
+    private void Shift(MonitorConfig dock, int at, int by)
+    {
+        List<WidgetConfig> order =
+        [
+            .. dock.Widgets
+                .Select((w, i) => (Widget: w, Index: i))
+                .OrderBy(x => x.Widget.Cell < 0 ? int.MaxValue : x.Widget.Cell)
+                .ThenBy(x => x.Index)
+                .Select(x => x.Widget)
+        ];
+
+        int to = at + by;
+
+        if (at < 0 || to < 0 || at >= order.Count || to >= order.Count)
+        {
+            return;
+        }
+
+        string moved = order[at].InstanceId;
+        string other = order[to].InstanceId;
+        int here = order[at].Cell;
+        int there = order[to].Cell;
+
+        Rearrange(
+            dock.StableId,
+            widgets =>
+            [
+                .. widgets.Select(w =>
+                    w.InstanceId == moved ? w with { Cell = there }
+                    : w.InstanceId == other ? w with { Cell = here }
+                    : w)
+            ],
+            Loc.Tr("UndoMoved", "a widget moved"));
+    }
+
+    /// <summary>
+    /// Gives every other screen the same widgets as this one.
+    /// </summary>
+    /// <remarks>
+    /// The program's first sentence is that each screen has its own bar, and
+    /// the price of that was setting each of them up by hand - thirty drags
+    /// for three screens, because a widget is put on a bar by dragging it
+    /// onto that bar. Copies rather than the same widgets: each bar owns its
+    /// own, so taking one off one screen does not take it off the others.
+    /// The slots are kept, so a bar arranged in groups arrives in groups; a
+    /// narrower screen shuffles them along as it always does.
+    /// </remarks>
+    private void CopyToOthers()
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        SettingsModel current = _settings.Current;
+
+        var others = current.Monitors
+            .Where(m => m.StableId != dock.StableId)
+            .ToList();
+
+        if (others.Count == 0)
+        {
+            return;
+        }
+
+        foreach (MonitorConfig before in others)
+        {
+            Remember(before.StableId, before, Loc.Tr("UndoCopied", "the same widgets"));
+        }
+
+        Write(
+            current with
+            {
+                Monitors =
+                [
+                    .. current.Monitors.Select(m => m.StableId == dock.StableId
+                        ? m
+                        : m with { Widgets = [.. dock.Widgets.Select(w => w.AsNewInstance())] })
+                ],
+            },
+            WriteReason.WidgetConfig);
+
+        _log.LogInformation(
+            "settings.copied from={Monitor} to={Count}", dock.StableId, others.Count);
+
+        ReloadDocks();
+    }
+
     private void ResetDock()
     {
         if (Dock() is not { } dock)

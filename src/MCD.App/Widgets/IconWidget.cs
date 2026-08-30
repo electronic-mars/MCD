@@ -69,6 +69,8 @@ public sealed class IconWidget : WidgetViewModel
 
     public override string Summarise() => Item.Name;
 
+    public override string Called => Item.Name;
+
     /// <summary>A 22-point icon with its padding and margins: exactly one slot.</summary>
     public override double Length() => 30;
 

@@ -62,12 +62,32 @@ public sealed class DockWindowManager : IDisposable
         _onChanged = (_, _) => _ui.TryEnqueue(ReapplySettings);
         _onTopology = (_, trigger) => _coalescer.Poke(trigger);
         _onShell = (_, _) => _ui.TryEnqueue(RebuildEverything);
+        _onWatched = (_, watched) => _ui.TryEnqueue(() => Watched(watched));
 
         _coalescer.Settled += OnSettled;
         _settings.Changed += _onChanged;
         _watcher.TopologyMayHaveChanged += _onTopology;
         _watcher.ShellRestarted += _onShell;
+        _watcher.WatchedChanged += _onWatched;
     }
+
+    /// <summary>
+    /// Tells every bar whether anybody is looking.
+    /// </summary>
+    /// <remarks>
+    /// Behind a lock screen a bar has an audience of nobody, and every second
+    /// it spends reading sensors and laying out figures is a second the
+    /// machine cannot spend asleep.
+    /// </remarks>
+    private void Watched(bool watched)
+    {
+        foreach (DockWindow window in _windows.Values)
+        {
+            window.Watched = watched;
+        }
+    }
+
+    private readonly EventHandler<bool> _onWatched;
 
     private readonly EventHandler<SettingsModel> _onChanged;
     private readonly EventHandler<TopologyTrigger> _onTopology;
@@ -118,6 +138,7 @@ public sealed class DockWindowManager : IDisposable
         _settings.Changed -= _onChanged;
         _watcher.TopologyMayHaveChanged -= _onTopology;
         _watcher.ShellRestarted -= _onShell;
+        _watcher.WatchedChanged -= _onWatched;
 
         foreach (DockWindow window in _windows.Values)
         {
