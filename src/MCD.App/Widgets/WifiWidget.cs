@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
@@ -189,7 +189,7 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
             return 30;
         }
 
-        double along = DockMetrics.ReadingIcon(Density) + 12;
+        double along = DockMetrics.ReadingIcon(Density) + 12 + DockMetrics.ChipPadding;
 
         if (NameVisible == Visibility.Visible)
         {

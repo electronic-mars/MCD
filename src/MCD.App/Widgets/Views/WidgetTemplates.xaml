@@ -68,7 +68,12 @@
                     </StackPanel>
                 </ToolTip>
             </ToolTipService.ToolTip>
-            <StackPanel Orientation="Horizontal" Spacing="6">
+            <!-- Spacing carried by margins, not by StackPanel.Spacing: the
+                 spacing slot is dealt out around every child, the collapsed
+                 alert bell included, and those six invisible points pushed the
+                 ink past the box - the corner clip then shaved the icon's
+                 left edge. Found with a ruler on a 96-DPI bar. -->
+            <StackPanel Orientation="Horizontal">
                 <!-- A stroked Path, not a PathIcon. PathIcon fills the geometry,
                      and these shapes are drawn as lines: filled, the processor
                      becomes a plain square and the network arrows disappear
@@ -76,6 +81,7 @@
                 <Viewbox
                     Width="{x:Bind IconSize, Mode=OneWay}"
                     Height="{x:Bind IconSize, Mode=OneWay}"
+                    Margin="0,0,6,0"
                     VerticalAlignment="Center">
                     <!-- The Canvas fixes the 24-unit grid the icons are drawn on, so
                          every one scales by the same amount whatever its own bounds
@@ -92,7 +98,7 @@
                 </Viewbox>
 
                 <FontIcon
-                    Margin="-4,0"
+                    Margin="0,0,4,0"
                     VerticalAlignment="Center"
                     FontSize="11"
                     Foreground="{x:Bind Colour, Mode=OneWay}"
@@ -192,10 +198,11 @@
     <!-- The way in: one wheel, one slot, and a press that opens the window.
          It draws nothing that changes, so nothing here updates. -->
     <DataTemplate x:Key="mcd.settings" x:DataType="widgets:SettingsWidget">
-        <!-- Three points either side, not six: the drawing is 24 wide and the
-             slot is 30, so the usual margins would ask for 36 and the wheel
-             would be cut off by the end of its own slot. -->
-        <widgets:HoverChip Margin="3,0">
+        <!-- The whole slot, accounted for: margin 6 + icon 24 is the slot
+             exactly, so the chip's usual side padding has to go - with it the
+             wheel sat in a box six points narrower than its ink, and the
+             corner clip shaved both sides of it. -->
+        <widgets:HoverChip Margin="3,0" Padding="0,2">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock x:Uid="SettingsChipTip" FontSize="13" Text="Settings" />
@@ -491,17 +498,20 @@
         system's own feedback for free.
     -->
     <DataTemplate x:Key="mcd.icon" x:DataType="widgets:IconWidget">
+        <!-- Margin 4 + padding 4 + box 20 is 28: inside the slot on both
+             densities. It was 32 in a slot of 30 - or 26, compact - and the
+             button's corner clip shaved a pinned icon on both sides. -->
         <Button
             Margin="{x:Bind Item.Spacing, Mode=OneWay}"
             MinWidth="0"
             MinHeight="0"
-            Padding="3"
+            Padding="2"
             Background="Transparent"
             BorderThickness="0"
             Command="{x:Bind Item.LaunchCommand}"
             CornerRadius="4"
             ToolTipService.ToolTip="{x:Bind Item.Name}">
-            <Grid Width="22" Height="22">
+            <Grid Width="20" Height="20">
                 <Viewbox Visibility="{x:Bind Item.ChosenVisible}">
                     <Canvas Width="24" Height="24">
                         <Path

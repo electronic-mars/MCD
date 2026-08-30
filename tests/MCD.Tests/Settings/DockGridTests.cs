@@ -1,4 +1,5 @@
-﻿using Mcd.Core.Settings;
+﻿using System.Collections.Immutable;
+using Mcd.Core.Settings;
 using Shouldly;
 
 namespace Mcd.Tests.Settings;
@@ -186,6 +187,74 @@ public sealed class DockGridTests
             [(Entry("a", 0), 2), (Entry("b", 10), 2)], capacity: 20);
 
         placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("b", 10)]);
+    }
+
+    [Fact]
+    public void NothingVanishesWhileTheFrontOfTheBarStandsEmpty()
+    {
+        // The third screen, reconstructed from the log of 30.08.2026: a bar
+        // of 63 slots handed cells chosen on a bar of 78. The literal slots
+        // eat the far end, and before this rule six widgets simply vanished
+        // while the whole front of the bar stood empty.
+        List<Placement> placed = DockGrid.Settle(
+            [
+                (Entry("icon", 0), 2),
+                (Entry("media", 53), 6),
+                (Entry("sound", 58), 2),
+                (Entry("gpu", 60), 3),
+                (Entry("temp", 63), 3),
+                (Entry("ram", 66), 3),
+                (Entry("cpu", 69), 3),
+                (Entry("battery", 72), 3),
+                (Entry("clock", 75), 2),
+                (Entry("settings", 77), 1),
+            ],
+            capacity: 63);
+
+        // Every single one is on the bar.
+        placed.Count.ShouldBe(10);
+
+        // And nothing overlaps anything else.
+        var taken = new HashSet<int>();
+        foreach (Placement p in placed)
+        {
+            for (int c = p.Cell; c < p.End; c++)
+            {
+                taken.Add(c).ShouldBeTrue($"{p.InstanceId} overlaps at {c}");
+            }
+        }
+    }
+
+    [Fact]
+    public void AWidgetRescuedAtTheFrontTakesNoCursorWithIt()
+    {
+        // "b" cannot fit at 18 and is rescued at the front; "c" asked for 10
+        // and must still get 10 - a rescue is not a licence to drag everything
+        // after it to the front too.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 16), 3), (Entry("b", 18), 3), (Entry("c", 10), 2)], capacity: 20);
+
+        placed.Single(p => p.InstanceId == "a").Cell.ShouldBe(16);
+        placed.Single(p => p.InstanceId == "b").Cell.ShouldBe(0);
+        placed.Single(p => p.InstanceId == "c").Cell.ShouldBe(10);
+    }
+
+    [Fact]
+    public void AnArrangementScalesToTheBarItArrivesOn()
+    {
+        // The shape survives, the numbers do not: gathered at the far end of
+        // 78 slots means gathered at the far end of 63.
+        ImmutableArray<WidgetConfig> scaled = DockGrid.Scaled(
+            [Entry("icon", 0), Entry("media", 53), Entry("settings", 77), Entry("new")],
+            from: 78,
+            to: 63);
+
+        scaled.Single(w => w.InstanceId == "icon").Cell.ShouldBe(0);
+        scaled.Single(w => w.InstanceId == "media").Cell.ShouldBe(43);
+        scaled.Single(w => w.InstanceId == "settings").Cell.ShouldBe(62);
+
+        // A widget that never had a slot still has none.
+        scaled.Single(w => w.InstanceId == "new").Cell.ShouldBe(-1);
     }
 
     [Fact]

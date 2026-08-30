@@ -1783,14 +1783,35 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
+        // Refitted to each destination, not carried by number. A slot number
+        // chosen on this screen means a place along this screen; on a screen
+        // with fewer slots the literal numbers eat the far end and everything
+        // after them has nowhere to go - which is how the copy arrived on the
+        // third screen missing six of its ten widgets.
+        int? from = _docks.Slots(dock.StableId);
+
         Write(
             current with
             {
                 Monitors =
                 [
-                    .. current.Monitors.Select(m => m.StableId == dock.StableId
-                        ? m
-                        : m with { Widgets = [.. dock.Widgets.Select(w => w.AsNewInstance())] })
+                    .. current.Monitors.Select(m =>
+                    {
+                        if (m.StableId == dock.StableId)
+                        {
+                            return m;
+                        }
+
+                        ImmutableArray<WidgetConfig> copies =
+                            [.. dock.Widgets.Select(w => w.AsNewInstance())];
+
+                        return m with
+                        {
+                            Widgets = from is { } f && _docks.Slots(m.StableId) is { } t
+                                ? DockGrid.Scaled(copies, f, t)
+                                : copies,
+                        };
+                    })
                 ],
             },
             WriteReason.WidgetConfig,

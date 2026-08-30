@@ -290,6 +290,18 @@ public sealed class DockWindowManager : IDisposable
     public Func<string, bool> KeyRefused { get; set; } = _ => false;
 
     /// <summary>What the bar on this screen is holding but cannot show.</summary>
+    /// <summary>
+    /// How many slots a screen's bar has, or null while it has no bar.
+    /// </summary>
+    /// <remarks>
+    /// For refitting a layout to the screen it is being copied to. Only the
+    /// bar knows - the count depends on the screen's width, its scale and the
+    /// bar's density - so a screen that is away answers nothing, and the copy
+    /// falls back to carrying the numbers as they are.
+    /// </remarks>
+    public int? Slots(string stableId) =>
+        _windows.TryGetValue(stableId, out DockWindow? window) ? window.Slots : null;
+
     /// <summary>Points at one widget on one bar, or at nothing anywhere.</summary>
     public void Point(string stableId, string? instanceId)
     {

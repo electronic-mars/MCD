@@ -96,6 +96,9 @@ public sealed partial class DockWindow : Window
     /// <summary>Where the drop would put it, or null while it fits nowhere.</summary>
     private int? _landing;
 
+    /// <summary>How many slots this bar has, for carrying layouts between screens.</summary>
+    public int Slots => _capacity;
+
     /// <summary>How many slots this bar has, and what sits on them.</summary>
     private int _capacity;
     private List<Placement> _placed = [];

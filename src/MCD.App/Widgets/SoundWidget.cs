@@ -158,7 +158,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        double along = DockMetrics.ReadingIcon(Density) + 12;
+        double along = DockMetrics.ReadingIcon(Density) + 12 + DockMetrics.ChipPadding;
 
         if (LevelVisible == Visibility.Visible)
         {

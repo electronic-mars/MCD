@@ -1,4 +1,6 @@
-﻿namespace Mcd.Core.Settings;
+﻿using System.Collections.Immutable;
+
+namespace Mcd.Core.Settings;
 
 /// <summary>
 /// Which end of the bar its contents are gathered at.
@@ -83,8 +85,21 @@ public static class DockGrid
 
             if (cell + span > capacity)
             {
-                // Genuinely no room. The widget keeps its place in the
-                // settings and is simply not drawn - a slot that does not
+                // No room at the tail either. Before a widget is given up on,
+                // the front of the bar is searched: an arrangement made near
+                // the far end of a wide screen lands on a narrower one with
+                // its literal slots eating the far end, and everything after
+                // them has nowhere to go - while the whole front of the bar
+                // stands empty. A widget out of order is a smaller wrong than
+                // a widget that vanishes. It takes no cursor with it: the
+                // ones after it still settle where they asked to be.
+                if (FirstFree(placed, capacity, span) is { } front)
+                {
+                    placed.Add(new Placement(entry.InstanceId, front, span));
+                }
+
+                // Genuinely no room anywhere. The widget keeps its place in
+                // the settings and is simply not drawn - a slot that does not
                 // exist cannot be shown, and dropping it would lose
                 // somebody's widget to a moment of narrowness.
                 continue;
@@ -127,6 +142,33 @@ public static class DockGrid
     /// <summary>The first run of free slots long enough, or null when there is none.</summary>
     public static int? FirstFree(IReadOnlyList<Placement> placed, int capacity, int span) =>
         FirstFree(Occupancy(placed, capacity), span);
+
+    /// <summary>
+    /// The same arrangement, refitted to a bar with a different number of slots.
+    /// </summary>
+    /// <remarks>
+    /// For carrying a layout between screens - the copy button, a preset. The
+    /// numbers cannot survive the journey and the shape can: a row gathered at
+    /// the far end of sixty-eight slots should gather at the far end of fifty,
+    /// which means every slot number scales by the ratio of the two bars.
+    /// Collisions born of the squeeze are left to the settling code, which
+    /// already repairs them by shuffling along.
+    /// </remarks>
+    public static ImmutableArray<WidgetConfig> Scaled(
+        IReadOnlyList<WidgetConfig> widgets, int from, int to)
+    {
+        if (from <= 0 || to <= 0 || from == to)
+        {
+            return [.. widgets];
+        }
+
+        return
+        [
+            .. widgets.Select(w => w.Cell < 0
+                ? w
+                : w with { Cell = Math.Clamp((int)Math.Round(w.Cell * (double)to / from), 0, to - 1) })
+        ];
+    }
 
     /// <summary>Whether a widget of this length fits here, ignoring one of its own.</summary>
     public static bool Fits(

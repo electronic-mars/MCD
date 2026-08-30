@@ -318,7 +318,8 @@ public sealed partial class Metric : ObservableObject
         double label = LabelVisible == Visibility.Visible ? _labelWide.Value : 0;
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
-        return 6 + Spacing.Left + Spacing.Right + IconSize + 6 + Math.Max(value, label);
+        return Mcd.App.Dock.DockMetrics.ChipPadding
+            + Spacing.Left + Spacing.Right + IconSize + 6 + Math.Max(value, label);
     }
 
     /// <summary>How tall this chip is, in effective pixels.</summary>

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
@@ -256,7 +256,7 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
             return DockMetrics.ReadingIcon(Density) + DockMetrics.ReadingFont(Density) + 12;
         }
 
-        return DockMetrics.ReadingIcon(Density) + 12 + _figure.Value + 6;
+        return DockMetrics.ReadingIcon(Density) + 12 + DockMetrics.ChipPadding + _figure.Value + 6;
     }
 
     public override FrameworkElement? CreateEditor(Action<JsonElement?> changed) => null;

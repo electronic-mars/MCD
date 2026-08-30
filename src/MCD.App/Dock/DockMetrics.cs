@@ -42,6 +42,17 @@ public static class DockMetrics
 
     public static double ReadingFont(DockDensity density) =>
         density == DockDensity.Compact ? 14 : 15;
+
+    /// <summary>
+    /// What a HoverChip adds around its content, both sides together.
+    /// </summary>
+    /// <remarks>
+    /// Every widget that declares its length has to count this in, or the ink
+    /// is wider than the box and the chip's rounded-corner clip shaves the
+    /// icon's edge - which is exactly what happened, on every chip whose
+    /// arithmetic forgot it, and was found with a ruler on a 96-DPI bar.
+    /// </remarks>
+    public const double ChipPadding = 6;
     /// <summary>
     /// How far a chip gives under the finger.
     /// </summary>
