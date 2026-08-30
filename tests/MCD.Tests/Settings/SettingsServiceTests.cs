@@ -160,6 +160,119 @@ public sealed class SettingsServiceTests : IDisposable
     }
 
     [Fact]
+    public void UndoTouchesOnlyWhatTheChangeTouched()
+    {
+        using SettingsService service = Open();
+
+        service.Commit(
+            service.Current with
+            {
+                Monitors =
+                [
+                    new MonitorConfig { StableId = "one", Widgets = [] },
+                    new MonitorConfig { StableId = "two", Widgets = [] },
+                ],
+            },
+            WriteReason.UserAction);
+
+        // A person changes the first screen's bar...
+        service.Commit(
+            service.Current with
+            {
+                Monitors =
+                [
+                    service.Current.Monitors[0] with { Edge = AppBarEdge.Left },
+                    service.Current.Monitors[1],
+                ],
+            },
+            WriteReason.UserAction,
+            "the edge");
+
+        // ...and afterwards the second bar writes down where it settled its
+        // widgets, which nobody asked for and nobody can undo.
+        service.Commit(
+            service.Current with
+            {
+                Monitors =
+                [
+                    service.Current.Monitors[0],
+                    service.Current.Monitors[1] with
+                    {
+                        Widgets = [WidgetConfig.New("mcd.cpu") with { Cell = 4 }],
+                    },
+                ],
+            },
+            WriteReason.WidgetConfig);
+
+        service.Undo().ShouldBeTrue();
+
+        // The edge is back, and the second bar's own bookkeeping survived.
+        service.Current.Monitors[0].Edge.ShouldBe(new MonitorConfig().Edge);
+        service.Current.Monitors[1].Widgets.Single().Cell.ShouldBe(4);
+    }
+
+    [Fact]
+    public void AForgottenScreenComesBackWithItsBar()
+    {
+        using SettingsService service = Open();
+
+        service.Commit(
+            service.Current with
+            {
+                Monitors =
+                [
+                    new MonitorConfig { StableId = "one" },
+                    new MonitorConfig { StableId = "gone", Edge = AppBarEdge.Top },
+                ],
+            },
+            WriteReason.UserAction);
+
+        service.Commit(
+            service.Current with
+            {
+                Monitors = [.. service.Current.Monitors.Where(m => m.StableId != "gone")],
+            },
+            WriteReason.UserAction,
+            "a screen forgotten");
+
+        service.Undo().ShouldBeTrue();
+
+        service.Current.Monitors
+            .Single(m => m.StableId == "gone").Edge.ShouldBe(AppBarEdge.Top);
+    }
+
+    [Fact]
+    public void UndoLeavesAScreenThatArrivedAfterwardsAlone()
+    {
+        using SettingsService service = Open();
+
+        service.Commit(
+            service.Current with { Monitors = [new MonitorConfig { StableId = "one" }] },
+            WriteReason.UserAction);
+
+        service.Commit(
+            service.Current with
+            {
+                App = service.Current.App with { Theme = "light" },
+            },
+            WriteReason.UserAction,
+            "the theme");
+
+        // A second screen is plugged in between the change and the undo.
+        service.Commit(
+            service.Current with
+            {
+                Monitors = [.. service.Current.Monitors, new MonitorConfig { StableId = "two" }],
+            },
+            WriteReason.TopologyReconcile);
+
+        service.Undo().ShouldBeTrue();
+
+        service.Current.App.Theme.ShouldBe("system");
+        service.Current.Monitors.Select(m => m.StableId).ShouldBe(["one", "two"]);
+    }
+
+    [Fact]
     public void AnImportedFileLandsOnThisMachinesScreens()
     {
         string copy = Path.Combine(_dir, "copy.json");

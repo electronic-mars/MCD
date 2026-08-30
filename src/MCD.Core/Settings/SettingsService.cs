@@ -90,7 +90,19 @@ public sealed class SettingsService : IDisposable
     /// dragged off a bar while the window was shut was never written down at
     /// all, which is exactly the change somebody wants back.
     /// </remarks>
-    private readonly List<(SettingsModel Model, string What, string? Where)> _undo = [];
+    /// <remarks>
+    /// Both sides of each change are kept, not only the one being put back.
+    /// Undoing by restoring a whole snapshot also un-does everything that
+    /// happened afterwards and was never on this stack - a screen coming back,
+    /// a bar writing down where it settled - and none of that is anybody's to
+    /// take away. Holding what the change produced as well lets the undo touch
+    /// only the parts that are still as it left them.
+    /// </remarks>
+    private readonly List<Change> _undo = [];
+
+    /// <summary>One change, as it was and as it left things.</summary>
+    private readonly record struct Change(
+        SettingsModel Before, SettingsModel After, string What, string? Where);
 
     /// <summary>Whether there is anything to take back.</summary>
     public bool CanUndo => _undo.Count > 0;
@@ -120,14 +132,14 @@ public sealed class SettingsService : IDisposable
             return false;
         }
 
-        (SettingsModel model, string what, _) = _undo[^1];
+        Change change = _undo[^1];
         _undo.RemoveAt(_undo.Count - 1);
 
-        _log.LogInformation("settings.undone {What}", what);
+        _log.LogInformation("settings.undone {What}", change.What);
 
         // Committed without a name of its own, so undoing does not itself go
         // on the stack and leave the button rocking between two states.
-        Commit(model, WriteReason.UserAction);
+        Commit(Rollback(Current, change), WriteReason.UserAction);
 
         return true;
     }
@@ -165,7 +177,7 @@ public sealed class SettingsService : IDisposable
         // ask for back.
         if (what is not null)
         {
-            _undo.Add((previous, what, where));
+            _undo.Add(new Change(previous, model, what, where));
 
             // Twenty-five is plenty, and unbounded is a session's worth of
             // settings held for a button nobody presses twenty-six times.
@@ -177,6 +189,57 @@ public sealed class SettingsService : IDisposable
 
         _log.LogInformation("settings.commit reason={Reason}", reason);
         Changed?.Invoke(this, model);
+    }
+
+    /// <summary>
+    /// The settings as they are, with the parts one change touched put back.
+    /// </summary>
+    /// <remarks>
+    /// Part by part, and only where the part is still exactly as the change
+    /// left it. A screen that has been unplugged since, a bar that has written
+    /// down where it settled its widgets, a widget's own option changed
+    /// afterwards - none of those were what the button offered to take back,
+    /// and none of them are touched.
+    /// </remarks>
+    private static SettingsModel Rollback(SettingsModel now, Change change)
+    {
+        SettingsModel was = change.Before;
+        SettingsModel then = change.After;
+
+        // The screens themselves. A monitor still as the change left it goes
+        // back to how it was; one that has since been added or taken away by
+        // the reconciler is left alone, in the order this machine has now.
+        var before = was.Monitors.ToDictionary(m => m.StableId);
+        var after = then.Monitors.ToDictionary(m => m.StableId);
+
+        var monitors = new List<MonitorConfig>();
+
+        foreach (MonitorConfig mine in now.Monitors)
+        {
+            monitors.Add(
+                after.TryGetValue(mine.StableId, out MonitorConfig? left) && left == mine
+                && before.TryGetValue(mine.StableId, out MonitorConfig? original)
+                    ? original
+                    : mine);
+        }
+
+        // A screen the change itself removed - "forget this screen" - comes
+        // back where the rest of them leave room for it.
+        foreach (MonitorConfig lost in was.Monitors)
+        {
+            if (!after.ContainsKey(lost.StableId)
+                && !monitors.Any(m => m.StableId == lost.StableId))
+            {
+                monitors.Add(lost);
+            }
+        }
+
+        return now with
+        {
+            App = now.App == then.App ? was.App : now.App,
+            Sensors = now.Sensors == then.Sensors ? was.Sensors : now.Sensors,
+            Monitors = [.. monitors],
+        };
     }
 
     /// <summary>Writes a copy of the settings where somebody asks for it.</summary>

@@ -581,6 +581,55 @@ public sealed partial class DockWindow : Window
         AskForSettings(widget);
     }
 
+    /// <summary>
+    /// A left click on a bare part of the bar opens the settings.
+    /// </summary>
+    /// <remarks>
+    /// The right click has always done this and a newcomer does not find it:
+    /// a bar that answers no ordinary click reads as a picture rather than as
+    /// something to press. Only the bare parts - a click on a widget is that
+    /// widget's own business, and what a reading does when pressed is a
+    /// question still open.
+    /// </remarks>
+    private void OnTapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+    {
+        if (e.Handled || DockGrid.At(_placed, CellAt(e.GetPosition(Bar))) is not null)
+        {
+            return;
+        }
+
+        e.Handled = true;
+        AskForSettings(null);
+    }
+
+    /// <summary>
+    /// Draws a line round one widget, so a row in a list can point at it.
+    /// </summary>
+    /// <remarks>
+    /// Two widgets of the same kind on one bar are allowed and common, and a
+    /// list saying "CPU" twice cannot say which line is which chip. The slot
+    /// number in the row helps whoever counts slots; the outline is for
+    /// everybody else. The same line the press-and-hold draws - one way of
+    /// saying "this one" is enough for a program this size.
+    /// </remarks>
+    public void Point(string? instanceId)
+    {
+        if (_pointed is not null)
+        {
+            _pointed.Outline(false);
+            _pointed = null;
+        }
+
+        if (instanceId is not null
+            && _drawn.TryGetValue(instanceId, out WidgetHost? host))
+        {
+            host.Outline(true);
+            _pointed = host;
+        }
+    }
+
+    private WidgetHost? _pointed;
+
     private readonly List<WidgetHost> _hosts = [];
 
     /// <summary>

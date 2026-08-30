@@ -118,6 +118,11 @@ public sealed partial class SettingsWindow : Window
         _settings.Changed += OnSettingsChanged;
         Closed += (_, _) => _settings.Changed -= OnSettingsChanged;
 
+        // A line left round a widget because the window shut while the pointer
+        // was over its row would stay there until something else redrew the
+        // bar - a mark nobody made and nobody can clear.
+        Closed += (_, _) => _docks.Point(string.Empty, null);
+
         Reload();
         Nav.SelectedItem = Nav.MenuItems[0];
     }
@@ -1653,6 +1658,12 @@ public sealed partial class SettingsWindow : Window
                 _selectedId = entry.InstanceId;
                 ShowWidgets();
             };
+
+            // And the bar itself says which one this line is about. Two
+            // widgets of the same kind read as the same row otherwise, and
+            // the arrow next to one of them is then a guess.
+            line.PointerEntered += (_, _) => _docks.Point(dock.StableId, entry.InstanceId);
+            line.PointerExited += (_, _) => _docks.Point(dock.StableId, null);
 
             rows.Add(line);
         }

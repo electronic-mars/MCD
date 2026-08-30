@@ -290,6 +290,15 @@ public sealed class DockWindowManager : IDisposable
     public Func<string, bool> KeyRefused { get; set; } = _ => false;
 
     /// <summary>What the bar on this screen is holding but cannot show.</summary>
+    /// <summary>Points at one widget on one bar, or at nothing anywhere.</summary>
+    public void Point(string stableId, string? instanceId)
+    {
+        foreach ((string id, DockWindow window) in _windows)
+        {
+            window.Point(id == stableId ? instanceId : null);
+        }
+    }
+
     public IReadOnlyList<WidgetConfig> Unplaced(string stableId) =>
         _windows.TryGetValue(stableId, out DockWindow? window) ? window.Unplaced : [];
 
