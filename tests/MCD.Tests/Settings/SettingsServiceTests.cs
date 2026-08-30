@@ -1,4 +1,4 @@
-using Mcd.Core.Settings;
+﻿using Mcd.Core.Settings;
 using Mcd.Interop.AppBar;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
@@ -157,6 +157,74 @@ public sealed class SettingsServiceTests : IDisposable
         using SettingsService again = Open();
 
         again.Current.App.Icons["cpu"].ShouldBe("Rocket");
+    }
+
+    [Fact]
+    public void AnImportedFileLandsOnThisMachinesScreens()
+    {
+        string copy = Path.Combine(_dir, "copy.json");
+
+        using (SettingsService theirs = Open())
+        {
+            theirs.Commit(
+                theirs.Current with
+                {
+                    App = theirs.Current.App with { Theme = "light" },
+                    Monitors =
+                    [
+                        new MonitorConfig
+                        {
+                            StableId = "their-first",
+                            Widgets = [WidgetConfig.New("mcd.cpu")],
+                            Edge = AppBarEdge.Left,
+                        },
+                        new MonitorConfig { StableId = "their-second" },
+                    ],
+                },
+                WriteReason.UserAction);
+
+            theirs.Export(copy);
+        }
+
+        File.Delete(Path.Combine(_dir, "config.json"));
+        File.Delete(Path.Combine(_dir, "config.bak"));
+
+        using SettingsService mine = Open();
+
+        mine.Commit(
+            mine.Current with
+            {
+                Monitors = [new MonitorConfig { StableId = "my-only", FriendlyName = "DELL" }],
+            },
+            WriteReason.UserAction);
+
+        MonitorConfig before = mine.Current.Monitors[0];
+
+        // One screen here, two in the file: the first arrangement lands, the
+        // second has nowhere to go and is said so rather than dropped quietly.
+        mine.Import(copy, "loaded").ShouldBe(1);
+
+        mine.Current.App.Theme.ShouldBe("light");
+        mine.Current.Monitors.Length.ShouldBe(1);
+        mine.Current.Monitors[0].StableId.ShouldBe("my-only");
+        mine.Current.Monitors[0].FriendlyName.ShouldBe("DELL");
+        mine.Current.Monitors[0].Edge.ShouldBe(AppBarEdge.Left);
+        mine.Current.Monitors[0].Widgets.Single().TypeId.ShouldBe("mcd.cpu");
+
+        // And it is one press of undo away, like everything else a person does.
+        mine.Undo().ShouldBeTrue();
+        mine.Current.Monitors[0].ShouldBe(before);
+    }
+
+    [Fact]
+    public void AFileThatIsNotSettingsIsRefused()
+    {
+        string junk = Path.Combine(_dir, "junk.json");
+        File.WriteAllText(junk, "{ this is not json");
+
+        using SettingsService service = Open();
+
+        service.Import(junk, "loaded").ShouldBeNull();
     }
 
     private SettingsService Open() => new(NullLogger<SettingsService>.Instance, _dir);

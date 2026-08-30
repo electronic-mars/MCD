@@ -179,6 +179,62 @@ public sealed class SettingsService : IDisposable
         Changed?.Invoke(this, model);
     }
 
+    /// <summary>Writes a copy of the settings where somebody asks for it.</summary>
+    public void Export(string path)
+    {
+        _store.Export(path, Current);
+        _log.LogInformation("settings.exported to={Path}", path);
+    }
+
+    /// <summary>
+    /// Takes the settings from a file, fitting them to this machine's screens.
+    /// </summary>
+    /// <remarks>
+    /// The screens are the whole difficulty. A bar belongs to a screen by an
+    /// identity built from the hardware, so the same file on another machine
+    /// describes bars for screens that are not there - which is why copying
+    /// config.json across has always arrived with every layout missing. The
+    /// screens here keep their identities and take the arrangements in the
+    /// order they are listed: the first bar in the file lands on the first
+    /// screen. Everything that is not about a particular screen - the theme,
+    /// the keys, the icons, what the readings are called - comes across whole.
+    /// </remarks>
+    /// <returns>How many bars were filled in, or null if the file is not one.</returns>
+    public int? Import(string path, string what)
+    {
+        if (_store.Import(path) is not { } incoming)
+        {
+            return null;
+        }
+
+        SettingsModel theirs = SettingsMigrations.Apply(incoming, _log);
+        SettingsModel here = Current;
+
+        int filled = Math.Min(theirs.Monitors.Length, here.Monitors.Length);
+
+        SettingsModel next = theirs with
+        {
+            Monitors =
+            [
+                .. here.Monitors.Select((mine, i) => i < filled
+                    ? theirs.Monitors[i] with
+                    {
+                        StableId = mine.StableId,
+                        FriendlyName = mine.FriendlyName,
+                    }
+                    : mine),
+            ],
+        };
+
+        Commit(next, WriteReason.UserAction, what);
+
+        _log.LogInformation(
+            "settings.imported from={Path} bars={Bars} of={Of}",
+            path, filled, here.Monitors.Length);
+
+        return filled;
+    }
+
     /// <summary>Writes any pending change out now.</summary>
     public void Flush()
     {

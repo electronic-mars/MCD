@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mcd.Core.Infrastructure;
 using Microsoft.Extensions.Logging;
@@ -89,6 +89,23 @@ internal sealed class SettingsStore(ILogger log, string? directory = null)
             File.Move(TempPath, ConfigPath);
         }
     }
+
+    /// <summary>Writes the settings to a file of somebody's choosing.</summary>
+    /// <remarks>
+    /// Straight out, not through the temp-and-replace dance: this is a copy
+    /// being made somewhere else, and losing it costs one more press of the
+    /// button rather than everything the program knows.
+    /// </remarks>
+    public void Export(string path, SettingsModel model)
+    {
+#pragma warning disable RS0030
+        File.WriteAllText(path, JsonSerializer.Serialize(model, Json));
+#pragma warning restore RS0030
+    }
+
+    /// <summary>Reads a settings file from anywhere, or null if it is not one.</summary>
+    public SettingsModel? Import(string path) =>
+        TryRead(path, out SettingsModel model) ? model : null;
 
     private bool TryRead(string path, out SettingsModel model)
     {

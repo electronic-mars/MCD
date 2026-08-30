@@ -1016,4 +1016,34 @@
   <data name="LastDoorGo" xml:space="preserve">
     <value>Take it off anyway</value>
   </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Save a copy</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Everything: the bars, the theme, the keys, what the readings are called.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Save to a file</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Load a copy</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Undo brings it all back.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Load from a file</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Loaded. {0} of this machine's bars were filled in.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>That file is not a settings file this program can read.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>settings loaded from a file</value>
+  </data>
 </root>

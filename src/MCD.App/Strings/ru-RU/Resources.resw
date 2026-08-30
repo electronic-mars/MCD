@@ -1016,4 +1016,34 @@
   <data name="LastDoorGo" xml:space="preserve">
     <value>Всё равно убрать</value>
   </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Сохранить копию</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Всё: панели, тема, клавиши, имена показаний.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Сохранить в файл</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Загрузить копию</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Заменяет всё на этих страницах. Панели лягут на экраны этой машины в том порядке, в каком были сохранены. Отмена вернёт как было.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Загрузить из файла</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Загружено. Панелей этой машины заполнено: {0}.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>Это не тот файл настроек, который программа умеет читать.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>настройки из файла</value>
+  </data>
 </root>

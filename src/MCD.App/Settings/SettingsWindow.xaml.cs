@@ -2983,7 +2983,23 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("OpenFolder", "Open the folder"),
                     () => Open(AppPaths.Root),
-                    "Folder"))));
+                    "Folder")),
+
+            Braun.Row(
+                Loc.Tr("ExportRow", "Save a copy"),
+                Loc.Tr(
+                    "ExportRowHint",
+                    "Everything: the bars, the theme, the keys, what the readings are called."),
+                Braun.Action(Loc.Tr("ExportButton", "Save to a file"), ExportSettings, "ArrowDown")),
+
+            Braun.Row(
+                Loc.Tr("ImportRow", "Load a copy"),
+                _importSaid.Length > 0
+                    ? _importSaid
+                    : Loc.Tr(
+                        "ImportRowHint",
+                        "Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Undo brings it all back."),
+                Braun.Action(Loc.Tr("ImportButton", "Load from a file"), ImportSettings, "ArrowUp"))));
 
         AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("QuitTitle", "Quitting")));
 
@@ -3001,6 +3017,85 @@ public sealed partial class SettingsWindow : Window
 
     /// <summary>This build's version, for the About page.</summary>
     private string _version = string.Empty;
+
+    /// <summary>What the last load did, said on the row that did it.</summary>
+    private string _importSaid = string.Empty;
+
+    /// <summary>
+    /// Writes everything the program knows to a file somebody chooses.
+    /// </summary>
+    /// <remarks>
+    /// The same shape as the file it keeps for itself, so it can be read and
+    /// edited by whoever wants to.
+    /// </remarks>
+    private async void ExportSettings()
+    {
+        var picker = new Windows.Storage.Pickers.FileSavePicker
+        {
+            SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary,
+            SuggestedFileName = "master-control-dock",
+        };
+
+        picker.FileTypeChoices.Add(Loc.Tr("SettingsFileKind", "Settings"), [".json"]);
+
+        WinRT.Interop.InitializeWithWindow.Initialize(
+            picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
+
+        if (await picker.PickSaveFileAsync() is not { } file)
+        {
+            return;
+        }
+
+        try
+        {
+            _settings.Export(file.Path);
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            _log.LogError(e, "settings.export failed");
+        }
+    }
+
+    /// <summary>
+    /// Takes everything from a file, and says what became of the bars.
+    /// </summary>
+    /// <remarks>
+    /// The count is the honest part. This machine may have fewer screens than
+    /// the one the file came from, and a bar with nowhere to go is simply not
+    /// brought over - which is worth saying on the row rather than leaving
+    /// somebody to count their bars.
+    /// </remarks>
+    private async void ImportSettings()
+    {
+        var picker = new Windows.Storage.Pickers.FileOpenPicker
+        {
+            SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary,
+        };
+
+        picker.FileTypeFilter.Add(".json");
+
+        WinRT.Interop.InitializeWithWindow.Initialize(
+            picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
+
+        if (await picker.PickSingleFileAsync() is not { } file)
+        {
+            return;
+        }
+
+        int? filled = _settings.Import(file.Path, Loc.Tr("UndoImported", "settings loaded from a file"));
+
+        _importSaid = filled is { } bars
+            ? string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("ImportDone", "Loaded. {0} of this machine's bars were filled in."),
+                bars)
+            : Loc.Tr("ImportBad", "That file is not a settings file this program can read.");
+
+        _mine = _settings.Current;
+
+        ReloadDocks();
+        ShowAbout();
+    }
 
 
     private void Open(string path)
