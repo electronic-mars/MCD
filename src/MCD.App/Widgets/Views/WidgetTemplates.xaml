@@ -166,7 +166,12 @@
 
     <!-- Sound: a speaker that says how loud, and a press that silences. -->
     <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
-        <widgets:HoverChip Margin="6,0" Visibility="{x:Bind Shown, Mode=OneWay}">
+        <widgets:HoverChip Margin="3,0" Visibility="{x:Bind Shown, Mode=OneWay}">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
             <StackPanel
                 Orientation="Horizontal"
                 Spacing="6"
@@ -232,7 +237,7 @@
         by giving them no slot rather than by drawing something invisible.
     -->
     <DataTemplate x:Key="mcd.battery" x:DataType="widgets:BatteryWidget">
-        <widgets:HoverChip Margin="6,0">
+        <widgets:HoverChip Margin="3,0">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
@@ -301,7 +306,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="mcd.wifi" x:DataType="widgets:WifiWidget">
-        <widgets:HoverChip Margin="6,0">
+        <widgets:HoverChip Margin="3,0">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
@@ -338,10 +343,18 @@
     <!-- The time, and the date under it on a full-size bar. Tabular figures
          so the minute changing does not shuffle the hour along. -->
     <DataTemplate x:Key="mcd.clock" x:DataType="widgets:ClockWidget">
-        <StackPanel
-            Margin="6,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+        <!-- A chip like everything else, which is also what gives the tooltip
+             its window. The hover answers what the bar has no room for: the
+             seconds, and the date written out in full. -->
+        <widgets:HoverChip Margin="3,0">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
             <!-- The interface face, like everything else on the bar. Consolas
                  draws noticeably smaller digits at the same point size, so the
                  clock came out smaller than the readings beside it; the width
@@ -358,7 +371,8 @@
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 Text="{x:Bind Date, Mode=OneWay}"
                 Visibility="{x:Bind DateVisible, Mode=OneWay}" />
-        </StackPanel>
+            </StackPanel>
+        </widgets:HoverChip>
     </DataTemplate>
 
     <!--

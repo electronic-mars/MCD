@@ -1,4 +1,4 @@
-using Mcd.App.Dock;
+﻿using Mcd.App.Dock;
 using Mcd.Core.Settings;
 using Mcd.Sensors.Contracts;
 using Microsoft.UI.Xaml;
@@ -41,7 +41,7 @@ public sealed class SettingsWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>Nothing here follows the readings; it is a door.</summary>
     public override void Tick(SensorSnapshot snapshot) =>
-        IconSize = DockMetrics.ReadingIcon(Density);
+        IconSize = ReadingIcon;
 
     public override void Press() => WantSettings();
 
@@ -55,7 +55,7 @@ public sealed class SettingsWidget(WidgetContext context, WidgetConfig entry)
     /// Fourteen points of padding rounded it up to two slots - sixty points of
     /// bar for a drawing twenty-four across, on a bar where slots are counted.
     /// </remarks>
-    public override double Length() => DockMetrics.ReadingIcon(Density) + 6;
+    public override double Length() => ReadingIcon + 6;
 
     public override FrameworkElement? CreateEditor(System.Action<System.Text.Json.JsonElement?> changed) => null;
 }

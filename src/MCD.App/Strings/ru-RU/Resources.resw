@@ -1046,4 +1046,64 @@
   <data name="UndoImported" xml:space="preserve">
     <value>настройки из файла</value>
   </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Крупный</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Средний</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Мелкий</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Сохранить эту расстановку</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Запоминает, что стоит на этой панели, под именем — чтобы потом поставить на любую панель, здесь или на другом экране.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Сохранить как пресет</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Поставить на эту панель</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Забыть</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>Виджетов: {0}</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>Как назвать</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Сохранить расстановку</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>сохранённый пресет</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>поставленный пресет</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>забытый пресет</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Звук выключен</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Громкость {0} %</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>нажатие вернёт звук</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>нажатие выключит звук</value>
+  </data>
 </root>

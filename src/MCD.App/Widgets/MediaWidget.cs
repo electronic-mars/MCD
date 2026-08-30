@@ -146,7 +146,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
     public override void Attach()
     {
-        IconSize = DockMetrics.ReadingIcon(Density);
+        IconSize = ReadingIcon;
         FontSize = 10;
         Spacing = GaugeWidget.Gap(Orientation);
         TitleVisible = ShowTitle && Density == DockDensity.Default

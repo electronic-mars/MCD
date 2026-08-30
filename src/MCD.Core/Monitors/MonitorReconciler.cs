@@ -83,7 +83,12 @@ public static class MonitorReconciler
         MonitorInfo primary = snapshot.Monitors.First(m => m.IsPrimary);
         MonitorConfig template = matches.TryGetValue(primary.StableId, out MonitorConfig? existing)
             ? existing
-            : new MonitorConfig();
+
+            // A machine this program has never seen. The standard bar gathers
+            // its row at the far end, the way a taskbar's tray does - the
+            // widgets on it are things to glance at, and the glance goes to
+            // the corner. Anyone's own arrangement inherits as it stands.
+            : new MonitorConfig { Anchor = DockAnchor.End };
 
         foreach (MonitorInfo monitor in pending)
         {

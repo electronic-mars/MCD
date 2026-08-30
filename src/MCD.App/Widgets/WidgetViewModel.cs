@@ -40,6 +40,9 @@ public sealed record WidgetContext(
 
     /// <summary>Light, dark, or whatever Windows is set to.</summary>
     public ElementTheme Theme { get; init; } = ElementTheme.Default;
+
+    /// <summary>"large", "medium" or "small" - how big the readings are drawn.</summary>
+    public string Size { get; init; } = "large";
 }
 
 /// <summary>
@@ -84,6 +87,12 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
 
     /// <summary>How thick the bar is, which decides how big a reading is drawn.</summary>
     public DockDensity Density { get; set; } = DockDensity.Default;
+
+    /// <summary>How big this widget's icon is drawn, from density and the chosen size.</summary>
+    protected double ReadingIcon => Dock.DockMetrics.ReadingIcon(Density, Context.Size);
+
+    /// <summary>How big its text is drawn, likewise.</summary>
+    protected double ReadingFont => Dock.DockMetrics.ReadingFont(Density, Context.Size);
 
     /// <summary>The settings entry this widget was built from.</summary>
     public WidgetConfig Entry { get; }

@@ -37,11 +37,19 @@ public static class DockMetrics
     /// than theirs at a glance, because a reading on this bar is a number to be
     /// read across a room rather than a label beside an icon.
     /// </remarks>
-    public static double ReadingIcon(DockDensity density) =>
-        density == DockDensity.Compact ? 20 : 24;
+    public static double ReadingIcon(DockDensity density, string size = "large") => size switch
+    {
+        "small" => density == DockDensity.Compact ? 14 : 16,
+        "medium" => density == DockDensity.Compact ? 17 : 20,
+        _ => density == DockDensity.Compact ? 20 : 24,
+    };
 
-    public static double ReadingFont(DockDensity density) =>
-        density == DockDensity.Compact ? 14 : 15;
+    public static double ReadingFont(DockDensity density, string size = "large") => size switch
+    {
+        "small" => 12,
+        "medium" => 13,
+        _ => density == DockDensity.Compact ? 14 : 15,
+    };
 
     /// <summary>
     /// What a HoverChip adds around its content, both sides together.

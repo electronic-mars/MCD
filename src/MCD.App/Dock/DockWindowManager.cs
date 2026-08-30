@@ -334,6 +334,7 @@ public sealed class DockWindowManager : IDisposable
             BackdropColour = app.BackdropColour,
             BackdropImage = app.BackdropImage,
             Theme = Appearance.Of(app.Theme),
+            Size = app.Size,
         };
     }
 
@@ -487,7 +488,8 @@ public sealed class DockWindowManager : IDisposable
             .Append(app.Backdrop).Append('|')
             .Append(app.BackdropColour).Append('|')
             .Append(app.BackdropImage).Append('|')
-            .Append(app.Accent).Append('|');
+            .Append(app.Accent).Append('|')
+            .Append(app.Size).Append('|');
 
         foreach (KeyValuePair<string, string> icon in app.Icons)
         {

@@ -73,8 +73,8 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         };
 
         metric.SizeFor(
-            DockMetrics.ReadingIcon(Density),
-            DockMetrics.ReadingFont(Density),
+            ReadingIcon,
+            ReadingFont,
             narrow: Orientation == Orientation.Vertical,
 
             // Not down the side of a screen. The bar is 86 points wide there,
@@ -141,7 +141,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>
-        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(2, 0, 2, 0);
+        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(1, 0, 1, 0);
 }
 
 /// <summary>One thing a gauge can show, and where its figure comes from.</summary>

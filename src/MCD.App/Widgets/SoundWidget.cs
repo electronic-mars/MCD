@@ -66,6 +66,10 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial double FontSize { get; set; } = 12;
 
+    /// <summary>The hover: how loud, and that a press silences.</summary>
+    [ObservableProperty]
+    public partial string Detail { get; set; } = string.Empty;
+
     /// <summary>Whether the figure is written beside the speaker.</summary>
     private bool WithLevel => WidgetOptions.Number(Options, "level") is not 0;
 
@@ -110,9 +114,9 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         }
 
         Shown = Visibility.Visible;
-        IconSize = DockMetrics.ReadingIcon(Density);
+        IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
-        FontSize = DockMetrics.ReadingFont(Density);
+        FontSize = ReadingFont;
 
         Icon = muted.Value ? "SpeakerOff"
             : loud < 0.01f ? "SpeakerOff"
@@ -127,6 +131,17 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         Level = room
             ? Math.Round(loud * 100).ToString("F0", System.Globalization.CultureInfo.InvariantCulture) + " %"
             : string.Empty;
+
+        string state = muted.Value
+            ? Loc.Tr("SoundMutedTip", "Silenced")
+            : string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("SoundLevelTip", "Volume {0} %"),
+                Math.Round(loud * 100));
+
+        Detail = state + " · " + (muted.Value
+            ? Loc.Tr("SoundPressUnmuteTip", "a press lets it speak")
+            : Loc.Tr("SoundPressMuteTip", "a press silences it"));
     }
 
     /// <summary>
@@ -158,11 +173,11 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        double along = DockMetrics.ReadingIcon(Density) + 12 + DockMetrics.ChipPadding;
+        double along = ReadingIcon + 6 + DockMetrics.ChipPadding;
 
         if (LevelVisible == Visibility.Visible)
         {
-            _figure ??= Metric.Wide("100 %", DockMetrics.ReadingFont(Density));
+            _figure ??= Metric.Wide("100 %", ReadingFont);
             along += _figure.Value + 6;
         }
 

@@ -58,6 +58,17 @@ public sealed record AppSettings
     /// </summary>
     public string Language { get; init; } = "system";
 
+    /// <summary>
+    /// How large the readings are drawn: "large", "medium" or "small".
+    /// </summary>
+    /// <remarks>
+    /// Large is the size the bar has always used; small is the sixteen-pixel
+    /// icon and twelve-point text of the PowerToys dock, for whoever wants a
+    /// quieter bar; medium sits between them. Separate from a bar's density,
+    /// which is about how much screen the bar itself takes.
+    /// </remarks>
+    public string Size { get; init; } = "large";
+
     public bool Autostart { get; init; }
 
     /// <summary>
@@ -84,6 +95,30 @@ public sealed record AppSettings
     /// written to again.
     /// </summary>
     public ImmutableArray<LaunchItem> Launcher { get; init; } = [];
+
+    /// <summary>
+    /// Arrangements kept by name, to be put onto any bar.
+    /// </summary>
+    /// <remarks>
+    /// A preset remembers how many slots the bar it was saved from had, so
+    /// that loading it onto a narrower or wider bar can keep the shape by
+    /// scaling the slot numbers rather than carrying them literally - the
+    /// mistake the copy-to-other-screens button made first.
+    /// </remarks>
+    public ImmutableArray<BarPreset> Presets { get; init; } = [];
+}
+
+/// <summary>One saved arrangement: what was on a bar and where it stood.</summary>
+public sealed record BarPreset
+{
+    public string Id { get; init; } = string.Empty;
+
+    public string Name { get; init; } = string.Empty;
+
+    /// <summary>How many slots the bar this was saved from had.</summary>
+    public int Slots { get; init; }
+
+    public ImmutableArray<WidgetConfig> Widgets { get; init; } = [];
 }
 
 /// <summary>One thing the launcher can start.</summary>
@@ -205,17 +240,46 @@ public static class DockContents
     /// </remarks>
     public static ImmutableArray<WidgetConfig> Default =>
     [
+        .. Documents(),
         WidgetConfig.New("mcd.media"),
+        WidgetConfig.New("mcd.sound"),
         Gauge("cpu"),
-        Gauge("ram"),
-        Gauge("up"),
-        Gauge("down"),
-        Gauge("gpu"),
         WidgetConfig.New("mcd.temp"),
+        Gauge("ram"),
+        Gauge("gpu"),
         WidgetConfig.New("mcd.battery"),
         WidgetConfig.New("mcd.wifi"),
+        WidgetConfig.New("mcd.clock"),
         WidgetConfig.New("mcd.settings"),
     ];
+
+    /// <summary>
+    /// A pinned link to the Documents folder, on a machine that has one.
+    /// </summary>
+    /// <remarks>
+    /// On the default bar to show, not to be essential: a folder on the bar is
+    /// the feature nobody would guess is there - a link to any folder or
+    /// program, wearing any icon from the set - and the way to say so is to
+    /// have one standing there when the program is first met. Taken off like
+    /// any other widget.
+    /// </remarks>
+    private static IEnumerable<WidgetConfig> Documents()
+    {
+        string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+        if (path.Length == 0 || !Directory.Exists(path))
+        {
+            yield break;
+        }
+
+        yield return WidgetConfig.New("mcd.icon") with
+        {
+            Config = WidgetJson.Object(
+                ("target", path),
+                ("name", Path.GetFileName(path)),
+                ("icon", "Folder")),
+        };
+    }
 
     /// <summary>One reading, as a widget of its own.</summary>
     public static WidgetConfig Gauge(string reading) =>

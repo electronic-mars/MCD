@@ -125,9 +125,9 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
             return;
         }
 
-        IconSize = DockMetrics.ReadingIcon(Density);
+        IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
-        FontSize = DockMetrics.ReadingFont(Density);
+        FontSize = ReadingFont;
 
         // An unknown strength is drawn as no strength, not as full. The
         // aerial is read to decide whether to move seats, and "I do not know"
@@ -189,14 +189,14 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
             return 30;
         }
 
-        double along = DockMetrics.ReadingIcon(Density) + 12 + DockMetrics.ChipPadding;
+        double along = ReadingIcon + 6 + DockMetrics.ChipPadding;
 
         if (NameVisible == Visibility.Visible)
         {
             // Reserved for the longest name that will be drawn rather than for
             // this one, so that walking from one network to another does not
             // shove everything to the right of it along.
-            _figure ??= Metric.Wide(new string('m', Longest), DockMetrics.ReadingFont(Density));
+            _figure ??= Metric.Wide(new string('m', Longest), ReadingFont);
             along += _figure.Value + 6;
         }
 

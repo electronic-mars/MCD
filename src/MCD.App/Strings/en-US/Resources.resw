@@ -1046,4 +1046,64 @@
   <data name="UndoImported" xml:space="preserve">
     <value>settings loaded from a file</value>
   </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Keep this arrangement</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Saves what is on this bar, by name, to be put onto any bar later - here or on another screen.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Save as a preset</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Put it on this bar</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Forget it</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} widgets</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>What to call it</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Save this arrangement</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>a preset saved</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>a preset put on</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>a preset forgotten</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Silenced</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Volume {0} %</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>a press lets it speak</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>a press silences it</value>
+  </data>
 </root>

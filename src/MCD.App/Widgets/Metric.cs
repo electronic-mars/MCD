@@ -223,7 +223,7 @@ public sealed partial class Metric : ObservableObject
     /// where readings sit above one another.
     /// </remarks>
     [ObservableProperty]
-    public partial Thickness Spacing { get; set; } = new(2, 0, 2, 0);
+    public partial Thickness Spacing { get; set; } = new(1, 0, 1, 0);
 
     /// <summary>
     /// Sizes this reading for the bar it is going on.

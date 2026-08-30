@@ -46,6 +46,17 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial Visibility DateVisible { get; set; } = Visibility.Visible;
 
+    /// <summary>
+    /// The whole answer, for the hover: seconds and the date written out.
+    /// </summary>
+    /// <remarks>
+    /// The bar shows what fits; the hover shows what the bar had no room for.
+    /// A compact bar drops the date and nothing anywhere shows the seconds,
+    /// so this is where both live.
+    /// </remarks>
+    [ObservableProperty]
+    public partial string Detail { get; set; } = string.Empty;
+
     [ObservableProperty]
     public partial double TimeSize { get; set; } = 14;
 
@@ -81,10 +92,12 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     {
         DateTime now = DateTime.Now;
 
-        TimeSize = DockMetrics.ReadingFont(Density);
+        TimeSize = ReadingFont;
         DateSize = Math.Max(9, TimeSize - 4);
 
         Time = now.ToString(Pattern, CultureInfo.CurrentCulture);
+        Detail = now.ToString("T", CultureInfo.CurrentCulture)
+            + Environment.NewLine + now.ToString("D", CultureInfo.CurrentCulture);
 
         // The date is dropped on a compact bar whatever the setting says:
         // there is one line of room, and the time is the line worth having.
@@ -135,13 +148,13 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
         // Measured once. Both strings are the longest a fixed pattern ever
         // gets, in a fixed size: asking the text engine for them again every
         // second was work for an answer that cannot change.
-        _time ??= Metric.Wide(Widest(Pattern), DockMetrics.ReadingFont(Density));
-        _date ??= Metric.Wide(Widest("ddd d MMM"), Math.Max(9, DockMetrics.ReadingFont(Density) - 4));
+        _time ??= Metric.Wide(Widest(Pattern), ReadingFont);
+        _date ??= Metric.Wide(Widest("ddd d MMM"), Math.Max(9, ReadingFont - 4));
 
         double time = _time.Value;
         double date = DateVisible == Visibility.Visible ? _date.Value : 0;
 
-        double along = Math.Max(time, date) + 14;
+        double along = Math.Max(time, date) + 6 + Mcd.App.Dock.DockMetrics.ChipPadding;
 
         return Orientation == Orientation.Vertical
             ? (DateVisible == Visibility.Visible ? 34 : 22)

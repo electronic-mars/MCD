@@ -140,9 +140,9 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
             return;
         }
 
-        IconSize = DockMetrics.ReadingIcon(Density);
+        IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
-        FontSize = DockMetrics.ReadingFont(Density);
+        FontSize = ReadingFont;
 
         // Unknown reads as full rather than as empty: a battery whose level
         // the firmware will not give is not a flat battery, and drawing it
@@ -247,16 +247,16 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
                 && Orientation == Microsoft.UI.Xaml.Controls.Orientation.Horizontal
                 ? "100 %"
                 : "100",
-            DockMetrics.ReadingFont(Density));
+            ReadingFont);
 
         // Down the side of a screen the figure goes under the drawing rather
         // than beside it, so the length is the height of the two.
         if (Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical)
         {
-            return DockMetrics.ReadingIcon(Density) + DockMetrics.ReadingFont(Density) + 12;
+            return ReadingIcon + ReadingFont + 12;
         }
 
-        return DockMetrics.ReadingIcon(Density) + 12 + DockMetrics.ChipPadding + _figure.Value + 6;
+        return ReadingIcon + 6 + DockMetrics.ChipPadding + _figure.Value + 6;
     }
 
     public override FrameworkElement? CreateEditor(Action<JsonElement?> changed) => null;

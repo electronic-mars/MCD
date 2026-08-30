@@ -73,8 +73,8 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
         };
 
         metric.SizeFor(
-            DockMetrics.ReadingIcon(Density),
-            DockMetrics.ReadingFont(Density),
+            ReadingIcon,
+            ReadingFont,
             narrow: Orientation == Orientation.Vertical,
 
             // Not down the side of a screen. The bar is 86 points wide there,

@@ -672,6 +672,22 @@ public sealed partial class SettingsWindow : Window
             BackdropExtraRow(look),
 
             Braun.Row(
+                Loc.Tr("SizeLabel", "Size of the readings"),
+                Loc.Tr(
+                    "SizeHint",
+                    "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
+                Braun.Segs(
+                    [
+                        Loc.Tr("SegSizeLarge", "Large"),
+                        Loc.Tr("SegSizeMedium", "Medium"),
+                        Loc.Tr("SegSizeSmall", "Small"),
+                    ],
+                    Math.Max(0, Array.IndexOf(Sizes, look.Size)),
+                    i => ApplyLook(size: Sizes[i]),
+                    wide: true),
+                stack: true),
+
+            Braun.Row(
                 Loc.Tr("AccentLabel", "Colour of the readings"),
                 Loc.Tr(
                     "AccentHint",
@@ -920,7 +936,10 @@ public sealed partial class SettingsWindow : Window
     private bool _restartOffered;
 
     /// <summary>The one writer of the appearance settings.</summary>
-    private void ApplyLook(string? theme = null, string? backdrop = null, string? accent = null)
+    private static readonly string[] Sizes = ["large", "medium", "small"];
+
+    private void ApplyLook(
+        string? theme = null, string? backdrop = null, string? accent = null, string? size = null)
     {
         SettingsModel current = _settings.Current;
 
@@ -932,6 +951,7 @@ public sealed partial class SettingsWindow : Window
                     Theme = theme ?? current.App.Theme,
                     Backdrop = backdrop ?? current.App.Backdrop,
                     Accent = accent ?? current.App.Accent,
+                    Size = size ?? current.App.Size,
                 },
             },
             WriteReason.UserAction,
@@ -1370,6 +1390,45 @@ public sealed partial class SettingsWindow : Window
                     "Undo",
                     danger: true))));
 
+        // ------------------------------------------------------------ presets
+        WidgetsBody.Children.Add(Braun.Heading("Star", Loc.Tr("PresetsGroup", "Presets")));
+
+        var presetRows = new List<FrameworkElement?>
+        {
+            Braun.Row(
+                Loc.Tr("PresetSaveRow", "Keep this arrangement"),
+                Loc.Tr(
+                    "PresetSaveRowHint",
+                    "Saves what is on this bar, by name, to be put onto any bar later - here or on another screen."),
+                Braun.Action(Loc.Tr("PresetSaveButton", "Save as a preset"), SavePreset, "Plus")),
+        };
+
+        foreach (BarPreset preset in _settings.Current.App.Presets)
+        {
+            string id = preset.Id;
+
+            var apply = Braun.Action(
+                Loc.Tr("PresetApply", "Put it on this bar"), () => ApplyPreset(id), "ArrowDown");
+
+            var drop = Braun.Action(
+                Loc.Tr("PresetDelete", "Forget it"), () => DeletePreset(id), "Delete", danger: true);
+
+            presetRows.Add(Braun.Row(
+                preset.Name,
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("PresetHint", "{0} widgets"),
+                    preset.Widgets.Length),
+                new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 8,
+                    Children = { apply, drop },
+                }));
+        }
+
+        WidgetsBody.Children.Add(Braun.Group([.. presetRows]));
+
         // ------------------------------------------------------- chosen widget
         if (Inspector() is { } inspector)
         {
@@ -1383,6 +1442,108 @@ public sealed partial class SettingsWindow : Window
             _inspectorAt = null;
         }
 
+    }
+
+    /// <summary>Asks for a name and keeps this bar's arrangement under it.</summary>
+    private async void SavePreset()
+    {
+        if (Dock() is not { } dock || _docks.Slots(dock.StableId) is not { } slots)
+        {
+            return;
+        }
+
+        var box = new TextBox
+        {
+            Header = Loc.Tr("PresetNameHeader", "What to call it"),
+            Text = ScreenName(dock.StableId),
+        };
+
+        box.SelectionLength = box.Text.Length;
+
+        var dialog = new ContentDialog
+        {
+            Title = Loc.Tr("PresetSaveTitle", "Save this arrangement"),
+            PrimaryButtonText = Loc.Tr("PresetSaveGo", "Save"),
+            CloseButtonText = Loc.Tr("Cancel", "Cancel"),
+            DefaultButton = ContentDialogButton.Primary,
+            XamlRoot = Root.XamlRoot,
+            Content = new StackPanel { MinWidth = 320, Children = { box } },
+        };
+
+        if (await dialog.ShowAsync() != ContentDialogResult.Primary || box.Text.Trim().Length == 0)
+        {
+            return;
+        }
+
+        SettingsModel current = _settings.Current;
+
+        var preset = new BarPreset
+        {
+            Id = Guid.NewGuid().ToString("N"),
+            Name = box.Text.Trim(),
+            Slots = slots,
+            Widgets = dock.Widgets,
+        };
+
+        Write(
+            current with
+            {
+                App = current.App with { Presets = [.. current.App.Presets, preset] },
+            },
+            WriteReason.UserAction,
+            Loc.Tr("UndoPresetSaved", "a preset saved"));
+
+        _log.LogInformation("settings.preset saved name={Name} widgets={Count}", preset.Name, preset.Widgets.Length);
+        ShowWidgets();
+    }
+
+    /// <summary>
+    /// Puts a saved arrangement onto the bar being edited.
+    /// </summary>
+    /// <remarks>
+    /// Fresh instances, scaled slots: the preset remembers how many slots its
+    /// bar had, and the numbers are refitted to this one so the shape arrives
+    /// rather than the arithmetic. Undo puts back what was there.
+    /// </remarks>
+    private void ApplyPreset(string id)
+    {
+        if (Dock() is not { } dock
+            || _settings.Current.App.Presets.FirstOrDefault(p => p.Id == id) is not { } preset)
+        {
+            return;
+        }
+
+        ImmutableArray<WidgetConfig> copies = [.. preset.Widgets.Select(w => w.AsNewInstance())];
+
+        _selectedId = null;
+
+        Rearrange(
+            dock.StableId,
+            _ => preset.Slots > 0 && _docks.Slots(dock.StableId) is { } here
+                ? DockGrid.Scaled(copies, preset.Slots, here)
+                : copies,
+            Loc.Tr("UndoPresetApplied", "a preset put on"));
+
+        _log.LogInformation("settings.preset applied name={Name} monitor={Monitor}", preset.Name, dock.StableId);
+    }
+
+    /// <summary>Forgets one saved arrangement. Undoable like everything here.</summary>
+    private void DeletePreset(string id)
+    {
+        SettingsModel current = _settings.Current;
+
+        Write(
+            current with
+            {
+                App = current.App with
+                {
+                    Presets = [.. current.App.Presets.Where(p => p.Id != id)],
+                },
+            },
+            WriteReason.UserAction,
+            Loc.Tr("UndoPresetDropped", "a preset forgotten"));
+
+        ShowWidgets();
     }
 
     /// <summary>
