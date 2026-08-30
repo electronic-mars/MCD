@@ -144,7 +144,7 @@
                      in the item's content together, and the name keeps its own
                      x:Uid. Two icon sets in one window read as two programs,
                      and the join was the first four things on the page. -->
-                <NavigationViewItem Tag="docks">
+                <NavigationViewItem x:Uid="NavDocksItem" Tag="docks">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
                             <Canvas Width="24" Height="24">
@@ -160,7 +160,7 @@
                         <TextBlock x:Uid="NavDocks" VerticalAlignment="Center" Text="Bars" />
                     </StackPanel>
                 </NavigationViewItem>
-                <NavigationViewItem Tag="widgets">
+                <NavigationViewItem x:Uid="NavWidgetsItem" Tag="widgets">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
                             <Canvas Width="24" Height="24">
@@ -176,7 +176,7 @@
                         <TextBlock x:Uid="NavWidgets" VerticalAlignment="Center" Text="Widgets" />
                     </StackPanel>
                 </NavigationViewItem>
-                <NavigationViewItem Tag="appearance">
+                <NavigationViewItem x:Uid="NavLookItem" Tag="appearance">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
                             <Canvas Width="24" Height="24">
@@ -192,7 +192,7 @@
                         <TextBlock x:Uid="NavAppearance" VerticalAlignment="Center" Text="Appearance" />
                     </StackPanel>
                 </NavigationViewItem>
-                <NavigationViewItem Tag="sensors">
+                <NavigationViewItem x:Uid="NavSensorsItem" Tag="sensors">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
                             <Canvas Width="24" Height="24">
@@ -211,7 +211,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Tag="about">
+                <NavigationViewItem x:Uid="NavProgramItem" Tag="about">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
                             <Canvas Width="24" Height="24">

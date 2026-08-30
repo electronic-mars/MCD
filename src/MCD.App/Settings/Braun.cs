@@ -144,11 +144,12 @@ public static class Braun
         {
             Orientation = Orientation.Horizontal,
             Spacing = 7,
-            // Hung ten points into the gutter, so that the words of the
-            // heading start on the same line as the names of the rows it
-            // heads. With the icon in the column, the words began eleven
-            // points to the right of everything they were naming.
-            Margin = new Thickness(-10, 14, 0, 7),
+            // Not hung into the gutter to line the words up with the row
+            // names below. That was tried: the heading's own drawing then
+            // sits outside the column and is cut off by its edge, and a
+            // clipped icon is a worse fault than eleven points of
+            // misalignment between a heading and the rows under it.
+            Margin = new Thickness(0, 14, 0, 7),
         };
 
         row.Children.Add(Glyph(glyph, 16, Tx3));
