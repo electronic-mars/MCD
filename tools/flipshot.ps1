@@ -23,6 +23,7 @@ $env:MCD_DATA_DIR = Join-Path $scratch 'MCD'
 $env:MCD_SELFTEST = '1'
 $env:MCD_SELFTEST_SECONDS = '22'
 $env:MCD_SELFTEST_FLIP = 'density'
+if ($env:MCD_FLIP_PAINT -eq '1') { $env:MCD_PAINT = '1' }
 
 if ($Config) {
     New-Item -ItemType Directory -Force $env:MCD_DATA_DIR | Out-Null
@@ -82,4 +83,4 @@ Select-String -Path (Join-Path $logDir '*.log') -Pattern 'selftest.flipped|dock.
     ForEach-Object { $_.Line } | Select-Object -Last 20
 
 Remove-Item -Recurse -Force $scratch -ErrorAction SilentlyContinue
-Remove-Item Env:MCD_DATA_DIR, Env:MCD_SELFTEST, Env:MCD_SELFTEST_SECONDS, Env:MCD_SELFTEST_FLIP -ErrorAction SilentlyContinue
+Remove-Item Env:MCD_DATA_DIR, Env:MCD_SELFTEST, Env:MCD_SELFTEST_SECONDS, Env:MCD_SELFTEST_FLIP, Env:MCD_PAINT -ErrorAction SilentlyContinue

@@ -352,6 +352,19 @@ public sealed partial class DockWindow : Window
         else
         {
             _appBar.SetPosition(Config.Edge, Monitor.Bounds, thickness);
+
+            // Whatever a slide left behind is taken back. Place() pins the
+            // bar to a fixed thickness so the twenty frames of a slide do not
+            // relayout the widgets; pinned again, the bar must fill whatever
+            // the window is - or a thickness change grows the window and
+            // leaves the bar the old size, its bottom line cut off. Found
+            // with diagnostic paint: a blue bar 30 tall in a red window 48.
+            Bar.Height = double.NaN;
+            Bar.Width = double.NaN;
+            Bar.VerticalAlignment = VerticalAlignment.Stretch;
+            Bar.HorizontalAlignment = HorizontalAlignment.Stretch;
+            _push.X = 0;
+            _push.Y = 0;
         }
 
         if (Config.Mode == AppBarMode.Desktop)
