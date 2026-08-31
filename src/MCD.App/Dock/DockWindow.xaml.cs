@@ -122,6 +122,12 @@ public sealed partial class DockWindow : Window
     private WidgetHost? _outlined;
     private bool _offBar;
 
+    /// <summary>Which window is mid-refresh, for reading crash logs.</summary>
+    private static int _refreshing;
+
+    /// <summary>Which window is mid-refresh, for reading crash logs.</summary>
+    public static int Refreshing => _refreshing;
+
     /// <summary>The slot grid, drawn only while something is in flight.</summary>
     private readonly List<Rectangle> _slots = [];
     private bool _hiding;
@@ -136,6 +142,10 @@ public sealed partial class DockWindow : Window
         Config = config;
 
         InitializeComponent();
+
+        _log.LogInformation(
+            "dock.window born={Window} monitor={Monitor}",
+            GetHashCode(), monitor.Identity.FriendlyName);
 
         _hwnd = WindowNative.GetWindowHandle(this);
         _subclass = new WindowSubclass(_hwnd);
@@ -289,6 +299,11 @@ public sealed partial class DockWindow : Window
         }
 
         _tornDown = true;
+
+        _log.LogInformation(
+            "dock.window torndown={Window} monitor={Monitor}",
+            GetHashCode(), Monitor.Identity.FriendlyName);
+
         _tick.Stop();
         _hold.Stop();
         _slide?.Stop();
@@ -1582,6 +1597,7 @@ public sealed partial class DockWindow : Window
             _capacity,
             [.. _placed.Where(p => _drawn.ContainsKey(p.InstanceId))
                 .Select(p => ((FrameworkElement)_drawn[p.InstanceId], p))]);
+
     }
 
     /// <summary>
@@ -2025,6 +2041,16 @@ public sealed partial class DockWindow : Window
 
     private void Refresh()
     {
+        // A stopped timer can still deliver the tick it had already queued,
+        // and by then this window may be a corpse. And a window rebuilt in a
+        // storm can reach its first ticks before its island has attached -
+        // walking XAML that has no root logged E_UNEXPECTED on the good days
+        // and took the whole process on the bad ones (c0000005, 31.08).
+        if (_tornDown || Content?.XamlRoot is null)
+        {
+            return;
+        }
+
         // A bar that has slid off the screen shows nothing, so there is
         // nothing to bring up to date. It is caught up in one go on the way
         // back out, which takes 200 milliseconds nobody can read a number in.
@@ -2034,6 +2060,8 @@ public sealed partial class DockWindow : Window
         }
 
         SensorSnapshot snapshot = _sensors.Current;
+
+        _refreshing = GetHashCode();
 
         foreach (WidgetHost host in _hosts)
         {

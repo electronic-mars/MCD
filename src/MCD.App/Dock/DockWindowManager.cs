@@ -59,7 +59,21 @@ public sealed class DockWindowManager : IDisposable
         // while the shell restarts would otherwise put the docks back up
         // after teardown, and the shell would keep an edge claimed against
         // windows that no longer exist.
-        _onChanged = (_, _) => _ui.TryEnqueue(ReapplySettings);
+        _onChanged = (_, _) =>
+        {
+            // Coalesced: a rebuild writes settled cells back for every bar,
+            // and each write announced another full pass. One pending pass
+            // reads the newest settings when it runs; a queue of them is the
+            // same work done four times in a row.
+            if (Interlocked.Exchange(ref _reapplyQueued, 1) == 0)
+            {
+                _ui.TryEnqueue(() =>
+                {
+                    Interlocked.Exchange(ref _reapplyQueued, 0);
+                    ReapplySettings();
+                });
+            }
+        };
         _onTopology = (_, trigger) => _coalescer.Poke(trigger);
         _onShell = (_, _) => _ui.TryEnqueue(RebuildEverything);
         _onWatched = (_, watched) => _ui.TryEnqueue(() => Watched(watched));
@@ -242,18 +256,22 @@ public sealed class DockWindowManager : IDisposable
         // the one change most worth taking back, and until now it was the one
         // change never written down - the history lived in a settings window
         // that is usually shut while somebody is dragging.
-        _settings.Commit(
-            next,
-            WriteReason.WidgetConfig,
-            what ?? (drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar")),
-            stableId);
-
+        // Before the commit, not after: the commit announces the change, and
+        // whoever runs on that announcement must find these maps already
+        // agreeing with what was written - or it schedules another rebuild to
+        // fix a difference that does not exist.
         if (drawn
             && next.Monitors.FirstOrDefault(m => m.StableId == stableId) is { } config)
         {
             _dressed[stableId] = Look(config);
             _held[stableId] = Contents(config);
         }
+
+        _settings.Commit(
+            next,
+            WriteReason.WidgetConfig,
+            what ?? (drawn ? null : Loc.Tr("UndoOnTheBar", "on the bar")),
+            stableId);
     }
 
     /// <summary>
@@ -363,7 +381,19 @@ public sealed class DockWindowManager : IDisposable
                 string look = Look(plan.Config);
                 string held = Contents(plan.Config);
 
-                if (!_dressed.TryGetValue(id, out string? dressed) || dressed != look)
+                if (window.Config.Density != plan.Config.Density)
+                {
+                    // The bar changes its own thickness in place. Tearing the
+                    // window down and building another put three fresh windows
+                    // through appbar renegotiation at once, and the process
+                    // did not reliably survive the second toggle - a crash on
+                    // one machine, a hang on another run. The window already
+                    // knows how to re-register its strip and rebuild its
+                    // widgets at the new sizes.
+                    window.RefreshWidgets(plan.Config, Context());
+                    window.ApplyPosition();
+                }
+                else if (!_dressed.TryGetValue(id, out string? dressed) || dressed != look)
                 {
                     window.RefreshWidgets(plan.Config, Context());
                 }
@@ -474,6 +504,8 @@ public sealed class DockWindowManager : IDisposable
     }
 
     /// <summary>How each dock window was last dressed, by stable id.</summary>
+    private int _reapplyQueued;
+
     private readonly Dictionary<string, string> _dressed = [];
 
     /// <summary>What each dock window was last holding, by stable id.</summary>
@@ -543,6 +575,5 @@ public sealed class DockWindowManager : IDisposable
         window.Monitor.Bounds.Equals(plan.Monitor.Bounds)
         && window.Monitor.Dpi == plan.Monitor.Dpi
         && window.Config.Edge == plan.Config.Edge
-        && window.Config.Density == plan.Config.Density
         && window.Config.Mode == plan.Config.Mode;
 }

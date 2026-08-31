@@ -174,6 +174,15 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
 
     public void Tick(SensorSnapshot snapshot)
     {
+        // A tick can already be sitting in the dispatcher's queue when the
+        // window is torn down; delivered late, it walks freed XAML - which
+        // logged E_UNEXPECTED when it was lucky and killed the process when
+        // it was not. A dead host answers nothing.
+        if (_gone)
+        {
+            return;
+        }
+
         // Three failures in a row and the widget is left alone. One broken
         // widget must cost its own square of the bar, not the whole bar.
         if (_failures >= 3)
@@ -190,7 +199,13 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         catch (Exception e)
         {
             _failures++;
-            _log.LogError(e, "widget.tick typeId={TypeId} failed", _widget.TypeId);
+            _log.LogError(
+                e,
+                "widget.tick typeId={TypeId} failed host={Host} rooted={Rooted} in={Window}",
+                _widget.TypeId,
+                GetHashCode(),
+                XamlRoot is not null,
+                Mcd.App.Dock.DockWindow.Refreshing);
         }
     }
 

@@ -540,6 +540,42 @@ public partial class App : Application
             // somebody's desk while they are working. Each page is announced
             // in the log so whatever is photographing can keep in step
             // instead of guessing at a cadence.
+            // A density toggle, made the way a person makes it - the same
+            // write the settings page commits - so the whole rebuild path is
+            // exercised: teardown, appbar renegotiation, refit, write-back.
+            // Announced in the log so the photographer keeps in step.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "density")
+            {
+                void Flip()
+                {
+                    SettingsService settings = _services!.GetRequiredService<SettingsService>();
+                    SettingsModel current = settings.Current;
+
+                    settings.Commit(
+                        current with
+                        {
+                            Monitors =
+                            [
+                                .. current.Monitors.Select(m => m.Enabled
+                                    ? m with
+                                    {
+                                        Density = m.Density == DockDensity.Compact
+                                            ? DockDensity.Default
+                                            : DockDensity.Compact,
+                                    }
+                                    : m)
+                            ],
+                        },
+                        WriteReason.UserAction,
+                        "толщина");
+
+                    log.LogInformation("selftest.flipped");
+                }
+
+                Later(4000, Flip);
+                Later(9000, Flip);
+            }
+
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_PAGE") is { Length: > 0 } pages)
             {
                 // After the rehearsals, not alongside them. The rehearsal at
