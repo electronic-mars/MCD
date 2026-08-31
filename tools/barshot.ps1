@@ -1,4 +1,4 @@
-# Photographs every bar of a scratch run, straight off the screen, and names
+﻿# Photographs every bar of a scratch run, straight off the screen, and names
 # each file by its edge and position. For looking at the widgets as they are
 # actually drawn - the settings window's pages are photographed by pages.ps1,
 # but a widget lives on the bar, and the bar is what people look at.
@@ -67,5 +67,10 @@ foreach ($r in $rects) {
 
 try { $p.WaitForExit(($Seconds + 6) * 1000) | Out-Null } catch {}
 if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force }
+
+# What the run wrote back - so a chain of runs can hand one run's settled
+# arrangement to the next, the way a person's real sessions do.
+Copy-Item (Join-Path $env:MCD_DATA_DIR 'config.json') (Join-Path $Out 'config-after.json') -ErrorAction SilentlyContinue
+
 Remove-Item -Recurse -Force $scratch -ErrorAction SilentlyContinue
 Remove-Item Env:MCD_DATA_DIR, Env:MCD_SELFTEST, Env:MCD_SELFTEST_SECONDS -ErrorAction SilentlyContinue

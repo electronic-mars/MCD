@@ -130,6 +130,9 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
     /// </remarks>
     public override string Called => Chosen is null
         ? Loc.Tr("OfferHottest", "Temperature - the hottest")
+            + (Metrics.Count > 0 && Metrics[0].Sensor is { } watching
+                ? " · " + Names.For(watching)
+                : string.Empty)
         : Loc.Tr("WidgetTemperatureName", "Temperature") + " · " + Name(Chosen);
 
     public override string Summarise() => Name(Chosen);

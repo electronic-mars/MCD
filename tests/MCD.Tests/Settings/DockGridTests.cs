@@ -21,6 +21,9 @@ public sealed class DockGridTests
         Cell = cell,
     };
 
+    private static WidgetConfig Sized(string id, int cell, int span) =>
+        Entry(id, cell) with { Span = span };
+
     [Fact]
     public void UnplacedWidgetsTakeTheFirstFreeSlots()
     {
@@ -239,21 +242,60 @@ public sealed class DockGridTests
     }
 
     [Fact]
-    public void AnArrangementScalesToTheBarItArrivesOn()
+    public void NeighboursStayNeighboursWhenEveryWidgetGetsNarrower()
     {
-        // The shape survives, the numbers do not: gathered at the far end of
-        // 78 slots means gathered at the far end of 63.
-        ImmutableArray<WidgetConfig> scaled = DockGrid.Scaled(
-            [Entry("icon", 0), Entry("media", 53), Entry("settings", 77), Entry("new")],
+        // The smaller reading size: same bar, every widget one slot thinner.
+        // Scaled by position alone this puts a one-slot hole after each
+        // widget; preserving the gaps, the cluster stays a cluster.
+        ImmutableArray<WidgetConfig> refit = DockGrid.Refitted(
+            [Sized("a", 10, 3), Sized("b", 13, 3), Sized("c", 16, 3)],
+            new Dictionary<string, int> { ["a"] = 2, ["b"] = 2, ["c"] = 2 },
+            from: 60,
+            to: 60);
+
+        refit.Select(w => (w.InstanceId, w.Cell)).ShouldBe([("a", 10), ("b", 12), ("c", 14)]);
+    }
+
+    [Fact]
+    public void ADeliberateGapScalesWithTheBar()
+    {
+        // A folder at the start, a cluster at the end of 78 slots, arriving
+        // on 63: the widgets touch as they touched, and the emptiness between
+        // scales with the bar.
+        ImmutableArray<WidgetConfig> refit = DockGrid.Refitted(
+            [Sized("icon", 0, 2), Sized("media", 53, 6), Sized("gear", 59, 1), Entry("new")],
+            new Dictionary<string, int> { ["icon"] = 2, ["media"] = 6, ["gear"] = 1 },
             from: 78,
             to: 63);
 
-        scaled.Single(w => w.InstanceId == "icon").Cell.ShouldBe(0);
-        scaled.Single(w => w.InstanceId == "media").Cell.ShouldBe(43);
-        scaled.Single(w => w.InstanceId == "settings").Cell.ShouldBe(62);
+        refit.Single(w => w.InstanceId == "icon").Cell.ShouldBe(0);
+
+        // Gap of 51 scales to 41: media at 2 + 41 = 43, gear flush after it.
+        refit.Single(w => w.InstanceId == "media").Cell.ShouldBe(43);
+        refit.Single(w => w.InstanceId == "gear").Cell.ShouldBe(49);
 
         // A widget that never had a slot still has none.
-        scaled.Single(w => w.InstanceId == "new").Cell.ShouldBe(-1);
+        refit.Single(w => w.InstanceId == "new").Cell.ShouldBe(-1);
+    }
+
+    [Fact]
+    public void ARefitRoundTripComesHome()
+    {
+        // Thickness there and back: adjacency in, adjacency out, at the
+        // original cells.
+        var spansAt68 = new Dictionary<string, int> { ["a"] = 4, ["b"] = 4 };
+        var spansAt78 = new Dictionary<string, int> { ["a"] = 3, ["b"] = 3 };
+
+        ImmutableArray<WidgetConfig> there = DockGrid.Refitted(
+            [Sized("a", 40, 3), Sized("b", 43, 3)], spansAt68, from: 78, to: 68);
+
+        // What the write-back would record after the journey out.
+        ImmutableArray<WidgetConfig> recorded =
+            [.. there.Select(w => w with { Span = spansAt68[w.InstanceId] })];
+
+        ImmutableArray<WidgetConfig> home = DockGrid.Refitted(recorded, spansAt78, from: 68, to: 78);
+
+        home.Select(w => (w.InstanceId, w.Cell)).ShouldBe([("a", 40), ("b", 43)]);
     }
 
     [Fact]

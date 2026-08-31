@@ -156,10 +156,27 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         Listen();
     }
 
-    /// <summary>Nothing here follows the readings; it follows what is playing.</summary>
+    /// <summary>
+    /// Nothing here follows the readings - but the sessions are re-read on a
+    /// slow beat of their own.
+    /// </summary>
+    /// <remarks>
+    /// The events are not enough on their own, and this was seen, not
+    /// supposed: a browser tab that was already playing when the bar started
+    /// raised nothing, and the buttons sat dim beside live music until an
+    /// unrelated player started and shook the list. A closed tab's artwork
+    /// likewise outstayed the tab. Asking every few seconds costs one COM
+    /// call and heals every event that never came.
+    /// </remarks>
     public override void Tick(SensorSnapshot snapshot)
     {
+        if (++_beat % 3 == 0)
+        {
+            Repick();
+        }
     }
+
+    private uint _beat;
 
     /// <summary>
     /// The artwork, three keys, and the track's name when it is written out.

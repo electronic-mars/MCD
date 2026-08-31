@@ -307,6 +307,20 @@ public sealed record WidgetConfig
     public string TypeId { get; init; } = string.Empty;
 
     /// <summary>
+    /// How many slots this widget held when its cell was written. Zero until
+    /// the bar has said.
+    /// </summary>
+    /// <remarks>
+    /// Without it, two adjacent widgets and two widgets a gap apart look the
+    /// same in the settings - just two numbers - and a change that shrinks
+    /// every widget (a smaller reading size, a denser bar) turns adjacency
+    /// into a row of little gaps nobody asked for. With the old span written
+    /// down, the gap between neighbours is knowable, and it is the gap that
+    /// is preserved.
+    /// </remarks>
+    public int Span { get; init; }
+
+    /// <summary>
     /// Which slot of the bar this sits at, counted from the near end.
     /// </summary>
     /// <remarks>

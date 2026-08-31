@@ -305,6 +305,10 @@ public sealed class DockWindowManager : IDisposable
     public int? Slots(string stableId) =>
         _windows.TryGetValue(stableId, out DockWindow? window) ? window.Slots : null;
 
+    /// <summary>What the live widget calls itself, or null while its bar is away.</summary>
+    public string? Called(string stableId, string instanceId) =>
+        _windows.TryGetValue(stableId, out DockWindow? window) ? window.Called(instanceId) : null;
+
     /// <summary>Points at one widget on one bar, or at nothing anywhere.</summary>
     public void Point(string stableId, string? instanceId)
     {

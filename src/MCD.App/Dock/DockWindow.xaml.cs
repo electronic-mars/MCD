@@ -99,6 +99,18 @@ public sealed partial class DockWindow : Window
     /// <summary>How many slots this bar has, for carrying layouts between screens.</summary>
     public int Slots => _capacity;
 
+    /// <summary>
+    /// What the live widget calls itself, or null while it is not drawn.
+    /// </summary>
+    /// <remarks>
+    /// For the settings list. A throwaway copy has never met a sensor, so it
+    /// calls the roving thermometer "the hottest" and a renamed reading by
+    /// its old name - and the list then names a widget differently from the
+    /// bar standing right there, which reads as a widget missing.
+    /// </remarks>
+    public string? Called(string instanceId) =>
+        _drawn.TryGetValue(instanceId, out WidgetHost? host) ? host.Widget.Called : null;
+
     /// <summary>How many slots this bar has, and what sits on them.</summary>
     private int _capacity;
     private List<Placement> _placed = [];
@@ -1232,8 +1244,66 @@ public sealed partial class DockWindow : Window
 
         _built = built;
         _drawn = hosts;
+        Refit();
         Settle();
         WriteBackCells();
+    }
+
+    /// <summary>
+    /// Re-lays the arrangement when the bar or the widgets have changed size
+    /// since the cells were written.
+    /// </summary>
+    /// <remarks>
+    /// The cells are numbers on a particular bar, and the widgets' widths are
+    /// part of the same arithmetic: change the density and both move, change
+    /// the reading size and the widths alone do. Either way the gaps are what
+    /// the arrangement actually is - two widgets standing together must still
+    /// stand together when both get narrower, or every such change leaves a
+    /// row of little holes. Settled literally instead, the row scattered; and
+    /// scaled by position alone, it grew gaps at every shrink.
+    /// </remarks>
+    private void Refit()
+    {
+        var spans = _built.ToDictionary(b => b.Entry.InstanceId, b => b.Span, StringComparer.Ordinal);
+
+        bool resized = Config.Widgets.Any(w =>
+            w.Span > 0 && spans.TryGetValue(w.InstanceId, out int fresh) && fresh > 0 && fresh != w.Span);
+
+        if (Config.Slots == _capacity && !resized)
+        {
+            // Nothing moved, but a bar that has never written its own count
+            // or its spans down still has to, once.
+            if (Config.Widgets.Any(w => w.Cell >= 0 && w.Span == 0))
+            {
+                _recount = true;
+            }
+
+            return;
+        }
+
+        if (Config.Slots > 0)
+        {
+            _log.LogInformation(
+                "dock.refitted monitor={Monitor} from={From} to={To} resized={Resized}",
+                Monitor.Identity.FriendlyName, Config.Slots, _capacity, resized);
+
+            Config = Config with
+            {
+                Widgets = DockGrid.Refitted(Config.Widgets, spans, Config.Slots, _capacity),
+            };
+
+            var cells = Config.Widgets.ToDictionary(w => w.InstanceId, w => w.Cell);
+
+            _built =
+            [
+                .. _built.Select(b => cells.TryGetValue(b.Entry.InstanceId, out int cell)
+                    ? (b.Entry with { Cell = cell }, b.Span)
+                    : b)
+            ];
+        }
+
+        Config = Config with { Slots = _capacity };
+        _recount = true;
     }
 
     /// <summary>
@@ -1249,7 +1319,7 @@ public sealed partial class DockWindow : Window
     /// shorter number in it - only for having stopped being about anything.
     /// </param>
     private int Wants(WidgetViewModel widget, int held) =>
-        widget.Matters
+        widget.Possible
             ? Math.Max(held, DockLayout.SpanOf(widget.Length(), CellSize))
             : 0;
 
@@ -1260,42 +1330,6 @@ public sealed partial class DockWindow : Window
         double length = horizontal ? Monitor.Width / Monitor.Scale : Monitor.Height / Monitor.Scale;
 
         _capacity = DockLayout.Capacity(length, CellSize);
-
-        if (Config.Slots == _capacity)
-        {
-            return;
-        }
-
-        // The cells were written against a different number of slots - the
-        // density changed, or the screen did. Refitted by the ratio of the
-        // two bars, so the arrangement keeps its shape; settled literally,
-        // the tail landed wherever the rescue found room, and the write-back
-        // then recorded the scatter as if somebody had asked for it.
-        if (Config.Slots > 0)
-        {
-            _log.LogInformation(
-                "dock.refitted monitor={Monitor} from={From} to={To}",
-                Monitor.Identity.FriendlyName, Config.Slots, _capacity);
-
-            Config = Config with
-            {
-                Widgets = DockGrid.Scaled(Config.Widgets, Config.Slots, _capacity),
-            };
-
-            var scaled = Config.Widgets.ToDictionary(w => w.InstanceId, w => w.Cell);
-
-            _built =
-            [
-                .. _built.Select(b => scaled.TryGetValue(b.Entry.InstanceId, out int cell)
-                    ? (b.Entry with { Cell = cell }, b.Span)
-                    : b)
-            ];
-        }
-
-        // Recorded either way - a bar that has never said how many slots it
-        // has needs to say so once, or the first density change scatters it.
-        Config = Config with { Slots = _capacity };
-        _recount = true;
     }
 
     /// <summary>Whether the slot count still has to be written down.</summary>
@@ -1579,10 +1613,11 @@ public sealed partial class DockWindow : Window
     private void WriteBackCells()
     {
         var cells = _placed.ToDictionary(
-            p => p.InstanceId, p => Written(p.Cell), StringComparer.Ordinal);
+            p => p.InstanceId, p => (Cell: Written(p.Cell), p.Span), StringComparer.Ordinal);
 
         if (!_recount
-            && Config.Widgets.All(w => !cells.TryGetValue(w.InstanceId, out int cell) || cell == w.Cell))
+            && Config.Widgets.All(w => !cells.TryGetValue(w.InstanceId, out (int Cell, int Span) at)
+                || (at.Cell == w.Cell && at.Span == w.Span)))
         {
             return;
         }
@@ -1595,7 +1630,9 @@ public sealed partial class DockWindow : Window
         ImmutableArray<WidgetConfig> settled =
         [
             .. Config.Widgets.Select(
-                w => cells.TryGetValue(w.InstanceId, out int cell) ? w with { Cell = cell } : w)
+                w => cells.TryGetValue(w.InstanceId, out (int Cell, int Span) at)
+                    ? w with { Cell = at.Cell, Span = at.Span }
+                    : w)
         ];
 
         // Kept here too, so this window's own idea of its layout matches what
@@ -2036,6 +2073,12 @@ public sealed partial class DockWindow : Window
             {
                 continue;
             }
+
+            // Present but about nothing right now - Wi-Fi while the cable is
+            // in - is drawn dim, the way the player's keys already are while
+            // nothing plays. Gone entirely, it was "on the bar and in the
+            // settings but nowhere to be seen".
+            host.Sleeping(host.Widget.Possible && !host.Widget.Matters);
 
             int wants = Wants(host.Widget, span);
 

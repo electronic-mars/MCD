@@ -121,6 +121,26 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     /// <summary>Half-gone: the pointer is off the bar, and letting go removes it.</summary>
     public void Doomed(bool on) => Opacity = on ? 0.25 : (Opacity < 1 ? 0.4 : 1);
 
+    /// <summary>
+    /// Present but about nothing right now: drawn dim, the way the player's
+    /// keys are while nothing plays, so the widget can be seen, aimed at and
+    /// dragged rather than being a hole in the bar.
+    /// </summary>
+    public void Sleeping(bool asleep)
+    {
+        _asleep = asleep;
+
+        // Not while a drag is dressing the opacity its own way.
+        if (Opacity is 1 or Asleep)
+        {
+            Opacity = asleep ? Asleep : 1;
+        }
+    }
+
+    private bool _asleep;
+
+    private const double Asleep = 0.45;
+
     /// <summary>The settings entry this was built from, so the bar can rearrange itself.</summary>
     public WidgetConfig Entry => _widget.Entry;
 

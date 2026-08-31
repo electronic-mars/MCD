@@ -138,36 +138,76 @@ public static class DockGrid
         return anchor == DockAnchor.End ? spare : spare / 2;
     }
 
-    /// <summary>The first run of free slots long enough, or null when there is none.</summary>
-    public static int? FirstFree(IReadOnlyList<Placement> placed, int capacity, int span) =>
-        FirstFree(Occupancy(placed, capacity), span);
-
     /// <summary>
-    /// The same arrangement, refitted to a bar with a different number of slots.
+    /// The same arrangement, re-laid for new widget widths and a new number
+    /// of slots. What is preserved is the gaps: neighbours stay neighbours,
+    /// and a deliberate gap scales with the bar.
     /// </summary>
     /// <remarks>
-    /// For carrying a layout between screens - the copy button, a preset. The
-    /// numbers cannot survive the journey and the shape can: a row gathered at
-    /// the far end of sixty-eight slots should gather at the far end of fifty,
-    /// which means every slot number scales by the ratio of the two bars.
-    /// Collisions born of the squeeze are left to the settling code, which
-    /// already repairs them by shuffling along.
+    /// Cells alone cannot say whether two widgets touch - that needs the old
+    /// spans, which is why the bar writes them down. Widgets whose old span
+    /// was never recorded fall back to plain proportional scaling.
     /// </remarks>
-    public static ImmutableArray<WidgetConfig> Scaled(
-        IReadOnlyList<WidgetConfig> widgets, int from, int to)
+    public static ImmutableArray<WidgetConfig> Refitted(
+        ImmutableArray<WidgetConfig> widgets,
+        IReadOnlyDictionary<string, int> spans,
+        int from,
+        int to)
     {
-        if (from <= 0 || to <= 0 || from == to)
+        if (from <= 0 || to <= 0)
         {
-            return [.. widgets];
+            return widgets;
+        }
+
+        double ratio = (double)to / from;
+        var cells = new Dictionary<string, int>(StringComparer.Ordinal);
+
+        int prevOldEnd = 0;
+        int prevNewEnd = 0;
+
+        foreach (WidgetConfig w in widgets
+            .Where(w => w.Cell >= 0)
+            .OrderBy(w => w.Cell))
+        {
+            int newSpan = spans.TryGetValue(w.InstanceId, out int fresh) ? fresh : w.Span;
+
+            // A widget taking no room takes part in no gaps either.
+            if (newSpan <= 0)
+            {
+                cells[w.InstanceId] = Math.Clamp((int)Math.Round(w.Cell * ratio), 0, to - 1);
+                continue;
+            }
+
+            if (w.Span <= 0)
+            {
+                // Written before spans were recorded: scale the number and
+                // let the settling repair what that gets wrong.
+                int guessed = Math.Clamp((int)Math.Round(w.Cell * ratio), 0, to - 1);
+                cells[w.InstanceId] = Math.Max(guessed, prevNewEnd);
+                prevOldEnd = w.Cell + newSpan;
+                prevNewEnd = cells[w.InstanceId] + newSpan;
+                continue;
+            }
+
+            int gap = Math.Max(0, w.Cell - prevOldEnd);
+            int cell = prevNewEnd + (int)Math.Round(gap * ratio);
+
+            cells[w.InstanceId] = cell;
+            prevOldEnd = w.Cell + w.Span;
+            prevNewEnd = cell + newSpan;
         }
 
         return
         [
-            .. widgets.Select(w => w.Cell < 0
-                ? w
-                : w with { Cell = Math.Clamp((int)Math.Round(w.Cell * (double)to / from), 0, to - 1) })
+            .. widgets.Select(w => cells.TryGetValue(w.InstanceId, out int cell)
+                ? w with { Cell = cell }
+                : w)
         ];
     }
+
+    /// <summary>The first run of free slots long enough, or null when there is none.</summary>
+    public static int? FirstFree(IReadOnlyList<Placement> placed, int capacity, int span) =>
+        FirstFree(Occupancy(placed, capacity), span);
 
     /// <summary>Whether a widget of this length fits here, ignoring one of its own.</summary>
     public static bool Fits(

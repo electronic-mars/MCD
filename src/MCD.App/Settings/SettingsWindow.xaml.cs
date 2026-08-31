@@ -657,29 +657,51 @@ public sealed partial class SettingsWindow : Window
 
         LookBody.Children.Add(Braun.Heading("Brush", Loc.Tr("LookGroupBar", "The bar")));
 
+        // One decision per row, the current answer readable at a glance, the
+        // alternatives behind it. This page was a checkerboard of thirteen
+        // shouting segment keys for four quiet questions, and finding the one
+        // to change meant reading all of them.
         string[] backdrops = ["acrylic", "solid", "colour", "image", "braun"];
+
+        ComboBox Pick(IReadOnlyList<string> labels, int index, Action<int> chosen)
+        {
+            var box = new ComboBox
+            {
+                MinWidth = 200,
+                ItemsSource = labels.ToList(),
+                SelectedIndex = Math.Clamp(index, 0, labels.Count - 1),
+            };
+
+            box.SelectionChanged += (_, _) =>
+            {
+                if (!_filling && box.SelectedIndex >= 0 && box.SelectedIndex != index)
+                {
+                    chosen(box.SelectedIndex);
+                }
+            };
+
+            return box;
+        }
 
         LookBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("ThemeLabel", "Theme"),
                 Loc.Tr("ThemeHint", "The bars and this window follow it together."),
-                Braun.Segs(
+                Pick(
                     [
                         Loc.Tr("SegThemeSystem", "Match Windows"),
                         Loc.Tr("SegThemeLight", "Light"),
                         Loc.Tr("SegThemeDark", "Dark"),
                     ],
                     Appearance.Index(look.Theme),
-                    i => ApplyLook(theme: Appearance.FromIndex(i)),
-                    wide: true),
-                stack: true),
+                    i => ApplyLook(theme: Appearance.FromIndex(i)))),
 
             Braun.Row(
                 Loc.Tr("BackgroundLabel", "Background"),
                 Loc.Tr(
                     "BackgroundHint",
                     "Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw."),
-                Braun.Segs(
+                Pick(
                     [
                         Loc.Tr("SegBackdropTranslucent", "Translucent"),
                         Loc.Tr("SegBackdropSolid", "Solid"),
@@ -688,9 +710,7 @@ public sealed partial class SettingsWindow : Window
                         Loc.Tr("SegBackdropBraun", "Instrument"),
                     ],
                     Math.Max(0, Array.IndexOf(backdrops, look.Backdrop)),
-                    i => ApplyLook(backdrop: backdrops[i]),
-                    wide: true),
-                stack: true),
+                    i => ApplyLook(backdrop: backdrops[i]))),
 
             BackdropExtraRow(look),
 
@@ -699,31 +719,27 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr(
                     "ReadingSizeHint",
                     "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
-                Braun.Segs(
+                Pick(
                     [
                         Loc.Tr("SegSizeLarge", "Large"),
                         Loc.Tr("SegSizeMedium", "Medium"),
                         Loc.Tr("SegSizeSmall", "Small"),
                     ],
                     Math.Max(0, Array.IndexOf(Sizes, look.Size)),
-                    i => ApplyLook(size: Sizes[i]),
-                    wide: true),
-                stack: true),
+                    i => ApplyLook(size: Sizes[i]))),
 
             Braun.Row(
                 Loc.Tr("AccentLabel", "Colour of the readings"),
                 Loc.Tr(
                     "AccentHint",
                     "The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."),
-                Braun.Segs(
+                Pick(
                     [
                         Loc.Tr("SegAccentNeutral", "Plain text"),
                         Loc.Tr("SegAccentWindows", "Windows accent"),
                     ],
                     look.Accent == "windows" ? 1 : 0,
-                    i => ApplyLook(accent: i == 1 ? "windows" : "neutral"),
-                    wide: true),
-                stack: true)));
+                    i => ApplyLook(accent: i == 1 ? "windows" : "neutral")))));
 
     }
 
@@ -1495,14 +1511,29 @@ public sealed partial class SettingsWindow : Window
 
         _selectedId = null;
 
-        Rearrange(
-            dock.StableId,
-            _ => preset.Slots > 0 && _docks.Slots(dock.StableId) is { } here
-                ? DockGrid.Scaled(copies, preset.Slots, here)
-                : copies,
-            Loc.Tr("UndoPresetApplied", "a preset put on"));
+        SettingsModel current = _settings.Current;
+
+        // Carried whole - cells, spans and the slot count they were written
+        // for. The bar itself refits an arrangement from a different bar,
+        // preserving the gaps, because only it knows its own slot count and
+        // its widgets' widths at today's sizes.
+        Write(
+            current with
+            {
+                Monitors =
+                [
+                    .. current.Monitors.Select(m => m.StableId == dock.StableId
+                        ? m with { Widgets = copies, Slots = preset.Slots }
+                        : m)
+                ],
+            },
+            WriteReason.WidgetConfig,
+            Loc.Tr("UndoPresetApplied", "a preset put on"),
+            dock.StableId);
 
         _log.LogInformation("settings.preset applied name={Name} monitor={Monitor}", preset.Name, dock.StableId);
+        ShowDock();
+        ShowWidgets();
     }
 
     /// <summary>Forgets one saved arrangement. Undoable like everything here.</summary>
@@ -1710,7 +1741,12 @@ public sealed partial class SettingsWindow : Window
 
             var name = new TextBlock
             {
-                Text = NameOf(entry),
+                // The widget standing on the bar, asked by name: the copy
+                // built here has never met a sensor, so it would call the
+                // roving thermometer "the hottest" while the bar's own says
+                // "GPU" - and a person comparing the two counts a widget
+                // missing.
+                Text = _docks.Called(dock.StableId, entry.InstanceId) ?? NameOf(entry),
                 FontSize = 14,
                 VerticalAlignment = VerticalAlignment.Center,
                 Foreground = entry.InstanceId == _selectedId ? Braun.Acc : Braun.Tx,
@@ -1901,35 +1937,23 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        // Refitted to each destination, not carried by number. A slot number
-        // chosen on this screen means a place along this screen; on a screen
-        // with fewer slots the literal numbers eat the far end and everything
-        // after them has nowhere to go - which is how the copy arrived on the
-        // third screen missing six of its ten widgets.
-        int? from = _docks.Slots(dock.StableId);
-
+        // Carried whole - cells, spans, and the slot count they were written
+        // for - and refitted by each receiving bar itself, which is the only
+        // party that knows its own slot count and its widgets' widths at its
+        // own density. Scaled here by position alone, the copy arrived with
+        // gaps where the widths differed.
         Write(
             current with
             {
                 Monitors =
                 [
-                    .. current.Monitors.Select(m =>
-                    {
-                        if (m.StableId == dock.StableId)
+                    .. current.Monitors.Select(m => m.StableId == dock.StableId
+                        ? m
+                        : m with
                         {
-                            return m;
-                        }
-
-                        ImmutableArray<WidgetConfig> copies =
-                            [.. dock.Widgets.Select(w => w.AsNewInstance())];
-
-                        return m with
-                        {
-                            Widgets = from is { } f && _docks.Slots(m.StableId) is { } t
-                                ? DockGrid.Scaled(copies, f, t)
-                                : copies,
-                        };
-                    })
+                            Widgets = [.. dock.Widgets.Select(w => w.AsNewInstance())],
+                            Slots = dock.Slots,
+                        })
                 ],
             },
             WriteReason.WidgetConfig,
