@@ -159,51 +159,102 @@ public static class DockGrid
             return widgets;
         }
 
-        double ratio = (double)to / from;
         var cells = new Dictionary<string, int>(StringComparer.Ordinal);
 
-        int prevOldEnd = 0;
-        int prevNewEnd = 0;
+        // The chain: everything with a slot and a width, in bar order. What
+        // an arrangement is, is this chain and its gaps - the emptiness
+        // before the first widget, between neighbours, and after the last.
+        var chain = new List<(string Id, int OldCell, int OldSpan, int NewSpan)>();
 
-        foreach (WidgetConfig w in widgets
-            .Where(w => w.Cell >= 0)
-            .OrderBy(w => w.Cell))
+        foreach (WidgetConfig w in widgets.Where(w => w.Cell >= 0).OrderBy(w => w.Cell))
         {
             int newSpan = spans.TryGetValue(w.InstanceId, out int fresh) ? fresh : w.Span;
 
-            // A widget taking no room takes part in no gaps either.
             if (newSpan <= 0)
             {
-                cells[w.InstanceId] = Math.Clamp((int)Math.Round(w.Cell * ratio), 0, to - 1);
+                // Taking no room, it takes part in no gaps either.
+                cells[w.InstanceId] = Math.Clamp(
+                    (int)Math.Round(w.Cell * (double)to / from), 0, to - 1);
                 continue;
             }
 
             if (w.Span <= 0)
             {
-                // Written before spans were recorded: scale the number and
-                // let the settling repair what that gets wrong.
-                int guessed = Math.Clamp((int)Math.Round(w.Cell * ratio), 0, to - 1);
-                cells[w.InstanceId] = Math.Max(guessed, prevNewEnd);
-                prevOldEnd = w.Cell + newSpan;
-                prevNewEnd = cells[w.InstanceId] + newSpan;
+                // Written before spans were recorded: the width is guessed to
+                // be what it is now, which for a one-time upgrade is close
+                // enough - the write-back replaces the guess with the truth.
+                chain.Add((w.InstanceId, w.Cell, newSpan, newSpan));
                 continue;
             }
 
-            int gap = Math.Max(0, w.Cell - prevOldEnd);
-            int cell = prevNewEnd + (int)Math.Round(gap * ratio);
-
-            cells[w.InstanceId] = cell;
-            prevOldEnd = w.Cell + w.Span;
-            prevNewEnd = cell + newSpan;
+            chain.Add((w.InstanceId, w.Cell, w.Span, newSpan));
         }
 
-        return
+        if (chain.Count == 0)
+        {
+            return Apply(widgets, cells);
+        }
+
+        // Every gap scales by the same factor - the new slack over the old -
+        // and the total is kept exact by handing the rounding remainders to
+        // the largest fractions. Exactness is what keeps the edges honest: a
+        // row flush against either end has a zero gap there, zero stays
+        // zero, and the row stays flush. Scaled loosely, every thickness
+        // round trip walked the user's right-pinned cluster a few slots
+        // further from its edge.
+        var gaps = new List<double>();
+        int cursor = 0;
+
+        foreach ((_, int oldCell, int oldSpan, _) in chain)
+        {
+            gaps.Add(Math.Max(0, oldCell - cursor));
+            cursor = Math.Max(cursor, oldCell) + oldSpan;
+        }
+
+        gaps.Add(Math.Max(0, from - cursor));
+
+        double slackOld = gaps.Sum();
+        int slackNew = to - chain.Sum(c => c.NewSpan);
+
+        var scaled = new int[gaps.Count];
+
+        if (slackOld > 0 && slackNew > 0)
+        {
+            var wanted = gaps.Select(g => g * slackNew / slackOld).ToArray();
+            int given = 0;
+
+            for (int i = 0; i < wanted.Length; i++)
+            {
+                scaled[i] = (int)Math.Floor(wanted[i]);
+                given += scaled[i];
+            }
+
+            foreach (int i in Enumerable.Range(0, wanted.Length)
+                .OrderByDescending(i => wanted[i] - Math.Floor(wanted[i]))
+                .Take(Math.Max(0, slackNew - given)))
+            {
+                scaled[i]++;
+            }
+        }
+
+        int at = scaled[0];
+
+        for (int i = 0; i < chain.Count; i++)
+        {
+            cells[chain[i].Id] = at;
+            at += chain[i].NewSpan + scaled[i + 1];
+        }
+
+        return Apply(widgets, cells);
+    }
+
+    private static ImmutableArray<WidgetConfig> Apply(
+        ImmutableArray<WidgetConfig> widgets, IReadOnlyDictionary<string, int> cells) =>
         [
             .. widgets.Select(w => cells.TryGetValue(w.InstanceId, out int cell)
                 ? w with { Cell = cell }
                 : w)
         ];
-    }
 
     /// <summary>The first run of free slots long enough, or null when there is none.</summary>
     public static int? FirstFree(IReadOnlyList<Placement> placed, int capacity, int span) =>

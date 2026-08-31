@@ -253,7 +253,10 @@ public sealed class DockGridTests
             from: 60,
             to: 60);
 
-        refit.Select(w => (w.InstanceId, w.Cell)).ShouldBe([("a", 10), ("b", 12), ("c", 14)]);
+        // The three slots the shrink freed are shared between the row's two
+        // outer gaps in proportion - the leading ten grows to eleven, the
+        // tail takes the rest - and the neighbours stay glued.
+        refit.Select(w => (w.InstanceId, w.Cell)).ShouldBe([("a", 11), ("b", 13), ("c", 15)]);
     }
 
     [Fact]
@@ -270,9 +273,9 @@ public sealed class DockGridTests
 
         refit.Single(w => w.InstanceId == "icon").Cell.ShouldBe(0);
 
-        // Gap of 51 scales to 41: media at 2 + 41 = 43, gear flush after it.
-        refit.Single(w => w.InstanceId == "media").Cell.ShouldBe(43);
-        refit.Single(w => w.InstanceId == "gear").Cell.ShouldBe(49);
+        // The middle gap and the tail share the shrink in proportion.
+        refit.Single(w => w.InstanceId == "media").Cell.ShouldBe(42);
+        refit.Single(w => w.InstanceId == "gear").Cell.ShouldBe(48);
 
         // A widget that never had a slot still has none.
         refit.Single(w => w.InstanceId == "new").Cell.ShouldBe(-1);
@@ -296,6 +299,54 @@ public sealed class DockGridTests
         ImmutableArray<WidgetConfig> home = DockGrid.Refitted(recorded, spansAt78, from: 68, to: 78);
 
         home.Select(w => (w.InstanceId, w.Cell)).ShouldBe([("a", 40), ("b", 43)]);
+    }
+
+    [Fact]
+    public void ARowAgainstTheFarEndStaysAgainstTheFarEnd()
+    {
+        // The user's own bar: a folder at the start and a cluster ending
+        // flush at slot 78. Every thickness round trip was walking the
+        // cluster a few slots further from the edge; ten toggles later a
+        // quarter of the bar stood empty past the gear.
+        (string Id, int Cell, int Span)[] compact =
+        [
+            ("icon", 0, 2), ("media", 50, 5), ("sound", 55, 2), ("gpu", 57, 3),
+            ("temp", 60, 3), ("ram", 63, 3), ("cpu", 66, 3), ("battery", 69, 3),
+            ("clock", 72, 2), ("gear", 74, 1), ("extra", 75, 3),
+        ];
+
+        var wide = compact.ToDictionary(w => w.Id, w => w.Id is "icon" or "gear" ? w.Span : w.Span + 1);
+        var thin = compact.ToDictionary(w => w.Id, w => w.Span);
+
+        ImmutableArray<WidgetConfig> arrangement = [.. compact.Select(w => Sized(w.Id, w.Cell, w.Span))];
+
+        for (int trip = 0; trip < 5; trip++)
+        {
+            ImmutableArray<WidgetConfig> at68 = DockGrid.Refitted(arrangement, wide, from: 78, to: 68);
+            at68 = [.. at68.Select(w => w with { Span = wide[w.InstanceId] })];
+
+            ImmutableArray<WidgetConfig> at78 = DockGrid.Refitted(at68, thin, from: 68, to: 78);
+            arrangement = [.. at78.Select(w => w with { Span = thin[w.InstanceId] })];
+        }
+
+        // Five round trips later the cluster still ends at the far edge and
+        // the folder still stands at the start.
+        WidgetConfig last = arrangement.Single(w => w.InstanceId == "extra");
+        (last.Cell + last.Span).ShouldBe(78);
+        arrangement.Single(w => w.InstanceId == "icon").Cell.ShouldBe(0);
+
+        // And nothing overlaps anything else.
+        foreach (WidgetConfig w in arrangement)
+        {
+            foreach (WidgetConfig other in arrangement)
+            {
+                if (w.InstanceId != other.InstanceId && w.Cell >= 0 && other.Cell >= 0)
+                {
+                    (w.Cell + w.Span <= other.Cell || other.Cell + other.Span <= w.Cell)
+                        .ShouldBeTrue($"{w.InstanceId} overlaps {other.InstanceId}");
+                }
+            }
+        }
     }
 
     [Fact]
