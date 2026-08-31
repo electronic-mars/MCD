@@ -221,7 +221,8 @@ public sealed class DockWindowManager : IDisposable
         string stableId,
         ImmutableArray<WidgetConfig> widgets,
         bool drawn = false,
-        string? what = null)
+        string? what = null,
+        int? slots = null)
     {
         SettingsModel current = _settings.Current;
 
@@ -230,7 +231,9 @@ public sealed class DockWindowManager : IDisposable
             Monitors =
             [
                 .. current.Monitors.Select(
-                    c => c.StableId == stableId ? c with { Widgets = widgets } : c)
+                    c => c.StableId == stableId
+                        ? c with { Widgets = widgets, Slots = slots ?? c.Slots }
+                        : c)
             ],
         };
 
@@ -401,7 +404,8 @@ public sealed class DockWindowManager : IDisposable
             string stableId = plan.Config.StableId;
             window.Rearranged += (_, widgets) => Save(stableId, widgets);
             window.Watched = _watched;
-            window.Settled += (_, widgets) => Save(stableId, widgets, drawn: true);
+            window.Settled += (_, widgets) =>
+                Save(stableId, widgets, drawn: true, slots: window.Slots);
 
             // Drawn, because the bar is already showing it - and named,
             // because a hand did it.
@@ -494,6 +498,11 @@ public sealed class DockWindowManager : IDisposable
         foreach (KeyValuePair<string, string> icon in app.Icons)
         {
             text.Append(icon.Key).Append('=').Append(icon.Value).Append(';');
+        }
+
+        foreach (KeyValuePair<string, string> name in _settings.Current.Sensors.Names)
+        {
+            text.Append(name.Key).Append('=').Append(name.Value).Append(';');
         }
 
         return text.ToString();

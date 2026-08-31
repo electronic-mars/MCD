@@ -558,7 +558,7 @@
     <value>The standard set</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Puts back the set the bar came with. Undo brings your own arrangement back.</value>
+    <value>Puts back the set the bar came with. Ctrl+Z brings your own arrangement back.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
     <value>Restore the standard bar</value>
@@ -873,7 +873,7 @@
     <value>The other screens</value>
   </data>
   <data name="CopyRowHint" xml:space="preserve">
-    <value>Gives every other screen the same widgets in the same places. Each bar keeps its own copies, and undo puts the others back.</value>
+    <value>Gives every other screen the same widgets, refitted to the shape of this bar. Each bar keeps its own copies; Ctrl+Z puts the others back.</value>
   </data>
   <data name="CopyButton" xml:space="preserve">
     <value>Make them the same</value>
@@ -1029,7 +1029,7 @@
     <value>Load a copy</value>
   </data>
   <data name="ImportRowHint" xml:space="preserve">
-    <value>Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Undo brings it all back.</value>
+    <value>Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Ctrl+Z brings it all back.</value>
   </data>
   <data name="ImportButton" xml:space="preserve">
     <value>Load from a file</value>
@@ -1111,5 +1111,17 @@
   </data>
   <data name="ReadingSizeHint" xml:space="preserve">
     <value>How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Copies</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>General</value>
   </data>
 </root>

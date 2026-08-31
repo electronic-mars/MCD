@@ -146,7 +146,7 @@
                         HorizontalTextAlignment="Left"
                         FontSize="{x:Bind LabelFontSize, Mode=OneWay}"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        Text="{x:Bind Label}"
+                        Text="{x:Bind Label, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis"
                         Visibility="{x:Bind LabelVisible, Mode=OneWay}" />
                 </StackPanel>

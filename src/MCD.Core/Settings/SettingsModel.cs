@@ -205,6 +205,20 @@ public sealed record MonitorConfig
     /// </remarks>
     public ImmutableArray<WidgetConfig> Widgets { get; init; } = DockContents.Default;
 
+    /// <summary>
+    /// How many slots the bar had when these cells were written. Zero until
+    /// the bar has said.
+    /// </summary>
+    /// <remarks>
+    /// A slot number means nothing without the bar it was counted on. When
+    /// the bar comes back with a different count - the density changed, the
+    /// screen changed mode - the arrangement is refitted by the ratio of the
+    /// two, instead of being settled literally and scattering: cells past the
+    /// new end were being rescued one by one at the front of the bar, and the
+    /// write-back then recorded the wreckage.
+    /// </remarks>
+    public int Slots { get; init; }
+
     /// <summary>The three regions files before schema 4 were arranged in. Read
     /// by the migration and never written back.</summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

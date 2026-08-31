@@ -53,8 +53,10 @@ public static class DockGrid
         var placed = new List<Placement>();
         int cursor = 0;
 
-        // Ordered by slot; anything not yet placed keeps the order it was
-        // given and goes after everything that has a slot of its own.
+        // First as asked, without worrying about the end of the bar: each
+        // widget on its slot, or on the first free one after whatever comes
+        // before it. Ordered by slot; anything not yet placed keeps the order
+        // it was given and goes after everything that has a slot of its own.
         foreach ((WidgetConfig entry, int span) in items
             .Select((item, i) => (item, i))
             .OrderBy(x => x.item.Entry.Cell < 0 ? int.MaxValue : x.item.Entry.Cell)
@@ -73,40 +75,37 @@ public static class DockGrid
 
             int cell = Math.Max(entry.Cell < 0 ? 0 : entry.Cell, cursor);
 
-            if (cell + span > capacity)
-            {
-                // Past the end of this bar, but the gap in front of it may be
-                // the whole reason: an arrangement made on a wide screen, or
-                // copied from one, asks for slot 60 on a bar with 40. Closing
-                // up behind whatever came before keeps the order and loses
-                // only the spacing, which is the smaller loss by far.
-                cell = cursor;
-            }
-
-            if (cell + span > capacity)
-            {
-                // No room at the tail either. Before a widget is given up on,
-                // the front of the bar is searched: an arrangement made near
-                // the far end of a wide screen lands on a narrower one with
-                // its literal slots eating the far end, and everything after
-                // them has nowhere to go - while the whole front of the bar
-                // stands empty. A widget out of order is a smaller wrong than
-                // a widget that vanishes. It takes no cursor with it: the
-                // ones after it still settle where they asked to be.
-                if (FirstFree(placed, capacity, span) is { } front)
-                {
-                    placed.Add(new Placement(entry.InstanceId, front, span));
-                }
-
-                // Genuinely no room anywhere. The widget keeps its place in
-                // the settings and is simply not drawn - a slot that does not
-                // exist cannot be shown, and dropping it would lose
-                // somebody's widget to a moment of narrowness.
-                continue;
-            }
-
             placed.Add(new Placement(entry.InstanceId, cell, span));
             cursor = cell + span;
+        }
+
+        if (cursor <= capacity)
+        {
+            return placed;
+        }
+
+        // The row runs off the end - slots chosen on a wider bar, or spans
+        // grown since they were chosen. The row is squeezed leftward from the
+        // far end instead: each widget keeps its place unless the one after
+        // it needs the room, so the order and the shape survive and only the
+        // gaps give way. Squeezed one by one at the first free slot instead,
+        // widgets from the tail landed scattered across the front of the bar,
+        // and the write-back recorded the scatter.
+        while (placed.Count > 0 && placed.Sum(p => p.Span) > capacity)
+        {
+            // Genuinely more widget than bar. The last ones keep their place
+            // in the settings and are simply not drawn - dropping them would
+            // lose somebody's widgets to a moment of narrowness.
+            placed.RemoveAt(placed.Count - 1);
+        }
+
+        int room = capacity;
+
+        for (int i = placed.Count - 1; i >= 0; i--)
+        {
+            int cell = Math.Min(placed[i].Cell, room - placed[i].Span);
+            placed[i] = placed[i] with { Cell = cell };
+            room = cell;
         }
 
         return placed;

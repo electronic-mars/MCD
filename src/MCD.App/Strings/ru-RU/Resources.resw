@@ -558,7 +558,7 @@
     <value>Стандартный набор</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Вернёт на панель набор из установки. Отмена вернёт вашу расстановку.</value>
+    <value>Вернёт на панель набор из установки. Ctrl+Z вернёт вашу расстановку.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
     <value>Вернуть стандартную панель</value>
@@ -873,7 +873,7 @@
     <value>Другие экраны</value>
   </data>
   <data name="CopyRowHint" xml:space="preserve">
-    <value>Даёт каждому другому экрану те же виджеты на тех же местах. У каждой панели свои копии, отмена вернёт остальные как было.</value>
+    <value>Даёт каждому другому экрану те же виджеты, расставленные по форме этой панели. У каждой панели свои копии; Ctrl+Z вернёт остальные как было.</value>
   </data>
   <data name="CopyButton" xml:space="preserve">
     <value>Сделать такими же</value>
@@ -1029,7 +1029,7 @@
     <value>Загрузить копию</value>
   </data>
   <data name="ImportRowHint" xml:space="preserve">
-    <value>Заменяет всё на этих страницах. Панели лягут на экраны этой машины в том порядке, в каком были сохранены. Отмена вернёт как было.</value>
+    <value>Заменяет всё на этих страницах. Панели лягут на экраны этой машины в том порядке, в каком были сохранены. Ctrl+Z вернёт как было.</value>
   </data>
   <data name="ImportButton" xml:space="preserve">
     <value>Загрузить из файла</value>
@@ -1111,5 +1111,17 @@
   </data>
   <data name="ReadingSizeHint" xml:space="preserve">
     <value>Насколько крупно рисуются значки и цифры. Толщина самой панели задаётся на её странице.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Копии</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Общие</value>
   </data>
 </root>

@@ -167,15 +167,15 @@ public sealed class DockGridTests
     }
 
     [Fact]
-    public void AnArrangementFromAWiderScreenClosesUpInsteadOfFallingOff()
+    public void AnArrangementFromAWiderScreenSqueezesLeftwardInsteadOfFallingOff()
     {
-        // What "make the others the same" produces: slots chosen on a bar with
-        // sixty-eight of them, arriving on one with twenty. The spacing cannot
-        // survive that and the order can, so the order is what is kept.
+        // Slots chosen on a wide bar, arriving on one with twenty. The row is
+        // squeezed from the far end: what sat at the end still sits at the
+        // end, what sat at the start stays put, and only the gaps give way.
         List<Placement> placed = DockGrid.Settle(
             [(Entry("a", 0), 2), (Entry("b", 30), 2), (Entry("c", 55), 2)], capacity: 20);
 
-        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("b", 2), ("c", 4)]);
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("b", 16), ("c", 18)]);
     }
 
     [Fact]
@@ -211,8 +211,9 @@ public sealed class DockGridTests
             ],
             capacity: 63);
 
-        // Every single one is on the bar.
+        // Every single one is on the bar, in the order it was arranged.
         placed.Count.ShouldBe(10);
+        placed.Select(p => p.Cell).ShouldBe([.. placed.Select(p => p.Cell).OrderBy(c => c)]);
 
         // And nothing overlaps anything else.
         var taken = new HashSet<int>();
@@ -226,17 +227,15 @@ public sealed class DockGridTests
     }
 
     [Fact]
-    public void AWidgetRescuedAtTheFrontTakesNoCursorWithIt()
+    public void TheSqueezeTakesOnlyTheRoomItNeeds()
     {
-        // "b" cannot fit at 18 and is rescued at the front; "c" asked for 10
-        // and must still get 10 - a rescue is not a licence to drag everything
-        // after it to the front too.
+        // "b" runs off the end by two, so "a" gives two slots of its gap and
+        // "c", further along the bar than the squeeze reaches, does not move.
         List<Placement> placed = DockGrid.Settle(
-            [(Entry("a", 16), 3), (Entry("b", 18), 3), (Entry("c", 10), 2)], capacity: 20);
+            [(Entry("c", 10), 2), (Entry("a", 16), 3), (Entry("b", 18), 3)], capacity: 20);
 
-        placed.Single(p => p.InstanceId == "a").Cell.ShouldBe(16);
-        placed.Single(p => p.InstanceId == "b").Cell.ShouldBe(0);
-        placed.Single(p => p.InstanceId == "c").Cell.ShouldBe(10);
+        placed.Select(p => (p.InstanceId, p.Cell))
+            .ShouldBe([("c", 10), ("a", 14), ("b", 17)]);
     }
 
     [Fact]

@@ -67,6 +67,11 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
 
+            // A name given on the readings page wins over the built-in
+            // caption; without one the caption stays the short word ("CPU"),
+            // not the sensor's own longer label.
+            NameFound = found => Context.Names.Renamed(found.Key) ? Context.Names.For(found) : null,
+
             // As long as this reading ever gets: a rate runs to "888 MB/s",
             // and everything else to a three-figure percentage.
             Sample = reading.Unit == "B/s" ? "888 MB/s" : "100 %",

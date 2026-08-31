@@ -192,6 +192,22 @@
                         <TextBlock x:Uid="NavAppearance" VerticalAlignment="Center" Text="Appearance" />
                     </StackPanel>
                 </NavigationViewItem>
+                <NavigationViewItem x:Uid="NavGeneralItem" Tag="general">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabGeneral}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavGeneral" VerticalAlignment="Center" Text="General" />
+                    </StackPanel>
+                </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavSensorsItem" Tag="sensors">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
@@ -503,6 +519,13 @@
                         </Border>
                     </StackPanel>
 
+
+                    <!-- The whole machine's settings: keys, language, startup,
+                         copies. Not about any one bar, and not about the
+                         program's own papers either. -->
+                    <StackPanel x:Name="GeneralSection" Visibility="Collapsed">
+                        <StackPanel x:Name="GeneralBody" />
+                    </StackPanel>
 
                     <!-- About, opened the way Master Audio Switcher opens its
                          own: the mark, the name, the version, centred, with

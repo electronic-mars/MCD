@@ -97,6 +97,18 @@ public sealed partial class Metric : ObservableObject
     /// </remarks>
     public Func<SensorDescriptor, string>? IconFound { get; init; }
 
+    /// <summary>
+    /// What to call the reading once its sensor is known, when somebody has
+    /// a say in that.
+    /// </summary>
+    /// <remarks>
+    /// The renaming pencil on the readings page changes a reading's name
+    /// everywhere it appears - and the small caption under a figure on the
+    /// bar is the place people actually mean when they rename "CPU" to
+    /// something of their own. Null keeps the widget's built-in caption.
+    /// </remarks>
+    public Func<SensorDescriptor, string?>? NameFound { get; init; }
+
     [ObservableProperty]
     public partial string Text { get; set; } = "--";
 
@@ -374,13 +386,15 @@ public sealed partial class Metric : ObservableObject
                 Icon = IconFound(found);
             }
 
-            Detail = found.Hardware.Length > 0 && found.Hardware != found.Label
-                ? $"{found.Label} · {found.Hardware}"
-                : found.Label;
+            string called = NameFound?.Invoke(found) ?? found.Label;
 
-            if (Roving)
+            Detail = found.Hardware.Length > 0 && found.Hardware != called
+                ? $"{called} · {found.Hardware}"
+                : called;
+
+            if (Roving || NameFound?.Invoke(found) is not null)
             {
-                Label = found.Label;
+                Label = called;
 
                 // The name changed, so the width reserved for it is a width for
                 // a word that is no longer there.

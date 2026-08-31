@@ -1260,7 +1260,46 @@ public sealed partial class DockWindow : Window
         double length = horizontal ? Monitor.Width / Monitor.Scale : Monitor.Height / Monitor.Scale;
 
         _capacity = DockLayout.Capacity(length, CellSize);
+
+        if (Config.Slots == _capacity)
+        {
+            return;
+        }
+
+        // The cells were written against a different number of slots - the
+        // density changed, or the screen did. Refitted by the ratio of the
+        // two bars, so the arrangement keeps its shape; settled literally,
+        // the tail landed wherever the rescue found room, and the write-back
+        // then recorded the scatter as if somebody had asked for it.
+        if (Config.Slots > 0)
+        {
+            _log.LogInformation(
+                "dock.refitted monitor={Monitor} from={From} to={To}",
+                Monitor.Identity.FriendlyName, Config.Slots, _capacity);
+
+            Config = Config with
+            {
+                Widgets = DockGrid.Scaled(Config.Widgets, Config.Slots, _capacity),
+            };
+
+            var scaled = Config.Widgets.ToDictionary(w => w.InstanceId, w => w.Cell);
+
+            _built =
+            [
+                .. _built.Select(b => scaled.TryGetValue(b.Entry.InstanceId, out int cell)
+                    ? (b.Entry with { Cell = cell }, b.Span)
+                    : b)
+            ];
+        }
+
+        // Recorded either way - a bar that has never said how many slots it
+        // has needs to say so once, or the first density change scatters it.
+        Config = Config with { Slots = _capacity };
+        _recount = true;
     }
+
+    /// <summary>Whether the slot count still has to be written down.</summary>
+    private bool _recount;
 
     /// <summary>
     /// How many slots this entry will want, worked out before it is built for
@@ -1542,10 +1581,13 @@ public sealed partial class DockWindow : Window
         var cells = _placed.ToDictionary(
             p => p.InstanceId, p => Written(p.Cell), StringComparer.Ordinal);
 
-        if (Config.Widgets.All(w => !cells.TryGetValue(w.InstanceId, out int cell) || cell == w.Cell))
+        if (!_recount
+            && Config.Widgets.All(w => !cells.TryGetValue(w.InstanceId, out int cell) || cell == w.Cell))
         {
             return;
         }
+
+        _recount = false;
 
         _log.LogInformation(
             "dock.settled monitor={Monitor} slots={Slots}", Monitor.Identity.FriendlyName, _capacity);

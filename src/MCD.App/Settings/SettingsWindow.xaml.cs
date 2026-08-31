@@ -123,6 +123,23 @@ public sealed partial class SettingsWindow : Window
         // bar - a mark nobody made and nobody can clear.
         Closed += (_, _) => _docks.Point(string.Empty, null);
 
+        // The undo rows are gone from the pages - they were furniture - but
+        // the promise in the hints ("Ctrl+Z brings it back") has to be kept
+        // by an actual key.
+        var undoKey = new Microsoft.UI.Xaml.Input.KeyboardAccelerator
+        {
+            Key = Windows.System.VirtualKey.Z,
+            Modifiers = Windows.System.VirtualKeyModifiers.Control,
+        };
+
+        undoKey.Invoked += (_, e) =>
+        {
+            e.Handled = true;
+            DoUndo();
+        };
+
+        Root.KeyboardAccelerators.Add(undoKey);
+
         Reload();
         Nav.SelectedItem = Nav.MenuItems[0];
     }
@@ -267,6 +284,12 @@ public sealed partial class SettingsWindow : Window
 
             presenter.PreferredMaximumWidth = (int)Math.Round(widest * scale);
             presenter.PreferredMaximumHeight = (int)Math.Round(tallest * scale);
+
+            // No maximize - not on the caption button and not on a double
+            // click of the title bar. The window sizes itself to its content;
+            // stretched over a whole display it is mostly margin, and the
+            // gesture was being made by accident.
+            presenter.IsMaximizable = false;
         }
 
         AppWindow.Resize(size);
@@ -842,7 +865,7 @@ public sealed partial class SettingsWindow : Window
         // written for. Refreshing the other page left the button reading "not
         // set" after a key had been set, and the warning about a combination
         // another program holds never appeared at all.
-        ShowAbout();
+        ShowGeneral();
     }
 
     /// <summary>
@@ -929,7 +952,7 @@ public sealed partial class SettingsWindow : Window
 
         _log.LogInformation("settings.language {Language}", language);
         _restartOffered = true;
-        ShowAbout();
+        ShowGeneral();
     }
 
     /// <summary>True once the language has been changed in this sitting.</summary>
@@ -1069,7 +1092,6 @@ public sealed partial class SettingsWindow : Window
     {
         Braun.Theme = Root.ActualTheme;
         DockBody.Children.Clear();
-        _undoOnDocks = null;
 
         MonitorConfig? dock = _settings.Current.Monitors
             .FirstOrDefault(m => m.StableId == _editing);
@@ -1117,14 +1139,7 @@ public sealed partial class SettingsWindow : Window
                         Loc.Tr("ForgetButton", "Forget it"), ForgetScreen, "Delete", danger: true))
                 : null,
 
-            // Outside everything the master switch dims. It was inside, which
-            // meant that switching a dock off left an enabled Undo button in
-            // a panel that could not be clicked - including the undo of
-            // switching it off.
-            Braun.Row(
-                Loc.Tr("UndoRow", "Take the last change back"),
-                Loc.Tr("UndoRowHint", "Anything changed here or on a bar itself, on any screen."),
-                _undoOnDocks = Undo())));
+            null));
 
         // Everything the master switch governs dims with it.
         var gated = new StackPanel
@@ -1255,7 +1270,6 @@ public sealed partial class SettingsWindow : Window
     {
         Braun.Theme = Root.ActualTheme;
         WidgetsBody.Children.Clear();
-        _undoOnWidgets = null;
 
         MonitorConfig? dock = _settings.Current.Monitors
             .FirstOrDefault(m => m.StableId == _editing);
@@ -1272,14 +1286,6 @@ public sealed partial class SettingsWindow : Window
 
         // ------------------------------------------------------------ contents
         WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
-
-        // The page that makes most of the changes worth taking back, and it
-        // had no way to take one back: the button was on the page next door,
-        // and the destructive things - the crosses, the reset - are all here.
-        WidgetsBody.Children.Add(Braun.Group(Braun.Row(
-            Loc.Tr("UndoRow", "Take the last change back"),
-            Loc.Tr("UndoRowHint", "Anything changed here or on a bar itself, on any screen."),
-            _undoOnWidgets = Undo())));
 
         WidgetsBody.Children.Add(BarList(dock));
 
@@ -1330,34 +1336,6 @@ public sealed partial class SettingsWindow : Window
                         danger: true))
                 : null,
 
-            // Also only when there are any, and worded as waiting rather than
-            // as missing. Somebody who drags a Wi-Fi widget onto the bar of a
-            // machine holding a cable sees nothing happen, and nothing
-            // happening is indistinguishable from broken.
-            Quiet(dock) is { Count: > 0 } quiet
-                ? Braun.Row(
-                    // Counted rows are read as sentences, and a sentence that
-                    // says "1 are waiting" is a sentence written by a machine.
-                    quiet.Count == 1
-                        ? Loc.Tr("QuietRowOne", "One is waiting for its moment")
-                        : string.Format(
-                            CultureInfo.CurrentCulture,
-                            Loc.Tr("QuietRow", "{0} are waiting for their moment"),
-                            quiet.Count),
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Loc.Tr(
-                            "QuietRowHint",
-                            "{0} - on the bar, taking no slot until it has something to say. It comes back where you left it."),
-                        Named(quiet)),
-                    Braun.Action(
-                        quiet.Count == 1
-                            ? Loc.Tr("QuietButtonOne", "Take it off")
-                            : Loc.Tr("QuietButton", "Take them off"),
-                        () => Shed(dock, quiet, Loc.Tr("UndoQuiet", "the ones that were waiting")),
-                        "Delete",
-                        danger: true))
-                : null,
 
             // Only where there is somewhere to copy to.
             _settings.Current.Monitors.Length > 1
@@ -1365,7 +1343,7 @@ public sealed partial class SettingsWindow : Window
                     Loc.Tr("CopyRow", "The other screens"),
                     Loc.Tr(
                         "CopyRowHint",
-                        "Gives every other screen the same widgets in the same places. Each bar keeps its own copies, and undo puts the others back."),
+                        "Gives every other screen the same widgets, refitted to the shape of this bar. Each bar keeps its own copies; Ctrl+Z puts the others back."),
                     Braun.Action(
                         string.Format(
                             CultureInfo.CurrentCulture,
@@ -1379,7 +1357,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("ResetRow", "The standard set"),
                 Loc.Tr(
                     "ResetRowHint",
-                    "Puts back the set the bar came with. Undo brings your own arrangement back."),
+                    "Puts back the set the bar came with. Ctrl+Z brings your own arrangement back."),
                 // Dressed as what it is. It throws away the whole
                 // arrangement of this screen - every pinned program, every
                 // widget's own settings - and it was wearing a quieter coat
@@ -1740,27 +1718,6 @@ public sealed partial class SettingsWindow : Window
             };
 
             line.Children.Add(name);
-
-            // Where it stands, or that it is not standing. Two widgets of the
-            // same kind are allowed and common - the list said "CPU" twice
-            // with nothing to tell them apart, so neither arrow nor cross
-            // could be aimed.
-            var place = new TextBlock
-            {
-                Text = entry.Cell >= 0
-                    ? string.Format(
-                        CultureInfo.CurrentCulture,
-                        Loc.Tr("ListAtSlot", "slot {0}"),
-                        entry.Cell)
-                    : Loc.Tr("ListNoSlot", "waiting"),
-                FontSize = 11,
-                Margin = new Thickness(0, 0, 6, 0),
-                VerticalAlignment = VerticalAlignment.Center,
-                Foreground = Braun.Tx3,
-            };
-
-            Grid.SetColumn(place, 1);
-            line.Children.Add(place);
 
             Button Small(string glyph, string tip, Action click, bool danger = false)
             {
@@ -2343,85 +2300,6 @@ public sealed partial class SettingsWindow : Window
     }
 
     /// <summary>
-    /// The undo button, always there and only sometimes able to act.
-    /// </summary>
-    /// <remarks>
-    /// Enabled rather than shown: a control that appears after the first
-    /// mistake is invisible exactly while a person is working out what is
-    /// safe to try.
-    /// </remarks>
-    private Button Undo()
-    {
-        var button = Braun.Action(UndoLabel(), DoUndo, "Undo");
-        button.IsEnabled = _settings.CanUndo;
-
-        return button;
-    }
-
-    /// <summary>
-    /// The undo buttons now in the tree, one per page that has one.
-    /// </summary>
-    /// <remarks>
-    /// Two, because there are two pages that make changes worth taking back -
-    /// and the one that makes most of them was the one without a button.
-    /// Held as references to what a page has already built, never as
-    /// something to put into the next one: an element that outlives a rebuild
-    /// has two parents, and that ended the program once.
-    /// </remarks>
-    private Button? _undoOnDocks;
-    private Button? _undoOnWidgets;
-
-    /// <summary>
-    /// Says on the button what undoing would put back, without building the
-    /// page again.
-    /// </summary>
-    /// <remarks>
-    /// The one thing on this page that changes while the rest of it has to
-    /// stand still: a widget's own options are saved as they are typed, and
-    /// rebuilding the page under somebody typing takes the field away
-    /// mid-word.
-    /// </remarks>
-    private void ShowUndo()
-    {
-        foreach (Button? button in new[] { _undoOnDocks, _undoOnWidgets })
-        {
-            if (button is null)
-            {
-                continue;
-            }
-
-            button.Content = Braun.Legend(UndoLabel(), "Undo", Braun.Tx2);
-            button.IsEnabled = _settings.CanUndo;
-        }
-    }
-
-    private string UndoLabel()
-    {
-        if (_settings.UndoWhat is not { } what)
-        {
-            return Loc.Tr("Undo", "Undo");
-        }
-
-        // Named only when it is somebody else's screen. Saying "on this
-        // screen" on every button teaches people to stop reading it, and the
-        // whole point of the words is the one case where pressing undo moves
-        // something they cannot see.
-        if (_settings.UndoWhere is { } where && where != _editing)
-        {
-            return string.Format(
-                CultureInfo.CurrentCulture,
-                Loc.Tr("UndoElsewhereLabel", "Undo - {0}, {1}"),
-                what,
-                ScreenName(where));
-        }
-
-        return string.Format(
-            CultureInfo.CurrentCulture,
-            Loc.Tr("UndoWithLabel", "Undo - {0}"),
-            what);
-    }
-
-    /// <summary>
     /// Writes the settings and remembers that this window did it.
     /// </summary>
     /// <remarks>
@@ -2456,7 +2334,6 @@ public sealed partial class SettingsWindow : Window
         }
 
         ReloadDocks();
-        ShowUndo();
     }
 
     /// <summary>Builds a widget's view model, to ask it about itself.</summary>
@@ -2683,8 +2560,7 @@ public sealed partial class SettingsWindow : Window
         {
             // A widget's own options changed: the bar redraws itself, and the
             // page must not rebuild the editor the person is typing into.
-            ShowUndo();
-        }
+            }
     }
 
     private void EditDock(Func<MonitorConfig, MonitorConfig> change, string what)
@@ -2708,7 +2584,6 @@ public sealed partial class SettingsWindow : Window
             stableId);
 
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
-        ShowUndo();
     }
 
     private MonitorConfig? Dock() =>
@@ -2722,11 +2597,17 @@ public sealed partial class SettingsWindow : Window
         WidgetsSection.Visibility = Show(tag == "widgets");
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
+        GeneralSection.Visibility = Show(tag == "general");
         AboutSection.Visibility = Show(tag == "about");
 
         if (tag == "about")
         {
             ShowAbout();
+        }
+
+        if (tag == "general")
+        {
+            ShowGeneral();
         }
 
         // Only while the page that shows live figures is on screen. A window
@@ -3102,63 +2983,10 @@ public sealed partial class SettingsWindow : Window
 
         AboutBody.Children.Add(mark);
 
-        // --------------------------------------------------------- shortcuts
-        // Keys and language live with the program, not with how the bars are
-        // painted: neither is about a bar, and both are about the whole
-        // machine. They sat under Appearance because that was the page that
-        // was not about one screen.
-        AboutBody.Children.Add(Braun.Heading("Sliders", Loc.Tr("KeysGroup", "Keys")));
-
-        AboutBody.Children.Add(Braun.Group(
-            KeyRow(
-                Shortcut.Bars,
-                Loc.Tr("KeyBars", "Show or hide every bar"),
-                Loc.Tr("KeyBarsHint", "The bars go away and come back. Their layout is kept.")),
-            KeyRow(
-                Shortcut.Settings,
-                Loc.Tr("KeySettings", "Open this window"),
-                Loc.Tr("KeySettingsHint", "From anywhere, including over a full-screen program.")),
-            KeyRow(
-                Shortcut.Mute,
-                Loc.Tr("KeyMute", "Silence the machine"),
-                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one."))));
-
-        AboutBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
-
-        string[] languages = ["system", "en-US", "ru-RU"];
-
-        AboutBody.Children.Add(Braun.Group(
-            Braun.Row(
-                Loc.Tr("LanguageLabel", "Language"),
-                Loc.Tr("LanguageHint", "Takes effect the next time the program starts."),
-                Braun.Segs(
-                    [Loc.Tr("LanguageSystemItem", "Same as Windows"), "English", "Русский"],
-                    Math.Max(0, Array.IndexOf(languages, _settings.Current.App.Language)),
-                    i => PickLanguage(languages[i]),
-                    wide: true),
-                stack: true),
-
-            // Offered only once a language has actually been chosen: people
-            // reasonably think closing this window is a restart.
-            _restartOffered
-                ? Braun.Row(
-                    Loc.Tr("RestartRow", "The language has changed"),
-                    Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
-                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, "Undo"))
-                : null));
-
-        AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("StartupTitle", "Startup")));
-
-        AboutBody.Children.Add(Braun.Group(Braun.Row(
-            Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
-            Loc.Tr("StartWithWindowsHint", "The bars come back when you sign in."),
-            Braun.Switch(AutoStart.Enabled, on =>
-            {
-                AutoStart.Enabled = on;
-                _log.LogInformation("settings.autostart enabled={Enabled}", on);
-                ShowAbout();
-            }))));
-
+        // Only the program's own papers. The machine's settings - keys,
+        // language, startup, copies - have a page of their own; a page called
+        // "the program" that was mostly settings was a page nobody could
+        // guess the contents of.
         AboutBody.Children.Add(Braun.Heading("Document", Loc.Tr("FilesTitle", "Its own files")));
 
         AboutBody.Children.Add(Braun.Group(
@@ -3176,23 +3004,7 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("OpenFolder", "Open the folder"),
                     () => Open(AppPaths.Root),
-                    "Folder")),
-
-            Braun.Row(
-                Loc.Tr("ExportRow", "Save a copy"),
-                Loc.Tr(
-                    "ExportRowHint",
-                    "Everything: the bars, the theme, the keys, what the readings are called."),
-                Braun.Action(Loc.Tr("ExportButton", "Save to a file"), ExportSettings, "ArrowDown")),
-
-            Braun.Row(
-                Loc.Tr("ImportRow", "Load a copy"),
-                _importSaid.Length > 0
-                    ? _importSaid
-                    : Loc.Tr(
-                        "ImportRowHint",
-                        "Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Undo brings it all back."),
-                Braun.Action(Loc.Tr("ImportButton", "Load from a file"), ImportSettings, "ArrowUp"))));
+                    "Folder"))));
 
         AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("QuitTitle", "Quitting")));
 
@@ -3206,6 +3018,110 @@ public sealed partial class SettingsWindow : Window
                 () => _onExit(),
                 "Power",
                 danger: true))));
+    }
+
+    /// <summary>
+    /// The whole machine's settings: keys, language, startup, copies.
+    /// </summary>
+    /// <remarks>
+    /// Everything here is about the program as installed on this computer -
+    /// nothing is about one bar or one screen. It lived on the About page,
+    /// which grew until the information about the program was the thing
+    /// hardest to find on it.
+    /// </remarks>
+    private void ShowGeneral()
+    {
+        Braun.Theme = Root.ActualTheme;
+        GeneralBody.Children.Clear();
+
+        GeneralBody.Children.Add(Braun.Heading("Sliders", Loc.Tr("KeysGroup", "Keys")));
+
+        GeneralBody.Children.Add(Braun.Group(
+            KeyRow(
+                Shortcut.Bars,
+                Loc.Tr("KeyBars", "Show or hide every bar"),
+                Loc.Tr("KeyBarsHint", "The bars go away and come back. Their layout is kept.")),
+            KeyRow(
+                Shortcut.Settings,
+                Loc.Tr("KeySettings", "Open this window"),
+                Loc.Tr("KeySettingsHint", "From anywhere, including over a full-screen program.")),
+            KeyRow(
+                Shortcut.Mute,
+                Loc.Tr("KeyMute", "Silence the machine"),
+                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one."))));
+
+        GeneralBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
+
+        // A drop-down rather than a row of segments: the segments were laid
+        // out for exactly three choices, and this list is meant to grow.
+        string[] languages = ["system", "en-US", "ru-RU"];
+
+        var combo = new ComboBox
+        {
+            MinWidth = 220,
+            ItemsSource = new List<string>
+            {
+                Loc.Tr("LanguageSystemItem", "Same as Windows"),
+                "English",
+                "Русский",
+            },
+            SelectedIndex = Math.Max(0, Array.IndexOf(languages, _settings.Current.App.Language)),
+        };
+
+        combo.SelectionChanged += (_, _) =>
+        {
+            if (combo.SelectedIndex >= 0
+                && languages[combo.SelectedIndex] != _settings.Current.App.Language)
+            {
+                PickLanguage(languages[combo.SelectedIndex]);
+            }
+        };
+
+        GeneralBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("LanguageLabel", "Language"),
+                Loc.Tr("LanguageHint", "Takes effect the next time the program starts."),
+                combo),
+
+            // Offered only once a language has actually been chosen: people
+            // reasonably think closing this window is a restart.
+            _restartOffered
+                ? Braun.Row(
+                    Loc.Tr("RestartRow", "The language has changed"),
+                    Loc.Tr("RestartRowHint", "The bars will read in the new language once the program starts again."),
+                    Braun.Action(Loc.Tr("RestartNowText", "Restart now"), Restart, "Undo"))
+                : null));
+
+        GeneralBody.Children.Add(Braun.Heading("Power", Loc.Tr("StartupTitle", "Startup")));
+
+        GeneralBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
+            Loc.Tr("StartWithWindowsHint", "The bars come back when you sign in."),
+            Braun.Switch(AutoStart.Enabled, on =>
+            {
+                AutoStart.Enabled = on;
+                _log.LogInformation("settings.autostart enabled={Enabled}", on);
+                ShowGeneral();
+            }))));
+
+        GeneralBody.Children.Add(Braun.Heading("Document", Loc.Tr("CopiesTitle", "Copies")));
+
+        GeneralBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("ExportRow", "Save a copy"),
+                Loc.Tr(
+                    "ExportRowHint",
+                    "Everything: the bars, the theme, the keys, what the readings are called."),
+                Braun.Action(Loc.Tr("ExportButton", "Save to a file"), ExportSettings, "ArrowDown")),
+
+            Braun.Row(
+                Loc.Tr("ImportRow", "Load a copy"),
+                _importSaid.Length > 0
+                    ? _importSaid
+                    : Loc.Tr(
+                        "ImportRowHint",
+                        "Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Ctrl+Z brings it all back."),
+                Braun.Action(Loc.Tr("ImportButton", "Load from a file"), ImportSettings, "ArrowUp"))));
     }
 
     /// <summary>This build's version, for the About page.</summary>
@@ -3287,7 +3203,7 @@ public sealed partial class SettingsWindow : Window
         _mine = _settings.Current;
 
         ReloadDocks();
-        ShowAbout();
+        ShowGeneral();
     }
 
 
