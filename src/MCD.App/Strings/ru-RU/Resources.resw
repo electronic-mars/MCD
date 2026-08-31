@@ -93,7 +93,7 @@
     <value>Закрытие окна оставляет панели работать. Снятие задачи в диспетчере оставит на экране занятое место.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
-    <value>Выйти из Master Control Dock</value>
+    <value>Выйти</value>
   </data>
   <!-- Кнопки медиавиджета на панели -->
   <!-- Окно настроек, строки из кода -->
@@ -570,7 +570,7 @@
     <value>Если выключить, развёрнутое окно сможет закрыть панель.</value>
   </data>
   <data name="WidgetOptions" xml:space="preserve">
-    <value>Его настройки</value>
+    <value>Настройки виджета</value>
   </data>
   <data name="RemoveRow" xml:space="preserve">
     <value>Убрать с панели</value>
@@ -756,7 +756,7 @@
     <value>То же, что клавиша отключения звука, для клавиатур, где её нет.</value>
   </data>
   <data name="KeyNone" xml:space="preserve">
-    <value>Не назначено</value>
+    <value>Назначить…</value>
   </data>
   <data name="KeyClear" xml:space="preserve">
     <value>Убрать</value>
@@ -1123,5 +1123,20 @@
   </data>
   <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
     <value>Общие</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Диск</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Плата</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Клавиши, язык, запуск и копии — всё, что относится к программе целиком.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Открыть папку: {0}</value>
   </data>
 </root>

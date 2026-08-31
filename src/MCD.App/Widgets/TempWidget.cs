@@ -70,6 +70,10 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             // belongs to its hardware is chosen when it turns up rather than
             // guessed from the key now.
             IconFound = sensor => Icons.For("temp", IconFor(sensor.Group)),
+
+            NameFound = sensor => Names.Renamed(sensor.Key)
+                ? Names.For(sensor)
+                : GroupName(sensor.Group),
         };
 
         metric.SizeFor(
@@ -214,6 +218,25 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
                 ? Names.For(sensor)
                 : k.Value
             : Loc.Tr("LabelTemperature", "Temperature");
+
+    /// <summary>
+    /// The caption for a part nobody has renamed, in the interface language.
+    /// </summary>
+    /// <remarks>
+    /// The driver's own name for the chip is whatever alphabet the driver
+    /// ships - "GPU" beside a localized "ЦП" made one bar speak two
+    /// languages. The group is ours to name; the hardware's full name stays
+    /// in the hover, where it is the answer to a different question.
+    /// </remarks>
+    private static string GroupName(HardwareGroup group) => group switch
+    {
+        HardwareGroup.Cpu => Loc.Tr("LabelCpu", "CPU"),
+        HardwareGroup.Gpu => Loc.Tr("LabelGpu", "GPU"),
+        HardwareGroup.Memory => Loc.Tr("LabelMemory", "Memory"),
+        HardwareGroup.Storage => Loc.Tr("GroupStorage", "Drive"),
+        HardwareGroup.Motherboard => Loc.Tr("GroupBoard", "Board"),
+        _ => Loc.Tr("WidgetTemperatureName", "Temperature"),
+    };
 
     internal static string IconFor(HardwareGroup group) => group switch
     {

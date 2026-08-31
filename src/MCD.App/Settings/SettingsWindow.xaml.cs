@@ -1192,7 +1192,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr(
                     "AnchorHint",
                     "A bar is as long as the screen and what is on it usually is not. This is which end the empty part goes."),
-                Braun.Segs(
+                Braun.Choice(
                     [
                         Loc.Tr("SegAnchorStart", "At the start"),
                         Loc.Tr("SegAnchorCentre", "In the middle"),
@@ -1201,9 +1201,7 @@ public sealed partial class SettingsWindow : Window
                     (int)dock.Anchor,
                     i => SetDock(
                         d => d with { Anchor = (DockAnchor)i },
-                        Loc.Tr("UndoAnchor", "where the widgets sit")),
-                    wide: true),
-                stack: true),
+                        Loc.Tr("UndoAnchor", "where the widgets sit")))),
 
             // A bar down the side of the screen has one thickness. The row is
             // replaced by its explanation rather than offered greyed and mute.
@@ -1211,14 +1209,12 @@ public sealed partial class SettingsWindow : Window
                 ? Braun.Row(
                     Loc.Tr("SizeLabel", "Thickness"),
                     Loc.Tr("SizeHint", "How much room the bar takes up."),
-                    Braun.Segs(
+                    Braun.Choice(
                         [Loc.Tr("SegThickDefault", "Default"), Loc.Tr("SegThickCompact", "Compact")],
                         dock.Density == DockDensity.Compact ? 1 : 0,
                         i => SetDock(
                             d => d with { Density = i == 1 ? DockDensity.Compact : DockDensity.Default },
-                            Loc.Tr("UndoThickness", "thickness")),
-                        wide: true),
-                    stack: true)
+                            Loc.Tr("UndoThickness", "thickness"))))
                 : Braun.Row(
                     Loc.Tr("SizeLabel", "Thickness"),
                     Loc.Tr("ThicknessNote", "A bar down the side of the screen has one thickness."),
@@ -1246,16 +1242,14 @@ public sealed partial class SettingsWindow : Window
                         "ModePinnedHint",
                         "The bar keeps its strip of screen. A maximised window stops at it rather than covering it."),
                 },
-                Braun.Segs(
+                Braun.Choice(
                     [
                         Loc.Tr("ModePinned", "Keeps its place"),
                         Loc.Tr("ModeHide", "Hides"),
                         Loc.Tr("ModeDesktop", "On the desktop"),
                     ],
                     Math.Max(0, Array.IndexOf(modes, dock.Mode)),
-                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")),
-                    wide: true),
-                stack: true),
+                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")))),
 
             // Not offered on the desktop, where it would contradict the mode
             // rather than qualify it. A setting that cannot act is not shown.
@@ -1749,7 +1743,7 @@ public sealed partial class SettingsWindow : Window
                 Text = _docks.Called(dock.StableId, entry.InstanceId) ?? NameOf(entry),
                 FontSize = 14,
                 VerticalAlignment = VerticalAlignment.Center,
-                Foreground = entry.InstanceId == _selectedId ? Braun.Acc : Braun.Tx,
+                Foreground = Braun.Tx,
                 TextTrimming = TextTrimming.CharacterEllipsis,
             };
 
@@ -1805,8 +1799,12 @@ public sealed partial class SettingsWindow : Window
             line.Children.Add(off);
 
             // The whole line chooses it, so its own settings appear below
-            // without anybody having to find it on the screen.
-            line.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            // without anybody having to find it on the screen. Chosen is a
+            // filled container, not a text colour: accent-blue text read as a
+            // hyperlink, and colour alone is invisible to half the eyes.
+            line.Background = entry.InstanceId == _selectedId
+                ? Braun.PanelHi
+                : new SolidColorBrush(Microsoft.UI.Colors.Transparent);
             line.PointerReleased += (_, _) =>
             {
                 _selectedId = entry.InstanceId;
@@ -3017,18 +3015,22 @@ public sealed partial class SettingsWindow : Window
             Braun.Row(
                 Loc.Tr("LogsRow", "The log"),
                 Loc.Tr("LogsRowHint", "What the program wrote down about its own run."),
-                Braun.Action(
-                    Loc.Tr("OpenFolder", "Open the folder"),
-                    () => Open(AppPaths.LogDirectory),
-                    "Folder")),
+                Named(
+                    Braun.Action(
+                        Loc.Tr("OpenFolder", "Open the folder"),
+                        () => Open(AppPaths.LogDirectory),
+                        "Folder"),
+                    Loc.Tr("LogsRow", "The log"))),
 
             Braun.Row(
                 Loc.Tr("ConfigRow", "The settings file"),
                 Loc.Tr("ConfigRowHint", "Everything on these pages, as it is stored on disk."),
-                Braun.Action(
-                    Loc.Tr("OpenFolder", "Open the folder"),
-                    () => Open(AppPaths.Root),
-                    "Folder"))));
+                Named(
+                    Braun.Action(
+                        Loc.Tr("OpenFolder", "Open the folder"),
+                        () => Open(AppPaths.Root),
+                        "Folder"),
+                    Loc.Tr("ConfigRow", "The settings file")))));
 
         AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("QuitTitle", "Quitting")));
 
@@ -3037,11 +3039,7 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr(
                 "ExitHint",
                 "Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind."),
-            Braun.Action(
-                Loc.Tr("ExitButton", "Exit Master Control Dock"),
-                () => _onExit(),
-                "Power",
-                danger: true))));
+            Braun.Action(Loc.Tr("ExitButton", "Quit"), () => _onExit(), "Power"))));
     }
 
     /// <summary>
@@ -3230,6 +3228,19 @@ public sealed partial class SettingsWindow : Window
         ShowGeneral();
     }
 
+
+    /// <summary>Two buttons with one label need two names for the narrator.</summary>
+    private static Button Named(Button button, string context)
+    {
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(
+            button,
+            string.Format(
+                CultureInfo.CurrentCulture,
+                Loc.Tr("OpenFolderOf", "Open the folder: {0}"),
+                context));
+
+        return button;
+    }
 
     private void Open(string path)
     {

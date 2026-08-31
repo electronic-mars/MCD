@@ -114,6 +114,27 @@ public partial class App : Application
         _services.GetRequiredService<SettingsService>().Changed += (_, _) =>
             _uiQueue?.TryEnqueue(TakeKeys);
 
+        string chosen = Environment.GetEnvironmentVariable("MCD_LANG")
+            ?? _services!.GetRequiredService<SettingsService>().Current.App.Language;
+
+        if (chosen is not (null or "" or "system"))
+        {
+            try
+            {
+                var culture = new System.Globalization.CultureInfo(chosen);
+
+                // Formatting follows the interface language, or the clock
+                // writes its months in the system region's tongue beside
+                // widgets speaking the chosen one.
+                System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
+                System.Globalization.CultureInfo.CurrentCulture = culture;
+            }
+            catch (System.Globalization.CultureNotFoundException)
+            {
+                // A tag from a future settings file changes nothing.
+            }
+        }
+
         if (Environment.GetEnvironmentVariable("MCD_SELFTEST") == "1")
         {
             ScheduleSelfTestExit(start);

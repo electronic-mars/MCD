@@ -162,15 +162,14 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
         // where the charge matters most. Only the per-cent sign goes: three
         // characters instead of five, and the drawing beside it says what
         // kind of figure it is.
-        bool roomy = Density == DockDensity.Default
-            && Orientation == Microsoft.UI.Xaml.Controls.Orientation.Horizontal;
-
         LevelVisible = Visibility.Visible;
 
+        // The unit goes everywhere the figure goes. Saving two characters on
+        // the compact bar put a bare "100" beside neighbours saying "19 %",
+        // and the row read as a mistake rather than an economy.
         Level = _state.Percent < 0
             ? "--"
-            : _state.Percent.ToString("F0", CultureInfo.InvariantCulture)
-                + (roomy ? " %" : string.Empty);
+            : _state.Percent.ToString("F0", CultureInfo.InvariantCulture) + " %";
 
         Detail = Says();
     }
@@ -242,12 +241,7 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     /// </summary>
     public override double Length()
     {
-        _figure ??= Metric.Wide(
-            Density == DockDensity.Default
-                && Orientation == Microsoft.UI.Xaml.Controls.Orientation.Horizontal
-                ? "100 %"
-                : "100",
-            ReadingFont);
+        _figure ??= Metric.Wide("100 %", ReadingFont);
 
         // Down the side of a screen the figure goes under the drawing rather
         // than beside it, so the length is the height of the two.

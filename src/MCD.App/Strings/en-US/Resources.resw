@@ -93,7 +93,7 @@
     <value>Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
-    <value>Exit Master Control Dock</value>
+    <value>Quit</value>
   </data>
   <!-- Media widget buttons on the bar -->
   <!-- Settings window, strings built in code -->
@@ -756,7 +756,7 @@
     <value>The same as the mute key, for keyboards that have not got one.</value>
   </data>
   <data name="KeyNone" xml:space="preserve">
-    <value>Not set</value>
+    <value>Assign…</value>
   </data>
   <data name="KeyClear" xml:space="preserve">
     <value>Clear</value>
@@ -1123,5 +1123,20 @@
   </data>
   <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Drive</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Keys, language, startup and copies - the whole program, no one bar.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Open the folder: {0}</value>
   </data>
 </root>

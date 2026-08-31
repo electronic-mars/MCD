@@ -95,6 +95,8 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry TabGeneral => Draw("Sliders");
 
+    public static Geometry PageGeneral => Draw("Sliders");
+
     public static Geometry PageLook => Draw("Brush");
 
     public static Geometry PageSensors => Draw("Pulse");
