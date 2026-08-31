@@ -131,6 +131,9 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     private double? _figure;
 
 
+    /// <summary>What the last tick drew, so an unchanged second draws nothing.</summary>
+    private (int Percent, bool Charging, bool Present, int Minutes) _drawn = (-2, false, false, -2);
+
     public override void Tick(SensorSnapshot snapshot)
     {
         _state = Power.Read();
@@ -162,6 +165,16 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
         // where the charge matters most. Only the per-cent sign goes: three
         // characters instead of five, and the drawing beside it says what
         // kind of figure it is.
+        // Rebuilding identical strings once a second was work for nobody.
+        var now = (_state.Percent, _state.Charging, _state.Present, _state.Minutes);
+
+        if (now == _drawn)
+        {
+            return;
+        }
+
+        _drawn = now;
+
         LevelVisible = Visibility.Visible;
 
         // The unit goes everywhere the figure goes. Saving two characters on

@@ -88,6 +88,12 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     private double? _time;
     private double? _date;
 
+    /// <summary>The format, worked out once - it cannot change mid-run.</summary>
+    private string? _pattern;
+
+    /// <summary>The date line, rebuilt only when the day turns over.</summary>
+    private (int Day, string Text) _dateLine;
+
     public override void Tick(SensorSnapshot snapshot)
     {
         DateTime now = DateTime.Now;
@@ -95,9 +101,16 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
         TimeSize = ReadingFont;
         DateSize = Math.Max(9, TimeSize - 4);
 
-        Time = now.ToString(Pattern, CultureInfo.CurrentCulture);
+        _pattern ??= Pattern;
+
+        if (_dateLine.Day != now.DayOfYear)
+        {
+            _dateLine = (now.DayOfYear, now.ToString("D", CultureInfo.CurrentCulture));
+        }
+
+        Time = now.ToString(_pattern, CultureInfo.CurrentCulture);
         Detail = now.ToString("T", CultureInfo.CurrentCulture)
-            + Environment.NewLine + now.ToString("D", CultureInfo.CurrentCulture);
+            + Environment.NewLine + _dateLine.Text;
 
         // The date is dropped on a compact bar whatever the setting says:
         // there is one line of room, and the time is the line worth having.

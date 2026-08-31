@@ -612,10 +612,10 @@
     <value>How busy the chip itself is, straight from the driver.</value>
   </data>
   <data name="SenseGpuVramName" xml:space="preserve">
-    <value>Graphics memory</value>
+    <value>Graphics memory controller</value>
   </data>
   <data name="SenseGpuVram" xml:space="preserve">
-    <value>How busy the memory on the graphics card is.</value>
+    <value>How busy the memory controller is - not how full the memory is.</value>
   </data>
   <data name="SenseGpuVramClockName" xml:space="preserve">
     <value>Graphics memory speed</value>
@@ -1138,5 +1138,17 @@
   </data>
   <data name="OpenFolderOf" xml:space="preserve">
     <value>Open the folder: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>Resumes {0}</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>Graphics memory used</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>How full the card's own memory is.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
   </data>
 </root>

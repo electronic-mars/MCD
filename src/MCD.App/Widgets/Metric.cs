@@ -158,6 +158,18 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial double IconSize { get; set; } = 17;
 
+    /// <summary>
+    /// The stroke that draws the icon at exactly a pixel and a half on
+    /// screen, whatever the icon's size.
+    /// </summary>
+    /// <remarks>
+    /// The standalone widgets already compute this; the reading chips wore a
+    /// hardcoded 1.5 that the Viewbox then scaled, so a medium-size reading's
+    /// icon came out lighter than the battery beside it - the seven-weights
+    /// disease, back in one template.
+    /// </remarks>
+    public double Stroke => 36 / Math.Max(1, IconSize);
+
     [ObservableProperty]
     public partial double FontSize { get; set; } = 13;
 
@@ -248,6 +260,7 @@ public sealed partial class Metric : ObservableObject
     public void SizeFor(double icon, double font, bool narrow = false, bool subtitle = false)
     {
         IconSize = icon;
+        OnPropertyChanged(nameof(Stroke));
         FontSize = font;
         Narrow = narrow;
         LabelVisible = subtitle ? Visibility.Visible : Visibility.Collapsed;
@@ -386,13 +399,14 @@ public sealed partial class Metric : ObservableObject
                 Icon = IconFound(found);
             }
 
-            string called = NameFound?.Invoke(found) ?? found.Label;
+            string? given = NameFound?.Invoke(found);
+            string called = given ?? found.Label;
 
             Detail = found.Hardware.Length > 0 && found.Hardware != called
                 ? $"{called} · {found.Hardware}"
                 : called;
 
-            if (Roving || NameFound?.Invoke(found) is not null)
+            if (Roving || given is not null)
             {
                 Label = called;
 

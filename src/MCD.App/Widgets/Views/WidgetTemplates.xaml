@@ -93,7 +93,7 @@
                             StrokeEndLineCap="Round"
                             StrokeLineJoin="Round"
                             StrokeStartLineCap="Round"
-                            StrokeThickness="1.5" />
+                            StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
                     </Canvas>
                 </Viewbox>
 
@@ -194,6 +194,7 @@
                     VerticalAlignment="Center"
                     FontSize="{x:Bind FontSize, Mode=OneWay}"
                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    Opacity="{x:Bind LevelShown, Mode=OneWay}"
                     Text="{x:Bind Level, Mode=OneWay}"
                     Visibility="{x:Bind LevelVisible, Mode=OneWay}" />
             </StackPanel>
@@ -290,7 +291,7 @@
                         <Path
                             Data="M 13.4 6.2 L 9.6 12.4 L 12.6 12.4 L 11.4 17.8 L 15.2 11.6 L 12.2 11.6 Z"
                             Fill="{x:Bind Colour, Mode=OneWay}"
-                            Stroke="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                            Stroke="#66000000"
                             StrokeThickness="1.2"
                             Visibility="{x:Bind Charging, Mode=OneWay}" />
                     </Canvas>
@@ -523,8 +524,21 @@
             Background="Transparent"
             BorderThickness="0"
             Command="{x:Bind Item.LaunchCommand}"
-            CornerRadius="4"
-            ToolTipService.ToolTip="{x:Bind Item.Name}">
+            CornerRadius="4">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Text="{x:Bind Item.Name}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Item.Target}" />
+                    </StackPanel>
+                </ToolTip>
+            </ToolTipService.ToolTip>
             <Grid Width="20" Height="20">
                 <Viewbox Visibility="{x:Bind Item.ChosenVisible}">
                     <Canvas Width="24" Height="24">

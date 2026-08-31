@@ -492,7 +492,7 @@
     <value>Занято памяти</value>
   </data>
   <data name="SenseCpuClockName" xml:space="preserve">
-    <value>Скорость процессора</value>
+    <value>Частота процессора</value>
   </data>
   <data name="SenseGpuPowerName" xml:space="preserve">
     <value>Мощность видеокарты</value>
@@ -612,10 +612,10 @@
     <value>Насколько занят сам чип — прямо от драйвера.</value>
   </data>
   <data name="SenseGpuVramName" xml:space="preserve">
-    <value>Видеопамять</value>
+    <value>Контроллер видеопамяти</value>
   </data>
   <data name="SenseGpuVram" xml:space="preserve">
-    <value>Насколько занята память на видеокарте.</value>
+    <value>Насколько занят контроллер памяти — не её заполнение.</value>
   </data>
   <data name="SenseGpuVramClockName" xml:space="preserve">
     <value>Частота видеопамяти</value>
@@ -1138,5 +1138,17 @@
   </data>
   <data name="OpenFolderOf" xml:space="preserve">
     <value>Открыть папку: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>Продолжит: {0}</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>Занято видеопамяти</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>Насколько заполнена память самой видеокарты.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} ГБ</value>
   </data>
 </root>

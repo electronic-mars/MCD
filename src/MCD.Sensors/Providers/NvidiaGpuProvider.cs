@@ -1,4 +1,4 @@
-using Mcd.Sensors.Contracts;
+﻿using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
 
 namespace Mcd.Sensors.Providers;
@@ -76,6 +76,8 @@ public sealed class NvidiaGpuProvider(ILogger<NvidiaGpuProvider> log) : ISensorP
                 Put(into, gpu, SensorKind.Load, "core", load.Gpu);
                 Put(into, gpu, SensorKind.Load, "memory", load.Memory);
             }
+
+            Put(into, gpu, SensorKind.Load, "vram", _nvml.MemoryUsed(gpu.Handle));
         }
     }
 
@@ -114,7 +116,11 @@ public sealed class NvidiaGpuProvider(ILogger<NvidiaGpuProvider> log) : ISensorP
         // NVIDIA's own limit sits at 90. Those are the numbers worth colouring.
         yield return Sensor(gpu, SensorKind.Temperature, "core", "GPU", "°C", 83, 90);
         yield return Sensor(gpu, SensorKind.Load, "core", "GPU", "%");
-        yield return Sensor(gpu, SensorKind.Load, "memory", "GPU memory", "%");
+        // The controller's busyness and the memory's fullness are different
+        // numbers, and the first was labelled as the second for a while -
+        // which taught people the wrong figure.
+        yield return Sensor(gpu, SensorKind.Load, "memory", "GPU memory controller", "%");
+        yield return Sensor(gpu, SensorKind.Load, "vram", "GPU memory used", "%");
         yield return Sensor(gpu, SensorKind.Fan, "main", "GPU fan", "%");
         yield return Sensor(gpu, SensorKind.Clock, "core", "GPU clock", "MHz");
         yield return Sensor(gpu, SensorKind.Clock, "memory", "GPU memory clock", "MHz");

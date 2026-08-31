@@ -97,6 +97,30 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             metric.Update(Sensors, snapshot);
         }
 
+        // The memory hover answers in gigabytes, not only per cent: "36 %"
+        // says how full, "11.4 / 32 GB" says of what. Rebuilt only when the
+        // rounded figure moves, so an idle machine builds no strings.
+        if (Reading.Id == "ram"
+            && Metrics.Count > 0
+            && Metrics[0].Sensor is not null
+            && snapshot[UsedBytes] is { HasValue: true } used
+            && snapshot[TotalBytes] is { HasValue: true } total)
+        {
+            double usedGb = Math.Round(used.Value / Gb, 1);
+
+            if (Math.Abs(usedGb - _saidGb) >= 0.1)
+            {
+                _saidGb = usedGb;
+
+                Metrics[0].Detail = string.Format(
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    Loc.Tr("RamDetail", "{0} · {1} / {2} GB"),
+                    Loc.Tr("LabelMemory", "Memory"),
+                    usedGb,
+                    Math.Round(total.Value / Gb));
+            }
+        }
+
         if (Metrics.Count > 0 && Metrics[0].Sensor is null && _waited < Patience)
         {
             _waited++;
@@ -112,6 +136,16 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     private const int Patience = 10;
 
     private int _waited;
+
+    private const double Gb = 1024.0 * 1024 * 1024;
+
+    private double _saidGb = double.MinValue;
+
+    private static readonly SensorKey UsedBytes =
+        SensorKey.Make("mem", "ram", SensorKind.Bytes, "used");
+
+    private static readonly SensorKey TotalBytes =
+        SensorKey.Make("mem", "ram", SensorKind.Bytes, "total");
 
     /// <summary>
     /// Whether this machine has the thing this reading is about.

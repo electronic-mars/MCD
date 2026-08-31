@@ -116,9 +116,16 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("SenseGpuCoreName", "Graphics chip"),
                 Loc.Tr("SenseGpuCore", "How busy the chip itself is, straight from the driver.")),
 
+            // Two different numbers that read as one: the controller's
+            // busyness and the memory's fullness. The first wore the second's
+            // name for a while, and taught people the wrong figure.
             (HardwareGroup.Gpu, SensorKind.Load, "memory") => (
-                Loc.Tr("SenseGpuVramName", "Graphics memory"),
-                Loc.Tr("SenseGpuVram", "How busy the memory on the graphics card is.")),
+                Loc.Tr("SenseGpuVramName", "Graphics memory controller"),
+                Loc.Tr("SenseGpuVram", "How busy the memory controller is - not how full the memory is.")),
+
+            (HardwareGroup.Gpu, SensorKind.Load, "vram") => (
+                Loc.Tr("SenseGpuVramFillName", "Graphics memory used"),
+                Loc.Tr("SenseGpuVramFill", "How full the card's own memory is.")),
 
             (HardwareGroup.Gpu, SensorKind.Clock, "memory") => (
                 Loc.Tr("SenseGpuVramClockName", "Graphics memory speed"),

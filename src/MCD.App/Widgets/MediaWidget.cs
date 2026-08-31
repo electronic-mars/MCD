@@ -106,8 +106,25 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
 
     public string NextIcon => "Next";
 
-    /// <summary>What the middle button's tooltip says: the track, when one is known.</summary>
-    public string PlayTip => Title.Length > 0 ? Title : Loc.Tr("MediaPlayPause", "Play or pause");
+    /// <summary>
+    /// What the middle button's tooltip says: the track; or, while the keys
+    /// rest, who a press would wake - the one thing a dim player owes.
+    /// </summary>
+    public string PlayTip => Title.Length > 0
+        ? Title
+        : Resumes() is { Length: > 0 } who
+            ? string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("MediaResumes", "Resumes {0}"),
+                who)
+            : Loc.Tr("MediaPlayPause", "Play or pause");
+
+    /// <summary>Who the keys would drive right now, said the way a person would.</summary>
+    private string Resumes()
+    {
+        string id = Nominated.Length > 0 ? Nominated : _lastApp ?? string.Empty;
+        return id.Length > 0 ? Short(id) : string.Empty;
+    }
 
     partial void OnTitleChanged(string value) => OnPropertyChanged(nameof(PlayTip));
 

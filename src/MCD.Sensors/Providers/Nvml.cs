@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mcd.Sensors.Providers;
@@ -54,7 +54,17 @@ internal sealed class Nvml : IDisposable
 
     private delegate int DeviceUtilization(nint device, out Utilization value);
 
+    private delegate int DeviceMemory(nint device, out Memory value);
+
     private delegate int DeviceText(nint device, nint buffer, uint length);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Memory
+    {
+        public ulong Total;
+        public ulong Free;
+        public ulong Used;
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct Utilization
@@ -102,6 +112,7 @@ internal sealed class Nvml : IDisposable
         nvml._name = nvml.Resolve<DeviceText>("nvmlDeviceGetName");
         nvml._temperature = nvml.Resolve<DeviceKindOutUint>("nvmlDeviceGetTemperature");
         nvml._utilization = nvml.Resolve<DeviceUtilization>("nvmlDeviceGetUtilizationRates");
+        nvml._memory = nvml.Resolve<DeviceMemory>("nvmlDeviceGetMemoryInfo");
         nvml._fanSpeed = nvml.Resolve<DeviceOutUint>("nvmlDeviceGetFanSpeed");
         nvml._clock = nvml.Resolve<DeviceKindOutUint>("nvmlDeviceGetClockInfo");
         nvml._power = nvml.Resolve<DeviceOutUint>("nvmlDeviceGetPowerUsage");
@@ -120,6 +131,14 @@ internal sealed class Nvml : IDisposable
     public string? Uuid(nint device) => Text(_uuid, device, 96);
 
     public string? Name(nint device) => Text(_name, device, 96);
+
+    /// <summary>How full the card's own memory is, in per cent, or null.</summary>
+    public double? MemoryUsed(nint device) =>
+        _memory is not null && _memory(device, out Memory info) == Success && info.Total > 0
+            ? 100.0 * info.Used / info.Total
+            : null;
+
+    private DeviceMemory? _memory;
 
     public double? Temperature(nint device) =>
         _temperature is not null && _temperature(device, TemperatureGpu, out uint value) == Success

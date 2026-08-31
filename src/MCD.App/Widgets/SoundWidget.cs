@@ -70,6 +70,10 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial string Detail { get; set; } = string.Empty;
 
+    /// <summary>The figure fades while silenced: the icon says quiet, the dim number says what comes back.</summary>
+    [ObservableProperty]
+    public partial double LevelShown { get; set; } = 1;
+
     /// <summary>Whether the figure is written beside the speaker.</summary>
     private bool WithLevel => WidgetOptions.Number(Options, "level") is not 0;
 
@@ -131,6 +135,8 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         Level = room
             ? Math.Round(loud * 100).ToString("F0", System.Globalization.CultureInfo.InvariantCulture) + " %"
             : string.Empty;
+
+        LevelShown = muted.Value ? 0.5 : 1;
 
         string state = muted.Value
             ? Loc.Tr("SoundMutedTip", "Silenced")

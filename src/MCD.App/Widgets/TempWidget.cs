@@ -286,14 +286,30 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
     {
         SensorSnapshot snapshot = sensors.Current;
 
-        return sensors.Catalog
-            .Where(d => d.Kind == SensorKind.Temperature && d.Prominent && snapshot[d.Key].HasValue)
+        // Ranked by how close each is to its own limit, not by raw degrees.
+        // A drive at 60 of 85 is calmer than a graphics chip at 80 of 83,
+        // and the raw numbers say the opposite. One pass, no sort: this runs
+        // every second on the interface thread.
+        SensorDescriptor? warmest = null;
+        double worst = double.MinValue;
 
-            // Ranked by how close each is to its own limit, not by raw degrees.
-            // A drive at 60 of 85 is calmer than a graphics chip at 80 of 83,
-            // and the raw numbers say the opposite.
-            .OrderByDescending(d => Pressure(snapshot[d.Key].Value, d))
-            .FirstOrDefault();
+        foreach (SensorDescriptor d in sensors.Catalog)
+        {
+            if (d.Kind != SensorKind.Temperature || !d.Prominent || !snapshot[d.Key].HasValue)
+            {
+                continue;
+            }
+
+            double pressure = Pressure(snapshot[d.Key].Value, d);
+
+            if (pressure > worst)
+            {
+                worst = pressure;
+                warmest = d;
+            }
+        }
+
+        return warmest;
     }
 
     private static double Pressure(double value, SensorDescriptor sensor) =>
