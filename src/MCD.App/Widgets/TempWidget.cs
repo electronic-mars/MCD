@@ -30,6 +30,9 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
     /// <summary>One entry, so the metric chip template serves unchanged.</summary>
     public ObservableCollection<Metric> Metrics { get; } = [];
 
+    /// <summary>The one chip, for the template to hold directly - see GaugeWidget.Front.</summary>
+    public Metric? Front => Metrics.Count > 0 ? Metrics[0] : null;
+
     /// <summary>The chosen sensor's key, or null for the hottest reading.</summary>
     private SensorKey? Chosen =>
         WidgetOptions.Text(Options, "sensor") is { Length: > 0 } key ? new SensorKey(key) : null;
@@ -87,6 +90,7 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             // cut is exactly as wide as the language.
             subtitle: Density == DockDensity.Default && Orientation == Orientation.Horizontal);
         Metrics.Add(metric);
+        OnPropertyChanged(nameof(Front));
     }
 
     public override void Tick(SensorSnapshot snapshot)

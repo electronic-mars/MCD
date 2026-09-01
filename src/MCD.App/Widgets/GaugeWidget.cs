@@ -46,6 +46,17 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     /// <summary>One entry, so the metric chip template serves unchanged.</summary>
     public ObservableCollection<Metric> Metrics { get; } = [];
 
+    /// <summary>
+    /// The one chip, for the template to hold directly.
+    /// </summary>
+    /// <remarks>
+    /// Not through an ItemsControl: one measures to nothing before its
+    /// containers are generated, so the host stood two points wide and the
+    /// chip painted itself in overflow from the middle of its span - the
+    /// lopsided margins visible the moment anything was pressed.
+    /// </remarks>
+    public Metric? Front => Metrics.Count > 0 ? Metrics[0] : null;
+
     /// <summary>Which of the known readings this gauge is.</summary>
     public GaugeReading Reading =>
         Known.FirstOrDefault(r => r.Id == WidgetOptions.Text(Options, "reading")) ?? Known[0];
@@ -88,6 +99,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             // cut is exactly as wide as the language.
             subtitle: Density == DockDensity.Default && Orientation == Orientation.Horizontal);
         Metrics.Add(metric);
+        OnPropertyChanged(nameof(Front));
     }
 
     public override void Tick(SensorSnapshot snapshot)

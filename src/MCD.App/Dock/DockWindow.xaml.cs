@@ -125,6 +125,8 @@ public sealed partial class DockWindow : Window
     /// <summary>Which window is mid-refresh, for reading crash logs.</summary>
     private static int _refreshing;
 
+    private int _sizedAt;
+
     /// <summary>Which window is mid-refresh, for reading crash logs.</summary>
     public static int Refreshing => _refreshing;
 
@@ -1439,6 +1441,12 @@ public sealed partial class DockWindow : Window
 
         var host = new WidgetHost(_log, widget, template);
         DockLayout.Dress(host, Config.Edge);
+
+        if (Environment.GetEnvironmentVariable("MCD_PAINT") == "2")
+        {
+            host.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 220, 60, 60));
+            host.BorderThickness = new Thickness(1);
+        }
         host.Attach();
 
         return (host, Wants(widget, 0));
@@ -2079,6 +2087,20 @@ public sealed partial class DockWindow : Window
         foreach (WidgetHost host in _hosts)
         {
             host.Tick(snapshot);
+        }
+
+        if (Environment.GetEnvironmentVariable("MCD_PAINT") == "2" && ++_sizedAt == 6)
+        {
+
+            foreach (WidgetHost host in _hosts)
+            {
+                var content = host.Content as FrameworkElement;
+                _log.LogInformation(
+                    "diag.size type={Type} host={HostW:F1}/{HostD:F1} content={ContentW:F1}/{ContentD:F1}",
+                    host.Entry.TypeId,
+                    host.ActualWidth, host.DesiredSize.Width,
+                    content?.ActualWidth ?? -1, content?.DesiredSize.Width ?? -1);
+            }
         }
 
         Regrow();

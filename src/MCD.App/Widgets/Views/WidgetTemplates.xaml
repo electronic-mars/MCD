@@ -49,6 +49,8 @@
     <DataTemplate x:Key="MetricTemplate" x:DataType="widgets:Metric">
         <widgets:HoverChip
             Margin="{x:Bind Spacing, Mode=OneWay}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Visibility="{x:Bind Visibility, Mode=OneWay}">
             <!-- The reading first, its name under it. A bar is glanced at, and
                  what someone hovering wants is confirmation of the number and
@@ -156,17 +158,34 @@
 
     <!-- One reading in one slot. Still an ItemsControl over a one-entry list:
          the metric chip template serves both widgets unchanged. -->
+    <!-- One chip, held directly: an ItemsControl measures to nothing before
+         its containers exist, and the host stood two points wide while the
+         chip painted itself in overflow. -->
     <DataTemplate x:Key="mcd.gauge" x:DataType="widgets:GaugeWidget">
-        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}" />
+        <ContentControl
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsTabStop="False"
+            Content="{x:Bind Front, Mode=OneWay}"
+            ContentTemplate="{StaticResource MetricTemplate}" />
     </DataTemplate>
 
     <DataTemplate x:Key="mcd.temp" x:DataType="widgets:TempWidget">
-        <ItemsControl ItemTemplate="{StaticResource MetricTemplate}" ItemsSource="{x:Bind Metrics}" />
+        <ContentControl
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsTabStop="False"
+            Content="{x:Bind Front, Mode=OneWay}"
+            ContentTemplate="{StaticResource MetricTemplate}" />
     </DataTemplate>
 
     <!-- Sound: a speaker that says how loud, and a press that silences. -->
     <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
-        <widgets:HoverChip Margin="3,0" Visibility="{x:Bind Shown, Mode=OneWay}">
+        <widgets:HoverChip
+            Margin="3,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind Shown, Mode=OneWay}">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
@@ -208,7 +227,11 @@
              exactly, so the chip's usual side padding has to go - with it the
              wheel sat in a box six points narrower than its ink, and the
              corner clip shaved both sides of it. -->
-        <widgets:HoverChip Margin="3,0" Padding="0,2">
+        <widgets:HoverChip
+            Margin="3,0"
+            Padding="0,2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock x:Uid="SettingsChipTip" FontSize="13" Text="Settings" />
@@ -238,7 +261,7 @@
         by giving them no slot rather than by drawing something invisible.
     -->
     <DataTemplate x:Key="mcd.battery" x:DataType="widgets:BatteryWidget">
-        <widgets:HoverChip Margin="3,0">
+        <widgets:HoverChip Margin="3,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
@@ -307,7 +330,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="mcd.wifi" x:DataType="widgets:WifiWidget">
-        <widgets:HoverChip Margin="3,0">
+        <widgets:HoverChip Margin="3,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
@@ -347,7 +370,7 @@
         <!-- A chip like everything else, which is also what gives the tooltip
              its window. The hover answers what the bar has no room for: the
              seconds, and the date written out in full. -->
-        <widgets:HoverChip Margin="3,0">
+        <widgets:HoverChip Margin="3,0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ToolTipService.ToolTip>
                 <ToolTip Placement="Bottom">
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
@@ -395,6 +418,8 @@
     <DataTemplate x:Key="mcd.media" x:DataType="widgets:MediaWidget">
         <StackPanel
             Margin="{x:Bind Spacing, Mode=OneWay}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Opacity="{x:Bind Dim, Mode=OneWay}"
             Orientation="{x:Bind Orientation}">
             <StackPanel.OpacityTransition>
@@ -518,6 +543,8 @@
              button's corner clip shaved a pinned icon on both sides. -->
         <Button
             Margin="{x:Bind Item.Spacing, Mode=OneWay}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             MinWidth="0"
             MinHeight="0"
             Padding="2"

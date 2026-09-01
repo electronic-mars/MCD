@@ -22,6 +22,7 @@ $logDir = Join-Path $scratch 'MCD\logs'
 $env:MCD_DATA_DIR = Join-Path $scratch 'MCD'
 $env:MCD_SELFTEST = '1'
 $env:MCD_SELFTEST_SECONDS = "$Seconds"
+if ($env:MCD_BAR_PAINT) { $env:MCD_PAINT = $env:MCD_BAR_PAINT }
 
 if ($Config) {
     New-Item -ItemType Directory -Force $env:MCD_DATA_DIR | Out-Null
@@ -71,6 +72,8 @@ if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force }
 # What the run wrote back - so a chain of runs can hand one run's settled
 # arrangement to the next, the way a person's real sessions do.
 Copy-Item (Join-Path $env:MCD_DATA_DIR 'config.json') (Join-Path $Out 'config-after.json') -ErrorAction SilentlyContinue
+Get-ChildItem $logDir -Filter *.log -ErrorAction SilentlyContinue |
+    Copy-Item -Destination (Join-Path $Out 'run.log') -ErrorAction SilentlyContinue
 
 Remove-Item -Recurse -Force $scratch -ErrorAction SilentlyContinue
-Remove-Item Env:MCD_DATA_DIR, Env:MCD_SELFTEST, Env:MCD_SELFTEST_SECONDS -ErrorAction SilentlyContinue
+Remove-Item Env:MCD_DATA_DIR, Env:MCD_SELFTEST, Env:MCD_SELFTEST_SECONDS, Env:MCD_PAINT -ErrorAction SilentlyContinue

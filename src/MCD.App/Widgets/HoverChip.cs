@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Mcd.App.Dock;
 using Microsoft.UI;
 using Microsoft.UI.Composition;
@@ -53,6 +53,12 @@ public sealed partial class HoverChip : ContentControl
                 tip.XamlRoot = XamlRoot;
             }
         };
+
+        if (Environment.GetEnvironmentVariable("MCD_PAINT") == "2")
+        {
+            BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 60, 120, 255));
+            BorderThickness = new Thickness(1);
+        }
 
         PointerEntered += (_, _) => Fade(Hover);
         PointerExited += OnGone;
