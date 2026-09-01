@@ -1274,9 +1274,60 @@ public sealed partial class DockWindow : Window
 
         _built = built;
         _drawn = hosts;
+        Unanchor();
         Refit();
         Settle();
         WriteBackCells();
+    }
+
+    /// <summary>
+    /// Retires the anchor by baking its shift into the cells, once.
+    /// </summary>
+    /// <remarks>
+    /// The anchor gathered the row at an end while the settings kept it as it
+    /// was first settled - and that split is what made a drop before the row
+    /// walk every widget along. Now the cells are the one truth: a bar written
+    /// under the old scheme has the old drawing offset added into its numbers,
+    /// so it looks exactly as it did, and the anchor is set to Start for good.
+    /// </remarks>
+    private void Unanchor()
+    {
+        if (Config.Anchor == DockAnchor.Start)
+        {
+            return;
+        }
+
+        List<Placement> placed = DockGrid.Settle(_built, _capacity);
+        int offset = DockGrid.Offset(placed, _capacity, Config.Anchor);
+
+        if (offset > 0)
+        {
+            var cells = placed.ToDictionary(p => p.InstanceId, p => p.Cell + offset, StringComparer.Ordinal);
+
+            Config = Config with
+            {
+                Widgets =
+                [
+                    .. Config.Widgets.Select(w => cells.TryGetValue(w.InstanceId, out int cell)
+                        ? w with { Cell = cell }
+                        : w)
+                ],
+            };
+
+            _built =
+            [
+                .. _built.Select(b => cells.TryGetValue(b.Entry.InstanceId, out int cell)
+                    ? (b.Entry with { Cell = cell }, b.Span)
+                    : b)
+            ];
+        }
+
+        Config = Config with { Anchor = DockAnchor.Start };
+        _recount = true;
+
+        _log.LogInformation(
+            "dock.unanchored monitor={Monitor} shifted={Offset}",
+            Monitor.Identity.FriendlyName, offset);
     }
 
     /// <summary>
@@ -1634,20 +1685,6 @@ public sealed partial class DockWindow : Window
     {
         _placed = DockGrid.Settle(_built, _capacity);
 
-        // The anchor moves the row itself, not only its picture. Drawn as a
-        // picture and left out of the model, the empty half of a centred bar
-        // was a place nothing could be dropped into: the free slots all live
-        // after the last widget, so they were drawn off the far end, and a
-        // point in the visible gap had no slot to name. The offset goes into
-        // the placements, and everything downstream - the outlines, the
-        // pointer arithmetic, the drop - sees one row of slots.
-        _offset = DockGrid.Offset(_placed, _capacity, Config.Anchor);
-
-        if (_offset > 0)
-        {
-            _placed = [.. _placed.Select(p => p with { Cell = p.Cell + _offset })];
-        }
-
         DockLayout.Arrange(
             Config.Edge,
             Strip,
@@ -1656,21 +1693,6 @@ public sealed partial class DockWindow : Window
                 .Select(p => ((FrameworkElement)_drawn[p.InstanceId], p))]);
 
     }
-
-    /// <summary>
-    /// The slot a widget is written down as holding, given where it is drawn.
-    /// </summary>
-    /// <remarks>
-    /// The anchor is a property of the bar, not of the widget: a row gathered
-    /// in the middle must come back to the same arrangement when it is
-    /// gathered at the start again. So the settings keep the row as it was
-    /// settled, and the shift is taken off on the way in and put back on the
-    /// way out.
-    /// </remarks>
-    private int Written(int drawn) => drawn - _offset;
-
-    /// <summary>How far along the bar its contents are drawn.</summary>
-    private int _offset;
 
     /// <summary>
     /// Records where the layout actually put things, when that differs from
@@ -1686,7 +1708,7 @@ public sealed partial class DockWindow : Window
     private void WriteBackCells()
     {
         var cells = _placed.ToDictionary(
-            p => p.InstanceId, p => (Cell: Written(p.Cell), p.Span), StringComparer.Ordinal);
+            p => p.InstanceId, p => (p.Cell, p.Span), StringComparer.Ordinal);
 
         if (!_recount
             && Config.Widgets.All(w => !cells.TryGetValue(w.InstanceId, out (int Cell, int Span) at)
@@ -1967,29 +1989,24 @@ public sealed partial class DockWindow : Window
             Monitor.Identity.FriendlyName, host.Entry.TypeId, cell);
 
         string moved = host.Entry.InstanceId;
-        int written = Written(cell);
 
-        // A drop into the empty part before a gathered row lands earlier than
-        // the row begins, which in the settings would be a negative slot. The
-        // whole row moves up instead, so the arrangement keeps its shape and
-        // its gaps and the numbers stay honest.
-        int under = Math.Min(0, written);
-
+        // Only the widget in hand changes its number. The neighbours stay
+        // where they were put: a drop is about one thing, and a drop that
+        // quietly walked the rest of the row along was the "why did my links
+        // move" of the anchored days.
         Config = Config with
         {
             Widgets =
             [
-                .. Config.Widgets.Select(w => w.InstanceId == moved
-                    ? w with { Cell = written - under }
-                    : w.Cell < 0 ? w : w with { Cell = w.Cell - under })
+                .. Config.Widgets.Select(w => w.InstanceId == moved ? w with { Cell = cell } : w)
             ],
         };
 
         _built =
         [
             .. _built.Select(b => b.Entry.InstanceId == moved
-                ? (b.Entry with { Cell = written - under }, b.Span)
-                : b.Entry.Cell < 0 ? b : (b.Entry with { Cell = b.Entry.Cell - under }, b.Span))
+                ? (b.Entry with { Cell = cell }, b.Span)
+                : b)
         ];
 
         Settle();
@@ -2024,14 +2041,11 @@ public sealed partial class DockWindow : Window
             "dock.dropped monitor={Monitor} widget={Widget} cell={Cell}",
             Monitor.Identity.FriendlyName, entry.TypeId, landing.Value);
 
-        int written = Written(landing.Value);
-        int under = Math.Min(0, written);
-
         Rearranged?.Invoke(
             this,
             [
-                .. Config.Widgets.Select(w => w.Cell < 0 ? w : w with { Cell = w.Cell - under }),
-                entry with { Cell = written - under },
+                .. Config.Widgets,
+                entry with { Cell = landing.Value },
             ]);
     }
 

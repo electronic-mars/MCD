@@ -893,24 +893,6 @@
   <data name="ListEmpty" xml:space="preserve">
     <value>На этой панели пока ничего нет.</value>
   </data>
-  <data name="AnchorLabel" xml:space="preserve">
-    <value>Где стоят виджеты</value>
-  </data>
-  <data name="AnchorHint" xml:space="preserve">
-    <value>Панель длиной во весь экран, а то, что на ней, обычно нет. Это выбор, с какой стороны остаётся пустое место.</value>
-  </data>
-  <data name="SegAnchorStart" xml:space="preserve">
-    <value>В начале</value>
-  </data>
-  <data name="SegAnchorCentre" xml:space="preserve">
-    <value>По центру</value>
-  </data>
-  <data name="SegAnchorEnd" xml:space="preserve">
-    <value>В конце</value>
-  </data>
-  <data name="UndoAnchor" xml:space="preserve">
-    <value>где стоят виджеты</value>
-  </data>
   <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
     <value>Панели</value>
   </data>
@@ -1228,5 +1210,35 @@
   </data>
   <data name="WifiRate" xml:space="preserve">
     <value>{0} Мбит/с</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Свои программы</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Свои программы</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Свои программы</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Программы, папки и адреса, закреплённые на панели экрана, выбранного на странице «Панели».</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>Закреплено на этой панели</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Пока ничего не закреплено. Бросьте файл на панель или закрепите кнопкой выше.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Сохранённые наборы виджетов. Любой можно поставить на панель, выбранную на странице «Панели».</value>
   </data>
 </root>

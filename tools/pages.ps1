@@ -10,8 +10,8 @@
 # set of photographs of the wrong pages.
 param(
     [string]$Out = "$env:TEMP\mcd-pages",
-    [string]$Pages = 'docks,icons,appearance,sensors,about',
-    [int]$Seconds = 16
+    [string]$Pages = 'docks,widgets,pins,presets,appearance,general,sensors,about',
+    [int]$Seconds = 22
 )
 
 $ErrorActionPreference = 'Stop'

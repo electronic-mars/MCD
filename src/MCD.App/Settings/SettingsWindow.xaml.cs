@@ -316,8 +316,18 @@ public sealed partial class SettingsWindow : Window
         _selectedId = widgetId;
 
         // A widget was pointed at, so the page that has its settings is the
-        // page to open. Pointing at bare bar opens the page about the bar.
-        Nav.SelectedItem = widgetId is null ? Nav.MenuItems[0] : Nav.MenuItems[1];
+        // page to open: a pinned icon lives on the pins page, everything else
+        // on the widgets page. Pointing at bare bar opens the page about the
+        // bar.
+        bool pin = widgetId is not null
+            && _settings.Current.Monitors.FirstOrDefault(m => m.StableId == _editing)
+                ?.Widgets.FirstOrDefault(w => w.InstanceId == widgetId)?.TypeId == IconWidget.Type;
+
+        Nav.SelectedItem = widgetId is null
+            ? Nav.MenuItems[0]
+            : Nav.MenuItems.OfType<NavigationViewItem>()
+                .FirstOrDefault(i => (i.Tag as string) == (pin ? "pins" : "widgets"))
+            ?? Nav.MenuItems[1];
 
         ReloadDocks();
 
@@ -1035,6 +1045,8 @@ public sealed partial class SettingsWindow : Window
 
         ShowDock();
         ShowWidgets();
+        ShowPins();
+        ShowPresets();
     }
 
     /// <summary>The name one screen goes by in the switcher, by its id.</summary>
@@ -1175,33 +1187,9 @@ public sealed partial class SettingsWindow : Window
             Braun.Row(
                 Loc.Tr("EdgeLabel", "Edge"),
                 Loc.Tr("EdgeHint", "Which side of the screen the bar sits on."),
-                Braun.Segs(
-                    [
-                        Loc.Tr("SegEdgeLeft", "Left"),
-                        Loc.Tr("SegEdgeTop", "Top"),
-                        Loc.Tr("SegEdgeRight", "Right"),
-                        Loc.Tr("SegEdgeBottom", "Bottom"),
-                    ],
-                    (int)dock.Edge,
-                    i => SetDock(d => d with { Edge = (AppBarEdge)i }, Loc.Tr("UndoEdge", "edge")),
-                    wide: true),
-                stack: true),
-
-            Braun.Row(
-                Loc.Tr("AnchorLabel", "Where the widgets sit"),
-                Loc.Tr(
-                    "AnchorHint",
-                    "A bar is as long as the screen and what is on it usually is not. This is which end the empty part goes."),
-                Braun.Choice(
-                    [
-                        Loc.Tr("SegAnchorStart", "At the start"),
-                        Loc.Tr("SegAnchorCentre", "In the middle"),
-                        Loc.Tr("SegAnchorEnd", "At the end"),
-                    ],
-                    (int)dock.Anchor,
-                    i => SetDock(
-                        d => d with { Anchor = (DockAnchor)i },
-                        Loc.Tr("UndoAnchor", "where the widgets sit")))),
+                EdgeBoard(
+                    dock.Edge,
+                    edge => SetDock(d => d with { Edge = edge }, Loc.Tr("UndoEdge", "edge")))),
 
             // A bar down the side of the screen has one thickness. The row is
             // replaced by its explanation rather than offered greyed and mute.
@@ -1294,11 +1282,7 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
-        // ------------------------------------------------------------ contents
-        WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
-
-        WidgetsBody.Children.Add(BarList(dock));
-
+        // ------------------------------------------------------------- the bar
         WidgetsBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("BarLiveTitle", "The bar itself"),
@@ -1314,14 +1298,6 @@ public sealed partial class SettingsWindow : Window
                     "Drag one onto a bar and it lands where you drop it. Two of the same is fine."),
                 Gallery(dock),
                 stack: true),
-
-            Braun.Row(
-                Loc.Tr("PinRow", "A program of your own"),
-                Loc.Tr(
-                    "PinRowHint",
-                    "Pinned programs sit on the bar as icons. A file dropped straight onto the bar is pinned to the slot it lands on."),
-                Braun.Action(
-                    Loc.Tr("PinProgramButton", "Pin a program..."), () => _ = PinDialog(), "Plus")),
 
             // Only when there are any. A row that says "nothing is missing"
             // on every ordinary day is a row nobody reads on the day
@@ -1378,10 +1354,145 @@ public sealed partial class SettingsWindow : Window
                     "Undo",
                     danger: true))));
 
-        // ------------------------------------------------------------ presets
-        WidgetsBody.Children.Add(Braun.Heading("Star", Loc.Tr("PresetsGroup", "Presets")));
+        // ------------------------------------------------------------ contents
+        WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
 
-        var presetRows = new List<FrameworkElement?>
+        WidgetsBody.Children.Add(BarList(dock));
+
+        // ------------------------------------------------------- chosen widget
+        if (Inspector() is { } inspector)
+        {
+            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
+
+            WidgetsBody.Children.Add(_inspectorAt);
+            WidgetsBody.Children.Add(inspector);
+        }
+        else
+        {
+            _inspectorAt = null;
+        }
+
+    }
+
+    /// <summary>
+    /// Fills the page about the programs pinned to the chosen bar.
+    /// </summary>
+    /// <remarks>
+    /// A page of its own so a pinned program has somewhere to be seen the
+    /// moment it is pinned. On the widgets page a fresh pin landed as the last
+    /// row of a long list, below the fold - present, and invisible.
+    /// </remarks>
+    private void ShowPins()
+    {
+        Braun.Theme = Root.ActualTheme;
+        PinsBody.Children.Clear();
+
+        MonitorConfig? dock = _settings.Current.Monitors
+            .FirstOrDefault(m => m.StableId == _editing);
+
+        PinsSection.Opacity = dock is null ? 0.5 : 1;
+
+        if (dock is null)
+        {
+            PinsBody.Children.Add(Braun.Group(Braun.Row(
+                Loc.Tr("DockNoScreen", "No screen has been set up yet."), null, null)));
+
+            return;
+        }
+
+        PinsBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("PinRow", "A program of your own"),
+            Loc.Tr(
+                "PinRowHint",
+                "Pinned programs sit on the bar as icons. A file dropped straight onto the bar is pinned to the slot it lands on."),
+            Braun.Action(
+                Loc.Tr("PinProgramButton", "Pin a program..."), () => _ = PinDialog(), "Plus"))));
+
+        PinsBody.Children.Add(Braun.Heading(
+            "Rocket", Loc.Tr("PinnedListTitle", "Pinned to this bar")));
+
+        List<WidgetConfig> pins =
+        [
+            .. dock.Widgets
+                .Where(w => w.TypeId == IconWidget.Type)
+                .OrderBy(w => w.Cell < 0 ? int.MaxValue : w.Cell)
+        ];
+
+        if (pins.Count == 0)
+        {
+            PinsBody.Children.Add(Braun.Group(Braun.Row(
+                Loc.Tr(
+                    "PinsEmpty",
+                    "Nothing is pinned yet. Drop a file onto the bar, or pin one above."),
+                null,
+                null)));
+
+            return;
+        }
+
+        var rows = new List<FrameworkElement?>();
+
+        foreach (WidgetConfig entry in pins)
+        {
+            string name = _docks.Called(dock.StableId, entry.InstanceId) ?? NameOf(entry);
+            string target = WidgetOptions.Text(entry.Config, "target") ?? string.Empty;
+
+            Grid row = Braun.Row(name, target, Braun.Action(
+                Loc.Tr("ListRemove", "Take it off the bar"),
+                () => TakeOff(entry, Loc.Tr("UndoRemoved", "a widget taken off")),
+                "Delete",
+                danger: true));
+
+            // The same gestures the widget list answers: the line chooses it,
+            // and the bar itself says which icon the line is about.
+            row.Background = entry.InstanceId == _selectedId
+                ? Braun.PanelHi
+                : new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+
+            row.PointerReleased += (_, _) =>
+            {
+                _selectedId = entry.InstanceId;
+                ShowPins();
+            };
+
+            row.PointerEntered += (_, _) => _docks.Point(dock.StableId, entry.InstanceId);
+            row.PointerExited += (_, _) => _docks.Point(dock.StableId, null);
+
+            rows.Add(row);
+        }
+
+        PinsBody.Children.Add(Braun.Group([.. rows]));
+
+        // The chosen pin's name and icon, edited right here - the pin lives on
+        // this page, so its settings do too.
+        if (pins.FirstOrDefault(p => p.InstanceId == _selectedId) is { } chosen)
+        {
+            _pinShown?.Dispose();
+            _pinShown = Build(chosen);
+
+            string id = chosen.InstanceId;
+
+            if (_pinShown?.CreateEditor(options => OnInspectorConfigured(id, options)) is { } editor)
+            {
+                PinsBody.Children.Add(Braun.Heading(
+                    "Sliders", _docks.Called(dock.StableId, id) ?? NameOf(chosen)));
+
+                PinsBody.Children.Add(Braun.Group(Braun.Row(
+                    Loc.Tr("WidgetOptions", "Its own settings"), null, editor, stack: true)));
+            }
+        }
+    }
+
+    /// <summary>The pin whose editor is on the pins page, kept to be disposed.</summary>
+    private WidgetViewModel? _pinShown;
+
+    /// <summary>Fills the page of saved arrangements.</summary>
+    private void ShowPresets()
+    {
+        Braun.Theme = Root.ActualTheme;
+        PresetsBody.Children.Clear();
+
+        var rows = new List<FrameworkElement?>
         {
             Braun.Row(
                 Loc.Tr("PresetSaveRow", "Keep this arrangement"),
@@ -1401,7 +1512,7 @@ public sealed partial class SettingsWindow : Window
             var drop = Braun.Action(
                 Loc.Tr("PresetDelete", "Forget it"), () => DeletePreset(id), "Delete", danger: true);
 
-            presetRows.Add(Braun.Row(
+            rows.Add(Braun.Row(
                 preset.Name,
                 string.Format(
                     CultureInfo.CurrentCulture,
@@ -1415,21 +1526,7 @@ public sealed partial class SettingsWindow : Window
                 }));
         }
 
-        WidgetsBody.Children.Add(Braun.Group([.. presetRows]));
-
-        // ------------------------------------------------------- chosen widget
-        if (Inspector() is { } inspector)
-        {
-            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
-
-            WidgetsBody.Children.Add(_inspectorAt);
-            WidgetsBody.Children.Add(inspector);
-        }
-        else
-        {
-            _inspectorAt = null;
-        }
-
+        PresetsBody.Children.Add(Braun.Group([.. rows]));
     }
 
     /// <summary>Asks for a name and keeps this bar's arrangement under it.</summary>
@@ -1482,7 +1579,7 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("UndoPresetSaved", "a preset saved"));
 
         _log.LogInformation("settings.preset saved name={Name} widgets={Count}", preset.Name, preset.Widgets.Length);
-        ShowWidgets();
+        ShowPresets();
     }
 
     /// <summary>
@@ -1528,6 +1625,7 @@ public sealed partial class SettingsWindow : Window
         _log.LogInformation("settings.preset applied name={Name} monitor={Monitor}", preset.Name, dock.StableId);
         ShowDock();
         ShowWidgets();
+        ShowPins();
     }
 
     /// <summary>Forgets one saved arrangement. Undoable like everything here.</summary>
@@ -1546,7 +1644,7 @@ public sealed partial class SettingsWindow : Window
             WriteReason.UserAction,
             Loc.Tr("UndoPresetDropped", "a preset forgotten"));
 
-        ShowWidgets();
+        ShowPresets();
     }
 
     /// <summary>
@@ -1645,6 +1743,107 @@ public sealed partial class SettingsWindow : Window
 
         EditDock(change, what);
         ShowDock();
+    }
+
+    /// <summary>
+    /// The screen as a little drawing, with a key on each of its four edges.
+    /// </summary>
+    /// <remarks>
+    /// The question is "which side of the screen", so the control is a screen
+    /// with sides: press the side the bar should stand on. The chosen edge
+    /// wears the accent, exactly where the bar itself will be. Four words in a
+    /// row said the same thing more slowly, and said nothing about geometry.
+    /// </remarks>
+    private FrameworkElement EdgeBoard(AppBarEdge chosen, Action<AppBarEdge> pick)
+    {
+        const double Wide = 176;
+        const double Tall = 110;
+        const double Bar = 15;
+        const double In = 8;
+
+        var face = new Grid { Width = Wide, Height = Tall };
+
+        face.Children.Add(new Microsoft.UI.Xaml.Shapes.Rectangle
+        {
+            RadiusX = 10,
+            RadiusY = 10,
+            Fill = Braun.CardHi,
+            Stroke = Braun.LineHi,
+            StrokeThickness = 1,
+        });
+
+        (AppBarEdge Edge, string Name)[] sides =
+        [
+            (AppBarEdge.Left, Loc.Tr("SegEdgeLeft", "Left")),
+            (AppBarEdge.Top, Loc.Tr("SegEdgeTop", "Top")),
+            (AppBarEdge.Right, Loc.Tr("SegEdgeRight", "Right")),
+            (AppBarEdge.Bottom, Loc.Tr("SegEdgeBottom", "Bottom")),
+        ];
+
+        foreach ((AppBarEdge edge, string name) in sides)
+        {
+            bool on = edge == chosen;
+
+            var strip = new Microsoft.UI.Xaml.Shapes.Rectangle
+            {
+                RadiusX = 4,
+                RadiusY = 4,
+                Fill = on ? Braun.Acc : Braun.Sunk,
+                Stroke = on ? null : Braun.LineHi,
+                StrokeThickness = on ? 0 : 1,
+            };
+
+            var key = new Button
+            {
+                Content = strip,
+                MinWidth = 0,
+                MinHeight = 0,
+                Padding = new Thickness(0),
+                BorderThickness = new Thickness(0),
+                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalContentAlignment = VerticalAlignment.Stretch,
+            };
+
+            if (DockMetrics.IsHorizontal(edge))
+            {
+                key.Height = Bar;
+                key.HorizontalAlignment = HorizontalAlignment.Stretch;
+                key.VerticalAlignment = edge == AppBarEdge.Top
+                    ? VerticalAlignment.Top
+                    : VerticalAlignment.Bottom;
+                key.Margin = edge == AppBarEdge.Top
+                    ? new Thickness(In + Bar + 3, In, In + Bar + 3, 0)
+                    : new Thickness(In + Bar + 3, 0, In + Bar + 3, In);
+            }
+            else
+            {
+                key.Width = Bar;
+                key.VerticalAlignment = VerticalAlignment.Stretch;
+                key.HorizontalAlignment = edge == AppBarEdge.Left
+                    ? HorizontalAlignment.Left
+                    : HorizontalAlignment.Right;
+                key.Margin = edge == AppBarEdge.Left
+                    ? new Thickness(In, In + Bar + 3, 0, In + Bar + 3)
+                    : new Thickness(0, In + Bar + 3, In, In + Bar + 3);
+            }
+
+            ToolTipService.SetToolTip(key, name);
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(key, name);
+
+            AppBarEdge picked = edge;
+            key.Click += (_, _) =>
+            {
+                if (picked != chosen)
+                {
+                    pick(picked);
+                }
+            };
+
+            face.Children.Add(key);
+        }
+
+        return face;
     }
 
     /// <summary>What this screen's bar is holding but has no room to show.</summary>
@@ -2623,6 +2822,7 @@ public sealed partial class SettingsWindow : Window
         {
             ShowDock();
             ShowWidgets();
+            ShowPins();
         }
         else
         {
@@ -2663,6 +2863,8 @@ public sealed partial class SettingsWindow : Window
 
         DocksSection.Visibility = Show(tag == "docks");
         WidgetsSection.Visibility = Show(tag == "widgets");
+        PinsSection.Visibility = Show(tag == "pins");
+        PresetsSection.Visibility = Show(tag == "presets");
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
         GeneralSection.Visibility = Show(tag == "general");

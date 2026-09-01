@@ -244,9 +244,12 @@ public sealed class DockWindowManager : IDisposable
         {
             Monitors =
             [
+                // Anchor pinned to Start on every write: the bar has already
+                // baked the old anchor's shift into the cells it is reporting,
+                // and a saved End would bake it in again on the next start.
                 .. current.Monitors.Select(
                     c => c.StableId == stableId
-                        ? c with { Widgets = widgets, Slots = slots ?? c.Slots }
+                        ? c with { Widgets = widgets, Slots = slots ?? c.Slots, Anchor = DockAnchor.Start }
                         : c)
             ],
         };

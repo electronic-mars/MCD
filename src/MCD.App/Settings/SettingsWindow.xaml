@@ -176,6 +176,38 @@
                         <TextBlock x:Uid="NavWidgets" VerticalAlignment="Center" Text="Widgets" />
                     </StackPanel>
                 </NavigationViewItem>
+                <NavigationViewItem x:Uid="NavPinsItem" Tag="pins">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabPins}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavPins" VerticalAlignment="Center" Text="Your programs" />
+                    </StackPanel>
+                </NavigationViewItem>
+                <NavigationViewItem x:Uid="NavPresetsItem" Tag="presets">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabPresets}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavPresets" VerticalAlignment="Center" Text="Presets" />
+                    </StackPanel>
+                </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavLookItem" Tag="appearance">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
@@ -224,9 +256,9 @@
                         <TextBlock x:Uid="NavSensors" VerticalAlignment="Center" Text="Readings" />
                     </StackPanel>
                 </NavigationViewItem>
-            </NavigationView.MenuItems>
-
-            <NavigationView.FooterMenuItems>
+                <!-- With the others rather than in the pane's footer: parked
+                     alone at the bottom it read as a different kind of thing,
+                     and it is just another page. -->
                 <NavigationViewItem x:Uid="NavProgramItem" Tag="about">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">
@@ -243,7 +275,7 @@
                         <TextBlock x:Uid="NavAbout" VerticalAlignment="Center" Text="The program" />
                     </StackPanel>
                 </NavigationViewItem>
-            </NavigationView.FooterMenuItems>
+            </NavigationView.MenuItems>
 
             <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
                 <StackPanel MinWidth="420" MaxWidth="1000" HorizontalAlignment="Stretch" Spacing="12">
@@ -327,6 +359,71 @@
                             TextWrapping="Wrap" />
 
                         <StackPanel x:Name="WidgetsBody" Margin="0,14,0,0" />
+                    </StackPanel>
+
+                    <!-- Pinned programs. A page of their own so a fresh pin is
+                         seen the moment it lands, instead of surfacing as the
+                         last row of a long list. -->
+                    <StackPanel x:Name="PinsSection" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PagePins}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock
+                                x:Uid="PinsTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Your programs" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Uid="PinsIntro"
+                            Margin="0,8,0,0"
+                            Foreground="{ThemeResource BraunTx2}"
+                            Text="Programs, folders and addresses pinned to the bar of the screen chosen under Bars."
+                            TextWrapping="Wrap" />
+
+                        <StackPanel x:Name="PinsBody" Margin="0,14,0,0" />
+                    </StackPanel>
+
+                    <!-- Presets. Saved arrangements, apart from the widgets
+                         page they used to sit at the foot of. -->
+                    <StackPanel x:Name="PresetsSection" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PagePresets}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock
+                                x:Uid="PresetsTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Presets" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Uid="PresetsIntro"
+                            Margin="0,8,0,0"
+                            Foreground="{ThemeResource BraunTx2}"
+                            Text="Saved arrangements of widgets. Any of them can be put onto the bar chosen under Bars."
+                            TextWrapping="Wrap" />
+
+                        <StackPanel x:Name="PresetsBody" Margin="0,14,0,0" />
                     </StackPanel>
 
                     <!-- Appearance -->

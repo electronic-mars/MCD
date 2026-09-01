@@ -87,6 +87,10 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry TabWidgets => Draw("Layout");
 
+    public static Geometry TabPins => Draw("Rocket");
+
+    public static Geometry TabPresets => Draw("Star");
+
     public static Geometry TabLook => Draw("Brush");
 
     public static Geometry TabSensors => Draw("Pulse");
@@ -96,6 +100,10 @@ public sealed partial class IconRow : ObservableObject
     public static Geometry TabGeneral => Draw("Sliders");
 
     public static Geometry PageGeneral => Draw("Sliders");
+
+    public static Geometry PagePins => Draw("Rocket");
+
+    public static Geometry PagePresets => Draw("Star");
 
     public static Geometry PageLook => Draw("Brush");
 

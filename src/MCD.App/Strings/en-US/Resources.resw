@@ -893,24 +893,6 @@
   <data name="ListEmpty" xml:space="preserve">
     <value>Nothing on this bar yet.</value>
   </data>
-  <data name="AnchorLabel" xml:space="preserve">
-    <value>Where the widgets sit</value>
-  </data>
-  <data name="AnchorHint" xml:space="preserve">
-    <value>A bar is as long as the screen and what is on it usually is not. This is which end the empty part goes.</value>
-  </data>
-  <data name="SegAnchorStart" xml:space="preserve">
-    <value>At the start</value>
-  </data>
-  <data name="SegAnchorCentre" xml:space="preserve">
-    <value>In the middle</value>
-  </data>
-  <data name="SegAnchorEnd" xml:space="preserve">
-    <value>At the end</value>
-  </data>
-  <data name="UndoAnchor" xml:space="preserve">
-    <value>where the widgets sit</value>
-  </data>
   <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
     <value>Bars</value>
   </data>
@@ -1228,5 +1210,35 @@
   </data>
   <data name="WifiRate" xml:space="preserve">
     <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Your programs</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Your programs</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Your programs</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Programs, folders and addresses pinned to the bar of the screen chosen under Bars.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>Pinned to this bar</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Nothing is pinned yet. Drop a file onto the bar, or pin one above.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Saved arrangements of widgets. Any of them can be put onto the bar chosen under Bars.</value>
   </data>
 </root>
