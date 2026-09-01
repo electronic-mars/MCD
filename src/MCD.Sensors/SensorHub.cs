@@ -232,6 +232,10 @@ public sealed class SensorHub : IDisposable
 
             source.Ready = true;
             source.Descriptors = [.. found];
+
+            // The list was taken this very moment; asking again further down
+            // this same pass would be the one wasted Discover per opening.
+            source.NextRelist = now + Relist;
             RebuildCatalog();
 
             _log.LogInformation(
@@ -264,7 +268,11 @@ public sealed class SensorHub : IDisposable
 
         source.NextPoll = now + source.Provider.Interval;
 
-        var buffer = new Dictionary<SensorKey, double>();
+        // The source's own buffer, cleared rather than remade: most sources
+        // poll every second, and a fresh dictionary per source per tick was
+        // steady garbage bought for nothing.
+        Dictionary<SensorKey, double> buffer = source.Buffer;
+        buffer.Clear();
 
         if (!Safely(source, () => { source.Provider.Poll(buffer); return true; }, "reading", false))
         {
@@ -281,9 +289,14 @@ public sealed class SensorHub : IDisposable
 
         // A key the provider knows about but did not return this time is ageing,
         // not gone: a drive that was busy for one tick should not blink out.
-        foreach (SensorKey key in source.Values.Keys.Where(k => !buffer.ContainsKey(k)).ToList())
+        // Overwriting a value in place is safe to do mid-walk; only growing or
+        // shrinking the dictionary is not.
+        foreach ((SensorKey key, SensorReading value) in source.Values)
         {
-            source.Values[key] = source.Values[key].Aging();
+            if (!buffer.ContainsKey(key))
+            {
+                source.Values[key] = value.Aging();
+            }
         }
     }
 
@@ -480,6 +493,9 @@ public sealed class SensorHub : IDisposable
         public ISensorProvider Provider { get; } = provider;
 
         public Dictionary<SensorKey, SensorReading> Values { get; } = [];
+
+        /// <summary>Reused across polls; see the note where it is filled.</summary>
+        public Dictionary<SensorKey, double> Buffer { get; } = [];
 
         public ImmutableArray<SensorDescriptor> Descriptors { get; set; } = [];
 

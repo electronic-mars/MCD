@@ -542,13 +542,24 @@ public static class Braun
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
 
-            line.Children.Add(new Ellipse
-            {
-                Width = 6,
-                Height = 6,
-                VerticalAlignment = VerticalAlignment.Center,
-                Fill = Lamp(items[i].On),
-            });
+            // Lit is a filled lamp, dark is an empty ring: the difference
+            // survives being seen without its colour.
+            line.Children.Add(items[i].On
+                ? new Ellipse
+                {
+                    Width = 6,
+                    Height = 6,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Fill = Lamp(true),
+                }
+                : new Ellipse
+                {
+                    Width = 6,
+                    Height = 6,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Stroke = Lamp(false),
+                    StrokeThickness = 1.5,
+                });
 
             line.Children.Add(new TextBlock
             {

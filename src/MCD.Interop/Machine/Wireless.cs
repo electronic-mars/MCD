@@ -8,9 +8,12 @@ namespace Mcd.Interop.Machine;
 /// <param name="Bars">Signal strength, 0 to 5, or -1 when it is not reported.</param>
 /// <param name="Link">Band, speed and standard, when the WLAN service tells them.</param>
 public readonly record struct WirelessState(
-    bool Wireless, string Name, int Bars, WirelessLink Link = default)
+    bool Wireless, string Name, int Bars, WirelessLink Link)
 {
-    public static WirelessState None => new(false, string.Empty, -1);
+    // Link spelt out rather than defaulted: a defaulted WirelessLink carries
+    // a null Standard, and a null that only appears on the disconnected path
+    // is the kind that waits years to be dereferenced.
+    public static WirelessState None => new(false, string.Empty, -1, WirelessLink.None);
 }
 
 /// <summary>
