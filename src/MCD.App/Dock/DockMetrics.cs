@@ -121,16 +121,20 @@ public static class DockMetrics
     /// </remarks>
     public static double CellDips(AppBarEdge edge, DockDensity density, string size = "large")
     {
-        double cell = IsHorizontal(edge) && density == DockDensity.Compact ? 26 : 30;
+        // Half the size of the smallest thing that stands alone. A widget
+        // occupies whole slots, and the round-up waste - up to one slot,
+        // split onto the widget's two edges by centring - was the mysterious
+        // air between neighbours. Halving the grid halves the average waste
+        // without giving up the model: the slots are still the places a drag
+        // lands on and the reason the row holds still while figures change.
+        double cell = IsHorizontal(edge) && density == DockDensity.Compact ? 13 : 15;
 
-        // The slot shrinks with the readings. A widget occupies whole slots,
-        // so slots sized for the large readings leave every smaller widget
-        // swimming in its own footprint - the row read as gappy exactly when
-        // the person had asked for a tighter bar.
+        // And the slot shrinks with the readings, or a tighter size would
+        // leave every widget swimming in its old footprint.
         return size switch
         {
-            "small" => cell - 8,
-            "medium" => cell - 4,
+            "small" => cell - 4,
+            "medium" => cell - 2,
             _ => cell,
         };
     }
