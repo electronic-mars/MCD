@@ -112,10 +112,57 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     /// </summary>
     public void Outline(bool on)
     {
-        BorderBrush = on
+        // On the chip, not on the host. The host is as wide as the length
+        // the widget declared - reservation included - and an outline drawn
+        // there showed a box wider than the ink, unevenly: exactly what a
+        // person sees the moment they pick a widget up. The chip is what the
+        // hover pill lights, so the pickup outline and the pill agree.
+        Brush? brush = on
             ? new SolidColorBrush(Windows.UI.Color.FromArgb(0xE6, 0xFF, 0xFF, 0xFF))
             : null;
-        BorderThickness = new Thickness(on ? 1 : 0);
+
+        var line = new Thickness(on ? 1 : 0);
+
+        switch (Chip())
+        {
+            case Control control:
+                control.BorderBrush = brush;
+                control.BorderThickness = line;
+                break;
+
+            case Grid grid:
+                grid.BorderBrush = brush;
+                grid.BorderThickness = line;
+                break;
+
+            case StackPanel stack:
+                stack.BorderBrush = brush;
+                stack.BorderThickness = line;
+                break;
+
+            default:
+                BorderBrush = brush;
+                BorderThickness = line;
+                break;
+        }
+    }
+
+    /// <summary>The template's root element - the thing the person sees as the widget.</summary>
+    private FrameworkElement? Chip()
+    {
+        DependencyObject at = this;
+
+        for (int depth = 0; depth < 4 && VisualTreeHelper.GetChildrenCount(at) > 0; depth++)
+        {
+            at = VisualTreeHelper.GetChild(at, 0);
+
+            if (at is ContentPresenter presenter && VisualTreeHelper.GetChildrenCount(presenter) > 0)
+            {
+                return VisualTreeHelper.GetChild(presenter, 0) as FrameworkElement;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>Half-gone: the pointer is off the bar, and letting go removes it.</summary>
