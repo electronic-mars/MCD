@@ -1721,10 +1721,33 @@ public sealed partial class SettingsWindow : Window
 
         var rows = new List<FrameworkElement?>();
 
+        // Twins get numbers. Two widgets of one kind are allowed and common,
+        // and two rows saying "CPU" leave the arrows aimed by guesswork.
+        var seen = new Dictionary<string, int>(StringComparer.CurrentCulture);
+        var counts = new Dictionary<string, int>(StringComparer.CurrentCulture);
+
+        List<string> names =
+        [
+            .. order.Select(w => _docks.Called(dock.StableId, w.InstanceId) ?? NameOf(w))
+        ];
+
+        foreach (string n in names)
+        {
+            counts[n] = counts.TryGetValue(n, out int c) ? c + 1 : 1;
+        }
+
         for (int i = 0; i < order.Count; i++)
         {
             WidgetConfig entry = order[i];
             int at = i;
+
+            string called = names[i];
+
+            if (counts[called] > 1)
+            {
+                seen[called] = seen.TryGetValue(called, out int nth) ? nth + 1 : 1;
+                called = $"{called} \u00b7 {seen[called]}";
+            }
 
             var line = new Grid { ColumnSpacing = 6, Padding = new Thickness(13, 7, 13, 7) };
             line.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -1740,7 +1763,7 @@ public sealed partial class SettingsWindow : Window
                 // roving thermometer "the hottest" while the bar's own says
                 // "GPU" - and a person comparing the two counts a widget
                 // missing.
-                Text = _docks.Called(dock.StableId, entry.InstanceId) ?? NameOf(entry),
+                Text = called,
                 FontSize = 14,
                 VerticalAlignment = VerticalAlignment.Center,
                 Foreground = Braun.Tx,
@@ -1798,6 +1821,17 @@ public sealed partial class SettingsWindow : Window
             Grid.SetColumn(off, 4);
             line.Children.Add(off);
 
+            // The three buttons appear when the row is pointed at or when the
+            // keyboard reaches them - twelve rows of three always-lit keys,
+            // a third of them red, was the noisiest thing in the window. They
+            // stay in the tree and tabbable, so nothing is lost to a keyboard.
+            foreach (Button key in new[] { up, down, off })
+            {
+                key.Opacity = 0;
+                key.GotFocus += (_, _) => key.Opacity = 1;
+                key.LostFocus += (_, _) => key.Opacity = 0;
+            }
+
             // The whole line chooses it, so its own settings appear below
             // without anybody having to find it on the screen. Chosen is a
             // filled container, not a text colour: accent-blue text read as a
@@ -1811,11 +1845,23 @@ public sealed partial class SettingsWindow : Window
                 ShowWidgets();
             };
 
-            // And the bar itself says which one this line is about. Two
-            // widgets of the same kind read as the same row otherwise, and
-            // the arrow next to one of them is then a guess.
-            line.PointerEntered += (_, _) => _docks.Point(dock.StableId, entry.InstanceId);
-            line.PointerExited += (_, _) => _docks.Point(dock.StableId, null);
+            // And the bar itself says which one this line is about, while
+            // the row's own keys light up.
+            line.PointerEntered += (_, _) =>
+            {
+                _docks.Point(dock.StableId, entry.InstanceId);
+                up.Opacity = 1;
+                down.Opacity = 1;
+                off.Opacity = 1;
+            };
+
+            line.PointerExited += (_, _) =>
+            {
+                _docks.Point(dock.StableId, null);
+                up.Opacity = 0;
+                down.Opacity = 0;
+                off.Opacity = 0;
+            };
 
             rows.Add(line);
         }
@@ -2653,6 +2699,7 @@ public sealed partial class SettingsWindow : Window
         [
             .. _sensors.Catalog
                 .OrderBy(d => d.Group)
+                .ThenBy(d => d.Hardware, StringComparer.CurrentCulture)
                 .ThenBy(d => d.Kind)
                 .ThenBy(d => d.Label, StringComparer.CurrentCulture)
         ];
@@ -2665,10 +2712,19 @@ public sealed partial class SettingsWindow : Window
             _readings.Clear();
 
             var names = new SensorNames(_settings.Current.Sensors.Names);
+            string was = string.Empty;
 
             foreach (SensorDescriptor sensor in found)
             {
-                _readings.Add(new SensorRow(sensor, names, OnSensorRenamed));
+                // Seventeen rows in one undivided list made every reading
+                // carry its device's name; grouped, the device is said once,
+                // as a heading.
+                string device = DeviceName(sensor);
+
+                _readings.Add(new SensorRow(
+                    sensor, names, OnSensorRenamed, device == was ? "" : device));
+
+                was = device;
             }
         }
 
@@ -2683,9 +2739,82 @@ public sealed partial class SettingsWindow : Window
             ? Loc.Tr("SensorsNoneYet", "Nothing is answering yet.")
             : string.Format(
                 CultureInfo.CurrentCulture,
-                Loc.Tr("SensorsSummary", "{0} readings. Sources: {1}."),
-                found.Length,
-                Roll());
+                Loc.Tr("SensorsCount", "{0} readings."),
+                found.Length);
+
+        ShowSources();
+    }
+
+    /// <summary>The device a reading belongs to, for the group headings.</summary>
+    private static string DeviceName(SensorDescriptor sensor) => sensor.Group switch
+    {
+        // Through Detail, which already refuses a source's own shorthand:
+        // "gpu" as a heading is plumbing, a model name is a heading.
+        HardwareGroup.Gpu when SensorNames.Detail(sensor) is { Length: > 0 } model => model,
+        HardwareGroup.Cpu => Loc.Tr("DeviceCpu", "Processor"),
+        HardwareGroup.Gpu => Loc.Tr("DeviceGpu", "Graphics"),
+        HardwareGroup.Memory => Loc.Tr("DeviceMemory", "Memory"),
+        HardwareGroup.Storage => Loc.Tr("DeviceStorage", "Drives"),
+        HardwareGroup.Network => Loc.Tr("DeviceNetwork", "Network"),
+        _ => Loc.Tr("DeviceBoard", "Board"),
+    };
+
+    /// <summary>What the last drawn source list looked like, to rebuild it only on change.</summary>
+    private string _sourcesShown = string.Empty;
+
+    /// <summary>
+    /// One line per source, in place of a paragraph strung with semicolons.
+    /// </summary>
+    /// <remarks>
+    /// The question people bring here is about one source by name, and a
+    /// sentence made them read all of it. A list is scanned; and the silent
+    /// sources stay in it, because they are the point.
+    /// </remarks>
+    private void ShowSources()
+    {
+        var roll = _sensors.Sources
+            .OrderBy(s => s.Tier)
+            .ThenBy(s => SourceName(s.Id), StringComparer.CurrentCulture)
+            .ToList();
+
+        string signature = string.Join(
+            ";", roll.Select(s => $"{s.Id}:{s.Answering}:{s.Readings}"));
+
+        if (signature == _sourcesShown)
+        {
+            return;
+        }
+
+        _sourcesShown = signature;
+        SourcesList.Children.Clear();
+
+        foreach (SourceRoll source in roll)
+        {
+            var line = new Grid { ColumnSpacing = 8, Padding = new Thickness(0, 2, 0, 2) };
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            line.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            var name = new TextBlock
+            {
+                Text = SourceName(source.Id),
+                FontSize = 12,
+                Foreground = source.Answering ? Braun.Tx2 : Braun.Tx3,
+            };
+
+            var state = new TextBlock
+            {
+                Text = SourceState(source),
+                FontSize = 12,
+                Foreground = Braun.Tx3,
+                TextWrapping = TextWrapping.Wrap,
+            };
+
+            Grid.SetColumn(name, 0);
+            Grid.SetColumn(state, 1);
+            line.Children.Add(name);
+            line.Children.Add(state);
+            SourcesList.Children.Add(line);
+        }
     }
 
     /// <summary>

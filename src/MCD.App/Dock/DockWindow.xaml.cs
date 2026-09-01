@@ -985,7 +985,7 @@ public sealed partial class DockWindow : Window
     }
 
     /// <summary>How long one slot is meant to be, before the bar is divided up.</summary>
-    private double CellSize => DockMetrics.CellDips(Config.Edge, Config.Density);
+    private double CellSize => DockMetrics.CellDips(Config.Edge, Config.Density, _context.Size);
 
     /// <summary>
     /// How long one slot actually is: the bar's own length shared out between

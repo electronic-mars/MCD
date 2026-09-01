@@ -1151,4 +1151,31 @@
   <data name="RamDetail" xml:space="preserve">
     <value>{0} · {1} / {2} ГБ</value>
   </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>Показаний: {0}.</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>Процессор</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>Видеокарта</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Память</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Накопители</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Сеть</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Плата</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Изменить…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Авто</value>
+  </data>
 </root>

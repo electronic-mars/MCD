@@ -16,7 +16,11 @@ public sealed partial class SensorRow : ObservableObject
     private readonly SensorDescriptor _sensor;
     private readonly Action<SensorRow, string> _rename;
 
-    public SensorRow(SensorDescriptor sensor, SensorNames names, Action<SensorRow, string> rename)
+    public SensorRow(
+        SensorDescriptor sensor,
+        SensorNames names,
+        Action<SensorRow, string> rename,
+        string group = "")
     {
         _sensor = sensor;
         _rename = rename;
@@ -24,9 +28,22 @@ public sealed partial class SensorRow : ObservableObject
         Key = sensor.Key;
         Label = names.For(sensor);
         Explain = SensorNames.Explain(sensor);
-        Hardware = SensorNames.Detail(sensor);
+        Group = group;
+
+        // The part's name is the group's job now; repeated under three rows
+        // in a row it was the darkest text on the page and said nothing new.
+        string detail = SensorNames.Detail(sensor);
+        Hardware = detail == group ? string.Empty : detail;
+
         Unit = sensor.Unit;
     }
+
+    /// <summary>The heading drawn above this row, when it opens a new device.</summary>
+    public string Group { get; }
+
+    public Microsoft.UI.Xaml.Visibility GroupShown => Group.Length > 0
+        ? Microsoft.UI.Xaml.Visibility.Visible
+        : Microsoft.UI.Xaml.Visibility.Collapsed;
 
     public SensorKey Key { get; }
 

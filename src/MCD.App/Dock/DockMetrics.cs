@@ -119,8 +119,21 @@ public static class DockMetrics
     /// player. That is what makes a slot a place: a widget can be put wherever
     /// there are enough free ones, and nowhere else.
     /// </remarks>
-    public static double CellDips(AppBarEdge edge, DockDensity density) =>
-        IsHorizontal(edge) && density == DockDensity.Compact ? 26 : 30;
+    public static double CellDips(AppBarEdge edge, DockDensity density, string size = "large")
+    {
+        double cell = IsHorizontal(edge) && density == DockDensity.Compact ? 26 : 30;
+
+        // The slot shrinks with the readings. A widget occupies whole slots,
+        // so slots sized for the large readings leave every smaller widget
+        // swimming in its own footprint - the row read as gappy exactly when
+        // the person had asked for a tighter bar.
+        return size switch
+        {
+            "small" => cell - 8,
+            "medium" => cell - 4,
+            _ => cell,
+        };
+    }
 
     public static bool IsHorizontal(AppBarEdge edge) =>
         edge is AppBarEdge.Top or AppBarEdge.Bottom;

@@ -416,11 +416,15 @@
                         </StackPanel>
                         <TextBlock
                             x:Name="SensorSummary"
-                            Margin="0,-3,0,10"
+                            Margin="0,-3,0,6"
                             FontSize="12"
                             Foreground="{ThemeResource BraunTx3}"
                             LineHeight="17"
                             TextWrapping="Wrap" />
+
+                        <!-- One line per source: the silent ones are the point,
+                             and a paragraph strung with semicolons hid them. -->
+                        <StackPanel x:Name="SourcesList" Margin="0,0,0,10" />
 
                         <Border
                             Background="{ThemeResource BraunCard}"
@@ -430,6 +434,14 @@
                             <ItemsControl x:Name="SensorList">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="local:SensorRow">
+                                        <StackPanel>
+                                        <TextBlock
+                                            Padding="13,10,13,4"
+                                            FontSize="11"
+                                            CharacterSpacing="120"
+                                            Foreground="{ThemeResource BraunTx3}"
+                                            Text="{x:Bind Group}"
+                                            Visibility="{x:Bind GroupShown}" />
                                         <Grid
                                             Padding="13,10"
                                             BorderBrush="{ThemeResource BraunLine}"
@@ -513,6 +525,7 @@
                                                 </Viewbox>
                                             </Button>
                                         </Grid>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

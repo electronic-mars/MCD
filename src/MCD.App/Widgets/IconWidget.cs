@@ -103,16 +103,18 @@ public sealed class IconWidget : WidgetViewModel
 
         panel.Children.Add(name);
 
-        // The drawn icons on offer, and the way back to the program's own.
-        var icons = new VariableSizedWrapGrid
+        // The icon: the current one shown, the seventy alternatives put
+        // away behind a press. Unfolded into the page, the grid was five
+        // hundred points of anonymous drawings that buried every setting
+        // below it - the single loudest violation of its own style.
+        panel.Children.Add(new TextBlock
         {
-            Orientation = Orientation.Horizontal,
-            MaximumRowsOrColumns = 8,
-            ItemWidth = 34,
-            ItemHeight = 34,
-        };
+            Text = Loc.Tr("PinIconHeader", "Icon"),
+            FontSize = 12,
+            Opacity = 0.7,
+        });
 
-        foreach (string glyph in IconLibrary.Paths.Keys)
+        static FrameworkElement Drawn(string glyph, double box)
         {
             var shape = new Microsoft.UI.Xaml.Shapes.Path
             {
@@ -128,19 +130,63 @@ public sealed class IconWidget : WidgetViewModel
             var canvas = new Canvas { Width = 24, Height = 24 };
             canvas.Children.Add(shape);
 
+            return new Viewbox { Width = box, Height = box, Child = canvas };
+        }
+
+        string wearing = WidgetOptions.Text(Options, "icon") ?? string.Empty;
+
+        var icons = new VariableSizedWrapGrid
+        {
+            Orientation = Orientation.Horizontal,
+            MaximumRowsOrColumns = 8,
+            ItemWidth = 36,
+            ItemHeight = 36,
+        };
+
+        var flyout = new Flyout
+        {
+            Content = new ScrollViewer
+            {
+                Content = new StackPanel
+                {
+                    Spacing = 8,
+                    Children = { icons },
+                },
+                MaxHeight = 320,
+            },
+        };
+
+        foreach (string glyph in IconLibrary.Paths.Keys)
+        {
+            bool current = glyph == wearing;
+
             var button = new Button
             {
-                Width = 30,
-                Height = 30,
+                Width = 32,
+                Height = 32,
                 Padding = new Thickness(3),
                 Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-                BorderThickness = new Thickness(0),
-                Content = new Viewbox { Child = canvas },
+
+                // The one already worn is marked, so the grid answers "which
+                // is it now" as well as "which could it be".
+                BorderThickness = new Thickness(current ? 1 : 0),
+                BorderBrush = current
+                    ? (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"]
+                    : null,
+                CornerRadius = new CornerRadius(6),
+                Content = Drawn(glyph, 24),
             };
+
+            // Seventy anonymous drawings; the name is the difference between
+            // hunting and finding.
+            ToolTipService.SetToolTip(button, glyph);
 
             string chosen = glyph;
             button.Click += (_, _) =>
+            {
+                flyout.Hide();
                 changed(WidgetOptions.Merge(Options, ("icon", JsonValue.Create(chosen))));
+            };
 
             icons.Children.Add(button);
         }
@@ -150,16 +196,32 @@ public sealed class IconWidget : WidgetViewModel
             Content = Loc.Tr("LaunchIconAuto", "The program's own icon"),
         };
 
-        own.Click += (_, _) => changed(WidgetOptions.Merge(Options, ("icon", null)));
-
-        panel.Children.Add(new TextBlock
+        own.Click += (_, _) =>
         {
-            Text = Loc.Tr("PinIconHeader", "Icon"),
-            FontSize = 12,
-            Opacity = 0.7,
-        });
-        panel.Children.Add(icons);
-        panel.Children.Add(own);
+            flyout.Hide();
+            changed(WidgetOptions.Merge(Options, ("icon", null)));
+        };
+
+        ((StackPanel)((ScrollViewer)flyout.Content).Content).Children.Add(own);
+
+        var change = new Button
+        {
+            Flyout = flyout,
+            Content = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 8,
+                Children =
+                {
+                    wearing.Length > 0
+                        ? Drawn(wearing, 18)
+                        : new TextBlock { Text = Loc.Tr("LaunchIconAutoShort", "Auto"), FontSize = 12 },
+                    new TextBlock { Text = Loc.Tr("PinIconChange", "Change\u2026"), FontSize = 12 },
+                },
+            },
+        };
+
+        panel.Children.Add(change);
 
         return panel;
     }

@@ -1151,4 +1151,31 @@
   <data name="RamDetail" xml:space="preserve">
     <value>{0} · {1} / {2} GB</value>
   </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>{0} readings.</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>Graphics</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Drives</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Network</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Change…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Auto</value>
+  </data>
 </root>
