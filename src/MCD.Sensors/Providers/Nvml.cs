@@ -113,6 +113,7 @@ internal sealed class Nvml : IDisposable
         nvml._temperature = nvml.Resolve<DeviceKindOutUint>("nvmlDeviceGetTemperature");
         nvml._utilization = nvml.Resolve<DeviceUtilization>("nvmlDeviceGetUtilizationRates");
         nvml._memory = nvml.Resolve<DeviceMemory>("nvmlDeviceGetMemoryInfo");
+        nvml._threshold = nvml.Resolve<DeviceKindOutUint>("nvmlDeviceGetTemperatureThreshold");
         nvml._fanSpeed = nvml.Resolve<DeviceOutUint>("nvmlDeviceGetFanSpeed");
         nvml._clock = nvml.Resolve<DeviceKindOutUint>("nvmlDeviceGetClockInfo");
         nvml._power = nvml.Resolve<DeviceOutUint>("nvmlDeviceGetPowerUsage");
@@ -139,6 +140,14 @@ internal sealed class Nvml : IDisposable
             : null;
 
     private DeviceMemory? _memory;
+
+    private DeviceKindOutUint? _threshold;
+
+    /// <summary>The card's own temperature limit: 0 = shutdown, 1 = slowdown.</summary>
+    public double? Threshold(nint device, uint kind) =>
+        _threshold is not null && _threshold(device, kind, out uint value) == Success && value > 0
+            ? value
+            : null;
 
     public double? Temperature(nint device) =>
         _temperature is not null && _temperature(device, TemperatureGpu, out uint value) == Success

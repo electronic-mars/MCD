@@ -126,6 +126,14 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         return id.Length > 0 ? Short(id) : string.Empty;
     }
 
+    /// <summary>What clicking the artwork opens, by name when the name is known.</summary>
+    public string ArtTip => Resumes() is { Length: > 0 } who
+        ? string.Format(
+            System.Globalization.CultureInfo.CurrentCulture,
+            Loc.Tr("MediaOpenNamed", "Open {0}"),
+            who)
+        : Loc.Tr("MediaOpenPlayer", "Open the player");
+
     partial void OnTitleChanged(string value) => OnPropertyChanged(nameof(PlayTip));
 
     /// <summary>

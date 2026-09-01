@@ -67,6 +67,11 @@
                             FontSize="13"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="{x:Bind Detail, Mode=OneWay}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Story, Mode=OneWay}"
+                            Visibility="{x:Bind StoryShown, Mode=OneWay}" />
                     </StackPanel>
                 </ToolTip>
             </ToolTipService.ToolTip>

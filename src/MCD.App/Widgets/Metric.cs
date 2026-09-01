@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Immutable;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
@@ -79,6 +80,23 @@ public sealed partial class Metric : ObservableObject
     /// </remarks>
     [ObservableProperty]
     public partial string Detail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The hover's second line: what the reading did over the last minute,
+    /// and the worst it has been this session.
+    /// </summary>
+    [ObservableProperty]
+    public partial string Story { get; set; } = string.Empty;
+
+    /// <summary>Whether the hover has a story line yet.</summary>
+    [ObservableProperty]
+    public partial Visibility StoryShown { get; set; } = Visibility.Collapsed;
+
+    /// <summary>The worst this reading has been since the program started watching it.</summary>
+    private double _peak = double.MinValue;
+
+    /// <summary>Story text is rebuilt on a slow beat, not every second.</summary>
+    private uint _storyBeat;
 
     public string Unit { get; }
 
@@ -427,6 +445,10 @@ public sealed partial class Metric : ObservableObject
                 Icon = IconFound(found);
             }
 
+            // The minute of history the hub keeps for whoever asks - and
+            // until now nobody ever asked.
+            sensors.Watch(found.Key);
+
             string? given = NameFound?.Invoke(found);
             string called = given ?? found.Label;
 
@@ -462,6 +484,33 @@ public sealed partial class Metric : ObservableObject
         Visibility = Visibility.Visible;
 
         SensorReading reading = snapshot[Sensor.Key];
+
+        if (reading.HasValue && reading.Value > _peak)
+        {
+            _peak = reading.Value;
+        }
+
+        // The hover's second line: the minute's range and the session's
+        // peak. Rebuilt every few seconds - it is read by a person hovering,
+        // not by anyone at a glance.
+        if (++_storyBeat % 5 == 0 && _peak > double.MinValue)
+        {
+            ImmutableArray<double> minute = snapshot.Trend(Sensor.Key);
+
+            Story = minute.Length >= 5
+                ? string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("MetricStory", "last minute {0}\u2013{1} \u00b7 peak {2}"),
+                    Format(minute.Min()),
+                    Format(minute.Max()),
+                    Format(_peak))
+                : string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("MetricPeak", "peak {0}"),
+                    Format(_peak));
+
+            StoryShown = Visibility.Visible;
+        }
 
         string shown = reading.HasValue ? Format(reading.Value) : "--";
 

@@ -1178,4 +1178,16 @@
   <data name="LaunchIconAutoShort" xml:space="preserve">
     <value>Авто</value>
   </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>за минуту {0}–{1} · пик {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>пик {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>Открыть {0}</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Открыть плеер</value>
+  </data>
 </root>

@@ -332,10 +332,9 @@ public static class Braun
 
             var caption = new TextBlock
             {
-                Text = labels[i].ToUpper(CultureInfo.CurrentCulture),
-                FontSize = MicroSize,
+                Text = labels[i],
+                FontSize = 12,
                 FontWeight = on ? FontWeights.Medium : FontWeights.Normal,
-                CharacterSpacing = 160,
                 Foreground = on ? OnAcc : Tx3,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -477,8 +476,7 @@ public static class Braun
         // keeping a hostage for.
         var ruler = new TextBlock
         {
-            FontSize = MicroSize,
-            CharacterSpacing = 160,
+            FontSize = 12,
 
             // The heaviest weight any of them can switch to: the chosen key is
             // Medium, and a width reserved at Normal clips the moment somebody
@@ -490,7 +488,7 @@ public static class Braun
 
         foreach (string label in labels)
         {
-            ruler.Text = label.ToUpper(CultureInfo.CurrentCulture);
+            ruler.Text = label;
             ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
             widest = Math.Max(widest, ruler.DesiredSize.Width);
         }
@@ -554,10 +552,9 @@ public static class Braun
 
             line.Children.Add(new TextBlock
             {
-                Text = items[i].Label.ToUpper(CultureInfo.CurrentCulture),
-                FontSize = MicroSize,
+                Text = items[i].Label,
+                FontSize = 12,
                 FontWeight = FontWeights.Medium,
-                CharacterSpacing = 120,
                 Foreground = chosen ? Tx : Tx3,
             });
 
@@ -774,10 +771,9 @@ public static class Braun
 
         body.Children.Add(new TextBlock
         {
-            Text = text.ToUpper(CultureInfo.CurrentCulture),
-            FontSize = 12,
+            Text = text,
+            FontSize = 13,
             FontWeight = FontWeights.Medium,
-            CharacterSpacing = 140,
             Foreground = ink,
             VerticalAlignment = VerticalAlignment.Center,
         });

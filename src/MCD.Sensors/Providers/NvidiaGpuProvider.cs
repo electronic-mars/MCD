@@ -105,16 +105,25 @@ public sealed class NvidiaGpuProvider(ILogger<NvidiaGpuProvider> log) : ISensorP
             string uuid = _nvml.Uuid(handle) ?? $"gpu{i}";
             string name = _nvml.Name(handle) ?? "NVIDIA GPU";
 
-            _gpus.Add(new Gpu(handle, Shorten(uuid), name));
+            // The card's own limits, when the driver will say. The generic
+            // 83/90 are a GeForce's habits, not this card's word.
+            _gpus.Add(new Gpu(
+                handle,
+                Shorten(uuid),
+                name,
+                _nvml.Threshold(handle, 1),
+                _nvml.Threshold(handle, 0)));
             log.LogInformation("sensors.nvml found {Name} ({Uuid})", name, uuid);
         }
     }
 
     private static IEnumerable<SensorDescriptor> Describe(Gpu gpu)
     {
-        // 83 °C is where a modern GeForce starts pulling its clocks back, and
-        // NVIDIA's own limit sits at 90. Those are the numbers worth colouring.
-        yield return Sensor(gpu, SensorKind.Temperature, "core", "GPU", "°C", 83, 90);
+        // The card's own thresholds when the driver reports them; a modern
+        // GeForce's habits - clocks pulled at 83, limit at 90 - otherwise.
+        yield return Sensor(
+            gpu, SensorKind.Temperature, "core", "GPU", "°C",
+            gpu.Slowdown ?? 83, gpu.Shutdown ?? 90);
         yield return Sensor(gpu, SensorKind.Load, "core", "GPU", "%");
         // The controller's busyness and the memory's fullness are different
         // numbers, and the first was labelled as the second for a while -
@@ -150,5 +159,6 @@ public sealed class NvidiaGpuProvider(ILogger<NvidiaGpuProvider> log) : ISensorP
     private static string Shorten(string uuid) =>
         uuid.Length <= 12 ? uuid : "gpu-" + uuid[^8..];
 
-    private sealed record Gpu(nint Handle, string Key, string Name);
+    private sealed record Gpu(
+        nint Handle, string Key, string Name, double? Slowdown = null, double? Shutdown = null);
 }

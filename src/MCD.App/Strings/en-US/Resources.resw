@@ -1178,4 +1178,16 @@
   <data name="LaunchIconAutoShort" xml:space="preserve">
     <value>Auto</value>
   </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>last minute {0}–{1} · peak {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>peak {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>Open {0}</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Open the player</value>
+  </data>
 </root>
