@@ -448,9 +448,14 @@ public sealed partial class Metric : ObservableObject
 
         if (Sensor is null)
         {
-            // Hardware this machine does not have. An empty chip that never
-            // fills in looks like a fault; its absence does not.
-            Visibility = Visibility.Collapsed;
+            // Not hidden - dashed. A chip that collapses itself while its
+            // sensor is still loading is measured as nothing by its host on
+            // the first pass, and that width was never reliably corrected:
+            // the widget then painted itself in overflow with lopsided
+            // margins, which is what the hover pill lit up. Whether a widget
+            // belongs on this machine at all is the span machinery's call,
+            // not the chip's.
+            Text = "--";
             return;
         }
 

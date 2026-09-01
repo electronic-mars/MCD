@@ -1409,6 +1409,34 @@ public sealed partial class DockWindow : Window
     /// <summary>Whether this drag has already been asked how long it is.</summary>
     private bool _measured;
 
+    /// <summary>Sizes a host to what its widget declares.</summary>
+    private void Believe(WidgetHost host, WidgetViewModel widget)
+    {
+        if (!widget.Possible)
+        {
+            return;
+        }
+
+        if (DockMetrics.IsHorizontal(Config.Edge))
+        {
+            double wide = widget.Length();
+
+            if (double.IsNaN(host.Width) || Math.Abs(host.Width - wide) > 0.5)
+            {
+                host.Width = wide;
+            }
+        }
+        else
+        {
+            double tall = widget.Length();
+
+            if (double.IsNaN(host.Height) || Math.Abs(host.Height - tall) > 0.5)
+            {
+                host.Height = tall;
+            }
+        }
+    }
+
     /// <summary>Builds one widget, or nothing when it cannot be built.</summary>
     private (WidgetHost Host, int Span)? MakeHost(WidgetConfig entry)
     {
@@ -1441,6 +1469,14 @@ public sealed partial class DockWindow : Window
 
         var host = new WidgetHost(_log, widget, template);
         DockLayout.Dress(host, Config.Edge);
+
+        // The host's size is declared, not discovered: a template whose
+        // chip fills in after the first pass measures as nothing, and the
+        // correction never reliably climbed back up - the host stood two
+        // points wide while the chip painted itself in overflow, wearing
+        // lopsided margins the hover pill faithfully lit. The view model
+        // already knows its length; the host simply believes it.
+        Believe(host, widget);
 
         if (Environment.GetEnvironmentVariable("MCD_PAINT") == "2")
         {
@@ -2144,6 +2180,7 @@ public sealed partial class DockWindow : Window
             host.Sleeping(host.Widget.Possible && !host.Widget.Matters);
 
             int wants = Wants(host.Widget, span);
+            Believe(host, host.Widget);
 
             if (wants == span)
             {
