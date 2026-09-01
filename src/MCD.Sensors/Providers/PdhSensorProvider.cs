@@ -1,4 +1,4 @@
-using Mcd.Interop.Pdh;
+﻿using Mcd.Interop.Pdh;
 using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
 
@@ -44,6 +44,12 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
 
         new("disk", "total", SensorKind.Load, HardwareGroup.Storage, "Disk", "%",
             @"\PhysicalDisk(_Total)\% Disk Time"),
+
+        new("disk", "read", SensorKind.BytesPerSecond, HardwareGroup.Storage, "Disk read", "B/s",
+            @"\PhysicalDisk(_Total)\Disk Read Bytes/sec"),
+
+        new("disk", "write", SensorKind.BytesPerSecond, HardwareGroup.Storage, "Disk write", "B/s",
+            @"\PhysicalDisk(_Total)\Disk Write Bytes/sec"),
 
         new("net", "down", SensorKind.BytesPerSecond, HardwareGroup.Network, "Down", "B/s",
             @"\Network Interface(*)\Bytes Received/sec", Aggregate.Sum),

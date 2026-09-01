@@ -29,6 +29,9 @@ public sealed class SensorHub : IDisposable
     /// <summary>How long a source that has failed is left alone before being probed again.</summary>
     private static readonly TimeSpan RetryAfter = TimeSpan.FromSeconds(30);
 
+    /// <summary>How often a working source is asked whether its list has changed.</summary>
+    private static readonly TimeSpan Relist = TimeSpan.FromMinutes(5);
+
     private static readonly TimeSpan Tick = TimeSpan.FromSeconds(1);
 
     /// <summary>How long the thread sleeps while nobody is looking.</summary>
@@ -234,6 +237,24 @@ public sealed class SensorHub : IDisposable
             _log.LogInformation(
                 "sensors.provider id={Id} state=available sensors={Count}",
                 source.Provider.Id, found.Count);
+        }
+
+        if (now >= source.NextRelist)
+        {
+            source.NextRelist = now + Relist;
+
+            IReadOnlyList<SensorDescriptor>? fresh =
+                Safely(source, source.Provider.Discover, "listing sensors");
+
+            if (fresh is not null && !source.Descriptors.SequenceEqual(fresh))
+            {
+                source.Descriptors = [.. fresh];
+                RebuildCatalog();
+
+                _log.LogInformation(
+                    "sensors.provider id={Id} state=relisted sensors={Count}",
+                    source.Provider.Id, fresh.Count);
+            }
         }
 
         if (now < source.NextPoll)
@@ -469,6 +490,8 @@ public sealed class SensorHub : IDisposable
         public DateTimeOffset NextProbe { get; set; } = DateTimeOffset.MinValue;
 
         public DateTimeOffset NextPoll { get; set; } = DateTimeOffset.MinValue;
+
+        public DateTimeOffset NextRelist { get; set; } = DateTimeOffset.MinValue;
     }
 }
 

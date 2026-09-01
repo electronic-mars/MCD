@@ -1,4 +1,4 @@
-using System.Buffers.Binary;
+﻿using System.Buffers.Binary;
 using System.Collections.Immutable;
 using System.IO.MemoryMappedFiles;
 using System.Text;
@@ -30,6 +30,16 @@ public sealed record HwInfoReading(
     string Label,
     string Unit,
     double Value);
+
+/// <summary>Where the tables sit right now, and when HWiNFO last wrote them.</summary>
+public readonly record struct HwInfoShape(
+    long Polled,
+    int SensorAt,
+    int SensorStride,
+    int SensorCount,
+    int ReadingAt,
+    int ReadingStride,
+    int ReadingCount);
 
 /// <param name="PolledAt">
 /// When HWiNFO last refreshed the block. The one field worth watching: in the
@@ -113,6 +123,59 @@ public sealed class HwInfoSharedMemory : IDisposable
         {
             return null;
         }
+    }
+
+    private readonly byte[] _header = new byte[HeaderSize];
+
+    /// <summary>
+    /// The header, read fresh, or null when the block is not one.
+    /// </summary>
+    /// <remarks>
+    /// The cheap read: forty-eight bytes, no strings. A tick that knows where
+    /// its rows are needs nothing else from the block but the rows themselves.
+    /// </remarks>
+    public HwInfoShape? Shape()
+    {
+        if (_view.Capacity < HeaderSize)
+        {
+            return null;
+        }
+
+        _view.ReadArray(0, _header, 0, HeaderSize);
+
+        if (Extent(_header) is not { } end || end > _view.Capacity)
+        {
+            return null;
+        }
+
+        return new HwInfoShape(
+            BinaryPrimitives.ReadInt64LittleEndian(_header.AsSpan(16)),
+            (int)U32(_header, 24),
+            (int)U32(_header, 28),
+            (int)U32(_header, 32),
+            (int)U32(_header, 36),
+            (int)U32(_header, 40),
+            (int)U32(_header, 44));
+    }
+
+    /// <summary>One reading row's identity and value, straight from the view.</summary>
+    /// <remarks>The row must be inside the shape this same tick handed out.</remarks>
+    public (uint Id, int SensorIndex, double Value) Reading(in HwInfoShape shape, int row)
+    {
+        long at = shape.ReadingAt + ((long)row * shape.ReadingStride);
+
+        return (
+            _view.ReadUInt32(at + 8),
+            (int)_view.ReadUInt32(at + 4),
+            _view.ReadDouble(at + ValueAt));
+    }
+
+    /// <summary>Which piece of hardware a sensor-table entry stands for.</summary>
+    public (uint Id, uint Instance) SensorIdentity(in HwInfoShape shape, int index)
+    {
+        long at = shape.SensorAt + ((long)index * shape.SensorStride);
+
+        return (_view.ReadUInt32(at), _view.ReadUInt32(at + 4));
     }
 
     /// <summary>A copy of the whole block, or null if it does not look like one.</summary>

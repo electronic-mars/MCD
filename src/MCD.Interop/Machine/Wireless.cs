@@ -1,4 +1,4 @@
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 
 namespace Mcd.Interop.Machine;
 
@@ -6,7 +6,9 @@ namespace Mcd.Interop.Machine;
 /// <param name="Wireless">True while the way out to the internet is a wireless one.</param>
 /// <param name="Name">The network's name, or empty when there is none to give.</param>
 /// <param name="Bars">Signal strength, 0 to 5, or -1 when it is not reported.</param>
-public readonly record struct WirelessState(bool Wireless, string Name, int Bars)
+/// <param name="Link">Band, speed and standard, when the WLAN service tells them.</param>
+public readonly record struct WirelessState(
+    bool Wireless, string Name, int Bars, WirelessLink Link = default)
 {
     public static WirelessState None => new(false, string.Empty, -1);
 }
@@ -147,7 +149,8 @@ public static class Wireless
             return new WirelessState(
                 Wireless: true,
                 Name: profile?.ProfileName ?? string.Empty,
-                Bars: profile?.GetSignalBars() is { } bars ? bars : -1);
+                Bars: profile?.GetSignalBars() is { } bars ? bars : -1,
+                Link: WlanLink.Read());
         }
         catch (Exception)
         {

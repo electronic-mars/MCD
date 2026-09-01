@@ -1,4 +1,4 @@
-using Mcd.Sensors.Contracts;
+﻿using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
 
 namespace Mcd.Sensors.Providers;
@@ -65,7 +65,10 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
     private HwInfoSharedMemory? _block;
     private List<Sensor> _sensors = [];
 
-    private DateTimeOffset _publishedAt;
+    /// <summary>Where each of <see cref="_sensors"/> sat in the reading table last time it was seen.</summary>
+    private int[] _rows = [];
+
+    private long _published;
     private DateTimeOffset _movedAt;
 
     public string Id => ProviderId;
@@ -116,8 +119,15 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
         }
 
         Trouble = null;
-        _publishedAt = first.PolledAt;
+        _published = first.PolledAt.ToUnixTimeSeconds();
         _movedAt = DateTimeOffset.UtcNow;
+
+        _rows = new int[_sensors.Count];
+
+        if (_block.Shape() is { } shape)
+        {
+            Reindex(shape);
+        }
 
         log.LogInformation(
             "sensors.hwinfo opened, {Count} of {Total} readings taken",
@@ -130,27 +140,83 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
 
     public void Poll(IDictionary<SensorKey, double> into)
     {
-        if (Read() is not { } block)
+        if (_block is null || _block.Shape() is not { } shape)
         {
             Close("the block stopped being readable");
             throw new InvalidOperationException("HWiNFO stopped publishing readable shared memory.");
         }
 
-        WatchForAbandonment(block);
+        WatchForAbandonment(shape.Polled);
 
-        foreach (Sensor sensor in _sensors)
+        bool repinned = false;
+
+        for (int i = 0; i < _sensors.Count; i++)
         {
-            // Found by identity rather than by position: HWiNFO reorders the
-            // table when hardware appears or a sensor is hidden, and a row index
-            // captured at startup would then point at a different reading.
-            HwInfoReading? reading = block.Readings.FirstOrDefault(
-                r => r.Id == sensor.ReadingId && block.Owner(r) is { } o
-                     && o.Id == sensor.SensorId && o.Instance == sensor.Instance);
-
-            if (reading is not null)
+            if (Take(shape, i, into) || repinned)
             {
-                into[sensor.Descriptor.Key] = reading.Value;
+                continue;
             }
+
+            // The row is not where it was: HWiNFO reorders the table when
+            // hardware appears or a sensor is hidden. One pass over it pins
+            // every reading to its new place - once, not once per sensor.
+            Reindex(shape);
+            repinned = true;
+            Take(shape, i, into);
+        }
+    }
+
+    /// <summary>One reading, from the row it was last seen in - if it is still that row.</summary>
+    private bool Take(in HwInfoShape shape, int index, IDictionary<SensorKey, double> into)
+    {
+        Sensor sensor = _sensors[index];
+        int row = _rows[index];
+
+        if ((uint)row >= (uint)shape.ReadingCount)
+        {
+            return false;
+        }
+
+        (uint id, int owner, double value) = _block!.Reading(shape, row);
+
+        if (id != sensor.ReadingId || (uint)owner >= (uint)shape.SensorCount)
+        {
+            return false;
+        }
+
+        (uint ownerId, uint instance) = _block.SensorIdentity(shape, owner);
+
+        if (ownerId != sensor.SensorId || instance != sensor.Instance)
+        {
+            return false;
+        }
+
+        into[sensor.Descriptor.Key] = value;
+        return true;
+    }
+
+    /// <summary>Finds every tracked reading's row again, in one pass over the table.</summary>
+    private void Reindex(in HwInfoShape shape)
+    {
+        var where = new Dictionary<(uint Reading, uint Sensor, uint Instance), int>(shape.ReadingCount);
+
+        for (int row = 0; row < shape.ReadingCount; row++)
+        {
+            (uint id, int owner, _) = _block!.Reading(shape, row);
+
+            if ((uint)owner < (uint)shape.SensorCount)
+            {
+                (uint ownerId, uint instance) = _block.SensorIdentity(shape, owner);
+                where.TryAdd((id, ownerId, instance), row);
+            }
+        }
+
+        for (int i = 0; i < _sensors.Count; i++)
+        {
+            Sensor sensor = _sensors[i];
+
+            _rows[i] = where.TryGetValue(
+                (sensor.ReadingId, sensor.SensorId, sensor.Instance), out int row) ? row : -1;
         }
     }
 
@@ -166,13 +232,13 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
     /// dock quietly become a photograph of this morning. The only way to tell is
     /// that the time in the header stops moving.
     /// </remarks>
-    private void WatchForAbandonment(HwInfoBlock block)
+    private void WatchForAbandonment(long polled)
     {
         DateTimeOffset now = DateTimeOffset.UtcNow;
 
-        if (block.PolledAt != _publishedAt)
+        if (polled != _published)
         {
-            _publishedAt = block.PolledAt;
+            _published = polled;
             _movedAt = now;
             return;
         }
@@ -198,6 +264,7 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
         _block?.Dispose();
         _block = null;
         _sensors = [];
+        _rows = [];
         Trouble = why;
 
         // Once per reason, not once per probe: the availability check runs

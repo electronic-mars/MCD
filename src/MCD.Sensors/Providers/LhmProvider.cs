@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -75,46 +75,56 @@ public sealed class LhmProvider(
         foreach (LhmSensor sensor in sensors)
         {
             SensorKey key = SensorKey.Make(
-                ProviderId, Hardware(sensor.Hardware), SensorKind.Temperature, Slot(sensor.Id));
+                ProviderId, Hardware(sensor.Hardware), sensor.Kind, Slot(sensor.Id));
 
             keys[sensor.Id] = key;
 
+            bool warm = sensor.Kind == SensorKind.Temperature;
+
             found.Add(new SensorDescriptor(
                 key,
-                SensorKind.Temperature,
+                sensor.Kind,
                 sensor.Group,
                 sensor.Hardware,
                 sensor.Label,
-                "°C",
+                sensor.Kind switch
+                {
+                    SensorKind.Fan => "RPM",
+                    SensorKind.Power => "W",
+                    _ => "\u00b0C",
+                },
 
                 // LibreHardwareMonitor knows each part's limits but does not
                 // publish them here, so these are the ordinary ones: sustained
                 // 85 is where a processor stops being comfortable and 95 is
                 // where it slows itself down; graphics chips and drives run
                 // cooler, and a board sensor past 75 means the airflow failed.
-                Warning: sensor.Group switch
+                Warning: warm ? sensor.Group switch
                 {
                     HardwareGroup.Motherboard => 60,
                     HardwareGroup.Gpu => 80,
                     HardwareGroup.Storage => 65,
                     _ => 85,
-                },
-                Critical: sensor.Group switch
+                } : null,
+                Critical: warm ? sensor.Group switch
                 {
                     HardwareGroup.Motherboard => 75,
                     HardwareGroup.Gpu => 90,
                     HardwareGroup.Storage => 75,
                     _ => 95,
-                },
+                } : null,
                 Rank: 60,
-                Prominent: Headline(sensor)));
+
+                // A fan speed or a power figure is looked up, not glanced at;
+                // neither belongs on the bar unasked.
+                Prominent: warm && Headline(sensor)));
         }
 
         _keys = keys.ToImmutable();
         _found = found.ToImmutable();
         Trouble = null;
 
-        log.LogInformation("sensors.lhm opened, {Count} temperatures at {Where}", _found.Length, endpoint());
+        log.LogInformation("sensors.lhm opened, {Count} readings at {Where}", _found.Length, endpoint());
         return true;
     }
 
@@ -134,7 +144,7 @@ public sealed class LhmProvider(
             // then point at a different part.
             if (_keys.TryGetValue(sensor.Id, out SensorKey key))
             {
-                into[key] = sensor.Celsius;
+                into[key] = sensor.Value;
             }
         }
     }
@@ -155,7 +165,7 @@ public sealed class LhmProvider(
         try
         {
             string json = _http.GetStringAsync(uri).GetAwaiter().GetResult();
-            ImmutableArray<LhmSensor> sensors = LhmReport.Temperatures(json);
+            ImmutableArray<LhmSensor> sensors = LhmReport.Sensors(json);
 
             if (sensors.IsEmpty)
             {

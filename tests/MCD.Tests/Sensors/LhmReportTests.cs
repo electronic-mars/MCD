@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Mcd.Sensors.Contracts;
 using Mcd.Sensors.Providers;
 using Shouldly;
@@ -17,19 +17,35 @@ namespace Mcd.Tests.Sensors;
 public sealed class LhmReportTests
 {
     private static ImmutableArray<LhmSensor> Sensors() =>
-        LhmReport.Temperatures(File.ReadAllText(Path.Combine("fixtures", "lhm", "data.json")));
+        LhmReport.Sensors(File.ReadAllText(Path.Combine("fixtures", "lhm", "data.json")));
 
     [Fact]
-    public void EveryTemperatureIsFoundAndNothingElseIs()
+    public void EveryReadingIsFoundAndNothingElseIs()
     {
         ImmutableArray<LhmSensor> found = Sensors();
 
-        // Six temperatures in the document; the load figure and the fan speed
-        // sit beside them under headings of their own and must not be taken for
-        // temperatures.
-        found.Length.ShouldBe(6);
-        found.ShouldNotContain(s => s.Label.Contains("Fan"));
+        // Six temperatures, a fan and a power draw; the load figure sits
+        // beside them and stays where it is - other sources report loads
+        // first-hand.
+        found.Length.ShouldBe(8);
+        found.Count(s => s.Kind == SensorKind.Temperature).ShouldBe(6);
         found.ShouldNotContain(s => s.Label.Contains("Total"));
+    }
+
+    [Fact]
+    public void AFanAndAPowerDrawAreReadAsWhatTheyAre()
+    {
+        ImmutableArray<LhmSensor> found = Sensors();
+
+        LhmSensor fan = found.Single(s => s.Id == "/lpc/nct6798d/fan/1");
+        fan.Kind.ShouldBe(SensorKind.Fan);
+        fan.Value.ShouldBe(884);
+        fan.Hardware.ShouldBe("Nuvoton NCT6798D");
+
+        LhmSensor power = found.Single(s => s.Id == "/amdcpu/0/power/0");
+        power.Kind.ShouldBe(SensorKind.Power);
+        power.Value.ShouldBe(65.3);
+        power.Group.ShouldBe(HardwareGroup.Cpu);
     }
 
     [Fact]
@@ -40,7 +56,8 @@ public sealed class LhmReportTests
         cpu.Label.ShouldBe("Core (Tctl/Tdie)");
         cpu.Hardware.ShouldBe("AMD Ryzen 7 5800X");
         cpu.Group.ShouldBe(HardwareGroup.Cpu);
-        cpu.Celsius.ShouldBe(58.4);
+        cpu.Kind.ShouldBe(SensorKind.Temperature);
+        cpu.Value.ShouldBe(58.4);
     }
 
     [Fact]
@@ -83,9 +100,9 @@ public sealed class LhmReportTests
     [Fact]
     public void SomethingThatIsNotTheDocumentGivesNothing()
     {
-        LhmReport.Temperatures("<html>404 Not Found</html>").ShouldBeEmpty();
-        LhmReport.Temperatures("{}").ShouldBeEmpty();
-        LhmReport.Temperatures("[1,2,3]").ShouldBeEmpty();
+        LhmReport.Sensors("<html>404 Not Found</html>").ShouldBeEmpty();
+        LhmReport.Sensors("{}").ShouldBeEmpty();
+        LhmReport.Sensors("[1,2,3]").ShouldBeEmpty();
     }
 
     [Fact]

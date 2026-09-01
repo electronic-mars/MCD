@@ -1190,4 +1190,43 @@
   <data name="MediaOpenPlayer" xml:space="preserve">
     <value>Open the player</value>
   </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Committed memory</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>How much of what Windows can promise - memory plus the page file - is already promised.</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Committed, in bytes</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Commit limit</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>Memory plus the page file: the most Windows can promise at once.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Memory free</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>How much of the installed memory is not taken up.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Drives - reading</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>How much the drives are reading right now, all of them together.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Drives - writing</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>How much the drives are writing right now, all of them together.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
 </root>

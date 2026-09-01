@@ -147,9 +147,25 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("SenseGpuHeatName", "Graphics - temperature"),
                 Loc.Tr("SenseGpuTemp", "How hot the graphics chip is.")),
 
+            (HardwareGroup.Memory, SensorKind.Load, "commit") => (
+                Loc.Tr("SenseCommitName", "Committed memory"),
+                Loc.Tr("SenseCommit", "How much of what Windows can promise - memory plus the page file - is already promised.")),
+
             (HardwareGroup.Memory, SensorKind.Load, _) => (
                 Loc.Tr("PartMemory", "Memory"),
                 Loc.Tr("SenseRamLoad", "How much of the memory is taken up, as a share of all of it.")),
+
+            (HardwareGroup.Memory, SensorKind.Bytes, "free") => (
+                Loc.Tr("SenseRamFreeName", "Memory free"),
+                Loc.Tr("SenseRamFree", "How much of the installed memory is not taken up.")),
+
+            (HardwareGroup.Memory, SensorKind.Bytes, "commit-used") => (
+                Loc.Tr("SenseCommitUsedName", "Committed, in bytes"),
+                Loc.Tr("SenseCommit", "How much of what Windows can promise - memory plus the page file - is already promised.")),
+
+            (HardwareGroup.Memory, SensorKind.Bytes, "commit-total") => (
+                Loc.Tr("SenseCommitTotalName", "Commit limit"),
+                Loc.Tr("SenseCommitTotal", "Memory plus the page file: the most Windows can promise at once.")),
 
             (HardwareGroup.Memory, SensorKind.Bytes, "total") => (
                 Loc.Tr("SenseRamTotalName", "Memory installed"),
@@ -170,6 +186,14 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
             (HardwareGroup.Storage, SensorKind.Temperature, _) => (
                 Loc.Tr("PartDisk", "Drive"),
                 Loc.Tr("SenseDiskTemp", "How hot this drive is.")),
+
+            (HardwareGroup.Storage, SensorKind.BytesPerSecond, "read") => (
+                Loc.Tr("SenseDiskReadName", "Drives - reading"),
+                Loc.Tr("SenseDiskRead", "How much the drives are reading right now, all of them together.")),
+
+            (HardwareGroup.Storage, SensorKind.BytesPerSecond, "write") => (
+                Loc.Tr("SenseDiskWriteName", "Drives - writing"),
+                Loc.Tr("SenseDiskWrite", "How much the drives are writing right now, all of them together.")),
 
             (HardwareGroup.Network, SensorKind.BytesPerSecond, "up") => (
                 Loc.Tr("LabelSend", "Send"),

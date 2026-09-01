@@ -1190,4 +1190,43 @@
   <data name="MediaOpenPlayer" xml:space="preserve">
     <value>Открыть плеер</value>
   </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Выделенная память</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>Сколько из того, что Windows может пообещать программам — память плюс файл подкачки — уже обещано.</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Выделено, в байтах</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Предел выделения</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>Память плюс файл подкачки: больше Windows пообещать разом не может.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Свободная память</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>Сколько установленной памяти сейчас не занято.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Диски — чтение</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>Сколько диски сейчас читают, все вместе.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Диски — запись</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>Сколько диски сейчас пишут, все вместе.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} ГГц</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Мбит/с</value>
+  </data>
 </root>

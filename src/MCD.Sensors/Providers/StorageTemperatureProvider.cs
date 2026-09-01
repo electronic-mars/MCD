@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using Mcd.Interop.Storage;
 using Mcd.Sensors.Contracts;
@@ -30,7 +30,12 @@ public sealed class StorageTemperatureProvider(ILogger<StorageTemperatureProvide
     private const int TimeoutsBeforeGivingUp = 2;
 
     private readonly List<Drive> _drives = [];
+
+    /// <summary>Every index that answered to its name at the last look, reporting or not.</summary>
+    private readonly List<int> _seen = [];
+
     private bool _looked;
+    private uint _polls;
 
     public string Id => ProviderId;
 
@@ -46,9 +51,20 @@ public sealed class StorageTemperatureProvider(ILogger<StorageTemperatureProvide
         }
 
         _looked = true;
+        Look();
+        return _drives.Count != 0;
+    }
+
+    /// <summary>Finds every drive from scratch.</summary>
+    private void Look()
+    {
+        _drives.Clear();
+        _seen.Clear();
 
         foreach (int index in StorageTemperature.Enumerate())
         {
+            _seen.Add(index);
+
             if (StorageTemperature.Identify(index) is not { } identity)
             {
                 continue;
@@ -68,8 +84,6 @@ public sealed class StorageTemperatureProvider(ILogger<StorageTemperatureProvide
                 "sensors.disk found {Model} at {Celsius} C (warning {Warning}, critical {Critical})",
                 identity.Model, first.Celsius, first.Warning, first.Critical);
         }
-
-        return _drives.Count != 0;
     }
 
     public IReadOnlyList<SensorDescriptor> Discover() =>
@@ -91,6 +105,16 @@ public sealed class StorageTemperatureProvider(ILogger<StorageTemperatureProvide
 
     public void Poll(IDictionary<SensorKey, double> into)
     {
+        // Drives come and go while the program runs; a USB enclosure plugged
+        // in after startup used to stay invisible for the whole session.
+        // Every tenth poll - five minutes - the shelf is checked, and only a
+        // change is worth the full look.
+        if (++_polls % 10 == 0 && !StorageTemperature.Enumerate().SequenceEqual(_seen))
+        {
+            log.LogInformation("sensors.disk the drives changed, looking again");
+            Look();
+        }
+
         foreach (Drive drive in _drives.Where(d => !d.GivenUp).ToList())
         {
             if (Read(drive.Index) is { } reading)

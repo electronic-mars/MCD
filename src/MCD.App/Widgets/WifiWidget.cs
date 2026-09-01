@@ -162,6 +162,32 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
                     _state.Bars)
                 : string.Empty)
             : Loc.Tr("WifiConnected", "On a wireless network");
+
+        // The physical side, when the WLAN service reports it: which band the
+        // link is on, what standard it speaks, and what it negotiated. The
+        // band is the one a person can act on - the far room wants 2.4 GHz.
+        WirelessLink link = _state.Link;
+
+        if (link.Standard.Length > 0)
+        {
+            Detail += " · " + link.Standard;
+        }
+
+        if (link.Ghz > 0)
+        {
+            Detail += " · " + string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("WifiBand", "{0:0.#} GHz"),
+                link.Ghz);
+        }
+
+        if (link.Mbit > 0)
+        {
+            Detail += " · " + string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("WifiRate", "{0} Mbit/s"),
+                link.Mbit);
+        }
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Globalization;
 using System.Text.Json;
 using Mcd.Sensors.Contracts;
@@ -16,7 +16,8 @@ public sealed record LhmSensor(
     string Label,
     string Hardware,
     HardwareGroup Group,
-    double Celsius);
+    SensorKind Kind,
+    double Value);
 
 /// <summary>
 /// Reads the tree LibreHardwareMonitor's web server publishes.
@@ -36,8 +37,8 @@ public sealed record LhmSensor(
 /// </remarks>
 public static class LhmReport
 {
-    /// <summary>Every temperature in the document, or empty if it is not one.</summary>
-    public static ImmutableArray<LhmSensor> Temperatures(string json)
+    /// <summary>Every reading this takes from the document, or empty if it is not one.</summary>
+    public static ImmutableArray<LhmSensor> Sensors(string json)
     {
         JsonElement root;
 
@@ -71,9 +72,9 @@ public static class LhmReport
             // A leaf with an identifier is a sensor. Everything above it that
             // had no identifier was a heading, and the last real piece of
             // hardware is whatever we were told on the way down.
-            if (Celsius(node) is { } degrees && hardware is not null)
+            if (Reading(node) is { } read && hardware is not null)
             {
-                into.Add(new LhmSensor(id, text, hardware, Classify(id), degrees));
+                into.Add(new LhmSensor(id, text, hardware, Classify(id), read.Kind, read.Value));
             }
 
             return;
@@ -161,20 +162,37 @@ public static class LhmReport
         };
     }
 
-    /// <summary>The number at the front of a display string, or null if it is not a temperature.</summary>
-    public static double? Celsius(JsonElement node)
+    /// <summary>The reading a node carries, when it is a kind worth taking.</summary>
+    /// <remarks>
+    /// Temperatures, fan speeds and power draws. Loads, clocks and the rest
+    /// stay where they are: other sources report those first-hand, and a copy
+    /// relayed through a monitor would only fight them for the same name.
+    /// </remarks>
+    public static (SensorKind Kind, double Value)? Reading(JsonElement node)
     {
-        if (!string.Equals(Text(node, "Type"), "Temperature", StringComparison.OrdinalIgnoreCase))
+        string type = Text(node, "Type");
+        string value = Text(node, "Value");
+
+        // Older builds of the web server do not label a sensor's kind, so
+        // the unit on the value is the fallback test.
+        SensorKind? kind =
+            string.Equals(type, "Temperature", StringComparison.OrdinalIgnoreCase)
+            || value.Contains('\u00b0')
+                ? SensorKind.Temperature
+            : string.Equals(type, "Fan", StringComparison.OrdinalIgnoreCase)
+              || value.EndsWith("RPM", StringComparison.OrdinalIgnoreCase)
+                ? SensorKind.Fan
+            : string.Equals(type, "Power", StringComparison.OrdinalIgnoreCase)
+              || value.EndsWith(" W", StringComparison.Ordinal)
+                ? SensorKind.Power
+            : null;
+
+        if (kind is null || Number(value) is not { } number)
         {
-            // Older builds of the web server do not label a sensor's kind, so
-            // the unit on the value is the fallback test.
-            if (!Text(node, "Value").Contains('°'))
-            {
-                return null;
-            }
+            return null;
         }
 
-        return Number(Text(node, "Value"));
+        return (kind.Value, number);
     }
 
     /// <summary>

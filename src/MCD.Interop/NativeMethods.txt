@@ -156,3 +156,16 @@ HOT_KEY_MODIFIERS
 // Whether this machine has a battery, and how much is left in it.
 GetSystemPowerStatus
 SYSTEM_POWER_STATUS
+
+// Wi-Fi: the connection profile says the network and the bars, but the band
+// and the link speed live behind the WLAN API's handle.
+WlanOpenHandle
+WlanCloseHandle
+WlanEnumInterfaces
+WlanQueryInterface
+WlanFreeMemory
+WLAN_INTERFACE_INFO_LIST
+WLAN_INTERFACE_INFO
+WLAN_CONNECTION_ATTRIBUTES
+WLAN_INTF_OPCODE
+WLAN_INTERFACE_STATE

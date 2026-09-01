@@ -50,6 +50,19 @@
                   "Children": []
                 }
               ]
+            },
+            {
+              "Text": "Powers",
+              "Value": "",
+              "SensorId": "",
+              "Children": [
+                {
+                  "Text": "CPU Package",
+                  "Value": "65,3 W",
+                  "SensorId": "/amdcpu/0/power/0",
+                  "Children": []
+                }
+              ]
             }
           ]
         },
