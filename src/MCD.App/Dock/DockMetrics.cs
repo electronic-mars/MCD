@@ -60,7 +60,7 @@ public static class DockMetrics
     /// icon's edge - which is exactly what happened, on every chip whose
     /// arithmetic forgot it, and was found with a ruler on a 96-DPI bar.
     /// </remarks>
-    public const double ChipPadding = 6;
+    public const double ChipPadding = 4;
     /// <summary>
     /// How far a chip gives under the finger.
     /// </summary>

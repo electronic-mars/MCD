@@ -297,10 +297,35 @@ public sealed partial class Metric : ObservableObject
     private void Reserve()
     {
         Ruler.FontSize = FontSize;
-        Ruler.Text = Text;
+        // Reserved by the current figure's SHAPE, not by the widest figure
+        // the reading could ever show: every digit priced as an eight, so
+        // "47 %" and "62 %" cost the same and nothing twitches - but a chip
+        // saying "2 %" no longer holds the room for "100 %". That standing
+        // reservation was the last of the mystery air between widgets: the
+        // slots absorb a change of digit count, so the neighbours still
+        // never move.
+        Ruler.Text = Eights(Text);
         Ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
 
-        ValueWidth = Math.Max(ValueWidth, Math.Ceiling(Ruler.DesiredSize.Width) + 1);
+        double wanted = Math.Ceiling(Ruler.DesiredSize.Width) + 1;
+
+        if (Math.Abs(wanted - ValueWidth) > 0.5)
+        {
+            ValueWidth = wanted;
+        }
+    }
+
+    /// <summary>The figure with every digit at the widest a digit gets.</summary>
+    internal static string Eights(string figure)
+    {
+        Span<char> priced = stackalloc char[figure.Length];
+
+        for (int i = 0; i < figure.Length; i++)
+        {
+            priced[i] = char.IsAsciiDigit(figure[i]) ? '8' : figure[i];
+        }
+
+        return new string(priced);
     }
 
     /// <summary>
@@ -339,12 +364,15 @@ public sealed partial class Metric : ObservableObject
         _sampleWide ??= Wide(Sample, FontSize);
         _labelWide ??= Math.Min(100, Wide(Label, LabelFontSize));
 
-        double value = Math.Max(ValueWidth, _sampleWide.Value);
+        // The sample only stands in until a real figure has been measured -
+        // it is the guess that keeps a fresh chip from being laid out around
+        // "--", not a standing reservation.
+        double value = ValueWidth > 0 ? ValueWidth : _sampleWide.Value;
         double label = LabelVisible == Visibility.Visible ? _labelWide.Value : 0;
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
         return Mcd.App.Dock.DockMetrics.ChipPadding
-            + Spacing.Left + Spacing.Right + IconSize + 6 + Math.Max(value, label);
+            + Spacing.Left + Spacing.Right + IconSize + 4 + Math.Max(value, label);
     }
 
     /// <summary>How tall this chip is, in effective pixels.</summary>

@@ -213,6 +213,20 @@ public static class DockGrid
 
         gaps.Add(Math.Max(0, from - cursor));
 
+        // A sliver between neighbours is history, not intent. The coarse
+        // grid's round-up slack got written into arrangements as one-or-two
+        // slot gaps, and preserving them faithfully preserved air nobody
+        // asked for, forever. Nobody arranges a two-slot gap on purpose - it
+        // cannot be seen while dragging - so slivers snap shut; the gaps at
+        // the two ends stay, because flush-against-an-edge lives there.
+        for (int i = 1; i < gaps.Count - 1; i++)
+        {
+            if (gaps[i] > 0 && gaps[i] <= 2)
+            {
+                gaps[i] = 0;
+            }
+        }
+
         double slackOld = gaps.Sum();
         int slackNew = to - chain.Sum(c => c.NewSpan);
 

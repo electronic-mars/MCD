@@ -302,6 +302,25 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void ASliverBetweenNeighboursSnapsShut()
+    {
+        // Two slots of air between "a" and "b" is the coarse grid's rounding
+        // written into the file, not an arrangement; ten slots is somebody's
+        // deliberate spacing and survives.
+        ImmutableArray<WidgetConfig> refit = DockGrid.Refitted(
+            [Sized("a", 10, 3), Sized("b", 15, 3), Sized("c", 28, 3)],
+            new Dictionary<string, int> { ["a"] = 3, ["b"] = 3, ["c"] = 3 },
+            from: 60,
+            to: 60);
+
+        refit.Single(w => w.InstanceId == "b").Cell
+            .ShouldBe(refit.Single(w => w.InstanceId == "a").Cell + 3);
+
+        (refit.Single(w => w.InstanceId == "c").Cell
+            - refit.Single(w => w.InstanceId == "b").Cell - 3).ShouldBeGreaterThan(2);
+    }
+
+    [Fact]
     public void ARowAgainstTheFarEndStaysAgainstTheFarEnd()
     {
         // The user's own bar: a folder at the start and a cluster ending

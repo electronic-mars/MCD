@@ -83,7 +83,7 @@
                 <Viewbox
                     Width="{x:Bind IconSize, Mode=OneWay}"
                     Height="{x:Bind IconSize, Mode=OneWay}"
-                    Margin="0,0,6,0"
+                    Margin="0,0,4,0"
                     VerticalAlignment="Center">
                     <!-- The Canvas fixes the 24-unit grid the icons are drawn on, so
                          every one scales by the same amount whatever its own bounds

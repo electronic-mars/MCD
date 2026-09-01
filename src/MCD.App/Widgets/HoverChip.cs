@@ -38,7 +38,7 @@ public sealed partial class HoverChip : ContentControl
             Application.Current.Resources["BareContent"];
         Background = _fill;
         CornerRadius = new CornerRadius(DockMetrics.ItemCornerRadius);
-        Padding = new Thickness(3, 2, 3, 2);
+        Padding = new Thickness(2, 2, 2, 2);
         IsTabStop = false;
         VerticalContentAlignment = VerticalAlignment.Center;
         HorizontalContentAlignment = HorizontalAlignment.Center;

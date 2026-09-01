@@ -106,6 +106,9 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     private double? _figure;
 
+    /// <summary>How many characters the reserved figure was priced for.</summary>
+    private int _figureFor = -1;
+
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -135,6 +138,14 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         Level = room
             ? Math.Round(loud * 100).ToString("F0", System.Globalization.CultureInfo.InvariantCulture) + " %"
             : string.Empty;
+
+        // Priced by the current figure's digit count, like the readings: a
+        // standing "100 %" reservation was dead air beside "42 %".
+        if (Level.Length != _figureFor)
+        {
+            _figureFor = Level.Length;
+            _figure = Level.Length > 0 ? Metric.Wide(Metric.Eights(Level), FontSize) : null;
+        }
 
         LevelShown = muted.Value ? 0.5 : 1;
 
@@ -183,7 +194,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
 
         if (LevelVisible == Visibility.Visible)
         {
-            _figure ??= Metric.Wide("100 %", ReadingFont);
+            _figure ??= Metric.Wide("88 %", ReadingFont);
             along += _figure.Value + 6;
         }
 
