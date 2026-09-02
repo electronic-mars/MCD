@@ -19,3 +19,9 @@ build/msix-out/
 TestResults/
 *.log
 dist/
+
+# The picking table: every free Hugeicons drawing, laid out by category by
+# tools/fetch_icon_library.py. Five thousand files to choose from rather than
+# anything the program carries - what is chosen is named in fetch_icons.py and
+# cached, drawing and all, in assets/icons-src.
+assets/icons-free/
