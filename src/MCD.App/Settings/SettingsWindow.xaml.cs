@@ -133,6 +133,17 @@ public sealed partial class SettingsWindow : Window
         // bar - a mark nobody made and nobody can clear.
         Closed += (_, _) => _docks.Point(string.Empty, null);
 
+        // The bars can be hidden from their own menu; the way back is a
+        // banner over every page of this window, not a row on one of them.
+        HiddenText.Text = Loc.Tr(
+            "BarsHiddenBanner",
+            "The bars are hidden. Bring them back here, with the key under General, or by starting the program again.");
+        HiddenAction.Content = Braun.Action(
+            Loc.Tr("BarsShow", "Show the bars"), () => _docks.Visible = true, "Layout");
+        BarsShown(_docks.Visible);
+        _docks.VisibleChanged += OnBarsVisible;
+        Closed += (_, _) => _docks.VisibleChanged -= OnBarsVisible;
+
         // The undo rows are gone from the pages - they were furniture - but
         // the promise in the hints ("Ctrl+Z brings it back") has to be kept
         // by an actual key.
@@ -153,6 +164,12 @@ public sealed partial class SettingsWindow : Window
         Reload();
         Nav.SelectedItem = Nav.MenuItems[0];
     }
+
+    private void OnBarsVisible(object? sender, bool visible) =>
+        DispatcherQueue.TryEnqueue(() => BarsShown(visible));
+
+    private void BarsShown(bool visible) =>
+        HiddenBanner.Visibility = visible ? Visibility.Collapsed : Visibility.Visible;
 
     /// <summary>The settings as this window last acted on them.</summary>
     private SettingsModel _seen;

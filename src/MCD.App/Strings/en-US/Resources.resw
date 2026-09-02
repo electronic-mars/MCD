@@ -1275,12 +1275,18 @@
     <value>Settings…</value>
   </data>
   <data name="BarMenuHideAll" xml:space="preserve">
-    <value>Hide all bars</value>
+    <value>Hide the bars</value>
   </data>
   <data name="BarMenuExit" xml:space="preserve">
     <value>Exit</value>
   </data>
   <data name="BarWelcome" xml:space="preserve">
     <value>Right-click for the menu and settings. Files can be dropped right here.</value>
+  </data>
+  <data name="BarsHiddenBanner" xml:space="preserve">
+    <value>The bars are hidden. Bring them back here, with the key under General, or by starting the program again.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Show the bars</value>
   </data>
 </root>

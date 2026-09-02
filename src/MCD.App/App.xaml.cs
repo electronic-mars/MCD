@@ -237,7 +237,17 @@ public partial class App : Application
             {
                 if (!timedOut)
                 {
-                    _uiQueue?.TryEnqueue(() => ShowSettings());
+                    // Starting the program again is the way back that needs
+                    // no knowledge: hidden bars come back, then the window.
+                    _uiQueue?.TryEnqueue(() =>
+                    {
+                        if (_docks is { Visible: false } docks)
+                        {
+                            docks.Visible = true;
+                        }
+
+                        ShowSettings();
+                    });
                 }
             },
             state: null,

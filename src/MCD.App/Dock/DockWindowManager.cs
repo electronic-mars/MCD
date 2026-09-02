@@ -151,8 +151,12 @@ public sealed class DockWindowManager : IDisposable
 
             _visible = value;
             Rebuild(_visible ? _plans : []);
+            VisibleChanged?.Invoke(this, _visible);
         }
     }
+
+    /// <summary>The bars went away, or came back.</summary>
+    public event EventHandler<bool>? VisibleChanged;
 
     public void Dispose()
     {

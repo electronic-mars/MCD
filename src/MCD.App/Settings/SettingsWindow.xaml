@@ -91,6 +91,7 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -122,9 +123,40 @@
             what happened. The window now has a floor wide enough for the pane,
             so the folding is not needed and is turned off, toggle and all.
         -->
+        <!-- Shown while the bars are hidden, on every page: the way back
+             has to be where somebody looking for it will look. -->
+        <Border
+            x:Name="HiddenBanner"
+            Grid.Row="1"
+            Margin="16,0,16,8"
+            Padding="14,8,8,8"
+            Background="{ThemeResource BraunPanelHi}"
+            BorderBrush="{ThemeResource BraunLineHi}"
+            BorderThickness="1"
+            CornerRadius="10"
+            Visibility="Collapsed">
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    x:Name="HiddenText"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    Foreground="{ThemeResource BraunTx}"
+                    TextWrapping="Wrap" />
+                <ContentControl
+                    x:Name="HiddenAction"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    IsTabStop="False" />
+            </Grid>
+        </Border>
+
         <NavigationView
             x:Name="Nav"
-            Grid.Row="1"
+            Grid.Row="2"
             IsBackButtonVisible="Collapsed"
             IsSettingsVisible="False"
             OpenPaneLength="248"
@@ -697,7 +729,7 @@
              were not sure had happened. -->
         <Border
             x:Name="Toast"
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="0,0,0,18"
             Padding="14,6,6,6"
             HorizontalAlignment="Center"

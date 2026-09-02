@@ -1275,12 +1275,18 @@
     <value>Настроить…</value>
   </data>
   <data name="BarMenuHideAll" xml:space="preserve">
-    <value>Спрятать все панели</value>
+    <value>Спрятать панели</value>
   </data>
   <data name="BarMenuExit" xml:space="preserve">
     <value>Выход</value>
   </data>
   <data name="BarWelcome" xml:space="preserve">
     <value>Правый клик — меню и настройки. Файлы можно бросать прямо сюда.</value>
+  </data>
+  <data name="BarsHiddenBanner" xml:space="preserve">
+    <value>Панели спрятаны. Вернуть их можно здесь, клавишей из раздела «Общие» или повторным запуском программы.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Показать панели</value>
   </data>
 </root>
