@@ -1268,9 +1268,6 @@
   <data name="PinDialogHint" xml:space="preserve">
     <value>Или просто бросьте файл на панель — он закрепится там, куда попал.</value>
   </data>
-  <data name="BarMenuRemove" xml:space="preserve">
-    <value>Убрать: {0}</value>
-  </data>
   <data name="BarMenuSettings" xml:space="preserve">
     <value>Настроить…</value>
   </data>
@@ -1283,10 +1280,10 @@
   <data name="BarWelcome" xml:space="preserve">
     <value>Правый клик — меню и настройки. Файлы можно бросать прямо сюда.</value>
   </data>
-  <data name="BarsHiddenBanner" xml:space="preserve">
-    <value>Панели спрятаны. Вернуть их можно здесь, клавишей из раздела «Общие» или повторным запуском программы.</value>
-  </data>
   <data name="BarsShow" xml:space="preserve">
     <value>Показать панели</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Спрятать или показать панели</value>
   </data>
 </root>

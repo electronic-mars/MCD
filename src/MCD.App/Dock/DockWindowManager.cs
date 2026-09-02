@@ -121,9 +121,6 @@ public sealed class DockWindowManager : IDisposable
     /// </summary>
     public event EventHandler<DockSettingsRequest>? SettingsRequested;
 
-    /// <summary>A bar's menu asked for every bar to go away.</summary>
-    public event EventHandler? HideAllRequested;
-
     /// <summary>A bar's menu asked for the program to stop.</summary>
     public event EventHandler? ExitRequested;
 
@@ -445,7 +442,6 @@ public sealed class DockWindowManager : IDisposable
                 _loggers.CreateLogger<DockWindow>(), plan.Monitor, plan.Config, Context());
 
             window.SettingsRequested += (s, request) => SettingsRequested?.Invoke(s, request);
-            window.HideAllRequested += (_, _) => HideAllRequested?.Invoke(this, EventArgs.Empty);
             window.ExitRequested += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
 
             // A bar that has been rearranged by hand says so; writing it down

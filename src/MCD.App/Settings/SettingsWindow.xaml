@@ -91,7 +91,6 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -123,40 +122,9 @@
             what happened. The window now has a floor wide enough for the pane,
             so the folding is not needed and is turned off, toggle and all.
         -->
-        <!-- Shown while the bars are hidden, on every page: the way back
-             has to be where somebody looking for it will look. -->
-        <Border
-            x:Name="HiddenBanner"
-            Grid.Row="1"
-            Margin="16,0,16,8"
-            Padding="14,8,8,8"
-            Background="{ThemeResource BraunPanelHi}"
-            BorderBrush="{ThemeResource BraunLineHi}"
-            BorderThickness="1"
-            CornerRadius="10"
-            Visibility="Collapsed">
-            <Grid ColumnSpacing="12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    x:Name="HiddenText"
-                    VerticalAlignment="Center"
-                    FontSize="13"
-                    Foreground="{ThemeResource BraunTx}"
-                    TextWrapping="Wrap" />
-                <ContentControl
-                    x:Name="HiddenAction"
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    IsTabStop="False" />
-            </Grid>
-        </Border>
-
         <NavigationView
             x:Name="Nav"
-            Grid.Row="2"
+            Grid.Row="1"
             IsBackButtonVisible="Collapsed"
             IsSettingsVisible="False"
             OpenPaneLength="248"
@@ -165,6 +133,7 @@
             ExpandedModeThresholdWidth="0"
             IsPaneToggleButtonVisible="False"
             PaneDisplayMode="Left"
+            ItemInvoked="OnItemInvoked"
             SelectionChanged="OnSectionChanged">
 
             <NavigationView.MenuItems>
@@ -308,6 +277,28 @@
                     </StackPanel>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
+
+            <!-- Not a page: a switch at the foot of the pane, where the
+                 pane's own pages end. It hides every bar and, worded the
+                 other way round, brings them back. -->
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Uid="NavHideItem" Tag="hide" SelectsOnInvoked="False">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabHide}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Name="HideText" VerticalAlignment="Center" Text="Hide the bars" />
+                    </StackPanel>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
 
             <ScrollViewer x:Name="Pages" Padding="36,24,36,36">
                 <StackPanel MinWidth="420" MaxWidth="1000" HorizontalAlignment="Stretch" Spacing="12">
@@ -729,7 +720,7 @@
              were not sure had happened. -->
         <Border
             x:Name="Toast"
-            Grid.Row="2"
+            Grid.Row="1"
             Margin="0,0,0,18"
             Padding="14,6,6,6"
             HorizontalAlignment="Center"

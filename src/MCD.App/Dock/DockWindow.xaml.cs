@@ -197,8 +197,6 @@ public sealed partial class DockWindow : Window
         Root.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(OnGrab), true);
         Root.AddHandler(UIElement.PointerMovedEvent, new PointerEventHandler(OnDrag), true);
         Root.AddHandler(UIElement.PointerReleasedEvent, new PointerEventHandler(OnDrop), true);
-        Root.PointerMoved += OnHover;
-        Root.PointerExited += (_, _) => _bare.Visibility = Visibility.Collapsed;
 
         // Losing the capture is not a drop. Taking the pointer from the button a
         // drag started on makes that button raise capture-lost at once, and
@@ -641,92 +639,33 @@ public sealed partial class DockWindow : Window
     {
         var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
 
-        if (target is not null)
-        {
-            string called = target.Widget.Called is { Length: > 0 } name ? name : target.Entry.TypeId;
-
-            var remove = new MenuFlyoutItem
-            {
-                Text = string.Format(
-                    System.Globalization.CultureInfo.CurrentCulture,
-                    Loc.Tr("BarMenuRemove", "Remove {0}"),
-                    called),
-            };
-
-            remove.Click += (_, _) => RemoveWidget(target);
-            menu.Items.Add(remove);
-        }
-
+        // The two glyphs are the system's, on purpose: "settings" and
+        // "power" are the two pictures every Windows user already knows.
         string? id = target?.Entry.InstanceId;
-        var settings = new MenuFlyoutItem { Text = Loc.Tr("BarMenuSettings", "Settings...") };
+
+        var settings = new MenuFlyoutItem
+        {
+            Text = Loc.Tr("BarMenuSettings", "Settings..."),
+            Icon = new FontIcon { Glyph = "\uE713" },
+        };
+
         settings.Click += (_, _) => AskForSettings(id);
         menu.Items.Add(settings);
 
-        menu.Items.Add(new MenuFlyoutSeparator());
+        var exit = new MenuFlyoutItem
+        {
+            Text = Loc.Tr("BarMenuExit", "Exit"),
+            Icon = new FontIcon { Glyph = "\uE7E8" },
+        };
 
-        var hide = new MenuFlyoutItem { Text = Loc.Tr("BarMenuHideAll", "Hide all bars") };
-        hide.Click += (_, _) => HideAllRequested?.Invoke(this, EventArgs.Empty);
-        menu.Items.Add(hide);
-
-        var exit = new MenuFlyoutItem { Text = Loc.Tr("BarMenuExit", "Exit") };
         exit.Click += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
         menu.Items.Add(exit);
 
         menu.ShowAt(Root, at);
     }
 
-    /// <summary>The menu asked for every bar to go away.</summary>
-    public event EventHandler? HideAllRequested;
-
     /// <summary>The menu asked for the program to stop.</summary>
     public event EventHandler? ExitRequested;
-
-    /// <summary>
-    /// Lights the bare slot under the pointer, so the empty part of the bar
-    /// reads as a place rather than as nothing.
-    /// </summary>
-    /// <remarks>
-    /// Empty looked like "nothing here", and nothing here is not somewhere a
-    /// person clicks or drops. The slot under the pointer glowing faintly is
-    /// the bar saying it is listening.
-    /// </remarks>
-    private void OnHover(object sender, PointerRoutedEventArgs e)
-    {
-        if (_grabbed is not null || _tornDown || _capacity == 0)
-        {
-            _bare.Visibility = Visibility.Collapsed;
-            return;
-        }
-
-        Point at = e.GetCurrentPoint(Bar).Position;
-
-        if (Under(at) is not null
-            || at.X < 0 || at.Y < 0 || at.X > Bar.ActualWidth || at.Y > Bar.ActualHeight)
-        {
-            _bare.Visibility = Visibility.Collapsed;
-            return;
-        }
-
-        Rect rect = CellRect(CellAt(at), 1);
-
-        _bare.Fill = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
-            ? Windows.UI.Color.FromArgb(0x10, 0x00, 0x00, 0x00)
-            : Windows.UI.Color.FromArgb(0x14, 0xFF, 0xFF, 0xFF));
-        _bare.Width = Math.Max(0, rect.Width);
-        _bare.Height = Math.Max(0, rect.Height);
-        Canvas.SetLeft(_bare, rect.X);
-        Canvas.SetTop(_bare, rect.Y);
-        _bare.Visibility = Visibility.Visible;
-    }
-
-    /// <summary>The glow under the pointer on a bare slot.</summary>
-    private readonly Rectangle _bare = new()
-    {
-        IsHitTestVisible = false,
-        Visibility = Visibility.Collapsed,
-        RadiusX = 5,
-        RadiusY = 5,
-    };
 
     /// <summary>
     /// Says, once ever, how the bar is used.
@@ -1373,7 +1312,6 @@ public sealed partial class DockWindow : Window
         // the window, shown and hidden rather than added and removed.
         if (!Overlay.Children.Contains(_aim))
         {
-            Overlay.Children.Add(_bare);
             Overlay.Children.Add(_aim);
             Overlay.Children.Add(_goodbye);
         }

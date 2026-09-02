@@ -91,6 +91,8 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry TabPresets => Draw("Star");
 
+    public static Geometry TabHide => Draw("Layout");
+
     public static Geometry TabLook => Draw("Brush");
 
     public static Geometry TabSensors => Draw("Pulse");

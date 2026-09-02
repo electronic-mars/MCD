@@ -1268,9 +1268,6 @@
   <data name="PinDialogHint" xml:space="preserve">
     <value>Or drop a file straight onto the bar: it is pinned where it lands.</value>
   </data>
-  <data name="BarMenuRemove" xml:space="preserve">
-    <value>Remove {0}</value>
-  </data>
   <data name="BarMenuSettings" xml:space="preserve">
     <value>Settings…</value>
   </data>
@@ -1283,10 +1280,10 @@
   <data name="BarWelcome" xml:space="preserve">
     <value>Right-click for the menu and settings. Files can be dropped right here.</value>
   </data>
-  <data name="BarsHiddenBanner" xml:space="preserve">
-    <value>The bars are hidden. Bring them back here, with the key under General, or by starting the program again.</value>
-  </data>
   <data name="BarsShow" xml:space="preserve">
     <value>Show the bars</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Hide or show the bars</value>
   </data>
 </root>

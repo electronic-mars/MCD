@@ -133,13 +133,7 @@ public sealed partial class SettingsWindow : Window
         // bar - a mark nobody made and nobody can clear.
         Closed += (_, _) => _docks.Point(string.Empty, null);
 
-        // The bars can be hidden from their own menu; the way back is a
-        // banner over every page of this window, not a row on one of them.
-        HiddenText.Text = Loc.Tr(
-            "BarsHiddenBanner",
-            "The bars are hidden. Bring them back here, with the key under General, or by starting the program again.");
-        HiddenAction.Content = Braun.Action(
-            Loc.Tr("BarsShow", "Show the bars"), () => _docks.Visible = true, "Layout");
+        // The switch at the foot of the pane is worded for what it will do.
         BarsShown(_docks.Visible);
         _docks.VisibleChanged += OnBarsVisible;
         Closed += (_, _) => _docks.VisibleChanged -= OnBarsVisible;
@@ -169,7 +163,18 @@ public sealed partial class SettingsWindow : Window
         DispatcherQueue.TryEnqueue(() => BarsShown(visible));
 
     private void BarsShown(bool visible) =>
-        HiddenBanner.Visibility = visible ? Visibility.Collapsed : Visibility.Visible;
+        HideText.Text = visible
+            ? Loc.Tr("BarMenuHideAll", "Hide the bars")
+            : Loc.Tr("BarsShow", "Show the bars");
+
+    /// <summary>The footer switch: hides every bar, or brings them back.</summary>
+    private void OnItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+    {
+        if ((args.InvokedItemContainer as NavigationViewItem)?.Tag as string == "hide")
+        {
+            _docks.Visible = !_docks.Visible;
+        }
+    }
 
     /// <summary>The settings as this window last acted on them.</summary>
     private SettingsModel _seen;
@@ -390,7 +395,7 @@ public sealed partial class SettingsWindow : Window
         bool foot = tag.EndsWith('!');
         string wanted = foot ? tag[..^1] : tag;
 
-        foreach (object item in Nav.MenuItems.Concat(Nav.FooterMenuItems))
+        foreach (object item in Nav.MenuItems)
         {
             if (item is not NavigationViewItem entry || (entry.Tag as string) != wanted)
             {
@@ -451,7 +456,7 @@ public sealed partial class SettingsWindow : Window
         // the wrong name, and a picture of the wrong page looks right.
         object? was = Nav.SelectedItem;
 
-        foreach (object item in Nav.MenuItems.Concat(Nav.FooterMenuItems))
+        foreach (object item in Nav.MenuItems)
         {
             if (item is not NavigationViewItem entry || entry.Tag is not string tag)
             {

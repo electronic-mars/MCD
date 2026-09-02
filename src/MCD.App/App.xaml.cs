@@ -103,7 +103,6 @@ public partial class App : Application
 
         _docks = _services.GetRequiredService<DockWindowManager>();
         _docks.SettingsRequested += (_, request) => ShowSettings(request.Screen, request.WidgetId);
-        _docks.HideAllRequested += (_, _) => ShowOrHideBars();
         _docks.ExitRequested += (_, _) => { Shutdown(); Exit(); };
         _docks.Start();
 
