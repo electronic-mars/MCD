@@ -358,7 +358,13 @@
                             Text="What is on the bar of the screen chosen under Bars, and what else could be."
                             TextWrapping="Wrap" />
 
-                        <StackPanel x:Name="WidgetsBody" Margin="0,14,0,0" />
+                        <ContentControl
+                            x:Name="WidgetsTabs"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            IsTabStop="False" />
+                        <StackPanel x:Name="WidgetsBody" Margin="0,4,0,0" />
                     </StackPanel>
 
                     <!-- Pinned programs. A page of their own so a fresh pin is
@@ -391,7 +397,13 @@
                             Text="Programs, folders and addresses pinned to the bar of the screen chosen under Bars."
                             TextWrapping="Wrap" />
 
-                        <StackPanel x:Name="PinsBody" Margin="0,14,0,0" />
+                        <ContentControl
+                            x:Name="PinsTabs"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            IsTabStop="False" />
+                        <StackPanel x:Name="PinsBody" Margin="0,4,0,0" />
                     </StackPanel>
 
                     <!-- Presets. Saved arrangements, apart from the widgets
@@ -423,7 +435,13 @@
                             Text="Saved arrangements of widgets. Any of them can be put onto the bar chosen under Bars."
                             TextWrapping="Wrap" />
 
-                        <StackPanel x:Name="PresetsBody" Margin="0,14,0,0" />
+                        <ContentControl
+                            x:Name="PresetsTabs"
+                            Margin="0,14,0,0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            IsTabStop="False" />
+                        <StackPanel x:Name="PresetsBody" Margin="0,4,0,0" />
                     </StackPanel>
 
                     <!-- Appearance -->
@@ -673,5 +691,30 @@
                 </StackPanel>
             </ScrollViewer>
         </NavigationView>
+
+        <!-- What just happened, and the way back. Ctrl+Z always worked; a
+             change that only announced itself in a hint was a change people
+             were not sure had happened. -->
+        <Border
+            x:Name="Toast"
+            Grid.Row="1"
+            Margin="0,0,0,18"
+            Padding="14,6,6,6"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Background="{ThemeResource BraunPanelHi}"
+            BorderBrush="{ThemeResource BraunLineHi}"
+            BorderThickness="1"
+            CornerRadius="10"
+            Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock
+                    x:Name="ToastText"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    Foreground="{ThemeResource BraunTx}" />
+                <ContentControl x:Name="ToastAction" IsTabStop="False" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

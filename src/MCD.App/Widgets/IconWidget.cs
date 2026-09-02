@@ -308,6 +308,14 @@ public sealed partial class LaunchButton : ObservableObject, IDisposable
         {
             FindIcon();
         }
+        else
+        {
+            // A chosen glyph is the whole picture: the letter that stands in
+            // for a missing icon has nothing to stand in for. Set here rather
+            // than left to the change handler - a default never changes, so
+            // the handler never ran, and every pinned folder wore a "D".
+            Placeholder = Visibility.Collapsed;
+        }
     }
 
     /// <summary>A library icon the person chose instead of the extracted one.</summary>

@@ -108,6 +108,16 @@ public sealed partial class SettingsWindow : Window
         _refresh.Tick += (_, _) => Tick();
         Closed += (_, _) => _refresh.Stop();
 
+        _toast = DispatcherQueue.CreateTimer();
+        _toast.Interval = TimeSpan.FromSeconds(5);
+        _toast.IsRepeating = false;
+        _toast.Tick += (_, _) => Toast.Visibility = Visibility.Collapsed;
+
+        _flash = DispatcherQueue.CreateTimer();
+        _flash.Interval = TimeSpan.FromMilliseconds(1600);
+        _flash.IsRepeating = false;
+        _flash.Tick += (_, _) => _docks.Point(string.Empty, null);
+
         // What happens on a bar is a change to the same settings this window
         // is showing, and until now the window never heard about it: the chip
         // counts, the undo label and the chosen widget all went stale the
@@ -189,6 +199,13 @@ public sealed partial class SettingsWindow : Window
         }
 
         ReloadDocks();
+
+        // A change made on the bar itself is announced here too - the bar
+        // has no room for a sentence, and this window is open.
+        if (_settings.UndoWhat is { } what && !ReferenceEquals(what, _said))
+        {
+            Say(what);
+        }
     }
 
     /// <summary>
@@ -693,18 +710,34 @@ public sealed partial class SettingsWindow : Window
             return box;
         }
 
+        // Two or three short answers are shown side by side: a list that has
+        // to be opened to learn that "Compact" exists hides the choice.
+        Panel Keys(IReadOnlyList<string> labels, int index, Action<int> chosen) =>
+            Braun.Segs(
+                labels,
+                index,
+                i =>
+                {
+                    if (!_filling && i != index)
+                    {
+                        chosen(i);
+                    }
+                },
+                wide: true);
+
         LookBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("ThemeLabel", "Theme"),
                 Loc.Tr("ThemeHint", "The bars and this window follow it together."),
-                Pick(
+                Keys(
                     [
                         Loc.Tr("SegThemeSystem", "Match Windows"),
                         Loc.Tr("SegThemeLight", "Light"),
                         Loc.Tr("SegThemeDark", "Dark"),
                     ],
                     Appearance.Index(look.Theme),
-                    i => ApplyLook(theme: Appearance.FromIndex(i)))),
+                    i => ApplyLook(theme: Appearance.FromIndex(i))),
+                stack: true),
 
             Braun.Row(
                 Loc.Tr("BackgroundLabel", "Background"),
@@ -729,28 +762,148 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr(
                     "ReadingSizeHint",
                     "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
-                Pick(
+                Keys(
                     [
                         Loc.Tr("SegSizeLarge", "Large"),
                         Loc.Tr("SegSizeMedium", "Medium"),
                         Loc.Tr("SegSizeSmall", "Small"),
                     ],
                     Math.Max(0, Array.IndexOf(Sizes, look.Size)),
-                    i => ApplyLook(size: Sizes[i]))),
+                    i => ApplyLook(size: Sizes[i])),
+                stack: true),
 
             Braun.Row(
                 Loc.Tr("AccentLabel", "Colour of the readings"),
                 Loc.Tr(
                     "AccentHint",
                     "The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way."),
-                Pick(
+                Keys(
                     [
                         Loc.Tr("SegAccentNeutral", "Plain text"),
                         Loc.Tr("SegAccentWindows", "Windows accent"),
                     ],
                     look.Accent == "windows" ? 1 : 0,
-                    i => ApplyLook(accent: i == 1 ? "windows" : "neutral")))));
+                    i => ApplyLook(accent: i == 1 ? "windows" : "neutral")),
+                stack: true)));
 
+        // ------------------------------------------------------------- sample
+        // The bar lives on another screen; what these rows do to it is shown
+        // here, on a strip that follows them.
+        var chosen = new IconChoices(look.Icons);
+
+        LookBody.Children.Add(Braun.Heading("Layout", Loc.Tr("LookSampleGroup", "Sample")));
+        LookBody.Children.Add(Sample(look, chosen));
+
+        // -------------------------------------------------------------- icons
+        // Which picture a reading wears, on every bar. This used to be a
+        // pencil on the gallery chip - a local-looking key with a global
+        // effect, which is how a processor came to be a cogwheel everywhere.
+        LookBody.Children.Add(Braun.Heading("Star", Loc.Tr("LookIconsGroup", "Icons of the readings")));
+
+        var iconRows = new List<FrameworkElement?>();
+
+        foreach ((string id, string label, string fallback) in IconChoices.Known)
+        {
+            string wearing = chosen.For(id, fallback);
+            string pick = id;
+
+            Button change = Braun.Action(Loc.Tr("IconChange", "Change..."), () => { }, "Pen");
+            change.Click += (_, _) => PickPicture(pick, change);
+
+            var control = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 10,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            control.Children.Add(Braun.Tile(30, Braun.Glyph(wearing, 18, Braun.Tx)));
+            control.Children.Add(change);
+
+            iconRows.Add(Braun.Row(label, null, control));
+        }
+
+        LookBody.Children.Add(Braun.Group([.. iconRows]));
+    }
+
+    /// <summary>A strip of bar as the appearance settings would draw it.</summary>
+    private FrameworkElement Sample(AppSettings look, IconChoices chosen)
+    {
+        double tall = look.Size switch { "small" => 36, "medium" => 42, _ => 48 };
+        double font = look.Size switch { "small" => 12, "medium" => 13, _ => 15 };
+        double icon = look.Size switch { "small" => 16, "medium" => 18, _ => 20 };
+
+        Windows.UI.Color ground = look.Backdrop switch
+        {
+            "colour" => Swatch(look.BackdropColour),
+            "braun" => Windows.UI.Color.FromArgb(255, 0x1C, 0x1F, 0x24),
+            "acrylic" or "image" => Windows.UI.Color.FromArgb(255, 0x24, 0x27, 0x2E),
+            _ => Root.ActualTheme == ElementTheme.Light
+                ? Windows.UI.Color.FromArgb(255, 0xF3, 0xF3, 0xF3)
+                : Windows.UI.Color.FromArgb(255, 0x20, 0x20, 0x20),
+        };
+
+        bool dark = (ground.R * 299 + ground.G * 587 + ground.B * 114) / 1000 < 128;
+
+        Brush ink = look.Accent == "windows"
+            ? Braun.Acc
+            : new SolidColorBrush(dark
+                ? Windows.UI.Color.FromArgb(255, 0xE9, 0xEC, 0xF1)
+                : Windows.UI.Color.FromArgb(255, 0x23, 0x26, 0x2B));
+
+        var row = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 22,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        (string Glyph, string Figure, string Label)[] readings =
+        [
+            (chosen.For("cpu", "Cpu"), "37 %", Loc.Tr("LabelCpu", "CPU")),
+            (chosen.For("temp", "Temperature"), "51 \u00b0C", Loc.Tr("LabelGpu", "GPU")),
+            ("Clock", "12:54", string.Empty),
+        ];
+
+        foreach ((string glyph, string figure, string label) in readings)
+        {
+            var cell = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 6,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            cell.Children.Add(Braun.Glyph(glyph, icon, ink));
+
+            var words = new StackPanel();
+            words.Children.Add(new TextBlock { Text = figure, FontSize = font, Foreground = ink });
+
+            if (label.Length > 0)
+            {
+                words.Children.Add(new TextBlock
+                {
+                    Text = label,
+                    FontSize = Math.Max(9, font - 4),
+                    Foreground = ink,
+                    Opacity = 0.7,
+                });
+            }
+
+            cell.Children.Add(words);
+            row.Children.Add(cell);
+        }
+
+        return new Border
+        {
+            Height = tall,
+            Background = new SolidColorBrush(ground),
+            BorderBrush = Braun.Line,
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(8),
+            Child = row,
+        };
     }
 
     /// <summary>
@@ -1037,11 +1190,17 @@ public sealed partial class SettingsWindow : Window
             tabs.Add(("Computer", Label(monitors[i], monitors, live, i), monitors[i].Enabled));
         }
 
-        DisplayTabs.Content = Braun.Tabs(tabs, chosen, i =>
+        // The same switcher on every page that acts on one screen. Which
+        // screen a page was about used to be a fact kept on another page,
+        // and "I pinned it and it is not in the list" was that fact missing.
+        foreach (ContentControl slot in new[] { DisplayTabs, WidgetsTabs, PinsTabs, PresetsTabs })
         {
-            _editing = monitors[i].StableId;
-            ReloadDocks();
-        });
+            slot.Content = Braun.Tabs(tabs, chosen, i =>
+            {
+                _editing = monitors[i].StableId;
+                ReloadDocks();
+            });
+        }
 
         ShowDock();
         ShowWidgets();
@@ -1197,12 +1356,14 @@ public sealed partial class SettingsWindow : Window
                 ? Braun.Row(
                     Loc.Tr("SizeLabel", "Thickness"),
                     Loc.Tr("SizeHint", "How much room the bar takes up."),
-                    Braun.Choice(
+                    Braun.Segs(
                         [Loc.Tr("SegThickDefault", "Default"), Loc.Tr("SegThickCompact", "Compact")],
                         dock.Density == DockDensity.Compact ? 1 : 0,
                         i => SetDock(
                             d => d with { Density = i == 1 ? DockDensity.Compact : DockDensity.Default },
-                            Loc.Tr("UndoThickness", "thickness"))))
+                            Loc.Tr("UndoThickness", "thickness")),
+                        wide: true),
+                    stack: true)
                 : Braun.Row(
                     Loc.Tr("SizeLabel", "Thickness"),
                     Loc.Tr("ThicknessNote", "A bar down the side of the screen has one thickness."),
@@ -1230,14 +1391,16 @@ public sealed partial class SettingsWindow : Window
                         "ModePinnedHint",
                         "The bar keeps its strip of screen. A maximised window stops at it rather than covering it."),
                 },
-                Braun.Choice(
+                Braun.Segs(
                     [
                         Loc.Tr("ModePinned", "Keeps its place"),
                         Loc.Tr("ModeHide", "Hides"),
                         Loc.Tr("ModeDesktop", "On the desktop"),
                     ],
                     Math.Max(0, Array.IndexOf(modes, dock.Mode)),
-                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")))),
+                    i => SetDock(d => d with { Mode = modes[i] }, Loc.Tr("UndoMode", "how it holds its edge")),
+                    wide: true),
+                stack: true),
 
             // Not offered on the desktop, where it would contradict the mode
             // rather than qualify it. A setting that cannot act is not shown.
@@ -1283,14 +1446,22 @@ public sealed partial class SettingsWindow : Window
         }
 
         // ------------------------------------------------------------- the bar
-        WidgetsBody.Children.Add(Braun.Group(
-            Braun.Row(
-                Loc.Tr("BarLiveTitle", "The bar itself"),
-                Loc.Tr(
-                    "BarHelp",
-                    "Drag a widget along the bar to move it, off the bar to remove it. A right click anywhere on the bar opens this window - over a widget, with that widget already chosen."),
-                null),
+        // The gestures, as a line rather than as a settings row with nothing
+        // to set: a row in a card promises a control.
+        WidgetsBody.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr(
+                "BarGestures",
+                "Drag to move \u00b7 off the edge to remove \u00b7 right-click for the menu"),
+            FontSize = 12,
+            Foreground = Braun.Tx3,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 0),
+        });
 
+        WidgetsBody.Children.Add(Braun.Heading("Layout", Loc.Tr("WidgetsBarGroup", "The bar")));
+
+        WidgetsBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("GalleryRow", "Put one on the bar"),
                 Loc.Tr(
@@ -1319,7 +1490,7 @@ public sealed partial class SettingsWindow : Window
                             : Loc.Tr("CrowdedButton", "Take them off"),
                         () => Shed(dock, stranded, Loc.Tr("UndoCrowded", "the ones that did not fit")),
                         "Delete",
-                        danger: true))
+                        danger: false))
                 : null,
 
 
@@ -1352,7 +1523,7 @@ public sealed partial class SettingsWindow : Window
                     Loc.Tr("ResetButton", "Restore the standard bar"),
                     ResetDock,
                     "Undo",
-                    danger: true))));
+                    danger: false))));
 
         // ------------------------------------------------------------ contents
         WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
@@ -1437,11 +1608,23 @@ public sealed partial class SettingsWindow : Window
             string name = _docks.Called(dock.StableId, entry.InstanceId) ?? NameOf(entry);
             string target = WidgetOptions.Text(entry.Config, "target") ?? string.Empty;
 
-            Grid row = Braun.Row(name, target, Braun.Action(
+            var keys = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+
+            // The folder, for a file - what the taskbar offers on the same
+            // gesture. An address has no folder.
+            if (Path.IsPathRooted(target))
+            {
+                keys.Children.Add(Braun.Action(
+                    Loc.Tr("PinOpenFolder", "Open folder"), () => Reveal(target), "Folder"));
+            }
+
+            keys.Children.Add(Braun.Action(
                 Loc.Tr("ListRemove", "Take it off the bar"),
                 () => TakeOff(entry, Loc.Tr("UndoRemoved", "a widget taken off")),
-                "Delete",
-                danger: true));
+                "Delete"));
+
+            Grid row = Braun.Row(name, Middle(target, 56), keys);
+            ToolTipService.SetToolTip(row, target);
 
             // The same gestures the widget list answers: the line chooses it,
             // and the bar itself says which icon the line is about.
@@ -1475,16 +1658,52 @@ public sealed partial class SettingsWindow : Window
             if (_pinShown?.CreateEditor(options => OnInspectorConfigured(id, options)) is { } editor)
             {
                 PinsBody.Children.Add(Braun.Heading(
-                    "Sliders", _docks.Called(dock.StableId, id) ?? NameOf(chosen)));
+                    "Sliders", Loc.Tr("PinsEditorTitle", "Name and icon")));
 
                 PinsBody.Children.Add(Braun.Group(Braun.Row(
-                    Loc.Tr("WidgetOptions", "Its own settings"), null, editor, stack: true)));
+                    _docks.Called(dock.StableId, id) ?? NameOf(chosen), null, editor, stack: true)));
             }
         }
     }
 
     /// <summary>The pin whose editor is on the pins page, kept to be disposed.</summary>
     private WidgetViewModel? _pinShown;
+
+    /// <summary>Shows a file in its folder, the way the shell does.</summary>
+    private void Reveal(string target)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{target}\"")
+            {
+                UseShellExecute = true,
+            });
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning(ex, "settings.pin could not show {Target}", target);
+        }
+    }
+
+    /// <summary>
+    /// A path shortened in the middle, where paths carry the least.
+    /// </summary>
+    /// <remarks>
+    /// Cut at the end, a path loses the file; cut at the start, the drive.
+    /// The framework only cuts at the end.
+    /// </remarks>
+    private static string Middle(string text, int most)
+    {
+        if (text.Length <= most)
+        {
+            return text;
+        }
+
+        int head = (most - 1) * 2 / 5;
+        int tail = most - 1 - head;
+
+        return text[..head] + "\u2026" + text[^tail..];
+    }
 
     /// <summary>Fills the page of saved arrangements.</summary>
     private void ShowPresets()
@@ -1510,7 +1729,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("PresetApply", "Put it on this bar"), () => ApplyPreset(id), "ArrowDown");
 
             var drop = Braun.Action(
-                Loc.Tr("PresetDelete", "Forget it"), () => DeletePreset(id), "Delete", danger: true);
+                Loc.Tr("PresetDelete", "Forget it"), () => DeletePreset(id), "Delete", danger: false);
 
             rows.Add(Braun.Row(
                 preset.Name,
@@ -1524,6 +1743,16 @@ public sealed partial class SettingsWindow : Window
                     Spacing = 8,
                     Children = { apply, drop },
                 }));
+        }
+
+        if (!_settings.Current.App.Presets.Any())
+        {
+            rows.Add(Braun.Row(
+                Loc.Tr(
+                    "PresetsEmpty",
+                    "None yet. A saved arrangement goes onto any screen with one press."),
+                null,
+                null));
         }
 
         PresetsBody.Children.Add(Braun.Group([.. rows]));
@@ -1831,6 +2060,24 @@ public sealed partial class SettingsWindow : Window
             ToolTipService.SetToolTip(key, name);
             Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(key, name);
 
+            // A key that answers the pointer is a key; a strip that does not
+            // is a picture of the state.
+            key.PointerEntered += (_, _) =>
+            {
+                if (!on)
+                {
+                    strip.Fill = Braun.LineHi;
+                }
+            };
+
+            key.PointerExited += (_, _) =>
+            {
+                if (!on)
+                {
+                    strip.Fill = Braun.Sunk;
+                }
+            };
+
             AppBarEdge picked = edge;
             key.Click += (_, _) =>
             {
@@ -1843,7 +2090,17 @@ public sealed partial class SettingsWindow : Window
             face.Children.Add(key);
         }
 
-        return face;
+        var board = new StackPanel { Spacing = 6, HorizontalAlignment = HorizontalAlignment.Right };
+        board.Children.Add(face);
+        board.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr("EdgeBoardHint", "Press a side"),
+            FontSize = 12,
+            Foreground = Braun.Tx3,
+            HorizontalAlignment = HorizontalAlignment.Center,
+        });
+
+        return board;
     }
 
     /// <summary>What this screen's bar is holding but has no room to show.</summary>
@@ -1969,7 +2226,18 @@ public sealed partial class SettingsWindow : Window
                 TextTrimming = TextTrimming.CharacterEllipsis,
             };
 
-            line.Children.Add(name);
+            // A handle at the head of the line: the mark of a row that can be
+            // taken hold of, which these can.
+            var lead = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 8,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            lead.Children.Add(Braun.Glyph("List", 12, Braun.Tx3));
+            lead.Children.Add(name);
+            line.Children.Add(lead);
 
             Button Small(string glyph, string tip, Action click, bool danger = false)
             {
@@ -2015,7 +2283,7 @@ public sealed partial class SettingsWindow : Window
                 "Delete",
                 Loc.Tr("ListRemove", "Take it off the bar"),
                 () => TakeOff(entry, Loc.Tr("UndoRemoved", "a widget taken off")),
-                danger: true);
+                danger: false);
 
             Grid.SetColumn(off, 4);
             line.Children.Add(off);
@@ -2048,6 +2316,11 @@ public sealed partial class SettingsWindow : Window
             // the row's own keys light up.
             line.PointerEntered += (_, _) =>
             {
+                if (entry.InstanceId != _selectedId)
+                {
+                    line.Background = Braun.CardHi;
+                }
+
                 _docks.Point(dock.StableId, entry.InstanceId);
                 up.Opacity = 1;
                 down.Opacity = 1;
@@ -2056,6 +2329,11 @@ public sealed partial class SettingsWindow : Window
 
             line.PointerExited += (_, _) =>
             {
+                if (entry.InstanceId != _selectedId)
+                {
+                    line.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+                }
+
                 _docks.Point(dock.StableId, null);
                 up.Opacity = 0;
                 down.Opacity = 0;
@@ -2254,7 +2532,7 @@ public sealed partial class SettingsWindow : Window
     {
         var gallery = new VariableSizedWrapGrid
         {
-            ItemHeight = 40,
+            ItemHeight = 52,
             ItemWidth = 204,
             Orientation = Orientation.Horizontal,
         };
@@ -2282,11 +2560,15 @@ public sealed partial class SettingsWindow : Window
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
+            // Two lines rather than an ellipsis: "Temperature - the h..."
+            // was cut exactly where the meaning began.
             var name = new TextBlock
             {
                 Text = offer.Name,
+                FontSize = 13,
                 VerticalAlignment = VerticalAlignment.Center,
-                TextTrimming = TextTrimming.CharacterEllipsis,
+                TextWrapping = TextWrapping.Wrap,
+                MaxLines = 2,
             };
 
             Grid.SetColumn(name, 1);
@@ -2306,40 +2588,34 @@ public sealed partial class SettingsWindow : Window
 
             var picture = new Viewbox { Width = 16, Height = 16, Child = canvas };
 
-            List<(Button Pencil, WidgetOffer Offer)> pencils = [];
-
-            // A pencil on the ones whose picture can be changed, and nothing
-            // on the clock and the player, which draw their own faces.
-            //
-            // It is the pencil that changes the picture, not the chip. The
-            // chip is what a widget is carried by, and a press on the thing
-            // you carry should not quietly repaint every copy of it on every
-            // bar - which is what pressing the chip did, and it is how a
-            // processor came to be drawn as a cogwheel.
-            if (offer.Chooses is not null)
+            // A plus puts one on the chosen bar and has the bar point at it.
+            // A press used to do nothing, on purpose - its result landed on
+            // another screen with nothing to watch - and the drag it left as
+            // the only way in is a drag between windows, across monitors,
+            // sometimes holding a hiding bar open with the same hand. The
+            // pointing is what makes the press honest.
+            var plus = new Button
             {
-                var pencil = new Button
-                {
-                    Width = 22,
-                    Height = 22,
-                    Padding = new Thickness(0),
-                    MinWidth = 0,
-                    MinHeight = 0,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Background = Braun.PanelHi,
-                    BorderBrush = Braun.LineHi,
-                    BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(6),
-                    Content = Braun.Glyph("Pen", 11, Braun.Tx2),
-                };
+                Width = 24,
+                Height = 24,
+                Padding = new Thickness(0),
+                MinWidth = 0,
+                MinHeight = 0,
+                VerticalAlignment = VerticalAlignment.Center,
+                Background = Braun.PanelHi,
+                BorderBrush = Braun.LineHi,
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(6),
+                Content = Braun.Glyph("Plus", 12, Braun.Tx2),
+            };
 
-                ToolTipService.SetToolTip(
-                    pencil, Loc.Tr("ChipPencil", "Change the picture, on every bar."));
+            ToolTipService.SetToolTip(plus, Loc.Tr("GalleryRow", "Put one on the bar"));
 
-                Grid.SetColumn(pencil, 3);
-                row.Children.Add(pencil);
-                pencils.Add((pencil, offer));
-            }
+            Grid.SetColumn(plus, 3);
+            row.Children.Add(plus);
+
+            WidgetOffer adding = offer;
+            plus.Click += (_, _) => AddOffer(adding);
 
             row.Children.Add(picture);
             row.Children.Add(name);
@@ -2366,9 +2642,8 @@ public sealed partial class SettingsWindow : Window
 
             ToolTipService.SetToolTip(
                 chip,
-                offer.Chooses is null
-                    ? Loc.Tr("ChipDragOnly", "Drag it onto a bar to put one there.")
-                    : Loc.Tr("ChipDragOrPick", "Drag it onto a bar to put one there. The pencil changes its picture."));
+                offer.Description + "\n" + Loc.Tr(
+                    "ChipHint", "Drag it onto a bar, or press the plus to put one on the chosen bar."));
 
             WidgetOffer chosen = offer;
 
@@ -2378,16 +2653,28 @@ public sealed partial class SettingsWindow : Window
                 args.Data.RequestedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
             };
 
-            foreach ((Button pencil, WidgetOffer whose) in pencils)
-            {
-                WidgetOffer picked = whose;
-                pencil.Click += (_, _) => PickPicture(picked, pencil);
-            }
-
             gallery.Children.Add(chip);
         }
 
         return gallery;
+    }
+
+    /// <summary>Puts one of these on the chosen bar, and has the bar point at it.</summary>
+    private void AddOffer(WidgetOffer offer)
+    {
+        if (Dock() is not { } dock)
+        {
+            return;
+        }
+
+        WidgetConfig made = offer.Make();
+
+        Rearrange(
+            dock.StableId,
+            widgets => [.. widgets, made],
+            string.Format(CultureInfo.CurrentCulture, Loc.Tr("UndoAdded", "added {0}"), offer.Name));
+
+        Flash(dock.StableId, made.InstanceId);
     }
 
     /// <summary>
@@ -2398,13 +2685,8 @@ public sealed partial class SettingsWindow : Window
     /// processor gauge on every bar wears the same one. That is why this is
     /// reached from the thing being drawn rather than from a page of its own.
     /// </remarks>
-    private void PickPicture(WidgetOffer offer, FrameworkElement at)
+    private void PickPicture(string id, FrameworkElement at)
     {
-        if (offer.Chooses is not { } id)
-        {
-            return;
-        }
-
         var grid = new GridView
         {
             ItemsSource = IconRow.Choices(),
@@ -2462,6 +2744,7 @@ public sealed partial class SettingsWindow : Window
 
         _log.LogInformation("settings.icon {Id} default", id);
         ReloadDocks();
+        RefreshLook();
     }
 
     /// <summary>Writes down which picture a reading is drawn with.</summary>
@@ -2479,6 +2762,7 @@ public sealed partial class SettingsWindow : Window
 
         _log.LogInformation("settings.icon {Id} {Icon}", id, icon);
         ReloadDocks();
+        RefreshLook();
     }
 
     /// <summary>
@@ -2528,7 +2812,7 @@ public sealed partial class SettingsWindow : Window
                     Loc.Tr("RemoveFromBar", "Remove from bar"),
                     RemoveSelected,
                     "Delete",
-                    danger: true)));
+                    danger: false)));
     }
 
     private void OnInspectorConfigured(string id, System.Text.Json.JsonElement? options)
@@ -2578,7 +2862,57 @@ public sealed partial class SettingsWindow : Window
     {
         _mine = model;
         _settings.Commit(model, reason, what, where);
+
+        if (what is not null)
+        {
+            Say(what);
+        }
     }
+
+    /// <summary>
+    /// Says what just happened, with the way back beside it.
+    /// </summary>
+    /// <remarks>
+    /// Five seconds, then gone. The undo itself never went anywhere; what
+    /// was missing was the sentence that says a thing happened and can be
+    /// taken back - without it a button that did its job looked like a
+    /// button that did nothing.
+    /// </remarks>
+    private void Say(string what)
+    {
+        _said = what;
+
+        ToastText.Text = string.Format(
+            CultureInfo.CurrentCulture, Loc.Tr("ToastDone", "Done: {0}"), what);
+
+        ToastAction.Content = Braun.Action(
+            Loc.Tr("ToastUndo", "Undo"),
+            () =>
+            {
+                Toast.Visibility = Visibility.Collapsed;
+                DoUndo();
+            },
+            "Undo");
+
+        Toast.Visibility = Visibility.Visible;
+        _toast.Stop();
+        _toast.Start();
+    }
+
+    /// <summary>The last change announced, by identity, so a change is announced once.</summary>
+    private string? _said;
+
+    private readonly DispatcherQueueTimer _toast;
+
+    /// <summary>Has the bar point at one widget for a moment, then let go.</summary>
+    private void Flash(string stableId, string instanceId)
+    {
+        _docks.Point(stableId, instanceId);
+        _flash.Stop();
+        _flash.Start();
+    }
+
+    private readonly DispatcherQueueTimer _flash;
 
     /// <summary>Puts the settings back to before the last change.</summary>
     private void DoUndo()
@@ -2950,9 +3284,6 @@ public sealed partial class SettingsWindow : Window
     /// <summary>The device a reading belongs to, for the group headings.</summary>
     private static string DeviceName(SensorDescriptor sensor) => sensor.Group switch
     {
-        // Through Detail, which already refuses a source's own shorthand:
-        // "gpu" as a heading is plumbing, a model name is a heading.
-        HardwareGroup.Gpu when SensorNames.Detail(sensor) is { Length: > 0 } model => model,
         HardwareGroup.Cpu => Loc.Tr("DeviceCpu", "Processor"),
         HardwareGroup.Gpu => Loc.Tr("DeviceGpu", "Graphics"),
         HardwareGroup.Memory => Loc.Tr("DeviceMemory", "Memory"),
@@ -2975,6 +3306,7 @@ public sealed partial class SettingsWindow : Window
     private void ShowSources()
     {
         var roll = _sensors.Sources
+            .Where(s => s.Tier != Tier.External)
             .OrderBy(s => s.Tier)
             .ThenBy(s => SourceName(s.Id), StringComparer.CurrentCulture)
             .ToList();
@@ -3044,8 +3376,6 @@ public sealed partial class SettingsWindow : Window
         "acpi" => Loc.Tr("SourceAcpi", "ACPI thermal zones"),
         "disk" => Loc.Tr("SourceDisk", "drive temperatures"),
         "nvml" => Loc.Tr("SourceNvml", "NVIDIA driver"),
-        "lhm" => "LibreHardwareMonitor",
-        "hwinfo" => "HWiNFO",
         _ => id,
     };
 
@@ -3191,7 +3521,21 @@ public sealed partial class SettingsWindow : Window
             {
                 MinWidth = 360,
                 Spacing = 12,
-                Children = { _newTarget, browse, _newName },
+                Children =
+                {
+                    _newTarget,
+                    browse,
+                    _newName,
+                    new TextBlock
+                    {
+                        Text = Loc.Tr(
+                            "PinDialogHint",
+                            "Or drop a file straight onto the bar: it is pinned where it lands."),
+                        FontSize = 12,
+                        Opacity = 0.7,
+                        TextWrapping = TextWrapping.Wrap,
+                    },
+                },
             },
         };
 
@@ -3226,6 +3570,7 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("UndoAdded", "added {0}"),
                 name.Length > 0 ? name : IconWidget.NameFor(target)));
 
+        Flash(dock.StableId, pin.InstanceId);
         _log.LogInformation("settings.pin added {Target}", target);
     }
 

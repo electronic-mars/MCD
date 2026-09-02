@@ -26,7 +26,7 @@
     <value>Readings</value>
   </data>
   <data name="NavAbout.Text" xml:space="preserve">
-    <value>The program</value>
+    <value>About</value>
   </data>
   <!-- Docks page -->
   <data name="DocksTitle.Text" xml:space="preserve">
@@ -34,9 +34,6 @@
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
     <value>Each screen has its own bar. This page is the bar of the screen chosen above; changes land on it as you make them.</value>
-  </data>
-  <data name="BarLiveTitle" xml:space="preserve">
-    <value>The bar itself</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
     <value>Show a bar on this display</value>
@@ -73,7 +70,7 @@
     <value>Readings</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running.</value>
+    <value>Everything the program reads on this machine, and what to call it - the pencil renames.</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Live readings</value>
@@ -201,9 +198,6 @@
   <data name="TempHottestSummary" xml:space="preserve">
     <value>The hottest reading</value>
   </data>
-  <data name="TempExplain" xml:space="preserve">
-    <value>Processor and motherboard temperatures live behind a driver, which a Store app cannot contain. Run HWiNFO with its Shared Memory Support switched on, or LibreHardwareMonitor with its Remote Web Server on, and they appear here by themselves.</value>
-  </data>
   <!-- Media widget -->
   <data name="MediaPlayPause" xml:space="preserve">
     <value>Play or pause</value>
@@ -298,9 +292,6 @@
   </data>
   <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Next</value>
-  </data>
-  <data name="BarHelp" xml:space="preserve">
-    <value>Drag a widget along the bar to move it, off the bar to remove it. A right click anywhere on the bar opens this window - over a widget, with that widget already chosen.</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
     <value>On the bar</value>
@@ -692,12 +683,6 @@
   <data name="WidgetDropCaption" xml:space="preserve">
     <value>Put it here</value>
   </data>
-  <data name="ChipDragOnly" xml:space="preserve">
-    <value>Drag it onto a bar to put one there.</value>
-  </data>
-  <data name="ChipDragOrPick" xml:space="preserve">
-    <value>Drag it onto a bar to put one there. The pencil changes its picture.</value>
-  </data>
   <data name="UndoRow" xml:space="preserve">
     <value>Take the last change back</value>
   </data>
@@ -861,10 +846,7 @@
     <value>Widgets</value>
   </data>
   <data name="WidgetsIntro.Text" xml:space="preserve">
-    <value>What is on the bar of the screen chosen under Bars, and what else could be.</value>
-  </data>
-  <data name="ChipPencil" xml:space="preserve">
-    <value>Change the picture, on every bar.</value>
+    <value>What is on this screen's bar, and what else could be.</value>
   </data>
   <data name="IconDefault" xml:space="preserve">
     <value>The one it came with</value>
@@ -906,7 +888,7 @@
     <value>Readings</value>
   </data>
   <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
-    <value>The program</value>
+    <value>About</value>
   </data>
   <data name="UndoLook" xml:space="preserve">
     <value>how the bars are painted</value>
@@ -936,7 +918,7 @@
     <value>Graphics - temperature</value>
   </data>
   <data name="CopyButtonCount" xml:space="preserve">
-    <value>Make {0} the same</value>
+    <value>Copy to the other {0}</value>
   </data>
   <data name="ListAtSlot" xml:space="preserve">
     <value>slot {0}</value>
@@ -1101,7 +1083,7 @@
     <value>General</value>
   </data>
   <data name="CopiesTitle" xml:space="preserve">
-    <value>Copies</value>
+    <value>Backup</value>
   </data>
   <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
     <value>General</value>
@@ -1221,7 +1203,7 @@
     <value>Your programs</value>
   </data>
   <data name="PinsIntro.Text" xml:space="preserve">
-    <value>Programs, folders and addresses pinned to the bar of the screen chosen under Bars.</value>
+    <value>Programs, folders and addresses pinned to this screen's bar.</value>
   </data>
   <data name="PinnedListTitle" xml:space="preserve">
     <value>Pinned to this bar</value>
@@ -1239,6 +1221,66 @@
     <value>Presets</value>
   </data>
   <data name="PresetsIntro.Text" xml:space="preserve">
-    <value>Saved arrangements of widgets. Any of them can be put onto the bar chosen under Bars.</value>
+    <value>Saved arrangements of widgets. Any of them goes onto the chosen screen's bar.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>Drag it onto a bar, or press the plus to put one on the chosen bar.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>Done: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>None yet. A saved arrangement goes onto any screen with one press.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>the bar is on</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>the bar is off</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>Press a side</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>The bar</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>Drag to move · off the edge to remove · right-click for the menu</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>Name and icon</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>Icons of the readings</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>Sample</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>Change…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>Or drop a file straight onto the bar: it is pinned where it lands.</value>
+  </data>
+  <data name="BarMenuRemove" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>Settings…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>Hide all bars</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>Right-click for the menu and settings. Files can be dropped right here.</value>
   </data>
 </root>

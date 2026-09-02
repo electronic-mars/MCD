@@ -197,6 +197,8 @@ public sealed partial class DockWindow : Window
         Root.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(OnGrab), true);
         Root.AddHandler(UIElement.PointerMovedEvent, new PointerEventHandler(OnDrag), true);
         Root.AddHandler(UIElement.PointerReleasedEvent, new PointerEventHandler(OnDrop), true);
+        Root.PointerMoved += OnHover;
+        Root.PointerExited += (_, _) => _bare.Visibility = Visibility.Collapsed;
 
         // Losing the capture is not a drop. Taking the pointer from the button a
         // drag started on makes that button raise capture-lost at once, and
@@ -618,13 +620,177 @@ public sealed partial class DockWindow : Window
 
         int cell = CellAt(e.GetPosition(Bar));
 
-        string? widget = DockGrid.At(_placed, cell) is { } sitting
-            && _hosts.FirstOrDefault(h => h.Entry.InstanceId == sitting.InstanceId) is { } target
-                ? target.Entry.InstanceId
-                : null;
+        WidgetHost? target = DockGrid.At(_placed, cell) is { } sitting
+            ? _hosts.FirstOrDefault(h => h.Entry.InstanceId == sitting.InstanceId)
+            : null;
 
-        AskForSettings(widget);
+        ShowMenu(target, e.GetPosition(Root));
     }
+
+    /// <summary>
+    /// The bar's own menu: what people come to a right click for, without a
+    /// window in between.
+    /// </summary>
+    /// <remarks>
+    /// The taskbar, the Dock, every bar there is answers a right click with a
+    /// menu; this one opened a whole window. Taking a widget off, hiding the
+    /// bars and stopping the program are one click each now, and the window
+    /// is the item that says so.
+    /// </remarks>
+    private void ShowMenu(WidgetHost? target, Point at)
+    {
+        var menu = new MenuFlyout { XamlRoot = Root.XamlRoot };
+
+        if (target is not null)
+        {
+            string called = target.Widget.Called is { Length: > 0 } name ? name : target.Entry.TypeId;
+
+            var remove = new MenuFlyoutItem
+            {
+                Text = string.Format(
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    Loc.Tr("BarMenuRemove", "Remove {0}"),
+                    called),
+            };
+
+            remove.Click += (_, _) => RemoveWidget(target);
+            menu.Items.Add(remove);
+        }
+
+        string? id = target?.Entry.InstanceId;
+        var settings = new MenuFlyoutItem { Text = Loc.Tr("BarMenuSettings", "Settings...") };
+        settings.Click += (_, _) => AskForSettings(id);
+        menu.Items.Add(settings);
+
+        menu.Items.Add(new MenuFlyoutSeparator());
+
+        var hide = new MenuFlyoutItem { Text = Loc.Tr("BarMenuHideAll", "Hide all bars") };
+        hide.Click += (_, _) => HideAllRequested?.Invoke(this, EventArgs.Empty);
+        menu.Items.Add(hide);
+
+        var exit = new MenuFlyoutItem { Text = Loc.Tr("BarMenuExit", "Exit") };
+        exit.Click += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
+        menu.Items.Add(exit);
+
+        menu.ShowAt(Root, at);
+    }
+
+    /// <summary>The menu asked for every bar to go away.</summary>
+    public event EventHandler? HideAllRequested;
+
+    /// <summary>The menu asked for the program to stop.</summary>
+    public event EventHandler? ExitRequested;
+
+    /// <summary>
+    /// Lights the bare slot under the pointer, so the empty part of the bar
+    /// reads as a place rather than as nothing.
+    /// </summary>
+    /// <remarks>
+    /// Empty looked like "nothing here", and nothing here is not somewhere a
+    /// person clicks or drops. The slot under the pointer glowing faintly is
+    /// the bar saying it is listening.
+    /// </remarks>
+    private void OnHover(object sender, PointerRoutedEventArgs e)
+    {
+        if (_grabbed is not null || _tornDown || _capacity == 0)
+        {
+            _bare.Visibility = Visibility.Collapsed;
+            return;
+        }
+
+        Point at = e.GetCurrentPoint(Bar).Position;
+
+        if (Under(at) is not null
+            || at.X < 0 || at.Y < 0 || at.X > Bar.ActualWidth || at.Y > Bar.ActualHeight)
+        {
+            _bare.Visibility = Visibility.Collapsed;
+            return;
+        }
+
+        Rect rect = CellRect(CellAt(at), 1);
+
+        _bare.Fill = new SolidColorBrush(Root.ActualTheme == ElementTheme.Light
+            ? Windows.UI.Color.FromArgb(0x10, 0x00, 0x00, 0x00)
+            : Windows.UI.Color.FromArgb(0x14, 0xFF, 0xFF, 0xFF));
+        _bare.Width = Math.Max(0, rect.Width);
+        _bare.Height = Math.Max(0, rect.Height);
+        Canvas.SetLeft(_bare, rect.X);
+        Canvas.SetTop(_bare, rect.Y);
+        _bare.Visibility = Visibility.Visible;
+    }
+
+    /// <summary>The glow under the pointer on a bare slot.</summary>
+    private readonly Rectangle _bare = new()
+    {
+        IsHitTestVisible = false,
+        Visibility = Visibility.Collapsed,
+        RadiusX = 5,
+        RadiusY = 5,
+    };
+
+    /// <summary>
+    /// Says, once ever, how the bar is used.
+    /// </summary>
+    /// <remarks>
+    /// A file on disk rather than a setting: a setting written here would be
+    /// one more write on first start, which the unattended check counts.
+    /// </remarks>
+    private void Welcome()
+    {
+        if (!DockMetrics.IsHorizontal(Config.Edge))
+        {
+            return;
+        }
+
+        string mark = System.IO.Path.Combine(Mcd.Core.Infrastructure.AppPaths.Root, "welcomed");
+
+        if (File.Exists(mark))
+        {
+            return;
+        }
+
+        try
+        {
+            File.WriteAllText(mark, string.Empty);
+        }
+        catch (IOException)
+        {
+            // Then it is said again next time; nothing worse.
+        }
+
+        var chip = new Border
+        {
+            Background = new SolidColorBrush(Windows.UI.Color.FromArgb(0xE6, 0x23, 0x27, 0x2D)),
+            BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF)),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(12, 5, 12, 5),
+            // At the near end, where a bar is empty: a chip in the middle
+            // sat on top of whatever was playing.
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(88, 0, 0, 0),
+            IsHitTestVisible = false,
+            Child = new TextBlock
+            {
+                Text = Loc.Tr(
+                    "BarWelcome",
+                    "Right-click for the menu and settings. Files can be dropped right here."),
+                FontSize = 12,
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xE9, 0xEC, 0xF1)),
+            },
+        };
+
+        Bar.Children.Add(chip);
+
+        _welcome.Interval = TimeSpan.FromSeconds(9);
+        _welcome.IsRepeating = false;
+        _welcome.Tick += (_, _) => Bar.Children.Remove(chip);
+        _welcome.Start();
+    }
+
+    private readonly DispatcherQueueTimer _welcome =
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().CreateTimer();
 
     /// <summary>
     /// A left click on a bare part of the bar opens the settings.
@@ -1207,11 +1373,13 @@ public sealed partial class DockWindow : Window
         // the window, shown and hidden rather than added and removed.
         if (!Overlay.Children.Contains(_aim))
         {
+            Overlay.Children.Add(_bare);
             Overlay.Children.Add(_aim);
             Overlay.Children.Add(_goodbye);
         }
 
         BuildWidgets();
+        Welcome();
     }
 
     /// <summary>

@@ -74,9 +74,9 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             // guessed from the key now.
             IconFound = sensor => Icons.For("temp", IconFor(sensor.Group)),
 
-            NameFound = sensor => Names.Renamed(sensor.Key)
+            NameFound = sensor => Hottest(Names.Renamed(sensor.Key)
                 ? Names.For(sensor)
-                : GroupName(sensor.Group),
+                : GroupName(sensor.Group)),
         };
 
         metric.SizeFor(
@@ -175,11 +175,6 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
                     Options,
                     ("sensor", i == 0 ? null : JsonValue.Create(found[i - 1].Key.Value)))))));
 
-        if (found.Length > 0 && found.All(s => s.Group != HardwareGroup.Cpu))
-        {
-            panel.Children.Add(Explain());
-        }
-
         // The widget's own limits. Left empty, each part keeps the point its
         // maker - or the ordinary default for its kind - declares.
         var limits = new StackPanel
@@ -257,19 +252,15 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             ? Names.For(sensor)
             : $"{Names.For(sensor)} — {sensor.Hardware}";
 
-    private static TextBlock Explain() => new()
-    {
-        Text = Loc.Tr(
-            "TempExplain",
-            "Processor and motherboard temperatures live behind a driver, "
-            + "which a Store app cannot contain. Run HWiNFO with its Shared "
-            + "Memory Support switched on, then turn it on under Sensors in "
-            + "settings, and they will appear here."),
-        TextWrapping = TextWrapping.Wrap,
-        FontSize = 12,
-        Opacity = 0.7,
-        MaxWidth = 360,
-    };
+    /// <summary>
+    /// The roving thermometer's caption, marked as roving.
+    /// </summary>
+    /// <remarks>
+    /// Two chips both saying "Drive 51 °C" - one the drive's own, one the
+    /// hottest part which happens to be the drive - read as a duplicate, and
+    /// the "duplicate" got taken off. The triangle says this one moves.
+    /// </remarks>
+    private string Hottest(string name) => Chosen is null ? "\u25B2 " + name : name;
 
     /// <summary>
     /// Every temperature the machine reports, hardware first.

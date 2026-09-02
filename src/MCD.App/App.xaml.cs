@@ -103,6 +103,8 @@ public partial class App : Application
 
         _docks = _services.GetRequiredService<DockWindowManager>();
         _docks.SettingsRequested += (_, request) => ShowSettings(request.Screen, request.WidgetId);
+        _docks.HideAllRequested += (_, _) => ShowOrHideBars();
+        _docks.ExitRequested += (_, _) => { Shutdown(); Exit(); };
         _docks.Start();
 
         // The keys the whole machine listens for. Taken again whenever the
@@ -387,21 +389,10 @@ public partial class App : Application
         services.AddSingleton<ISensorProvider, StorageTemperatureProvider>();
         services.AddSingleton<ISensorProvider, AcpiThermalProvider>();
 
-        // Held by its own type as well, because the settings page has to be able
-        // to say why it is not reading anything, and "off" and "HWiNFO is not
-        // running" are different answers to that.
-        services.AddSingleton(sp => new HwInfoProvider(
-            sp.GetRequiredService<ILogger<HwInfoProvider>>(),
-            () => sp.GetRequiredService<SettingsService>().Current
-                .Sensors.EnabledProviders.GetValueOrDefault(HwInfoProvider.ProviderId, true)));
-        services.AddSingleton<ISensorProvider>(sp => sp.GetRequiredService<HwInfoProvider>());
-
-        services.AddSingleton(sp => new LhmProvider(
-            sp.GetRequiredService<ILogger<LhmProvider>>(),
-            () => sp.GetRequiredService<SettingsService>().Current
-                .Sensors.EnabledProviders.GetValueOrDefault(LhmProvider.ProviderId, true),
-            () => sp.GetRequiredService<SettingsService>().Current.Sensors.LhmHttpEndpoint));
-        services.AddSingleton<ISensorProvider>(sp => sp.GetRequiredService<LhmProvider>());
+        // No source that lives in another program. The bridges to HWiNFO and
+        // LibreHardwareMonitor are kept in the tree but not wired: the plan is
+        // the program's own readings, and until then a line saying "run this
+        // other thing" is a line about somebody else's software.
 
         services.AddSingleton<SensorHub>();
         services.AddSingleton<DockWindowManager>();

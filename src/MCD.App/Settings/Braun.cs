@@ -544,7 +544,7 @@ public static class Braun
 
             // Lit is a filled lamp, dark is an empty ring: the difference
             // survives being seen without its colour.
-            line.Children.Add(items[i].On
+            Ellipse lamp = items[i].On
                 ? new Ellipse
                 {
                     Width = 6,
@@ -559,7 +559,13 @@ public static class Braun
                     VerticalAlignment = VerticalAlignment.Center,
                     Stroke = Lamp(false),
                     StrokeThickness = 1.5,
-                });
+                };
+
+            ToolTipService.SetToolTip(
+                lamp,
+                items[i].On ? Loc.Tr("LampOn", "the bar is on") : Loc.Tr("LampOff", "the bar is off"));
+
+            line.Children.Add(lamp);
 
             line.Children.Add(new TextBlock
             {
