@@ -714,7 +714,18 @@ public partial class App : Application
         _logProvider?.Dispose();
         _logProvider = null;
 
-        _onlyInstance?.ReleaseMutex();
+        // Released only by the thread that took it. ProcessExit runs this on
+        // a thread of its own, and a mutex released from the wrong thread
+        // throws - which turned an orderly exit into a crash report. Closing
+        // the handle lets the mutex go either way.
+        try
+        {
+            _onlyInstance?.ReleaseMutex();
+        }
+        catch (ApplicationException)
+        {
+        }
+
         _onlyInstance?.Dispose();
         _onlyInstance = null;
     }
