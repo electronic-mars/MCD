@@ -1286,4 +1286,37 @@
   <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
     <value>Hide or show the bars</value>
   </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>needs the PawnIO driver</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>processor registers</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>memory modules</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>Processor and memory temperatures</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>They live behind a kernel driver. PawnIO is a signed, open one, installed once with administrator rights; the readings appear by themselves once it is there.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} is installed but did not answer. A restart of the program usually settles it.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Get the driver…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>Processor – hottest core</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>The warmest of the cores right now.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>Processor power</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>How much power the processor is drawing.</value>
+  </data>
 </root>

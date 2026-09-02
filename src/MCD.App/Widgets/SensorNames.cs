@@ -207,6 +207,14 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("PartBoard", "Motherboard"),
                 Loc.Tr("SenseBoardTemp", "How hot the motherboard is.")),
 
+            (HardwareGroup.Cpu, SensorKind.Temperature, "core-max") => (
+                Loc.Tr("SenseCpuCoreMaxName", "Processor - hottest core"),
+                Loc.Tr("SenseCpuCoreMax", "The warmest of the cores right now.")),
+
+            (HardwareGroup.Cpu, SensorKind.Power, _) => (
+                Loc.Tr("SenseCpuPowerName", "Processor power"),
+                Loc.Tr("SenseCpuPower", "How much power the processor is drawing.")),
+
             (HardwareGroup.Cpu, SensorKind.Temperature, _) when sensor.Prominent => (
                 Loc.Tr("PartCpu", "Processor"),
                 Loc.Tr("SenseCpuTemp", "How hot the processor is.")),

@@ -1286,4 +1286,37 @@
   <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
     <value>Спрятать или показать панели</value>
   </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>нужен драйвер PawnIO</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>регистры процессора</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>модули памяти</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>Температура процессора и памяти</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>Они живут за драйвером уровня ядра. PawnIO — подписанный, открытый, ставится один раз с правами администратора; показания появятся сами, как только он есть.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} установлен, но не ответил. Обычно помогает перезапуск программы.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Скачать драйвер…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>Процессор — самое горячее ядро</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>Самое тёплое из ядер прямо сейчас.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>Мощность процессора</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>Сколько процессор потребляет.</value>
+  </data>
 </root>

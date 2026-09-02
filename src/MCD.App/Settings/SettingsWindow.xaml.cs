@@ -3371,6 +3371,34 @@ public sealed partial class SettingsWindow : Window
             line.Children.Add(state);
             SourcesList.Children.Add(line);
         }
+
+        // The one thing on this page a person can do about a silent source.
+        // The processor's and the memory's own thermometers sit behind a
+        // kernel driver this program does not carry; PawnIO is signed, open,
+        // installed once, and the button goes to its author's page - the
+        // program neither downloads nor runs anything itself.
+        if (roll.Any(s => s.Tier == Tier.Driver && !s.Answering))
+        {
+            string version = Mcd.Interop.PawnIo.PawnIo.InstalledVersion() ?? string.Empty;
+
+            var row = Braun.Row(
+                Loc.Tr("DriverRow", "Processor and memory temperatures"),
+                version.Length > 0
+                    ? string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr("DriverRowInstalledHint", "PawnIO {0} is installed but did not answer. A restart of the program usually settles it."),
+                        version)
+                    : Loc.Tr(
+                        "DriverRowHint",
+                        "They live behind a kernel driver. PawnIO is a signed, open one, installed once with administrator rights; the readings appear by themselves once it is there."),
+                Braun.Action(
+                    Loc.Tr("DriverGet", "Get the driver..."),
+                    () => Open("https://pawnio.eu/"),
+                    "Download"));
+
+            row.Margin = new Thickness(0, 8, 0, 0);
+            SourcesList.Children.Add(Braun.Group(row));
+        }
     }
 
     /// <summary>
@@ -3398,6 +3426,8 @@ public sealed partial class SettingsWindow : Window
         "acpi" => Loc.Tr("SourceAcpi", "ACPI thermal zones"),
         "disk" => Loc.Tr("SourceDisk", "drive temperatures"),
         "nvml" => Loc.Tr("SourceNvml", "NVIDIA driver"),
+        "cpu" => Loc.Tr("SourceCpu", "processor registers"),
+        "dimm" => Loc.Tr("SourceDimm", "memory modules"),
         _ => id,
     };
 
@@ -3409,6 +3439,7 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("SourceAnswering", "answering ({0})"),
             source.Readings),
         { Tier: Tier.External } => Loc.Tr("SourceNotRunning", "not running"),
+        { Tier: Tier.Driver } => Loc.Tr("SourceNeedsDriver", "needs the PawnIO driver"),
         _ => Loc.Tr("SourceNotHere", "not on this machine"),
     };
 

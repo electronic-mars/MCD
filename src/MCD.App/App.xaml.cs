@@ -398,6 +398,13 @@ public partial class App : Application
         services.AddSingleton<ISensorProvider, StorageTemperatureProvider>();
         services.AddSingleton<ISensorProvider, AcpiThermalProvider>();
 
+        // The processor and the memory modules, through the PawnIO driver
+        // when the person has installed it. Registered always: each one says
+        // "not without the driver" until the driver appears, and the hub asks
+        // again every half minute.
+        services.AddSingleton<ISensorProvider, CpuMsrProvider>();
+        services.AddSingleton<ISensorProvider, DimmProvider>();
+
         // No source that lives in another program. The bridges to HWiNFO and
         // LibreHardwareMonitor are kept in the tree but not wired: the plan is
         // the program's own readings, and until then a line saying "run this

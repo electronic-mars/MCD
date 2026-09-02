@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- No UI reference. Readings are gathered here and published as immutable
        snapshots; nothing in this project knows a window exists. -->
@@ -14,7 +14,16 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="System.Management" />
+    <PackageReference Include="RAMSPDToolkit" />
     <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- The driver author's own signed module for Intel registers, byte for
+       byte from the PawnIO.Modules release, with its licence beside it. The
+       driver refuses a module signed by anybody else. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\PawnIO\IntelMSR.bin" LogicalName="Mcd.Sensors.Resources.PawnIO.IntelMSR.bin" />
+    <None Include="Resources\PawnIO\COPYING" />
   </ItemGroup>
 
 </Project>

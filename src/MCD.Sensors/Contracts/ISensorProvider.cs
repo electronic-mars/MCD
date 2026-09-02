@@ -1,4 +1,4 @@
-namespace Mcd.Sensors.Contracts;
+﻿namespace Mcd.Sensors.Contracts;
 
 /// <summary>What a source needs before it can be used at all.</summary>
 public enum Tier
@@ -15,6 +15,12 @@ public enum Tier
     /// complete without it.
     /// </summary>
     External,
+
+    /// <summary>
+    /// A kernel driver the person installs once - PawnIO. The program carries
+    /// the modules and the arithmetic; the driver carries the rights.
+    /// </summary>
+    Driver,
 }
 
 /// <summary>
