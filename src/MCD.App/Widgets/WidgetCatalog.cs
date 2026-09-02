@@ -36,13 +36,23 @@ public sealed record WidgetType(
 /// somebody picked; the clock draws digits and the player draws its own
 /// buttons, and neither has an icon to change.
 /// </param>
+/// <param name="Category">
+/// Which part of the machine it is about, for the gallery's headings: one
+/// of <see cref="WidgetCatalog.Categories"/>.
+/// </param>
+/// <param name="Short">
+/// The name under that heading, where the part is already said. Null means
+/// the full name.
+/// </param>
 public sealed record WidgetOffer(
     string Name,
     string Description,
     string Icon,
     Func<WidgetConfig> Make,
     Func<WidgetConfig, bool> Matches,
-    string? Chooses = null);
+    string? Chooses = null,
+    string Category = "other",
+    string? Short = null);
 
 /// <summary>
 /// Every widget this build knows about, in the order they are offered.
@@ -130,27 +140,55 @@ public static class WidgetCatalog
     /// per-core sensors would drown the list. Any sensor at all can still be
     /// chosen on the widget itself once it is on the bar.
     /// </remarks>
+    /// <summary>The gallery's headings, in the order they are shown, with their names.</summary>
+    public static IReadOnlyList<(string Id, string Name)> Categories =>
+    [
+        ("cpu", Loc.Tr("CatProcessor", "Processor")),
+        ("memory", Loc.Tr("CatMemory", "Memory")),
+        ("gpu", Loc.Tr("CatGraphics", "Graphics")),
+        ("storage", Loc.Tr("CatStorage", "Drives")),
+        ("network", Loc.Tr("CatNetwork", "Network")),
+        ("other", Loc.Tr("CatOther", "Everything else")),
+    ];
+
+    /// <summary>The heading a reading belongs under, and what to call it there.</summary>
+    private static (string Category, string Name, string Short) Placed(string readingId) => readingId switch
+    {
+        "cpu" => ("cpu", Loc.Tr("OfferCpuLoad", "Processor - load"), Loc.Tr("ShortLoad", "Load")),
+        "ram" => ("memory", Loc.Tr("OfferRamLoad", "Memory - load"), Loc.Tr("ShortLoad", "Load")),
+        "gpu" => ("gpu", Loc.Tr("OfferGpuLoad", "Graphics - load"), Loc.Tr("ShortLoad", "Load")),
+        "up" => ("network", Loc.Tr("OfferNetUp", "Network - sending"), Loc.Tr("LabelSend", "Send")),
+        "down" => ("network", Loc.Tr("OfferNetDown", "Network - receiving"), Loc.Tr("LabelReceive", "Receive")),
+        _ => ("other", readingId, readingId),
+    };
+
+    private static string CategoryOf(HardwareGroup group) => group switch
+    {
+        HardwareGroup.Cpu => "cpu",
+        HardwareGroup.Memory => "memory",
+        HardwareGroup.Gpu => "gpu",
+        HardwareGroup.Storage => "storage",
+        HardwareGroup.Network => "network",
+        _ => "other",
+    };
+
     public static IEnumerable<WidgetOffer> Offers(SensorHub sensors)
     {
         foreach (GaugeReading reading in GaugeWidget.Known)
         {
+            (string category, string name, string shortName) = Placed(reading.Id);
+
             yield return new WidgetOffer(
-                reading.Label,
+                name,
                 Loc.Tr("OfferGauge", "A live figure on the bar."),
                 reading.Icon,
                 () => DockContents.Gauge(reading.Id),
                 entry => entry.TypeId == GaugeWidget.Type
                     && (WidgetOptions.Text(entry.Config, "reading") ?? "cpu") == reading.Id,
-                Chooses: reading.Id);
+                Chooses: reading.Id,
+                Category: category,
+                Short: shortName);
         }
-
-        yield return new WidgetOffer(
-            Loc.Tr("OfferHottest", "Temperature — the hottest"),
-            Loc.Tr("OfferHottestDescription", "Whichever part is closest to its limit right now."),
-            "Temperature",
-            () => WidgetConfig.New(TempWidget.Type),
-            entry => entry.TypeId == TempWidget.Type
-                && string.IsNullOrEmpty(WidgetOptions.Text(entry.Config, "sensor")));
 
         // Named the way the sensors page names them, not the way the firmware
         // does: a chip reading "PVC10 SK hynix 1024GB" tells nobody it is the
@@ -173,8 +211,13 @@ public static class WidgetCatalog
             string name = SensorNames.Plain(sensor);
             string detail = SensorNames.Detail(sensor);
 
+            // Under its part's heading the chip says "Temperature"; where
+            // two parts of a kind have one each - two drives - the model
+            // tells them apart.
+            bool twins = plain[name].Count() > 1 && detail.Length > 0;
+
             yield return new WidgetOffer(
-                plain[name].Count() > 1 && detail.Length > 0 ? $"{name} — {detail}" : name,
+                twins ? $"{name} — {detail}" : name,
                 detail.Length > 0 ? detail : Loc.Tr("OfferSensor", "This part's temperature."),
                 TempWidget.IconFor(sensor.Group),
                 () => WidgetConfig.New(TempWidget.Type) with
@@ -183,7 +226,11 @@ public static class WidgetCatalog
                 },
                 entry => entry.TypeId == TempWidget.Type
                     && WidgetOptions.Text(entry.Config, "sensor") == key,
-                Chooses: "temp");
+                Chooses: "temp",
+                Category: CategoryOf(sensor.Group),
+                Short: twins
+                    ? $"{Loc.Tr("ShortTemperature", "Temperature")} — {detail}"
+                    : Loc.Tr("ShortTemperature", "Temperature"));
         }
 
         yield return new WidgetOffer(

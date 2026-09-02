@@ -43,30 +43,36 @@ public sealed class DimmProvider(HostClient host, ILogger<DimmProvider> log) : I
         return slots.Length != 0;
     }
 
+    /// <summary>
+    /// One reading for the memory as a whole: the warmest module.
+    /// </summary>
+    /// <remarks>
+    /// Two sticks a degree apart are one fact about the machine, not two
+    /// rows and two chips. The warmest is the one that matters, and the
+    /// service still reads them all.
+    /// </remarks>
     public IReadOnlyList<SensorDescriptor> Discover() =>
     [
-        .. _slots.Select((slot, i) => new SensorDescriptor(
-            SensorKey.Make(ProviderId, $"dimm{slot}", SensorKind.Temperature, "spd"),
+        new(
+            SensorKey.Make(ProviderId, "all", SensorKind.Temperature, "max"),
             SensorKind.Temperature,
             HardwareGroup.Memory,
-            $"DIMM {i + 1}",
-            $"DIMM {i + 1}",
+            string.Empty,
+            "Memory",
             "°C",
             Warning: 70,
-            Critical: 85))
+            Critical: 85),
     ];
 
     public void Poll(IDictionary<SensorKey, double> into)
     {
-        if (!host.Connected)
+        if (!host.Connected || host.Latest.Dimms.Length == 0)
         {
             return;
         }
 
-        foreach (DimmReading dimm in host.Latest.Dimms)
-        {
-            into[SensorKey.Make(ProviderId, $"dimm{dimm.Slot}", SensorKind.Temperature, "spd")] = dimm.Celsius;
-        }
+        into[SensorKey.Make(ProviderId, "all", SensorKind.Temperature, "max")] =
+            host.Latest.Dimms.Max(d => d.Celsius);
     }
 
     public void Dispose()

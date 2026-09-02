@@ -399,7 +399,7 @@
     <value>How hot this drive is.</value>
   </data>
   <data name="SenseRamTemp" xml:space="preserve">
-    <value>How hot the memory is.</value>
+    <value>How hot the memory is – the warmest of the modules.</value>
   </data>
   <data name="SenseBoardTemp" xml:space="preserve">
     <value>How hot the motherboard is.</value>
@@ -1339,5 +1339,50 @@
   </data>
   <data name="SenseCpuHeatName" xml:space="preserve">
     <value>Processor – temperature</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>Graphics</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Drives</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Network</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Everything else</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>Processor – load</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Memory – load</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>Graphics – load</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Network – sending</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Network – receiving</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Memory – temperature</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Drive – temperature</value>
   </data>
 </root>

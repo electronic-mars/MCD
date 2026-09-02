@@ -43,10 +43,20 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
 
         SensorKey? key = Chosen;
 
+        // Sized for the caption the chip will wear on the bar - "CPU" - not
+        // for the name the settings pages use, "Processor - temperature".
+        // The width is reserved once, from this first label, and a long one
+        // here bought four slots for a chip that draws in two.
+        SensorDescriptor? known = key is { } wanted
+            ? Sensors.Catalog.FirstOrDefault(d => d.Key.Equals(wanted))
+            : null;
+
         var metric = new Metric(
             "temp",
             Icons.For("temp", "Temperature"),
-            Name(key),
+            known is not null
+                ? Hottest(Names.Renamed(known.Key) ? Names.For(known) : GroupName(known.Group))
+                : Loc.Tr("LabelTemperature", "Temperature"),
             "°C",
             key is { } k
                 ? sensors => sensors.Catalog.FirstOrDefault(d => d.Key.Equals(k))

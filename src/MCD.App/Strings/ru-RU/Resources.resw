@@ -399,7 +399,7 @@
     <value>Насколько горяч этот накопитель.</value>
   </data>
   <data name="SenseRamTemp" xml:space="preserve">
-    <value>Насколько горяча память.</value>
+    <value>Насколько горяча память — самая тёплая из планок.</value>
   </data>
   <data name="SenseBoardTemp" xml:space="preserve">
     <value>Насколько горяча материнская плата.</value>
@@ -1339,5 +1339,50 @@
   </data>
   <data name="SenseCpuHeatName" xml:space="preserve">
     <value>Процессор — температура</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>Процессор</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Память</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>Видеокарта</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Накопители</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Сеть</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Остальное</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>Процессор — загрузка</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Память — загрузка</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>Видеокарта — загрузка</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Сеть — отправка</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Сеть — получение</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Память — температура</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Накопитель — температура</value>
   </data>
 </root>

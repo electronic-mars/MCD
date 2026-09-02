@@ -176,15 +176,15 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("SenseRamUsed", "How much memory is taken up right now.")),
 
             (HardwareGroup.Memory, SensorKind.Temperature, _) => (
-                Loc.Tr("PartMemory", "Memory"),
-                Loc.Tr("SenseRamTemp", "How hot the memory is.")),
+                Loc.Tr("SenseRamHeatName", "Memory - temperature"),
+                Loc.Tr("SenseRamTemp", "How hot the memory is - the warmest of the modules.")),
 
             (HardwareGroup.Storage, SensorKind.Load, _) => (
                 Loc.Tr("SenseDiskBusyName", "Drive activity"),
                 Loc.Tr("SenseDiskBusy", "How much of the time this drive is busy.")),
 
             (HardwareGroup.Storage, SensorKind.Temperature, _) => (
-                Loc.Tr("PartDisk", "Drive"),
+                Loc.Tr("SenseDiskHeatName", "Drive - temperature"),
                 Loc.Tr("SenseDiskTemp", "How hot this drive is.")),
 
             (HardwareGroup.Storage, SensorKind.BytesPerSecond, "read") => (

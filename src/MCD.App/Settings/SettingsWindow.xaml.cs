@@ -2553,17 +2553,33 @@ public sealed partial class SettingsWindow : Window
     /// want. Taking one off is done on the bar, by dragging it off or by its
     /// own right-click menu.
     /// </remarks>
-    private VariableSizedWrapGrid Gallery(MonitorConfig dock)
+    private FrameworkElement Gallery(MonitorConfig dock)
     {
-        var gallery = new VariableSizedWrapGrid
+        // One wrap of chips under each part of the machine. Twenty chips in
+        // one heap, three of them called "Memory", was the disorder this
+        // heading answers; under a heading a chip needs only its own word.
+        var shelves = new Dictionary<string, VariableSizedWrapGrid>(StringComparer.Ordinal);
+
+        VariableSizedWrapGrid Shelf(string category)
         {
-            ItemHeight = 52,
-            ItemWidth = 204,
-            Orientation = Orientation.Horizontal,
-        };
+            if (!shelves.TryGetValue(category, out VariableSizedWrapGrid? shelf))
+            {
+                shelf = new VariableSizedWrapGrid
+                {
+                    ItemHeight = 52,
+                    ItemWidth = 204,
+                    Orientation = Orientation.Horizontal,
+                };
+
+                shelves[category] = shelf;
+            }
+
+            return shelf;
+        }
 
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
+            VariableSizedWrapGrid gallery = Shelf(offer.Category);
             int already = dock.Widgets.Count(offer.Matches);
 
             var shape = new Microsoft.UI.Xaml.Shapes.Path
@@ -2589,7 +2605,7 @@ public sealed partial class SettingsWindow : Window
             // was cut exactly where the meaning began.
             var name = new TextBlock
             {
-                Text = offer.Name,
+                Text = offer.Short ?? offer.Name,
                 FontSize = 13,
                 VerticalAlignment = VerticalAlignment.Center,
                 TextWrapping = TextWrapping.Wrap,
@@ -2681,7 +2697,22 @@ public sealed partial class SettingsWindow : Window
             gallery.Children.Add(chip);
         }
 
-        return gallery;
+        var stack = new StackPanel { Spacing = 2 };
+
+        foreach ((string id, string heading) in WidgetCatalog.Categories)
+        {
+            if (!shelves.TryGetValue(id, out VariableSizedWrapGrid? shelf))
+            {
+                continue;
+            }
+
+            TextBlock caption = Braun.Micro(heading);
+            caption.Margin = new Thickness(2, 8, 0, 6);
+            stack.Children.Add(caption);
+            stack.Children.Add(shelf);
+        }
+
+        return stack;
     }
 
     /// <summary>Puts one of these on the chosen bar, and has the bar point at it.</summary>
