@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Builds Master Control Dock and installs it for the current user, with a shortcut
 on the desktop.
@@ -35,6 +35,27 @@ if (-not $SkipBuild) {
         --nologo `
         --verbosity quiet
     if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed with $LASTEXITCODE" }
+
+    Write-Host "publishing the sensor service ($Configuration)..."
+    & dotnet publish (Join-Path $root 'src\MCD.SensorHost\MCD.SensorHost.csproj') `
+        --configuration $Configuration `
+        --runtime win-x64 `
+        --self-contained true `
+        --nologo `
+        --verbosity quiet
+    if ($LASTEXITCODE -ne 0) { throw "dotnet publish (service) failed with $LASTEXITCODE" }
+}
+
+# The service holds its own files open while it runs. It is stopped for the
+# copy and started again after - with rights, which is the one prompt this
+# script may show, and only when the service is already there.
+$serviceName = 'MasterControlDockSensors'
+$service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+$serviceWasRunning = $service -and $service.Status -eq 'Running'
+if ($serviceWasRunning) {
+    Write-Host "stopping the sensor service for the copy..."
+    Start-Process -FilePath sc.exe -ArgumentList "stop $serviceName" -Verb RunAs -Wait -WindowStyle Hidden
+    Start-Sleep -Seconds 2
 }
 
 $published = Get-ChildItem -Path (Join-Path $root 'src\MCD.App\bin') -Filter $exeName -Recurse |
@@ -48,6 +69,20 @@ Write-Host "installing to $target"
 if (Test-Path $target) { Remove-Item $target -Recurse -Force }
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 Copy-Item (Join-Path $source '*') $target -Recurse -Force
+
+$servicePublished = Get-ChildItem -Path (Join-Path $root 'src\MCD.SensorHost\bin') -Filter 'MasterControlDock.Sensors.exe' -Recurse |
+    Where-Object { $_.FullName -like '*publish*' } |
+    Sort-Object LastWriteTime -Descending | Select-Object -First 1
+if ($servicePublished) {
+    $serviceTarget = Join-Path $target 'SensorHost'
+    New-Item -ItemType Directory -Path $serviceTarget -Force | Out-Null
+    Copy-Item (Join-Path $servicePublished.Directory.FullName '*') $serviceTarget -Recurse -Force
+}
+
+if ($serviceWasRunning) {
+    Write-Host "starting the sensor service again..."
+    Start-Process -FilePath sc.exe -ArgumentList "start $serviceName" -Verb RunAs -Wait -WindowStyle Hidden
+}
 
 $exe = Join-Path $target $exeName
 $icon = Join-Path $target 'Assets\icon.ico'

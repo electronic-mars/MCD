@@ -276,6 +276,7 @@ public partial class App : Application
                     _services.GetRequiredService<SettingsService>(),
                     _docks,
                     _services.GetRequiredService<SensorHub>(),
+                    _services.GetRequiredService<Mcd.Sensors.Host.HostClient>(),
                     onExit: () => { Shutdown(); Exit(); });
             }
             catch (Exception e)
@@ -402,6 +403,7 @@ public partial class App : Application
         // when the person has installed it. Registered always: each one says
         // "not without the driver" until the driver appears, and the hub asks
         // again every half minute.
+        services.AddSingleton<Mcd.Sensors.Host.HostClient>();
         services.AddSingleton<ISensorProvider, CpuMsrProvider>();
         services.AddSingleton<ISensorProvider, DimmProvider>();
 

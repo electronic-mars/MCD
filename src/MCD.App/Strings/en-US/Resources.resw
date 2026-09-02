@@ -1319,4 +1319,25 @@
   <data name="SenseCpuPower" xml:space="preserve">
     <value>How much power the processor is drawing.</value>
   </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>needs the sensor service</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>The sensor service</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} is in. The service that reads through it runs as the system and is put in once - this asks for administrator rights.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>The service program is not in this build.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>The service is running and the readings are on their way.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Install the service…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>Processor – temperature</value>
+  </data>
 </root>

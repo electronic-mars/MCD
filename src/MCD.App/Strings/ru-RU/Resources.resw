@@ -1299,7 +1299,7 @@
     <value>Температура процессора и памяти</value>
   </data>
   <data name="DriverRowHint" xml:space="preserve">
-    <value>Они живут за драйвером уровня ядра. PawnIO — подписанный, открытый, ставится один раз с правами администратора; показания появятся сами, как только он есть.</value>
+    <value>Они живут за драйвером уровня ядра. PawnIO — подписанный, открытый, ставится один раз с правами администратора; дальше через него читает маленькая служба этой программы.</value>
   </data>
   <data name="DriverRowInstalledHint" xml:space="preserve">
     <value>PawnIO {0} установлен, но не ответил. Обычно помогает перезапуск программы.</value>
@@ -1318,5 +1318,26 @@
   </data>
   <data name="SenseCpuPower" xml:space="preserve">
     <value>Сколько процессор потребляет.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>нужна служба датчиков</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>Служба датчиков</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} установлен. Служба, читающая через него, работает от имени системы и ставится один раз — это запросит права администратора.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>В этой сборке нет программы службы.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>Служба работает, показания на подходе.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Установить службу…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>Процессор — температура</value>
   </data>
 </root>

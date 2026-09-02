@@ -216,7 +216,7 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("SenseCpuPower", "How much power the processor is drawing.")),
 
             (HardwareGroup.Cpu, SensorKind.Temperature, _) when sensor.Prominent => (
-                Loc.Tr("PartCpu", "Processor"),
+                Loc.Tr("SenseCpuHeatName", "Processor - temperature"),
                 Loc.Tr("SenseCpuTemp", "How hot the processor is.")),
 
             _ => null,

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The one part of the program that runs with rights: a service, as the
+       system, reading the processor's registers and the memory modules'
+       thermometers through PawnIO and handing the figures to the bar over a
+       named pipe. The bar itself stays an ordinary program. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>MasterControlDock.Sensors</AssemblyName>
+    <RootNamespace>Mcd.SensorHost</RootNamespace>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationIcon>..\MCD.App\Assets\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MCD.Interop\MCD.Interop.csproj" />
+    <ProjectReference Include="..\MCD.Sensors\MCD.Sensors.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
+    <PackageReference Include="RAMSPDToolkit" />
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- The driver author's own signed module for Intel registers, byte for
+       byte from the PawnIO.Modules release, with its licence beside it. The
+       driver refuses a module signed by anybody else. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\PawnIO\IntelMSR.bin" LogicalName="Mcd.SensorHost.Resources.PawnIO.IntelMSR.bin" />
+    <None Include="Resources\PawnIO\COPYING" />
+  </ItemGroup>
+
+</Project>

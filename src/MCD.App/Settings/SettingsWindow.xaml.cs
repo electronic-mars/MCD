@@ -40,6 +40,7 @@ public sealed partial class SettingsWindow : Window
     private readonly SettingsService _settings;
     private readonly DockWindowManager _docks;
     private readonly SensorHub _sensors;
+    private readonly Mcd.Sensors.Host.HostClient _host;
     private readonly Action _onExit;
     /// <summary>The widget the bar sent here to be set up.</summary>
     private string? _selectedId;
@@ -73,6 +74,7 @@ public sealed partial class SettingsWindow : Window
         SettingsService settings,
         DockWindowManager docks,
         SensorHub sensors,
+        Mcd.Sensors.Host.HostClient host,
         Action onExit)
     {
 
@@ -80,6 +82,7 @@ public sealed partial class SettingsWindow : Window
         _settings = settings;
         _docks = docks;
         _sensors = sensors;
+        _host = host;
         _onExit = onExit;
 
         InitializeComponent();
@@ -3379,25 +3382,83 @@ public sealed partial class SettingsWindow : Window
         // program neither downloads nor runs anything itself.
         if (roll.Any(s => s.Tier == Tier.Driver && !s.Answering))
         {
-            string version = Mcd.Interop.PawnIo.PawnIo.InstalledVersion() ?? string.Empty;
+            SourcesList.Children.Add(DriverRow());
+        }
+    }
 
-            var row = Braun.Row(
+    /// <summary>
+    /// The two steps between a bare machine and the processor's temperature,
+    /// whichever is next: the driver, then the service that reads through it.
+    /// </summary>
+    /// <remarks>
+    /// The driver admits administrators only, so the reading is done by a
+    /// small service of this program's own, put in once with a UAC prompt by
+    /// the button here. The bar itself never asks for rights.
+    /// </remarks>
+    private FrameworkElement DriverRow()
+    {
+        string version = Mcd.Interop.PawnIo.PawnIo.InstalledVersion() ?? string.Empty;
+        Grid row;
+
+        if (version.Length == 0)
+        {
+            row = Braun.Row(
                 Loc.Tr("DriverRow", "Processor and memory temperatures"),
-                version.Length > 0
-                    ? string.Format(
-                        CultureInfo.CurrentCulture,
-                        Loc.Tr("DriverRowInstalledHint", "PawnIO {0} is installed but did not answer. A restart of the program usually settles it."),
-                        version)
-                    : Loc.Tr(
-                        "DriverRowHint",
-                        "They live behind a kernel driver. PawnIO is a signed, open one, installed once with administrator rights; the readings appear by themselves once it is there."),
+                Loc.Tr(
+                    "DriverRowHint",
+                    "They live behind a kernel driver. PawnIO is a signed, open one, installed once with administrator rights; a small service of this program then reads through it."),
                 Braun.Action(
                     Loc.Tr("DriverGet", "Get the driver..."),
                     () => Open("https://pawnio.eu/"),
                     "Download"));
+        }
+        else if (!_host.Connected)
+        {
+            string service = Path.Combine(AppContext.BaseDirectory, "SensorHost", "MasterControlDock.Sensors.exe");
 
-            row.Margin = new Thickness(0, 8, 0, 0);
-            SourcesList.Children.Add(Braun.Group(row));
+            row = Braun.Row(
+                Loc.Tr("ServiceRow", "The sensor service"),
+                File.Exists(service)
+                    ? string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr("ServiceRowHint", "PawnIO {0} is in. The service that reads through it runs as the system and is put in once - this asks for administrator rights."),
+                        version)
+                    : Loc.Tr("ServiceRowMissing", "The service program is not in this build."),
+                Braun.Action(
+                    Loc.Tr("ServiceInstall", "Install the service..."),
+                    () => InstallService(service),
+                    "Power"));
+        }
+        else
+        {
+            row = Braun.Row(
+                Loc.Tr("ServiceRow", "The sensor service"),
+                Loc.Tr("ServiceRowWaiting", "The service is running and the readings are on their way."),
+                null);
+        }
+
+        row.Margin = new Thickness(0, 8, 0, 0);
+        return Braun.Group(row);
+    }
+
+    /// <summary>Runs the service's own installer, elevated. The UAC prompt is the person's to answer.</summary>
+    private void InstallService(string service)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(service, "--install")
+            {
+                UseShellExecute = true,
+                Verb = "runas",
+            });
+
+            _log.LogInformation("settings.service install requested");
+        }
+        catch (Exception e)
+        {
+            // Declined at the prompt, most likely. Nothing to do but say so
+            // in the log; the row stays as it is.
+            _log.LogWarning(e, "settings.service could not start the installer");
         }
     }
 
@@ -3439,7 +3500,9 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("SourceAnswering", "answering ({0})"),
             source.Readings),
         { Tier: Tier.External } => Loc.Tr("SourceNotRunning", "not running"),
-        { Tier: Tier.Driver } => Loc.Tr("SourceNeedsDriver", "needs the PawnIO driver"),
+        { Tier: Tier.Driver } => Mcd.Interop.PawnIo.PawnIo.InstalledVersion() is null
+            ? Loc.Tr("SourceNeedsDriver", "needs the PawnIO driver")
+            : Loc.Tr("SourceNeedsService", "needs the sensor service"),
         _ => Loc.Tr("SourceNotHere", "not on this machine"),
     };
 
