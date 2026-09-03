@@ -88,6 +88,19 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
     private double? _time;
     private double? _date;
 
+    /// <summary>The box the time is drawn in: the longest the pattern ever gets.</summary>
+    /// <remarks>
+    /// A box that fits this minute is a box that changes width at ten
+    /// o'clock, and the two lines are centred on each other - so the date
+    /// underneath would step sideways with it.
+    /// </remarks>
+    [ObservableProperty]
+    public partial double TimeWidth { get; set; }
+
+    /// <summary>The box the date is drawn in, likewise.</summary>
+    [ObservableProperty]
+    public partial double DateWidth { get; set; }
+
     /// <summary>The format, worked out once - it cannot change mid-run.</summary>
     private string? _pattern;
 
@@ -100,6 +113,9 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
 
         TimeSize = ReadingFont;
         DateSize = Math.Max(9, TimeSize - 4);
+
+        TimeWidth = _time ??= Metric.Wide(Widest(Pattern), TimeSize);
+        DateWidth = _date ??= Metric.Wide(Widest("ddd d MMM"), DateSize);
 
         _pattern ??= Pattern;
 
@@ -163,6 +179,7 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
         // second was work for an answer that cannot change.
         _time ??= Metric.Wide(Widest(Pattern), ReadingFont);
         _date ??= Metric.Wide(Widest("ddd d MMM"), Math.Max(9, ReadingFont - 4));
+
 
         double time = _time.Value;
         double date = DateVisible == Visibility.Visible ? _date.Value : 0;

@@ -130,6 +130,10 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     /// </remarks>
     private double? _figure;
 
+    /// <summary>The box the figure is drawn in: "100 %" whatever it says now.</summary>
+    [ObservableProperty]
+    public partial double FigureWidth { get; set; }
+
 
     /// <summary>What the last tick drew, so an unchanged second draws nothing.</summary>
     private (int Percent, bool Charging, bool Present, int Minutes) _drawn = (-2, false, false, -2);
@@ -146,6 +150,10 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
         IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
         FontSize = ReadingFont;
+
+        // Priced for "100 %" whether it says that or not, so the drawing
+        // beside it does not shift as the charge crosses ten.
+        FigureWidth = _figure ??= Metric.Wide("100 %", FontSize);
 
         // Unknown reads as full rather than as empty: a battery whose level
         // the firmware will not give is not a flat battery, and drawing it

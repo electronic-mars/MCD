@@ -1495,6 +1495,32 @@ public sealed partial class SettingsWindow : Window
                 Gallery(dock),
                 stack: true),
 
+            // The ones on the bar with nothing to say: a reading whose part
+            // has gone, a battery pulled out. They hold no slot, so without
+            // this row the only sign of them is a name in the list above and
+            // no chip on the bar - which reads as a widget that broke.
+            Quiet(dock) is { Count: > 0 } quiet
+                ? Braun.Row(
+                    quiet.Count == 1
+                        ? Loc.Tr("QuietRowOne", "One is waiting for its moment")
+                        : string.Format(
+                            CultureInfo.CurrentCulture,
+                            Loc.Tr("QuietRow", "{0} are waiting for their moment"),
+                            quiet.Count),
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr(
+                            "QuietRowHint",
+                            "{0} - on the bar, taking no slot until it has something to say. It comes back where you left it."),
+                        Named(quiet)),
+                    Braun.Action(
+                        quiet.Count == 1
+                            ? Loc.Tr("QuietButtonOne", "Take it off")
+                            : Loc.Tr("QuietButton", "Take them off"),
+                        () => Shed(dock, quiet, Loc.Tr("UndoQuiet", "the ones that were waiting")),
+                        "Delete"))
+                : null,
+
             // Only when there are any. A row that says "nothing is missing"
             // on every ordinary day is a row nobody reads on the day
             // something is.

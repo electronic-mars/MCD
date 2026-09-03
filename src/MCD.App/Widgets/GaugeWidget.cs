@@ -171,6 +171,21 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     public override bool Matters =>
         Metrics.Count == 0 || Metrics[0].Sensor is not null || _waited < Patience;
 
+
+    /// <summary>
+    /// Whether the reading this names is on this machine at all.
+    /// </summary>
+    /// <remarks>
+    /// A chip whose sensor nobody reports draws nothing - and until now it
+    /// went on holding the slots it was drawing nothing in: a stretch of bar
+    /// that could not be dropped into and could not be explained. Naming a
+    /// reading that has gone (a drive taken out, modules the readings now
+    /// group differently) hands the slots back, and the settings list it
+    /// among the ones with nothing to say. The moment the reading answers
+    /// again it takes its place back.
+    /// </remarks>
+    public override bool Possible => Matters;
+
     public override string Summarise() => Reading.Label;
 
     public override string Called =>

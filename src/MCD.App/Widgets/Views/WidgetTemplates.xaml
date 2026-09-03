@@ -126,22 +126,29 @@
                      moves inside its own box and nothing further along the bar
                      shifts. -->
                 <StackPanel Margin="{x:Bind Lift, Mode=OneWay}" VerticalAlignment="Center">
-                    <!-- Left, and said so on the box as well as inside it: a
-                         MaxWidth without an alignment leaves the default
-                         Stretch, which centres the text in whatever is left
-                         over. The figure then sat left of a short name and
-                         centred under a long one - that is, the rule changed
-                         with the language. -->
-                    <TextBlock
-                        MinWidth="{x:Bind ValueWidth, Mode=OneWay}"
-                        MaxWidth="{x:Bind ValueWidth, Mode=OneWay}"
-                        HorizontalAlignment="Left"
-                        HorizontalTextAlignment="Left"
-                        FontSize="{x:Bind FontSize, Mode=OneWay}"
-                        FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
-                        Foreground="{x:Bind Colour, Mode=OneWay}"
-                        Text="{x:Bind Text, Mode=OneWay}"
-                        TextTrimming="CharacterEllipsis" />
+                    <!-- The number in one box and its unit in another, each
+                         as wide as that reading can ever need. The digits are
+                         right-aligned, so they grow leftwards into room kept
+                         for them and the unit stays where it is; nothing on
+                         the chip moves when a reading crosses ten. -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock
+                            MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                            MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                            HorizontalTextAlignment="Right"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
+                            Foreground="{x:Bind Colour, Mode=OneWay}"
+                            Text="{x:Bind Figure, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            MinWidth="{x:Bind SuffixWidth, Mode=OneWay}"
+                            HorizontalTextAlignment="Left"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
+                            Foreground="{x:Bind Colour, Mode=OneWay}"
+                            Text="{x:Bind Suffix, Mode=OneWay}" />
+                    </StackPanel>
                     <!-- Capped, as PowerToys caps theirs. A drive's name is its
                          model number and runs to twenty characters; left to size
                          itself it makes one reading three times the width of its
@@ -214,8 +221,14 @@
                             StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
                     </Canvas>
                 </Viewbox>
+                <!-- In a box of its own, right-aligned: the per cent sign
+                     then keeps its place while the digits change under it,
+                     and the speaker beside them never shifts. -->
                 <TextBlock
+                    MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                    MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
                     VerticalAlignment="Center"
+                    HorizontalTextAlignment="Right"
                     FontSize="{x:Bind FontSize, Mode=OneWay}"
                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     Opacity="{x:Bind LevelShown, Mode=OneWay}"
@@ -325,7 +338,10 @@
                     </Canvas>
                 </Viewbox>
                 <TextBlock
+                    MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                    MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
                     VerticalAlignment="Center"
+                    HorizontalTextAlignment="Right"
                     FontSize="{x:Bind FontSize, Mode=OneWay}"
                     Foreground="{x:Bind Colour, Mode=OneWay}"
                     Text="{x:Bind Level, Mode=OneWay}"
@@ -359,11 +375,18 @@
                             StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
                     </Canvas>
                 </Viewbox>
+                <!-- A name reads from the left, so this box is filled from
+                     the left; the width is the one the slot was reserved
+                     for, so joining a shorter network moves nothing. -->
                 <TextBlock
+                    MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                    MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
                     VerticalAlignment="Center"
+                    HorizontalTextAlignment="Left"
                     FontSize="{x:Bind FontSize, Mode=OneWay}"
                     Foreground="{x:Bind Colour, Mode=OneWay}"
                     Text="{x:Bind Name, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
                     Visibility="{x:Bind NameVisible, Mode=OneWay}" />
             </StackPanel>
         </widgets:HoverChip>
@@ -390,12 +413,16 @@
                  is reserved from the longest the pattern ever gets, so nothing
                  shuffles when the hour changes. -->
             <TextBlock
+                MinWidth="{x:Bind TimeWidth, Mode=OneWay}"
                 HorizontalAlignment="Center"
+                HorizontalTextAlignment="Center"
                 FontSize="{x:Bind TimeSize, Mode=OneWay}"
                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                 Text="{x:Bind Time, Mode=OneWay}" />
             <TextBlock
+                MinWidth="{x:Bind DateWidth, Mode=OneWay}"
                 HorizontalAlignment="Center"
+                HorizontalTextAlignment="Center"
                 FontSize="{x:Bind DateSize, Mode=OneWay}"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 Text="{x:Bind Date, Mode=OneWay}"

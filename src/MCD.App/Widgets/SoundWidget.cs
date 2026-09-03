@@ -106,8 +106,9 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     private double? _figure;
 
-    /// <summary>How many characters the reserved figure was priced for.</summary>
-    private int _figureFor = -1;
+    /// <summary>The box the figure is drawn in, wide enough for the loudest it gets.</summary>
+    [ObservableProperty]
+    public partial double FigureWidth { get; set; }
 
 
     public override void Tick(SensorSnapshot snapshot)
@@ -139,13 +140,10 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
             ? Math.Round(loud * 100).ToString("F0", System.Globalization.CultureInfo.InvariantCulture) + " %"
             : string.Empty;
 
-        // Priced by the current figure's digit count, like the readings: a
-        // standing "100 %" reservation was dead air beside "42 %".
-        if (Level.Length != _figureFor)
-        {
-            _figureFor = Level.Length;
-            _figure = Level.Length > 0 ? Metric.Wide(Metric.Eights(Level), FontSize) : null;
-        }
+        // Priced for "100 %" whether it says that or not. Priced by the
+        // figure in hand instead, the box changed width as the volume
+        // crossed ten and a hundred - and the speaker beside it moved.
+        FigureWidth = _figure ??= Metric.Wide("100 %", FontSize);
 
         LevelShown = muted.Value ? 0.5 : 1;
 
@@ -194,7 +192,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
 
         if (LevelVisible == Visibility.Visible)
         {
-            _figure ??= Metric.Wide("88 %", ReadingFont);
+            _figure ??= Metric.Wide("100 %", ReadingFont);
             along += _figure.Value + 6;
         }
 

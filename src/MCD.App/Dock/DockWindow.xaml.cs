@@ -1763,11 +1763,12 @@ public sealed partial class DockWindow : Window
     /// something to act on - make room, or take it off. A battery widget on a
     /// machine running from the mains is doing exactly what it was asked to,
     /// and listing it as a problem would teach somebody to ignore the list.
+    /// A reading that has gone from the machine altogether belongs here too:
+    /// it is not a bar that ran out of room, it is a chip with nothing to
+    /// say, and it says so in the same words.
     /// </remarks>
     private bool Waiting(string instanceId) =>
-        _drawn.TryGetValue(instanceId, out WidgetHost? host)
-        && !host.Widget.Matters
-        && host.Widget.Possible;
+        _drawn.TryGetValue(instanceId, out WidgetHost? host) && !host.Widget.Matters;
 
     /// <summary>
     /// The widgets on this bar that are quiet because they are about nothing.

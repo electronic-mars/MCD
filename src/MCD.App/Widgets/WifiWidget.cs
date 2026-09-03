@@ -115,6 +115,10 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
     /// </remarks>
     private double? _figure;
 
+    /// <summary>The box the name is drawn in: the longest one that will be drawn.</summary>
+    [ObservableProperty]
+    public partial double FigureWidth { get; set; }
+
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -128,6 +132,10 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
         IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
         FontSize = ReadingFont;
+
+        // The room the slot was reserved for: the longest name that will be
+        // drawn, so joining a network with a shorter one moves nothing.
+        FigureWidth = _figure ??= Metric.Wide(new string('m', Longest), FontSize);
 
         // An unknown strength is drawn as no strength, not as full. The
         // aerial is read to decide whether to move seats, and "I do not know"

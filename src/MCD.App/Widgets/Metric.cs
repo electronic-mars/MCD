@@ -200,6 +200,27 @@ public sealed partial class Metric : ObservableObject
     /// reading after it on the bar shuffles sideways to make room - which is
     /// far more distracting than the figure it is reporting.
     /// </remarks>
+    /// <summary>The number by itself: "22", "1.2", or "--" while there is none.</summary>
+    /// <remarks>
+    /// Kept apart from what follows it so each can have a box of its own.
+    /// One box for the pair moves the unit whenever the figure crosses ten,
+    /// and the chip is centred in its slots, so that moved the icon too.
+    /// </remarks>
+    [ObservableProperty]
+    public partial string Figure { get; set; } = "--";
+
+    /// <summary>What follows the number: " %", " °C", " MB/s".</summary>
+    [ObservableProperty]
+    public partial string Suffix { get; set; } = string.Empty;
+
+    /// <summary>The box the number is right-aligned in. Fixed for the chip's life.</summary>
+    [ObservableProperty]
+    public partial double FigureWidth { get; set; }
+
+    /// <summary>The box the unit sits in, left-aligned. Fixed likewise.</summary>
+    [ObservableProperty]
+    public partial double SuffixWidth { get; set; }
+
     [ObservableProperty]
     public partial double ValueWidth { get; set; }
 
@@ -286,11 +307,21 @@ public sealed partial class Metric : ObservableObject
         // the box and the centring eats half the shift.
         Lift = subtitle ? new Thickness(0, -2, 0, 2) : new Thickness(0, -1, 0, 1);
 
-        // The box starts empty and grows to the widest value actually seen,
-        // and what the fixed parts measure is asked again at the new size.
-        ValueWidth = 0;
-        _sampleWide = null;
+        // The room this reading is entitled to, whatever it happens to say
+        // this second: the sample's digits, and the widest unit it can turn
+        // into. Decided here, once, and never touched by a value again.
         _labelWide = null;
+
+        (string biggest, _) = Split(Sample);
+        FigureWidth = Wide(Eights(biggest), FontSize);
+        SuffixWidth = 0;
+
+        foreach (string unit in Units())
+        {
+            SuffixWidth = Math.Max(SuffixWidth, Wide(unit, FontSize));
+        }
+
+        ValueWidth = FigureWidth + SuffixWidth;
         Reserve();
     }
 
@@ -301,37 +332,61 @@ public sealed partial class Metric : ObservableObject
     /// Keeps the number's box as wide as the widest value seen this session.
     /// </summary>
     /// <remarks>
-    /// Wide enough that the row never shuffles sideways when a figure grows,
-    /// and no wider: a box sized in advance for a rate that may never come
-    /// leaves a dead stretch of bar that reads as a ragged gap - which is
-    /// exactly what it did. Growth is immediate and kept; the box never
-    /// shrinks while the dock is up, and the value sits centred in whatever
-    /// slack is left. Measured with a real TextBlock rather than estimated
-    /// per character: the estimate over-reserved on narrow glyphs and the
-    /// spare width read as more ragged gap. Measured at SemiBold, which is
-    /// what critical readings switch to - a box that fits the ordinary weight
-    /// only would clip the reading at the moment it matters most.
+    /// <para>
+    /// Reserved by what the reading can ever show, not by what it shows this
+    /// second. A box that follows the figure changes width every time the
+    /// reading crosses ten - and since the chip is centred in the slots it
+    /// holds, that width walked the icon, the unit and the caption sideways
+    /// twice a minute on a busy processor. It also grew the widget's slots,
+    /// which is where the undroppable stretches of bar came from.
+    /// </para>
+    /// <para>
+    /// So the digits grow leftwards into room already kept for them, and the
+    /// unit does not move at all. Measured at SemiBold, which is what
+    /// critical readings switch to - a box that fits the ordinary weight only
+    /// would clip the reading at the moment it matters most.
+    /// </para>
     /// </remarks>
     private void Reserve()
     {
-        Ruler.FontSize = FontSize;
-        // Reserved by the current figure's SHAPE, not by the widest figure
-        // the reading could ever show: every digit priced as an eight, so
-        // "47 %" and "62 %" cost the same and nothing twitches - but a chip
-        // saying "2 %" no longer holds the room for "100 %". That standing
-        // reservation was the last of the mystery air between widgets: the
-        // slots absorb a change of digit count, so the neighbours still
-        // never move.
-        Ruler.Text = Eights(Text);
-        Ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        (string figure, string suffix) = Split(Text);
 
-        double wanted = Math.Ceiling(Ruler.DesiredSize.Width) + 1;
+        Figure = figure;
+        Suffix = suffix;
 
-        if (Math.Abs(wanted - ValueWidth) > 0.5)
-        {
-            ValueWidth = wanted;
-        }
+        // Never narrower than the sample asked for, and widened only by
+        // something the sample did not foresee.
+        FigureWidth = Math.Max(FigureWidth, Wide(Eights(figure), FontSize));
+        SuffixWidth = Math.Max(SuffixWidth, Wide(suffix, FontSize));
+        ValueWidth = FigureWidth + SuffixWidth;
     }
+
+    /// <summary>Where the number stops and its unit begins.</summary>
+    internal static (string Figure, string Suffix) Split(string shown)
+    {
+        int at = 0;
+
+        while (at < shown.Length && (char.IsAsciiDigit(shown[at]) || shown[at] is '.' or '-'))
+        {
+            at++;
+        }
+
+        return (shown[..at], shown[at..]);
+    }
+
+    /// <summary>
+    /// Every unit this reading can turn into, so the box is kept for the widest.
+    /// </summary>
+    /// <remarks>
+    /// A rate walks from "B/s" through "kB/s" to "MB/s" as the traffic grows,
+    /// and a unit that changes width takes the digits beside it along.
+    /// </remarks>
+    private string[] Units() => Unit switch
+    {
+        "B/s" => Narrow ? [" B", "k", "M"] : [" B/s", " kB/s", " MB/s"],
+        "B" => Narrow ? [" B", "k", "M"] : [" B", " kB", " MB", " GB", " TB"],
+        _ => [" " + Unit],
+    };
 
     /// <summary>The figure with every digit at the widest a digit gets.</summary>
     internal static string Eights(string figure)
@@ -347,11 +402,10 @@ public sealed partial class Metric : ObservableObject
     }
 
     /// <summary>
-    /// What the fixed parts of this chip measure, once they have been asked
-    /// for. Cleared by <see cref="SizeFor"/>, which is the only thing that can
-    /// change them.
+    /// What the caption measures, once it has been asked for. Cleared by
+    /// <see cref="SizeFor"/> and by a rename, which are the only two things
+    /// that can change it.
     /// </summary>
-    private double? _sampleWide;
     private double? _labelWide;
 
     /// <summary>One shared, never-shown TextBlock, used only to measure.</summary>
@@ -376,16 +430,12 @@ public sealed partial class Metric : ObservableObject
     /// </remarks>
     public double Width()
     {
-        // The sample and the name are fixed from the moment SizeFor runs, so
-        // they are measured once and kept. Measuring them again on every tick
-        // was two thirds of everything this program did while idle.
-        _sampleWide ??= Wide(Sample, FontSize);
+        // The name is fixed from the moment SizeFor runs, so it is measured
+        // once and kept. Measuring it again on every tick was two thirds of
+        // everything this program did while idle.
         _labelWide ??= Math.Min(100, Wide(Label, LabelFontSize));
 
-        // The sample only stands in until a real figure has been measured -
-        // it is the guess that keeps a fresh chip from being laid out around
-        // "--", not a standing reservation.
-        double value = ValueWidth > 0 ? ValueWidth : _sampleWide.Value;
+        double value = FigureWidth + SuffixWidth;
         double label = LabelVisible == Visibility.Visible ? _labelWide.Value : 0;
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
