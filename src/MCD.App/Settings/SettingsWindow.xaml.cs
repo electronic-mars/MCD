@@ -1455,6 +1455,10 @@ public sealed partial class SettingsWindow : Window
     private void ShowWidgets()
     {
         Braun.Theme = Root.ActualTheme;
+
+        // The rows that point at widgets are about to be thrown away, and a
+        // row that goes without a farewell leaves its line drawn on the bar.
+        _docks.Point(string.Empty, null);
         WidgetsBody.Children.Clear();
 
         MonitorConfig? dock = _settings.Current.Monitors
@@ -1607,6 +1611,7 @@ public sealed partial class SettingsWindow : Window
     private void ShowPins()
     {
         Braun.Theme = Root.ActualTheme;
+        _docks.Point(string.Empty, null);
         PinsBody.Children.Clear();
 
         MonitorConfig? dock = _settings.Current.Monitors

@@ -197,6 +197,7 @@ public sealed partial class DockWindow : Window
         Root.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(OnGrab), true);
         Root.AddHandler(UIElement.PointerMovedEvent, new PointerEventHandler(OnDrag), true);
         Root.AddHandler(UIElement.PointerReleasedEvent, new PointerEventHandler(OnDrop), true);
+        Root.PointerExited += (_, _) => Cool();
 
         // Losing the capture is not a drop. Taking the pointer from the button a
         // drag started on makes that button raise capture-lost at once, and
@@ -661,7 +662,23 @@ public sealed partial class DockWindow : Window
         exit.Click += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
         menu.Items.Add(exit);
 
+        // The menu takes the pointer with it, so the chip under it would
+        // stay lit until something else happened to touch it.
+        menu.Closed += (_, _) => Cool();
+        Cool();
+
         menu.ShowAt(Root, at);
+    }
+
+    /// <summary>Every light out: the hover pills, and the line round a pointed widget.</summary>
+    private void Cool()
+    {
+        foreach (WidgetHost host in _hosts)
+        {
+            host.Cool();
+        }
+
+        Point(null);
     }
 
     /// <summary>The menu asked for the program to stop.</summary>
@@ -1347,6 +1364,7 @@ public sealed partial class DockWindow : Window
         }
 
         _hosts.Clear();
+        _pointed = null;
         BuildWidgets();
     }
 
@@ -1501,14 +1519,18 @@ public sealed partial class DockWindow : Window
     /// A slot that draws nothing is worse than no slot: it is a gap in the bar
     /// that cannot be dropped into and cannot be explained.
     /// </remarks>
-    /// <param name="held">
-    /// How many it already has. A widget never gives a slot back for having a
-    /// shorter number in it - only for having stopped being about anything.
-    /// </param>
-    private int Wants(WidgetViewModel widget, int held) =>
-        widget.Possible
-            ? Math.Max(held, DockLayout.SpanOf(widget.Length(), CellSize))
-            : 0;
+    /// <remarks>
+    /// What it asks for now, not the widest it ever asked for. Holding the
+    /// high-water mark was the guard against a figure that changed width as
+    /// it grew - and figures do not do that any more: every reading keeps a
+    /// box sized for what it can ever show. What is left changes only when
+    /// something deliberate happens (a sensor arrives and renames the chip,
+    /// the reading size changes), and then a widget that has been holding
+    /// slots it no longer fills should let go of them. That high-water mark
+    /// is what left a chip standing in a run half again its own width.
+    /// </remarks>
+    private int Wants(WidgetViewModel widget, int _) =>
+        widget.Possible ? DockLayout.SpanOf(widget.Length(), CellSize) : 0;
 
     /// <summary>How long this bar is, and how many slots that comes to.</summary>
     private void Measure()

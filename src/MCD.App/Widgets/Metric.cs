@@ -436,7 +436,16 @@ public sealed partial class Metric : ObservableObject
         _labelWide ??= Math.Min(100, Wide(Label, LabelFontSize));
 
         double value = FigureWidth + SuffixWidth;
-        double label = LabelVisible == Visibility.Visible ? _labelWide.Value : 0;
+
+        // A caption nobody will keep buys no width. Until the sensor turns
+        // up the chip is captioned with a placeholder - the word
+        // "Temperature", or the key itself for a reading that has gone - and
+        // widths bought by those were held for the rest of the session:
+        // a chip standing in a run half again its own width, with the air
+        // beside it looking like a gap somebody left.
+        double label = LabelVisible == Visibility.Visible && Sensor is not null
+            ? _labelWide.Value
+            : 0;
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
         return Mcd.App.Dock.DockMetrics.ChipPadding

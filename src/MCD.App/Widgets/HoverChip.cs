@@ -85,7 +85,18 @@ public sealed partial class HoverChip : ContentControl
         ? Windows.UI.Color.FromArgb(0x0B, 0xFF, 0xFF, 0xFF)
         : Windows.UI.Color.FromArgb(0x4D, 0xFF, 0xFF, 0xFF);
 
-    private void OnGone(object sender, PointerRoutedEventArgs e)
+    private void OnGone(object sender, PointerRoutedEventArgs e) => Cool();
+
+    /// <summary>
+    /// Puts the light out, whether or not the pointer said goodbye.
+    /// </summary>
+    /// <remarks>
+    /// A right click opens a menu, and the menu takes the pointer with it:
+    /// the release never arrives and the chip stays lit for the rest of the
+    /// session. The bar puts its own lights out when the pointer leaves it,
+    /// when a menu opens, and whenever it rebuilds.
+    /// </remarks>
+    public void Cool()
     {
         Fade(Colors.Transparent, lighting: false);
         Squeeze(1f);

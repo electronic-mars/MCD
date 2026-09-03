@@ -165,6 +165,15 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         return null;
     }
 
+    /// <summary>Puts out whatever light the pointer left on this chip.</summary>
+    public void Cool()
+    {
+        if (Chip() is HoverChip chip)
+        {
+            chip.Cool();
+        }
+    }
+
     /// <summary>Half-gone: the pointer is off the bar, and letting go removes it.</summary>
     public void Doomed(bool on) => Opacity = on ? 0.25 : (Opacity < 1 ? 0.4 : 1);
 
