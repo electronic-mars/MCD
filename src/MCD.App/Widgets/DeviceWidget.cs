@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Mcd.App.Dock;
@@ -16,8 +16,8 @@ namespace Mcd.App.Widgets;
 /// </summary>
 /// <remarks>
 /// Which device is a sensor key, chosen in the gallery or in the chip's own
-/// settings. The chip draws the kind of device and writes its name under the
-/// figure, because two devices at 60 % say nothing without saying whose.
+/// settings. The chip draws the kind of device, with a battery under the
+/// figure; whose battery it is, the hover says.
 /// </remarks>
 public sealed class DeviceWidget(WidgetContext context, WidgetConfig entry)
     : WidgetViewModel(context, entry)
@@ -60,6 +60,7 @@ public sealed class DeviceWidget(WidgetContext context, WidgetConfig entry)
             Spacing = GaugeWidget.Gap(Orientation),
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
+            Badged = true,
             NameFound = sensor => Names.Renamed(sensor.Key) ? Names.For(sensor) : sensor.Hardware,
         };
 

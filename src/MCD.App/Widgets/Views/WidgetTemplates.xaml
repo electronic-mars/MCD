@@ -162,7 +162,25 @@
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         Text="{x:Bind Label, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis"
-                        Visibility="{x:Bind LabelVisible, Mode=OneWay}" />
+                        Visibility="{x:Bind CaptionShown, Mode=OneWay}" />
+                    <!-- A device's charge wears a battery here instead: its
+                         name is in the hover, and on the bar it only cost width. -->
+                    <Viewbox
+                        Width="{x:Bind BadgeSize}"
+                        Height="{x:Bind BadgeSize}"
+                        Margin="0,-1,0,0"
+                        HorizontalAlignment="Left"
+                        Visibility="{x:Bind BadgeShown, Mode=OneWay}">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind Badge, Converter={StaticResource Icon}, Mode=OneWay}"
+                                Stroke="{ThemeResource TextFillColorSecondaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="{x:Bind BadgeStroke}" />
+                        </Canvas>
+                    </Viewbox>
                 </StackPanel>
             </StackPanel>
         </widgets:HoverChip>

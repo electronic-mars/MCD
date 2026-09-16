@@ -239,6 +239,31 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial double LabelFontSize { get; set; } = 11;
 
+    /// <summary>
+    /// A battery drawn where the caption would be, instead of the caption.
+    /// </summary>
+    /// <remarks>
+    /// For a device's charge, whose name is already in the hover: a word
+    /// under the figure made the chip three times as wide as the figure.
+    /// </remarks>
+    public bool Badged { get; init; }
+
+    /// <summary>The battery under the figure, filled as far as the charge.</summary>
+    [ObservableProperty]
+    public partial string Badge { get; set; } = "Battery";
+
+    /// <summary>How big the battery under the figure is drawn.</summary>
+    public double BadgeSize => 14;
+
+    /// <summary>The badge's stroke, a pixel and a half on screen like the icon's.</summary>
+    public double BadgeStroke => 36 / BadgeSize;
+
+    public Visibility CaptionShown =>
+        LabelVisible == Visibility.Visible && !Badged ? Visibility.Visible : Visibility.Collapsed;
+
+    public Visibility BadgeShown =>
+        LabelVisible == Visibility.Visible && Badged ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Shown while the reading is past its critical point.</summary>
     /// <remarks>
     /// The shape behind the colour: for some eyes the amber-to-red step
@@ -303,6 +328,8 @@ public sealed partial class Metric : ObservableObject
         FontSize = font;
         Narrow = narrow;
         LabelVisible = subtitle ? Visibility.Visible : Visibility.Collapsed;
+        OnPropertyChanged(nameof(CaptionShown));
+        OnPropertyChanged(nameof(BadgeShown));
         // Minus on top, plus underneath: a negative top margin alone shrinks
         // the box and the centring eats half the shift.
         Lift = subtitle ? new Thickness(0, -2, 0, 2) : new Thickness(0, -1, 0, 1);
@@ -443,7 +470,7 @@ public sealed partial class Metric : ObservableObject
         // widths bought by those were held for the rest of the session:
         // a chip standing in a run half again its own width, with the air
         // beside it looking like a gap somebody left.
-        double label = LabelVisible == Visibility.Visible && Sensor is not null
+        double label = LabelVisible == Visibility.Visible && Sensor is not null && !Badged
             ? _labelWide.Value
             : 0;
 
@@ -583,6 +610,11 @@ public sealed partial class Metric : ObservableObject
             Reserve();
         }
         Colour = Paint(reading);
+
+        if (Badged && reading.HasValue)
+        {
+            Badge = reading.Value >= 60 ? "BatteryFull" : reading.Value >= 20 ? "Battery" : "BatteryLow";
+        }
 
         bool critical = _level == Level.Critical;
 
