@@ -191,6 +191,15 @@
             ContentTemplate="{StaticResource MetricTemplate}" />
     </DataTemplate>
 
+    <DataTemplate x:Key="mcd.device" x:DataType="widgets:DeviceWidget">
+        <ContentControl
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsTabStop="False"
+            Content="{x:Bind Front, Mode=OneWay}"
+            ContentTemplate="{StaticResource MetricTemplate}" />
+    </DataTemplate>
+
     <!-- Sound: a speaker that says how loud, and a press that silences. -->
     <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
         <widgets:HoverChip

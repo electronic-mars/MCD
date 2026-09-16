@@ -1,4 +1,4 @@
-# Third-party components
+﻿# Third-party components
 
 Master Control Dock is licensed under GPL-3.0-or-later. It builds on the
 following components; every version is pinned exactly in
@@ -24,6 +24,14 @@ set, MIT licensed, fetched through [Iconify](https://iconify.design/). The SVG
 sources are kept in `assets/icons-src/` and turned into path data by
 `tools/fetch_icons.py`, so a build needs no network and a change to the set is a
 diff rather than a mystery.
+
+## HyperHeadset
+
+How a HyperX Cloud Flight S dongle is asked for the headset's charge - the
+request's header, the command number and where the answer sits in the reply
+- comes from [HyperHeadset](https://github.com/LennardKittner/HyperHeadset)
+by Lennard Kittner, MIT licensed. No code is taken; the layout is
+re-implemented in `src/MCD.Interop/Machine/HyperXDongle.cs`.
 
 ## Microsoft PowerToys
 

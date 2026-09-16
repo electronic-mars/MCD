@@ -1,4 +1,4 @@
-namespace Mcd.Sensors.Contracts;
+﻿namespace Mcd.Sensors.Contracts;
 
 /// <summary>What a reading measures.</summary>
 public enum SensorKind
@@ -21,6 +21,9 @@ public enum HardwareGroup
     Storage,
     Network,
     Motherboard,
+
+    /// <summary>Things with batteries of their own: mice, headsets, keyboards.</summary>
+    Peripheral,
 }
 
 /// <summary>

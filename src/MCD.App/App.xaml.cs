@@ -398,6 +398,7 @@ public partial class App : Application
         services.AddSingleton<ISensorProvider, NvidiaGpuProvider>();
         services.AddSingleton<ISensorProvider, StorageTemperatureProvider>();
         services.AddSingleton<ISensorProvider, AcpiThermalProvider>();
+        services.AddSingleton<ISensorProvider, DeviceBatteryProvider>();
 
         // The processor and the memory modules, through the PawnIO driver
         // when the person has installed it. Registered always: each one says

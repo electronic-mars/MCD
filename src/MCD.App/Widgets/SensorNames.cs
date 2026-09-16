@@ -207,6 +207,13 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
                 Loc.Tr("PartBoard", "Motherboard"),
                 Loc.Tr("SenseBoardTemp", "How hot the motherboard is.")),
 
+            (HardwareGroup.Peripheral, _, _) => (
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("OfferDeviceCharge", "{0} - charge"),
+                    sensor.Hardware),
+                Loc.Tr("SenseDeviceCharge", "How much charge this device has left.")),
+
             (HardwareGroup.Cpu, SensorKind.Temperature, "core-max") => (
                 Loc.Tr("SenseCpuCoreMaxName", "Processor - hottest core"),
                 Loc.Tr("SenseCpuCoreMax", "The warmest of the cores right now.")),

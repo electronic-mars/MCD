@@ -1,4 +1,4 @@
-"""Downloads the icon set and turns it into a C# lookup.
+﻿"""Downloads the icon set and turns it into a C# lookup.
 
 The icons are Hugeicons, the same free set Master Audio Switcher uses, fetched
 through Iconify. They are drawn as strokes on a 24 by 24 grid, which is why the
@@ -97,6 +97,11 @@ ICONS: dict[str, str] = {
     "Shield": "shield-01",
     "Network2": "neural-network",
     "CpuCharge": "cpu-charge",
+    # Wireless devices, drawn by what they are.
+    "Mouse": "mouse-22",
+    "Headset": "headset",
+    "Keyboard": "keyboard",
+    "Bluetooth": "bluetooth",
     # The settings window draws from this set too, rather than from the
     # system's glyph font: two icon sets in one program read as two programs.
     "Undo": "undo",

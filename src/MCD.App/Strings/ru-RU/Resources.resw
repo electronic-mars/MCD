@@ -1385,4 +1385,40 @@
   <data name="SenseDiskHeatName" xml:space="preserve">
     <value>Накопитель — температура</value>
   </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Устройство</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>Сколько заряда осталось у беспроводной мыши, наушников или клавиатуры.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Мыши</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Наушники</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Клавиатуры</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Прочие устройства</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>{0} — заряд</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>Сколько заряда осталось у этого устройства.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>Сколько заряда осталось у этого устройства.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Беспроводные устройства</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Какое устройство</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>беспроводные устройства</value>
+  </data>
 </root>

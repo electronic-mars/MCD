@@ -395,6 +395,12 @@ public sealed partial class SettingsWindow : Window
     /// </summary>
     public void GoTo(string tag)
     {
+        // "widgets@0.5" scrolls halfway: the middle of a long page is where
+        // things go wrong unseen, and the top and the foot miss it.
+        double? part = tag.Split('@') is [_, var fraction]
+            && double.TryParse(fraction, CultureInfo.InvariantCulture, out double f) ? f : null;
+        tag = tag.Split('@')[0];
+
         bool foot = tag.EndsWith('!');
         string wanted = foot ? tag[..^1] : tag;
 
@@ -409,8 +415,17 @@ public sealed partial class SettingsWindow : Window
 
             // After the pages have been laid out, not before: the page just
             // switched to has no extent yet.
-            DispatcherQueue.TryEnqueue(() => Pages.ChangeView(
-                null, foot ? Pages.ScrollableHeight : 0, null, disableAnimation: true));
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                // Laid out first: a page just switched to reports no extent,
+                // and a scroll to "half of nothing" stays at the top.
+                Pages.UpdateLayout();
+                Pages.ChangeView(
+                    null,
+                    part is { } share ? Pages.ScrollableHeight * share : foot ? Pages.ScrollableHeight : 0,
+                    null,
+                    disableAnimation: true);
+            });
 
             return;
         }
@@ -3376,6 +3391,7 @@ public sealed partial class SettingsWindow : Window
         HardwareGroup.Memory => Loc.Tr("DeviceMemory", "Memory"),
         HardwareGroup.Storage => Loc.Tr("DeviceStorage", "Drives"),
         HardwareGroup.Network => Loc.Tr("DeviceNetwork", "Network"),
+        HardwareGroup.Peripheral => Loc.Tr("DevicePeripherals", "Wireless devices"),
         _ => Loc.Tr("DeviceBoard", "Board"),
     };
 
@@ -3549,6 +3565,7 @@ public sealed partial class SettingsWindow : Window
         "acpi" => Loc.Tr("SourceAcpi", "ACPI thermal zones"),
         "disk" => Loc.Tr("SourceDisk", "drive temperatures"),
         "nvml" => Loc.Tr("SourceNvml", "NVIDIA driver"),
+        "dev" => Loc.Tr("SourceDev", "wireless devices"),
         "cpu" => Loc.Tr("SourceCpu", "processor registers"),
         "dimm" => Loc.Tr("SourceDimm", "memory modules"),
         _ => id,

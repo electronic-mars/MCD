@@ -1385,4 +1385,40 @@
   <data name="SenseDiskHeatName" xml:space="preserve">
     <value>Drive – temperature</value>
   </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>How much charge a wireless mouse, headset or keyboard has left.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Mice</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Headsets</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Keyboards</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Other devices</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>{0} – charge</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>How much charge this device has left.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>How much charge this device has left.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Wireless devices</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Which device</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>wireless devices</value>
+  </data>
 </root>

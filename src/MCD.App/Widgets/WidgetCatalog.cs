@@ -128,6 +128,13 @@ public static class WidgetCatalog
             Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
             "Music",
             (context, entry) => new MediaWidget(context, entry)),
+
+        new(
+            DeviceWidget.Type,
+            Loc.Tr("WidgetDeviceName", "Device"),
+            Loc.Tr("WidgetDeviceDescription", "How much charge a wireless mouse, headset or keyboard has left."),
+            "Bluetooth",
+            (context, entry) => new DeviceWidget(context, entry)),
     ];
 
     /// <summary>
@@ -148,6 +155,10 @@ public static class WidgetCatalog
         ("gpu", Loc.Tr("CatGraphics", "Graphics")),
         ("storage", Loc.Tr("CatStorage", "Drives")),
         ("network", Loc.Tr("CatNetwork", "Network")),
+        ("mouse", Loc.Tr("CatMice", "Mice")),
+        ("headset", Loc.Tr("CatHeadsets", "Headsets")),
+        ("keyboard", Loc.Tr("CatKeyboards", "Keyboards")),
+        ("device", Loc.Tr("CatDevices", "Other devices")),
         ("other", Loc.Tr("CatOther", "Everything else")),
     ];
 
@@ -231,6 +242,33 @@ public static class WidgetCatalog
                 Short: twins
                     ? $"{Loc.Tr("ShortTemperature", "Temperature")} — {detail}"
                     : Loc.Tr("ShortTemperature", "Temperature"));
+        }
+
+        // One chip per wireless device that reports a charge, under the kind
+        // of device it is. The name is the device's own - under "Mice" the
+        // chip says "Kone Air", which is the thing a person is choosing.
+        foreach (SensorDescriptor device in sensors.Catalog
+            .Where(d => d.Group == HardwareGroup.Peripheral)
+            .OrderBy(d => d.Hardware, StringComparer.CurrentCulture))
+        {
+            string key = device.Key.Value;
+            string family = Mcd.Sensors.Providers.DeviceBatteryProvider.FamilyOf(device.Key);
+
+            yield return new WidgetOffer(
+                string.Format(
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    Loc.Tr("OfferDeviceCharge", "{0} - charge"),
+                    device.Hardware),
+                Loc.Tr("OfferDevice", "How much charge this device has left."),
+                DeviceWidget.IconFor(device.Key),
+                () => WidgetConfig.New(DeviceWidget.Type) with
+                {
+                    Config = WidgetJson.Object(("sensor", key)),
+                },
+                entry => entry.TypeId == DeviceWidget.Type
+                    && WidgetOptions.Text(entry.Config, "sensor") == key,
+                Category: family == "other" ? "device" : family,
+                Short: device.Hardware);
         }
 
         yield return new WidgetOffer(
