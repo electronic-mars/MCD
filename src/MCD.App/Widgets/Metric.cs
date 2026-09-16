@@ -290,6 +290,9 @@ public sealed partial class Metric : ObservableObject
     /// <summary>This widget's own critical point, when one was set for it.</summary>
     public double? CritAt { get; set; }
 
+    /// <summary>Whether lower is worse - a charge, where 5 % is the alarm and 100 % is fine.</summary>
+    public bool Falls { get; init; }
+
     /// <summary>
     /// A small optical lift for the two-line block.
     /// </summary>
@@ -627,7 +630,9 @@ public sealed partial class Metric : ObservableObject
             _alertBeats = 5;
         }
 
-        AlertVisible = critical ? Visibility.Visible : Visibility.Collapsed;
+        // A badged chip's empty battery is its shape cue already, and the
+        // chip keeps no room for the triangle beside it.
+        AlertVisible = critical && !Badged ? Visibility.Visible : Visibility.Collapsed;
 
         if (critical && _alertBeats > 0)
         {
@@ -668,9 +673,11 @@ public sealed partial class Metric : ObservableObject
     }
 
     private Level Raw(double value) =>
-        (CritAt ?? Sensor!.Critical) is { } critical && value >= critical ? Level.Critical
-        : (WarnAt ?? Sensor!.Warning) is { } warning && value >= warning ? Level.Warning
+        (CritAt ?? Sensor!.Critical) is { } critical && Past(value, critical) ? Level.Critical
+        : (WarnAt ?? Sensor!.Warning) is { } warning && Past(value, warning) ? Level.Warning
         : Level.Normal;
+
+    private bool Past(double value, double limit) => Falls ? value <= limit : value >= limit;
 
     private Level Falling(double value)
     {
@@ -681,7 +688,10 @@ public sealed partial class Metric : ObservableObject
             _ => null,
         };
 
-        return floor is { } limit && value < limit - Hysteresis ? Raw(value) : _level;
+        bool cleared = floor is { } limit
+            && (Falls ? value > limit + Hysteresis : value < limit - Hysteresis);
+
+        return cleared ? Raw(value) : _level;
     }
 
     private static Brush Neutral =>

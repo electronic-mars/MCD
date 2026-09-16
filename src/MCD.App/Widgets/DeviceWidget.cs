@@ -61,6 +61,9 @@ public sealed class DeviceWidget(WidgetContext context, WidgetConfig entry)
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
             Badged = true,
+            Falls = true,
+            WarnAt = 10,
+            CritAt = 5,
             NameFound = sensor => Names.Renamed(sensor.Key) ? Names.For(sensor) : sensor.Hardware,
         };
 
