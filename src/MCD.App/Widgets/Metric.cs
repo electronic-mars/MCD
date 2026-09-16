@@ -252,6 +252,10 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial string Badge { get; set; } = "Battery";
 
+    /// <summary>The battery's colour: quiet, and dimmed with the icon when the device is.</summary>
+    [ObservableProperty]
+    public partial Brush BadgeColour { get; set; } = Secondary;
+
     /// <summary>How big the battery under the figure is drawn.</summary>
     public double BadgeSize => 14;
 
@@ -614,6 +618,13 @@ public sealed partial class Metric : ObservableObject
         }
         Colour = Paint(reading);
 
+        if (Badged)
+        {
+            BadgeColour = !reading.HasValue || (_level == Level.Normal && reading.Quality == Quality.Stale)
+                ? Dimmed
+                : Secondary;
+        }
+
         if (Badged && reading.HasValue)
         {
             Badge = reading.Value >= 60 ? "BatteryFull" : reading.Value >= 20 ? "Battery" : "BatteryLow";
@@ -700,6 +711,9 @@ public sealed partial class Metric : ObservableObject
     private Brush Accented => Braun
         ? (Brush)Application.Current.Resources["McdReadingAccent"]
         : (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"];
+
+    private static Brush Secondary =>
+        (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
 
     private static Brush Dimmed =>
         (Brush)Application.Current.Resources["TextFillColorTertiaryBrush"];

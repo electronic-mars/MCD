@@ -174,7 +174,7 @@
                         <Canvas Width="24" Height="24">
                             <Path
                                 Data="{x:Bind Badge, Converter={StaticResource Icon}, Mode=OneWay}"
-                                Stroke="{ThemeResource TextFillColorSecondaryBrush}"
+                                Stroke="{x:Bind BadgeColour, Mode=OneWay}"
                                 StrokeEndLineCap="Round"
                                 StrokeLineJoin="Round"
                                 StrokeStartLineCap="Round"
