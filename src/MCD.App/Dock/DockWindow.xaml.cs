@@ -644,6 +644,12 @@ public sealed partial class DockWindow : Window
         // "power" are the two pictures every Windows user already knows.
         string? id = target?.Entry.InstanceId;
 
+        if (target?.Widget.Menu().ToList() is { Count: > 0 } own)
+        {
+            own.ForEach(menu.Items.Add);
+            menu.Items.Add(new MenuFlyoutSeparator());
+        }
+
         var settings = new MenuFlyoutItem
         {
             Text = Loc.Tr("BarMenuSettings", "Settings..."),

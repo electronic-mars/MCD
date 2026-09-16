@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml.Data;
+﻿using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
 
@@ -30,8 +30,10 @@ public sealed class IconConverter : IValueConverter
     {
         string name = value as string ?? string.Empty;
 
-        string path = IconLibrary.Paths.TryGetValue(name, out string? found)
-            ? found
+        // A drawing handed over whole - another program's outline - is
+        // path data already, and says so by starting with a move.
+        string path = IconLibrary.Paths.TryGetValue(name, out string? found) ? found
+            : name.StartsWith('M') ? name
             : IconLibrary.Paths["Activity"];
 
         return XamlBindingHelper.ConvertValue(typeof(Geometry), path);

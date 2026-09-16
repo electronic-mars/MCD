@@ -208,6 +208,9 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     {
     }
 
+    /// <summary>What this widget adds to the bar's right-click menu, above the bar's own items.</summary>
+    public virtual IEnumerable<Microsoft.UI.Xaml.Controls.MenuFlyoutItemBase> Menu() => [];
+
     /// <summary>Called once, after the sensor catalogue is known to have settled.</summary>
     public virtual void Attach()
     {

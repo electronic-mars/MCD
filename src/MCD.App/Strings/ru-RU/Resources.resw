@@ -1421,4 +1421,16 @@
   <data name="SourceDev" xml:space="preserve">
     <value>беспроводные устройства</value>
   </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Audio Switcher</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Master Audio Switcher на панели вместо трея: нажатие переводит звук на следующее устройство.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>Нет устройства вывода</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>нажатие — следующее устройство</value>
+  </data>
 </root>

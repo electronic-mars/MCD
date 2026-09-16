@@ -704,6 +704,9 @@ public partial class App : Application
         _docks?.Dispose();
         _docks = null;
 
+        // The switcher's tray icon back now, not after its fifteen seconds.
+        Mcd.App.Widgets.AudioSwitcher.HandBack();
+
         _services?.Dispose();
         _services = null;
 

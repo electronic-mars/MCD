@@ -222,6 +222,35 @@
             ContentTemplate="{StaticResource MetricTemplate}" />
     </DataTemplate>
 
+    <!-- Master Audio Switcher: the device the sound goes to, in its own outline. -->
+    <DataTemplate x:Key="mcd.switcher" x:DataType="widgets:SwitcherWidget">
+        <widgets:HoverChip
+            Margin="3,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind Shown, Mode=OneWay}">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <Viewbox
+                Width="{x:Bind IconSize, Mode=OneWay}"
+                Height="{x:Bind IconSize, Mode=OneWay}"
+                VerticalAlignment="Center">
+                <Canvas Width="24" Height="24">
+                    <Path
+                        Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                </Canvas>
+            </Viewbox>
+        </widgets:HoverChip>
+    </DataTemplate>
+
     <!-- Sound: a speaker that says how loud, and a press that silences. -->
     <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
         <widgets:HoverChip

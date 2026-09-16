@@ -95,6 +95,13 @@ public static class WidgetCatalog
             (context, entry) => new SoundWidget(context, entry)),
 
         new(
+            SwitcherWidget.Type,
+            Loc.Tr("WidgetSwitcherName", "Audio Switcher"),
+            Loc.Tr("WidgetSwitcherDescription", "Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device."),
+            "Headset",
+            (context, entry) => new SwitcherWidget(context, entry)),
+
+        new(
             BatteryWidget.Type,
             Loc.Tr("WidgetBatteryName", "Battery"),
             Loc.Tr("WidgetBatteryDescription", "How much charge is left. Only on a machine that runs on charge."),
@@ -277,6 +284,19 @@ public static class WidgetCatalog
             "Speaker",
             () => WidgetConfig.New(SoundWidget.Type),
             entry => entry.TypeId == SoundWidget.Type);
+
+        // Only while the program is running: the note it leaves is the one
+        // sign it is there, and a chip for a program that is not would be
+        // an empty place on the bar.
+        if (AudioSwitcher.Present())
+        {
+            yield return new WidgetOffer(
+                Loc.Tr("WidgetSwitcherName", "Audio Switcher"),
+                Loc.Tr("WidgetSwitcherDescription", "Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device."),
+                "Headset",
+                () => WidgetConfig.New(SwitcherWidget.Type),
+                entry => entry.TypeId == SwitcherWidget.Type);
+        }
 
         // Offered only where they are about something. A desktop has no
         // battery and is never going to grow one, and a machine with no

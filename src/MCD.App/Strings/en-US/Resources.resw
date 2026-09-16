@@ -1421,4 +1421,16 @@
   <data name="SourceDev" xml:space="preserve">
     <value>wireless devices</value>
   </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Audio Switcher</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>No sound device</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>a press switches to the next</value>
+  </data>
 </root>
