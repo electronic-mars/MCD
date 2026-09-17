@@ -1433,4 +1433,7 @@
   <data name="SwitcherPressTip" xml:space="preserve">
     <value>нажатие — следующее устройство</value>
   </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Открыть Master Audio Switcher</value>
+  </data>
 </root>

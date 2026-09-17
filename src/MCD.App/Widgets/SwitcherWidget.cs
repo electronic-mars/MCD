@@ -69,6 +69,7 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
         }
 
         Shown = Visibility.Visible;
+        AudioSwitcher.Drawn();
 
         SwitcherDevice? current = outputs.FirstOrDefault(d => d.Current);
 
@@ -85,6 +86,17 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
 
     public override IEnumerable<MenuFlyoutItemBase> Menu()
     {
+        if (AudioSwitcher.Outputs is null)
+        {
+            yield break;
+        }
+
+        var open = new MenuFlyoutItem { Text = Loc.Tr("SwitcherOpen", "Open Master Audio Switcher") };
+        open.Click += (_, _) => AudioSwitcher.Open();
+
+        yield return open;
+        yield return new MenuFlyoutSeparator();
+
         foreach (SwitcherDevice device in AudioSwitcher.Outputs ?? [])
         {
             var item = new RadioMenuFlyoutItem

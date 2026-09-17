@@ -36,7 +36,17 @@ public partial class App : Application
     private HotKeys? _keys;
     private bool _shutDown;
 
-    public App() => InitializeComponent();
+    /// <remarks>
+    /// Ended by Exit and nothing else. Left to the default, the program
+    /// stopped the moment its last window closed - and hiding the bars with
+    /// no settings window open closes every window it has, so "hide" quietly
+    /// meant "quit".
+    /// </remarks>
+    public App()
+    {
+        InitializeComponent();
+        DispatcherShutdownMode = DispatcherShutdownMode.OnExplicitShutdown;
+    }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
@@ -605,6 +615,20 @@ public partial class App : Application
 
                 Later(4000, Flip);
                 Later(9000, Flip);
+            }
+
+            // The bars hidden and brought back, as the menu item does it -
+            // what a widget that must know whether it is on screen is checked by.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "bars")
+            {
+                void Flip()
+                {
+                    ShowOrHideBars();
+                    log.LogInformation("selftest.flipped bars={Visible}", _docks?.Visible);
+                }
+
+                Later(8000, Flip);
+                Later(18000, Flip);
             }
 
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_PAGE") is { Length: > 0 } pages)

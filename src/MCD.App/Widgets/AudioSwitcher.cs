@@ -17,9 +17,11 @@ public sealed record SwitcherDevice(string Id, string Name, string Icon, bool Cu
 /// <para>
 /// Its local HTTP interface, as its docs/DOCK.md describes: a note in its data
 /// folder says where it listens and with what token, and a hello once a
-/// second both fetches its state and keeps its tray icon away. Fifteen
-/// seconds without one and the icon comes back by itself - so a bar that has
-/// crashed never leaves the program without a face.
+/// second both fetches its state and says whether its chip is on a screen
+/// right now (protocol 2). The tray icon stays away only while hellos keep
+/// saying so; fifteen seconds without one, or one that says no, and the
+/// icon comes back by itself - so a bar that has crashed, or is alive but
+/// draws nothing, never leaves the program without a face.
 /// </para>
 /// <para>
 /// One line for the whole program, not one per chip. The bar rebuilds its
@@ -32,7 +34,7 @@ public sealed record SwitcherDevice(string Id, string Name, string Icon, bool Cu
 /// </remarks>
 public static partial class AudioSwitcher
 {
-    private const int Protocol = 1;
+    private const int Protocol = 2;
 
     private static readonly TimeSpan Beat = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan Grace = TimeSpan.FromSeconds(3);
@@ -51,12 +53,13 @@ public static partial class AudioSwitcher
     private static readonly Lock Gate = new();
 
     private static int _chips;
+    private static long _drawn = long.MinValue;
+    private static string? _refused;
     private static bool _running;
     private static ILogger? _log;
 
     private static (string Url, string Token)? _line;
     private static bool _hosting;
-    private static bool _warned;
     private static int _missed;
     private static readonly Dictionary<string, string> Drawings = [];
 
@@ -82,6 +85,16 @@ public static partial class AudioSwitcher
         _ = Task.Run(Run);
     }
 
+    /// <summary>
+    /// A chip is on a screen, drawn, this second. Said on every tick by
+    /// every chip that is; silence for a couple of seconds means none is -
+    /// the bars were hidden, the chip was taken off, or it has nothing to show.
+    /// </summary>
+    public static void Drawn() => Interlocked.Exchange(ref _drawn, Environment.TickCount64);
+
+    /// <summary>Whether any chip said it was drawn lately.</summary>
+    private static bool Showing => Environment.TickCount64 - Interlocked.Read(ref _drawn) < 2500;
+
     /// <summary>A chip has left its bar.</summary>
     public static void Leave()
     {
@@ -102,7 +115,11 @@ public static partial class AudioSwitcher
         if (_hosting && _line is { } line)
         {
             _hosting = false;
-            Call(line, "dock_take_over", new JsonObject { ["hosting"] = false }).Wait(TimeSpan.FromSeconds(1));
+            // Off the UI thread: awaited on it, the request's own continuations
+            // queue behind this very wait, and the icon went back minutes late.
+            Task.Run(() => Call(line, "dock_take_over", new JsonObject { ["hosting"] = false }))
+                .Wait(TimeSpan.FromSeconds(2));
+            _log?.LogInformation("switcher.handed-back program stopping");
         }
     }
 
@@ -130,6 +147,9 @@ public static partial class AudioSwitcher
 
     /// <summary>What a click on its tray icon does.</summary>
     public static void Next() => Fire("switch_next", []);
+
+    /// <summary>Its window, in front - what its other tray button does.</summary>
+    public static void Open() => Fire("bring_forward", []);
 
     /// <summary>The sound moved to one device.</summary>
     public static void SwitchTo(string id) => Fire("switch_to", new JsonObject { ["device_id"] = id });
@@ -178,7 +198,7 @@ public static partial class AudioSwitcher
                 continue;
             }
 
-            await Hello(want: chips > 0);
+            await Hello();
             await Task.Delay(Beat);
         }
 
@@ -190,9 +210,9 @@ public static partial class AudioSwitcher
         Publish(null);
     }
 
-    private static async Task Hello(bool want)
+    private static async Task Hello()
     {
-        _line ??= Find() is { } found ? (found.Url, found.Token) : null;
+        _line ??= Find() is { } found && found.Url != _refused ? (found.Url, found.Token) : null;
 
         if (_line is not { } line)
         {
@@ -200,19 +220,25 @@ public static partial class AudioSwitcher
             return;
         }
 
-        JsonNode? said = await Call(line, "dock_hello", []);
+        bool showing = Showing;
+        JsonNode? said = await Call(line, "dock_hello", new JsonObject { ["showing"] = showing });
 
-        if (said is null || said["protocol"]?.GetValue<int>() != Protocol)
+        if (said is not null && said["protocol"]?.GetValue<int>() != Protocol)
         {
-            // Gone, restarted on another port, or a protocol this does not
-            // speak. The note is read again next time.
-            if (said is not null && !_warned)
-            {
-                _warned = true;
-                _log?.LogWarning("switcher.protocol {Protocol} not understood", said["protocol"]);
-            }
+            // A protocol this does not speak: stop talking to that copy
+            // altogether, rather than guess at what a hello now promises.
+            _log?.LogWarning("switcher.protocol {Protocol} not understood", said["protocol"]);
+            _refused = line.Url;
+            _line = null;
+            Publish(null);
+            await Release(line, "protocol");
+            return;
+        }
 
-            // One slow answer is not an absence. Past that, the chip is
+        if (said is null)
+        {
+            // Gone, or restarted on another port: the note is read again
+            // next time. One slow answer is not an absence. Past that, the chip is
             // gone from the bar, and so the icon goes back to the tray - a
             // program drawn nowhere is the one thing this must not cause.
             if (++_missed >= Patience)
@@ -247,16 +273,22 @@ public static partial class AudioSwitcher
 
         Publish(outputs);
 
-        // Taken only once a chip is on a bar and has something to draw, and
-        // never let go here otherwise - the loop's end does that, after the
-        // grace, so a rebuild does not blink the tray.
-        if (want && outputs.Count > 0 && said["hosting"]?.GetValue<bool>() != true
+        // Taken only while a chip is actually drawn - which it cannot be
+        // before the first answer, so the first hello always says no - and
+        // handed back the moment none is.
+        if (!showing)
+        {
+            await Release(line, "nothing drawn");
+            return;
+        }
+
+        if (said["hosting"]?.GetValue<bool>() != true
             && await Call(line, "dock_take_over", new JsonObject { ["hosting"] = true }) is not null)
         {
             _log?.LogInformation("switcher.took-over version={Version}", said["version"]);
         }
 
-        _hosting |= want && outputs.Count > 0;
+        _hosting = true;
     }
 
     /// <summary>The tray icon handed back, if it was ours.</summary>
@@ -315,7 +347,7 @@ public static partial class AudioSwitcher
             _ = Task.Run(async () =>
             {
                 await Call(line, method, arguments);
-                await Hello(want: _hosting);
+                await Hello();
             });
         }
     }

@@ -140,12 +140,24 @@ public sealed class HyperXDongle : IDisposable
         }
     }
 
+    /// <remarks>
+    /// Safe to call twice - the sensor hub closes its providers and the
+    /// service container closes them again, and a second close that threw
+    /// stopped the program's exit halfway. The token source is left for the
+    /// collector: the listener may still cancel it on its way out.
+    /// </remarks>
     public void Dispose()
     {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+        {
+            return;
+        }
+
         _gone.Cancel();
         _stream.Dispose();
-        _gone.Dispose();
     }
+
+    private int _disposed;
 
     private static List<string> Interfaces()
     {

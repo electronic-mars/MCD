@@ -1433,4 +1433,7 @@
   <data name="SwitcherPressTip" xml:space="preserve">
     <value>a press switches to the next</value>
   </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Open Master Audio Switcher</value>
+  </data>
 </root>
