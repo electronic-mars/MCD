@@ -37,7 +37,16 @@ public static partial class AudioSwitcher
     private static readonly TimeSpan Beat = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan Grace = TimeSpan.FromSeconds(3);
 
-    private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(2) };
+    /// <summary>
+    /// Long enough for its hello, which enumerates every sound device and
+    /// was measured at three seconds. At two, nearly every hello was cut off:
+    /// the chip hid itself while the program, which had heard the hello all
+    /// the same, kept its tray icon away.
+    /// </summary>
+    private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(10) };
+
+    /// <summary>Hellos lost in a row before the chip hides and the icon is handed back.</summary>
+    private const int Patience = 3;
 
     private static readonly Lock Gate = new();
 
@@ -48,6 +57,7 @@ public static partial class AudioSwitcher
     private static (string Url, string Token)? _line;
     private static bool _hosting;
     private static bool _warned;
+    private static int _missed;
     private static readonly Dictionary<string, string> Drawings = [];
 
     /// <summary>What the program said last, or null while it is not there.</summary>
@@ -172,11 +182,9 @@ public static partial class AudioSwitcher
             await Task.Delay(Beat);
         }
 
-        if (_hosting && _line is { } line)
+        if (_line is { } line)
         {
-            _hosting = false;
-            await Call(line, "dock_take_over", new JsonObject { ["hosting"] = false });
-            _log?.LogInformation("switcher.handed-back");
+            await Release(line, "no chip on any bar");
         }
 
         Publish(null);
@@ -204,27 +212,20 @@ public static partial class AudioSwitcher
                 _log?.LogWarning("switcher.protocol {Protocol} not understood", said["protocol"]);
             }
 
-            _line = null;
-            _hosting = false;
-            Publish(null);
+            // One slow answer is not an absence. Past that, the chip is
+            // gone from the bar, and so the icon goes back to the tray - a
+            // program drawn nowhere is the one thing this must not cause.
+            if (++_missed >= Patience)
+            {
+                _line = null;
+                Publish(null);
+                await Release(line, "lost");
+            }
+
             return;
         }
 
-        // Taken while a chip wants it; never let go here - the loop's end
-        // does that, after the grace, so a rebuild does not blink the tray.
-        if (want)
-        {
-            if (said["hosting"]?.GetValue<bool>() != true)
-            {
-                if (await Call(line, "dock_take_over", new JsonObject { ["hosting"] = true }) is not null)
-                {
-                    _log?.LogInformation("switcher.took-over version={Version}", said["version"]);
-                }
-            }
-
-            _hosting = true;
-        }
-
+        _missed = 0;
         List<SwitcherDevice> outputs = [];
 
         foreach (JsonNode? device in said["state"]?["outputs"]?.AsArray() ?? [])
@@ -245,6 +246,30 @@ public static partial class AudioSwitcher
         }
 
         Publish(outputs);
+
+        // Taken only once a chip is on a bar and has something to draw, and
+        // never let go here otherwise - the loop's end does that, after the
+        // grace, so a rebuild does not blink the tray.
+        if (want && outputs.Count > 0 && said["hosting"]?.GetValue<bool>() != true
+            && await Call(line, "dock_take_over", new JsonObject { ["hosting"] = true }) is not null)
+        {
+            _log?.LogInformation("switcher.took-over version={Version}", said["version"]);
+        }
+
+        _hosting |= want && outputs.Count > 0;
+    }
+
+    /// <summary>The tray icon handed back, if it was ours.</summary>
+    private static async Task Release((string Url, string Token) line, string why)
+    {
+        if (!_hosting)
+        {
+            return;
+        }
+
+        _hosting = false;
+        await Call(line, "dock_take_over", new JsonObject { ["hosting"] = false });
+        _log?.LogInformation("switcher.handed-back {Why}", why);
     }
 
     /// <summary>
