@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -53,7 +53,7 @@ public static partial class AudioSwitcher
     private static readonly Lock Gate = new();
 
     private static int _chips;
-    private static long _drawn = long.MinValue;
+    private static long _drawn;
     private static string? _refused;
     private static bool _running;
     private static ILogger? _log;
@@ -65,6 +65,9 @@ public static partial class AudioSwitcher
 
     /// <summary>What the program said last, or null while it is not there.</summary>
     public static IReadOnlyList<SwitcherDevice>? Outputs { get; private set; }
+
+    /// <summary>Raised off the UI thread when a press has come back with a new state.</summary>
+    public static event Action? Answered;
 
     /// <summary>A chip is on a bar and wants the program drawn there.</summary>
     public static void Join(ILogger log)
@@ -93,7 +96,13 @@ public static partial class AudioSwitcher
     public static void Drawn() => Interlocked.Exchange(ref _drawn, Environment.TickCount64);
 
     /// <summary>Whether any chip said it was drawn lately.</summary>
-    private static bool Showing => Environment.TickCount64 - Interlocked.Read(ref _drawn) < 2500;
+    /// <remarks>
+    /// Zero for never. It was long.MinValue, and "now minus never" overflowed
+    /// into a small number: the very first hello promised a chip that had not
+    /// been drawn.
+    /// </remarks>
+    private static bool Showing =>
+        Interlocked.Read(ref _drawn) is > 0 and var at && Environment.TickCount64 - at < 2500;
 
     /// <summary>A chip has left its bar.</summary>
     public static void Leave()
@@ -252,26 +261,7 @@ public static partial class AudioSwitcher
         }
 
         _missed = 0;
-        List<SwitcherDevice> outputs = [];
-
-        foreach (JsonNode? device in said["state"]?["outputs"]?.AsArray() ?? [])
-        {
-            if (device is null)
-            {
-                continue;
-            }
-
-            var entry = new SwitcherDevice(
-                device["id"]?.GetValue<string>() ?? string.Empty,
-                device["name"]?.GetValue<string>() ?? string.Empty,
-                device["icon"]?.GetValue<string>() ?? string.Empty,
-                device["is_default"]?.GetValue<bool>() == true);
-
-            outputs.Add(entry);
-            await Fetch(line, entry.Icon);
-        }
-
-        Publish(outputs);
+        await Take(line, said["state"]);
 
         // Taken only while a chip is actually drawn - which it cannot be
         // before the first answer, so the first hello always says no - and
@@ -289,6 +279,35 @@ public static partial class AudioSwitcher
         }
 
         _hosting = true;
+    }
+
+    /// <summary>
+    /// The devices out of a state, as its hello and its switches return it;
+    /// the current one is marked is_default.
+    /// </summary>
+    private static async Task<IReadOnlyList<SwitcherDevice>> Take((string Url, string Token) line, JsonNode? state)
+    {
+        List<SwitcherDevice> outputs = [];
+
+        foreach (JsonNode? device in state?["outputs"]?.AsArray() ?? [])
+        {
+            if (device is null)
+            {
+                continue;
+            }
+
+            var entry = new SwitcherDevice(
+                device["id"]?.GetValue<string>() ?? string.Empty,
+                device["name"]?.GetValue<string>() ?? string.Empty,
+                device["icon"]?.GetValue<string>() ?? string.Empty,
+                device["is_default"]?.GetValue<bool>() == true);
+
+            outputs.Add(entry);
+            await Fetch(line, entry.Icon);
+        }
+
+        Publish(outputs);
+        return outputs;
     }
 
     /// <summary>The tray icon handed back, if it was ours.</summary>
@@ -340,16 +359,34 @@ public static partial class AudioSwitcher
 
     private static void Publish(List<SwitcherDevice>? outputs) => Outputs = outputs;
 
+    /// <summary>
+    /// A press, sent now. What it returns is the new state, and the chip is
+    /// redrawn from it at once rather than on the next hello.
+    /// </summary>
     private static void Fire(string method, JsonObject arguments)
     {
-        if (_line is { } line)
+        if (_line is not { } line)
         {
-            _ = Task.Run(async () =>
-            {
-                await Call(line, method, arguments);
-                await Hello();
-            });
+            _log?.LogWarning("switcher.{Method} not sent: the program has not been found", method);
+            return;
         }
+
+        _log?.LogInformation("switcher.{Method} sent", method);
+
+        _ = Task.Run(async () =>
+        {
+            JsonNode? state = await Call(line, method, arguments);
+
+            if (state is JsonObject && state["outputs"] is not null)
+            {
+                IReadOnlyList<SwitcherDevice> outputs = await Take(line, state);
+                _log?.LogInformation(
+                    "switcher.{Method} answered: now {Current}",
+                    method,
+                    outputs.FirstOrDefault(d => d.Current)?.Name ?? "nothing");
+                Answered?.Invoke();
+            }
+        });
     }
 
     private static async Task<JsonNode?> Call((string Url, string Token) line, string method, JsonObject arguments)
@@ -376,6 +413,13 @@ public static partial class AudioSwitcher
         }
         catch (Exception e) when (e is HttpRequestException or TaskCanceledException or JsonException)
         {
+            // A hello that did not come back is counted where it is made; a
+            // press that did not is worth a line of its own.
+            if (method != "dock_hello")
+            {
+                _log?.LogWarning("switcher.{Method} failed: {Error}", method, e.Message);
+            }
+
             return null;
         }
     }

@@ -631,6 +631,16 @@ public partial class App : Application
                 Later(18000, Flip);
             }
 
+            // The switcher's chip pressed twice, as a click on it presses it.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "press")
+            {
+                void Press() => log.LogInformation(
+                    "selftest.pressed switchers={Count}", _docks?.Press(Mcd.App.Widgets.SwitcherWidget.Type));
+
+                Later(8000, Press);
+                Later(14000, Press);
+            }
+
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_PAGE") is { Length: > 0 } pages)
             {
                 // After the rehearsals, not alongside them. The rehearsal at

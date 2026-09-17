@@ -299,6 +299,9 @@ public sealed class DockWindowManager : IDisposable
         return hosts;
     }
 
+    /// <summary>Presses every widget of one kind, the way a click on it does.</summary>
+    public int Press(string typeId) => _windows.Values.Sum(w => w.Press(typeId));
+
     /// <summary>Asks the first live bar for its settings, through its own menu.</summary>
     public bool RehearseMenu()
     {

@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
 using Mcd.Core.Settings;
 using Mcd.Sensors.Contracts;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -41,6 +42,7 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
     public partial string Detail { get; set; } = string.Empty;
 
     private bool _joined;
+    private Microsoft.UI.Dispatching.DispatcherQueue? _ui;
 
     public override bool Matters => Shown == Visibility.Visible;
 
@@ -51,6 +53,8 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
         if (!_joined)
         {
             _joined = true;
+            _ui = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+            AudioSwitcher.Answered += OnAnswered;
             AudioSwitcher.Join(Context.Log);
         }
 
@@ -81,8 +85,12 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
 
     public override void Press()
     {
+        Context.Log.LogInformation("switcher.pressed");
         AudioSwitcher.Next();
     }
+
+    /// <summary>A press came back: the new device is drawn now, not on the next tick.</summary>
+    private void OnAnswered() => _ui?.TryEnqueue(() => Tick(SensorSnapshot.Empty));
 
     public override IEnumerable<MenuFlyoutItemBase> Menu()
     {
@@ -121,6 +129,7 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
         if (_joined)
         {
             _joined = false;
+            AudioSwitcher.Answered -= OnAnswered;
             AudioSwitcher.Leave();
         }
 

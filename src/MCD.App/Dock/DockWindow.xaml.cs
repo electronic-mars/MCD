@@ -2069,6 +2069,19 @@ public sealed partial class DockWindow : Window
 
     private void OnAbandon(object sender, PointerRoutedEventArgs e) => LetGo();
 
+    /// <summary>Presses every widget of one kind here, as a release on it does. For the self-test.</summary>
+    public int Press(string typeId)
+    {
+        WidgetHost[] found = [.. _hosts.Where(h => h.Entry.TypeId == typeId)];
+
+        foreach (WidgetHost host in found)
+        {
+            host.Press();
+        }
+
+        return found.Length;
+    }
+
     private void LetGo()
     {
         _hold.Stop();
