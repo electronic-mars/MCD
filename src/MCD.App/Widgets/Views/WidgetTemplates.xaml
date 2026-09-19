@@ -234,20 +234,41 @@
                     <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
                 </ToolTip>
             </ToolTipService.ToolTip>
-            <Viewbox
-                Width="{x:Bind IconSize, Mode=OneWay}"
-                Height="{x:Bind IconSize, Mode=OneWay}"
-                VerticalAlignment="Center">
-                <Canvas Width="24" Height="24">
-                    <Path
-                        Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
-                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                        StrokeEndLineCap="Round"
-                        StrokeLineJoin="Round"
-                        StrokeStartLineCap="Round"
-                        StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
-                </Canvas>
-            </Viewbox>
+            <Grid VerticalAlignment="Center">
+                <Viewbox
+                    Width="{x:Bind IconSize, Mode=OneWay}"
+                    Height="{x:Bind IconSize, Mode=OneWay}">
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                    </Canvas>
+                </Viewbox>
+                <!-- The sound is switched off: a cross on the corner, the way
+                     the switcher marks it in its own tray icon. Drawn over the
+                     icon so the chip keeps its width. -->
+                <Viewbox
+                    Width="9"
+                    Height="9"
+                    Margin="0,0,-3,-2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Visibility="{x:Bind MutedShown, Mode=OneWay}">
+                    <Canvas Width="10" Height="10">
+                        <Ellipse Width="10" Height="10" Fill="{ThemeResource McdCriticalBrush}" />
+                        <Path
+                            Data="M 3.2 3.2 L 6.8 6.8 M 6.8 3.2 L 3.2 6.8"
+                            Stroke="White"
+                            StrokeEndLineCap="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="1.4" />
+                    </Canvas>
+                </Viewbox>
+            </Grid>
         </widgets:HoverChip>
     </DataTemplate>
 

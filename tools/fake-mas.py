@@ -1,7 +1,8 @@
 """A stand-in for Master Audio Switcher's bridge (protocol 2) that logs every call.
 
 Usage: python tools/fake-mas.py <dir>, then start the dock with LOCALAPPDATA=<dir>;
-calls land in <dir>/calls.log.
+calls land in <dir>/calls.log. FAKE_SLOW=<s> makes a switch take that
+long; FAKE_MUTED=1 reports the sound switched off.
 """
 import json, os, sys, time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -11,6 +12,8 @@ note_dir = os.path.join(root, 'MasterAudioSwitcher')
 os.makedirs(note_dir, exist_ok=True)
 log = open(os.path.join(root, 'calls.log'), 'a', encoding='utf-8', buffering=1)
 TOKEN = 'tok-123'
+SLOW = float(os.environ.get('FAKE_SLOW', '0'))  # seconds a switch takes
+MUTED = os.environ.get('FAKE_MUTED') == '1'
 devices = [
     {'id': 'A', 'name': 'Speakers', 'kind': 'output', 'icon': 'speakers'},
     {'id': 'B', 'name': 'Headphones', 'kind': 'output', 'icon': 'headphones'},
@@ -57,11 +60,13 @@ class H(BaseHTTPRequestHandler):
         if tok != TOKEN:
             return self.reply(403, {'error': 'bad token'})
         if method == 'dock_hello':
-            result = {'protocol': 2, 'version': '9.9.9', 'hosting': hosting, 'state': state()}
+            result = {'protocol': 2, 'version': '9.9.9', 'hosting': hosting,
+                      'master': {'volume': 0.5, 'muted': MUTED}, 'state': state()}
         elif method == 'dock_take_over':
             hosting = bool(args['hosting'])
             result = {'hosting': hosting}
         elif method == 'switch_next':
+            time.sleep(SLOW)
             current = (current + 1) % len(devices)
             result = state()
         elif method == 'bring_forward':

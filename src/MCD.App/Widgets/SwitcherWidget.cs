@@ -41,6 +41,10 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
     [ObservableProperty]
     public partial string Detail { get; set; } = string.Empty;
 
+    /// <summary>A cross in the icon's corner while the device's sound is switched off.</summary>
+    [ObservableProperty]
+    public partial Visibility MutedShown { get; set; } = Visibility.Collapsed;
+
     private bool _joined;
     private Microsoft.UI.Dispatching.DispatcherQueue? _ui;
 
@@ -79,7 +83,10 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
 
         Icon = current is not null && AudioSwitcher.Drawing(current.Icon) is { } drawn ? drawn : "Speaker";
 
+        MutedShown = AudioSwitcher.Muted ? Visibility.Visible : Visibility.Collapsed;
+
         Detail = (current?.Name ?? Loc.Tr("SwitcherNoDevice", "No sound device"))
+            + (AudioSwitcher.Muted ? " · " + Loc.Tr("SoundMutedTip", "Silenced") : string.Empty)
             + " · " + Loc.Tr("SwitcherPressTip", "a press switches to the next");
     }
 

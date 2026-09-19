@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Mcd.App.Widgets;
 
 /// <summary>One sound device as Master Audio Switcher sees it.</summary>
-public sealed record SwitcherDevice(string Id, string Name, string Icon, bool Current);
+public sealed record SwitcherDevice(string Id, string Name, string Icon, bool Current, bool InCycle);
 
 /// <summary>
 /// The line to Master Audio Switcher, which then lives on the bar instead of
@@ -65,6 +65,17 @@ public static partial class AudioSwitcher
 
     /// <summary>What the program said last, or null while it is not there.</summary>
     public static IReadOnlyList<SwitcherDevice>? Outputs { get; private set; }
+
+    /// <summary>Whether the current device's sound is switched off, as its hello says.</summary>
+    public static bool Muted { get; private set; }
+
+    /// <summary>
+    /// Presses sent and not yet answered. While there are any, the device a
+    /// hello reports is not drawn: the switch takes its program seconds, and
+    /// a hello in between still names the old device - it would take back
+    /// the one drawn the moment the press was made.
+    /// </summary>
+    private static int _pending;
 
     /// <summary>Raised off the UI thread when a press has come back with a new state.</summary>
     public static event Action? Answered;
@@ -155,7 +166,24 @@ public static partial class AudioSwitcher
     }
 
     /// <summary>What a click on its tray icon does.</summary>
-    public static void Next() => Fire("switch_next", []);
+    /// <remarks>
+    /// The next device is drawn at once, worked out the way the program
+    /// works it out - the next present device in the cycle after the current
+    /// one, or the first - and the answer corrects it if it differs.
+    /// </remarks>
+    public static void Next()
+    {
+        if (Outputs is { } outputs && outputs.Where(d => d.InCycle).ToList() is { Count: > 0 } ring)
+        {
+            int at = ring.FindIndex(d => d.Current);
+            string next = ring[(at + 1) % ring.Count].Id;
+
+            Publish([.. outputs.Select(d => d with { Current = d.Id == next })]);
+            Answered?.Invoke();
+        }
+
+        Fire("switch_next", []);
+    }
 
     /// <summary>Its window, in front - what its other tray button does.</summary>
     public static void Open() => Fire("bring_forward", []);
@@ -261,7 +289,12 @@ public static partial class AudioSwitcher
         }
 
         _missed = 0;
-        await Take(line, said["state"]);
+        Muted = said["master"]?["muted"]?.GetValue<bool>() == true;
+
+        if (Volatile.Read(ref _pending) == 0)
+        {
+            await Take(line, said["state"]);
+        }
 
         // Taken only while a chip is actually drawn - which it cannot be
         // before the first answer, so the first hello always says no - and
@@ -300,7 +333,8 @@ public static partial class AudioSwitcher
                 device["id"]?.GetValue<string>() ?? string.Empty,
                 device["name"]?.GetValue<string>() ?? string.Empty,
                 device["icon"]?.GetValue<string>() ?? string.Empty,
-                device["is_default"]?.GetValue<bool>() == true);
+                device["is_default"]?.GetValue<bool>() == true,
+                device["in_cycle"]?.GetValue<bool>() != false);
 
             outputs.Add(entry);
             await Fetch(line, entry.Icon);
@@ -373,9 +407,12 @@ public static partial class AudioSwitcher
 
         _log?.LogInformation("switcher.{Method} sent", method);
 
+        Interlocked.Increment(ref _pending);
+
         _ = Task.Run(async () =>
         {
-            JsonNode? state = await Call(line, method, arguments);
+            JsonNode? state = await Call(line, method, arguments, quiet: true);
+            Interlocked.Decrement(ref _pending);
 
             if (state is JsonObject && state["outputs"] is not null)
             {
@@ -384,12 +421,21 @@ public static partial class AudioSwitcher
                     "switcher.{Method} answered: now {Current}",
                     method,
                     outputs.FirstOrDefault(d => d.Current)?.Name ?? "nothing");
-                Answered?.Invoke();
             }
+            else
+            {
+                // No answer in time is not a failure: the switch may well be
+                // done, only slowly. What is true is read again instead.
+                _log?.LogInformation("switcher.{Method} no answer in time, reading the state again", method);
+                await Hello();
+            }
+
+            Answered?.Invoke();
         });
     }
 
-    private static async Task<JsonNode?> Call((string Url, string Token) line, string method, JsonObject arguments)
+    private static async Task<JsonNode?> Call(
+        (string Url, string Token) line, string method, JsonObject arguments, bool quiet = false)
     {
         try
         {
@@ -415,7 +461,7 @@ public static partial class AudioSwitcher
         {
             // A hello that did not come back is counted where it is made; a
             // press that did not is worth a line of its own.
-            if (method != "dock_hello")
+            if (method != "dock_hello" && !quiet)
             {
                 _log?.LogWarning("switcher.{Method} failed: {Error}", method, e.Message);
             }
