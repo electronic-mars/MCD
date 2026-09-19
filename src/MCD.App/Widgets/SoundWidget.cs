@@ -188,12 +188,12 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        double along = ReadingIcon + 6 + DockMetrics.ChipPadding;
+        double along = ReadingIcon + 6 + DockMetrics.ChipPadding + 4;
 
         if (LevelVisible == Visibility.Visible)
         {
             _figure ??= Metric.Wide("100 %", ReadingFont);
-            along += _figure.Value + 6;
+            along += _figure.Value + 4;
         }
 
         return Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical ? 30 : along;

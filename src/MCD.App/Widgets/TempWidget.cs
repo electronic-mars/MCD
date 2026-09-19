@@ -65,7 +65,8 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             Spacing = GaugeWidget.Gap(Orientation),
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
-            Sample = "100 °C",
+            Sample = "99 °C",
+            Degrees = true,
 
             // With no sensor named, this widget is about a question rather
             // than a part, and the answer is meant to move: the sensor is

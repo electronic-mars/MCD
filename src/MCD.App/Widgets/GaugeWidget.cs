@@ -85,7 +85,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
             // As long as this reading ever gets: a rate runs to "888 MB/s",
             // and everything else to a three-figure percentage.
-            Sample = reading.Unit == "B/s" ? "888 MB/s" : "100 %",
+            Sample = reading.Unit == "B/s" ? "888 MB/s" : "99 %",
         };
 
         metric.SizeFor(
@@ -208,7 +208,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>
-        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(1, 0, 1, 0);
+        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(5, 0, 5, 0);
 }
 
 /// <summary>One thing a gauge can show, and where its figure comes from.</summary>

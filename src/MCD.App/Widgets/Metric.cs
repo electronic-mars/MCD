@@ -347,7 +347,8 @@ public sealed partial class Metric : ObservableObject
         _labelWide = null;
 
         (string biggest, _) = Split(Sample);
-        FigureWidth = Wide(Eights(biggest), FontSize);
+        _figureBase = Wide(Eights(biggest), FontSize);
+        FigureWidth = _figureBase;
         SuffixWidth = 0;
 
         foreach (string unit in Units())
@@ -388,9 +389,12 @@ public sealed partial class Metric : ObservableObject
         Figure = figure;
         Suffix = suffix;
 
-        // Never narrower than the sample asked for, and widened only by
-        // something the sample did not foresee.
-        FigureWidth = Math.Max(FigureWidth, Wide(Eights(figure), FontSize));
+        // Never narrower than the sample asked for, and wider only while
+        // the figure is: the sample is two digits, because a box kept for
+        // "100" stood a digit's width of air between the icon and every
+        // ordinary reading, and the eye stopped pairing them. A reading that
+        // does reach a hundred widens its chip for as long as it stays there.
+        FigureWidth = Math.Max(_figureBase, Wide(Eights(figure), FontSize));
         SuffixWidth = Math.Max(SuffixWidth, Wide(suffix, FontSize));
         ValueWidth = FigureWidth + SuffixWidth;
     }
@@ -452,7 +456,19 @@ public sealed partial class Metric : ObservableObject
     /// A figure as long as this reading is ever likely to show, so the slots it
     /// takes are decided once rather than the first time it says "--".
     /// </summary>
-    public string Sample { get; set; } = "100 %";
+    public string Sample { get; set; } = "99 %";
+
+    private double _figureBase;
+
+    /// <summary>
+    /// A degree ring on the icon's corner, for a chip whose icon only says
+    /// of what: a processor's temperature and its load otherwise wear the
+    /// same processor. In the figure's own colour - an amber one read as a
+    /// warning.
+    /// </summary>
+    public bool Degrees { get; init; }
+
+    public Visibility DegreesShown => Degrees ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>How wide this chip is, in effective pixels.</summary>
     /// <remarks>
