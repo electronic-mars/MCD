@@ -66,7 +66,6 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
             Sample = "99 °C",
-            Thermal = true,
 
             // With no sensor named, this widget is about a question rather
             // than a part, and the answer is meant to move: the sensor is

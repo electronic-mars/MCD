@@ -467,14 +467,6 @@ public sealed partial class Metric : ObservableObject
     private double _figureBase;
 
     /// <summary>
-    /// A temperature. Said in colour - a lilac unit, and a lilac icon when
-    /// the chip has one of its own - because a processor's temperature and
-    /// its load otherwise look alike. Lilac, since amber and red are taken by
-    /// the warnings and grey by what is switched off.
-    /// </summary>
-    public bool Thermal { get; init; }
-
-    /// <summary>
     /// No icon: the second figure of a widget whose first already drew it.
     /// </summary>
     public bool Bare { get; init; }
@@ -653,10 +645,15 @@ public sealed partial class Metric : ObservableObject
         }
         Colour = Paint(reading);
 
-        bool calm = _level == Level.Normal && reading.HasValue && reading.Quality != Quality.Stale;
+        // The unit sits a shade back from the figure while all is well, and
+        // takes the warning's colour with it when it is not. The icon always
+        // follows the figure: a temperature is told apart by the "°C" it
+        // carries and by standing beside the load, not by a colour of its own.
+        UnitColour = _level == Level.Normal && reading.HasValue && reading.Quality != Quality.Stale
+            ? Secondary
+            : Colour;
 
-        UnitColour = calm ? (Thermal ? Lilac : Secondary) : Colour;
-        IconColour = calm && Thermal ? Lilac : Colour;
+        IconColour = Colour;
 
         if (Badged)
         {
@@ -761,9 +758,6 @@ public sealed partial class Metric : ObservableObject
     /// </summary>
     private static Brush Dimmed =>
         (Brush)Application.Current.Resources["McdInactiveBrush"];
-
-    private static Brush Lilac =>
-        (Brush)Application.Current.Resources["McdThermalBrush"];
 
     /// <summary>
     /// Fluent's own caution and critical colours, which follow the theme:

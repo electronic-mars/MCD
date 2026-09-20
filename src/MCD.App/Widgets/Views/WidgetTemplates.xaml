@@ -202,19 +202,28 @@
     <!-- One part of the machine: its icon once, then its load, its
          temperature, or both side by side. -->
     <DataTemplate x:Key="mcd.gauge" x:DataType="widgets:GaugeWidget">
-        <StackPanel
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Orientation="{x:Bind Orientation}">
-            <ContentControl
-                IsTabStop="False"
-                Content="{x:Bind Front, Mode=OneWay}"
-                ContentTemplate="{StaticResource MetricTemplate}" />
-            <ContentControl
-                IsTabStop="False"
-                Content="{x:Bind Second, Mode=OneWay}"
-                ContentTemplate="{StaticResource MetricTemplate}"
-                Visibility="{x:Bind SecondShown, Mode=OneWay}" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" Orientation="{x:Bind Orientation}">
+                <ContentControl
+                    IsTabStop="False"
+                    Content="{x:Bind Front, Mode=OneWay}"
+                    ContentTemplate="{StaticResource MetricTemplate}" />
+                <ContentControl
+                    IsTabStop="False"
+                    Content="{x:Bind Second, Mode=OneWay}"
+                    ContentTemplate="{StaticResource MetricTemplate}"
+                    Visibility="{x:Bind SecondShown, Mode=OneWay}" />
+            </StackPanel>
+            <!-- Under both figures and centred on the pair, not on either of
+                 them: the name belongs to the part, which is the whole chip. -->
+            <TextBlock
+                Margin="0,-3,0,0"
+                HorizontalAlignment="Center"
+                FontSize="{x:Bind CaptionFontSize, Mode=OneWay}"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind Caption, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                Visibility="{x:Bind CaptionShown, Mode=OneWay}" />
         </StackPanel>
     </DataTemplate>
 

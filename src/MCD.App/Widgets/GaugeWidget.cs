@@ -70,6 +70,21 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     public Visibility SecondShown => Second is null ? Visibility.Collapsed : Visibility.Visible;
 
+    /// <summary>
+    /// The part's name under a pair of figures, drawn by the widget rather
+    /// than by either chip.
+    /// </summary>
+    /// <remarks>
+    /// Centred under both. Left to a chip, the name sits under the figure
+    /// that owns it - so "RAM" stood under the load with the temperature
+    /// hanging off to the right, which reads as a caption for half a widget.
+    /// </remarks>
+    public string Caption { get; private set; } = string.Empty;
+
+    public Visibility CaptionShown { get; private set; } = Visibility.Collapsed;
+
+    public double CaptionFontSize { get; private set; } = 11;
+
     /// <summary>Which part's temperature goes with a reading, for the ones that have a part.</summary>
     private static HardwareGroup? PartOf(string readingId) => readingId switch
     {
@@ -118,12 +133,15 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
                     : gap,
                 Accent = Context.Accent,
                 Braun = Context.Backdrop == "braun",
-                Thermal = true,
-                Bare = pair,
+                    Bare = pair,
                 Sample = "99 °C",
             };
 
-            warmth.SizeFor(ReadingIcon, ReadingFont, narrow: Orientation == Orientation.Vertical, subtitle: subtitle);
+            warmth.SizeFor(
+                ReadingIcon,
+                ReadingFont,
+                narrow: Orientation == Orientation.Vertical,
+                subtitle: subtitle && !pair);
 
             if (!pair)
             {
@@ -136,6 +154,13 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
             _warmth = warmth;
         }
+
+        // With two figures the name goes under both, so neither chip draws
+        // one of its own.
+        Caption = reading.Label;
+        CaptionShown = pair && subtitle ? Visibility.Visible : Visibility.Collapsed;
+        OnPropertyChanged(nameof(Caption));
+        OnPropertyChanged(nameof(CaptionShown));
 
         var metric = new Metric(
             reading.Id,
@@ -169,7 +194,14 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             // and a name measured against nothing at all was drawn straight
             // through the edge: "Receive" fits, "Получение" does not, and the
             // cut is exactly as wide as the language.
-            subtitle: subtitle);
+            subtitle: subtitle && !pair);
+
+        if (pair)
+        {
+            CaptionFontSize = metric.LabelFontSize;
+            OnPropertyChanged(nameof(CaptionFontSize));
+        }
+
         Metrics.Add(metric);
 
         if (_warmth is not null)
@@ -280,12 +312,23 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     /// The second figure counts once its sensor is there: a temperature this
     /// machine does not report is not drawn, and keeps no room.
     /// </remarks>
-    public override double Length() =>
-        Metrics.Count == 0
-            ? 60
-            : Metrics
-                .Where((m, i) => i == 0 || m.Sensor is not null)
-                .Sum(m => Orientation == Orientation.Vertical ? m.Height() : m.Width());
+    public override double Length()
+    {
+        if (Metrics.Count == 0)
+        {
+            return 60;
+        }
+
+        double along = Metrics
+            .Where((m, i) => i == 0 || m.Sensor is not null)
+            .Sum(m => Orientation == Orientation.Vertical ? m.Height() : m.Width());
+
+        // The name under a pair is the widget's own, so the widget is the one
+        // that has to be wide enough for it.
+        return CaptionShown == Visibility.Visible && Orientation == Orientation.Horizontal
+            ? Math.Max(along, Metric.Wide(Caption, CaptionFontSize) + Dock.DockMetrics.ChipPadding)
+            : along;
+    }
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
@@ -331,7 +374,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>
-        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(7, 0, 7, 0);
+        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(1, 0, 1, 0);
 }
 
 /// <summary>One thing a gauge can show, and where its figure comes from.</summary>
