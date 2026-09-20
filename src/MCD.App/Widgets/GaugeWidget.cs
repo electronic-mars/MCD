@@ -71,19 +71,33 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     public Visibility SecondShown => Second is null ? Visibility.Collapsed : Visibility.Visible;
 
     /// <summary>
-    /// The part's name under a pair of figures, drawn by the widget rather
-    /// than by either chip.
+    /// The part's name, drawn by the widget rather than by either chip.
     /// </summary>
     /// <remarks>
-    /// Centred under both. Left to a chip, the name sits under the figure
-    /// that owns it - so "RAM" stood under the load with the temperature
-    /// hanging off to the right, which reads as a caption for half a widget.
+    /// On the full-size bar it goes in a line of its own, beside a small
+    /// icon, with the figures underneath: "CPU" over "1 % 58 °C". That is
+    /// narrower than the same thing in one line - the name sits over the
+    /// figures rather than beside them - and it says what the part is before
+    /// it says how it is doing. Left to a chip, the name ends up under the
+    /// figure that owns it, which reads as a caption for half a widget.
     /// </remarks>
     public string Caption { get; private set; } = string.Empty;
 
     public Visibility CaptionShown { get; private set; } = Visibility.Collapsed;
 
-    public double CaptionFontSize { get; private set; } = 11;
+    /// <summary>A size down from the figures: the name is read once, the figures at a glance.</summary>
+    public double CaptionFontSize { get; private set; } = 10;
+
+    /// <summary>The part's icon, drawn by the widget while the name is in the same line.</summary>
+    public string HeadIcon { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Smaller than a chip's own icon, so that two lines fit a bar built for
+    /// one line of figures and one of name.
+    /// </summary>
+    public double HeadIconSize { get; private set; } = 14;
+
+    public double HeadStroke => 36 / Math.Max(1, HeadIconSize);
 
     /// <summary>Which part's temperature goes with a reading, for the ones that have a part.</summary>
     private static HardwareGroup? PartOf(string readingId) => readingId switch
@@ -108,9 +122,21 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         Metrics.Clear();
 
         GaugeReading reading = Reading;
-        bool subtitle = Density == DockDensity.Default && Orientation == Orientation.Horizontal;
+        bool stacked = Density == DockDensity.Default && Orientation == Orientation.Horizontal;
         bool pair = WithLoad && WithTemp;
         Thickness gap = Gap(Orientation);
+
+        // The name and the icon are the widget's own up there, so no chip
+        // draws either.
+        Caption = reading.Label;
+        CaptionShown = stacked ? Visibility.Visible : Visibility.Collapsed;
+        HeadIcon = Icons.For(reading.Id, reading.Icon);
+        HeadIconSize = Math.Round(ReadingIcon * 0.72);
+        OnPropertyChanged(nameof(Caption));
+        OnPropertyChanged(nameof(CaptionShown));
+        OnPropertyChanged(nameof(HeadIcon));
+        OnPropertyChanged(nameof(HeadIconSize));
+        OnPropertyChanged(nameof(HeadStroke));
 
         if (WithTemp)
         {
@@ -119,7 +145,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             var warmth = new Metric(
                 reading.Id + "-temp",
                 Icons.For(reading.Id, reading.Icon),
-                pair ? string.Empty : reading.Label,
+                string.Empty,
                 "°C",
                 sensors => sensors.Catalog
                     .Where(d => d.Kind == SensorKind.Temperature && d.Prominent && d.Group == part)
@@ -133,15 +159,11 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
                     : gap,
                 Accent = Context.Accent,
                 Braun = Context.Backdrop == "braun",
-                    Bare = pair,
+                    Bare = pair || stacked,
                 Sample = "99 °C",
             };
 
-            warmth.SizeFor(
-                ReadingIcon,
-                ReadingFont,
-                narrow: Orientation == Orientation.Vertical,
-                subtitle: subtitle && !pair);
+            warmth.SizeFor(ReadingIcon, ReadingFont, narrow: Orientation == Orientation.Vertical);
 
             if (!pair)
             {
@@ -155,12 +177,6 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             _warmth = warmth;
         }
 
-        // With two figures the name goes under both, so neither chip draws
-        // one of its own.
-        Caption = reading.Label;
-        CaptionShown = pair && subtitle ? Visibility.Visible : Visibility.Collapsed;
-        OnPropertyChanged(nameof(Caption));
-        OnPropertyChanged(nameof(CaptionShown));
 
         var metric = new Metric(
             reading.Id,
@@ -174,6 +190,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
                 : gap,
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
+            Bare = stacked,
 
             // A name given on the readings page wins over the built-in
             // caption; without one the caption stays the short word ("CPU"),
@@ -194,13 +211,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             // and a name measured against nothing at all was drawn straight
             // through the edge: "Receive" fits, "Получение" does not, and the
             // cut is exactly as wide as the language.
-            subtitle: subtitle && !pair);
-
-        if (pair)
-        {
-            CaptionFontSize = metric.LabelFontSize;
-            OnPropertyChanged(nameof(CaptionFontSize));
-        }
+            subtitle: false);
 
         Metrics.Add(metric);
 
@@ -323,10 +334,12 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             .Where((m, i) => i == 0 || m.Sensor is not null)
             .Sum(m => Orientation == Orientation.Vertical ? m.Height() : m.Width());
 
-        // The name under a pair is the widget's own, so the widget is the one
-        // that has to be wide enough for it.
+        // The name line is the widget's own, so the widget is the one that
+        // has to be wide enough for it.
         return CaptionShown == Visibility.Visible && Orientation == Orientation.Horizontal
-            ? Math.Max(along, Metric.Wide(Caption, CaptionFontSize) + Dock.DockMetrics.ChipPadding)
+            ? Math.Max(
+                along,
+                HeadIconSize + 4 + Metric.Wide(Caption, CaptionFontSize) + Dock.DockMetrics.ChipPadding)
             : along;
     }
 
