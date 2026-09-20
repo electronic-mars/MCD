@@ -631,6 +631,23 @@ public partial class App : Application
                 Later(18000, Flip);
             }
 
+            // A widget chosen on the widgets page, and a switch in its own
+            // settings pressed - the whole way through, page included.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "editswitch")
+            {
+                Later(1500, () => log.LogInformation(
+                    "selftest.editswitch {Said}", _settingsWindow?.RehearseSwitch("ram", -1)));
+
+                Later(1800, () => log.LogInformation(
+                    "selftest.editswitch {Said}", _settingsWindow?.RehearseSwitch("ram", 0)));
+
+                Later(2100, () => log.LogInformation(
+                    "selftest.editswitch {Said}", _settingsWindow?.RehearseSwitch("ram", 1)));
+
+                Later(2400, () => log.LogInformation(
+                    "selftest.editswitch {Said}", _settingsWindow?.RehearseSwitch("cpu", 0)));
+            }
+
             // Every switch in a gauge's settings pressed twice, to see that
             // the second press says something the first did not.
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "switch")

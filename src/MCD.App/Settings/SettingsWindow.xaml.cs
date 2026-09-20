@@ -2876,6 +2876,84 @@ public sealed partial class SettingsWindow : Window
     /// A widget is chosen by right-clicking it on the bar itself, and until
     /// somebody does that this part of the page does not exist.
     /// </remarks>
+    /// <summary>The controls of the chosen widget's own settings, and whose they are.</summary>
+    private FrameworkElement? _inspectorEditor;
+
+    private string _inspectorFor = string.Empty;
+
+    /// <summary>
+    /// Chooses a widget on the widgets page and presses a switch in its own
+    /// settings, the way a person does. For the unattended check: a switch
+    /// that wrote to the widget chosen before this one changed a chip nobody
+    /// was looking at.
+    /// </summary>
+    public string RehearseSwitch(string reading, int pill)
+    {
+        if (Dock() is not { } dock)
+        {
+            return "no dock";
+        }
+
+        WidgetConfig[] gauges =
+        [
+            .. dock.Widgets.Where(w => w.TypeId == Mcd.App.Widgets.GaugeWidget.Type
+                && (Mcd.App.Widgets.WidgetOptions.Text(w.Config, "reading") ?? "cpu") == reading)
+        ];
+
+        if (gauges.Length == 0)
+        {
+            return $"no {reading} gauge";
+        }
+
+        _selectedId = gauges[0].InstanceId;
+        ShowWidgets();
+
+        var pills = new List<Button>();
+
+        void Find(DependencyObject at)
+        {
+            if (at is not Panel panel)
+            {
+                return;
+            }
+
+            foreach (UIElement child in panel.Children)
+            {
+                if (child is Button found)
+                {
+                    pills.Add(found);
+                }
+
+                Find(child);
+            }
+        }
+
+        Find(_inspectorEditor!);
+
+        if (pill >= pills.Count)
+        {
+            return $"editor for {_inspectorFor[..8]} has {pills.Count} switches";
+        }
+
+        if (pill >= 0)
+        {
+            var peer = new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(pills[pill]);
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)peer).Invoke();
+        }
+
+        return $"chose {_selectedId![..8]}, editor for {_inspectorFor[..8]}, pressed {pill} of {pills.Count}: "
+            + string.Join(
+                " ",
+                Dock()!.Widgets
+                    .Where(w => w.TypeId == Mcd.App.Widgets.GaugeWidget.Type)
+                    .Select(w => $"{w.InstanceId[..4]}="
+                        + (w.Config is { } json ? Compact(json.GetRawText()) : "null")));
+    }
+
+    /// <summary>One line of JSON, for a log line.</summary>
+    private static string Compact(string json) =>
+        new([.. json.Where(c => !char.IsWhiteSpace(c))]);
+
     private FrameworkElement? Inspector()
     {
         WidgetConfig? entry = Dock()?.Widgets.FirstOrDefault(w => w.InstanceId == _selectedId);
@@ -2900,6 +2978,9 @@ public sealed partial class SettingsWindow : Window
         FrameworkElement? editor = _inspected?.CreateEditor(
             options => OnInspectorConfigured(id, options));
 
+        _inspectorEditor = editor;
+        _inspectorFor = id;
+
         return Braun.Group(
             editor is null
                 ? Braun.Row(
@@ -2923,6 +3004,15 @@ public sealed partial class SettingsWindow : Window
         {
             return;
         }
+
+        // Which widget, and what it now says. Without this line a report of
+        // "I changed one widget and another one moved" cannot be told from
+        // "I changed the one I had chosen before".
+        _log.LogInformation(
+            "settings.widget {Id} {Was} -> {Now}",
+            id[..8],
+            Compact(dock.Widgets.FirstOrDefault(w => w.InstanceId == id)?.Config?.GetRawText() ?? "null"),
+            Compact(options?.GetRawText() ?? "null"));
 
         Rearrange(
             dock.StableId,
