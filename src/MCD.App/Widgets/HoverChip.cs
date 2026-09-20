@@ -60,13 +60,39 @@ public sealed partial class HoverChip : ContentControl
             BorderThickness = new Thickness(1);
         }
 
-        PointerEntered += (_, _) => Fade(Hover);
+        Loaded += (_, _) => _fill.Color = Rest;
+
+        PointerEntered += (_, _) => Light(Hover);
         PointerExited += OnGone;
         PointerCanceled += OnGone;
         PointerCaptureLost += OnGone;
         PointerPressed += OnPressed;
-        PointerReleased += (_, _) => { Fade(Hover); Squeeze(1f); };
-        SizeChanged += (_, _) => Centre();
+        PointerReleased += (_, _) => Light(Hover);
+    }
+
+    /// <summary>
+    /// True for a chip that does something when pressed.
+    /// </summary>
+    /// <remarks>
+    /// Those wear a faint plate all the time and answer the pointer; a
+    /// reading wears nothing and answers with its tooltip only. Lighting a
+    /// number up under the pointer, and squeezing it under a press, promised
+    /// an action it never had - and nothing on the bar said, before the
+    /// pointer got there, which chips were buttons.
+    /// </remarks>
+    public bool Button { get; set; }
+
+    private Windows.UI.Color Rest => !Button ? Colors.Transparent
+        : ActualTheme == ElementTheme.Dark
+            ? Windows.UI.Color.FromArgb(0x0D, 0xFF, 0xFF, 0xFF)
+            : Windows.UI.Color.FromArgb(0x40, 0xFF, 0xFF, 0xFF);
+
+    private void Light(Windows.UI.Color to)
+    {
+        if (Button)
+        {
+            Fade(to);
+        }
     }
 
     /// <summary>
@@ -78,12 +104,12 @@ public sealed partial class HoverChip : ContentControl
     /// low alpha over the dark theme, near-opaque white over the light one.
     /// </remarks>
     private Windows.UI.Color Hover => ActualTheme == ElementTheme.Dark
-        ? Windows.UI.Color.FromArgb(0x0F, 0xFF, 0xFF, 0xFF)
+        ? Windows.UI.Color.FromArgb(0x17, 0xFF, 0xFF, 0xFF)
         : Windows.UI.Color.FromArgb(0x80, 0xFF, 0xFF, 0xFF);
 
     private Windows.UI.Color Pressed => ActualTheme == ElementTheme.Dark
-        ? Windows.UI.Color.FromArgb(0x0B, 0xFF, 0xFF, 0xFF)
-        : Windows.UI.Color.FromArgb(0x4D, 0xFF, 0xFF, 0xFF);
+        ? Windows.UI.Color.FromArgb(0x26, 0xFF, 0xFF, 0xFF)
+        : Windows.UI.Color.FromArgb(0xB0, 0xFF, 0xFF, 0xFF);
 
     private void OnGone(object sender, PointerRoutedEventArgs e) => Cool();
 
@@ -96,17 +122,11 @@ public sealed partial class HoverChip : ContentControl
     /// session. The bar puts its own lights out when the pointer leaves it,
     /// when a menu opens, and whenever it rebuilds.
     /// </remarks>
-    public void Cool()
-    {
-        Fade(Colors.Transparent, lighting: false);
-        Squeeze(1f);
-    }
+    public void Cool() => Fade(Rest, lighting: false);
 
-    private void OnPressed(object sender, PointerRoutedEventArgs e)
-    {
-        Fade(Pressed);
-        Squeeze((float)DockMetrics.PressScale);
-    }
+    // No squeeze any more: scaling a chip this small blurred its text for
+    // the length of the press. The plate getting brighter says as much.
+    private void OnPressed(object sender, PointerRoutedEventArgs e) => Light(Pressed);
 
     /// <summary>Crossfades the background rather than switching it.</summary>
     /// <param name="lighting">
@@ -130,35 +150,4 @@ public sealed partial class HoverChip : ContentControl
         story.Children.Add(colour);
         story.Begin();
     }
-
-    /// <summary>
-    /// Shrinks the chip while it is held down.
-    /// </summary>
-    /// <remarks>
-    /// Through the compositor rather than a XAML transform: this runs on every
-    /// press, on up to three bars at once, and a scale animated on the interface
-    /// thread stutters whenever that thread is busy - which, on a bar that
-    /// redraws once a second, it regularly is.
-    /// </remarks>
-    private void Squeeze(float to)
-    {
-        Visual visual = ElementCompositionPreview.GetElementVisual(this);
-        Centre();
-
-        Vector3KeyFrameAnimation scale = visual.Compositor.CreateVector3KeyFrameAnimation();
-
-        scale.InsertKeyFrame(
-            1f,
-            new Vector3(to, to, 1f),
-            visual.Compositor.CreateCubicBezierEasingFunction(
-                new Vector2(0.33f, 1f), new Vector2(0.68f, 1f)));
-
-        scale.Duration = DockMetrics.PressScaleDuration;
-        visual.StartAnimation("Scale", scale);
-    }
-
-    /// <summary>Scales about the middle, so a press does not shift the chip sideways.</summary>
-    private void Centre() =>
-        ElementCompositionPreview.GetElementVisual(this).CenterPoint =
-            new Vector3((float)(ActualWidth / 2), (float)(ActualHeight / 2), 0);
 }

@@ -81,7 +81,13 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         ? Windows.UI.Color.FromArgb(0x0F, 0xFF, 0xFF, 0xFF)
         : Windows.UI.Color.FromArgb(0x80, 0xFF, 0xFF, 0xFF);
 
-    private void OnHere(object sender, PointerRoutedEventArgs e) => Fade(Hover);
+    private void OnHere(object sender, PointerRoutedEventArgs e)
+    {
+        if (_widget.Pressable || _widget.OwnButtons)
+        {
+            Fade(Hover);
+        }
+    }
 
     private void OnGone(object sender, PointerRoutedEventArgs e) => Fade(Colors.Transparent);
 

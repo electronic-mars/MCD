@@ -11,10 +11,14 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
             <SolidColorBrush x:Key="McdCriticalBrush" Color="#FF6B6B" />
+            <SolidColorBrush x:Key="McdThermalBrush" Color="#C4B5FD" />
+            <SolidColorBrush x:Key="McdInactiveBrush" Color="#939BA7" />
             <SolidColorBrush x:Key="McdReadingAccent" Color="#FFF26A21" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="McdCriticalBrush" Color="#C63B3B" />
+            <SolidColorBrush x:Key="McdThermalBrush" Color="#6542A6" />
+            <SolidColorBrush x:Key="McdInactiveBrush" Color="#69717D" />
             <SolidColorBrush x:Key="McdReadingAccent" Color="#FFD65A17" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
@@ -88,7 +92,7 @@
                 <!-- The alarm sits on the icon's corner, like a badge, and takes
                      no width: beside the icon it pushed the unit out of a chip
                      that kept no room for it - "62" instead of "62 °C". -->
-                <Grid Margin="0,0,4,0" VerticalAlignment="Center">
+                <Grid Margin="0,0,4,0" VerticalAlignment="Center" Visibility="{x:Bind IconShown}">
                     <Viewbox
                         Width="{x:Bind IconSize, Mode=OneWay}"
                         Height="{x:Bind IconSize, Mode=OneWay}"
@@ -99,22 +103,13 @@
                         <Canvas Width="24" Height="24">
                             <Path
                                 Data="{x:Bind Icon, Converter={StaticResource Icon}, Mode=OneWay}"
-                                Stroke="{x:Bind Colour, Mode=OneWay}"
+                                Stroke="{x:Bind IconColour, Mode=OneWay}"
                                 StrokeEndLineCap="Round"
                                 StrokeLineJoin="Round"
                                 StrokeStartLineCap="Round"
                                 StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
                         </Canvas>
                     </Viewbox>
-                    <Ellipse
-                        Width="5.5"
-                        Height="5.5"
-                        Margin="-3,-2,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Stroke="{x:Bind Colour, Mode=OneWay}"
-                        StrokeThickness="1.3"
-                        Visibility="{x:Bind DegreesShown}" />
                     <FontIcon
                         Margin="0,-4,-5,0"
                         HorizontalAlignment="Right"
@@ -159,7 +154,7 @@
                             HorizontalTextAlignment="Left"
                             FontSize="{x:Bind FontSize, Mode=OneWay}"
                             FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
-                            Foreground="{x:Bind Colour, Mode=OneWay}"
+                            Foreground="{x:Bind UnitColour, Mode=OneWay}"
                             Text="{x:Bind Suffix, Mode=OneWay}" />
                     </StackPanel>
                     <!-- Capped, as PowerToys caps theirs. A drive's name is its
@@ -204,13 +199,23 @@
     <!-- One chip, held directly: an ItemsControl measures to nothing before
          its containers exist, and the host stood two points wide while the
          chip painted itself in overflow. -->
+    <!-- One part of the machine: its icon once, then its load, its
+         temperature, or both side by side. -->
     <DataTemplate x:Key="mcd.gauge" x:DataType="widgets:GaugeWidget">
-        <ContentControl
+        <StackPanel
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            IsTabStop="False"
-            Content="{x:Bind Front, Mode=OneWay}"
-            ContentTemplate="{StaticResource MetricTemplate}" />
+            Orientation="{x:Bind Orientation}">
+            <ContentControl
+                IsTabStop="False"
+                Content="{x:Bind Front, Mode=OneWay}"
+                ContentTemplate="{StaticResource MetricTemplate}" />
+            <ContentControl
+                IsTabStop="False"
+                Content="{x:Bind Second, Mode=OneWay}"
+                ContentTemplate="{StaticResource MetricTemplate}"
+                Visibility="{x:Bind SecondShown, Mode=OneWay}" />
+        </StackPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="mcd.temp" x:DataType="widgets:TempWidget">
@@ -234,6 +239,7 @@
     <!-- Master Audio Switcher: the device the sound goes to, in its own outline. -->
     <DataTemplate x:Key="mcd.switcher" x:DataType="widgets:SwitcherWidget">
         <widgets:HoverChip
+            Button="True"
             Margin="3,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -284,6 +290,7 @@
     <!-- Sound: a speaker that says how loud, and a press that silences. -->
     <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
         <widgets:HoverChip
+            Button="True"
             Margin="3,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -336,6 +343,7 @@
              wheel sat in a box six points narrower than its ink, and the
              corner clip shaved both sides of it. -->
         <widgets:HoverChip
+            Button="True"
             Margin="3,0"
             Padding="0,2"
             HorizontalAlignment="Center"

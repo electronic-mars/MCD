@@ -1436,4 +1436,13 @@
   <data name="SwitcherOpen" xml:space="preserve">
     <value>Open Master Audio Switcher</value>
   </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>Beside the load, under the same icon.</value>
+  </data>
 </root>

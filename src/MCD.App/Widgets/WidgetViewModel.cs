@@ -168,6 +168,9 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     /// <summary>Knocks on the settings window.</summary>
     protected void WantSettings() => SettingsWanted?.Invoke(this, EventArgs.Empty);
 
+    /// <summary>Whether a press on this widget does anything; only those answer the pointer.</summary>
+    public virtual bool Pressable => false;
+
     /// <summary>
     /// Whether this widget draws buttons of its own.
     /// </summary>

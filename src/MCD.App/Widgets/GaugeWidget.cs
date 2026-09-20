@@ -10,7 +10,7 @@ using Microsoft.UI.Xaml.Controls;
 namespace Mcd.App.Widgets;
 
 /// <summary>
-/// One figure about how busy the machine is - a single slot of bar.
+/// One part of the machine: how busy it is, how warm, or both.
 /// </summary>
 /// <remarks>
 /// The processor, the memory, each direction of the network and the graphics
@@ -57,6 +57,33 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     /// </remarks>
     public Metric? Front => Metrics.Count > 0 ? Metrics[0] : null;
 
+    /// <summary>
+    /// The second figure, when the part shows two: its temperature after its
+    /// load, under the one icon.
+    /// </summary>
+    /// <remarks>
+    /// One widget rather than two side by side. Two chips wearing the same
+    /// processor had to be told apart, and the bar's slots put a gap of their
+    /// own between them; one icon with two figures is a group by construction.
+    /// </remarks>
+    public Metric? Second => Metrics.Count > 1 ? Metrics[1] : null;
+
+    public Visibility SecondShown => Second is null ? Visibility.Collapsed : Visibility.Visible;
+
+    /// <summary>Which part's temperature goes with a reading, for the ones that have a part.</summary>
+    private static HardwareGroup? PartOf(string readingId) => readingId switch
+    {
+        "cpu" => HardwareGroup.Cpu,
+        "ram" => HardwareGroup.Memory,
+        "gpu" => HardwareGroup.Gpu,
+        _ => null,
+    };
+
+    private bool WithTemp => PartOf(Reading.Id) is not null && WidgetOptions.Number(Options, "temp") is 1;
+
+    /// <summary>The load is shown unless it was switched off and the temperature is there instead.</summary>
+    private bool WithLoad => !WithTemp || WidgetOptions.Number(Options, "load") is not 0;
+
     /// <summary>Which of the known readings this gauge is.</summary>
     public GaugeReading Reading =>
         Known.FirstOrDefault(r => r.Id == WidgetOptions.Text(Options, "reading")) ?? Known[0];
@@ -66,6 +93,49 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         Metrics.Clear();
 
         GaugeReading reading = Reading;
+        bool subtitle = Density == DockDensity.Default && Orientation == Orientation.Horizontal;
+        bool pair = WithLoad && WithTemp;
+        Thickness gap = Gap(Orientation);
+
+        if (WithTemp)
+        {
+            HardwareGroup part = PartOf(reading.Id)!.Value;
+
+            var warmth = new Metric(
+                reading.Id + "-temp",
+                Icons.For(reading.Id, reading.Icon),
+                pair ? string.Empty : reading.Label,
+                "°C",
+                sensors => sensors.Catalog
+                    .Where(d => d.Kind == SensorKind.Temperature && d.Prominent && d.Group == part)
+                    .OrderBy(d => d.Label, StringComparer.CurrentCulture)
+                    .FirstOrDefault())
+            {
+                // Eight points from the figure before it: close enough to be
+                // one group, far enough to be two numbers.
+                Spacing = pair && Orientation == Orientation.Horizontal
+                    ? new Thickness(0, 0, gap.Right, 0)
+                    : gap,
+                Accent = Context.Accent,
+                Braun = Context.Backdrop == "braun",
+                Thermal = true,
+                Bare = pair,
+                Sample = "99 °C",
+            };
+
+            warmth.SizeFor(ReadingIcon, ReadingFont, narrow: Orientation == Orientation.Vertical, subtitle: subtitle);
+
+            if (!pair)
+            {
+                Metrics.Add(warmth);
+                OnPropertyChanged(nameof(Front));
+                OnPropertyChanged(nameof(Second));
+                OnPropertyChanged(nameof(SecondShown));
+                return;
+            }
+
+            _warmth = warmth;
+        }
 
         var metric = new Metric(
             reading.Id,
@@ -74,7 +144,9 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             reading.Unit,
             sensors => sensors.Catalog.FirstOrDefault(d => d.Key.Equals(reading.Key)))
         {
-            Spacing = Gap(Orientation),
+            Spacing = pair && Orientation == Orientation.Horizontal
+                ? new Thickness(gap.Left, 0, 0, 0)
+                : gap,
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
 
@@ -97,10 +169,21 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             // and a name measured against nothing at all was drawn straight
             // through the edge: "Receive" fits, "Получение" does not, and the
             // cut is exactly as wide as the language.
-            subtitle: Density == DockDensity.Default && Orientation == Orientation.Horizontal);
+            subtitle: subtitle);
         Metrics.Add(metric);
+
+        if (_warmth is not null)
+        {
+            Metrics.Add(_warmth);
+            _warmth = null;
+        }
+
         OnPropertyChanged(nameof(Front));
+        OnPropertyChanged(nameof(Second));
+        OnPropertyChanged(nameof(SecondShown));
     }
+
+    private Metric? _warmth;
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -114,6 +197,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         // rounded figure moves, so an idle machine builds no strings.
         if (Reading.Id == "ram"
             && Metrics.Count > 0
+            && Metrics[0].Id == "ram"
             && Metrics[0].Sensor is not null
             && snapshot[UsedBytes] is { HasValue: true } used
             && snapshot[TotalBytes] is { HasValue: true } total)
@@ -192,12 +276,51 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         Metrics.Count > 0 ? Metrics[0].Label : Reading.Label;
 
     /// <summary>Along the bar: the chip's width across it, its height down it.</summary>
+    /// <remarks>
+    /// The second figure counts once its sensor is there: a temperature this
+    /// machine does not report is not drawn, and keeps no room.
+    /// </remarks>
     public override double Length() =>
         Metrics.Count == 0
             ? 60
-            : Orientation == Orientation.Vertical ? Metrics[0].Height() : Metrics[0].Width();
+            : Metrics
+                .Where((m, i) => i == 0 || m.Sensor is not null)
+                .Sum(m => Orientation == Orientation.Vertical ? m.Height() : m.Width());
 
-    public override FrameworkElement CreateEditor(Action<JsonElement?> changed) =>
+    public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
+    {
+        var editor = new StackPanel { Spacing = 12 };
+        editor.Children.Add(Which(changed));
+
+        if (PartOf(Reading.Id) is not null)
+        {
+            editor.Children.Add(Mcd.App.Settings.Braun.Field(
+                Loc.Tr("GaugeShowLoad", "Load"),
+                Mcd.App.Settings.Braun.Switch(
+                    WithLoad,
+                    on => changed(WidgetOptions.Merge(
+                        Options,
+                        ("load", JsonValue.Create(on ? 1 : 0)),
+
+                        // Switching the last figure off would leave an icon
+                        // with nothing to say; the other comes on instead.
+                        ("temp", JsonValue.Create(on ? (WithTemp ? 1 : 0) : 1)))))));
+
+            editor.Children.Add(Mcd.App.Settings.Braun.Field(
+                Loc.Tr("GaugeShowTemp", "Temperature"),
+                Mcd.App.Settings.Braun.Switch(
+                    WithTemp,
+                    on => changed(WidgetOptions.Merge(
+                        Options,
+                        ("temp", JsonValue.Create(on ? 1 : 0)),
+                        ("load", JsonValue.Create(on ? (WithLoad ? 1 : 0) : 1))))),
+                Loc.Tr("GaugeShowTempHint", "Beside the load, under the same icon.")));
+        }
+
+        return editor;
+    }
+
+    private FrameworkElement Which(Action<JsonElement?> changed) =>
         Mcd.App.Settings.Braun.Field(
             Loc.Tr("GaugeWhich", "Which reading"),
             Mcd.App.Settings.Braun.Choice(
@@ -208,7 +331,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>
-        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(5, 0, 5, 0);
+        orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(7, 0, 7, 0);
 }
 
 /// <summary>One thing a gauge can show, and where its figure comes from.</summary>

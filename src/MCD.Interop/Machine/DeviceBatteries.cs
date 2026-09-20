@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mcd.Interop.Machine;
@@ -77,6 +77,23 @@ public static class DeviceBatteries
 
             string name = Text(id, FriendlyName) ?? Text(id, Description) ?? "Device";
             string family = classes.TryGetValue(container, out HashSet<string>? set) ? FamilyOf(set) : "other";
+
+            // A sleeping Bluetooth mouse keeps its battery node and drops its
+            // Mouse node, so the present nodes alone called it "other" - and
+            // the kind is part of the reading's key, so its chip lost it.
+            // What the device is does not change: asked once of every node
+            // Windows remembers, present or not, and kept.
+            if (family == "other")
+            {
+                family = Remembered.TryGetValue(container, out string? known)
+                    ? known
+                    : Remembered[container] = FamilyOf(EverSeen(container));
+            }
+            else
+            {
+                Remembered[container] = family;
+            }
+
             found.Add(new DeviceCharge(container, name, family, percent));
         }
 
@@ -93,23 +110,45 @@ public static class DeviceBatteries
         : classes.Contains("Keyboard") ? "keyboard"
         : "other";
 
-    private static List<string> PresentIds()
+    private static readonly Dictionary<Guid, string> Remembered = [];
+
+    /// <summary>The classes of every node of one device, absent ones included.</summary>
+    private static HashSet<string> EverSeen(Guid container)
     {
-        if (CM_Get_Device_ID_List_SizeW(out uint length, null, PresentOnly) != 0 || length == 0)
+        var classes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string id in Ids(0))
+        {
+            if (GuidOf(id, Container, Phantom) == container && Text(id, ClassName, Phantom) is { } kind)
+            {
+                classes.Add(kind);
+            }
+        }
+
+        return classes;
+    }
+
+    private const uint Phantom = 1;
+
+    private static List<string> PresentIds() => Ids(PresentOnly);
+
+    private static List<string> Ids(uint which)
+    {
+        if (CM_Get_Device_ID_List_SizeW(out uint length, null, which) != 0 || length == 0)
         {
             return [];
         }
 
         var buffer = new char[length];
 
-        return CM_Get_Device_ID_ListW(null, buffer, length, PresentOnly) == 0
+        return CM_Get_Device_ID_ListW(null, buffer, length, which) == 0
             ? [.. new string(buffer).Split('\0', StringSplitOptions.RemoveEmptyEntries)]
             : [];
     }
 
-    private static unsafe byte[]? Property(string id, DevPropKey key)
+    private static unsafe byte[]? Property(string id, DevPropKey key, uint locate = 0)
     {
-        if (CM_Locate_DevNodeW(out uint node, id, 0) != 0)
+        if (CM_Locate_DevNodeW(out uint node, id, locate) != 0)
         {
             return null;
         }
@@ -133,11 +172,11 @@ public static class DeviceBatteries
     private static byte? Byte(string id, DevPropKey key) =>
         Property(id, key) is { Length: > 0 } data ? data[0] : null;
 
-    private static Guid? GuidOf(string id, DevPropKey key) =>
-        Property(id, key) is { Length: 16 } data ? new Guid(data) : null;
+    private static Guid? GuidOf(string id, DevPropKey key, uint locate = 0) =>
+        Property(id, key, locate) is { Length: 16 } data ? new Guid(data) : null;
 
-    private static string? Text(string id, DevPropKey key) =>
-        Property(id, key) is { Length: > 2 } data
+    private static string? Text(string id, DevPropKey key, uint locate = 0) =>
+        Property(id, key, locate) is { Length: > 2 } data
             ? Encoding.Unicode.GetString(data).TrimEnd('\0')
             : null;
 

@@ -128,7 +128,13 @@ public sealed partial class Metric : ObservableObject
     public Func<SensorDescriptor, string?>? NameFound { get; init; }
 
     [ObservableProperty]
-    public partial string Text { get; set; } = "--";
+    public partial string Text { get; set; } = Waiting;
+
+    /// <summary>Not heard from yet: the sensor has not turned up.</summary>
+    public const string Waiting = "\u2026";
+
+    /// <summary>Known, and saying nothing: a headset that is switched off.</summary>
+    public const string Silent = "\u2014";
 
     [ObservableProperty]
     public partial Brush Colour { get; set; } = Neutral;
@@ -207,7 +213,7 @@ public sealed partial class Metric : ObservableObject
     /// and the chip is centred in its slots, so that moved the icon too.
     /// </remarks>
     [ObservableProperty]
-    public partial string Figure { get; set; } = "--";
+    public partial string Figure { get; set; } = Waiting;
 
     /// <summary>What follows the number: " %", " °C", " MB/s".</summary>
     [ObservableProperty]
@@ -404,7 +410,7 @@ public sealed partial class Metric : ObservableObject
     {
         int at = 0;
 
-        while (at < shown.Length && (char.IsAsciiDigit(shown[at]) || shown[at] is '.' or '-'))
+        while (at < shown.Length && (char.IsAsciiDigit(shown[at]) || shown[at] is '.' or '-' or '\u2026' or '\u2014'))
         {
             at++;
         }
@@ -461,14 +467,27 @@ public sealed partial class Metric : ObservableObject
     private double _figureBase;
 
     /// <summary>
-    /// A degree ring on the icon's corner, for a chip whose icon only says
-    /// of what: a processor's temperature and its load otherwise wear the
-    /// same processor. In the figure's own colour - an amber one read as a
-    /// warning.
+    /// A temperature. Said in colour - a lilac unit, and a lilac icon when
+    /// the chip has one of its own - because a processor's temperature and
+    /// its load otherwise look alike. Lilac, since amber and red are taken by
+    /// the warnings and grey by what is switched off.
     /// </summary>
-    public bool Degrees { get; init; }
+    public bool Thermal { get; init; }
 
-    public Visibility DegreesShown => Degrees ? Visibility.Visible : Visibility.Collapsed;
+    /// <summary>
+    /// No icon: the second figure of a widget whose first already drew it.
+    /// </summary>
+    public bool Bare { get; init; }
+
+    public Visibility IconShown => Bare ? Visibility.Collapsed : Visibility.Visible;
+
+    /// <summary>The icon's colour: the figure's, or lilac on a calm temperature.</summary>
+    [ObservableProperty]
+    public partial Brush IconColour { get; set; } = Neutral;
+
+    /// <summary>The unit's colour: quieter than the figure while all is well.</summary>
+    [ObservableProperty]
+    public partial Brush UnitColour { get; set; } = Secondary;
 
     /// <summary>How wide this chip is, in effective pixels.</summary>
     /// <remarks>
@@ -499,7 +518,7 @@ public sealed partial class Metric : ObservableObject
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
         return Mcd.App.Dock.DockMetrics.ChipPadding
-            + Spacing.Left + Spacing.Right + IconSize + 4 + Math.Max(value, label);
+            + Spacing.Left + Spacing.Right + (Bare ? 0 : IconSize + 4) + Math.Max(value, label);
     }
 
     /// <summary>How tall this chip is, in effective pixels.</summary>
@@ -586,7 +605,7 @@ public sealed partial class Metric : ObservableObject
             // margins, which is what the hover pill lit up. Whether a widget
             // belongs on this machine at all is the span machinery's call,
             // not the chip's.
-            Text = "--";
+            Text = Waiting;
             return;
         }
 
@@ -621,7 +640,7 @@ public sealed partial class Metric : ObservableObject
             StoryShown = Visibility.Visible;
         }
 
-        string shown = reading.HasValue ? Format(reading.Value) : "--";
+        string shown = reading.HasValue ? Format(reading.Value) : Silent;
 
         // Measured only when the digits actually moved. A reading that says
         // the same thing this second as last needs no text layout, and this
@@ -633,6 +652,11 @@ public sealed partial class Metric : ObservableObject
             Reserve();
         }
         Colour = Paint(reading);
+
+        bool calm = _level == Level.Normal && reading.HasValue && reading.Quality != Quality.Stale;
+
+        UnitColour = calm ? (Thermal ? Lilac : Secondary) : Colour;
+        IconColour = calm && Thermal ? Lilac : Colour;
 
         if (Badged)
         {
@@ -731,8 +755,15 @@ public sealed partial class Metric : ObservableObject
     private static Brush Secondary =>
         (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
 
+    /// <summary>
+    /// A grey of its own, not the text colour at a low alpha: over a
+    /// translucent bar that one was as visible as the wallpaper let it be.
+    /// </summary>
     private static Brush Dimmed =>
-        (Brush)Application.Current.Resources["TextFillColorTertiaryBrush"];
+        (Brush)Application.Current.Resources["McdInactiveBrush"];
+
+    private static Brush Lilac =>
+        (Brush)Application.Current.Resources["McdThermalBrush"];
 
     /// <summary>
     /// Fluent's own caution and critical colours, which follow the theme:

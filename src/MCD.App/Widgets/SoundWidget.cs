@@ -167,6 +167,8 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// between the last tick and this press, and a button that toggles what
     /// it last saw rather than what is true gets out of step and stays there.
     /// </remarks>
+    public override bool Pressable => true;
+
     public override void Press()
     {
         if (SystemVolume.Muted() is not { } muted)

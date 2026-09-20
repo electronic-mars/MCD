@@ -44,6 +44,8 @@ public sealed class SettingsWidget(WidgetContext context, WidgetConfig entry)
     {
     }
 
+    public override bool Pressable => true;
+
     public override void Press() => WantSettings();
 
     public override string Summarise() => Loc.Tr("WidgetSettingsName", "Settings");

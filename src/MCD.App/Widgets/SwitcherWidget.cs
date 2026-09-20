@@ -90,6 +90,8 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
             + " · " + Loc.Tr("SwitcherPressTip", "a press switches to the next");
     }
 
+    public override bool Pressable => true;
+
     public override void Press()
     {
         Context.Log.LogInformation("switcher.pressed");

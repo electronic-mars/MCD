@@ -53,6 +53,8 @@ public sealed class IconWidget : WidgetViewModel
     /// Starts the program. What the bar hands back when a press turned out
     /// not to be the beginning of a drag.
     /// </summary>
+    public override bool Pressable => true;
+
     public override void Press() => Item.LaunchCommand.Execute(null);
 
     public string Target => Item.Target;
