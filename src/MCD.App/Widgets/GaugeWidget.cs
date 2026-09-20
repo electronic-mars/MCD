@@ -86,16 +86,16 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     public Visibility CaptionShown { get; private set; } = Visibility.Collapsed;
 
     /// <summary>A size down from the figures: the name is read once, the figures at a glance.</summary>
-    public double CaptionFontSize { get; private set; } = 10;
+    public double CaptionFontSize { get; private set; } = 11;
 
     /// <summary>The part's icon, drawn by the widget while the name is in the same line.</summary>
     public string HeadIcon { get; private set; } = string.Empty;
 
     /// <summary>
-    /// Smaller than a chip's own icon, so that two lines fit a bar built for
-    /// one line of figures and one of name.
+    /// Larger than a chip's own icon: it stands beside two lines, and one
+    /// sized for a single line reads as a speck next to them.
     /// </summary>
-    public double HeadIconSize { get; private set; } = 14;
+    public double HeadIconSize { get; private set; } = 20;
 
     public double HeadStroke => 36 / Math.Max(1, HeadIconSize);
 
@@ -131,7 +131,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         Caption = reading.Label;
         CaptionShown = stacked ? Visibility.Visible : Visibility.Collapsed;
         HeadIcon = Icons.For(reading.Id, reading.Icon);
-        HeadIconSize = Math.Round(ReadingIcon * 0.72);
+        HeadIconSize = Math.Round(ReadingIcon * 1.25);
         OnPropertyChanged(nameof(Caption));
         OnPropertyChanged(nameof(CaptionShown));
         OnPropertyChanged(nameof(HeadIcon));
@@ -334,12 +334,13 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             .Where((m, i) => i == 0 || m.Sensor is not null)
             .Sum(m => Orientation == Orientation.Vertical ? m.Height() : m.Width());
 
-        // The name line is the widget's own, so the widget is the one that
-        // has to be wide enough for it.
+        // Beside the icon stand two lines, and the widget is as wide as the
+        // icon plus the wider of them: the name is the widget's own, and the
+        // chips no longer carry an icon of their own to pay for.
         return CaptionShown == Visibility.Visible && Orientation == Orientation.Horizontal
-            ? Math.Max(
-                along,
-                HeadIconSize + 4 + Metric.Wide(Caption, CaptionFontSize) + Dock.DockMetrics.ChipPadding)
+            ? HeadIconSize + 4
+                + Math.Max(along, Metric.Wide(Caption, CaptionFontSize))
+                + Dock.DockMetrics.ChipPadding
             : along;
     }
 

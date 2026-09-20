@@ -352,9 +352,8 @@ public sealed partial class Metric : ObservableObject
         OnPropertyChanged(nameof(Stacked));
         OnPropertyChanged(nameof(IconShown));
         OnPropertyChanged(nameof(HeadShown));
-        OnPropertyChanged(nameof(HeadFontSize));
-        OnPropertyChanged(nameof(HeadIconSize));
-        OnPropertyChanged(nameof(HeadStroke));
+        OnPropertyChanged(nameof(DrawIconSize));
+        OnPropertyChanged(nameof(DrawStroke));
         OnPropertyChanged(nameof(CaptionShown));
         OnPropertyChanged(nameof(BadgeShown));
         // Minus on top, plus underneath: a negative top margin alone shrinks
@@ -493,19 +492,18 @@ public sealed partial class Metric : ObservableObject
     /// </summary>
     public bool Stacked { get; private set; }
 
-    /// <summary>The icon beside the figure: only while the name is not above it.</summary>
-    public Visibility IconShown =>
-        Bare || Stacked ? Visibility.Collapsed : Visibility.Visible;
+    public Visibility IconShown => Bare ? Visibility.Collapsed : Visibility.Visible;
 
-    /// <summary>The name and its small icon, above the figure.</summary>
+    /// <summary>The name over the figure, both centred beside the icon.</summary>
     public Visibility HeadShown => Stacked ? Visibility.Visible : Visibility.Collapsed;
 
-    /// <summary>A size down from the figure: the name is read once, the figure at a glance.</summary>
-    public double HeadFontSize => LabelFontSize - 1;
+    /// <summary>
+    /// How big the icon is actually drawn: larger where it stands beside two
+    /// lines, because an icon sized for one line looks like a speck beside them.
+    /// </summary>
+    public double DrawIconSize => Stacked ? Math.Round(IconSize * 1.25) : IconSize;
 
-    public double HeadIconSize => Math.Round(IconSize * 0.72);
-
-    public double HeadStroke => 36 / Math.Max(1, HeadIconSize);
+    public double DrawStroke => 36 / Math.Max(1, DrawIconSize);
 
     /// <summary>The icon's colour: the figure's, or lilac on a calm temperature.</summary>
     [ObservableProperty]
@@ -528,7 +526,7 @@ public sealed partial class Metric : ObservableObject
         // The name is fixed from the moment SizeFor runs, so it is measured
         // once and kept. Measuring it again on every tick was two thirds of
         // everything this program did while idle.
-        _labelWide ??= Math.Min(100, Wide(Label, Stacked ? HeadFontSize : LabelFontSize));
+        _labelWide ??= Math.Min(100, Wide(Label, LabelFontSize));
 
         double value = FigureWidth + SuffixWidth;
 
@@ -539,13 +537,13 @@ public sealed partial class Metric : ObservableObject
         // a chip standing in a run half again its own width, with the air
         // beside it looking like a gap somebody left.
         double label = LabelVisible == Visibility.Visible && Sensor is not null && !Badged
-            ? _labelWide.Value + (Stacked ? HeadIconSize + 4 : 0)
+            ? _labelWide.Value
             : 0;
 
         // Chip padding 3 either side, its margins, icon, the 6-point gap.
         return Mcd.App.Dock.DockMetrics.ChipPadding
             + Spacing.Left + Spacing.Right
-            + (IconShown == Visibility.Visible ? IconSize + 4 : 0)
+            + (IconShown == Visibility.Visible ? DrawIconSize + 4 : 0)
             + Math.Max(value, label);
     }
 
@@ -558,9 +556,9 @@ public sealed partial class Metric : ObservableObject
     public double Height()
     {
         double lines = (FontSize * 1.4)
-            + (LabelVisible == Visibility.Visible ? (Stacked ? HeadFontSize : LabelFontSize) * 1.4 : 0);
+            + (LabelVisible == Visibility.Visible ? LabelFontSize * 1.4 : 0);
 
-        return 6 + Spacing.Top + Spacing.Bottom + Math.Max(IconSize, lines);
+        return 6 + Spacing.Top + Spacing.Bottom + Math.Max(DrawIconSize, lines);
     }
 
     /// <summary>

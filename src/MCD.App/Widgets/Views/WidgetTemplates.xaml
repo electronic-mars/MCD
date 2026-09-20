@@ -94,8 +94,8 @@
                      that kept no room for it - "62" instead of "62 °C". -->
                 <Grid Margin="0,0,4,0" VerticalAlignment="Center" Visibility="{x:Bind IconShown}">
                     <Viewbox
-                        Width="{x:Bind IconSize, Mode=OneWay}"
-                        Height="{x:Bind IconSize, Mode=OneWay}"
+                        Width="{x:Bind DrawIconSize, Mode=OneWay}"
+                        Height="{x:Bind DrawIconSize, Mode=OneWay}"
                         VerticalAlignment="Center">
                         <!-- The Canvas fixes the 24-unit grid the icons are drawn on, so
                              every one scales by the same amount whatever its own bounds
@@ -107,7 +107,7 @@
                                 StrokeEndLineCap="Round"
                                 StrokeLineJoin="Round"
                                 StrokeStartLineCap="Round"
-                                StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                                StrokeThickness="{x:Bind DrawStroke, Mode=OneWay}" />
                         </Canvas>
                     </Viewbox>
                     <FontIcon
@@ -134,35 +134,18 @@
                      moves inside its own box and nothing further along the bar
                      shifts. -->
                 <StackPanel Margin="{x:Bind Lift, Mode=OneWay}" VerticalAlignment="Center">
-                    <!-- What the reading is about, over the reading: a small
-                         icon and the name, centred on the figure below. -->
-                    <StackPanel
+                    <!-- What the reading is about, over the reading itself,
+                         both centred beside the one icon. -->
+                    <TextBlock
+                        MaxWidth="100"
                         Margin="0,0,0,-2"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal"
-                        Spacing="4"
-                        Visibility="{x:Bind HeadShown, Mode=OneWay}">
-                        <Viewbox
-                            Width="{x:Bind HeadIconSize, Mode=OneWay}"
-                            Height="{x:Bind HeadIconSize, Mode=OneWay}"
-                            VerticalAlignment="Center">
-                            <Canvas Width="24" Height="24">
-                                <Path
-                                    Data="{x:Bind Icon, Converter={StaticResource Icon}, Mode=OneWay}"
-                                    Stroke="{x:Bind IconColour, Mode=OneWay}"
-                                    StrokeEndLineCap="Round"
-                                    StrokeLineJoin="Round"
-                                    StrokeStartLineCap="Round"
-                                    StrokeThickness="{x:Bind HeadStroke, Mode=OneWay}" />
-                            </Canvas>
-                        </Viewbox>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="{x:Bind HeadFontSize, Mode=OneWay}"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="{x:Bind Label, Mode=OneWay}"
-                            TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
+                        HorizontalTextAlignment="Center"
+                        FontSize="{x:Bind LabelFontSize, Mode=OneWay}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Bind Label, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        Visibility="{x:Bind HeadShown, Mode=OneWay}" />
                     <!-- The number in one box and its unit in another, each
                          as wide as that reading can ever need. The digits are
                          right-aligned, so they grow leftwards into room kept
@@ -230,48 +213,52 @@
          chip painted itself in overflow. -->
     <!-- One part of the machine: its icon once, then its load, its
          temperature, or both side by side. -->
+    <!-- One part of the machine: its icon once, then its load, its
+         temperature, or both side by side. On the full-size bar the icon is
+         the widget's own and stands beside two lines - the part's name over
+         its figures - because both figures share the one icon. -->
     <DataTemplate x:Key="mcd.gauge" x:DataType="widgets:GaugeWidget">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <!-- On the full-size bar: what the part is, over how it is doing.
-                 The icon is the widget's own here, and smaller than a chip's,
-                 so both lines fit a bar built for one. -->
-            <StackPanel
-                Margin="0,0,0,-1"
-                HorizontalAlignment="Center"
-                Orientation="Horizontal"
-                Spacing="4"
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="4">
+            <Viewbox
+                Width="{x:Bind HeadIconSize, Mode=OneWay}"
+                Height="{x:Bind HeadIconSize, Mode=OneWay}"
+                VerticalAlignment="Center"
                 Visibility="{x:Bind CaptionShown, Mode=OneWay}">
-                <Viewbox
-                    Width="{x:Bind HeadIconSize, Mode=OneWay}"
-                    Height="{x:Bind HeadIconSize, Mode=OneWay}"
-                    VerticalAlignment="Center">
-                    <Canvas Width="24" Height="24">
-                        <Path
-                            Data="{x:Bind HeadIcon, Converter={StaticResource Icon}, Mode=OneWay}"
-                            Stroke="{x:Bind Front.IconColour, Mode=OneWay}"
-                            StrokeEndLineCap="Round"
-                            StrokeLineJoin="Round"
-                            StrokeStartLineCap="Round"
-                            StrokeThickness="{x:Bind HeadStroke, Mode=OneWay}" />
-                    </Canvas>
-                </Viewbox>
+                <Canvas Width="24" Height="24">
+                    <Path
+                        Data="{x:Bind HeadIcon, Converter={StaticResource Icon}, Mode=OneWay}"
+                        Stroke="{x:Bind Front.IconColour, Mode=OneWay}"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="{x:Bind HeadStroke, Mode=OneWay}" />
+                </Canvas>
+            </Viewbox>
+            <StackPanel VerticalAlignment="Center">
                 <TextBlock
-                    VerticalAlignment="Center"
+                    Margin="0,0,0,-2"
+                    HorizontalAlignment="Center"
+                    HorizontalTextAlignment="Center"
                     FontSize="{x:Bind CaptionFontSize, Mode=OneWay}"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Text="{x:Bind Caption, Mode=OneWay}"
-                    TextTrimming="CharacterEllipsis" />
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" Orientation="{x:Bind Orientation}">
-                <ContentControl
-                    IsTabStop="False"
-                    Content="{x:Bind Front, Mode=OneWay}"
-                    ContentTemplate="{StaticResource MetricTemplate}" />
-                <ContentControl
-                    IsTabStop="False"
-                    Content="{x:Bind Second, Mode=OneWay}"
-                    ContentTemplate="{StaticResource MetricTemplate}"
-                    Visibility="{x:Bind SecondShown, Mode=OneWay}" />
+                    TextTrimming="CharacterEllipsis"
+                    Visibility="{x:Bind CaptionShown, Mode=OneWay}" />
+                <StackPanel HorizontalAlignment="Center" Orientation="{x:Bind Orientation}">
+                    <ContentControl
+                        IsTabStop="False"
+                        Content="{x:Bind Front, Mode=OneWay}"
+                        ContentTemplate="{StaticResource MetricTemplate}" />
+                    <ContentControl
+                        IsTabStop="False"
+                        Content="{x:Bind Second, Mode=OneWay}"
+                        ContentTemplate="{StaticResource MetricTemplate}"
+                        Visibility="{x:Bind SecondShown, Mode=OneWay}" />
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </DataTemplate>
