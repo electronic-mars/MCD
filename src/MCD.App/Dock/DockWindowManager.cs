@@ -302,6 +302,62 @@ public sealed class DockWindowManager : IDisposable
     /// <summary>Presses every widget of one kind, the way a click on it does.</summary>
     public int Press(string typeId) => _windows.Values.Sum(w => w.Press(typeId));
 
+    /// <summary>
+    /// Presses a gauge's two switches the way the settings page does, and
+    /// says what each press wrote. For the unattended check: a switch that
+    /// only ever wrote the state it was built with looked, to the person
+    /// pressing it, like a switch that had stuck.
+    /// </summary>
+    public string Switches()
+    {
+        WidgetConfig entry = WidgetConfig.New(Mcd.App.Widgets.GaugeWidget.Type) with
+        {
+            Config = WidgetJson.Object(("reading", "cpu"), ("temp", 1)),
+        };
+
+        using var gauge = new Mcd.App.Widgets.GaugeWidget(Context(), entry);
+        var wrote = new List<string>();
+
+        Microsoft.UI.Xaml.FrameworkElement editor = gauge.CreateEditor(options =>
+            wrote.Add(options is { } json ? json.GetRawText() : "null"));
+
+        var pills = new List<Microsoft.UI.Xaml.Controls.Button>();
+
+        // Down the panels the editor is made of. Not the visual tree: this
+        // editor has never been shown, so it has no visual children yet.
+        void Find(Microsoft.UI.Xaml.DependencyObject at)
+        {
+            if (at is not Microsoft.UI.Xaml.Controls.Panel panel)
+            {
+                return;
+            }
+
+            foreach (Microsoft.UI.Xaml.UIElement child in panel.Children)
+            {
+                if (child is Microsoft.UI.Xaml.Controls.Button pill)
+                {
+                    pills.Add(pill);
+                }
+
+                Find(child);
+            }
+        }
+
+        Find(editor);
+
+        // The temperature switch is the second of the two, after the reading
+        // picker's own control; pressed twice, it has to write twice and
+        // differently.
+        foreach (Microsoft.UI.Xaml.Controls.Button pill in pills)
+        {
+            var peer = new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(pill);
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)peer).Invoke();
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)peer).Invoke();
+        }
+
+        return string.Join(" | ", wrote);
+    }
+
     /// <summary>Asks the first live bar for its settings, through its own menu.</summary>
     public bool RehearseMenu()
     {

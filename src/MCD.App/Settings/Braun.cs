@@ -634,6 +634,23 @@ public static class Braun
 
 
     /// <summary>
+    /// Sets a switch from outside, without telling anyone it moved.
+    /// </summary>
+    /// <remarks>
+    /// For the pairs where one switch moves another - a widget whose last
+    /// figure cannot be switched off, so switching one on switches the other
+    /// off. Silent on purpose: the switch that was pressed is the one that
+    /// writes, once, for both.
+    /// </remarks>
+    public static void Flip(Button pill, bool on)
+    {
+        if (pill.Tag is Action<bool> set)
+        {
+            set(on);
+        }
+    }
+
+    /// <summary>
     /// A switch, drawn as the pill it is.
     /// </summary>
     /// <remarks>
@@ -654,14 +671,16 @@ public static class Braun
         // way every recess in this program is: a fill darker than the panel,
         // then a stroke round the whole outline that is dark at the top and
         // gone by halfway down.
-        track.Children.Add(new Rectangle
+        var bed = new Rectangle
         {
             RadiusX = Tall / 2,
             RadiusY = Tall / 2,
             Fill = on ? Acc : Sunk,
             Stroke = on ? Clear : LineHi,
             StrokeThickness = 1,
-        });
+        };
+
+        track.Children.Add(bed);
 
         track.Children.Add(new Rectangle
         {
@@ -716,7 +735,37 @@ public static class Braun
             Background = Clear,
         };
 
-        pill.Click += (_, _) => set(!on);
+        // Its own state, redrawn here rather than by whoever built it.
+        // Drawn once from a captured "on", the pill sent the same value on
+        // every press and never moved: the first press did something and
+        // every press after it looked like a broken switch.
+        bool state = on;
+
+        void Paint()
+        {
+            bed.Fill = state ? Acc : Sunk;
+            bed.Stroke = state ? Clear : LineHi;
+            under.Margin = new Thickness(state ? Wide - Ball - 3 : 3, 0, 0, 0);
+            ball.Margin = under.Margin;
+            ball.Fill = Cylinder(
+                state ? 0xFFFFFFFFu : 0xFF7C838Eu,
+                state ? 0xFFE2E6ECu : 0xFF5A616Bu);
+        }
+
+        pill.Click += (_, _) =>
+        {
+            state = !state;
+            Paint();
+            set(state);
+        };
+
+        // For a switch that another switch can move: see Flip.
+        pill.Tag = (Action<bool>)(to =>
+        {
+            state = to;
+            Paint();
+        });
+
         return pill;
     }
 

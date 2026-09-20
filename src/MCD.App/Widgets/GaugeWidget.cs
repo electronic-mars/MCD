@@ -154,7 +154,10 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             {
                 // Eight points from the figure before it: close enough to be
                 // one group, far enough to be two numbers.
-                Spacing = pair && Orientation == Orientation.Horizontal
+                // Nothing on the left while the widget's own icon is there:
+                // the gap from icon to figure has to be the same here as on a
+                // chip that carries its own icon.
+                Spacing = Orientation == Orientation.Horizontal && (pair || stacked)
                     ? new Thickness(0, 0, gap.Right, 0)
                     : gap,
                 Accent = Context.Accent,
@@ -185,8 +188,8 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             reading.Unit,
             sensors => sensors.Catalog.FirstOrDefault(d => d.Key.Equals(reading.Key)))
         {
-            Spacing = pair && Orientation == Orientation.Horizontal
-                ? new Thickness(gap.Left, 0, 0, 0)
+            Spacing = Orientation == Orientation.Horizontal && (pair || stacked)
+                ? new Thickness(stacked ? 0 : gap.Left, 0, pair ? 0 : gap.Right, 0)
                 : gap,
             Accent = Context.Accent,
             Braun = Context.Backdrop == "braun",
@@ -349,30 +352,65 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         var editor = new StackPanel { Spacing = 12 };
         editor.Children.Add(Which(changed));
 
-        if (PartOf(Reading.Id) is not null)
+        if (PartOf(Reading.Id) is null)
         {
-            editor.Children.Add(Mcd.App.Settings.Braun.Field(
-                Loc.Tr("GaugeShowLoad", "Load"),
-                Mcd.App.Settings.Braun.Switch(
-                    WithLoad,
-                    on => changed(WidgetOptions.Merge(
-                        Options,
-                        ("load", JsonValue.Create(on ? 1 : 0)),
-
-                        // Switching the last figure off would leave an icon
-                        // with nothing to say; the other comes on instead.
-                        ("temp", JsonValue.Create(on ? (WithTemp ? 1 : 0) : 1)))))));
-
-            editor.Children.Add(Mcd.App.Settings.Braun.Field(
-                Loc.Tr("GaugeShowTemp", "Temperature"),
-                Mcd.App.Settings.Braun.Switch(
-                    WithTemp,
-                    on => changed(WidgetOptions.Merge(
-                        Options,
-                        ("temp", JsonValue.Create(on ? 1 : 0)),
-                        ("load", JsonValue.Create(on ? (WithLoad ? 1 : 0) : 1))))),
-                Loc.Tr("GaugeShowTempHint", "Beside the load, under the same icon.")));
+            return editor;
         }
+
+        // Kept here, not read back from the settings on every press: the
+        // page does not rebuild this editor when a switch writes, so the
+        // options it was built from are one press out of date from then on -
+        // and each switch also has to say where the other one stands.
+        bool load = WithLoad;
+        bool temp = WithTemp;
+
+        void Write() => changed(WidgetOptions.Merge(
+            Options,
+            ("load", JsonValue.Create(load ? 1 : 0)),
+            ("temp", JsonValue.Create(temp ? 1 : 0))));
+
+        Microsoft.UI.Xaml.Controls.Button? warmth = null;
+
+        Microsoft.UI.Xaml.Controls.Button busy = Mcd.App.Settings.Braun.Switch(
+            load,
+            on =>
+            {
+                load = on;
+
+                // Switching the last figure off would leave an icon with
+                // nothing to say; the other comes on instead, and its own
+                // switch has to show that.
+                temp = on ? temp : true;
+
+                if (!on && warmth is not null)
+                {
+                    Mcd.App.Settings.Braun.Flip(warmth, true);
+                }
+
+                Write();
+            });
+
+        warmth = Mcd.App.Settings.Braun.Switch(
+            temp,
+            on =>
+            {
+                temp = on;
+                load = on ? load : true;
+
+                if (!on)
+                {
+                    Mcd.App.Settings.Braun.Flip(busy, true);
+                }
+
+                Write();
+            });
+
+        editor.Children.Add(Mcd.App.Settings.Braun.Field(Loc.Tr("GaugeShowLoad", "Load"), busy));
+
+        editor.Children.Add(Mcd.App.Settings.Braun.Field(
+            Loc.Tr("GaugeShowTemp", "Temperature"),
+            warmth,
+            Loc.Tr("GaugeShowTempHint", "Beside the load, under the same icon.")));
 
         return editor;
     }

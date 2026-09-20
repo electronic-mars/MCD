@@ -152,10 +152,15 @@
                          for them and the unit stays where it is; nothing on
                          the chip moves when a reading crosses ten. -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <!-- Centred in its box, not pushed to the right of
+                             it: a one-digit reading right-aligned in a box
+                             kept for two stood a digit's width away from its
+                             icon, and every chip on the bar sat at a
+                             different distance from its own. -->
                         <TextBlock
                             MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
                             MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
-                            HorizontalTextAlignment="Right"
+                            HorizontalTextAlignment="Center"
                             FontSize="{x:Bind FontSize, Mode=OneWay}"
                             FontWeight="{x:Bind ValueWeight, Mode=OneWay}"
                             Foreground="{x:Bind Colour, Mode=OneWay}"
@@ -222,7 +227,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Orientation="Horizontal"
-            Spacing="4">
+            Spacing="2">
             <Viewbox
                 Width="{x:Bind HeadIconSize, Mode=OneWay}"
                 Height="{x:Bind HeadIconSize, Mode=OneWay}"

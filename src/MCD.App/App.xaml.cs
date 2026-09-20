@@ -631,6 +631,13 @@ public partial class App : Application
                 Later(18000, Flip);
             }
 
+            // Every switch in a gauge's settings pressed twice, to see that
+            // the second press says something the first did not.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "switch")
+            {
+                Later(3000, () => log.LogInformation("selftest.switches {Wrote}", _docks?.Switches()));
+            }
+
             // The switcher's chip pressed twice, as a click on it presses it.
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "press")
             {
