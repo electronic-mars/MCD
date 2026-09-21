@@ -2867,15 +2867,6 @@ public sealed partial class SettingsWindow : Window
         RefreshLook();
     }
 
-    /// <summary>
-    /// The chosen widget's own options, or nothing at all.
-    /// </summary>
-    /// <remarks>
-    /// Nothing at all is the point: an empty panel headed "WIDGET" beside a
-    /// line explaining that no widget is chosen is a room with nothing in it.
-    /// A widget is chosen by right-clicking it on the bar itself, and until
-    /// somebody does that this part of the page does not exist.
-    /// </remarks>
     /// <summary>The controls of the chosen widget's own settings, and whose they are.</summary>
     private FrameworkElement? _inspectorEditor;
 
@@ -2932,7 +2923,7 @@ public sealed partial class SettingsWindow : Window
 
         if (pill >= pills.Count)
         {
-            return $"editor for {_inspectorFor[..8]} has {pills.Count} switches";
+            return $"editor for {Short(_inspectorFor)} has {pills.Count} switches";
         }
 
         if (pill >= 0)
@@ -2941,19 +2932,41 @@ public sealed partial class SettingsWindow : Window
             ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)peer).Invoke();
         }
 
-        return $"chose {_selectedId![..8]}, editor for {_inspectorFor[..8]}, pressed {pill} of {pills.Count}: "
+        return $"chose {Short(_selectedId!)}, editor for {Short(_inspectorFor)}, pressed {pill} of {pills.Count}: "
             + string.Join(
                 " ",
                 Dock()!.Widgets
                     .Where(w => w.TypeId == Mcd.App.Widgets.GaugeWidget.Type)
-                    .Select(w => $"{w.InstanceId[..4]}="
+                    .Select(w => $"{Short(w.InstanceId)}="
                         + (w.Config is { } json ? Compact(json.GetRawText()) : "null")));
     }
 
-    /// <summary>One line of JSON, for a log line.</summary>
+    /// <summary>
+    /// One line of JSON, for a log line: written out again without
+    /// indentation, so the spaces inside values - a program's name, a path
+    /// under Program Files - survive.
+    /// </summary>
     private static string Compact(string json) =>
-        new([.. json.Where(c => !char.IsWhiteSpace(c))]);
+        System.Text.Json.Nodes.JsonNode.Parse(json)?.ToJsonString(Unescaped) ?? "null";
 
+    /// <summary>Names as written - "Документы" - not as a line of escapes.</summary>
+    private static readonly System.Text.Json.JsonSerializerOptions Unescaped = new()
+    {
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    };
+
+    /// <summary>The first eight characters of a widget's id, or the whole of a shorter one.</summary>
+    private static string Short(string id) => id.Length > 8 ? id[..8] : id;
+
+    /// <summary>
+    /// The chosen widget's own options, or nothing at all.
+    /// </summary>
+    /// <remarks>
+    /// Nothing at all is the point: an empty panel headed "WIDGET" beside a
+    /// line explaining that no widget is chosen is a room with nothing in it.
+    /// A widget is chosen by right-clicking it on the bar itself, and until
+    /// somebody does that this part of the page does not exist.
+    /// </remarks>
     private FrameworkElement? Inspector()
     {
         WidgetConfig? entry = Dock()?.Widgets.FirstOrDefault(w => w.InstanceId == _selectedId);
@@ -3010,7 +3023,7 @@ public sealed partial class SettingsWindow : Window
         // "I changed the one I had chosen before".
         _log.LogInformation(
             "settings.widget {Id} {Was} -> {Now}",
-            id[..8],
+            Short(id),
             Compact(dock.Widgets.FirstOrDefault(w => w.InstanceId == id)?.Config?.GetRawText() ?? "null"),
             Compact(options?.GetRawText() ?? "null"));
 
