@@ -361,9 +361,29 @@ public sealed partial class LaunchButton : ObservableObject, IDisposable
         _gone.Dispose();
     }
 
+    /// <summary>When the last start was asked for.</summary>
+    private long _started = -Again;
+
+    /// <summary>
+    /// The shortest time between two starts. A pinned program is one click,
+    /// and a click reaches this from two sides - the button, and the press
+    /// the bar hands back after a hold - so the second within a moment is
+    /// the same click, not a second wish for another window.
+    /// </summary>
+    private const long Again = 600;
+
     [RelayCommand]
     private void Launch()
     {
+        long now = Environment.TickCount64;
+
+        if (now - _started < Again)
+        {
+            return;
+        }
+
+        _started = now;
+
         try
         {
             // Through the shell, so that a folder opens in Explorer, an address

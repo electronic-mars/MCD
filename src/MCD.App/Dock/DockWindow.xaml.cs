@@ -829,12 +829,15 @@ public sealed partial class DockWindow : Window
 
         e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
 
+        // Nothing is drawn beside the pointer: not the picture of what is
+        // being carried, not a caption, not the glyph. Over the bar they
+        // were three small windows lying on the very slots somebody was
+        // aiming at, and the bar already says where it goes - the lit
+        // landing marker is the answer to "here?".
         if (e.DragUIOverride is { } hint)
         {
-            hint.Caption = files
-                ? Loc.Tr("PinDropCaption", "Pin to the bar")
-                : Loc.Tr("WidgetDropCaption", "Put it here");
-
+            hint.IsContentVisible = false;
+            hint.IsCaptionVisible = false;
             hint.IsGlyphVisible = false;
         }
 
@@ -959,9 +962,16 @@ public sealed partial class DockWindow : Window
     }
 
     /// <summary>
-    /// While something is in flight, the bar shows what it is made of: every
-    /// slot outlined, so an empty one is visibly a place a thing can go.
+    /// While something is in flight, the bar shows where there is room: each
+    /// stretch of free slots as one faint strip, so an empty place is
+    /// visibly a place a thing can go.
     /// </summary>
+    /// <remarks>
+    /// One strip to a stretch, not one box to a slot. On a bar with a
+    /// hundred slots free that was a hundred outlined boxes over the whole of
+    /// the bar - a wall of little windows in which the one landing marker was
+    /// hardest to find.
+    /// </remarks>
     private void ShowSlots(bool on)
     {
         foreach (Rectangle slot in _slots)
@@ -978,9 +988,21 @@ public sealed partial class DockWindow : Window
         }
 
         // Only the free ones, and the ones the widget in hand is leaving.
-        foreach (int cell in DockGrid.Free(_placed, _capacity, _grabbed?.Entry.InstanceId))
+        var free = DockGrid.Free(_placed, _capacity, _grabbed?.Entry.InstanceId).Order().ToList();
+
+        for (int i = 0; i < free.Count;)
         {
-            Rect rect = CellRect(cell, 1);
+            int first = free[i];
+            int length = 1;
+
+            while (i + length < free.Count && free[i + length] == first + length)
+            {
+                length++;
+            }
+
+            i += length;
+
+            Rect rect = CellRect(first, length);
 
             var slot = new Rectangle
             {
@@ -2063,7 +2085,13 @@ public sealed partial class DockWindow : Window
         // was swallowing the click of anybody with an unsteady hand or a
         // trackpad, and a launcher that sometimes does nothing is worse than
         // one that never did.
-        if (!moved && held is not null)
+        //
+        // But not when the release landed on a button of the widget's own: it
+        // clicks by itself, and the press handed back as well started every
+        // pinned program twice - two Notepads for one click. A held press has
+        // the pointer captured by the bar, so its release never lands on the
+        // button and is handed back as before.
+        if (!moved && held is not null && !OnAKey(e.OriginalSource))
         {
             held.Press();
         }
@@ -2106,6 +2134,17 @@ public sealed partial class DockWindow : Window
         }
 
         return opened;
+    }
+
+    /// <summary>
+    /// Shows what a drag over the bar shows - the free stretches and the
+    /// landing marker for a widget of some length at a slot - without a drag.
+    /// For the self-test.
+    /// </summary>
+    public void Pretend(int cell, int span)
+    {
+        ShowSlots(true);
+        Aim(cell, span, ignore: null);
     }
 
     /// <summary>How many of one kind's flyouts are open right now. For the self-test.</summary>

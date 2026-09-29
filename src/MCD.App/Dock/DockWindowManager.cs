@@ -309,6 +309,15 @@ public sealed class DockWindowManager : IDisposable
     /// <summary>Opens the flyout of every widget of one kind, as a press does. For the self-test.</summary>
     public int OpenFlyouts(string typeId) => _windows.Values.Sum(w => w.OpenFlyouts(typeId));
 
+    /// <summary>Shows the bars as a drag over them shows them. For the self-test.</summary>
+    public void Pretend(int cell, int span)
+    {
+        foreach (DockWindow window in _windows.Values)
+        {
+            window.Pretend(cell, span);
+        }
+    }
+
     /// <summary>How many flyouts of one kind of widget are open right now. For the self-test.</summary>
     public int FlyoutsOpen(string typeId) => _windows.Values.Sum(w => w.FlyoutsOpen(typeId));
 

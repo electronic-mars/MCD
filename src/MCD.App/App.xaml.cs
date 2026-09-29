@@ -727,6 +727,13 @@ public partial class App : Application
                                 .Select(o => o.Name + " -> " + o.Make().Config?.GetRawText())));
                 });
 
+                // What a drag over the bar shows, without a drag.
+                Later(5000, () =>
+                {
+                    _docks?.Pretend(cell: 60, span: 3);
+                    log.LogInformation("selftest.pretended");
+                });
+
                 Later(6000, () => log.LogInformation(
                     "selftest.flyout opened={Count}", _docks?.OpenFlyouts(Mcd.App.Widgets.SoundWidget.Type)));
 

@@ -159,6 +159,41 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void SomethingNewTakesTheFirstGapThatHoldsItAndMovesNobody()
+    {
+        // A bar arranged against its far end: one icon at the start, and a
+        // cluster that ends exactly at the edge. Pressing "add" used to put
+        // the new widget after the cluster, where there is no room, and
+        // squeeze the whole cluster leftward to make some.
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("home", 0), 3), (Entry("a", 150), 10), (Entry("b", 160), 25), (Entry("new"), 3)],
+            capacity: 185);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe(
+            [("home", 0), ("new", 3), ("a", 150), ("b", 160)]);
+    }
+
+    [Fact]
+    public void SomethingNewSkipsAGapTooSmallForItAndFollowsTheLast()
+    {
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("b", 4), 2), (Entry("new"), 3)], capacity: 20);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe([("a", 0), ("b", 4), ("new", 6)]);
+    }
+
+    [Fact]
+    public void SeveralNewOnesEachTakeTheNextGapInTheOrderTheyCame()
+    {
+        List<Placement> placed = DockGrid.Settle(
+            [(Entry("a", 0), 2), (Entry("b", 10), 2), (Entry("x"), 3), (Entry("y"), 3)],
+            capacity: 20);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).ShouldBe(
+            [("a", 0), ("x", 2), ("y", 5), ("b", 10)]);
+    }
+
+    [Fact]
     public void AWidgetWithNowhereToGoIsNotDrawn()
     {
         // It keeps its place in the settings and comes back when there is room.

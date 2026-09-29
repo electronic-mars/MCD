@@ -37,15 +37,20 @@ public readonly record struct Placement(string InstanceId, int Cell, int Span)
 public static class DockGrid
 {
     /// <summary>
-    /// Settles where everything sits: each widget on the slot it asked for, or
-    /// on the first free one after whatever comes before it.
+    /// Settles where everything sits: each widget on the slot it asked for,
+    /// and a new one in the first gap that holds it.
     /// </summary>
     /// <remarks>
     /// Left to right, in the order the slots say - so a bar arranged by hand
     /// comes back exactly as it was left, gaps and all, and one that cannot be
     /// honoured is repaired by shuffling along rather than by scattering. A
-    /// widget that has never been placed follows the one before it, which is
-    /// how a newly added thing lands on the first free slot.
+    /// widget that has never been placed goes into the first stretch of free
+    /// slots long enough for it, and only when there is none does it follow
+    /// the last widget. It used to follow the last one always, and on a bar
+    /// arranged against its far end there was no room past the last widget:
+    /// the new one landed at the very end and the whole arrangement was
+    /// squeezed leftward to make room for it, undoing what somebody had put
+    /// where they wanted it.
     /// </remarks>
     public static List<Placement> Settle(
         IReadOnlyList<(WidgetConfig Entry, int Span)> items, int capacity)
@@ -55,11 +60,12 @@ public static class DockGrid
 
         // First as asked, without worrying about the end of the bar: each
         // widget on its slot, or on the first free one after whatever comes
-        // before it. Ordered by slot; anything not yet placed keeps the order
-        // it was given and goes after everything that has a slot of its own.
+        // before it. Ordered by slot; the ones that have never been placed
+        // wait until these are down.
         foreach ((WidgetConfig entry, int span) in items
             .Select((item, i) => (item, i))
-            .OrderBy(x => x.item.Entry.Cell < 0 ? int.MaxValue : x.item.Entry.Cell)
+            .Where(x => x.item.Entry.Cell >= 0)
+            .OrderBy(x => x.item.Entry.Cell)
             .ThenBy(x => x.i)
             .Select(x => x.item))
         {
@@ -73,10 +79,37 @@ public static class DockGrid
                 continue;
             }
 
-            int cell = Math.Max(entry.Cell < 0 ? 0 : entry.Cell, cursor);
+            int cell = Math.Max(entry.Cell, cursor);
 
             placed.Add(new Placement(entry.InstanceId, cell, span));
             cursor = cell + span;
+        }
+
+        // Then each new one, in the order it was given, in the first gap that
+        // holds it - or after the last widget when no gap does.
+        foreach ((WidgetConfig entry, int span) in items.Where(x => x.Entry.Cell < 0))
+        {
+            if (span <= 0)
+            {
+                continue;
+            }
+
+            int at = 0;
+            int index = placed.Count;
+
+            for (int i = 0; i < placed.Count; i++)
+            {
+                if (placed[i].Cell - at >= span)
+                {
+                    index = i;
+                    break;
+                }
+
+                at = placed[i].End;
+            }
+
+            placed.Insert(index, new Placement(entry.InstanceId, at, span));
+            cursor = Math.Max(cursor, placed[^1].End);
         }
 
         if (cursor <= capacity)
