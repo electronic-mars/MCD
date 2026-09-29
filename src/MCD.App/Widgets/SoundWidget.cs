@@ -1,11 +1,13 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mcd.App.Dock;
 using Mcd.Audio;
 using Mcd.Core.Settings;
 using Mcd.Sensors.Contracts;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Input;
 
 namespace Mcd.App.Widgets;
 
@@ -18,6 +20,11 @@ namespace Mcd.App.Widgets;
 /// people put on one puts silencing the machine first. It is also the one
 /// thing a bar can do that a bar full of readings cannot - a number tells
 /// you something, and this changes something.
+/// </para>
+/// <para>
+/// Two buttons, because there are two things to do with it. The speaker
+/// opens a slider, and the wheel turns the volume without opening anything;
+/// the figure beside it silences the machine, or lets it speak again.
 /// </para>
 /// <para>
 /// The whole widget hides on a machine with no playback device rather than
@@ -66,9 +73,81 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial double FontSize { get; set; } = 12;
 
-    /// <summary>The hover: how loud, and that a press silences.</summary>
+    /// <summary>The speaker's hover: how loud, and what it opens.</summary>
     [ObservableProperty]
     public partial string Detail { get; set; } = string.Empty;
+
+    /// <summary>The figure's hover: that a press silences, or lets it speak.</summary>
+    [ObservableProperty]
+    public partial string MuteTip { get; set; } = string.Empty;
+
+    /// <summary>How loud, 0 to 100. The slider's value, both ways.</summary>
+    [ObservableProperty]
+    public partial double Volume { get; set; }
+
+    /// <summary>The slider's own reading beside it, "42 %".</summary>
+    [ObservableProperty]
+    public partial string VolumeText { get; set; } = string.Empty;
+
+    /// <summary>True while the tick is the one writing <see cref="Volume"/>, so that it is not taken for a hand on the slider.</summary>
+    private bool _reading;
+
+    /// <summary>True while the slider is open: the tick leaves the thumb alone, so it does not fight the hand.</summary>
+    private bool _sliding;
+
+    partial void OnVolumeChanged(double value)
+    {
+        VolumeText = Math.Round(value).ToString("F0", System.Globalization.CultureInfo.InvariantCulture) + " %";
+
+        if (_reading)
+        {
+            return;
+        }
+
+        // Turning it up is asking to hear it, as on every keyboard.
+        if (SystemVolume.Muted() is true && value > 0)
+        {
+            SystemVolume.Mute(false);
+        }
+
+        SystemVolume.Set((float)(value / 100));
+        Tick(SensorSnapshot.Empty);
+    }
+
+    /// <summary>
+    /// The slider is told which window it belongs to, and which way to open.
+    /// With one window per monitor a flyout cannot work out the first for
+    /// itself; and the bar is a strip of a few tens of points against the
+    /// edge of the screen, so "automatic" - which crashes once the flyout is
+    /// let out of the bar's bounds - is replaced by the side facing the
+    /// screen.
+    /// </summary>
+    public void SpeakerLoaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is Microsoft.UI.Xaml.Controls.Button { Flyout: { } flyout } button)
+        {
+            flyout.XamlRoot = button.XamlRoot;
+            flyout.Placement = PopupSide;
+        }
+    }
+
+    public void FlyoutOpened() => _sliding = true;
+
+    public void FlyoutClosed() => _sliding = false;
+
+    /// <summary>
+    /// The wheel over the widget turns the volume, two per cent a notch.
+    /// </summary>
+    public void OnWheel(object sender, PointerRoutedEventArgs e)
+    {
+        int notches = e.GetCurrentPoint(null).Properties.MouseWheelDelta / 120;
+
+        if (notches != 0)
+        {
+            Volume = Math.Clamp(Math.Round(Volume) + (notches * 2), 0, 100);
+            e.Handled = true;
+        }
+    }
 
     /// <summary>The figure fades while silenced: the icon says quiet, the dim number says what comes back.</summary>
     [ObservableProperty]
@@ -86,6 +165,12 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// gap it stood in was not.
     /// </remarks>
     public override bool Matters => Shown == Visibility.Visible;
+
+    /// <summary>
+    /// The widget draws two buttons of its own, so the bar keeps its hands off
+    /// them; a press is not "a press on the widget" until it is known which.
+    /// </summary>
+    public override bool OwnButtons => true;
 
     public override void Attach()
     {
@@ -147,6 +232,13 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
 
         LevelShown = muted.Value ? 0.5 : 1;
 
+        if (!_sliding)
+        {
+            _reading = true;
+            Volume = Math.Round(loud * 100);
+            _reading = false;
+        }
+
         string state = muted.Value
             ? Loc.Tr("SoundMutedTip", "Silenced")
             : string.Format(
@@ -154,22 +246,23 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
                 Loc.Tr("SoundLevelTip", "Volume {0} %"),
                 Math.Round(loud * 100));
 
-        Detail = state + " · " + (muted.Value
+        Detail = state + " · " + Loc.Tr("SoundSliderTip", "a press opens the slider, the wheel turns it");
+
+        MuteTip = muted.Value
             ? Loc.Tr("SoundPressUnmuteTip", "a press lets it speak")
-            : Loc.Tr("SoundPressMuteTip", "a press silences it"));
+            : Loc.Tr("SoundPressMuteTip", "a press silences it");
     }
 
     /// <summary>
-    /// A press silences the machine, or lets it speak again.
+    /// A press on the figure silences the machine, or lets it speak again.
     /// </summary>
     /// <remarks>
     /// Read back rather than assumed: something else may have changed it
     /// between the last tick and this press, and a button that toggles what
     /// it last saw rather than what is true gets out of step and stays there.
     /// </remarks>
-    public override bool Pressable => true;
-
-    public override void Press()
+    [RelayCommand]
+    private void ToggleMute()
     {
         if (SystemVolume.Muted() is not { } muted)
         {
@@ -190,12 +283,15 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        double along = ReadingIcon + 6 + DockMetrics.ChipPadding + 4;
+        // Margin 2, the speaker's button with 2 either side, and the
+        // figure's with 3 either side and 2 between: the slot the
+        // template really takes.
+        double along = 2 + ReadingIcon + 4;
 
         if (LevelVisible == Visibility.Visible)
         {
             _figure ??= Metric.Wide("100 %", ReadingFont);
-            along += _figure.Value + 4;
+            along += _figure.Value + 6 + 2;
         }
 
         return Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical ? 30 : along;

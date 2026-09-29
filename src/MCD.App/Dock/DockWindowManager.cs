@@ -302,6 +302,16 @@ public sealed class DockWindowManager : IDisposable
     /// <summary>Presses every widget of one kind, the way a click on it does.</summary>
     public int Press(string typeId) => _windows.Values.Sum(w => w.Press(typeId));
 
+    /// <summary>The view models of one kind of widget on every bar. For the self-test.</summary>
+    public IEnumerable<Mcd.App.Widgets.WidgetViewModel> Widgets(string typeId) =>
+        _windows.Values.SelectMany(w => w.Widgets(typeId));
+
+    /// <summary>Opens the flyout of every widget of one kind, as a press does. For the self-test.</summary>
+    public int OpenFlyouts(string typeId) => _windows.Values.Sum(w => w.OpenFlyouts(typeId));
+
+    /// <summary>How many flyouts of one kind of widget are open right now. For the self-test.</summary>
+    public int FlyoutsOpen(string typeId) => _windows.Values.Sum(w => w.FlyoutsOpen(typeId));
+
     /// <summary>
     /// Presses a gauge's two switches the way the settings page does, and
     /// says what each press wrote. For the unattended check: a switch that

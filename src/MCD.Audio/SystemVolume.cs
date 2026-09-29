@@ -111,7 +111,7 @@ public static unsafe class SystemVolume
     /// Opens the endpoint sound is playing through, does one thing with it,
     /// and lets it go.
     /// </summary>
-    private static T? With<T>(Func<IAudioEndpointVolume, T> work)
+    internal static T? With<T>(Func<IAudioEndpointVolume, T> work, EDataFlow flow = EDataFlow.eRender)
         where T : struct
     {
         try
@@ -119,7 +119,7 @@ public static unsafe class SystemVolume
             var enumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
 
             enumerator.GetDefaultAudioEndpoint(
-                EDataFlow.eRender, ERole.eMultimedia, out IMMDevice device);
+                flow, ERole.eMultimedia, out IMMDevice device);
 
             Guid iid = typeof(IAudioEndpointVolume).GUID;
 

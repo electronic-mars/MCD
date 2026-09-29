@@ -711,7 +711,7 @@
     <value>Sound</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Silences the machine, and says how loud it is.</value>
+    <value>The speaker opens a volume slider and the wheel turns it; the figure silences the machine.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Write how loud it is</value>
@@ -1444,5 +1444,134 @@
   </data>
   <data name="GaugeShowTempHint" xml:space="preserve">
     <value>Beside the load, under the same icon.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Microphone</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Switches the microphone off for the whole machine, and goes red while it is off.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Keep awake</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>A full cup keeps the machine from sleeping and chat programs from turning amber.</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Keyboard layout</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>The language the keyboard types in, and whether Caps Lock is on.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Programs</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Starts it from the bar.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>File Explorer</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Notepad</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Calculator</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Command Prompt</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Snipping Tool</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Task Manager</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows Settings</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Control Panel</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Recycle Bin</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Sticky Notes</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>The machine may sleep · a press keeps it awake</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Awake for another {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Awake until turned off</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>a press lets it sleep</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>Keep awake for 30 minutes</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Keep awake for an hour</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>Keep awake for two hours</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Keep awake until turned off</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Let it sleep</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>a minute</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} h {1} min</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Keeping the machine awake</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>The machine may sleep</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Microphone off · a press turns it on</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Microphone on · a press turns it off</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock is on</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>a press switches the layout</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>a press opens the slider, the wheel turns it</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Switch the microphone off</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Off and on again, for the whole machine, from anywhere.</value>
   </data>
 </root>

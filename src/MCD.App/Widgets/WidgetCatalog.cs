@@ -90,9 +90,30 @@ public static class WidgetCatalog
         new(
             SoundWidget.Type,
             Loc.Tr("WidgetSoundName", "Sound"),
-            Loc.Tr("WidgetSoundDescription", "Silences the machine, and says how loud it is."),
+            Loc.Tr("WidgetSoundDescription", "The speaker opens a volume slider and the wheel turns it; the figure silences the machine."),
             "Speaker",
             (context, entry) => new SoundWidget(context, entry)),
+
+        new(
+            MicWidget.Type,
+            Loc.Tr("WidgetMicName", "Microphone"),
+            Loc.Tr("WidgetMicDescription", "Switches the microphone off for the whole machine, and goes red while it is off."),
+            "Mic",
+            (context, entry) => new MicWidget(context, entry)),
+
+        new(
+            AwakeWidget.Type,
+            Loc.Tr("WidgetAwakeName", "Keep awake"),
+            Loc.Tr("WidgetAwakeDescription", "A full cup keeps the machine from sleeping and chat programs from turning amber."),
+            "CoffeeOn",
+            (context, entry) => new AwakeWidget(context, entry)),
+
+        new(
+            LayoutWidget.Type,
+            Loc.Tr("WidgetLayoutName", "Keyboard layout"),
+            Loc.Tr("WidgetLayoutDescription", "The language the keyboard types in, and whether Caps Lock is on."),
+            "Keyboard",
+            (context, entry) => new LayoutWidget(context, entry)),
 
         new(
             SwitcherWidget.Type,
@@ -166,6 +187,7 @@ public static class WidgetCatalog
         ("headset", Loc.Tr("CatHeadsets", "Headsets")),
         ("keyboard", Loc.Tr("CatKeyboards", "Keyboards")),
         ("device", Loc.Tr("CatDevices", "Other devices")),
+        ("apps", Loc.Tr("CatPrograms", "Programs")),
         ("other", Loc.Tr("CatOther", "Everything else")),
     ];
 
@@ -280,10 +302,44 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetSoundName", "Sound"),
-            Loc.Tr("WidgetSoundDescription", "Silences the machine, and says how loud it is."),
+            Loc.Tr("WidgetSoundDescription", "The speaker opens a volume slider and the wheel turns it; the figure silences the machine."),
             "Speaker",
             () => WidgetConfig.New(SoundWidget.Type),
             entry => entry.TypeId == SoundWidget.Type);
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetMicName", "Microphone"),
+            Loc.Tr("WidgetMicDescription", "Switches the microphone off for the whole machine, and goes red while it is off."),
+            "Mic",
+            () => WidgetConfig.New(MicWidget.Type),
+            entry => entry.TypeId == MicWidget.Type);
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetAwakeName", "Keep awake"),
+            Loc.Tr("WidgetAwakeDescription", "A full cup keeps the machine from sleeping and chat programs from turning amber."),
+            "CoffeeOn",
+            () => WidgetConfig.New(AwakeWidget.Type),
+            entry => entry.TypeId == AwakeWidget.Type);
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetLayoutName", "Keyboard layout"),
+            Loc.Tr("WidgetLayoutDescription", "The language the keyboard types in, and whether Caps Lock is on."),
+            "Keyboard",
+            () => WidgetConfig.New(LayoutWidget.Type),
+            entry => entry.TypeId == LayoutWidget.Type);
+
+        // What Windows brings with it, under its own heading, each drawn in
+        // this program's icons and changed like any pinned icon.
+        foreach (StandardPrograms.Program program in StandardPrograms.All.Where(p => p.Present))
+        {
+            yield return new WidgetOffer(
+                program.Name,
+                Loc.Tr("OfferProgram", "Starts it from the bar."),
+                program.Icon,
+                program.Pin,
+                program.Is,
+                Category: "apps");
+        }
 
         // Only while the program is running: the note it leaves is the one
         // sign it is there, and a chip for a program that is not would be

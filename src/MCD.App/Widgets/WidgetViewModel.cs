@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mcd.App.Dock;
 using Mcd.Core.Settings;
+using Mcd.Interop.AppBar;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
@@ -87,6 +88,21 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
 
     /// <summary>How thick the bar is, which decides how big a reading is drawn.</summary>
     public DockDensity Density { get; set; } = DockDensity.Default;
+
+    /// <summary>Which edge of the screen the bar is on.</summary>
+    public AppBarEdge Edge { get; set; } = AppBarEdge.Top;
+
+    /// <summary>
+    /// Which side of the widget a popup opens on: away from the edge the bar
+    /// is fixed to, into the screen.
+    /// </summary>
+    protected Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode PopupSide => Edge switch
+    {
+        AppBarEdge.Top => Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Bottom,
+        AppBarEdge.Left => Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Right,
+        AppBarEdge.Right => Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Left,
+        _ => Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Top,
+    };
 
     /// <summary>How big this widget's icon is drawn, from density and the chosen size.</summary>
     protected double ReadingIcon => Dock.DockMetrics.ReadingIcon(Density, Context.Size);

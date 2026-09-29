@@ -711,7 +711,7 @@
     <value>Звук</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Выключает звук и показывает, насколько он громкий.</value>
+    <value>Динамик открывает ползунок громкости, колесо мыши её меняет, а щелчок по цифрам выключает звук.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Писать громкость</value>
@@ -1444,5 +1444,134 @@
   </data>
   <data name="GaugeShowTempHint" xml:space="preserve">
     <value>Рядом с нагрузкой, под тем же значком.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Микрофон</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Выключает микрофон во всей системе и краснеет, пока он выключен.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Не спать</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>Полная чашка не даёт компьютеру уснуть, а чатам — показать «нет на месте».</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Раскладка клавиатуры</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>На каком языке печатает клавиатура и включён ли Caps Lock.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Программы</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Запускает его прямо с панели.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>Проводник</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Блокнот</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Калькулятор</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Терминал</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Командная строка</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Ножницы</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Диспетчер задач</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Параметры Windows</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Панель управления</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>Загрузки</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Корзина</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Записки</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>Компьютер может уснуть · щелчок не даёт ему спать</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Не спит ещё {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Не спит, пока не выключите</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>щелчок разрешает сон</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>Не спать 30 минут</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Не спать час</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>Не спать два часа</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Не спать, пока не выключу</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Разрешить сон</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>меньше минуты</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} мин</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} ч {1} мин</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Не даёт компьютеру уснуть</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>Компьютер может уснуть</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Микрофон выключен · щелчок включает</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Микрофон включён · щелчок выключает</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock включён</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>щелчок переключает раскладку</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>щелчок открывает ползунок, колесо меняет громкость</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Выключить микрофон</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Выключает и снова включает микрофон во всей системе, из любой программы.</value>
   </data>
 </root>

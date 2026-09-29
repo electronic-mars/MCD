@@ -365,6 +365,7 @@ public partial class App : Application
                 Shortcut.Bars => () => _uiQueue?.TryEnqueue(ShowOrHideBars),
                 Shortcut.Settings => () => _uiQueue?.TryEnqueue(() => ShowSettings()),
                 Shortcut.Mute => Silence,
+                Shortcut.Mic => SwitchMic,
                 _ => () => { },
             };
 
@@ -389,6 +390,15 @@ public partial class App : Application
         if (Mcd.Audio.SystemVolume.Muted() is { } muted)
         {
             Mcd.Audio.SystemVolume.Mute(!muted);
+        }
+    }
+
+    /// <summary>Switches the microphone off, or on again.</summary>
+    private static void SwitchMic()
+    {
+        if (Mcd.Audio.Microphone.Muted() is { } muted)
+        {
+            Mcd.Audio.Microphone.Mute(!muted);
         }
     }
 
@@ -663,6 +673,68 @@ public partial class App : Application
 
                 Later(8000, Press);
                 Later(14000, Press);
+            }
+
+            // The cup pressed full and empty again, the volume moved by two
+            // per cent and put back, and the slider opened - the presses a
+            // person makes on the new widgets, without a person.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "glyphs")
+            {
+                void Cup(string what)
+                {
+                    _docks?.Press(Mcd.App.Widgets.AwakeWidget.Type);
+                    var drawn = _docks?.Widgets(Mcd.App.Widgets.AwakeWidget.Type)
+                        .OfType<Mcd.App.Widgets.GlyphWidget>().FirstOrDefault();
+
+                    log.LogInformation(
+                        "selftest.cup {What} on={On} until={Until} icon={Icon} faded={Faded} said={Said}",
+                        what, Mcd.Interop.Machine.KeepAwake.On, Mcd.Interop.Machine.KeepAwake.Until,
+                        drawn?.Icon, drawn?.Faded, drawn?.Detail);
+                }
+
+                Later(3000, () => Cup("filled"));
+                Later(9000, () => Cup("emptied"));
+
+                Later(4000, () =>
+                {
+                    float was = Mcd.Audio.SystemVolume.Level() ?? 0;
+
+                    foreach (Mcd.App.Widgets.WidgetViewModel widget in _docks?.Widgets(Mcd.App.Widgets.SoundWidget.Type) ?? [])
+                    {
+                        ((Mcd.App.Widgets.SoundWidget)widget).Volume = Math.Round(was * 100) + 2;
+                    }
+
+                    float now = Mcd.Audio.SystemVolume.Level() ?? 0;
+                    Mcd.Audio.SystemVolume.Set(was);
+
+                    log.LogInformation(
+                        "selftest.volume was={Was} moved={Now} back={Back}",
+                        was, now, Mcd.Audio.SystemVolume.Level());
+                });
+
+                // What the gallery offers under "Programs", and what each
+                // would put on a bar.
+                Later(2000, () =>
+                {
+                    var hub = _services!.GetRequiredService<SensorHub>();
+
+                    log.LogInformation(
+                        "selftest.offers {Programs}",
+                        string.Join(
+                            "; ",
+                            Mcd.App.Widgets.WidgetCatalog.Offers(hub)
+                                .Where(o => o.Category == "apps")
+                                .Select(o => o.Name + " -> " + o.Make().Config?.GetRawText())));
+                });
+
+                Later(6000, () => log.LogInformation(
+                    "selftest.flyout opened={Count}", _docks?.OpenFlyouts(Mcd.App.Widgets.SoundWidget.Type)));
+
+                foreach (int after in new[] { 6300, 7000, 8000 })
+                {
+                    Later(after, () => log.LogInformation(
+                        "selftest.flyout open={Count}", _docks?.FlyoutsOpen(Mcd.App.Widgets.SoundWidget.Type)));
+                }
             }
 
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_PAGE") is { Length: > 0 } pages)

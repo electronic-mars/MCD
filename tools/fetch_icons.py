@@ -111,6 +111,18 @@ ICONS: dict[str, str] = {
     "Sliders": "sliders-horizontal",
     "Info": "information-circle",
     "List": "list-view",
+    # Keeping the machine awake: a cup with steam rising, and the same cup
+    # empty (coffee-04-empty is coffee-04 with its steam taken off, kept in
+    # assets/icons-src so the build still needs no network).
+    "CoffeeOn": "coffee-04",
+    "CoffeeOff": "coffee-04-empty",
+    "Mic": "mic-01",
+    "MicOff": "mic-off-01",
+    # The programs Windows brings, for the gallery's "Programs" shelf.
+    "Notepad": "note-02",
+    "Paint": "paint-board",
+    "Scissors": "scissor",
+    "StickyNote": "sticky-note-01",
     # The sound widget draws one of four, by how loud it is.
     "Speaker": "volume-high",
     "SpeakerMid": "volume-up",

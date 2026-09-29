@@ -14,12 +14,14 @@
             <SolidColorBrush x:Key="McdThermalBrush" Color="#C4B5FD" />
             <SolidColorBrush x:Key="McdInactiveBrush" Color="#939BA7" />
             <SolidColorBrush x:Key="McdReadingAccent" Color="#FFF26A21" />
+            <SolidColorBrush x:Key="McdChipRest" Color="#0DFFFFFF" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="McdCriticalBrush" Color="#C63B3B" />
             <SolidColorBrush x:Key="McdThermalBrush" Color="#6542A6" />
             <SolidColorBrush x:Key="McdInactiveBrush" Color="#69717D" />
             <SolidColorBrush x:Key="McdReadingAccent" Color="#FFD65A17" />
+            <SolidColorBrush x:Key="McdChipRest" Color="#40FFFFFF" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -337,23 +339,54 @@
         </widgets:HoverChip>
     </DataTemplate>
 
-    <!-- Sound: a speaker that says how loud, and a press that silences. -->
+    <!-- Sound: two buttons. The speaker opens a slider, and the wheel over
+         either turns the volume; the figure beside it silences the machine.
+         The speaker's padding is 2 and the margin round the pair 1, so at the
+         largest size the speaker alone is exactly one slot. Each wears the
+         faint resting plate a button chip wears elsewhere on the bar. -->
     <DataTemplate x:Key="mcd.sound" x:DataType="widgets:SoundWidget">
-        <widgets:HoverChip
-            Button="True"
-            Margin="3,0"
+        <StackPanel
+            Margin="1,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            Orientation="Horizontal"
+            PointerWheelChanged="{x:Bind OnWheel}"
+            Spacing="2"
             Visibility="{x:Bind Shown, Mode=OneWay}">
-            <ToolTipService.ToolTip>
-                <ToolTip Placement="Bottom">
-                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
-                </ToolTip>
-            </ToolTipService.ToolTip>
-            <StackPanel
-                Orientation="Horizontal"
-                Spacing="4"
-                VerticalAlignment="Center">
+            <Button
+                Padding="2,2"
+                Background="{ThemeResource McdChipRest}"
+                Loaded="{x:Bind SpeakerLoaded}"
+                Style="{StaticResource BarButton}"
+                ToolTipService.ToolTip="{x:Bind Detail, Mode=OneWay}">
+                <Button.Flyout>
+                    <!-- Not held to the bar's own bounds: the bar is a strip a
+                         few tens of points thick, and a slider squeezed
+                         into it lay over the very widget it belongs to. -->
+                    <Flyout
+                        Closed="{x:Bind FlyoutClosed}"
+                        Opened="{x:Bind FlyoutOpened}"
+                        Placement="Bottom"
+                        ShouldConstrainToRootBounds="False">
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="12">
+                            <Slider
+                                Width="180"
+                                VerticalAlignment="Center"
+                                Maximum="100"
+                                Minimum="0"
+                                StepFrequency="1"
+                                Value="{x:Bind Volume, Mode=TwoWay}" />
+                            <TextBlock
+                                Width="44"
+                                VerticalAlignment="Center"
+                                HorizontalTextAlignment="Right"
+                                Text="{x:Bind VolumeText, Mode=OneWay}" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
                 <Viewbox
                     Width="{x:Bind IconSize, Mode=OneWay}"
                     Height="{x:Bind IconSize, Mode=OneWay}"
@@ -368,9 +401,17 @@
                             StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
                     </Canvas>
                 </Viewbox>
-                <!-- In a box of its own, right-aligned: the per cent sign
-                     then keeps its place while the digits change under it,
-                     and the speaker beside them never shifts. -->
+            </Button>
+            <!-- In a box of its own: the per cent sign then keeps its place
+                 while the digits change under it, and the speaker beside
+                 them never shifts. -->
+            <Button
+                Padding="3,2"
+                Background="{ThemeResource McdChipRest}"
+                Command="{x:Bind ToggleMuteCommand}"
+                Style="{StaticResource BarButton}"
+                ToolTipService.ToolTip="{x:Bind MuteTip, Mode=OneWay}"
+                Visibility="{x:Bind LevelVisible, Mode=OneWay}">
                 <TextBlock
                     MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
                     MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
@@ -379,9 +420,96 @@
                     FontSize="{x:Bind FontSize, Mode=OneWay}"
                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     Opacity="{x:Bind LevelShown, Mode=OneWay}"
-                    Text="{x:Bind Level, Mode=OneWay}"
-                    Visibility="{x:Bind LevelVisible, Mode=OneWay}" />
-            </StackPanel>
+                    Text="{x:Bind Level, Mode=OneWay}" />
+            </Button>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- The microphone and the cup: one drawing, one press. Red is a second
+         drawing laid over the first, so it follows the bar's theme. Written
+         once; the microphone's key is the same template (see the dictionary's
+         code-behind). -->
+    <DataTemplate x:Key="mcd.awake" x:DataType="widgets:GlyphWidget">
+        <widgets:HoverChip
+            Button="True"
+            Margin="3,0"
+            Padding="0,2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind Shown, Mode=OneWay}">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <Viewbox
+                Width="{x:Bind IconSize, Mode=OneWay}"
+                Height="{x:Bind IconSize, Mode=OneWay}"
+                VerticalAlignment="Center">
+                <Canvas Width="24" Height="24">
+                    <Path
+                        Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                        Opacity="{x:Bind Faded, Mode=OneWay}"
+                        Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                    <Path
+                        Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                        Opacity="{x:Bind Alert, Mode=OneWay}"
+                        Stroke="{ThemeResource McdCriticalBrush}"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                </Canvas>
+            </Viewbox>
+        </widgets:HoverChip>
+    </DataTemplate>
+
+    <!-- The language the keyboard types in, in two letters. Caps Lock is a
+         plate of the accent colour behind them, with the letters on it drawn
+         in the colour meant for that, so nothing changes width when it comes
+         and goes. -->
+    <DataTemplate x:Key="mcd.layout" x:DataType="widgets:LayoutWidget">
+        <widgets:HoverChip
+            Button="True"
+            Margin="3,0"
+            Padding="0,2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <ToolTipService.ToolTip>
+                <ToolTip Placement="Bottom">
+                    <TextBlock FontSize="13" Text="{x:Bind Detail, Mode=OneWay}" />
+                </ToolTip>
+            </ToolTipService.ToolTip>
+            <Grid VerticalAlignment="Center">
+                <Border
+                    Background="{ThemeResource AccentFillColorDefaultBrush}"
+                    CornerRadius="4"
+                    Opacity="{x:Bind Capital, Mode=OneWay}" />
+                <TextBlock
+                    Width="{x:Bind BoxWidth, Mode=OneWay}"
+                    Margin="5,1"
+                    HorizontalAlignment="Center"
+                    HorizontalTextAlignment="Center"
+                    FontSize="{x:Bind FontSize, Mode=OneWay}"
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    Opacity="{x:Bind Plain, Mode=OneWay}"
+                    Text="{x:Bind Code, Mode=OneWay}" />
+                <TextBlock
+                    Width="{x:Bind BoxWidth, Mode=OneWay}"
+                    Margin="5,1"
+                    HorizontalAlignment="Center"
+                    HorizontalTextAlignment="Center"
+                    FontSize="{x:Bind FontSize, Mode=OneWay}"
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
+                    Opacity="{x:Bind Capital, Mode=OneWay}"
+                    Text="{x:Bind Code, Mode=OneWay}" />
+            </Grid>
         </widgets:HoverChip>
     </DataTemplate>
 

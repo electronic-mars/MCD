@@ -13,5 +13,12 @@ namespace Mcd.App.Widgets.Views;
 /// </remarks>
 public sealed partial class WidgetTemplates : ResourceDictionary
 {
-    public WidgetTemplates() => InitializeComponent();
+    public WidgetTemplates()
+    {
+        InitializeComponent();
+
+        // The microphone and the cup are one drawing and one press, and
+        // share a template written against their common base.
+        this[MicWidget.Type] = this[AwakeWidget.Type];
+    }
 }

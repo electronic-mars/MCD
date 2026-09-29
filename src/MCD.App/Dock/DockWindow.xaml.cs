@@ -1578,6 +1578,7 @@ public sealed partial class DockWindow : Window
                 : Orientation.Vertical;
 
             widget.Density = Config.Density;
+            widget.Edge = Config.Edge;
             widget.Attach();
 
             return DockLayout.SpanOf(widget.Length(), CellSize);
@@ -1647,6 +1648,7 @@ public sealed partial class DockWindow : Window
             : Orientation.Vertical;
 
         widget.Density = Config.Density;
+        widget.Edge = Config.Edge;
 
         // A widget that is a door knocks, and the bar answers: which screen
         // asked is the bar's to say, not the widget's.
@@ -2080,6 +2082,55 @@ public sealed partial class DockWindow : Window
         }
 
         return found.Length;
+    }
+
+    /// <summary>The view models of one kind of widget here. For the self-test.</summary>
+    public IEnumerable<WidgetViewModel> Widgets(string typeId) =>
+        _hosts.Where(h => h.Entry.TypeId == typeId).Select(h => h.Widget);
+
+    /// <summary>
+    /// Opens the flyout on the first button that has one, in every widget of
+    /// one kind here, as a press on it does. For the self-test.
+    /// </summary>
+    public int OpenFlyouts(string typeId)
+    {
+        int opened = 0;
+
+        foreach (WidgetHost host in _hosts.Where(h => h.Entry.TypeId == typeId))
+        {
+            if (FlyoutButton(host) is { } button)
+            {
+                button.Flyout.ShowAt(button);
+                opened++;
+            }
+        }
+
+        return opened;
+    }
+
+    /// <summary>How many of one kind's flyouts are open right now. For the self-test.</summary>
+    public int FlyoutsOpen(string typeId) => _hosts
+        .Where(h => h.Entry.TypeId == typeId)
+        .Count(h => FlyoutButton(h) is { Flyout.IsOpen: true });
+
+    private static Microsoft.UI.Xaml.Controls.Button? FlyoutButton(DependencyObject at)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(at); i++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(at, i);
+
+            if (child is Microsoft.UI.Xaml.Controls.Button { Flyout: not null } button)
+            {
+                return button;
+            }
+
+            if (FlyoutButton(child) is { } found)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 
     private void LetGo()

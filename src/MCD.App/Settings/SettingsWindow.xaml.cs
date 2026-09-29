@@ -4044,7 +4044,11 @@ public sealed partial class SettingsWindow : Window
             KeyRow(
                 Shortcut.Mute,
                 Loc.Tr("KeyMute", "Silence the machine"),
-                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one."))));
+                Loc.Tr("KeyMuteHint", "The same as the mute key, for keyboards that have not got one.")),
+            KeyRow(
+                Shortcut.Mic,
+                Loc.Tr("KeyMic", "Switch the microphone off"),
+                Loc.Tr("KeyMicHint", "Off and on again, for the whole machine, from anywhere."))));
 
         GeneralBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
 

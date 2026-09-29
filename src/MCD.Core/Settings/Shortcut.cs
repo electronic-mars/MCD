@@ -20,6 +20,9 @@ public static class Shortcut
     /// <summary>Silence the machine, or let it speak.</summary>
     public const string Mute = "mute";
 
+    /// <summary>Switch the microphone off, or on again.</summary>
+    public const string Mic = "mic";
+
     /// <summary>All of them, in the order they are offered.</summary>
-    public static IReadOnlyList<string> All { get; } = [Bars, Settings, Mute];
+    public static IReadOnlyList<string> All { get; } = [Bars, Settings, Mute, Mic];
 }
