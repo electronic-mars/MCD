@@ -43,6 +43,19 @@ public sealed class ShellIconTests
         pixels.ShouldNotBeNull();
     }
 
+    [Theory]
+    [InlineData("shell:Downloads")]
+    [InlineData("shell:RecycleBinFolder")]
+    [InlineData("ms-settings:")]
+    public void APlaceInTheShellHasAnIconToo(string name)
+    {
+        // The programs the gallery offers that are not files. Asked for by
+        // their text, the shell said nothing, and the bar drew a letter.
+        IconPixels pixels = ShellIcon.For(name).ShouldNotBeNull();
+
+        pixels.Bgra.Where((_, i) => i % 4 == 3).ShouldContain(a => a != 0);
+    }
+
     [Fact]
     public void SomethingThatIsNotAFileGivesNothing()
     {

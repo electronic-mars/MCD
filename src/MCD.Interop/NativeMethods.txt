@@ -110,6 +110,7 @@ MEMORYSTATUSEX
 // The icon a file, folder or shortcut is shown with in Explorer. Used by the
 // launcher, which has to look like the thing it starts.
 SHGetFileInfo
+SHParseDisplayName
 SHFILEINFOW
 SHGFI_FLAGS
 DestroyIcon

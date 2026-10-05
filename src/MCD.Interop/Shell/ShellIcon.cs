@@ -5,6 +5,7 @@ using Windows.Win32.System.Com;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.Shell;
+using Windows.Win32.UI.Shell.Common;
 using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Mcd.Interop.Shell;
@@ -112,8 +113,71 @@ public static class ShellIcon
         }
     }
 
+    /// <summary>The Settings app, under the name the shell lists it by.</summary>
+    private const string SettingsApp =
+        @"shell:AppsFolder\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel";
+
+    /// <summary>
+    /// The icon of something that is a place in the shell rather than a file:
+    /// "shell:Downloads", the Recycle Bin, a store program, the Settings app.
+    /// </summary>
+    /// <remarks>
+    /// These have no path for the file system to look at, so asking for the
+    /// icon of the text came back empty and the bar drew a letter. The shell
+    /// can parse the name into its own address of the thing, and the icon is
+    /// asked for by that.
+    /// </remarks>
+    private static unsafe IconPixels? ExtractNamed(string name)
+    {
+        if (name.Equals("ms-settings:", StringComparison.OrdinalIgnoreCase))
+        {
+            name = SettingsApp;
+        }
+
+        if (PInvoke.SHParseDisplayName(name, null, out ITEMIDLIST* item, 0, out _).Failed)
+        {
+            return null;
+        }
+
+        try
+        {
+            var info = default(SHFILEINFOW);
+
+            nuint ok = PInvoke.SHGetFileInfo(
+                (char*)item,
+                0,
+                &info,
+                (uint)sizeof(SHFILEINFOW),
+                SHGFI_FLAGS.SHGFI_PIDL | SHGFI_FLAGS.SHGFI_ICON | SHGFI_FLAGS.SHGFI_LARGEICON);
+
+            if (ok == 0 || info.hIcon.IsNull)
+            {
+                return null;
+            }
+
+            try
+            {
+                return Read(info.hIcon);
+            }
+            finally
+            {
+                PInvoke.DestroyIcon(info.hIcon);
+            }
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem((nint)item);
+        }
+    }
+
     private static unsafe IconPixels? Extract(string path)
     {
+        if (path.StartsWith("shell:", StringComparison.OrdinalIgnoreCase)
+            || path.Equals("ms-settings:", StringComparison.OrdinalIgnoreCase))
+        {
+            return ExtractNamed(path);
+        }
+
         var info = default(SHFILEINFOW);
         nuint ok;
 

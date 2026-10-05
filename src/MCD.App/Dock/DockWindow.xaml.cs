@@ -1361,7 +1361,7 @@ public sealed partial class DockWindow : Window
             Overlay.Children.Add(_goodbye);
         }
 
-        BuildWidgets();
+        BuildWidgets(startup: true);
         Welcome();
     }
 
@@ -1405,7 +1405,7 @@ public sealed partial class DockWindow : Window
     /// reading's width depends on its label and on the figures it has had to
     /// show, and a number guessed here would be wrong on somebody's machine.
     /// </remarks>
-    private void BuildWidgets()
+    private void BuildWidgets(bool startup = false)
     {
         Measure();
 
@@ -1427,7 +1427,7 @@ public sealed partial class DockWindow : Window
         _built = built;
         _drawn = hosts;
         Unanchor();
-        Refit();
+        Refit(startup);
         Settle();
         WriteBackCells();
     }
@@ -1495,11 +1495,22 @@ public sealed partial class DockWindow : Window
     /// row of little holes. Settled literally instead, the row scattered; and
     /// scaled by position alone, it grew gaps at every shrink.
     /// </remarks>
-    private void Refit()
+    /// <param name="startup">
+    /// True for the first build of a window, when no widths are comparable.
+    /// A bar that has only just started measures its widgets before the
+    /// sensors have said what they are, a headset has connected or a player
+    /// has opened, so the widths differ a little from the ones written down
+    /// at the end of the last run - and treating that as "the widths have
+    /// changed" re-laid the whole arrangement at the start of every second
+    /// or third day, and wrote the result down. The slots were left exactly
+    /// where somebody put them; what a start has to answer is only whether the
+    /// screen is a different length, which the slot count says.
+    /// </param>
+    private void Refit(bool startup)
     {
         var spans = _built.ToDictionary(b => b.Entry.InstanceId, b => b.Span, StringComparer.Ordinal);
 
-        bool resized = Config.Widgets.Any(w =>
+        bool resized = !startup && Config.Widgets.Any(w =>
             w.Span > 0 && spans.TryGetValue(w.InstanceId, out int fresh) && fresh > 0 && fresh != w.Span);
 
         if (Config.Slots == _capacity && !resized)
@@ -1517,8 +1528,16 @@ public sealed partial class DockWindow : Window
         if (Config.Slots > 0)
         {
             _log.LogInformation(
-                "dock.refitted monitor={Monitor} from={From} to={To} resized={Resized}",
-                Monitor.Identity.FriendlyName, Config.Slots, _capacity, resized);
+                "dock.refitted monitor={Monitor} from={From} to={To} resized={Resized} widths={Widths}",
+                Monitor.Identity.FriendlyName,
+                Config.Slots,
+                _capacity,
+                resized,
+                string.Join(
+                    " ",
+                    Config.Widgets
+                        .Where(w => w.Span > 0 && spans.TryGetValue(w.InstanceId, out int now) && now > 0 && now != w.Span)
+                        .Select(w => $"{w.TypeId}:{w.Span}>{spans[w.InstanceId]}")));
 
             Config = Config with
             {

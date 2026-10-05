@@ -217,7 +217,10 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
             : loud < 0.67f ? "SpeakerMid"
             : "Speaker";
 
-        bool room = WithLevel && Density == DockDensity.Default;
+        // On a compact bar too: the figure is the other button now, and a
+        // widget with one of its two buttons missing is a widget with half
+        // its gestures gone.
+        bool room = WithLevel;
 
         LevelVisible = room ? Visibility.Visible : Visibility.Collapsed;
 
