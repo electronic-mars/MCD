@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master Control Dock — панель управления</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Master Control Dock <small>панель управления</small></div>
+    <nav class="tabs" aria-label="Страницы">
+      <a href="index.html" aria-current="page">Элементы</a>
+      <a href="icons.html">Иконки</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Что есть в программе</h1>
+    <p class="lead">Всё описано по тому, что лежит в исходниках: каталог виджетов, строки интерфейса, настройки. Страница строится заново командой <code>python tools/panel/build.py</code>, поэтому с программой не расходится.</p>
+    <div class="stats" id="stats"></div>
+
+    <h2>Виджеты</h2>
+    <div id="groups"></div>
+
+    <h2>Панель</h2>
+    <dl class="pairs" id="bar"></dl>
+
+    <h2>Жесты</h2>
+    <dl class="pairs" id="gestures"></dl>
+
+    <h2>Окно настроек</h2>
+    <div class="grid" id="pages"></div>
+
+    <h2>Сочетания клавиш</h2>
+    <dl class="pairs" id="keys"></dl>
+
+    <h2>Откуда берутся данные</h2>
+    <dl class="pairs" id="sources"></dl>
+
+    <h2>Файлы</h2>
+    <dl class="pairs" id="files"></dl>
+
+    <h2>Для проверки</h2>
+    <dl class="pairs" id="dev"></dl>
+  </main>
+
+  <script src="elements.js"></script>
+</body>
+</html>

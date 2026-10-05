@@ -39,9 +39,13 @@ public static class KeyboardLayouts
             return new KeyboardLayout(
                 culture.TwoLetterISOLanguageName.ToUpperInvariant(), culture.DisplayName);
         }
-        catch (CultureNotFoundException)
+        catch (ArgumentException)
         {
-            // A layout made for a language the machine has no name for.
+            // A layout made for a language the machine has no name for - or
+            // none at all: a window caught between layouts answers 0, which
+            // the framework refuses with a different exception from the one
+            // it uses for an unknown language, and that one took the widget's
+            // tick down.
             return new KeyboardLayout("??", "0x" + language.ToString("X4", CultureInfo.InvariantCulture));
         }
     }

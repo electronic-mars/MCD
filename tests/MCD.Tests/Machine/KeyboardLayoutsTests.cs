@@ -19,6 +19,16 @@ public sealed class KeyboardLayoutsTests
         KeyboardLayouts.Of((ushort)language).Code.ShouldBe(code);
     }
 
+    [Theory]
+    [InlineData(0)]
+    [InlineData(0x7F7F)]
+    public void ALanguageThatCannotBeNamedIsTwoQuestionMarksNotAnException(int language)
+    {
+        // A window between layouts answers 0. That threw, in the widget's tick,
+        // on the first day it was on a bar.
+        KeyboardLayouts.Of((ushort)language).Code.ShouldBe("??");
+    }
+
     [Fact]
     public void ALayoutSaysItsNameForTheTooltip()
     {

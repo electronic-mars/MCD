@@ -158,40 +158,57 @@ public sealed class IconWidget : WidgetViewModel
             },
         };
 
-        foreach (string glyph in IconLibrary.Paths.Keys)
+        // Drawn when the flyout is first opened, not when this editor is
+        // built: the editor is rebuilt with every choice on the widgets page,
+        // and a library that grows by whatever somebody ticks on the control
+        // panel would be hundreds of buttons made for a list nobody opened.
+        bool filled = false;
+
+        flyout.Opening += (_, _) =>
         {
-            bool current = glyph == wearing;
-
-            var button = new Button
+            if (filled)
             {
-                Width = 32,
-                Height = 32,
-                Padding = new Thickness(3),
-                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+                return;
+            }
 
-                // The one already worn is marked, so the grid answers "which
-                // is it now" as well as "which could it be".
-                BorderThickness = new Thickness(current ? 1 : 0),
-                BorderBrush = current
-                    ? (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"]
-                    : null,
-                CornerRadius = new CornerRadius(6),
-                Content = Drawn(glyph, 24),
-            };
+            filled = true;
 
-            // Seventy anonymous drawings; the name is the difference between
-            // hunting and finding.
-            ToolTipService.SetToolTip(button, glyph);
-
-            string chosen = glyph;
-            button.Click += (_, _) =>
+            foreach (string glyph in IconLibrary.Paths.Keys)
             {
-                flyout.Hide();
-                changed(WidgetOptions.Merge(Options, ("icon", JsonValue.Create(chosen))));
-            };
+                bool current = glyph == wearing;
 
-            icons.Children.Add(button);
-        }
+                var button = new Button
+                {
+                    Width = 32,
+                    Height = 32,
+                    Padding = new Thickness(3),
+                    Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+
+                    // The one already worn is marked, so the grid answers "which
+                    // is it now" as well as "which could it be".
+                    BorderThickness = new Thickness(current ? 1 : 0),
+                    BorderBrush = current
+                        ? (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"]
+                        : null,
+                    CornerRadius = new CornerRadius(6),
+                    Content = Drawn(glyph, 24),
+                };
+
+                // Seventy anonymous drawings; the name is the difference between
+                // hunting and finding.
+                ToolTipService.SetToolTip(button, glyph);
+
+                string chosen = glyph;
+                button.Click += (_, _) =>
+                {
+                    flyout.Hide();
+                    changed(WidgetOptions.Merge(Options, ("icon", JsonValue.Create(chosen))));
+                };
+
+                icons.Children.Add(button);
+            }
+
+        };
 
         var own = new Button
         {

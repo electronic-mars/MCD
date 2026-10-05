@@ -25,3 +25,9 @@ dist/
 # anything the program carries - what is chosen is named in fetch_icons.py and
 # cached, drawing and all, in assets/icons-src.
 assets/icons-free/
+
+# The control panel (tools/panel): the fetched icon set, the data built from it,
+# and the icons somebody has ticked on its Icons page.
+tools/panel/cache/
+tools/panel/site/data/
+assets/icons-selected.json

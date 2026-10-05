@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Иконки — Master Control Dock</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="icons.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Master Control Dock <small>панель управления</small></div>
+    <nav class="tabs" aria-label="Страницы">
+      <a href="index.html">Элементы</a>
+      <a href="icons.html" aria-current="page">Иконки</a>
+    </nav>
+  </header>
+
+  <div class="bar" role="search">
+    <input id="q" type="search" placeholder="Найти: имя, слово, раздел (например: mic, battery, звук)" aria-label="Поиск" autocomplete="off">
+    <select id="cat" aria-label="Раздел"></select>
+    <div class="seg" role="group" aria-label="Что показывать">
+      <button type="button" data-mode="all" aria-pressed="true">Все</button>
+      <button type="button" data-mode="new" aria-pressed="false">Новые</button>
+      <button type="button" data-mode="selected" aria-pressed="false">Отмеченные <b id="n-sel">0</b></button>
+      <button type="button" data-mode="program" aria-pressed="false">В программе <b id="n-prog">0</b></button>
+    </div>
+    <label class="size">Размер <input id="size" type="range" min="26" max="64" value="34" aria-label="Размер значков"></label>
+  </div>
+
+  <main>
+    <p class="lead">Свободный набор Hugeicons (лицензия MIT): <b id="n-all">…</b> значков в <b id="n-cats">…</b> разделах. Поставьте галочки у тех, что стоит добавить в программу, — выбор сам сохраняется на диск (<code>assets/icons-selected.json</code>), оттуда я его и возьму. Значки с пометкой «в программе» — те, что уже есть и нужны самой программе; их пока не трогаем.</p>
+    <div id="sections" aria-live="polite"></div>
+    <p id="empty" class="lead" hidden>Ничего не найдено. Попробуйте другое слово или «Все» вместо «Новые».</p>
+  </main>
+
+  <footer class="dock">
+    <span id="status">Загружаю…</span>
+    <span class="spacer"></span>
+    <button type="button" id="copy">Скопировать список</button>
+    <button type="button" id="clear">Снять все</button>
+  </footer>
+
+  <script src="icons.js"></script>
+</body>
+</html>
