@@ -54,31 +54,6 @@ def cached(name: str, url: str) -> dict:
 # Icons
 # --------------------------------------------------------------------------
 
-CATEGORY_NAMES = {
-    "editing": "Редактирование", "business": "Бизнес", "communications": "Связь",
-    "arrows": "Стрелки", "files-folders": "Файлы и папки", "devices": "Устройства",
-    "logos": "Логотипы", "mathematics": "Математика", "games": "Игры",
-    "hands": "Руки и жесты", "e-commerce": "Торговля", "foods": "Еда", "ai": "ИИ",
-    "education": "Образование", "weather": "Погода", "maps": "Карты",
-    "energy": "Энергия", "date-time": "Дата и время", "security": "Безопасность",
-    "logistics": "Логистика", "media": "Медиа", "mouse": "Мышь и курсор",
-    "medical": "Медицина", "users": "Люди", "furnitures": "Мебель",
-    "programming": "Программирование", "image-camera": "Фото и камера",
-    "wifi": "Сеть и Wi-Fi", "buildings": "Здания", "layout": "Макет",
-    "crypto": "Криптовалюты", "clothing": "Одежда", "emojis": "Эмодзи",
-    "hierarchy": "Иерархия", "gym": "Спорт", "settings": "Настройки",
-    "kitchen": "Кухня", "filter-sorting": "Фильтры и сортировка", "check": "Галочки",
-    "islamic": "Исламские", "alert": "Предупреждения", "bookmark": "Закладки",
-    "add-remove": "Добавить и убрать", "award": "Награды", "shapes": "Фигуры",
-    "legal": "Право", "notes-tasks": "Заметки и задачи", "animation": "Анимация",
-    "menu": "Меню", "link-unlink": "Ссылки", "science-technology": "Наука и техника",
-    "space": "Космос", "dashboard": "Панели и приборы", "home": "Дом",
-    "download-upload": "Загрузка и отдача", "search": "Поиск", "git": "Git",
-    "login-logout": "Вход и выход", "presentation": "Презентации",
-    "other": "Без категории",
-}
-
-
 def program_icons() -> dict[str, str]:
     """Program name -> Hugeicons name, as tools/fetch_icons.py has it."""
     source = (ROOT / "tools" / "fetch_icons.py").read_text(encoding="utf-8-sig")
@@ -87,20 +62,26 @@ def program_icons() -> dict[str, str]:
 
 
 def build_icons() -> dict:
+    import groups
+
     iconify = cached("hugeicons.json", ICONIFY)
     catalogue = {i["name"]: i for i in cached("catalogue.json", CATALOGUE)["icons"]}
     carried = program_icons()
     named = {huge: name for name, huge in carried.items()}
 
-    categories: dict[str, int] = {}
+    # Placed in the meaning-groups of tools/panel/groups.py, the same ones the
+    # program's own picker lists; Hugeicons' own category is kept as "k" so it
+    # can still be searched for.
+    counts: dict[str, int] = {}
     icons = []
 
     for name, icon in sorted(iconify["icons"].items()):
         meta = catalogue.get(name, {})
         category = meta.get("category") or "other"
-        categories[category] = categories.get(category, 0) + 1
+        group = groups.group_of(name, category, meta.get("tags", ""))
+        counts[group] = counts.get(group, 0) + 1
 
-        entry = {"n": name, "c": category, "b": icon["body"]}
+        entry = {"n": name, "c": group, "k": category, "b": icon["body"]}
 
         if meta.get("tags"):
             entry["t"] = meta["tags"]
@@ -110,14 +91,12 @@ def build_icons() -> dict:
 
         icons.append(entry)
 
-    ordered = sorted(categories, key=lambda c: (c == "other", -categories[c], c))
-
     return {
         "license": "Hugeicons free set, MIT (via Iconify)",
         "inProgram": len(named),
         "categories": [
-            {"id": c, "name": CATEGORY_NAMES.get(c, c.replace("-", " ").title()), "count": categories[c]}
-            for c in ordered
+            {"id": g, "name": ru, "count": counts.get(g, 0)}
+            for g, (_, ru) in groups.GROUPS.items()
         ],
         "icons": icons,
     }
@@ -296,7 +275,7 @@ WIDGET_NOTES = {
             "Полная чашка с паром: компьютер не засыпает, а чаты не показывают «нет на месте». Пустая — как обычно.",
             "Правый клик: на 30 минут, на час, на два часа или пока не выключу.",
             "Курсор не двигается и ничего не нажимается: раз в 50 секунд идёт сдвиг мыши на ноль пикселей, который сбрасывает счётчик простоя.",
-            "Состояние не сохраняется: после перезапуска чашка пустая.",
+            "Включена по умолчанию: с первой чашкой на панели компьютер уже не спит. Выключили вручную — остаётся выключенной до следующего запуска программы.",
         ],
     },
     "mcd.layout": {

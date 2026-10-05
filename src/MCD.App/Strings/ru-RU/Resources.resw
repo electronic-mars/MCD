@@ -1574,4 +1574,52 @@
   <data name="KeyMicHint" xml:space="preserve">
     <value>Выключает и снова включает микрофон во всей системе, из любой программы.</value>
   </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>Найти по имени</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Интерфейс и стрелки</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Фигуры и рисование</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Файлы и учёба</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Соцсети и связь</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Программы и код</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Деньги и работа</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Устройства и энергия</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Транспорт и места</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Еда</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Кухня и напитки</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Медицина</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Спорт</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Игры и досуг</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Природа и космос</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>Люди и эмоции</value>
+  </data>
 </root>

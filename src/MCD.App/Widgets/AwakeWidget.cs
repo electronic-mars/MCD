@@ -17,8 +17,11 @@ namespace Mcd.App.Widgets;
 /// itself, so that nobody leaves a laptop awake in a bag over a weekend.
 /// </para>
 /// <para>
-/// The state is not saved. A machine that starts up asked to stay awake by
-/// something it has forgotten is a surprise nobody wants.
+/// On by default: the first cup on a bar in a run of the program fills
+/// itself, so that putting the widget there is enough, and a cup that has
+/// been emptied by hand stays empty until the program is started again.
+/// Whether it was on is not saved - a restart is a fresh decision, and the
+/// answer to it is "on".
 /// </para>
 /// </remarks>
 public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
@@ -27,6 +30,25 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
     public const string Type = "mcd.awake";
 
     public override string TypeId => Type;
+
+    /// <summary>
+    /// Whether this run of the program has already decided about the cup.
+    /// Static, because the bar rebuilds its widgets whenever a setting
+    /// changes and a rebuilt cup must not fill itself again after somebody
+    /// emptied it.
+    /// </summary>
+    private static bool _decided;
+
+    public override void Attach()
+    {
+        if (!_decided)
+        {
+            _decided = true;
+            KeepAwake.Start(null);
+        }
+
+        base.Attach();
+    }
 
     public override void Tick(SensorSnapshot snapshot)
     {

@@ -68,25 +68,6 @@
                     <Setter Property="CharacterSpacing" Value="220" />
                     <Setter Property="Foreground" Value="{ThemeResource BraunTx3}" />
                 </Style>
-
-
-            <DataTemplate x:Key="IconChoiceTemplate" x:DataType="local:IconChoice">
-                <Viewbox
-                    Width="26"
-                    Height="26"
-                    Margin="4"
-                    ToolTipService.ToolTip="{x:Bind Name}">
-                    <Canvas Width="24" Height="24">
-                        <Path
-                            Data="{x:Bind Shape}"
-                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                            StrokeEndLineCap="Round"
-                            StrokeLineJoin="Round"
-                            StrokeStartLineCap="Round"
-                            StrokeThickness="1.5" />
-                    </Canvas>
-                </Viewbox>
-            </DataTemplate>
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.RowDefinitions>

@@ -2789,24 +2789,23 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private void PickPicture(string id, FrameworkElement at)
     {
-        var grid = new GridView
-        {
-            ItemsSource = IconRow.Choices(),
-            SelectionMode = ListViewSelectionMode.Single,
-            MaxWidth = 320,
-            MaxHeight = 300,
-            ItemTemplate = (DataTemplate)Root.Resources["IconChoiceTemplate"],
-        };
-
-        // And a way back. A picture chosen by accident - and it is chosen by
-        // accident, because until today the whole chip was the button - could
-        // not be un-chosen: the list offers sixty-nine drawings and none of
-        // them is "the one it came with".
         var panel = new StackPanel { Spacing = 8, Padding = new Thickness(4) };
-        panel.Children.Add(grid);
 
         var flyout = new Flyout { Content = panel, XamlRoot = Content.XamlRoot };
 
+        string wearing = _settings.Current.App.Icons.TryGetValue(id, out string? worn)
+            ? worn
+            : Mcd.App.Widgets.IconChoices.Known.FirstOrDefault(k => k.Id == id).Fallback ?? string.Empty;
+
+        panel.Children.Insert(0, Mcd.App.Widgets.IconPicker.Build(wearing, picked =>
+        {
+            ChoosePicture(id, picked);
+            flyout.Hide();
+        }));
+
+        // And a way back. A picture chosen by accident could not be
+        // un-chosen: the list offers two thousand drawings and none of them
+        // is "the one it came with".
         if (_settings.Current.App.Icons.ContainsKey(id))
         {
             panel.Children.Add(Braun.Action(
@@ -2818,15 +2817,6 @@ public sealed partial class SettingsWindow : Window
                 },
                 "Undo"));
         }
-
-        grid.SelectionChanged += (_, args) =>
-        {
-            if (args.AddedItems.FirstOrDefault() is IconChoice picked)
-            {
-                ChoosePicture(id, picked.Name);
-                flyout.Hide();
-            }
-        };
 
         flyout.ShowAt(at);
     }
@@ -2878,6 +2868,82 @@ public sealed partial class SettingsWindow : Window
     /// that wrote to the widget chosen before this one changed a chip nobody
     /// was looking at.
     /// </summary>
+    /// <summary>
+    /// Chooses the first pinned program on the widgets page and opens the
+    /// list of icons to change its picture to, as pressing "Change" does.
+    /// For the unattended check.
+    /// </summary>
+    /// <param name="search">Typed into the search box once it is open, or empty.</param>
+    private Microsoft.UI.Xaml.Controls.VariableSizedWrapGrid? _pickerGrid;
+
+    private TextBox? _pickerBox;
+
+    /// <summary>Types into the open picker's search box, as a person does. For the unattended check.</summary>
+    public void TypeInPicker(string text)
+    {
+        if (_pickerBox is not null)
+        {
+            _pickerBox.Text = text;
+        }
+    }
+
+    /// <summary>How many icons the open picker is showing. For the unattended check.</summary>
+    public int PickerShows() => _pickerGrid?.Children.Count ?? -1;
+
+    public string OpenIconPicker(string search)
+    {
+        if (Dock() is not { } dock
+            || dock.Widgets.FirstOrDefault(w => w.TypeId == Mcd.App.Widgets.IconWidget.Type) is not { } pinned)
+        {
+            return "no pinned program";
+        }
+
+        // The button on the page in front of the person, not in an editor
+        // that was built and never shown: a flyout opened from the second
+        // has nowhere to appear.
+        static Button? FindChange(DependencyObject at)
+        {
+            for (int i = 0; i < Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(at); i++)
+            {
+                DependencyObject child = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(at, i);
+
+                if (child is Button { Flyout: not null, ActualWidth: > 0 } found)
+                {
+                    return found;
+                }
+
+                if (FindChange(child) is { } deeper)
+                {
+                    return deeper;
+                }
+            }
+
+            return null;
+        }
+
+        Button? change = FindChange(Content);
+
+        if (change is null)
+        {
+            return "no Change button";
+        }
+
+        change.Flyout.ShowAt(change);
+
+        if (search.Length > 0
+            && change.Flyout is Flyout { Content: StackPanel content }
+            && content.Children.Count > 0
+            && content.Children[0] is StackPanel picker
+            && picker.Children[0] is Grid header
+            && header.Children[1] is TextBox box)
+        {
+            _pickerGrid = (picker.Children[1] as ScrollViewer)?.Content as Microsoft.UI.Xaml.Controls.VariableSizedWrapGrid;
+            _pickerBox = box;
+        }
+
+        return $"opened for {pinned.InstanceId[..8]}, open={change.Flyout.IsOpen}, at {change.ActualWidth}x{change.ActualHeight}, root={change.XamlRoot is not null}";
+    }
+
     public string RehearseSwitch(string reading, int pill)
     {
         if (Dock() is not { } dock)

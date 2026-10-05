@@ -18,7 +18,7 @@
 
   <div class="bar" role="search">
     <input id="q" type="search" placeholder="Найти: имя, слово, раздел (например: mic, battery, звук)" aria-label="Поиск" autocomplete="off">
-    <select id="cat" aria-label="Раздел"></select>
+    <select id="cat" aria-label="Группа"></select>
     <div class="seg" role="group" aria-label="Что показывать">
       <button type="button" data-mode="all" aria-pressed="true">Все</button>
       <button type="button" data-mode="new" aria-pressed="false">Новые</button>
@@ -29,7 +29,7 @@
   </div>
 
   <main>
-    <p class="lead">Свободный набор Hugeicons (лицензия MIT): <b id="n-all">…</b> значков в <b id="n-cats">…</b> разделах. Поставьте галочки у тех, что стоит добавить в программу, — выбор сам сохраняется на диск (<code>assets/icons-selected.json</code>), оттуда я его и возьму. Значки с пометкой «в программе» — те, что уже есть и нужны самой программе; их пока не трогаем.</p>
+    <p class="lead">Свободный набор Hugeicons (лицензия MIT): <b id="n-all">…</b> значков в <b id="n-cats">…</b> группах по смыслу — те же группы, что в выборе значка в программе. Поставьте галочки у тех, что стоит добавить в программу, — выбор сам сохраняется на диск (<code>assets/icons-selected.json</code>), оттуда я его и возьму. Значки с пометкой «в программе» уже добавлены.</p>
     <div id="sections" aria-live="polite"></div>
     <p id="empty" class="lead" hidden>Ничего не найдено. Попробуйте другое слово или «Все» вместо «Новые».</p>
   </main>

@@ -109,6 +109,11 @@ def main() -> None:
     for _, huge in added:
         (SOURCES / f"{huge}.svg").write_text(SVG.format(body=iconify[huge]["body"]), encoding="utf-8")
 
+    sys.path.insert(0, str(HERE))
+    import groups
+
+    print(f"{groups.write_program_groups()} icons placed in tools/icon-groups.json")
+
     subprocess.run([sys.executable, str(FETCH)], cwd=ROOT, check=True)
     print(f"\nadded {len(added)}; IconLibrary.g.cs regenerated")
 

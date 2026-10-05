@@ -759,6 +759,28 @@ public partial class App : Application
                 return;
             }
 
+            // The list of icons for a pinned program, opened as a person opens
+            // it, and then left open for the photograph.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") is "picker" or "picker-search")
+            {
+                Later(3500, () => log.LogInformation(
+                    "selftest.picker {Said}",
+                    _settingsWindow?.OpenIconPicker(
+                        Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "picker-search" ? "coffee" : string.Empty)));
+
+                Later(4500, () =>
+                {
+                    if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "picker-search")
+                    {
+                        _settingsWindow?.TypeInPicker("coffee");
+                    }
+                });
+
+                Later(5300, () => log.LogInformation("selftest.picker shows={Count}", _settingsWindow?.PickerShows()));
+
+                return;
+            }
+
             // Closed last of all. The measuring above happens on later ticks,
             // and a window closed on this one is gone before any of it runs -
             // which is how the squeeze came back as nothing at all.

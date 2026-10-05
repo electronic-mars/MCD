@@ -29,7 +29,7 @@ async function load() {
   $("n-prog").textContent = String(data.inProgram);
 
   const select = $("cat");
-  select.append(new Option("Все разделы", ""));
+  select.append(new Option("Все группы", ""));
   for (const c of data.categories) select.append(new Option(`${c.name} (${c.count})`, c.id));
 
   let chosen = [];
@@ -62,7 +62,7 @@ function matches(icon) {
 
   if (!state.text) return true;
 
-  const hay = `${icon.n} ${icon.t || ""} ${icon.p || ""} ${state.catName.get(icon.c) || icon.c}`.toLowerCase();
+  const hay = `${icon.n} ${icon.t || ""} ${icon.p || ""} ${icon.k || ""} ${state.catName.get(icon.c) || icon.c}`.toLowerCase();
   return state.text.split(/\s+/).every((word) => hay.includes(word));
 }
 
@@ -86,6 +86,26 @@ function tile(icon) {
   return label;
 }
 
+// A group can be a thousand icons, so its tiles are made a few hundred at a time:
+// the first screenful appears at once and the page stays responsive while the rest arrive.
+function fill(grid) {
+  const list = grid._icons;
+  const mine = grid._pass = (grid._pass || 0) + 1;
+  grid.replaceChildren();
+  let at = 0;
+
+  const next = () => {
+    if (grid._pass !== mine) return; // a newer rebuild has taken the grid over
+    const frag = document.createDocumentFragment();
+    for (const end = Math.min(list.length, at + 240); at < end; at++) frag.append(tile(list[at]));
+    grid.append(frag);
+    grid._filled = at >= list.length;
+    if (!grid._filled) setTimeout(next, 0);
+  };
+
+  next();
+}
+
 function rebuild() {
   watcher?.disconnect();
 
@@ -106,11 +126,7 @@ function rebuild() {
       if (!entry.isIntersecting) continue;
       const grid = entry.target;
       watcher.unobserve(grid);
-      const list = grid._icons;
-      const frag = document.createDocumentFragment();
-      for (const icon of list) frag.append(tile(icon));
-      grid.replaceChildren(frag);
-      grid._filled = true;
+      fill(grid);
     }
   }, { rootMargin: "1400px 0px" });
 

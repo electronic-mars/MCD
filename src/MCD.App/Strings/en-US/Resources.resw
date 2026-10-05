@@ -1574,4 +1574,52 @@
   <data name="KeyMicHint" xml:space="preserve">
     <value>Off and on again, for the whole machine, from anywhere.</value>
   </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>Search by name</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Shapes and drawing</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Files and learning</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Social and messaging</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Apps and code</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Money and work</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Devices and power</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Transport and places</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Kitchen and drinks</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Medicine</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Sport</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Games and fun</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Nature and space</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>People and faces</value>
+  </data>
 </root>

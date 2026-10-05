@@ -116,52 +116,16 @@ public sealed class IconWidget : WidgetViewModel
             Opacity = 0.7,
         });
 
-        static FrameworkElement Drawn(string glyph, double box)
-        {
-            var shape = new Microsoft.UI.Xaml.Shapes.Path
-            {
-                Data = (Geometry)Microsoft.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(
-                    typeof(Geometry), IconLibrary.Paths[glyph]),
-                Stroke = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"],
-                StrokeThickness = 1.5,
-                StrokeLineJoin = PenLineJoin.Round,
-                StrokeStartLineCap = PenLineCap.Round,
-                StrokeEndLineCap = PenLineCap.Round,
-            };
-
-            var canvas = new Canvas { Width = 24, Height = 24 };
-            canvas.Children.Add(shape);
-
-            return new Viewbox { Width = box, Height = box, Child = canvas };
-        }
-
         string wearing = WidgetOptions.Text(Options, "icon") ?? string.Empty;
 
-        var icons = new VariableSizedWrapGrid
-        {
-            Orientation = Orientation.Horizontal,
-            MaximumRowsOrColumns = 8,
-            ItemWidth = 36,
-            ItemHeight = 36,
-        };
+        var flyout = new Flyout();
+        var content = new StackPanel { Spacing = 8 };
+        flyout.Content = content;
 
-        var flyout = new Flyout
-        {
-            Content = new ScrollViewer
-            {
-                Content = new StackPanel
-                {
-                    Spacing = 8,
-                    Children = { icons },
-                },
-                MaxHeight = 320,
-            },
-        };
-
-        // Drawn when the flyout is first opened, not when this editor is
-        // built: the editor is rebuilt with every choice on the widgets page,
-        // and a library that grows by whatever somebody ticks on the control
-        // panel would be hundreds of buttons made for a list nobody opened.
+        // The groups and their buttons are made when the flyout is first
+        // opened, not when this editor is built: the editor is rebuilt with
+        // every choice on the widgets page, and a library of two thousand
+        // would be a hundred buttons made for a list nobody opened.
         bool filled = false;
 
         flyout.Opening += (_, _) =>
@@ -173,41 +137,11 @@ public sealed class IconWidget : WidgetViewModel
 
             filled = true;
 
-            foreach (string glyph in IconLibrary.Paths.Keys)
+            content.Children.Insert(0, IconPicker.Build(wearing, chosen =>
             {
-                bool current = glyph == wearing;
-
-                var button = new Button
-                {
-                    Width = 32,
-                    Height = 32,
-                    Padding = new Thickness(3),
-                    Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-
-                    // The one already worn is marked, so the grid answers "which
-                    // is it now" as well as "which could it be".
-                    BorderThickness = new Thickness(current ? 1 : 0),
-                    BorderBrush = current
-                        ? (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"]
-                        : null,
-                    CornerRadius = new CornerRadius(6),
-                    Content = Drawn(glyph, 24),
-                };
-
-                // Seventy anonymous drawings; the name is the difference between
-                // hunting and finding.
-                ToolTipService.SetToolTip(button, glyph);
-
-                string chosen = glyph;
-                button.Click += (_, _) =>
-                {
-                    flyout.Hide();
-                    changed(WidgetOptions.Merge(Options, ("icon", JsonValue.Create(chosen))));
-                };
-
-                icons.Children.Add(button);
-            }
-
+                flyout.Hide();
+                changed(WidgetOptions.Merge(Options, ("icon", JsonValue.Create(chosen))));
+            }));
         };
 
         var own = new Button
@@ -221,7 +155,7 @@ public sealed class IconWidget : WidgetViewModel
             changed(WidgetOptions.Merge(Options, ("icon", null)));
         };
 
-        ((StackPanel)((ScrollViewer)flyout.Content).Content).Children.Add(own);
+        content.Children.Add(own);
 
         var change = new Button
         {
@@ -233,7 +167,7 @@ public sealed class IconWidget : WidgetViewModel
                 Children =
                 {
                     wearing.Length > 0
-                        ? Drawn(wearing, 18)
+                        ? IconPicker.Drawn(wearing, 18)
                         : new TextBlock { Text = Loc.Tr("LaunchIconAutoShort", "Auto"), FontSize = 12 },
                     new TextBlock { Text = Loc.Tr("PinIconChange", "Change\u2026"), FontSize = 12 },
                 },
