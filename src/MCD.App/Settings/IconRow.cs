@@ -77,7 +77,7 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry TabHide => Draw("ViewOff");
 
-    public static Geometry TabLook => Draw("Brush");
+    public static Geometry TabLook => Draw("Palette");
 
     public static Geometry TabSensors => Draw("Pulse");
 
@@ -91,7 +91,7 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry PagePresets => Draw("Star");
 
-    public static Geometry PageLook => Draw("Brush");
+    public static Geometry PageLook => Draw("Palette");
 
     public static Geometry PageSensors => Draw("Pulse");
 

@@ -48,6 +48,10 @@ public partial class App : Application
         DispatcherShutdownMode = DispatcherShutdownMode.OnExplicitShutdown;
     }
 
+    private static bool IsElevated() =>
+        new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent())
+            .IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         _uiQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
@@ -66,6 +70,41 @@ public partial class App : Application
             _logProvider.Dispose();
             Exit();
             return;
+        }
+
+        // Started with administrator rights - by an installer that was itself
+        // elevated, say - the program would run, but an elevated WinUI program
+        // takes no part in drag and drop: nothing from the settings could be
+        // dragged onto a bar. It starts itself again through the shell, which
+        // is not elevated, and the elevated copy ends. Once only: a machine
+        // whose shell is elevated too keeps the copy it has.
+        if (IsElevated()
+            && Environment.GetEnvironmentVariable("MCD_SELFTEST") != "1")
+        {
+            string stamp = Path.Combine(AppPaths.Root, "deelevate.stamp");
+
+            try
+            {
+                // The shell cannot be told "this is the second try", so the
+                // first leaves a note and the second reads it.
+                if (File.Exists(stamp) && DateTime.UtcNow - File.GetLastWriteTimeUtc(stamp) < TimeSpan.FromSeconds(30))
+                {
+                    throw new InvalidOperationException("already tried a moment ago");
+                }
+
+                File.WriteAllText(stamp, "x");
+                start.LogWarning("start.elevated relaunching through the shell");
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(
+                    "explorer.exe", $"\"{Environment.ProcessPath}\"") { UseShellExecute = true });
+                _logProvider.Dispose();
+                Exit();
+                return;
+            }
+            catch (Exception e)
+            {
+                start.LogWarning(e, "start.elevated could not relaunch; carrying on elevated");
+            }
         }
 
         if (!ClaimSingleInstance(start))

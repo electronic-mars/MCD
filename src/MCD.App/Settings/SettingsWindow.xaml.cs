@@ -4131,9 +4131,9 @@ public sealed partial class SettingsWindow : Window
 
         mark.Children.Add(new Border
         {
-            Width = 72,
-            Height = 72,
-            CornerRadius = new CornerRadius(18),
+            Width = 96,
+            Height = 96,
+            CornerRadius = new CornerRadius(22),
             HorizontalAlignment = HorizontalAlignment.Center,
             Margin = new Thickness(0, 4, 0, 14),
             Shadow = new ThemeShadow(),
@@ -4141,7 +4141,7 @@ public sealed partial class SettingsWindow : Window
             Child = new Image
             {
                 Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(
-                    new Uri("ms-appx:///Assets/icon.ico")),
+                    new Uri("ms-appx:///Assets/icon-128.png")),
                 Stretch = Microsoft.UI.Xaml.Media.Stretch.UniformToFill,
             },
         });

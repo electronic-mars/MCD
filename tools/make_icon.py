@@ -127,7 +127,7 @@ def main() -> None:
     (ASSETS / "icon.ico").write_bytes(header + entries + data)
 
     # Kept alongside for the tray, the About page and the Store tiles later.
-    for size in (16, 24, 32, 48, 256):
+    for size in (16, 24, 32, 48, 128, 256):
         draw(size).save(ASSETS / f"icon-{size}.png")
 
     print(f"wrote {ASSETS / 'icon.ico'} at {', '.join(str(s) for s in ICO_SIZES)}")

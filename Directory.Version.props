@@ -3,6 +3,6 @@
        assembly info, Package.appxmanifest, the About page, and check-version.ps1,
        which refuses a release whose git tag disagrees with this number. -->
   <PropertyGroup>
-    <McdVersion>0.1.3</McdVersion>
+    <McdVersion>0.1.4</McdVersion>
   </PropertyGroup>
 </Project>

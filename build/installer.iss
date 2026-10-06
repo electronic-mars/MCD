@@ -87,13 +87,16 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; \
     ValueType: none; ValueName: "MasterControlDock"; Flags: uninsdeletevalue
 
 [Run]
+; runasoriginaluser: an install "for all users" runs Setup elevated, and a program
+; started from it would inherit that. An elevated WinUI program cannot take part in
+; drag and drop, so nothing could be dragged onto the bar.
 Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; \
-    Flags: nowait postinstall skipifsilent
+    Flags: nowait postinstall skipifsilent runasoriginaluser
 ; The program updating itself runs this installer silently and then stops, so its
 ; own files can be replaced. Silent skips the tick box above, so without this
 ; line the update would end with the program simply gone. The flag is ours and
 ; is passed only on that path.
-Filename: "{app}\{#AppExe}"; Flags: nowait; Check: WasStartedByTheProgram
+Filename: "{app}\{#AppExe}"; Flags: nowait runasoriginaluser; Check: WasStartedByTheProgram
 
 [Code]
 function ServiceRunning: Boolean;
