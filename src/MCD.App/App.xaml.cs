@@ -776,10 +776,9 @@ public partial class App : Application
                 return;
             }
 
-            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "edit")
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "drag")
             {
-                Later(3000, () => log.LogInformation("selftest.edit {Said}", _docks?.RehearseEdit(add: false)));
-                Later(5000, () => log.LogInformation("selftest.edit {Said}", _docks?.RehearseEdit(add: true)));
+                Later(300, () => _docks?.Pretend(cell: 60, span: 3));
 
                 return;
             }

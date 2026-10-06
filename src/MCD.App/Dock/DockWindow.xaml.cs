@@ -650,37 +650,6 @@ public sealed partial class DockWindow : Window
             menu.Items.Add(new MenuFlyoutSeparator());
         }
 
-        // The last change, taken back from where it was made: a widget
-        // dragged the wrong way on the bar should not need the settings window
-        // to be opened to be put right.
-        if (UndoWhat?.Invoke() is { } what)
-        {
-            var undo = new MenuFlyoutItem
-            {
-                Text = string.Format(
-                    System.Globalization.CultureInfo.CurrentCulture,
-                    Loc.Tr("UndoWithLabel", "Undo - {0}"),
-                    what),
-                Icon = new FontIcon { Glyph = "" },
-            };
-
-            undo.Click += (_, _) => UndoNow?.Invoke();
-            menu.Items.Add(undo);
-        }
-
-        // Editing on the bar itself: a press on a widget opens its settings,
-        // a press on a free stretch offers what could stand there.
-        var edit = new MenuFlyoutItem
-        {
-            Text = _editing
-                ? Loc.Tr("BarMenuEditDone", "Finish editing")
-                : Loc.Tr("BarMenuEdit", "Edit this bar..."),
-            Icon = new FontIcon { Glyph = _editing ? "" : "" },
-        };
-
-        edit.Click += (_, _) => Edit(!_editing);
-        menu.Items.Add(edit);
-
         var settings = new MenuFlyoutItem
         {
             Text = Loc.Tr("BarMenuSettings", "Settings..."),
@@ -721,11 +690,7 @@ public sealed partial class DockWindow : Window
     /// <summary>The menu asked for the program to stop.</summary>
     public event EventHandler? ExitRequested;
 
-    /// <summary>What the last undoable change is called, or null when there is none.</summary>
-    public Func<string?>? UndoWhat { get; set; }
 
-    /// <summary>Takes the last change back.</summary>
-    public Action? UndoNow { get; set; }
 
     /// <summary>
     /// Says, once ever, how the bar is used.
@@ -1167,6 +1132,31 @@ public sealed partial class DockWindow : Window
         }
 
         // Only the free ones, and the ones the widget in hand is leaving.
+        // Every widget outlined, so a drag shows what can be dropped on and
+        // what is in the way: the contour in the bar's own light at sixty
+        // per cent, the inside barely tinted.
+        foreach (Placement sitting in _placed)
+        {
+            Rect box = CellRect(sitting.Cell, sitting.Span);
+
+            var outline = new Rectangle
+            {
+                Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(0x1F, 0xFF, 0xFF, 0xFF)),
+                Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(0x99, 0xFF, 0xFF, 0xFF)),
+                StrokeThickness = 1,
+                RadiusX = 5,
+                RadiusY = 5,
+                Width = Math.Max(0, box.Width),
+                Height = Math.Max(0, box.Height),
+                IsHitTestVisible = false,
+            };
+
+            Canvas.SetLeft(outline, box.X);
+            Canvas.SetTop(outline, box.Y);
+            Overlay.Children.Add(outline);
+            _slots.Add(outline);
+        }
+
         var free = DockGrid.Free(_placed, _capacity, _grabbed?.Entry.InstanceId).Order().ToList();
 
         for (int i = 0; i < free.Count;)
