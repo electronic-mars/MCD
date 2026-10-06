@@ -159,6 +159,16 @@ public sealed partial class SettingsWindow : Window
         Root.KeyboardAccelerators.Add(undoKey);
 
         Reload();
+        // Their own titles and screen switchers are the widgets page's now.
+        foreach (StackPanel part in new[] { PinsSection, PresetsSection })
+        {
+            part.Children[0].Visibility = Visibility.Collapsed;
+            part.Children[1].Visibility = Visibility.Collapsed;
+        }
+
+        PinsTabs.Visibility = Visibility.Collapsed;
+        PresetsTabs.Visibility = Visibility.Collapsed;
+
         Nav.SelectedItem = Nav.MenuItems[0];
     }
 
@@ -368,7 +378,7 @@ public sealed partial class SettingsWindow : Window
         Nav.SelectedItem = widgetId is null
             ? Nav.MenuItems[0]
             : Nav.MenuItems.OfType<NavigationViewItem>()
-                .FirstOrDefault(i => (i.Tag as string) == (pin ? "pins" : "widgets"))
+                .FirstOrDefault(i => (i.Tag as string) == "widgets")
             ?? Nav.MenuItems[1];
 
         ReloadDocks();
@@ -1807,6 +1817,53 @@ public sealed partial class SettingsWindow : Window
             var drop = Braun.Action(
                 Loc.Tr("PresetDelete", "Forget it"), () => DeletePreset(id), "Delete", danger: false);
 
+            // Automatically when this many screens are connected.
+            var desk = new ComboBox
+            {
+                MinWidth = 120,
+                ItemsSource = new[]
+                {
+                    Loc.Tr("DeskOff", "By hand"),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 1),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 2),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 3),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 4),
+                },
+                SelectedIndex = Math.Clamp(preset.Screens, 0, 4),
+            };
+
+            ToolTipService.SetToolTip(desk, Loc.Tr("DeskTip", "Put it on the main screen's bar by itself when this many screens are connected"));
+
+            desk.SelectionChanged += (_, _) =>
+            {
+                if (desk.SelectedIndex == Math.Clamp(preset.Screens, 0, 4))
+                {
+                    return;
+                }
+
+                int screens = desk.SelectedIndex;
+
+                SettingsModel current = _settings.Current;
+                Write(
+                    current with
+                    {
+                        App = current.App with
+                        {
+                            // One layout per screen count: choosing a count another
+                            // layout holds takes it from that one.
+                            Presets =
+                            [
+                                .. current.App.Presets.Select(p => p.Id == id
+                                    ? p with { Screens = screens }
+                                    : screens > 0 && p.Screens == screens ? p with { Screens = 0 } : p)
+                            ],
+                        },
+                    },
+                    WriteReason.UserAction,
+                    Loc.Tr("UndoPresetDesk", "when a layout is used"));
+                ShowPresets();
+            };
+
             rows.Add(Braun.Row(
                 preset.Name,
                 string.Format(
@@ -1817,7 +1874,7 @@ public sealed partial class SettingsWindow : Window
                 {
                     Orientation = Orientation.Horizontal,
                     Spacing = 8,
-                    Children = { apply, drop },
+                    Children = { desk, apply, drop },
                 }));
         }
 
@@ -3473,8 +3530,11 @@ public sealed partial class SettingsWindow : Window
 
         DocksSection.Visibility = Show(tag == "docks");
         WidgetsSection.Visibility = Show(tag == "widgets");
-        PinsSection.Visibility = Show(tag == "pins");
-        PresetsSection.Visibility = Show(tag == "presets");
+        // Programs and saved layouts are parts of the same page: one answer
+        // to "what is on the bar", where there used to be three pages to
+        // look through for it.
+        PinsSection.Visibility = Show(tag == "widgets");
+        PresetsSection.Visibility = Show(tag == "widgets");
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
         GeneralSection.Visibility = Show(tag == "general");
@@ -3598,6 +3658,20 @@ public sealed partial class SettingsWindow : Window
 
         _sourcesShown = signature;
         SourcesList.Children.Clear();
+
+        // The verdict first, the roll call after it for whoever wants it.
+        bool silent = roll.Any(x => !x.Answering && x.Tier == Tier.Driver);
+
+        SourcesList.Children.Add(new TextBlock
+        {
+            Text = silent
+                ? Loc.Tr("SourcesSomeSilent", "Some temperatures cannot be read yet. The row below says what is missing.")
+                : Loc.Tr("SourcesAllWell", "Everything this machine can report is being read."),
+            FontSize = 13,
+            Foreground = Braun.Tx2,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 0, 0, 6),
+        });
 
         foreach (SourceRoll source in roll)
         {

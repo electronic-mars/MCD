@@ -451,6 +451,14 @@ public sealed class DockWindowManager : IDisposable
     {
         AppSettings app = _settings.Current.App;
 
+        // Windows high-contrast: the system's own colours on a plain ground,
+        // whatever finish was chosen - a translucent or pictured bar under
+        // text is exactly what that mode exists to get rid of.
+        if (new Windows.UI.ViewManagement.AccessibilitySettings().HighContrast && app.Backdrop != "solid")
+        {
+            app = app with { Backdrop = "solid" };
+        }
+
         return new WidgetContext(
             _sensors,
             new IconChoices(app.Icons),
@@ -467,8 +475,65 @@ public sealed class DockWindowManager : IDisposable
         };
     }
 
+    private int? _screens;
+
+    /// <summary>
+    /// A layout tied to the number of screens now connected is put on the main
+    /// screen's bar when that number changes while the program runs.
+    /// </summary>
+    private void FollowTheDesk(ImmutableArray<DockPlan> plans)
+    {
+        int count = plans.Length;
+        int? before = _screens;
+        _screens = count;
+
+        if (before is null || before == count)
+        {
+            return;
+        }
+
+        BarPreset? preset = _settings.Current.App.Presets.FirstOrDefault(p => p.Screens == count);
+        DockPlan? main = plans.FirstOrDefault(p => p.Monitor.IsPrimary);
+
+        if (preset is null || main is null)
+        {
+            return;
+        }
+
+        string stableId = main.Config.StableId;
+
+        // After this change has finished being announced.
+        _ui.TryEnqueue(() =>
+        {
+            SettingsModel current = _settings.Current;
+            ImmutableArray<WidgetConfig> copies = [.. preset.Widgets.Select(w => w.AsNewInstance())];
+
+            _log.LogInformation("settings.desk screens={Count} layout={Name}", count, preset.Name);
+
+            _settings.Commit(
+                current with
+                {
+                    Monitors =
+                    [
+                        .. current.Monitors.Select(m => m.StableId == stableId
+                            ? m with { Widgets = copies, Slots = preset.Slots }
+                            : m)
+                    ],
+                },
+                WriteReason.UserAction,
+                string.Format(
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    Loc.Tr("UndoDesk", "layout {0} for {1} screens"),
+                    preset.Name,
+                    count),
+                stableId);
+        });
+    }
+
     private void Rebuild(ImmutableArray<DockPlan> plans)
     {
+        FollowTheDesk(plans);
+
         var wanted = plans.Where(p => p.ShouldShow).ToDictionary(p => p.Config.StableId);
 
         foreach ((string id, DockWindow window) in _windows.ToList())
@@ -537,6 +602,8 @@ public sealed class DockWindowManager : IDisposable
 
             window.SettingsRequested += (s, request) => SettingsRequested?.Invoke(s, request);
             window.ExitRequested += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
+            window.UndoWhat = () => _settings.UndoWhat;
+            window.UndoNow = () => _settings.Undo();
 
             // A bar that has been rearranged by hand says so; writing it down
             // happens here, where the one writer of settings lives.

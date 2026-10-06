@@ -117,6 +117,13 @@ public sealed record BarPreset
     public int Slots { get; init; }
 
     public ImmutableArray<WidgetConfig> Widgets { get; init; } = [];
+
+    /// <summary>
+    /// When this many screens are connected, the main screen's bar is given
+    /// this layout by itself. Zero: never. The desk at work and the desk at
+    /// home are told apart by how many screens are on them.
+    /// </summary>
+    public int Screens { get; init; }
 }
 
 /// <summary>One thing the launcher can start.</summary>

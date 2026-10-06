@@ -158,38 +158,6 @@
                         <TextBlock x:Uid="NavWidgets" VerticalAlignment="Center" Text="Widgets" />
                     </StackPanel>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="NavPinsItem" Tag="pins">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
-                            <Canvas Width="24" Height="24">
-                                <Path
-                                    Data="{x:Bind local:IconRow.TabPins}"
-                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                    StrokeEndLineCap="Round"
-                                    StrokeLineJoin="Round"
-                                    StrokeStartLineCap="Round"
-                                    StrokeThickness="2.1" />
-                            </Canvas>
-                        </Viewbox>
-                        <TextBlock x:Uid="NavPins" VerticalAlignment="Center" Text="Your programs" />
-                    </StackPanel>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="NavPresetsItem" Tag="presets">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
-                            <Canvas Width="24" Height="24">
-                                <Path
-                                    Data="{x:Bind local:IconRow.TabPresets}"
-                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                    StrokeEndLineCap="Round"
-                                    StrokeLineJoin="Round"
-                                    StrokeStartLineCap="Round"
-                                    StrokeThickness="2.1" />
-                            </Canvas>
-                        </Viewbox>
-                        <TextBlock x:Uid="NavPresets" VerticalAlignment="Center" Text="Presets" />
-                    </StackPanel>
-                </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavLookItem" Tag="appearance">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <Viewbox Width="17" Height="17" VerticalAlignment="Center">

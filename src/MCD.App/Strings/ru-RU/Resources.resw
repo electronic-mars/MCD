@@ -846,7 +846,7 @@
     <value>Виджеты</value>
   </data>
   <data name="WidgetsIntro.Text" xml:space="preserve">
-    <value>Что стоит на панели этого экрана и что ещё туда можно поставить.</value>
+    <value>Что стоит на панели этого экрана, закреплённые программы и сохранённые раскладки.</value>
   </data>
   <data name="IconDefault" xml:space="preserve">
     <value>Тот, что был изначально</value>
@@ -1627,5 +1627,26 @@
   </data>
   <data name="KeyFocusHint" xml:space="preserve">
     <value>Стрелки выбирают виджет, Enter нажимает, Esc выходит.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>Часть температур пока не читается. Строка ниже говорит, чего не хватает.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>Всё, что эта машина умеет сообщать, читается.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>Вручную</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>При экранах: {0}</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>Ставить на панель главного экрана само, когда подключено столько экранов</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>раскладка «{0}» для экранов: {1}</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>когда применять раскладку</value>
   </data>
 </root>

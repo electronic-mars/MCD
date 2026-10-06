@@ -10,7 +10,7 @@
 # set of photographs of the wrong pages.
 param(
     [string]$Out = "$env:TEMP\mcd-pages",
-    [string]$Pages = 'docks,widgets,pins,presets,appearance,general,sensors,about',
+    [string]$Pages = 'docks,widgets,appearance,general,sensors,about',
     [int]$Seconds = 22
 )
 

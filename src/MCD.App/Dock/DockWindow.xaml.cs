@@ -650,6 +650,24 @@ public sealed partial class DockWindow : Window
             menu.Items.Add(new MenuFlyoutSeparator());
         }
 
+        // The last change, taken back from where it was made: a widget
+        // dragged the wrong way on the bar should not need the settings window
+        // to be opened to be put right.
+        if (UndoWhat?.Invoke() is { } what)
+        {
+            var undo = new MenuFlyoutItem
+            {
+                Text = string.Format(
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    Loc.Tr("UndoWithLabel", "Undo - {0}"),
+                    what),
+                Icon = new FontIcon { Glyph = "" },
+            };
+
+            undo.Click += (_, _) => UndoNow?.Invoke();
+            menu.Items.Add(undo);
+        }
+
         var settings = new MenuFlyoutItem
         {
             Text = Loc.Tr("BarMenuSettings", "Settings..."),
@@ -689,6 +707,12 @@ public sealed partial class DockWindow : Window
 
     /// <summary>The menu asked for the program to stop.</summary>
     public event EventHandler? ExitRequested;
+
+    /// <summary>What the last undoable change is called, or null when there is none.</summary>
+    public Func<string?>? UndoWhat { get; set; }
+
+    /// <summary>Takes the last change back.</summary>
+    public Action? UndoNow { get; set; }
 
     /// <summary>
     /// Says, once ever, how the bar is used.
