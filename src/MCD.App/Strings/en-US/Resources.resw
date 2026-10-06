@@ -1703,4 +1703,28 @@
   <data name="DeskMany" xml:space="preserve">
     <value>Auto: with {0} screens</value>
   </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>Processor - load and temperature</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Memory - load and temperature</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>Graphics - load and temperature</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Both figures side by side, under one icon.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Load and temperature</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>Processor and memory temperature</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Not readable yet. It needs a driver and a small service: two steps on the Readings page, and the widgets appear here by themselves.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Set it up...</value>
+  </data>
 </root>

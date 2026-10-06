@@ -224,10 +224,47 @@ public static class WidgetCatalog
                 reading.Icon,
                 () => DockContents.Gauge(reading.Id),
                 entry => entry.TypeId == GaugeWidget.Type
-                    && (WidgetOptions.Text(entry.Config, "reading") ?? "cpu") == reading.Id,
+                    && (WidgetOptions.Text(entry.Config, "reading") ?? "cpu") == reading.Id
+                    && WidgetOptions.Number(entry.Config, "temp") is not 1,
                 Chooses: reading.Id,
                 Category: category,
                 Short: shortName);
+
+            // The load and the temperature of the same part in one chip, on
+            // offer by itself: it was only a switch inside the load widget's
+            // own settings, and nobody looks for a widget inside a widget.
+            // Offered once the part has a thermometer to read.
+            HardwareGroup? part = reading.Id switch
+            {
+                "cpu" => HardwareGroup.Cpu,
+                "ram" => HardwareGroup.Memory,
+                "gpu" => HardwareGroup.Gpu,
+                _ => null,
+            };
+
+            if (part is { } group
+                && sensors.Catalog.Any(d => d.Kind == SensorKind.Temperature && d.Prominent && d.Group == group))
+            {
+                yield return new WidgetOffer(
+                    reading.Id switch
+                    {
+                        "cpu" => Loc.Tr("OfferCpuBoth", "Processor - load and temperature"),
+                        "ram" => Loc.Tr("OfferRamBoth", "Memory - load and temperature"),
+                        _ => Loc.Tr("OfferGpuBoth", "Graphics - load and temperature"),
+                    },
+                    Loc.Tr("OfferBoth", "Both figures side by side, under one icon."),
+                    reading.Icon,
+                    () => DockContents.Gauge(reading.Id) with
+                    {
+                        Config = WidgetJson.Object(("reading", reading.Id), ("temp", 1)),
+                    },
+                    entry => entry.TypeId == GaugeWidget.Type
+                        && (WidgetOptions.Text(entry.Config, "reading") ?? "cpu") == reading.Id
+                        && WidgetOptions.Number(entry.Config, "temp") is 1,
+                    Chooses: reading.Id + "+temp",
+                    Category: category,
+                    Short: Loc.Tr("ShortBoth", "Load and temperature"));
+            }
         }
 
         // Named the way the sensors page names them, not the way the firmware

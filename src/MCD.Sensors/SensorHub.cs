@@ -27,7 +27,24 @@ public sealed class SensorHub : IDisposable
     private const int StaleTicksBeforeMissing = 3;
 
     /// <summary>How long a source that has failed is left alone before being probed again.</summary>
-    private static readonly TimeSpan RetryAfter = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan RetryAfter = TimeSpan.FromSeconds(8);
+
+    /// <summary>
+    /// Asks every source that is not answering to be tried again on the next
+    /// tick. For when something the sources wait on has just been done - the
+    /// driver put in, the service started - so the readings come up in a
+    /// second instead of after the next scheduled look.
+    /// </summary>
+    public void ProbeNow()
+    {
+        foreach (Source source in _sources.ToList())
+        {
+            if (!source.Ready)
+            {
+                source.NextProbe = DateTimeOffset.MinValue;
+            }
+        }
+    }
 
     /// <summary>How often a working source is asked whether its list has changed.</summary>
     private static readonly TimeSpan Relist = TimeSpan.FromMinutes(5);

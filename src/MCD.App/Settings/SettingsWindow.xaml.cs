@@ -1546,6 +1546,17 @@ public sealed partial class SettingsWindow : Window
             _inspectorAt = null;
         }
 
+        // Said where it is wanted: the temperature of the processor and the
+        // memory is not on offer below until it can be read, and nothing else
+        // on this page would ever say why.
+        if (!_sensors.Catalog.Any(d => d.Kind == SensorKind.Temperature && d.Group == HardwareGroup.Cpu))
+        {
+            WidgetsBody.Children.Add(Braun.Group(Braun.Row(
+                Loc.Tr("TempMissingRow", "Processor and memory temperature"),
+                Loc.Tr("TempMissingHint", "Not readable yet. It needs a driver and a small service: two steps on the Readings page, and the widgets appear here by themselves."),
+                Braun.Action(Loc.Tr("TempMissingButton", "Set it up..."), () => GoTo("sensors"), "Gear"))));
+        }
+
         // ---------------------------------------------- what else could be on it
         WidgetsBody.Children.Add(Braun.Heading("Layout", Loc.Tr("GalleryRow", "Put one on the bar")));
 
@@ -3192,7 +3203,23 @@ public sealed partial class SettingsWindow : Window
         {
             ShowReadings();
         }
+
+        // The widgets page, while it is open, follows what can be read: the
+        // moment a temperature appears its widgets are on offer, without
+        // leaving the page and coming back.
+        if (WidgetsSection.Visibility == Visibility.Visible)
+        {
+            int temperatures = _sensors.Catalog.Count(d => d.Kind == SensorKind.Temperature);
+
+            if (_temperaturesOffered != temperatures)
+            {
+                _temperaturesOffered = temperatures;
+                ShowWidgets();
+            }
+        }
     }
+
+    private int _temperaturesOffered = -1;
 
     /// <summary>
     /// Writes the settings and remembers that this window did it.
@@ -3551,6 +3578,11 @@ public sealed partial class SettingsWindow : Window
         GeneralSection.Visibility = Show(tag == "general");
         AboutSection.Visibility = Show(tag == "about");
 
+        if (tag == "widgets")
+        {
+            ShowWidgets();
+        }
+
         if (tag == "about")
         {
             ShowAbout();
@@ -3564,7 +3596,7 @@ public sealed partial class SettingsWindow : Window
         // Only while the page that shows live figures is on screen. A window
         // sitting behind everything else has no business waking the machine
         // once a second.
-        if (tag is "sensors")
+        if (tag is "sensors" or "widgets")
         {
             Tick();
             _refresh.Start();
@@ -3659,8 +3691,12 @@ public sealed partial class SettingsWindow : Window
             .ThenBy(s => SourceName(s.Id), StringComparer.CurrentCulture)
             .ToList();
 
+        // The driver and the service are in the signature: putting either in
+        // changes the next step this page offers, and the page has to notice
+        // without the program being closed and opened.
         string signature = string.Join(
-            ";", roll.Select(s => $"{s.Id}:{s.Answering}:{s.Readings}"));
+            ";", roll.Select(s => $"{s.Id}:{s.Answering}:{s.Readings}"))
+            + $"|{Mcd.Interop.PawnIo.PawnIo.InstalledVersion()}|{_host.Connected}";
 
         if (signature == _sourcesShown)
         {
@@ -3764,7 +3800,7 @@ public sealed partial class SettingsWindow : Window
                 Braun.Action(
                     Loc.Tr("ServiceInstall", "Install the service..."),
                     () => InstallService(service),
-                    "Power"));
+                    "Gear"));
         }
         else
         {
@@ -3790,6 +3826,17 @@ public sealed partial class SettingsWindow : Window
             });
 
             _log.LogInformation("settings.service install requested");
+
+            // The service takes a moment to start; the sources are asked to
+            // look again as it does, so the readings arrive by themselves.
+            _ = Task.Run(async () =>
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    await Task.Delay(2500);
+                    _sensors.ProbeNow();
+                }
+            });
         }
         catch (Exception e)
         {

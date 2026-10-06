@@ -1703,4 +1703,28 @@
   <data name="DeskMany" xml:space="preserve">
     <value>Само: при {0} экранах</value>
   </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>Процессор — загрузка и температура</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Память — загрузка и температура</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>Видеокарта — загрузка и температура</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Обе цифры рядом, под одним значком.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Загрузка и температура</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>Температура процессора и памяти</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Пока не читается. Нужны драйвер и небольшая служба: два шага на странице «Показания», после них виджеты появятся здесь сами.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Настроить…</value>
+  </data>
 </root>
