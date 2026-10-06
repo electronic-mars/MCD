@@ -26,10 +26,15 @@ AppPublisher={#AppPublisher}
 AppPublisherURL={#AppUrl}
 AppSupportURL={#AppUrl}/issues
 AppUpdatesURL={#AppUrl}/releases
-DefaultDirName={localappdata}\Programs\MasterControlDock
+DefaultDirName={autopf}\MasterControlDock
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
+; Per user unless the person asks for more: the first page offers "for all
+; users" and, only then, asks for administrator rights. {autopf} is the user's
+; own Programs folder in the first case and Program Files in the second, so a
+; folder under Program Files no longer fails with "access denied".
+PrivilegesRequiredOverridesAllowed=dialog
 OutputBaseFilename=MasterControlDock-{#AppVersion}-setup
 Compression=lzma2/max
 SolidCompression=yes
