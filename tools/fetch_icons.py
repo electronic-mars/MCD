@@ -49,10 +49,12 @@ ICONS: dict[str, str] = {
     "BatteryFull": "battery-full",
     "BatteryLow": "battery-empty",
     "BatteryCharging": "battery-charging-01",
-    "WifiHigh": "wifi-full-signal",
-    "WifiMid": "wifi-medium-signal",
-    "WifiLow": "wifi-low-signal",
-    "WifiNone": "wifi-no-signal",
+    # The open arcs, fewer as the signal drops. The set's own "signal" pictures
+    # are closed wedges that read as a cut-off fan at fifteen pixels.
+    "WifiHigh": "wifi-02",
+    "WifiMid": "wifi-arcs-2",
+    "WifiLow": "wifi-arcs-1",
+    "WifiNone": "wifi-arcs-0",
     "Power": "power",
     "Computer": "computer",
     "Activity": "activity-01",
@@ -1907,7 +1909,7 @@ def _self_check() -> None:
     assert small == "M 2 12 L 22 12", small
 
 
-SAME_SIZE = {"Speaker", "SpeakerMid", "SpeakerLow", "SpeakerOff"}
+SAME_SIZE = {"Speaker", "SpeakerMid", "SpeakerLow", "SpeakerOff", "WifiHigh", "WifiMid", "WifiLow", "WifiNone"}
 
 
 def main() -> None:

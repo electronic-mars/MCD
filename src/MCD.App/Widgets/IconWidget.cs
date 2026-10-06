@@ -76,6 +76,22 @@ public sealed class IconWidget : WidgetViewModel
     /// <summary>A 22-point icon with its padding and margins: exactly one slot.</summary>
     public override double Length() => 30;
 
+    /// <summary>The Recycle Bin gets its main verb: emptying it.</summary>
+    public override IEnumerable<Microsoft.UI.Xaml.Controls.MenuFlyoutItemBase> Menu()
+    {
+        if (string.Equals(WidgetOptions.Text(Options, "target"), "shell:RecycleBinFolder", StringComparison.OrdinalIgnoreCase))
+        {
+            var empty = new Microsoft.UI.Xaml.Controls.MenuFlyoutItem
+            {
+                Text = Loc.Tr("RecycleEmpty", "Empty Recycle Bin"),
+                Icon = new Microsoft.UI.Xaml.Controls.FontIcon { Glyph = "" },
+            };
+
+            empty.Click += (_, _) => Mcd.Interop.Shell.RecycleBin.Empty();
+            yield return empty;
+        }
+    }
+
     public override void Dispose()
     {
         Item.Dispose();

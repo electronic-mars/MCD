@@ -1727,4 +1727,7 @@
   <data name="TempMissingButton" xml:space="preserve">
     <value>Set it up...</value>
   </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>Empty Recycle Bin</value>
+  </data>
 </root>
