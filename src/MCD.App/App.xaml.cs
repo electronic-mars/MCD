@@ -776,6 +776,14 @@ public partial class App : Application
                 return;
             }
 
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "edit")
+            {
+                Later(3000, () => log.LogInformation("selftest.edit {Said}", _docks?.RehearseEdit(add: false)));
+                Later(5000, () => log.LogInformation("selftest.edit {Said}", _docks?.RehearseEdit(add: true)));
+
+                return;
+            }
+
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "keyboard")
             {
                 Later(3000, () => _docks?.FocusBar());

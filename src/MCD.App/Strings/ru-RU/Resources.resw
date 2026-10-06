@@ -1661,4 +1661,7 @@
   <data name="BarMenuEdit" xml:space="preserve">
     <value>Править панель…</value>
   </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>Закончить правку</value>
+  </data>
 </root>

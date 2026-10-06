@@ -668,15 +668,17 @@ public sealed partial class DockWindow : Window
             menu.Items.Add(undo);
         }
 
-        // The widgets page for this bar, with the widget under the pointer
-        // (or the first one) chosen: the bar's editor, one step from the bar.
+        // Editing on the bar itself: a press on a widget opens its settings,
+        // a press on a free stretch offers what could stand there.
         var edit = new MenuFlyoutItem
         {
-            Text = Loc.Tr("BarMenuEdit", "Edit this bar..."),
-            Icon = new FontIcon { Glyph = "" },
+            Text = _editing
+                ? Loc.Tr("BarMenuEditDone", "Finish editing")
+                : Loc.Tr("BarMenuEdit", "Edit this bar..."),
+            Icon = new FontIcon { Glyph = _editing ? "" : "" },
         };
 
-        edit.Click += (_, _) => AskForSettings(id ?? _hosts.FirstOrDefault()?.Entry.InstanceId);
+        edit.Click += (_, _) => Edit(!_editing);
         menu.Items.Add(edit);
 
         var settings = new MenuFlyoutItem

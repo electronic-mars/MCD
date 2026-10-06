@@ -306,6 +306,20 @@ public sealed class DockWindowManager : IDisposable
         target?.EnterKeyboard();
     }
 
+    /// <summary>Edits the first bar and opens its editors. For the self-test.</summary>
+    public string RehearseEdit(bool add)
+    {
+        DockWindow? first = _windows.Values.FirstOrDefault();
+
+        if (add)
+        {
+            first?.Rehearse_Add();
+            return "add";
+        }
+
+        return first?.Rehearse_Edit() ?? "no bar";
+    }
+
     /// <summary>Gives the keyboard back on every bar.</summary>
     public void LeaveBars()
     {
