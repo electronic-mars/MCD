@@ -25,6 +25,21 @@ public sealed class DockGridTests
         Entry(id, cell) with { Span = span };
 
     [Fact]
+    public void WidgetsThatAskForTheFarEndStandAgainstItAndTheRestAtTheNearEnd()
+    {
+        List<Placement> placed = DockGrid.Settle(
+            [
+                (Entry("folder"), 2),
+                (Entry("x") with { Cell = DockGrid.FromEnd }, 3),
+                (Entry("y") with { Cell = DockGrid.FromEnd }, 4),
+            ],
+            capacity: 20);
+
+        placed.Select(p => (p.InstanceId, p.Cell)).OrderBy(t => t.Cell)
+            .ShouldBe([("folder", 0), ("x", 13), ("y", 16)]);
+    }
+
+    [Fact]
     public void UnplacedWidgetsTakeTheFirstFreeSlots()
     {
         List<Placement> placed = DockGrid.Settle(

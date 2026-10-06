@@ -1635,13 +1635,13 @@
     <value>Всё, что эта машина умеет сообщать, читается.</value>
   </data>
   <data name="DeskOff" xml:space="preserve">
-    <value>Вручную</value>
+    <value>Само: никогда</value>
   </data>
   <data name="DeskScreens" xml:space="preserve">
     <value>При экранах: {0}</value>
   </data>
   <data name="DeskTip" xml:space="preserve">
-    <value>Ставить на панель главного экрана само, когда подключено столько экранов</value>
+    <value>Ставить эту раскладку на панель главного экрана само, когда подключено столько экранов</value>
   </data>
   <data name="UndoDesk" xml:space="preserve">
     <value>раскладка «{0}» для экранов: {1}</value>
@@ -1696,5 +1696,11 @@
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>Обновление не установлено: не скачалось или не прошло проверку подписи.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Само: при 1 экране</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Само: при {0} экранах</value>
   </data>
 </root>

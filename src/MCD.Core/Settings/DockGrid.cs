@@ -52,6 +52,15 @@ public static class DockGrid
     /// squeezed leftward to make room for it, undoing what somebody had put
     /// where they wanted it.
     /// </remarks>
+    /// <summary>
+    /// A cell that means "the far end of the bar": the widget has never been
+    /// placed, and is to stand against the end rather than in the first gap.
+    /// The ones that carry it end up side by side, in order, ending at the last
+    /// slot. A bar's first start is where this is used: a pinned folder at the
+    /// near end, the readings and the clock at the far one.
+    /// </summary>
+    public const int FromEnd = -2;
+
     public static List<Placement> Settle(
         IReadOnlyList<(WidgetConfig Entry, int Span)> items, int capacity)
     {
@@ -87,7 +96,7 @@ public static class DockGrid
 
         // Then each new one, in the order it was given, in the first gap that
         // holds it - or after the last widget when no gap does.
-        foreach ((WidgetConfig entry, int span) in items.Where(x => x.Entry.Cell < 0))
+        foreach ((WidgetConfig entry, int span) in items.Where(x => x.Entry.Cell < 0 && x.Entry.Cell != FromEnd))
         {
             if (span <= 0)
             {
@@ -110,6 +119,23 @@ public static class DockGrid
 
             placed.Insert(index, new Placement(entry.InstanceId, at, span));
             cursor = Math.Max(cursor, placed[^1].End);
+        }
+
+        // Those that asked for the far end, together, ending at the last slot -
+        // or as near to it as what is already down allows.
+        var atEnd = items.Where(x => x.Entry.Cell == FromEnd && x.Span > 0).ToList();
+
+        if (atEnd.Count > 0)
+        {
+            int from = Math.Max(placed.Count == 0 ? 0 : placed.Max(p => p.End), capacity - atEnd.Sum(x => x.Span));
+
+            foreach ((WidgetConfig entry, int span) in atEnd)
+            {
+                placed.Add(new Placement(entry.InstanceId, from, span));
+                from += span;
+            }
+
+            cursor = Math.Max(cursor, from);
         }
 
         if (cursor <= capacity)

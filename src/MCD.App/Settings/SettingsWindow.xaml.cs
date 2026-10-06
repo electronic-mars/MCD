@@ -1831,14 +1831,14 @@ public sealed partial class SettingsWindow : Window
             // Automatically when this many screens are connected.
             var desk = new ComboBox
             {
-                MinWidth = 120,
+                MinWidth = 190,
                 ItemsSource = new[]
                 {
-                    Loc.Tr("DeskOff", "By hand"),
-                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 1),
-                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 2),
-                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 3),
-                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskScreens", "With {0} screens"), 4),
+                    Loc.Tr("DeskOff", "Auto: never"),
+                    Loc.Tr("DeskOne", "Auto: with 1 screen"),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskMany", "Auto: with {0} screens"), 2),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskMany", "Auto: with {0} screens"), 3),
+                    string.Format(CultureInfo.CurrentCulture, Loc.Tr("DeskMany", "Auto: with {0} screens"), 4),
                 },
                 SelectedIndex = Math.Clamp(preset.Screens, 0, 4),
             };

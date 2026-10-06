@@ -264,16 +264,19 @@ public static class DockContents
     public static ImmutableArray<WidgetConfig> Default =>
     [
         .. Documents(),
-        WidgetConfig.New("mcd.media"),
-        WidgetConfig.New("mcd.sound"),
-        Gauge("cpu"),
-        WidgetConfig.New("mcd.temp"),
-        Gauge("ram"),
-        Gauge("gpu"),
-        WidgetConfig.New("mcd.battery"),
-        WidgetConfig.New("mcd.wifi"),
-        WidgetConfig.New("mcd.clock"),
-        WidgetConfig.New("mcd.settings"),
+        .. new[]
+        {
+            WidgetConfig.New("mcd.media"),
+            WidgetConfig.New("mcd.sound"),
+            Gauge("cpu"),
+            WidgetConfig.New("mcd.temp"),
+            Gauge("ram"),
+            Gauge("gpu"),
+            WidgetConfig.New("mcd.battery"),
+            WidgetConfig.New("mcd.wifi"),
+            WidgetConfig.New("mcd.clock"),
+            WidgetConfig.New("mcd.settings"),
+        }.Select(w => w with { Cell = DockGrid.FromEnd }),
     ];
 
     /// <summary>

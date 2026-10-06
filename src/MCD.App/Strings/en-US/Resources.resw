@@ -1635,13 +1635,13 @@
     <value>Everything this machine can report is being read.</value>
   </data>
   <data name="DeskOff" xml:space="preserve">
-    <value>By hand</value>
+    <value>Auto: never</value>
   </data>
   <data name="DeskScreens" xml:space="preserve">
     <value>With {0} screens</value>
   </data>
   <data name="DeskTip" xml:space="preserve">
-    <value>Put it on the main screen's bar by itself when this many screens are connected</value>
+    <value>Put this layout on the main screen's bar by itself when this many screens are connected</value>
   </data>
   <data name="UndoDesk" xml:space="preserve">
     <value>layout {0} for {1} screens</value>
@@ -1696,5 +1696,11 @@
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>The update was not installed: it could not be downloaded or did not pass the signature check.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Auto: with 1 screen</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Auto: with {0} screens</value>
   </data>
 </root>
