@@ -534,7 +534,7 @@
     <value>How much room the bar takes up.</value>
   </data>
   <data name="GalleryRow" xml:space="preserve">
-    <value>Put one on the bar</value>
+    <value>Every widget</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
     <value>Drag one onto a bar and it lands where you drop it. Two of the same is fine.</value>
@@ -1729,5 +1729,17 @@
   </data>
   <data name="RecycleEmpty" xml:space="preserve">
     <value>Empty Recycle Bin</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Show in the notification area</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>An icon beside the clock: a click opens the settings, a right click has the menu.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>the notification-area icon</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Widgets</value>
   </data>
 </root>

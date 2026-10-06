@@ -1502,11 +1502,13 @@ public sealed partial class SettingsWindow : Window
         // row that goes without a farewell leaves its line drawn on the bar.
         _docks.Point(string.Empty, null);
         WidgetsBody.Children.Clear();
+        OnBarBody.Children.Clear();
 
         MonitorConfig? dock = _settings.Current.Monitors
             .FirstOrDefault(m => m.StableId == _editing);
 
         WidgetsSection.Opacity = dock is null ? 0.5 : 1;
+        OnBarSection.Opacity = dock is null ? 0.5 : 1;
 
         if (dock is null)
         {
@@ -1514,38 +1516,6 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("DockNoScreen", "No screen has been set up yet."), null, null)));
 
             return;
-        }
-
-        // ------------------------------------------------------------- the bar
-        // The gestures, as a line rather than as a settings row with nothing
-        // to set: a row in a card promises a control.
-        WidgetsBody.Children.Add(new TextBlock
-        {
-            Text = Loc.Tr(
-                "BarGestures",
-                "Drag to move \u00b7 off the edge to remove \u00b7 right-click for the menu"),
-            FontSize = 12,
-            Foreground = Braun.Tx3,
-            TextWrapping = TextWrapping.Wrap,
-            Margin = new Thickness(0, 6, 0, 0),
-        });
-
-        // ------------------------------------------------------------ contents
-        WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
-
-        WidgetsBody.Children.Add(BarList(dock));
-
-        // ------------------------------------------------------- chosen widget
-        if (Inspector() is { } inspector)
-        {
-            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
-
-            WidgetsBody.Children.Add(_inspectorAt);
-            WidgetsBody.Children.Add(inspector);
-        }
-        else
-        {
-            _inspectorAt = null;
         }
 
         // Said where it is wanted: the temperature of the processor and the
@@ -1560,11 +1530,11 @@ public sealed partial class SettingsWindow : Window
         }
 
         // ---------------------------------------------- what else could be on it
-        WidgetsBody.Children.Add(Braun.Heading("Layout", Loc.Tr("GalleryRow", "Put one on the bar")));
+        WidgetsBody.Children.Add(Braun.Heading("Layout", Loc.Tr("GalleryHeading", "Widgets")));
 
         WidgetsBody.Children.Add(Braun.Group(
             Braun.Row(
-                Loc.Tr("GalleryRow", "Put one on the bar"),
+                Loc.Tr("GalleryRow", "Every widget"),
                 Loc.Tr(
                     "GalleryRowHint",
                     "Drag one onto a bar and it lands where you drop it. Two of the same is fine."),
@@ -1651,6 +1621,38 @@ public sealed partial class SettingsWindow : Window
                     ResetDock,
                     "Undo",
                     danger: false))));
+
+        // ------------------------------------------------------------- the bar
+        // The gestures, as a line rather than as a settings row with nothing
+        // to set: a row in a card promises a control.
+        OnBarBody.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr(
+                "BarGestures",
+                "Drag to move \u00b7 off the edge to remove \u00b7 right-click for the menu"),
+            FontSize = 12,
+            Foreground = Braun.Tx3,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 0),
+        });
+
+        // ------------------------------------------------------------ contents
+        OnBarBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
+
+        OnBarBody.Children.Add(BarList(dock));
+
+        // ------------------------------------------------------- chosen widget
+        if (Inspector() is { } inspector)
+        {
+            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
+
+            OnBarBody.Children.Add(_inspectorAt);
+            OnBarBody.Children.Add(inspector);
+        }
+        else
+        {
+            _inspectorAt = null;
+        }
     }
 
 
@@ -3575,6 +3577,7 @@ public sealed partial class SettingsWindow : Window
         // look through for it.
         PinsSection.Visibility = Show(tag == "widgets");
         PresetsSection.Visibility = Show(tag == "widgets");
+        OnBarSection.Visibility = Show(tag == "widgets");
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
         GeneralSection.Visibility = Show(tag == "general");
@@ -4400,15 +4403,28 @@ public sealed partial class SettingsWindow : Window
 
         GeneralBody.Children.Add(Braun.Heading("Power", Loc.Tr("StartupTitle", "Startup")));
 
-        GeneralBody.Children.Add(Braun.Group(Braun.Row(
-            Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
-            Loc.Tr("StartWithWindowsHint", "The bars come back when you sign in."),
-            Braun.Switch(AutoStart.Enabled, on =>
-            {
-                AutoStart.Enabled = on;
-                _log.LogInformation("settings.autostart enabled={Enabled}", on);
-                ShowGeneral();
-            }))));
+        GeneralBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("StartWithWindowsLabel", "Start with Windows"),
+                Loc.Tr("StartWithWindowsHint", "The bars come back when you sign in."),
+                Braun.Switch(AutoStart.Enabled, on =>
+                {
+                    AutoStart.Enabled = on;
+                    _log.LogInformation("settings.autostart enabled={Enabled}", on);
+                    ShowGeneral();
+                })),
+            Braun.Row(
+                Loc.Tr("TrayLabel", "Show in the notification area"),
+                Loc.Tr("TrayHint", "An icon beside the clock: a click opens the settings, a right click has the menu."),
+                Braun.Switch(_settings.Current.App.TrayIcon, on =>
+                {
+                    SettingsModel current = _settings.Current;
+                    Write(
+                        current with { App = current.App with { TrayIcon = on } },
+                        WriteReason.UserAction,
+                        Loc.Tr("UndoTray", "the notification-area icon"));
+                    ShowGeneral();
+                }))));
 
         GeneralBody.Children.Add(Braun.Heading("Document", Loc.Tr("CopiesTitle", "Copies")));
 

@@ -162,7 +162,13 @@ public partial class App : Application
         TakeKeys();
 
         _services.GetRequiredService<SettingsService>().Changed += (_, _) =>
-            _uiQueue?.TryEnqueue(TakeKeys);
+            _uiQueue?.TryEnqueue(() =>
+            {
+                TakeKeys();
+                ApplyTray();
+            });
+
+        ApplyTray();
 
         string chosen = Environment.GetEnvironmentVariable("MCD_LANG")
             ?? _services!.GetRequiredService<SettingsService>().Current.App.Language;
@@ -917,8 +923,57 @@ public partial class App : Application
     }
 #endif
 
+    private Mcd.Interop.Windowing.TrayIcon? _tray;
+
+    /// <summary>
+    /// Puts the notification-area icon up or takes it away, as the setting says.
+    /// </summary>
+    private void ApplyTray()
+    {
+        if (_services is null)
+        {
+            return;
+        }
+
+        AppSettings app = _services.GetRequiredService<SettingsService>().Current.App;
+
+        if (!app.TrayIcon)
+        {
+            _tray?.Dispose();
+            _tray = null;
+            return;
+        }
+
+        _tray ??= new Mcd.Interop.Windowing.TrayIcon(
+            () => ShowSettings(),
+            () =>
+            [
+                (Loc.Tr("BarMenuSettings", "Settings..."), () => ShowSettings()),
+                (
+                    _docks is { Visible: false }
+                        ? Loc.Tr("BarsShow", "Show the bars")
+                        : Loc.Tr("BarMenuHideAll", "Hide the bars"),
+                    ShowOrHideBars
+                ),
+                (Loc.Tr("BarMenuExit", "Exit"), () => { Shutdown(); Exit(); }),
+            ]);
+
+        // The taskbar's own theme picks the drawing, as it does for the window.
+        using Microsoft.Win32.RegistryKey? key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+            @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+
+        bool light = key?.GetValue("SystemUsesLightTheme") is 1;
+
+        _tray.Show(
+            Path.Combine(AppContext.BaseDirectory, "Assets", light ? "icon-light.ico" : "icon.ico"),
+            "Master Control Dock");
+    }
+
     private void Shutdown()
     {
+        _tray?.Dispose();
+        _tray = null;
+
         _keys?.Dispose();
         _keys = null;
 

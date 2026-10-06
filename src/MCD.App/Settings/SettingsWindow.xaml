@@ -416,6 +416,13 @@
                         <StackPanel x:Name="PresetsBody" Margin="0,4,0,0" />
                     </StackPanel>
 
+                    <!-- What is on the bar, and the settings of the one chosen:
+                         the last thing on the widgets page, after what could
+                         be put there. -->
+                    <StackPanel x:Name="OnBarSection" Visibility="Collapsed">
+                        <StackPanel x:Name="OnBarBody" Margin="0,4,0,0" />
+                    </StackPanel>
+
                     <!-- Appearance -->
                     <!-- Appearance. The rows are built in code from the Braun
                          kit: the choices here are three, five and two keys

@@ -534,7 +534,7 @@
     <value>Сколько места занимает панель.</value>
   </data>
   <data name="GalleryRow" xml:space="preserve">
-    <value>Поставить на панель</value>
+    <value>Все виджеты</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
     <value>Перетащите на панель — виджет встанет туда, куда вы его отпустили. Одинаковых можно ставить сколько угодно.</value>
@@ -1729,5 +1729,17 @@
   </data>
   <data name="RecycleEmpty" xml:space="preserve">
     <value>Очистить корзину</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Показывать в трее</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>Значок рядом с часами: щелчок открывает настройки, правый щелчок даёт меню.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>значок в трее</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Виджеты</value>
   </data>
 </root>

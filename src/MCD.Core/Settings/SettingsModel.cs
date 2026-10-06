@@ -26,6 +26,12 @@ public sealed record SettingsModel
 
 public sealed record AppSettings
 {
+    /// <summary>
+    /// Whether the program also puts an icon in the notification area. Off
+    /// unless asked for: the bars are the program's own controls.
+    /// </summary>
+    public bool TrayIcon { get; init; }
+
     /// <summary>"system", "light" or "dark".</summary>
     public string Theme { get; init; } = "system";
 
