@@ -1349,6 +1349,17 @@ public sealed partial class SettingsWindow : Window
                     dock.Enabled,
                     on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "showing the bar")))),
 
+            // Which glass is which: each screen shows its number for a moment.
+            _docks.Plans.Length > 1
+                ? Braun.Row(
+                    Loc.Tr("IdentifyRow", "Which screen is which"),
+                    Loc.Tr("IdentifyRowHint", "Shows each screen's number on it for a moment."),
+                    Braun.Action(
+                        Loc.Tr("IdentifyButton", "Identify"),
+                        () => Mcd.App.Dock.IdentifyScreens.Flash(_docks.Plans.Select(p => p.Monitor)),
+                        "Computer"))
+                : null,
+
             // Only for a screen that is not there. A list of screens that only
             // ever grows is a list somebody stops reading: every projector,
             // every television, every Win+P arrangement the program has ever

@@ -49,4 +49,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 
+  <!-- The unattended self-test (MCD_SELFTEST*) is compiled in for Debug, and for Release only on request: -p:SelfTest=true -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(SelfTest)' == 'true'">
+    <DefineConstants>$(DefineConstants);SELFTEST</DefineConstants>
+  </PropertyGroup>
+
 </Project>

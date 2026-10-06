@@ -1649,4 +1649,16 @@
   <data name="UndoPresetDesk" xml:space="preserve">
     <value>when a layout is used</value>
   </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Which screen is which</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>Shows each screen's number on it for a moment.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Identify</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Edit this bar...</value>
+  </data>
 </root>

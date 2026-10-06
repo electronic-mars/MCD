@@ -146,10 +146,12 @@ public partial class App : Application
             }
         }
 
+#if SELFTEST
         if (Environment.GetEnvironmentVariable("MCD_SELFTEST") == "1")
         {
             ScheduleSelfTestExit(start);
         }
+#endif
     }
 
     /// <summary>
@@ -467,6 +469,7 @@ public partial class App : Application
         }
     }
 
+#if SELFTEST
     /// <summary>
     /// Ends the program the same way a person would, after a fixed run.
     /// </summary>
@@ -762,6 +765,17 @@ public partial class App : Application
 
             // The keyboard taken onto the bar, as the hotkey does, moved once
             // with the arrow keys' own handler path, and given back.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "identify")
+            {
+                Later(3000, () =>
+                {
+                    Dock.IdentifyScreens.Flash(_docks!.Plans.Select(p => p.Monitor));
+                    log.LogInformation("selftest.identify shown");
+                });
+
+                return;
+            }
+
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "keyboard")
             {
                 Later(3000, () => _docks?.FocusBar());
@@ -855,6 +869,7 @@ public partial class App : Application
         _selfTest.Add(step);
         step.Start();
     }
+#endif
 
     private void Shutdown()
     {

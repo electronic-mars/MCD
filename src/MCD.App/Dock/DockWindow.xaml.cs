@@ -668,6 +668,17 @@ public sealed partial class DockWindow : Window
             menu.Items.Add(undo);
         }
 
+        // The widgets page for this bar, with the widget under the pointer
+        // (or the first one) chosen: the bar's editor, one step from the bar.
+        var edit = new MenuFlyoutItem
+        {
+            Text = Loc.Tr("BarMenuEdit", "Edit this bar..."),
+            Icon = new FontIcon { Glyph = "" },
+        };
+
+        edit.Click += (_, _) => AskForSettings(id ?? _hosts.FirstOrDefault()?.Entry.InstanceId);
+        menu.Items.Add(edit);
+
         var settings = new MenuFlyoutItem
         {
             Text = Loc.Tr("BarMenuSettings", "Settings..."),

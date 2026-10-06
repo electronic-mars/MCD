@@ -1649,4 +1649,16 @@
   <data name="UndoPresetDesk" xml:space="preserve">
     <value>когда применять раскладку</value>
   </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Какой экран какой</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>На каждом экране на секунду появится его номер.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Определить</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Править панель…</value>
+  </data>
 </root>
