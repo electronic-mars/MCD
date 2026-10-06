@@ -79,14 +79,21 @@ up again when HWiNFO is restarted.
 
 ## Installing it
 
-```
-pwsh tools/install-local.ps1
-```
+Take **MasterControlDock-<version>-setup.exe** from
+[Releases](https://github.com/electronic-mars/MCD/releases/latest). It installs
+for the current user only and needs no administrator rights. The program is not
+code-signed, so Windows SmartScreen warns once: **More info, Run anyway**. Every
+release carries `SHA256SUMS.txt`, and the installer is built in public by
+[this workflow](https://github.com/electronic-mars/MCD/actions).
 
-Builds it, copies it to `%LOCALAPPDATA%\Programs\MasterControlDock`, and puts a
-shortcut on the desktop and in the Start menu. Nothing is written outside your
-own profile and no administrator rights are needed. This is a stand-in for the
-real installer, which arrives with the MSIX package.
+**Updating:** *About, Check for updates*. It fetches the new installer, checks a
+signature made with a key that exists only in this repository's secrets (the
+program carries the public half), and restarts. Nothing happens without that
+press; the program contacts nobody on its own. An installer the key did not
+sign is deleted rather than run.
+
+From source, `pwsh tools/install-local.ps1` builds and installs a copy for
+development.
 
 ## Using it
 

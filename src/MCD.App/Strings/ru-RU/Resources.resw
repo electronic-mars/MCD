@@ -1664,4 +1664,37 @@
   <data name="BarMenuEditDone" xml:space="preserve">
     <value>Закончить правку</value>
   </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Обновления</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>Эта версия</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>Программа ни с кем не связывается, пока вы не нажмёте кнопку.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>Установить {0} и перезапустить</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Ищу новую версию…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>Доступна версия {0}. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>Это самая новая версия.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Не удалось связаться со страницей релизов. Ничего не изменено.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Скачиваю и проверяю установщик…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>Обновление не установлено: не скачалось или не прошло проверку подписи.</value>
+  </data>
 </root>

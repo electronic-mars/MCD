@@ -5,6 +5,11 @@ name: release
 on:
   push:
     tags: ['v*']
+  # A rehearsal: builds and signs everything and publishes nothing.
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   msix:
@@ -46,3 +51,90 @@ jobs:
           name: msix
           path: dist/*.msix
           if-no-files-found: error
+
+  # The installer, signed for the updater, published on the release. Per user,
+  # no administrator rights; not code-signed, so SmartScreen warns once. The
+  # program's own update button checks the signature made here.
+  installer:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Check the declared version
+        run: pwsh tools/check-version.ps1
+
+      - name: Read the version
+        shell: pwsh
+        run: |
+          $m = Select-String -Path Directory.Version.props -Pattern '<McdVersion>([^<]+)</McdVersion>'
+          "VERSION=$($m.Matches[0].Groups[1].Value)" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Test
+        run: dotnet test tests/MCD.Tests/MCD.Tests.csproj --configuration Release
+
+      - name: Publish the program and the sensor service
+        shell: pwsh
+        run: |
+          dotnet publish src/MCD.App/MCD.App.csproj -c Release -r win-x64 --self-contained true -o build/app
+          if ($LASTEXITCODE -ne 0) { throw "publish failed" }
+          dotnet publish src/MCD.SensorHost/MCD.SensorHost.csproj -c Release -r win-x64 --self-contained true -o build/app/SensorHost
+          if ($LASTEXITCODE -ne 0) { throw "publish of the service failed" }
+
+      - name: Build the installer
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup --no-progress -y }
+          & $iscc "/DAppVersion=$env:VERSION" "/DSourceDir=$PWD\build\app" "/O$PWD" build\installer.iss
+          if ($LASTEXITCODE -ne 0) { throw "the installer did not build" }
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          $setup = "MasterControlDock-$env:VERSION-setup.exe"
+          "SETUP=$setup" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          $h = (Get-FileHash $setup -Algorithm SHA256).Hash.ToLower()
+          "$h  $setup" | Out-File SHA256SUMS.txt -Encoding ascii
+
+      - name: Sign for the updater
+        shell: pwsh
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          # An unsigned release is one nobody can update to: stop here.
+          if (-not $env:UPDATE_SIGNING_KEY) { throw "UPDATE_SIGNING_KEY is not set" }
+          python -m pip install --quiet cryptography
+          $tag = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME } else { "v$env:VERSION" }
+          $url = "https://github.com/${{ github.repository }}/releases/download/$tag/$env:SETUP"
+          python tools/sign_release.py "$env:SETUP" "$tag" "$url"
+          if ($LASTEXITCODE -ne 0) { throw "the release was not signed" }
+          Get-Content latest.json
+
+      - name: Publish the release
+        if: github.event_name != 'workflow_dispatch'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $notes = "**$env:SETUP**: installer, per user, no administrator rights needed. It is not code-signed, so Windows SmartScreen warns once: More info, then Run anyway. Checksum in SHA256SUMS.txt (``Get-FileHash <file> -Algorithm SHA256``). An installed copy updates itself from About, Check for updates."
+          gh release create "${{ github.ref_name }}" "$env:SETUP" SHA256SUMS.txt latest.json --title "${{ github.ref_name }}" --notes "$notes"
+
+      - name: Keep the files from a rehearsal
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: rehearsal
+          path: |
+            MasterControlDock-*-setup.exe
+            SHA256SUMS.txt
+            latest.json
+

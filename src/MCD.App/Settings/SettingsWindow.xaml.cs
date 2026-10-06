@@ -4135,6 +4135,24 @@ public sealed partial class SettingsWindow : Window
 
         AboutBody.Children.Add(mark);
 
+        // Nothing here runs by itself: the program contacts nobody until this
+        // is pressed.
+        AboutBody.Children.Add(Braun.Heading("Download", Loc.Tr("UpdateTitle", "Updates")));
+
+        AboutBody.Children.Add(Braun.Group(Braun.Row(
+            Loc.Tr("UpdateRow", "This version"),
+            _updateNote.Length > 0
+                ? _updateNote
+                : Loc.Tr("UpdateRowHint", "The program contacts nobody until you press the button."),
+            _updating
+                ? null
+                : _offer is { } offer
+                    ? Braun.Action(
+                        string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), offer.Version),
+                        InstallUpdate,
+                        "Download")
+                    : Braun.Action(Loc.Tr("UpdateCheck", "Check for updates"), CheckUpdate, "Download"))));
+
         // Only the program's own papers. The machine's settings - keys,
         // language, startup, copies - have a page of their own; a page called
         // "the program" that was mostly settings was a page nobody could
@@ -4170,6 +4188,76 @@ public sealed partial class SettingsWindow : Window
                 "ExitHint",
                 "Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind."),
             Braun.Action(Loc.Tr("ExitButton", "Quit"), () => _onExit(), "Power"))));
+    }
+
+    private string _updateNote = string.Empty;
+    private Mcd.Core.Update.UpdateOffer? _offer;
+    private bool _updating;
+
+    private async void CheckUpdate()
+    {
+        _updating = true;
+        _offer = null;
+        _updateNote = Loc.Tr("UpdateChecking", "Looking for a newer version...");
+        ShowAbout();
+
+        try
+        {
+            Mcd.Core.Update.UpdateOffer found = await Mcd.Core.Update.Updater.LatestAsync();
+
+            if (Mcd.Core.Update.Updater.IsNewer(found.Version, _version))
+            {
+                _offer = found;
+                _updateNote = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("UpdateFound", "Version {0} is available. {1}"),
+                    found.Version,
+                    found.Notes);
+            }
+            else
+            {
+                _updateNote = Loc.Tr("UpdateLatest", "This is the newest version.");
+            }
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning(ex, "update.check failed");
+            _updateNote = Loc.Tr("UpdateFailed", "Could not reach the release page. Nothing was changed.");
+        }
+
+        _updating = false;
+        ShowAbout();
+    }
+
+    private async void InstallUpdate()
+    {
+        if (_offer is not { } offer)
+        {
+            return;
+        }
+
+        _updating = true;
+        _updateNote = Loc.Tr("UpdateDownloading", "Downloading and checking the installer...");
+        ShowAbout();
+
+        try
+        {
+            string installer = await Mcd.Core.Update.Updater.DownloadAsync(offer, null);
+
+            _log.LogInformation("update.install version={Version}", offer.Version);
+            Mcd.Core.Update.Updater.Install(installer);
+
+            // The installer is already starting; the bars are given back
+            // properly, not killed (a killed bar leaves its strip reserved).
+            _onExit();
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning(ex, "update.install failed");
+            _updateNote = Loc.Tr("UpdateRefused", "The update was not installed: it could not be downloaded or did not pass the signature check.");
+            _updating = false;
+            ShowAbout();
+        }
     }
 
     /// <summary>

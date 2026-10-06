@@ -31,3 +31,7 @@ assets/icons-free/
 tools/panel/cache/
 tools/panel/site/data/
 assets/icons-selected.json
+
+/.update-signing-key.pem
+/build/app/
+/build/out/

@@ -1664,4 +1664,37 @@
   <data name="BarMenuEditDone" xml:space="preserve">
     <value>Finish editing</value>
   </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>This version</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>The program contacts nobody until you press the button.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>Install {0} and restart</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Looking for a newer version...</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>Version {0} is available. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>This is the newest version.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Could not reach the release page. Nothing was changed.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Downloading and checking the installer...</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>The update was not installed: it could not be downloaded or did not pass the signature check.</value>
+  </data>
 </root>
