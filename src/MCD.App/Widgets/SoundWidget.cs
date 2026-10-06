@@ -213,8 +213,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
 
         Icon = muted.Value ? "SpeakerOff"
             : loud < 0.01f ? "SpeakerOff"
-            : loud < 0.34f ? "SpeakerLow"
-            : loud < 0.67f ? "SpeakerMid"
+            : loud < 0.5f ? "SpeakerLow"
             : "Speaker";
 
         // On a compact bar too: the figure is the other button now, and a
