@@ -285,15 +285,15 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        // Margin 2, the speaker's button with 2 either side, and the
-        // figure's with 3 either side and 2 between: the slot the
-        // template really takes.
-        double along = 2 + ReadingIcon + 4;
+        // Margin 2, the speaker's button with 2 on the left and 1 on the
+        // right, and the figure's with 2 either side and nothing between:
+        // the slot the template really takes.
+        double along = 2 + ReadingIcon + 3;
 
         if (LevelVisible == Visibility.Visible)
         {
             _figure ??= Metric.Wide("100 %", ReadingFont);
-            along += _figure.Value + 6 + 2;
+            along += _figure.Value + 4;
         }
 
         return Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical ? 30 : along;

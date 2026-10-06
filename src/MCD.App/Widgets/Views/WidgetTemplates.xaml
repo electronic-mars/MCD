@@ -351,10 +351,10 @@
             VerticalAlignment="Center"
             Orientation="Horizontal"
             PointerWheelChanged="{x:Bind OnWheel}"
-            Spacing="2"
+            Spacing="0"
             Visibility="{x:Bind Shown, Mode=OneWay}">
             <Button
-                Padding="2,2"
+                Padding="2,2,1,2"
                 Background="{ThemeResource McdChipRest}"
                 Loaded="{x:Bind SpeakerLoaded}"
                 Style="{StaticResource BarButton}"
@@ -406,7 +406,7 @@
                  while the digits change under it, and the speaker beside
                  them never shifts. -->
             <Button
-                Padding="3,2"
+                Padding="2,2"
                 Background="{ThemeResource McdChipRest}"
                 Command="{x:Bind ToggleMuteCommand}"
                 Style="{StaticResource BarButton}"
