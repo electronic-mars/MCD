@@ -516,7 +516,7 @@
     <value>The language has changed</value>
   </data>
   <data name="RestartRowHint" xml:space="preserve">
-    <value>The bars will read in the new language once the program starts again.</value>
+    <value>The language changes once the program starts again.</value>
   </data>
   <data name="ColourRow" xml:space="preserve">
     <value>The colour</value>
@@ -735,7 +735,7 @@
     <value>From anywhere, including over a full-screen program.</value>
   </data>
   <data name="KeyMute" xml:space="preserve">
-    <value>Silence the machine</value>
+    <value>Mute or unmute</value>
   </data>
   <data name="KeyMuteHint" xml:space="preserve">
     <value>The same as the mute key, for keyboards that have not got one.</value>
@@ -798,10 +798,10 @@
     <value>Useful where two networks are within reach and both work.</value>
   </data>
   <data name="QuietRow" xml:space="preserve">
-    <value>{0} are waiting for their moment</value>
+    <value>{0} are hidden until there is data</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} - on the bar, taking no slot until it has something to say. It comes back where you left it.</value>
+    <value>{0} - on the bar, taking no slot until it has something to show. It comes back where you left it.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
     <value>Take them off</value>
@@ -813,13 +813,13 @@
     <value>One of these does not fit</value>
   </data>
   <data name="QuietRowOne" xml:space="preserve">
-    <value>One is waiting for its moment</value>
+    <value>One is hidden until there is data</value>
   </data>
   <data name="BraunRow" xml:space="preserve">
     <value>What this is</value>
   </data>
   <data name="BraunHint" xml:space="preserve">
-    <value>The bar as a piece of equipment: a graphite body on the dark theme, a cream one on the light, readings in orange. Plain, strict and quiet - the same look these settings are drawn in, after Braun's instruments.</value>
+    <value>A strict instrument look: graphite body, orange readings.</value>
   </data>
   <data name="CrowdedButtonOne" xml:space="preserve">
     <value>Take it off</value>
@@ -834,7 +834,7 @@
     <value>Settings</value>
   </data>
   <data name="WidgetSettingsDescription" xml:space="preserve">
-    <value>Opens this window. The way in, for anybody who has not found the right click.</value>
+    <value>Opens the settings.</value>
   </data>
   <data name="SettingsChipTip.Text" xml:space="preserve">
     <value>Settings</value>
@@ -1020,7 +1020,7 @@
     <value>Small</value>
   </data>
   <data name="PresetsGroup" xml:space="preserve">
-    <value>Presets</value>
+    <value>Layouts</value>
   </data>
   <data name="PresetSaveRow" xml:space="preserve">
     <value>Keep this arrangement</value>
@@ -1029,7 +1029,7 @@
     <value>Saves what is on this bar, by name, to be put onto any bar later - here or on another screen.</value>
   </data>
   <data name="PresetSaveButton" xml:space="preserve">
-    <value>Save as a preset</value>
+    <value>Save as a layout</value>
   </data>
   <data name="PresetApply" xml:space="preserve">
     <value>Put it on this bar</value>
@@ -1050,13 +1050,13 @@
     <value>Save</value>
   </data>
   <data name="UndoPresetSaved" xml:space="preserve">
-    <value>a preset saved</value>
+    <value>a layout saved</value>
   </data>
   <data name="UndoPresetApplied" xml:space="preserve">
-    <value>a preset put on</value>
+    <value>a layout put on</value>
   </data>
   <data name="UndoPresetDropped" xml:space="preserve">
-    <value>a preset forgotten</value>
+    <value>a layout forgotten</value>
   </data>
   <data name="SoundMutedTip" xml:space="preserve">
     <value>Silenced</value>
@@ -1074,7 +1074,7 @@
     <value>Size of the readings</value>
   </data>
   <data name="ReadingSizeHint" xml:space="preserve">
-    <value>How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page.</value>
+    <value>How large the icons and figures are drawn, on every bar.</value>
   </data>
   <data name="NavGeneral.Text" xml:space="preserve">
     <value>General</value>
@@ -1212,13 +1212,13 @@
     <value>Nothing is pinned yet. Drop a file onto the bar, or pin one above.</value>
   </data>
   <data name="NavPresets.Text" xml:space="preserve">
-    <value>Presets</value>
+    <value>Layouts</value>
   </data>
   <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Presets</value>
+    <value>Layouts</value>
   </data>
   <data name="PresetsTitle.Text" xml:space="preserve">
-    <value>Presets</value>
+    <value>Layouts</value>
   </data>
   <data name="PresetsIntro.Text" xml:space="preserve">
     <value>Saved arrangements of widgets. Any of them goes onto the chosen screen's bar.</value>
@@ -1299,7 +1299,7 @@
     <value>Processor and memory temperatures</value>
   </data>
   <data name="DriverRowHint" xml:space="preserve">
-    <value>They live behind a kernel driver. PawnIO is a signed, open one, installed once with administrator rights; the readings appear by themselves once it is there.</value>
+    <value>Processor and memory temperatures need the PawnIO driver. It is installed once and asks for administrator rights.</value>
   </data>
   <data name="DriverRowInstalledHint" xml:space="preserve">
     <value>PawnIO {0} is installed but did not answer. A restart of the program usually settles it.</value>
@@ -1569,10 +1569,10 @@
     <value>a press opens the slider, the wheel turns it</value>
   </data>
   <data name="KeyMic" xml:space="preserve">
-    <value>Switch the microphone off</value>
+    <value>Mute or unmute the microphone</value>
   </data>
   <data name="KeyMicHint" xml:space="preserve">
-    <value>Off and on again, for the whole machine, from anywhere.</value>
+    <value>For the whole machine, from anywhere.</value>
   </data>
   <data name="IconSearch" xml:space="preserve">
     <value>Search by name</value>
@@ -1621,5 +1621,11 @@
   </data>
   <data name="IconGroup_people" xml:space="preserve">
     <value>People and faces</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Go to the bar</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Arrow keys choose a widget, Enter presses it, Esc leaves.</value>
   </data>
 </root>

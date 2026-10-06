@@ -114,16 +114,24 @@ public static unsafe class SystemVolume
     internal static T? With<T>(Func<IAudioEndpointVolume, T> work, EDataFlow flow = EDataFlow.eRender)
         where T : struct
     {
+        // Every interface is let go the moment it has been used. Left to the
+        // finalizer they hold registry keys of the endpoint's property store
+        // open until the next collection: about three handles a second.
+        object? enumerator = null;
+        object? device = null;
+        object? activated = null;
+
         try
         {
-            var enumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
+            var mm = (IMMDeviceEnumerator)new MMDeviceEnumerator();
+            enumerator = mm;
 
-            enumerator.GetDefaultAudioEndpoint(
-                flow, ERole.eMultimedia, out IMMDevice device);
+            mm.GetDefaultAudioEndpoint(flow, ERole.eMultimedia, out IMMDevice found);
+            device = found;
 
             Guid iid = typeof(IAudioEndpointVolume).GUID;
 
-            device.Activate(&iid, CLSCTX.CLSCTX_INPROC_SERVER, null, out object activated);
+            found.Activate(&iid, CLSCTX.CLSCTX_INPROC_SERVER, null, out activated);
 
             return work((IAudioEndpointVolume)activated);
         }
@@ -132,6 +140,16 @@ public static unsafe class SystemVolume
             // No playback device, or one that went away between being named
             // and being opened. Neither is this program's business.
             return null;
+        }
+        finally
+        {
+            foreach (object? com in new[] { activated, device, enumerator })
+            {
+                if (com is not null && System.Runtime.InteropServices.Marshal.IsComObject(com))
+                {
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(com);
+                }
+            }
         }
     }
 }

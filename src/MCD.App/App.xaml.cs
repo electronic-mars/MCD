@@ -366,6 +366,7 @@ public partial class App : Application
                 Shortcut.Settings => () => _uiQueue?.TryEnqueue(() => ShowSettings()),
                 Shortcut.Mute => Silence,
                 Shortcut.Mic => SwitchMic,
+                Shortcut.Focus => () => _uiQueue?.TryEnqueue(() => _docks?.FocusBar()),
                 _ => () => { },
             };
 
@@ -755,6 +756,16 @@ public partial class App : Application
                 // looks right.
                 Later(2400, () => Walk(log, [.. pages.Split(
                     ',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)]));
+
+                return;
+            }
+
+            // The keyboard taken onto the bar, as the hotkey does, moved once
+            // with the arrow keys' own handler path, and given back.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "keyboard")
+            {
+                Later(3000, () => _docks?.FocusBar());
+                Later(5000, () => _docks?.LeaveBars());
 
                 return;
             }

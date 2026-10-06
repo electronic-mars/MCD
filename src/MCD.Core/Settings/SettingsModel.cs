@@ -69,8 +69,6 @@ public sealed record AppSettings
     /// </remarks>
     public string Size { get; init; } = "large";
 
-    public bool Autostart { get; init; }
-
     /// <summary>
     /// The combinations the whole machine listens for, by what they do.
     /// </summary>
@@ -105,7 +103,7 @@ public sealed record AppSettings
     /// scaling the slot numbers rather than carrying them literally - the
     /// mistake the copy-to-other-screens button made first.
     /// </remarks>
-    public ImmutableArray<BarPreset> Presets { get; init; } = [];
+    public ImmutableArray<BarPreset> Presets { get; init; } = DockContents.Starters;
 }
 
 /// <summary>One saved arrangement: what was on a bar and where it stood.</summary>
@@ -179,7 +177,11 @@ public sealed record MonitorConfig
     /// </summary>
     public bool Enabled { get; init; } = true;
 
-    public AppBarEdge Edge { get; init; } = AppBarEdge.Bottom;
+    /// <summary>
+    /// Top, not bottom: a bar at the bottom of the main screen stands directly
+    /// on Windows' own taskbar, two strips in a row.
+    /// </summary>
+    public AppBarEdge Edge { get; init; } = AppBarEdge.Top;
 
     public AppBarMode Mode { get; init; } = AppBarMode.Pinned;
 
@@ -294,6 +296,46 @@ public static class DockContents
                 ("icon", "Folder")),
         };
     }
+
+    /// <summary>
+    /// Three arrangements a person can put on a bar with one press before they
+    /// have made one of their own. Kept as ordinary presets - they can be
+    /// applied, renamed and forgotten like any other.
+    /// </summary>
+    public static ImmutableArray<BarPreset> Starters { get; } =
+    [
+        Starter("Minimal", [WidgetConfig.New("mcd.sound"), WidgetConfig.New("mcd.clock"), WidgetConfig.New("mcd.settings")]),
+        Starter(
+            "Monitoring",
+            [
+                Gauge("cpu"),
+                WidgetConfig.New("mcd.temp"),
+                Gauge("ram"),
+                Gauge("gpu"),
+                Gauge("down"),
+                WidgetConfig.New("mcd.clock"),
+                WidgetConfig.New("mcd.settings"),
+            ]),
+        Starter(
+            "Work",
+            [
+                .. Documents(),
+                WidgetConfig.New("mcd.media"),
+                WidgetConfig.New("mcd.sound"),
+                WidgetConfig.New("mcd.mic"),
+                WidgetConfig.New("mcd.awake"),
+                WidgetConfig.New("mcd.layout"),
+                WidgetConfig.New("mcd.clock"),
+                WidgetConfig.New("mcd.settings"),
+            ]),
+    ];
+
+    private static BarPreset Starter(string name, IEnumerable<WidgetConfig> widgets) => new()
+    {
+        Id = Guid.NewGuid().ToString("n"),
+        Name = name,
+        Widgets = [.. widgets],
+    };
 
     /// <summary>One reading, as a widget of its own.</summary>
     public static WidgetConfig Gauge(string reading) =>

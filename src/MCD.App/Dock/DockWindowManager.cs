@@ -299,6 +299,22 @@ public sealed class DockWindowManager : IDisposable
         return hosts;
     }
 
+    /// <summary>Gives the keyboard to the bar on the screen the pointer is on.</summary>
+    public void FocusBar()
+    {
+        DockWindow? target = _windows.Values.FirstOrDefault(w => w.HoldsPointer) ?? _windows.Values.FirstOrDefault();
+        target?.EnterKeyboard();
+    }
+
+    /// <summary>Gives the keyboard back on every bar.</summary>
+    public void LeaveBars()
+    {
+        foreach (DockWindow window in _windows.Values)
+        {
+            window.LeaveKeyboard();
+        }
+    }
+
     /// <summary>Presses every widget of one kind, the way a click on it does.</summary>
     public int Press(string typeId) => _windows.Values.Sum(w => w.Press(typeId));
 

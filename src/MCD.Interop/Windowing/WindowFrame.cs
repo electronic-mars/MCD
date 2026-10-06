@@ -61,6 +61,21 @@ public static unsafe class WindowFrame
             sizeof(uint));
     }
 
+    /// <summary>
+    /// Lets a bar take the keyboard, or stops it doing so again. A bar never
+    /// activates by default (clicking a clock must not steal the foreground
+    /// from the document), so keyboard use turns that off for as long as it
+    /// lasts.
+    /// </summary>
+    public static void AllowActivation(nint hwnd, bool allow)
+    {
+        var handle = new HWND(hwnd);
+        nint exStyle = PInvoke.GetWindowLongPtr(handle, (WINDOW_LONG_PTR_INDEX)GwlExStyle);
+        nint wanted = allow ? exStyle & ~(nint)WsExNoActivate : exStyle | (nint)WsExNoActivate;
+
+        PInvoke.SetWindowLongPtr(handle, (WINDOW_LONG_PTR_INDEX)GwlExStyle, wanted);
+    }
+
     public static void SetTopmost(nint hwnd, bool topmost)
     {
         PInvoke.SetWindowPos(

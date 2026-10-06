@@ -204,7 +204,7 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     // The same resting brightness the player's keys use while nothing
     // plays: one dimness for one meaning. Fainter, the Wi-Fi read as a
     // rendering fault beside them.
-    private const double Asleep = 0.55;
+    private const double Asleep = 0.7;
 
     /// <summary>The settings entry this was built from, so the bar can rearrange itself.</summary>
     public WidgetConfig Entry => _widget.Entry;

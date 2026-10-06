@@ -75,7 +75,7 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry TabPresets => Draw("Star");
 
-    public static Geometry TabHide => Draw("Layout");
+    public static Geometry TabHide => Draw("ViewOff");
 
     public static Geometry TabLook => Draw("Brush");
 

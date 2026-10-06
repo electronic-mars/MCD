@@ -798,21 +798,6 @@ public sealed partial class SettingsWindow : Window
             BackdropExtraRow(look),
 
             Braun.Row(
-                Loc.Tr("ReadingSizeLabel", "Size of the readings"),
-                Loc.Tr(
-                    "ReadingSizeHint",
-                    "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
-                Keys(
-                    [
-                        Loc.Tr("SegSizeLarge", "Large"),
-                        Loc.Tr("SegSizeMedium", "Medium"),
-                        Loc.Tr("SegSizeSmall", "Small"),
-                    ],
-                    Math.Max(0, Array.IndexOf(Sizes, look.Size)),
-                    i => ApplyLook(size: Sizes[i])),
-                stack: true),
-
-            Braun.Row(
                 Loc.Tr("AccentLabel", "Colour of the readings"),
                 Loc.Tr(
                     "AccentHint",
@@ -971,7 +956,7 @@ public sealed partial class SettingsWindow : Window
         keys.Children.Add(Braun.Action(
             chord.Set ? chord.ToString() : Loc.Tr("KeyNone", "Not set"),
             () => _ = CatchKey(what, name),
-            "Sliders"));
+            "Keyboard"));
 
         if (chord.Set)
         {
@@ -1284,10 +1269,13 @@ public sealed partial class SettingsWindow : Window
         if (live.TryGetValue(config.StableId, out MonitorInfo? screen)
             && new string([.. screen.Identity.GdiName.Where(char.IsDigit)]) is { Length: > 0 } digits)
         {
+            // With its size: two screens of one model are otherwise told apart
+            // by a number nobody can see on the glass.
             return string.Format(
                 CultureInfo.CurrentCulture,
                 Loc.Tr("DisplayNumber", "Display {0}"),
-                int.Parse(digits, CultureInfo.InvariantCulture));
+                int.Parse(digits, CultureInfo.InvariantCulture))
+                + $" · {screen.Width}×{screen.Height}";
         }
 
         // An unplugged screen has no Windows number; its model name is all
@@ -1407,7 +1395,23 @@ public sealed partial class SettingsWindow : Window
                 : Braun.Row(
                     Loc.Tr("SizeLabel", "Thickness"),
                     Loc.Tr("ThicknessNote", "A bar down the side of the screen has one thickness."),
-                    null)));
+                    null),
+
+            Braun.Row(
+            Loc.Tr("ReadingSizeLabel", "Size of the readings"),
+            Loc.Tr(
+                "ReadingSizeHint",
+                "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
+            Braun.Segs(
+                [
+                    Loc.Tr("SegSizeLarge", "Large"),
+                    Loc.Tr("SegSizeMedium", "Medium"),
+                    Loc.Tr("SegSizeSmall", "Small"),
+                ],
+                Math.Max(0, Array.IndexOf(Sizes, _settings.Current.App.Size)),
+                i => ApplyLook(size: Sizes[i]),
+                wide: true),
+            stack: true)));
 
         // ----------------------------------------------------------- behaviour
         gated.Children.Add(Braun.Heading("Gear", Loc.Tr("BehaviourTitle", "Behaviour")));
@@ -1503,7 +1507,26 @@ public sealed partial class SettingsWindow : Window
             Margin = new Thickness(0, 6, 0, 0),
         });
 
-        WidgetsBody.Children.Add(Braun.Heading("Layout", Loc.Tr("WidgetsBarGroup", "The bar")));
+        // ------------------------------------------------------------ contents
+        WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
+
+        WidgetsBody.Children.Add(BarList(dock));
+
+        // ------------------------------------------------------- chosen widget
+        if (Inspector() is { } inspector)
+        {
+            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
+
+            WidgetsBody.Children.Add(_inspectorAt);
+            WidgetsBody.Children.Add(inspector);
+        }
+        else
+        {
+            _inspectorAt = null;
+        }
+
+        // ---------------------------------------------- what else could be on it
+        WidgetsBody.Children.Add(Braun.Heading("Layout", Loc.Tr("GalleryRow", "Put one on the bar")));
 
         WidgetsBody.Children.Add(Braun.Group(
             Braun.Row(
@@ -1594,26 +1617,8 @@ public sealed partial class SettingsWindow : Window
                     ResetDock,
                     "Undo",
                     danger: false))));
-
-        // ------------------------------------------------------------ contents
-        WidgetsBody.Children.Add(Braun.Heading("List", Loc.Tr("GalleryTitle", "On the bar")));
-
-        WidgetsBody.Children.Add(BarList(dock));
-
-        // ------------------------------------------------------- chosen widget
-        if (Inspector() is { } inspector)
-        {
-            _inspectorAt = Braun.Heading("Sliders", _inspectorName);
-
-            WidgetsBody.Children.Add(_inspectorAt);
-            WidgetsBody.Children.Add(inspector);
-        }
-        else
-        {
-            _inspectorAt = null;
-        }
-
     }
+
 
     /// <summary>
     /// Fills the page about the programs pinned to the chosen bar.
@@ -4114,7 +4119,11 @@ public sealed partial class SettingsWindow : Window
             KeyRow(
                 Shortcut.Mic,
                 Loc.Tr("KeyMic", "Switch the microphone off"),
-                Loc.Tr("KeyMicHint", "Off and on again, for the whole machine, from anywhere."))));
+                Loc.Tr("KeyMicHint", "Off and on again, for the whole machine, from anywhere.")),
+            KeyRow(
+                Shortcut.Focus,
+                Loc.Tr("KeyFocus", "Go to the bar"),
+                Loc.Tr("KeyFocusHint", "Arrow keys choose a widget, Enter presses it, Esc leaves."))));
 
         GeneralBody.Children.Add(Braun.Heading("Globe", Loc.Tr("LookGroupLanguage", "Language")));
 

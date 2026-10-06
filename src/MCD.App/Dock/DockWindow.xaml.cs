@@ -803,6 +803,148 @@ public sealed partial class DockWindow : Window
 
     private WidgetHost? _pointed;
 
+    /// <summary>Whether the pointer is on this bar's screen.</summary>
+    public bool HoldsPointer
+    {
+        get
+        {
+            (int x, int y) = WindowFrame.CursorAt();
+            var b = Monitor.Bounds;
+
+            return x >= b.left && x < b.right && y >= b.top && y < b.bottom;
+        }
+    }
+
+    private WidgetHost[]? _keyed;
+    private int _keyedAt;
+
+    /// <summary>
+    /// Takes the keyboard onto this bar: the arrow keys choose a widget, Enter
+    /// or Space presses it, Escape (or clicking away) gives the keyboard back.
+    /// </summary>
+    /// <remarks>
+    /// A bar is built not to take focus, so this is a mode with an entrance
+    /// and an exit rather than a state the bar is always in.
+    /// </remarks>
+    public void EnterKeyboard()
+    {
+        if (_keyed is not null)
+        {
+            return;
+        }
+
+        WidgetHost[] hosts =
+        [
+            .. _hosts
+                .Where(h => h.Widget.Possible && h.Visibility == Visibility.Visible)
+                .OrderBy(h => Grid.GetColumn(h) + Grid.GetRow(h))
+        ];
+
+        if (hosts.Length == 0)
+        {
+            return;
+        }
+
+        _keyed = hosts;
+        _keyedAt = 0;
+
+        foreach (WidgetHost host in hosts)
+        {
+            host.IsTabStop = true;
+            host.UseSystemFocusVisuals = false;
+        }
+
+        WindowFrame.AllowActivation(_hwnd, allow: true);
+        WindowFrame.BringToFront(_hwnd);
+
+        Root.KeyDown += OnKeyboard;
+        Activated += OnKeyboardActivated;
+
+        KeyedTo(0);
+        _log.LogInformation("dock.keyboard entered monitor={Monitor} widgets={Count}", Monitor.Identity.FriendlyName, hosts.Length);
+    }
+
+    private void KeyedTo(int index)
+    {
+        if (_keyed is null)
+        {
+            return;
+        }
+
+        _keyed[_keyedAt].Outline(false);
+        _keyedAt = (index + _keyed.Length) % _keyed.Length;
+        _keyed[_keyedAt].Outline(true);
+        _keyed[_keyedAt].Focus(FocusState.Keyboard);
+    }
+
+    private void OnKeyboard(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Windows.System.VirtualKey.Left:
+            case Windows.System.VirtualKey.Up:
+                KeyedTo(_keyedAt - 1);
+                break;
+            case Windows.System.VirtualKey.Right:
+            case Windows.System.VirtualKey.Down:
+            case Windows.System.VirtualKey.Tab:
+                KeyedTo(_keyedAt + 1);
+                break;
+            case Windows.System.VirtualKey.Home:
+                KeyedTo(0);
+                break;
+            case Windows.System.VirtualKey.End:
+                KeyedTo(-1);
+                break;
+            case Windows.System.VirtualKey.Enter:
+            case Windows.System.VirtualKey.Space:
+                _keyed?[_keyedAt].Press();
+                break;
+            case Windows.System.VirtualKey.Escape:
+                LeaveKeyboard();
+                break;
+            default:
+                return;
+        }
+
+        e.Handled = true;
+    }
+
+    private void OnKeyboardActivated(object sender, WindowActivatedEventArgs e)
+    {
+        // A flyout opened by Enter takes the activation for its own popup;
+        // only a real click elsewhere ends the mode.
+        if (e.WindowActivationState == WindowActivationState.Deactivated && !FlyoutsOpenAny())
+        {
+            LeaveKeyboard();
+        }
+    }
+
+    private bool FlyoutsOpenAny() =>
+        _hosts.Any(h => Microsoft.UI.Xaml.Media.VisualTreeHelper
+            .GetOpenPopupsForXamlRoot(Content.XamlRoot).Count > 0);
+
+    public void LeaveKeyboard()
+    {
+        if (_keyed is null)
+        {
+            return;
+        }
+
+        Root.KeyDown -= OnKeyboard;
+        Activated -= OnKeyboardActivated;
+
+        _keyed[_keyedAt].Outline(false);
+
+        foreach (WidgetHost host in _keyed)
+        {
+            host.IsTabStop = false;
+        }
+
+        _keyed = null;
+        WindowFrame.AllowActivation(_hwnd, allow: false);
+    }
+
     private readonly List<WidgetHost> _hosts = [];
 
     /// <summary>
@@ -2434,6 +2576,7 @@ public sealed partial class DockWindow : Window
     private void Regrow()
     {
         bool grew = false;
+        List<string> grown = [];
 
         for (int i = 0; i < _built.Count; i++)
         {
@@ -2472,6 +2615,7 @@ public sealed partial class DockWindow : Window
 
             _built[i] = (entry, wants);
             grew = true;
+            grown.Add($"{entry.TypeId} {span}->{wants}");
         }
 
         // Not while anything is in hand - including a press that has not yet
@@ -2479,7 +2623,10 @@ public sealed partial class DockWindow : Window
         // one thing a bar being arranged must never do.
         if (grew && _grabbed is null)
         {
-            _log.LogInformation("dock.regrown monitor={Monitor}", Monitor.Identity.FriendlyName);
+            _log.LogInformation(
+                "dock.regrown monitor={Monitor} changes={Changes}",
+                Monitor.Identity.FriendlyName,
+                string.Join(", ", grown));
             Settle();
         }
     }

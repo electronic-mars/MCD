@@ -137,7 +137,7 @@
     <value>Одна цифра: насколько занята часть машины.</value>
   </data>
   <data name="WidgetIconName" xml:space="preserve">
-    <value>Закреплённая иконка</value>
+    <value>Закреплённый значок</value>
   </data>
   <data name="WidgetIconDescription" xml:space="preserve">
     <value>Программа, папка или страница — в одном нажатии.</value>
@@ -158,10 +158,10 @@
     <value>Какой показатель</value>
   </data>
   <data name="TempWhich" xml:space="preserve">
-    <value>Какой сенсор</value>
+    <value>Какой датчик</value>
   </data>
   <data name="PinIconHeader" xml:space="preserve">
-    <value>Иконка</value>
+    <value>Значок</value>
   </data>
   <data name="WidgetMediaName" xml:space="preserve">
     <value>Медиа</value>
@@ -516,7 +516,7 @@
     <value>Язык изменён</value>
   </data>
   <data name="RestartRowHint" xml:space="preserve">
-    <value>Панели заговорят на новом языке после перезапуска программы.</value>
+    <value>Язык сменится после перезапуска программы.</value>
   </data>
   <data name="ColourRow" xml:space="preserve">
     <value>Цвет</value>
@@ -735,7 +735,7 @@
     <value>Откуда угодно, в том числе поверх полноэкранной программы.</value>
   </data>
   <data name="KeyMute" xml:space="preserve">
-    <value>Выключить звук</value>
+    <value>Выключить или включить звук</value>
   </data>
   <data name="KeyMuteHint" xml:space="preserve">
     <value>То же, что клавиша отключения звука, для клавиатур, где её нет.</value>
@@ -798,10 +798,10 @@
     <value>Пригодится там, где в досягаемости две сети и работают обе.</value>
   </data>
   <data name="QuietRow" xml:space="preserve">
-    <value>{0} ждут своего момента</value>
+    <value>Скрыты, пока нет данных: {0}</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} — на панели, но места не занимает, пока ему нечего сказать. Вернётся туда, где его оставили.</value>
+    <value>{0} — на панели, но места не занимает, пока нечего показать. Вернётся туда, где стоял.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
     <value>Убрать их</value>
@@ -813,13 +813,13 @@
     <value>Одно из них не помещается</value>
   </data>
   <data name="QuietRowOne" xml:space="preserve">
-    <value>Один ждёт своего момента</value>
+    <value>Один скрыт, пока нет данных</value>
   </data>
   <data name="BraunRow" xml:space="preserve">
     <value>Что это</value>
   </data>
   <data name="BraunHint" xml:space="preserve">
-    <value>Панель как прибор: графитовый корпус на тёмной теме, кремовый на светлой, показания оранжевым. Лаконично, строго и спокойно — тот же стиль, в котором нарисованы эти настройки; по мотивам приборов Braun.</value>
+    <value>Строгий приборный вид: графитовый корпус, оранжевые показания.</value>
   </data>
   <data name="CrowdedButtonOne" xml:space="preserve">
     <value>Убрать</value>
@@ -834,7 +834,7 @@
     <value>Настройки</value>
   </data>
   <data name="WidgetSettingsDescription" xml:space="preserve">
-    <value>Открывает это окно. Дверь для тех, кто не нашёл правый клик.</value>
+    <value>Открывает настройки.</value>
   </data>
   <data name="SettingsChipTip.Text" xml:space="preserve">
     <value>Настройки</value>
@@ -1020,7 +1020,7 @@
     <value>Мелкий</value>
   </data>
   <data name="PresetsGroup" xml:space="preserve">
-    <value>Пресеты</value>
+    <value>Раскладки</value>
   </data>
   <data name="PresetSaveRow" xml:space="preserve">
     <value>Сохранить эту расстановку</value>
@@ -1029,7 +1029,7 @@
     <value>Запоминает, что стоит на этой панели, под именем — чтобы потом поставить на любую панель, здесь или на другом экране.</value>
   </data>
   <data name="PresetSaveButton" xml:space="preserve">
-    <value>Сохранить как пресет</value>
+    <value>Сохранить как раскладку</value>
   </data>
   <data name="PresetApply" xml:space="preserve">
     <value>Поставить на эту панель</value>
@@ -1050,13 +1050,13 @@
     <value>Сохранить</value>
   </data>
   <data name="UndoPresetSaved" xml:space="preserve">
-    <value>сохранённый пресет</value>
+    <value>сохранённая раскладка</value>
   </data>
   <data name="UndoPresetApplied" xml:space="preserve">
-    <value>поставленный пресет</value>
+    <value>поставленная раскладка</value>
   </data>
   <data name="UndoPresetDropped" xml:space="preserve">
-    <value>забытый пресет</value>
+    <value>забытая раскладка</value>
   </data>
   <data name="SoundMutedTip" xml:space="preserve">
     <value>Звук выключен</value>
@@ -1074,7 +1074,7 @@
     <value>Размер значков и цифр</value>
   </data>
   <data name="ReadingSizeHint" xml:space="preserve">
-    <value>Насколько крупно рисуются значки и цифры. Толщина самой панели задаётся на её странице.</value>
+    <value>Насколько крупно рисуются значки и цифры, на всех панелях.</value>
   </data>
   <data name="NavGeneral.Text" xml:space="preserve">
     <value>Общие</value>
@@ -1212,13 +1212,13 @@
     <value>Пока ничего не закреплено. Бросьте файл на панель или закрепите кнопкой выше.</value>
   </data>
   <data name="NavPresets.Text" xml:space="preserve">
-    <value>Пресеты</value>
+    <value>Раскладки</value>
   </data>
   <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Пресеты</value>
+    <value>Раскладки</value>
   </data>
   <data name="PresetsTitle.Text" xml:space="preserve">
-    <value>Пресеты</value>
+    <value>Раскладки</value>
   </data>
   <data name="PresetsIntro.Text" xml:space="preserve">
     <value>Сохранённые наборы виджетов. Любой можно поставить на панель выбранного экрана.</value>
@@ -1299,7 +1299,7 @@
     <value>Температура процессора и памяти</value>
   </data>
   <data name="DriverRowHint" xml:space="preserve">
-    <value>Они живут за драйвером уровня ядра. PawnIO — подписанный, открытый, ставится один раз с правами администратора; дальше через него читает маленькая служба этой программы.</value>
+    <value>Для температуры процессора и памяти нужен драйвер PawnIO. Ставится один раз, нужны права администратора.</value>
   </data>
   <data name="DriverRowInstalledHint" xml:space="preserve">
     <value>PawnIO {0} установлен, но не ответил. Обычно помогает перезапуск программы.</value>
@@ -1569,10 +1569,10 @@
     <value>щелчок открывает ползунок, колесо меняет громкость</value>
   </data>
   <data name="KeyMic" xml:space="preserve">
-    <value>Выключить микрофон</value>
+    <value>Выключить или включить микрофон</value>
   </data>
   <data name="KeyMicHint" xml:space="preserve">
-    <value>Выключает и снова включает микрофон во всей системе, из любой программы.</value>
+    <value>Во всей системе, из любой программы.</value>
   </data>
   <data name="IconSearch" xml:space="preserve">
     <value>Найти по имени</value>
@@ -1621,5 +1621,11 @@
   </data>
   <data name="IconGroup_people" xml:space="preserve">
     <value>Люди и эмоции</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Перейти на панель</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Стрелки выбирают виджет, Enter нажимает, Esc выходит.</value>
   </data>
 </root>

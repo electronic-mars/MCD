@@ -23,6 +23,9 @@ public static class Shortcut
     /// <summary>Switch the microphone off, or on again.</summary>
     public const string Mic = "mic";
 
+    /// <summary>Move the keyboard onto a bar: arrows choose, Enter presses, Esc leaves.</summary>
+    public const string Focus = "focus";
+
     /// <summary>All of them, in the order they are offered.</summary>
-    public static IReadOnlyList<string> All { get; } = [Bars, Settings, Mute, Mic];
+    public static IReadOnlyList<string> All { get; } = [Bars, Settings, Mute, Mic, Focus];
 }

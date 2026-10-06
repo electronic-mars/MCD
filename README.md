@@ -91,53 +91,41 @@ real installer, which arrives with the MSIX package.
 ## Using it
 
 Starting it puts a bar on the edge of every screen. **Right-click an empty part
-of a bar** to open the settings, on that screen: which screens have a dock,
-which edge it sits on, how tall it is, which icon each reading is drawn with,
-what the program has remembered about each monitor, and the Exit button.
+of a bar** for the menu: *Settings*, *Hide the bars*, *Exit*. Starting the
+shortcut again while it is running opens the settings too, which is also the
+way back in if every bar has been switched off.
 
-There is no icon in the notification area, on purpose. A program whose whole
-point is a bar of visible controls should not hide its own controls behind a
-chevron in somebody else's bar. Starting the shortcut again while it is already
-running opens the settings as well - which is also the way back in if every dock
-has been switched off. **Start with Windows** lives on the About page.
+There is no icon in the notification area, on purpose: a program whose whole
+point is a bar of visible controls should not hide its own behind a chevron in
+somebody else's bar.
 
-**Arranging a dock.** A dock is one run of widgets, and where they sit is
-decided by **spacers** - widgets that stretch to take up the free length. One
-spacer in the middle splits the bar in two; two of them centre whatever is
-between. **To move a widget, drag it on the bar itself** - a marker shows where
-it will land, and while a drag is under way the spacers show themselves so they
-can be grabbed too. **Right-click the bar** and choose *Add widget* to put a
-new one exactly where you clicked.
+Four words are used throughout: a **bar** is the strip on a screen's edge, a
+**widget** is anything standing on it, a **reading** is a figure from a sensor,
+and a **layout** is a saved arrangement of widgets.
 
-Settings has a **Docks** page besides: pick a screen at the top, see the bar
-itself drawn live at its real thickness, then set which edge it sits on, how
-thick it is, and whether it hides itself. The widget list below is where a
-widget's own settings live - open its row to set it up.
+The settings window has these pages:
 
-The two sizes differ in more than thickness: the full size writes each reading's
-name under its figure, and the compact one shows the figure alone. Nothing is saved or
-discarded - it happens as you do it, and **Undo** puts back the last change. The
-temperature widget is where you choose which sensors it shows: either the
-hottest reading, whatever it happens to be, or the ones you pick, drawn side by
-side on the bar.
+- **Bars** - per screen: whether it has a bar, which edge, how thick, and how
+  the bar holds its edge (keeps its place, hides, or lies on the desktop).
+- **Widgets** - what is on this screen's bar, in order, with each widget's own
+  settings; below it, everything else that can be put there. Drag a widget
+  onto the bar and it lands where you drop it; drag one off the edge to remove
+  it. Spacers are widgets that stretch: one in the middle splits the bar in
+  two, two of them centre what is between.
+- **Your programs** - programs, folders and web addresses pinned to the bar. A
+  file dropped straight onto the bar is pinned where it lands.
+- **Layouts** - saved arrangements. Three come with the program (*Minimal*,
+  *Monitoring*, *Work*); keep your own and put any of them on any screen.
+- **Appearance** - theme, translucent or solid, size of the readings, colour of
+  the readings, and which icon each reading wears.
+- **General** - keys, language, start with Windows, and a backup of everything.
+- **Readings** - everything the program reads, where it comes from, and what to
+  call it.
+- **About** - version, the log, and *Quit*.
 
-**Appearance.** The **Appearance** page sets the theme (light, dark, or the same
-as Windows), whether the bars are translucent or solid, and whether the readings
-take the accent colour from your Windows settings. Readings past their warning
-level keep their warning colour either way, and past the critical level the
-figure turns the system's critical red and goes semibold.
-
-**Hiding the bar.** Each dock can either stay visible or hide itself, under
-Behaviour on the Docks page. A hidden dock reserves no space at all - windows
-maximise over it - and slides back out when the pointer reaches that edge of
-that screen. It will not hide on an edge where the taskbar already hides,
-because the two would be reaching for the same strip of screen; the setting says
-so rather than silently doing nothing.
-
-**Pinning things to the bar.** Settings has a **Launcher** page. Give it a
-program, a folder or a web address and it appears on every dock, drawn with the
-icon Explorer uses for it. Addresses have no icon of their own and show the
-first letter of their name.
+Every change is applied as you make it, and **Ctrl+Z** in the settings window
+takes the last one back. The bar at the foot of the window's navigation hides
+or shows all bars.
 
 **Do not end it from Task Manager.** The dock reserves part of the desktop work
 area through the shell, and only a proper shutdown gives that space back;

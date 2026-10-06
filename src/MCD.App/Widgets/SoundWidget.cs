@@ -233,7 +233,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         // crossed ten and a hundred - and the speaker beside it moved.
         FigureWidth = _figure ??= Metric.Wide("100 %", FontSize);
 
-        LevelShown = muted.Value ? 0.5 : 1;
+        LevelShown = muted.Value ? 0.7 : 1;
 
         if (!_sliding)
         {

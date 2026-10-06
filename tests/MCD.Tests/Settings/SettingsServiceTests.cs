@@ -19,7 +19,7 @@ public sealed class SettingsServiceTests : IDisposable
             first.Commit(
                 first.Current with
                 {
-                    App = first.Current.App with { Theme = "dark", Autostart = true },
+                    App = first.Current.App with { Theme = "dark", Language = "ru-RU" },
                     Monitors =
                     [
                         new MonitorConfig
@@ -40,7 +40,7 @@ public sealed class SettingsServiceTests : IDisposable
         using SettingsService second = Open();
 
         second.Current.App.Theme.ShouldBe("dark");
-        second.Current.App.Autostart.ShouldBeTrue();
+        second.Current.App.Language.ShouldBe("ru-RU");
         second.Current.Monitors.Single().Edge.ShouldBe(AppBarEdge.Left);
         second.Current.Monitors.Single().Density.ShouldBe(DockDensity.Compact);
     }
