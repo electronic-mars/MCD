@@ -22,52 +22,79 @@ ASSETS = ROOT / "src" / "MCD.App" / "Assets"
 ICO_SIZES = (16, 20, 24, 32, 40, 48, 64, 128, 256)
 
 SCREEN = (31, 36, 48, 255)
-SCREEN_EDGE = (78, 86, 104, 255)
-ACCENT = (76, 194, 255, 255)
-WIDGET = (150, 160, 178, 255)
+SCREEN_EDGE = (92, 101, 122, 255)
+BAR = (255, 122, 26, 255)        # the "Instrument" orange of the program's own look
+GLYPH = (31, 36, 48, 255)
 
 
 def draw(size: int) -> Image.Image:
-    """One icon, drawn at its own size."""
-    # Drawn at four times the target and reduced once. Straight lines stay
+    """
+    One icon, drawn at its own size: a screen with the bar along its top edge,
+    and the bar carrying what the program is for - readings. Below 48 pixels
+    the readings are plain marks; at 48 and up they are small pictures of a
+    clock, a level and a chip.
+    """
+    # Drawn at eight times the target and reduced once. Straight lines stay
     # straight, and only the curves get antialiased.
-    scale = 4
+    scale = 8
     s = size * scale
     image = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     pen = ImageDraw.Draw(image)
 
-    margin = max(1, round(s * 0.06))
-    radius = round(s * 0.18)
-    box = (margin, margin, s - margin - 1, s - margin - 1)
-
-    pen.rounded_rectangle(box, radius=radius, fill=SCREEN, outline=SCREEN_EDGE,
-                          width=max(scale, round(s * 0.035)))
-
-    # The dock itself: a bar along the bottom edge, which is the whole idea of
-    # the program and the one shape that still reads at 16 pixels.
-    bar_height = round(s * 0.20)
-    bar_inset = round(s * 0.17)
-    bar_bottom = s - margin - round(s * 0.09)
+    margin = max(1, round(s * 0.04))
     pen.rounded_rectangle(
-        (bar_inset, bar_bottom - bar_height, s - bar_inset - 1, bar_bottom),
-        radius=round(bar_height * 0.35),
-        fill=ACCENT,
+        (margin, margin, s - margin - 1, s - margin - 1),
+        radius=round(s * 0.20),
+        fill=SCREEN,
+        outline=SCREEN_EDGE,
+        width=max(scale, round(s * 0.04)),
     )
 
-    # Widgets on the screen above it. Below 24 pixels they would merge into a
-    # smudge, so they are simply left out.
-    if size >= 24:
-        dot = round(s * 0.09)
-        gap = round(s * 0.07)
-        top = round(s * 0.30)
-        left = bar_inset
-        for _ in range(3):
-            pen.rounded_rectangle(
-                (left, top, left + dot * 2, top + dot),
-                radius=round(dot * 0.4),
-                fill=WIDGET,
-            )
-            left += dot * 2 + gap
+    # The bar: nearly the width of the screen, a third of its height.
+    left = round(s * 0.11)
+    right = s - left - 1
+    top = round(s * 0.15)
+    bottom = round(s * 0.47)
+    pen.rounded_rectangle((left, top, right, bottom), radius=round((bottom - top) * 0.22), fill=BAR)
+
+    height = bottom - top
+    centre = (top + bottom) // 2
+    mark = round(height * 0.52)
+    cells = [left + round((right - left) * f) for f in (0.20, 0.50, 0.80)]
+
+    if size < 48:
+        # Three marks; at sixteen pixels that is what a reading can be.
+        for x in cells:
+            half = max(scale, mark // 2)
+            pen.rounded_rectangle((x - half, centre - half, x + half, centre + half),
+                                  radius=round(half * 0.45), fill=GLYPH)
+    else:
+        line = max(scale, round(height * 0.11))
+        half = mark // 2
+
+        # A clock: ring and two hands.
+        x = cells[0]
+        pen.ellipse((x - half, centre - half, x + half, centre + half), outline=GLYPH, width=line)
+        pen.line((x, centre, x, centre - round(half * 0.65)), fill=GLYPH, width=line)
+        pen.line((x, centre, x + round(half * 0.5), centre), fill=GLYPH, width=line)
+
+        # A level: three bars rising.
+        x = cells[1]
+        w = max(scale, round(half * 0.42))
+        for i, h in enumerate((0.45, 0.8, 1.15)):
+            bx = x - round(half * 0.95) + i * round(half * 0.7)
+            pen.rounded_rectangle((bx, centre + half - round(2 * half * h * 0.8), bx + w, centre + half),
+                                  radius=max(1, w // 3), fill=GLYPH)
+
+        # A chip: a square with pins.
+        x = cells[2]
+        inner = round(half * 0.72)
+        pen.rounded_rectangle((x - inner, centre - inner, x + inner, centre + inner),
+                              radius=round(inner * 0.25), outline=GLYPH, width=line)
+        pin = round(half * 0.32)
+        for d in (-round(inner * 0.5), round(inner * 0.5)):
+            pen.line((x + d, centre - inner, x + d, centre - inner - pin), fill=GLYPH, width=line)
+            pen.line((x + d, centre + inner, x + d, centre + inner + pin), fill=GLYPH, width=line)
 
     return image.resize((size, size), Image.LANCZOS)
 
