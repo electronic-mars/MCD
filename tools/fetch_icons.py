@@ -1809,7 +1809,7 @@ def _shapes(svg: str) -> list[str]:
     return found
 
 
-def combine(svg: str) -> str:
+def combine(svg: str, grow: bool = True) -> str:
     """
     Every shape in one string.
 
@@ -1824,7 +1824,9 @@ def combine(svg: str) -> str:
 
     # Normalised, because WinUI reads the same commands as SVG but not the
     # compressed spelling Iconify serves. See tools/svgpath.py.
-    return grown(" ".join(normalise(s.strip()) for s in shapes))
+    data = " ".join(normalise(s.strip()) for s in shapes)
+
+    return grown(data) if grow else data
 
 
 # The grid the icons are drawn on, and the live area they should fill on it.
@@ -1905,13 +1907,19 @@ def _self_check() -> None:
     assert small == "M 2 12 L 22 12", small
 
 
+SAME_SIZE = {"Speaker", "SpeakerMid", "SpeakerLow", "SpeakerOff"}
+
+
 def main() -> None:
     _self_check()
 
     rows: list[str] = []
 
     for key, name in ICONS.items():
-        data = combine(fetch(name))
+        # The speaker at its four volumes is one icon changing, not four icons:
+        # grown on its own, the ones with fewer waves are drawn narrower and
+        # come out enlarged, so the speaker swells as the sound gets quieter.
+        data = combine(fetch(name), grow=key not in SAME_SIZE)
         rows.append(f'        ["{key}"] =\n            "{data}",\n')
 
     # Which meaning-group each icon is in, so a picker of two thousand is a
