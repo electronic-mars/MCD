@@ -95,7 +95,9 @@ public sealed partial class SettingsWindow : Window
         Root.ActualThemeChanged += (_, _) => PaintBody();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(TitleBar);
-        AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "icon.ico"));
+        // The taskbar's own theme picks which of the two drawings the window wears.
+        AppWindow.SetIcon(Path.Combine(
+            AppContext.BaseDirectory, "Assets", TaskbarIsLight() ? "icon-light.ico" : "icon.ico"));
 
         SizeAndCentre(screen: null);
 
@@ -4141,7 +4143,7 @@ public sealed partial class SettingsWindow : Window
             Child = new Image
             {
                 Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(
-                    new Uri("ms-appx:///Assets/icon-128.png")),
+                    new Uri("ms-appx:///Assets/" + (Root.ActualTheme == ElementTheme.Light ? "icon-light-128.png" : "icon-128.png") + "")),
                 Stretch = Microsoft.UI.Xaml.Media.Stretch.UniformToFill,
             },
         });
@@ -4235,6 +4237,15 @@ public sealed partial class SettingsWindow : Window
                 "ExitHint",
                 "Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind."),
             Braun.Action(Loc.Tr("ExitButton", "Quit"), () => _onExit(), "Power"))));
+    }
+
+    /// <summary>Whether Windows draws its taskbar light.</summary>
+    private static bool TaskbarIsLight()
+    {
+        using Microsoft.Win32.RegistryKey? key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+            @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+
+        return key?.GetValue("SystemUsesLightTheme") is 1;
     }
 
     private string _updateNote = string.Empty;
