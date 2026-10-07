@@ -338,7 +338,7 @@ public sealed partial class SettingsWindow : Window
         double tallest = Math.Max(MinimumTall, Math.Min(MaximumTall, roomTall - Spare));
 
         var size = new Windows.Graphics.SizeInt32(
-            (int)Math.Round(Math.Clamp(1000, MinimumWide, widest) * scale),
+            (int)Math.Round(Math.Clamp(956, MinimumWide, widest) * scale),
             (int)Math.Round(Math.Clamp(780, MinimumTall, tallest) * scale));
 
         // A floor under the window, in the same physical pixels AppWindow
@@ -2705,6 +2705,11 @@ public sealed partial class SettingsWindow : Window
     /// want. Taking one off is done on the bar, by dragging it off or by its
     /// own right-click menu.
     /// </remarks>
+    // How far the gallery's own edge sits inside the frame round it, and the
+    // least space left between two cards.
+    private const double FrameInset = 13.6;
+    private const double MinGap = 16;
+
     private FrameworkElement Gallery(MonitorConfig dock)
     {
         // One wrap of chips under each part of the machine. Twenty chips in
@@ -2718,7 +2723,7 @@ public sealed partial class SettingsWindow : Window
             {
                 shelf = new VariableSizedWrapGrid
                 {
-                    ItemHeight = 104,
+                    ItemHeight = 88,
                     ItemWidth = 200,
                     Orientation = Orientation.Horizontal,
                 };
@@ -2730,6 +2735,7 @@ public sealed partial class SettingsWindow : Window
         }
 
         var chips = new List<(Border Chip, string Category, string Words)>();
+        double widest = 0;
 
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
@@ -2740,6 +2746,8 @@ public sealed partial class SettingsWindow : Window
             // same icon, small name and figure, with an ordinary figure in
             // place of the live one. The name is a caption beside it.
             Border picture = BarSample(offer.Sample ?? WidgetSample.Of(offer.Icon));
+            picture.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            widest = Math.Max(widest, picture.DesiredSize.Width);
 
             // Two lines rather than an ellipsis: "Temperature - the h..."
             // was cut exactly where the meaning began.
@@ -2817,7 +2825,7 @@ public sealed partial class SettingsWindow : Window
             // thing is going, so the bar is where the gesture should end.
             var chip = new Border
             {
-                Margin = new Thickness(0, 0, 8, 6),
+                Margin = new Thickness(0, 0, MinGap, 6),
                 Padding = new Thickness(8, 8, 8, 8),
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
@@ -2851,18 +2859,28 @@ public sealed partial class SettingsWindow : Window
         var stack = new StackPanel { Spacing = 0 };
         var headings = new Dictionary<string, TextBlock>(StringComparer.Ordinal);
 
-        // Never fewer than two columns, however narrow the window: the cells
-        // share the width out evenly instead of keeping one size and dropping
-        // to one column. Measured on the stack, which is as wide as the page
-        // lets it be; a shelf is only as wide as its own cells.
+        // A card is as wide as the widest widget's plate needs, with the plus
+        // beside it, and no wider. The cards are then spread so that the space
+        // between them and the space at either edge of the frame they sit in
+        // are the same; as many go in a row as fit, never fewer than two.
+        double card = Math.Ceiling(widest) + 8 + 28 + 18;
+
         stack.SizeChanged += (_, size) =>
         {
-            double width = size.NewSize.Width - 2;
-            int columns = Math.Max(2, (int)(width / 205));
+            double room = size.NewSize.Width + 2 * FrameInset;
+            int columns = Math.Max(2, (int)((room - MinGap) / (card + MinGap)));
+            double gap = (room - columns * card) / (columns + 1);
 
             foreach (VariableSizedWrapGrid shelf in shelves.Values)
             {
-                shelf.ItemWidth = Math.Floor(width / columns);
+                shelf.ItemWidth = card + gap;
+                shelf.Margin = new Thickness(gap - FrameInset, 0, 0, 0);
+                shelf.Width = columns * (card + gap);
+            }
+
+            foreach (var entry in chips)
+            {
+                entry.Chip.Margin = new Thickness(0, 0, gap, 6);
             }
         };
 
@@ -2965,9 +2983,11 @@ public sealed partial class SettingsWindow : Window
 
         return new Border
         {
-            Height = 50,
+            Height = 38,
+            MinWidth = 56,
             Padding = new Thickness(14, 0, 14, 0),
             CornerRadius = new CornerRadius(8),
+            HorizontalAlignment = HorizontalAlignment.Left,
             // Darker than the chip it sits on, the way the bar is darker than
             // the desktop round it.
             Background = new SolidColorBrush(Braun.Theme != ElementTheme.Light
