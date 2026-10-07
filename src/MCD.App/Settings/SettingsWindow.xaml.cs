@@ -2718,7 +2718,7 @@ public sealed partial class SettingsWindow : Window
             {
                 shelf = new VariableSizedWrapGrid
                 {
-                    ItemHeight = 62,
+                    ItemHeight = 54,
                     ItemWidth = 200,
                     Orientation = Orientation.Horizontal,
                 };
@@ -2728,6 +2728,8 @@ public sealed partial class SettingsWindow : Window
 
             return shelf;
         }
+
+        var chips = new List<(Border Chip, string Category, string Words)>();
 
         foreach (WidgetOffer offer in WidgetCatalog.Offers(_sensors))
         {
@@ -2812,8 +2814,8 @@ public sealed partial class SettingsWindow : Window
             // thing is going, so the bar is where the gesture should end.
             var chip = new Border
             {
-                Margin = new Thickness(0, 0, 8, 8),
-                Padding = new Thickness(10, 6, 10, 6),
+                Margin = new Thickness(0, 0, 8, 6),
+                Padding = new Thickness(8, 4, 8, 4),
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
                 BorderBrush = Braun.Line,
@@ -2840,9 +2842,11 @@ public sealed partial class SettingsWindow : Window
             };
 
             gallery.Children.Add(chip);
+            chips.Add((chip, offer.Category, (offer.Name + " " + (offer.Short ?? string.Empty) + " " + offer.Description).ToLowerInvariant()));
         }
 
-        var stack = new StackPanel { Spacing = 2 };
+        var stack = new StackPanel { Spacing = 0 };
+        var headings = new Dictionary<string, TextBlock>(StringComparer.Ordinal);
 
         // Never fewer than two columns, however narrow the window: the cells
         // share the width out evenly instead of keeping one size and dropping
@@ -2851,7 +2855,7 @@ public sealed partial class SettingsWindow : Window
         stack.SizeChanged += (_, size) =>
         {
             double width = size.NewSize.Width - 2;
-            int columns = Math.Max(2, (int)(width / 250));
+            int columns = Math.Max(2, (int)(width / 205));
 
             foreach (VariableSizedWrapGrid shelf in shelves.Values)
             {
@@ -2866,13 +2870,50 @@ public sealed partial class SettingsWindow : Window
                 continue;
             }
 
-            TextBlock caption = Braun.Micro(heading);
-            caption.Margin = new Thickness(2, 8, 0, 6);
+            TextBlock caption = Braun.Micro(heading + "  " + shelf.Children.Count.ToString(CultureInfo.CurrentCulture));
+            caption.Margin = new Thickness(2, 6, 0, 4);
             stack.Children.Add(caption);
             stack.Children.Add(shelf);
+            headings[id] = caption;
         }
 
-        return stack;
+        // A search through the whole catalogue: what matches stays, every shelf
+        // with nothing left under it goes with its heading. It looks at the
+        // name, the short caption and the description, in any case.
+        var search = new TextBox
+        {
+            PlaceholderText = Loc.Tr("GallerySearch", "Search widgets"),
+            Margin = new Thickness(0, 0, 8, 4),
+        };
+
+        search.TextChanged += (_, _) =>
+        {
+            string wanted = search.Text.Trim().ToLowerInvariant();
+
+            foreach ((Border chip, string category, string words) in chips)
+            {
+                chip.Visibility = wanted.Length == 0 || words.Contains(wanted, StringComparison.Ordinal)
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
+            }
+
+            foreach ((string category, VariableSizedWrapGrid shelf) in shelves)
+            {
+                bool any = chips.Any(c => c.Category == category && c.Chip.Visibility == Visibility.Visible);
+                shelf.Visibility = any ? Visibility.Visible : Visibility.Collapsed;
+
+                if (headings.TryGetValue(category, out TextBlock? caption))
+                {
+                    caption.Visibility = shelf.Visibility;
+                }
+            }
+        };
+
+        var whole = new StackPanel { Spacing = 2 };
+        whole.Children.Add(search);
+        whole.Children.Add(stack);
+
+        return whole;
     }
 
     /// <summary>
@@ -2921,8 +2962,8 @@ public sealed partial class SettingsWindow : Window
         return new Border
         {
             MinWidth = 40,
-            Height = 38,
-            Padding = new Thickness(9, 0, 9, 0),
+            Height = 34,
+            Padding = new Thickness(8, 0, 8, 0),
             CornerRadius = new CornerRadius(6),
             // Darker than the chip it sits on, the way the bar is darker than
             // the desktop round it.

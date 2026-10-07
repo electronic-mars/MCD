@@ -1716,7 +1716,7 @@
     <value>Обе цифры рядом, под одним значком.</value>
   </data>
   <data name="ShortBoth" xml:space="preserve">
-    <value>Загрузка и температура</value>
+    <value>Загрузка + t°</value>
   </data>
   <data name="TempMissingRow" xml:space="preserve">
     <value>Температура процессора и памяти</value>
@@ -1744,5 +1744,8 @@
   </data>
   <data name="DragToBar" xml:space="preserve">
     <value>Отпустите на панели</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Найти виджет</value>
   </data>
 </root>

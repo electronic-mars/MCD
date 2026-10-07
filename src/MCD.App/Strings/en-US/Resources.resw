@@ -1716,7 +1716,7 @@
     <value>Both figures side by side, under one icon.</value>
   </data>
   <data name="ShortBoth" xml:space="preserve">
-    <value>Load and temperature</value>
+    <value>Load + temp</value>
   </data>
   <data name="TempMissingRow" xml:space="preserve">
     <value>Processor and memory temperature</value>
@@ -1744,5 +1744,8 @@
   </data>
   <data name="DragToBar" xml:space="preserve">
     <value>Drop it on a bar</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Search widgets</value>
   </data>
 </root>
