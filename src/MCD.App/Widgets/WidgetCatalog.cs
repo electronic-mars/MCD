@@ -52,7 +52,21 @@ public sealed record WidgetOffer(
     Func<WidgetConfig, bool> Matches,
     string? Chooses = null,
     string Category = "other",
-    string? Short = null);
+    string? Short = null,
+    WidgetSample? Sample = null);
+
+/// <summary>
+/// A picture of what a widget looks like on the bar, drawn once with ordinary
+/// figures - not read from the machine - so a gallery of widgets shows what
+/// each will look like and what it says, not just its name.
+/// </summary>
+/// <param name="Icons">The drawings, left to right.</param>
+/// <param name="Figure">What it reads, as a typical day would have it.</param>
+/// <param name="Label">The small name above the figure on a full-size bar.</param>
+public sealed record WidgetSample(string[] Icons, string Figure = "", string Label = "")
+{
+    public static WidgetSample Of(string icon, string figure = "", string label = "") => new([icon], figure, label);
+}
 
 /// <summary>
 /// Every widget this build knows about, in the order they are offered.
@@ -228,7 +242,8 @@ public static class WidgetCatalog
                     && WidgetOptions.Number(entry.Config, "temp") is not 1,
                 Chooses: reading.Id,
                 Category: category,
-                Short: shortName);
+                Short: shortName,
+                Sample: WidgetSample.Of(reading.Icon, TypicalFigure(reading.Id), reading.Label));
 
             // The load and the temperature of the same part in one chip, on
             // offer by itself: it was only a switch inside the load widget's
@@ -263,7 +278,8 @@ public static class WidgetCatalog
                         && WidgetOptions.Number(entry.Config, "temp") is 1,
                     Chooses: reading.Id + "+temp",
                     Category: category,
-                    Short: Loc.Tr("ShortBoth", "Load and temperature"));
+                    Short: Loc.Tr("ShortBoth", "Load and temperature"),
+                    Sample: WidgetSample.Of(reading.Icon, TypicalFigure(reading.Id) + "  " + TypicalTemperature(reading.Id), reading.Label));
             }
         }
 
@@ -307,7 +323,8 @@ public static class WidgetCatalog
                 Category: CategoryOf(sensor.Group),
                 Short: twins
                     ? $"{Loc.Tr("ShortTemperature", "Temperature")} — {detail}"
-                    : Loc.Tr("ShortTemperature", "Temperature"));
+                    : Loc.Tr("ShortTemperature", "Temperature"),
+                Sample: WidgetSample.Of(TempWidget.IconFor(sensor.Group), "48 °C"));
         }
 
         // One chip per wireless device that reports a charge, under the kind
@@ -334,7 +351,8 @@ public static class WidgetCatalog
                 entry => entry.TypeId == DeviceWidget.Type
                     && WidgetOptions.Text(entry.Config, "sensor") == key,
                 Category: family == "other" ? "device" : family,
-                Short: device.Hardware);
+                Short: device.Hardware,
+                Sample: WidgetSample.Of(DeviceWidget.IconFor(device.Key), "82 %"));
         }
 
         yield return new WidgetOffer(
@@ -342,28 +360,32 @@ public static class WidgetCatalog
             Loc.Tr("WidgetSoundDescription", "The speaker opens a volume slider and the wheel turns it; the figure silences the machine."),
             "Speaker",
             () => WidgetConfig.New(SoundWidget.Type),
-            entry => entry.TypeId == SoundWidget.Type);
+            entry => entry.TypeId == SoundWidget.Type,
+            Sample: WidgetSample.Of("Speaker", "42 %"));
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetMicName", "Microphone"),
             Loc.Tr("WidgetMicDescription", "Switches the microphone off for the whole machine, and goes red while it is off."),
             "Mic",
             () => WidgetConfig.New(MicWidget.Type),
-            entry => entry.TypeId == MicWidget.Type);
+            entry => entry.TypeId == MicWidget.Type,
+            Sample: WidgetSample.Of("Mic"));
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetAwakeName", "Keep awake"),
             Loc.Tr("WidgetAwakeDescription", "A full cup keeps the machine from sleeping and chat programs from turning amber."),
             "CoffeeOn",
             () => WidgetConfig.New(AwakeWidget.Type),
-            entry => entry.TypeId == AwakeWidget.Type);
+            entry => entry.TypeId == AwakeWidget.Type,
+            Sample: WidgetSample.Of("CoffeeOn"));
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetLayoutName", "Keyboard layout"),
             Loc.Tr("WidgetLayoutDescription", "The language the keyboard types in, and whether Caps Lock is on."),
             "Keyboard",
             () => WidgetConfig.New(LayoutWidget.Type),
-            entry => entry.TypeId == LayoutWidget.Type);
+            entry => entry.TypeId == LayoutWidget.Type,
+            Sample: new WidgetSample([], "EN"));
 
         // What Windows brings with it, under its own heading, each drawn in
         // this program's icons and changed like any pinned icon.
@@ -375,7 +397,8 @@ public static class WidgetCatalog
                 program.Icon,
                 program.Pin,
                 program.Is,
-                Category: "apps");
+                Category: "apps",
+                Sample: WidgetSample.Of(program.Icon));
         }
 
         // Only while the program is running: the note it leaves is the one
@@ -388,7 +411,8 @@ public static class WidgetCatalog
                 Loc.Tr("WidgetSwitcherDescription", "Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device."),
                 "Headset",
                 () => WidgetConfig.New(SwitcherWidget.Type),
-                entry => entry.TypeId == SwitcherWidget.Type);
+                entry => entry.TypeId == SwitcherWidget.Type,
+                Sample: WidgetSample.Of("Headset"));
         }
 
         // Offered only where they are about something. A desktop has no
@@ -403,7 +427,8 @@ public static class WidgetCatalog
                 Loc.Tr("WidgetBatteryDescription", "How much charge is left. Only on a machine that runs on charge."),
                 "Battery",
                 () => WidgetConfig.New(BatteryWidget.Type),
-                entry => entry.TypeId == BatteryWidget.Type);
+                entry => entry.TypeId == BatteryWidget.Type,
+                Sample: WidgetSample.Of("Battery", "100 %"));
         }
 
         if (Wireless.Fitted())
@@ -413,7 +438,8 @@ public static class WidgetCatalog
                 Loc.Tr("WidgetWifiDescription", "How good the signal is. Only while the machine is on a wireless network."),
                 "WifiHigh",
                 () => WidgetConfig.New(WifiWidget.Type),
-                entry => entry.TypeId == WifiWidget.Type);
+                entry => entry.TypeId == WifiWidget.Type,
+                Sample: WidgetSample.Of("WifiHigh"));
         }
 
         yield return new WidgetOffer(
@@ -421,22 +447,42 @@ public static class WidgetCatalog
             Loc.Tr("WidgetSettingsDescription", "Opens this window. The way in, for anybody who has not found the right click."),
             "Gear",
             () => WidgetConfig.New(SettingsWidget.Type),
-            entry => entry.TypeId == SettingsWidget.Type);
+            entry => entry.TypeId == SettingsWidget.Type,
+            Sample: WidgetSample.Of("Gear"));
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetClockName", "Clock"),
             Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
             "Clock",
             () => WidgetConfig.New(ClockWidget.Type),
-            entry => entry.TypeId == ClockWidget.Type);
+            entry => entry.TypeId == ClockWidget.Type,
+            Sample: new WidgetSample([], "12:34", "Tue 6 Oct"));
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetMediaName", "Media"),
             Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
             "Music",
             () => WidgetConfig.New(MediaWidget.Type),
-            entry => entry.TypeId == MediaWidget.Type);
+            entry => entry.TypeId == MediaWidget.Type,
+            Sample: new WidgetSample(["Previous", "Play", "Next"]));
     }
+
+    /// <summary>What a reading typically says, for the gallery pictures.</summary>
+    private static string TypicalFigure(string readingId) => readingId switch
+    {
+        "cpu" => "23 %",
+        "ram" => "41 %",
+        "gpu" => "18 %",
+        "up" => "180 kB/s",
+        _ => "2.4 MB/s",
+    };
+
+    private static string TypicalTemperature(string readingId) => readingId switch
+    {
+        "cpu" => "48 °C",
+        "ram" => "38 °C",
+        _ => "52 °C",
+    };
 
     public static WidgetType? Find(string typeId) =>
         All.FirstOrDefault(w => w.TypeId == typeId);

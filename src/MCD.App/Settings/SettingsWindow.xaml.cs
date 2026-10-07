@@ -2700,8 +2700,8 @@ public sealed partial class SettingsWindow : Window
             {
                 shelf = new VariableSizedWrapGrid
                 {
-                    ItemHeight = 52,
-                    ItemWidth = 204,
+                    ItemHeight = 62,
+                    ItemWidth = 262,
                     Orientation = Orientation.Horizontal,
                 };
 
@@ -2716,35 +2716,28 @@ public sealed partial class SettingsWindow : Window
             VariableSizedWrapGrid gallery = Shelf(offer.Category);
             int already = dock.Widgets.Count(offer.Matches);
 
-            var shape = new Microsoft.UI.Xaml.Shapes.Path
-            {
-                Data = IconRow.Draw(offer.Icon),
-                Stroke = Braun.Tx,
-                StrokeThickness = 1.7,
-                StrokeLineJoin = PenLineJoin.Round,
-                StrokeStartLineCap = PenLineCap.Round,
-                StrokeEndLineCap = PenLineCap.Round,
-            };
-
-            var canvas = new Canvas { Width = 24, Height = 24 };
-            canvas.Children.Add(shape);
-
-            var row = new Grid { ColumnSpacing = 8, VerticalAlignment = VerticalAlignment.Center };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            // What it will look like on the bar, in a small dark plate: the
+            // same icon, small name and figure, with an ordinary figure in
+            // place of the live one. The name is a caption beside it.
+            Border picture = BarSample(offer.Sample ?? WidgetSample.Of(offer.Icon));
 
             // Two lines rather than an ellipsis: "Temperature - the h..."
             // was cut exactly where the meaning began.
             var name = new TextBlock
             {
                 Text = offer.Short ?? offer.Name,
-                FontSize = 13,
+                FontSize = 11,
+                Foreground = Braun.Tx2,
                 VerticalAlignment = VerticalAlignment.Center,
                 TextWrapping = TextWrapping.Wrap,
                 MaxLines = 2,
             };
+
+            var row = new Grid { ColumnSpacing = 8, VerticalAlignment = VerticalAlignment.Center };
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             Grid.SetColumn(name, 1);
 
@@ -2760,8 +2753,6 @@ public sealed partial class SettingsWindow : Window
             };
 
             Grid.SetColumn(count, 2);
-
-            var picture = new Viewbox { Width = 16, Height = 16, Child = canvas };
 
             // A plus puts one on the chosen bar and has the bar point at it.
             // A press used to do nothing, on purpose - its result landed on
@@ -2805,7 +2796,7 @@ public sealed partial class SettingsWindow : Window
             {
                 Margin = new Thickness(0, 0, 8, 8),
                 Padding = new Thickness(10, 6, 10, 6),
-                MinWidth = 196,
+                MinWidth = 254,
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
                 BorderBrush = Braun.Line,
@@ -2847,6 +2838,65 @@ public sealed partial class SettingsWindow : Window
         }
 
         return stack;
+    }
+
+    /// <summary>
+    /// A widget as it looks on the bar: a small dark plate with its icons, and
+    /// the small name over the figure the way a full-size bar writes them.
+    /// </summary>
+    private static Border BarSample(WidgetSample sample)
+    {
+        var line = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 5,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        foreach (string icon in sample.Icons)
+        {
+            var path = new Microsoft.UI.Xaml.Shapes.Path
+            {
+                Data = IconRow.Draw(icon),
+                Stroke = Braun.Tx,
+                StrokeThickness = 1.7,
+                StrokeLineJoin = PenLineJoin.Round,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Round,
+            };
+
+            var canvas = new Canvas { Width = 24, Height = 24 };
+            canvas.Children.Add(path);
+            line.Children.Add(new Viewbox { Width = 18, Height = 18, Child = canvas });
+        }
+
+        if (sample.Figure.Length > 0)
+        {
+            var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+
+            if (sample.Label.Length > 0)
+            {
+                text.Children.Add(new TextBlock { Text = sample.Label, FontSize = 9, Foreground = Braun.Tx3, LineHeight = 10 });
+            }
+
+            text.Children.Add(new TextBlock { Text = sample.Figure, FontSize = 13, Foreground = Braun.Tx, LineHeight = 15 });
+            line.Children.Add(text);
+        }
+
+        return new Border
+        {
+            MinWidth = 40,
+            Height = 38,
+            Padding = new Thickness(9, 0, 9, 0),
+            CornerRadius = new CornerRadius(6),
+            // Darker than the chip it sits on, the way the bar is darker than
+            // the desktop round it.
+            Background = new SolidColorBrush(Braun.Theme != ElementTheme.Light
+                ? Windows.UI.Color.FromArgb(0x70, 0x00, 0x00, 0x00)
+                : Windows.UI.Color.FromArgb(0x1A, 0x00, 0x00, 0x00)),
+            VerticalAlignment = VerticalAlignment.Center,
+            Child = line,
+        };
     }
 
     /// <summary>Puts one of these on the chosen bar, and has the bar point at it.</summary>
