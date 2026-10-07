@@ -2753,17 +2753,14 @@ public sealed partial class SettingsWindow : Window
                 MaxLines = 2,
             };
 
-            // Two rows: the widget as it looks, centred, and under it the
-            // name on the left with the count and the plus on the right.
-            var row = new Grid { ColumnSpacing = 8, RowSpacing = 8, VerticalAlignment = VerticalAlignment.Center };
+            // Two rows: the widget as it looks, with the plus beside it at the
+            // top right, and under them the name with the count.
+            var row = new Grid { ColumnSpacing = 8, RowSpacing = 8 };
             row.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             row.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-            picture.HorizontalAlignment = HorizontalAlignment.Center;
-            Grid.SetColumnSpan(picture, 3);
             Grid.SetRow(name, 1);
 
             // How many are on this bar already, rather than a tick that only
@@ -2788,23 +2785,22 @@ public sealed partial class SettingsWindow : Window
             // pointing is what makes the press honest.
             var plus = new Button
             {
-                Width = 24,
-                Height = 24,
+                Width = 28,
+                Height = 28,
                 Padding = new Thickness(0),
                 MinWidth = 0,
                 MinHeight = 0,
                 VerticalAlignment = VerticalAlignment.Center,
                 Background = Braun.PanelHi,
-                BorderBrush = Braun.LineHi,
+                BorderBrush = Braun.Acc,
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(6),
-                Content = Braun.Glyph("Plus", 12, Braun.Tx2),
+                Content = Braun.Glyph("Plus", 12, Braun.Acc),
             };
 
             ToolTipService.SetToolTip(plus, Loc.Tr("GalleryRow", "Put one on the bar"));
 
-            Grid.SetRow(plus, 1);
-            Grid.SetColumn(plus, 2);
+            Grid.SetColumn(plus, 1);
             row.Children.Add(plus);
 
             WidgetOffer adding = offer;
@@ -2933,7 +2929,7 @@ public sealed partial class SettingsWindow : Window
         {
             Orientation = Orientation.Horizontal,
             Spacing = 5,
-            HorizontalAlignment = HorizontalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Center,
         };
 
@@ -2969,10 +2965,9 @@ public sealed partial class SettingsWindow : Window
 
         return new Border
         {
-            MinWidth = 120,
-            Height = 42,
-            Padding = new Thickness(8, 0, 8, 0),
-            CornerRadius = new CornerRadius(6),
+            Height = 50,
+            Padding = new Thickness(14, 0, 14, 0),
+            CornerRadius = new CornerRadius(8),
             // Darker than the chip it sits on, the way the bar is darker than
             // the desktop round it.
             Background = new SolidColorBrush(Braun.Theme != ElementTheme.Light
