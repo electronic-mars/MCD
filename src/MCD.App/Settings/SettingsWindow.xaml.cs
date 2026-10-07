@@ -160,6 +160,24 @@ public sealed partial class SettingsWindow : Window
 
         Root.KeyboardAccelerators.Add(undoKey);
 
+        // A widget carried over this window says where it is going instead of
+        // showing the system's "forbidden" sign, which read as "this does not
+        // work" rather than "not here, on a bar".
+        Root.AllowDrop = true;
+        Root.DragOver += (_, e) =>
+        {
+            if (e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text)
+                && e.DragUIOverride is { } hint)
+            {
+                e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+                hint.IsGlyphVisible = false;
+                hint.IsCaptionVisible = true;
+                hint.Caption = Loc.Tr("DragToBar", "Drop it on a bar");
+            }
+        };
+
+        Root.Drop += (_, e) => e.Handled = true;
+
         Reload();
         // Their own titles and screen switchers are the widgets page's now.
         foreach (StackPanel part in new[] { PinsSection, PresetsSection })
@@ -2701,7 +2719,7 @@ public sealed partial class SettingsWindow : Window
                 shelf = new VariableSizedWrapGrid
                 {
                     ItemHeight = 62,
-                    ItemWidth = 262,
+                    ItemWidth = 200,
                     Orientation = Orientation.Horizontal,
                 };
 
@@ -2796,15 +2814,17 @@ public sealed partial class SettingsWindow : Window
             {
                 Margin = new Thickness(0, 0, 8, 8),
                 Padding = new Thickness(10, 6, 10, 6),
-                MinWidth = 254,
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
                 BorderBrush = Braun.Line,
                 Background = Braun.Card,
                 Child = row,
-                CanDrag = true,
                 AllowDrop = false,
             };
+
+            // What is picked up is the widget's own picture, not the whole
+            // card with its caption, count and plus.
+            picture.CanDrag = true;
 
             ToolTipService.SetToolTip(
                 chip,
@@ -2813,7 +2833,7 @@ public sealed partial class SettingsWindow : Window
 
             WidgetOffer chosen = offer;
 
-            chip.DragStarting += (_, args) =>
+            picture.DragStarting += (_, args) =>
             {
                 args.Data.SetText(WidgetDrag.Wrap(chosen.Make()));
                 args.Data.RequestedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
@@ -2823,6 +2843,21 @@ public sealed partial class SettingsWindow : Window
         }
 
         var stack = new StackPanel { Spacing = 2 };
+
+        // Never fewer than two columns, however narrow the window: the cells
+        // share the width out evenly instead of keeping one size and dropping
+        // to one column. Measured on the stack, which is as wide as the page
+        // lets it be; a shelf is only as wide as its own cells.
+        stack.SizeChanged += (_, size) =>
+        {
+            double width = size.NewSize.Width - 2;
+            int columns = Math.Max(2, (int)(width / 250));
+
+            foreach (VariableSizedWrapGrid shelf in shelves.Values)
+            {
+                shelf.ItemWidth = Math.Floor(width / columns);
+            }
+        };
 
         foreach ((string id, string heading) in WidgetCatalog.Categories)
         {

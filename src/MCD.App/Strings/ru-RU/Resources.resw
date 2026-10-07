@@ -1742,4 +1742,7 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Виджеты</value>
   </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Отпустите на панели</value>
+  </data>
 </root>

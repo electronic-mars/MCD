@@ -1742,4 +1742,7 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Widgets</value>
   </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Drop it on a bar</value>
+  </data>
 </root>
