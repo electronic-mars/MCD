@@ -2718,7 +2718,7 @@ public sealed partial class SettingsWindow : Window
             {
                 shelf = new VariableSizedWrapGrid
                 {
-                    ItemHeight = 54,
+                    ItemHeight = 104,
                     ItemWidth = 200,
                     Orientation = Orientation.Horizontal,
                 };
@@ -2753,13 +2753,18 @@ public sealed partial class SettingsWindow : Window
                 MaxLines = 2,
             };
 
-            var row = new Grid { ColumnSpacing = 8, VerticalAlignment = VerticalAlignment.Center };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            // Two rows: the widget as it looks, centred, and under it the
+            // name on the left with the count and the plus on the right.
+            var row = new Grid { ColumnSpacing = 8, RowSpacing = 8, VerticalAlignment = VerticalAlignment.Center };
+            row.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            row.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-            Grid.SetColumn(name, 1);
+            picture.HorizontalAlignment = HorizontalAlignment.Center;
+            Grid.SetColumnSpan(picture, 3);
+            Grid.SetRow(name, 1);
 
             // How many are on this bar already, rather than a tick that only
             // says "yes": two of a thing is allowed, and the number is the
@@ -2772,7 +2777,8 @@ public sealed partial class SettingsWindow : Window
                 Foreground = Braun.Acc,
             };
 
-            Grid.SetColumn(count, 2);
+            Grid.SetRow(count, 1);
+            Grid.SetColumn(count, 1);
 
             // A plus puts one on the chosen bar and has the bar point at it.
             // A press used to do nothing, on purpose - its result landed on
@@ -2797,7 +2803,8 @@ public sealed partial class SettingsWindow : Window
 
             ToolTipService.SetToolTip(plus, Loc.Tr("GalleryRow", "Put one on the bar"));
 
-            Grid.SetColumn(plus, 3);
+            Grid.SetRow(plus, 1);
+            Grid.SetColumn(plus, 2);
             row.Children.Add(plus);
 
             WidgetOffer adding = offer;
@@ -2815,7 +2822,7 @@ public sealed partial class SettingsWindow : Window
             var chip = new Border
             {
                 Margin = new Thickness(0, 0, 8, 6),
-                Padding = new Thickness(8, 4, 8, 4),
+                Padding = new Thickness(8, 8, 8, 8),
                 CornerRadius = new CornerRadius(8),
                 BorderThickness = new Thickness(1),
                 BorderBrush = Braun.Line,
@@ -2926,6 +2933,7 @@ public sealed partial class SettingsWindow : Window
         {
             Orientation = Orientation.Horizontal,
             Spacing = 5,
+            HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
         };
 
@@ -2961,8 +2969,8 @@ public sealed partial class SettingsWindow : Window
 
         return new Border
         {
-            MinWidth = 40,
-            Height = 34,
+            MinWidth = 120,
+            Height = 42,
             Padding = new Thickness(8, 0, 8, 0),
             CornerRadius = new CornerRadius(6),
             // Darker than the chip it sits on, the way the bar is darker than
