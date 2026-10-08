@@ -318,7 +318,7 @@ public sealed class DockWindowManager : IDisposable
     /// <summary>Presses every widget of one kind, the way a click on it does.</summary>
     public int Press(string typeId) => _windows.Values.Sum(w => w.Press(typeId));
 
-    /// <summary>The view models of one kind of widget on every bar. For the self-test.</summary>
+    /// <summary>The view models of one kind of widget on every bar.</summary>
     public IEnumerable<Mcd.App.Widgets.WidgetViewModel> Widgets(string typeId) =>
         _windows.Values.SelectMany(w => w.Widgets(typeId));
 

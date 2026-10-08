@@ -149,9 +149,17 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         }
     }
 
-    /// <summary>The figure fades while silenced: the icon says quiet, the dim number says what comes back.</summary>
+    /// <summary>
+    /// 1 while silenced: the speaker and its figure are drawn red, as the
+    /// microphone is when it is off. A figure only dimmed to 70 % was read as
+    /// "on, at 25 %" by somebody whose machine was silent.
+    /// </summary>
     [ObservableProperty]
-    public partial double LevelShown { get; set; } = 1;
+    public partial double Alert { get; set; }
+
+    /// <summary>1 while it can be heard: the ordinary drawing, under the red one.</summary>
+    [ObservableProperty]
+    public partial double Plain { get; set; } = 1;
 
     /// <summary>Whether the figure is written beside the speaker.</summary>
     private bool WithLevel => WidgetOptions.Number(Options, "level") is not 0;
@@ -232,7 +240,8 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         // crossed ten and a hundred - and the speaker beside it moved.
         FigureWidth = _figure ??= Metric.Wide("100 %", FontSize);
 
-        LevelShown = muted.Value ? 0.7 : 1;
+        Alert = muted.Value ? 1 : 0;
+        Plain = 1 - Alert;
 
         if (!_sliding)
         {

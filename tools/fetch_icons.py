@@ -125,11 +125,14 @@ ICONS: dict[str, str] = {
     "Paint": "paint-board",
     "Scissors": "scissor",
     "StickyNote": "sticky-note-01",
-    # The sound widget draws one of four, by how loud it is.
+    # The sound widget draws one of three, by how loud it is. Off is the one
+    # with the cross, as Windows draws it: Hugeicons' "volume-mute-01" is the
+    # bare speaker, which reads as "quiet" rather than "off".
     "Speaker": "volume-high",
-    "SpeakerMid": "volume-up",
     "SpeakerLow": "volume-low",
-    "SpeakerOff": "volume-mute-01",
+    "SpeakerOff": "volume-mute-02",
+    # A speaker with a plus: "louder", not a level of the speaker above.
+    "VolumeUp": "volume-up",
     # Chosen on the control panel (tools/panel), from the whole free set.
     "AArrowUp": "a-arrow-up",
     "ALargeSmall": "a-large-small",
@@ -1909,7 +1912,7 @@ def _self_check() -> None:
     assert small == "M 2 12 L 22 12", small
 
 
-SAME_SIZE = {"Speaker", "SpeakerMid", "SpeakerLow", "SpeakerOff", "WifiHigh", "WifiMid", "WifiLow", "WifiNone"}
+SAME_SIZE = {"Speaker", "SpeakerLow", "SpeakerOff", "WifiHigh", "WifiMid", "WifiLow", "WifiNone"}
 
 
 def main() -> None:
@@ -1918,7 +1921,7 @@ def main() -> None:
     rows: list[str] = []
 
     for key, name in ICONS.items():
-        # The speaker at its four volumes is one icon changing, not four icons:
+        # The speaker at its three volumes is one icon changing, not four icons:
         # grown on its own, the ones with fewer waves are drawn narrower and
         # come out enlarged, so the speaker swells as the sound gets quieter.
         data = combine(fetch(name), grow=key not in SAME_SIZE)

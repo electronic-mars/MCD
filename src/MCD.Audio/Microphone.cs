@@ -42,13 +42,19 @@ public static unsafe class Microphone
         }
     }
 
-    /// <summary>Switches recording off, or on again.</summary>
-    public static bool Mute(bool on)
+    /// <summary>Forgets the last answer: this call, or somebody else, just changed it.</summary>
+    internal static void Forget()
     {
         lock (Gate)
         {
             _asked = -Fresh;
         }
+    }
+
+    /// <summary>Switches recording off, or on again.</summary>
+    public static bool Mute(bool on)
+    {
+        Forget();
 
         return SystemVolume.With<bool>(
             volume =>

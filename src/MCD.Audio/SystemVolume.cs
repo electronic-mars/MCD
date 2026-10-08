@@ -74,8 +74,8 @@ public static unsafe class SystemVolume
     private static (bool? Muted, float Level) _last;
     private static long _asked = -Fresh;
 
-    /// <summary>Forgets the last answer, because this call just changed it.</summary>
-    private static void Moved()
+    /// <summary>Forgets the last answer: this call, or somebody else, just changed it.</summary>
+    internal static void Forget()
     {
         lock (Gate)
         {
@@ -86,7 +86,7 @@ public static unsafe class SystemVolume
     /// <summary>Silences the machine, or lets it speak again.</summary>
     public static bool Mute(bool on)
     {
-        Moved();
+        Forget();
 
         return With<bool>(volume =>
         {
@@ -98,7 +98,7 @@ public static unsafe class SystemVolume
     /// <summary>Sets how loud it is, nought to one.</summary>
     public static bool Set(float level)
     {
-        Moved();
+        Forget();
 
         return With<bool>(volume =>
         {
@@ -106,6 +106,14 @@ public static unsafe class SystemVolume
             return true;
         }) ?? false;
     }
+
+    /// <summary>
+    /// Which of Windows' default devices is "the" one: the console role, the
+    /// one Master Audio Switcher reads. Windows' own Sound settings set it and
+    /// the multimedia one together, but a switcher may set them apart, and
+    /// then the bar and the switcher must not be showing two devices.
+    /// </summary>
+    internal const ERole Role = ERole.eConsole;
 
     /// <summary>
     /// Opens the endpoint sound is playing through, does one thing with it,
@@ -126,7 +134,7 @@ public static unsafe class SystemVolume
             var mm = (IMMDeviceEnumerator)new MMDeviceEnumerator();
             enumerator = mm;
 
-            mm.GetDefaultAudioEndpoint(flow, ERole.eMultimedia, out IMMDevice found);
+            mm.GetDefaultAudioEndpoint(flow, Role, out IMMDevice found);
             device = found;
 
             Guid iid = typeof(IAudioEndpointVolume).GUID;

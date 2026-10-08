@@ -5,3 +5,6 @@ IAudioEndpointVolume
 EDataFlow
 ERole
 CLSCTX
+// Told when the volume or mute changes, and when the default device does.
+IAudioEndpointVolumeCallback
+IMMNotificationClient

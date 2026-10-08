@@ -391,10 +391,21 @@
                     Width="{x:Bind IconSize, Mode=OneWay}"
                     Height="{x:Bind IconSize, Mode=OneWay}"
                     VerticalAlignment="Center">
+                    <!-- Red is a second drawing over the first, as on the
+                         microphone, so both follow the bar's theme. -->
                     <Canvas Width="24" Height="24">
                         <Path
                             Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Opacity="{x:Bind Plain, Mode=OneWay}"
                             Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                        <Path
+                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Opacity="{x:Bind Alert, Mode=OneWay}"
+                            Stroke="{ThemeResource McdCriticalBrush}"
                             StrokeEndLineCap="Round"
                             StrokeLineJoin="Round"
                             StrokeStartLineCap="Round"
@@ -412,15 +423,26 @@
                 Style="{StaticResource BarButton}"
                 ToolTipService.ToolTip="{x:Bind MuteTip, Mode=OneWay}"
                 Visibility="{x:Bind LevelVisible, Mode=OneWay}">
-                <TextBlock
-                    MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
-                    MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
-                    VerticalAlignment="Center"
-                    HorizontalTextAlignment="Right"
-                    FontSize="{x:Bind FontSize, Mode=OneWay}"
-                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                    Opacity="{x:Bind LevelShown, Mode=OneWay}"
-                    Text="{x:Bind Level, Mode=OneWay}" />
+                <Grid>
+                    <TextBlock
+                        MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                        MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                        VerticalAlignment="Center"
+                        HorizontalTextAlignment="Right"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                        Opacity="{x:Bind Plain, Mode=OneWay}"
+                        Text="{x:Bind Level, Mode=OneWay}" />
+                    <TextBlock
+                        MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                        MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                        VerticalAlignment="Center"
+                        HorizontalTextAlignment="Right"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        Foreground="{ThemeResource McdCriticalBrush}"
+                        Opacity="{x:Bind Alert, Mode=OneWay}"
+                        Text="{x:Bind Level, Mode=OneWay}" />
+                </Grid>
             </Button>
         </StackPanel>
     </DataTemplate>

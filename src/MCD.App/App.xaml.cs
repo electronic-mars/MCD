@@ -155,6 +155,21 @@ public partial class App : Application
         _docks.ExitRequested += (_, _) => { Shutdown(); Exit(); };
         _docks.Start();
 
+        // The speaker and the microphone redrawn the moment either changes,
+        // whoever changed it, instead of on the bar's next second.
+        Mcd.Audio.AudioWatch.Changed += () => _uiQueue?.TryEnqueue(() =>
+        {
+            foreach (string type in new[] { Mcd.App.Widgets.SoundWidget.Type, Mcd.App.Widgets.MicWidget.Type })
+            {
+                foreach (Mcd.App.Widgets.WidgetViewModel widget in _docks?.Widgets(type) ?? [])
+                {
+                    widget.Tick(Mcd.Sensors.Contracts.SensorSnapshot.Empty);
+                }
+            }
+        });
+
+        Mcd.Audio.AudioWatch.Start();
+
         // The keys the whole machine listens for. Taken again whenever the
         // settings change, because that is the only thing that alters them.
         _keys = new HotKeys(start);
@@ -748,6 +763,11 @@ public partial class App : Application
                 {
                     float was = Mcd.Audio.SystemVolume.Level() ?? 0;
 
+                    // Turning it up lets a silenced machine speak, as it
+                    // should for a hand; the test puts the silence back too,
+                    // or it leaves the desk it ran on making noise.
+                    bool? silent = Mcd.Audio.SystemVolume.Muted();
+
                     foreach (Mcd.App.Widgets.WidgetViewModel widget in _docks?.Widgets(Mcd.App.Widgets.SoundWidget.Type) ?? [])
                     {
                         ((Mcd.App.Widgets.SoundWidget)widget).Volume = Math.Round(was * 100) + 2;
@@ -755,6 +775,11 @@ public partial class App : Application
 
                     float now = Mcd.Audio.SystemVolume.Level() ?? 0;
                     Mcd.Audio.SystemVolume.Set(was);
+
+                    if (silent is true)
+                    {
+                        Mcd.Audio.SystemVolume.Mute(true);
+                    }
 
                     log.LogInformation(
                         "selftest.volume was={Was} moved={Now} back={Back}",
