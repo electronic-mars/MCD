@@ -58,7 +58,7 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
                 "CoffeeOff",
                 faded: 0.55,
                 alert: false,
-                Loc.Tr("AwakeOffTip", "The machine may sleep · a press keeps it awake"));
+                Loc.Tr("AwakeOffTip", "The computer can sleep · Click to keep it awake"));
 
             return;
         }
@@ -66,11 +66,11 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
         string until = KeepAwake.Until is { } end
             ? string.Format(
                 System.Globalization.CultureInfo.CurrentCulture,
-                Loc.Tr("AwakeFor", "Awake for another {0}"),
+                Loc.Tr("AwakeFor", "Awake: {0} left"),
                 Left(end - DateTimeOffset.Now))
             : Loc.Tr("AwakeUntilOff", "Awake until turned off");
 
-        Draw("CoffeeOn", faded: 1, alert: false, until + " · " + Loc.Tr("AwakeOnTip", "a press lets it sleep"));
+        Draw("CoffeeOn", faded: 1, alert: false, until + " · " + Loc.Tr("AwakeOnTip", "Click to allow sleep"));
     }
 
     public override void Press()
@@ -112,7 +112,7 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
 
         if (KeepAwake.On)
         {
-            var off = new MenuFlyoutItem { Text = Loc.Tr("AwakeMenuOff", "Let it sleep") };
+            var off = new MenuFlyoutItem { Text = Loc.Tr("AwakeMenuOff", "Allow sleep") };
 
             off.Click += (_, _) =>
             {
@@ -131,7 +131,7 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
     {
         int minutes = (int)Math.Ceiling(Math.Max(0, span.TotalMinutes));
 
-        return minutes < 1 ? Loc.Tr("AwakeLessThanMinute", "a minute")
+        return minutes < 1 ? Loc.Tr("AwakeLessThanMinute", "less than a minute")
             : minutes < 60 ? string.Format(
                 System.Globalization.CultureInfo.CurrentCulture,
                 Loc.Tr("AwakeMinutes", "{0} min"),
@@ -144,6 +144,6 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
     }
 
     public override string Summarise() => KeepAwake.On
-        ? Loc.Tr("AwakeSummaryOn", "Keeping the machine awake")
-        : Loc.Tr("AwakeSummaryOff", "The machine may sleep");
+        ? Loc.Tr("AwakeSummaryOn", "Keeping the computer awake")
+        : Loc.Tr("AwakeSummaryOff", "The computer can sleep");
 }

@@ -203,7 +203,7 @@ public static class ReadingHistory
                     Say(known.Min()),
                     Say(known.Average()),
                     Say(known.Max()))
-                : Loc.Tr("HistoryNothing", "Nothing has been read yet."),
+                : Loc.Tr("HistoryNothing", "No data yet."),
         });
 
         return block;

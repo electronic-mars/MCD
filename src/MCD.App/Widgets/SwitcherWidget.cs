@@ -85,9 +85,9 @@ public sealed partial class SwitcherWidget(WidgetContext context, WidgetConfig e
 
         MutedShown = AudioSwitcher.Muted ? Visibility.Visible : Visibility.Collapsed;
 
-        Detail = (current?.Name ?? Loc.Tr("SwitcherNoDevice", "No sound device"))
-            + (AudioSwitcher.Muted ? " · " + Loc.Tr("SoundMutedTip", "Silenced") : string.Empty)
-            + " · " + Loc.Tr("SwitcherPressTip", "a press switches to the next");
+        Detail = (current?.Name ?? Loc.Tr("SwitcherNoDevice", "No audio output device"))
+            + (AudioSwitcher.Muted ? " · " + Loc.Tr("SoundMutedTip", "Muted") : string.Empty)
+            + " · " + Loc.Tr("SwitcherPressTip", "Click to switch to the next device");
     }
 
     public override bool Pressable => true;

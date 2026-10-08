@@ -51,8 +51,8 @@ public sealed class MicWidget(WidgetContext context, WidgetConfig entry)
             faded: 1,
             alert: muted,
             muted
-                ? Loc.Tr("MicOffTip", "Microphone off · a press turns it on")
-                : Loc.Tr("MicOnTip", "Microphone on · a press turns it off"));
+                ? Loc.Tr("MicOffTip", "Microphone muted · Click to unmute")
+                : Loc.Tr("MicOnTip", "Microphone on · Click to mute"));
     }
 
     /// <summary>

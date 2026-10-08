@@ -97,134 +97,134 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
         return (sensor.Group, sensor.Kind, slot) switch
         {
             (HardwareGroup.Cpu, SensorKind.Load, _) => (
-                Loc.Tr("PartCpu", "Processor"),
-                Loc.Tr("SenseCpuLoad", "How busy the processor is, as a share of what it can do.")),
+                Loc.Tr("PartCpu", "CPU"),
+                Loc.Tr("SenseCpuLoad", "CPU load.")),
 
             (HardwareGroup.Cpu, SensorKind.Clock, _) => (
-                Loc.Tr("SenseCpuClockName", "Processor speed"),
-                Loc.Tr("SenseCpuClock", "How fast it is running, as a share of the speed it is rated for.")),
+                Loc.Tr("SenseCpuClockName", "CPU clock speed"),
+                Loc.Tr("SenseCpuClock", "Clock speed as a percentage of rated speed.")),
 
             // Named apart from the temperature below. Two rows called
             // "Graphics" one under the other, differing only in the sentence
             // beneath them, is the fault this class exists to avoid - and it
             // was committing it on its own page.
             (HardwareGroup.Gpu, SensorKind.Load, "total") => (
-                Loc.Tr("SenseGpuBusyName", "Graphics - how busy"),
-                Loc.Tr("SenseGpuAll", "Everything the graphics hardware is doing, as Windows counts it.")),
+                Loc.Tr("SenseGpuBusyName", "GPU load"),
+                Loc.Tr("SenseGpuAll", "Total GPU load, as reported by Windows.")),
 
             (HardwareGroup.Gpu, SensorKind.Load, "core") => (
-                Loc.Tr("SenseGpuCoreName", "Graphics chip"),
-                Loc.Tr("SenseGpuCore", "How busy the chip itself is, straight from the driver.")),
+                Loc.Tr("SenseGpuCoreName", "GPU core"),
+                Loc.Tr("SenseGpuCore", "GPU core load, as reported by the driver.")),
 
             // Two different numbers that read as one: the controller's
             // busyness and the memory's fullness. The first wore the second's
             // name for a while, and taught people the wrong figure.
             (HardwareGroup.Gpu, SensorKind.Load, "memory") => (
-                Loc.Tr("SenseGpuVramName", "Graphics memory controller"),
-                Loc.Tr("SenseGpuVram", "How busy the memory controller is - not how full the memory is.")),
+                Loc.Tr("SenseGpuVramName", "GPU memory controller"),
+                Loc.Tr("SenseGpuVram", "Memory controller load, not memory in use.")),
 
             (HardwareGroup.Gpu, SensorKind.Load, "vram") => (
-                Loc.Tr("SenseGpuVramFillName", "Graphics memory used"),
-                Loc.Tr("SenseGpuVramFill", "How full the card's own memory is.")),
+                Loc.Tr("SenseGpuVramFillName", "GPU memory in use"),
+                Loc.Tr("SenseGpuVramFill", "GPU memory in use, as a percentage.")),
 
             (HardwareGroup.Gpu, SensorKind.Clock, "memory") => (
-                Loc.Tr("SenseGpuVramClockName", "Graphics memory speed"),
-                Loc.Tr("SenseGpuVramClock", "What speed the memory on the graphics card is running at.")),
+                Loc.Tr("SenseGpuVramClockName", "GPU memory clock speed"),
+                Loc.Tr("SenseGpuVramClock", "GPU memory clock speed.")),
 
             (HardwareGroup.Gpu, SensorKind.Clock, _) => (
-                Loc.Tr("SenseGpuClockName", "Graphics speed"),
-                Loc.Tr("SenseGpuClock", "What speed the graphics chip is running at.")),
+                Loc.Tr("SenseGpuClockName", "GPU clock speed"),
+                Loc.Tr("SenseGpuClock", "GPU core clock speed.")),
 
             (HardwareGroup.Gpu, SensorKind.Fan, _) => (
-                Loc.Tr("SenseGpuFanName", "Graphics fan"),
-                Loc.Tr("SenseGpuFan", "How fast the graphics card's fan is turning.")),
+                Loc.Tr("SenseGpuFanName", "GPU fan"),
+                Loc.Tr("SenseGpuFan", "GPU fan speed.")),
 
             (HardwareGroup.Gpu, SensorKind.Power, _) => (
-                Loc.Tr("SenseGpuPowerName", "Graphics power"),
-                Loc.Tr("SenseGpuPower", "How much power the graphics card is drawing.")),
+                Loc.Tr("SenseGpuPowerName", "GPU power"),
+                Loc.Tr("SenseGpuPower", "GPU power consumption.")),
 
             (HardwareGroup.Gpu, SensorKind.Temperature, _) => (
-                Loc.Tr("SenseGpuHeatName", "Graphics - temperature"),
-                Loc.Tr("SenseGpuTemp", "How hot the graphics chip is.")),
+                Loc.Tr("SenseGpuHeatName", "GPU temperature"),
+                Loc.Tr("SenseGpuTemp", "GPU temperature.")),
 
             (HardwareGroup.Memory, SensorKind.Load, "commit") => (
                 Loc.Tr("SenseCommitName", "Committed memory"),
-                Loc.Tr("SenseCommit", "How much of what Windows can promise - memory plus the page file - is already promised.")),
+                Loc.Tr("SenseCommit", "Committed memory as a percentage of the commit limit (RAM plus page file).")),
 
             (HardwareGroup.Memory, SensorKind.Load, _) => (
                 Loc.Tr("PartMemory", "Memory"),
-                Loc.Tr("SenseRamLoad", "How much of the memory is taken up, as a share of all of it.")),
+                Loc.Tr("SenseRamLoad", "Percentage of memory in use.")),
 
             (HardwareGroup.Memory, SensorKind.Bytes, "free") => (
-                Loc.Tr("SenseRamFreeName", "Memory free"),
-                Loc.Tr("SenseRamFree", "How much of the installed memory is not taken up.")),
+                Loc.Tr("SenseRamFreeName", "Free memory"),
+                Loc.Tr("SenseRamFree", "Installed memory not in use.")),
 
             (HardwareGroup.Memory, SensorKind.Bytes, "commit-used") => (
-                Loc.Tr("SenseCommitUsedName", "Committed, in bytes"),
-                Loc.Tr("SenseCommit", "How much of what Windows can promise - memory plus the page file - is already promised.")),
+                Loc.Tr("SenseCommitUsedName", "Committed memory (bytes)"),
+                Loc.Tr("SenseCommit", "Committed memory as a percentage of the commit limit (RAM plus page file).")),
 
             (HardwareGroup.Memory, SensorKind.Bytes, "commit-total") => (
                 Loc.Tr("SenseCommitTotalName", "Commit limit"),
-                Loc.Tr("SenseCommitTotal", "Memory plus the page file: the most Windows can promise at once.")),
+                Loc.Tr("SenseCommitTotal", "Maximum committed memory: RAM plus the page file.")),
 
             (HardwareGroup.Memory, SensorKind.Bytes, "total") => (
-                Loc.Tr("SenseRamTotalName", "Memory installed"),
-                Loc.Tr("SenseRamTotal", "How much memory is fitted in this machine.")),
+                Loc.Tr("SenseRamTotalName", "Installed memory"),
+                Loc.Tr("SenseRamTotal", "Total installed memory.")),
 
             (HardwareGroup.Memory, SensorKind.Bytes, _) => (
                 Loc.Tr("SenseRamUsedName", "Memory in use"),
-                Loc.Tr("SenseRamUsed", "How much memory is taken up right now.")),
+                Loc.Tr("SenseRamUsed", "Memory in use right now.")),
 
             (HardwareGroup.Memory, SensorKind.Temperature, _) => (
-                Loc.Tr("SenseRamHeatName", "Memory - temperature"),
-                Loc.Tr("SenseRamTemp", "How hot the memory is - the warmest of the modules.")),
+                Loc.Tr("SenseRamHeatName", "Memory temperature"),
+                Loc.Tr("SenseRamTemp", "Memory temperature. Shows the hottest module.")),
 
             (HardwareGroup.Storage, SensorKind.Load, _) => (
                 Loc.Tr("SenseDiskBusyName", "Drive activity"),
-                Loc.Tr("SenseDiskBusy", "How much of the time this drive is busy.")),
+                Loc.Tr("SenseDiskBusy", "Percentage of time the drive is active.")),
 
             (HardwareGroup.Storage, SensorKind.Temperature, _) => (
-                Loc.Tr("SenseDiskHeatName", "Drive - temperature"),
-                Loc.Tr("SenseDiskTemp", "How hot this drive is.")),
+                Loc.Tr("SenseDiskHeatName", "Drive temperature"),
+                Loc.Tr("SenseDiskTemp", "Drive temperature.")),
 
             (HardwareGroup.Storage, SensorKind.BytesPerSecond, "read") => (
-                Loc.Tr("SenseDiskReadName", "Drives - reading"),
-                Loc.Tr("SenseDiskRead", "How much the drives are reading right now, all of them together.")),
+                Loc.Tr("SenseDiskReadName", "Drive read rate"),
+                Loc.Tr("SenseDiskRead", "Current read rate, all drives combined.")),
 
             (HardwareGroup.Storage, SensorKind.BytesPerSecond, "write") => (
-                Loc.Tr("SenseDiskWriteName", "Drives - writing"),
-                Loc.Tr("SenseDiskWrite", "How much the drives are writing right now, all of them together.")),
+                Loc.Tr("SenseDiskWriteName", "Drive write rate"),
+                Loc.Tr("SenseDiskWrite", "Current write rate, all drives combined.")),
 
             (HardwareGroup.Network, SensorKind.BytesPerSecond, "up") => (
                 Loc.Tr("LabelSend", "Send"),
-                Loc.Tr("SenseNetUp", "How much data is going out right now.")),
+                Loc.Tr("SenseNetUp", "Current send rate.")),
 
             (HardwareGroup.Network, SensorKind.BytesPerSecond, "down") => (
                 Loc.Tr("LabelReceive", "Receive"),
-                Loc.Tr("SenseNetDown", "How much data is coming in right now.")),
+                Loc.Tr("SenseNetDown", "Current receive rate.")),
 
             (HardwareGroup.Motherboard, SensorKind.Temperature, _) when sensor.Prominent => (
                 Loc.Tr("PartBoard", "Motherboard"),
-                Loc.Tr("SenseBoardTemp", "How hot the motherboard is.")),
+                Loc.Tr("SenseBoardTemp", "Motherboard temperature.")),
 
             (HardwareGroup.Peripheral, _, _) => (
                 string.Format(
                     CultureInfo.CurrentCulture,
-                    Loc.Tr("OfferDeviceCharge", "{0} - charge"),
+                    Loc.Tr("OfferDeviceCharge", "{0} battery"),
                     sensor.Hardware),
-                Loc.Tr("SenseDeviceCharge", "How much charge this device has left.")),
+                Loc.Tr("SenseDeviceCharge", "Battery charge of this device.")),
 
             (HardwareGroup.Cpu, SensorKind.Temperature, "core-max") => (
-                Loc.Tr("SenseCpuCoreMaxName", "Processor - hottest core"),
-                Loc.Tr("SenseCpuCoreMax", "The warmest of the cores right now.")),
+                Loc.Tr("SenseCpuCoreMaxName", "Hottest CPU core"),
+                Loc.Tr("SenseCpuCoreMax", "Temperature of the hottest CPU core.")),
 
             (HardwareGroup.Cpu, SensorKind.Power, _) => (
-                Loc.Tr("SenseCpuPowerName", "Processor power"),
-                Loc.Tr("SenseCpuPower", "How much power the processor is drawing.")),
+                Loc.Tr("SenseCpuPowerName", "CPU power"),
+                Loc.Tr("SenseCpuPower", "CPU power consumption.")),
 
             (HardwareGroup.Cpu, SensorKind.Temperature, _) when sensor.Prominent => (
-                Loc.Tr("SenseCpuHeatName", "Processor - temperature"),
-                Loc.Tr("SenseCpuTemp", "How hot the processor is.")),
+                Loc.Tr("SenseCpuHeatName", "CPU temperature"),
+                Loc.Tr("SenseCpuTemp", "CPU temperature.")),
 
             _ => null,
         };
@@ -233,13 +233,13 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
     /// <summary>The best that can be said about a reading nothing is known about.</summary>
     private static string General(SensorKind kind) => kind switch
     {
-        SensorKind.Temperature => Loc.Tr("SenseTemp", "A temperature this machine reports."),
-        SensorKind.Load => Loc.Tr("SenseLoad", "How busy it is, as a share of what it can do."),
-        SensorKind.BytesPerSecond => Loc.Tr("SenseBytes", "How much data is moving right now."),
-        SensorKind.Clock => Loc.Tr("SenseClock", "What speed it is running at."),
-        SensorKind.Fan => Loc.Tr("SenseFan", "How fast this fan is turning."),
-        SensorKind.Power => Loc.Tr("SensePower", "How much power it is drawing."),
-        SensorKind.Bytes => Loc.Tr("SenseSize", "An amount this machine reports."),
+        SensorKind.Temperature => Loc.Tr("SenseTemp", "A temperature reported by this computer."),
+        SensorKind.Load => Loc.Tr("SenseLoad", "Load as a percentage of capacity."),
+        SensorKind.BytesPerSecond => Loc.Tr("SenseBytes", "Current data transfer rate."),
+        SensorKind.Clock => Loc.Tr("SenseClock", "Current clock speed."),
+        SensorKind.Fan => Loc.Tr("SenseFan", "Fan speed."),
+        SensorKind.Power => Loc.Tr("SensePower", "Power consumption."),
+        SensorKind.Bytes => Loc.Tr("SenseSize", "A value reported by this computer."),
         _ => string.Empty,
     };
 
@@ -268,10 +268,10 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
         string spelled = text.ToLowerInvariant() switch
         {
             "mem" or "ram" => Loc.Tr("PartMemory", "Memory"),
-            "cpu" => Loc.Tr("PartCpu", "Processor"),
-            "gpu" => Loc.Tr("PartGpu", "Graphics"),
+            "cpu" => Loc.Tr("PartCpu", "CPU"),
+            "gpu" => Loc.Tr("PartGpu", "GPU"),
             "ssd" or "hdd" or "disk" => Loc.Tr("PartDisk", "Drive"),
-            "composite" => Loc.Tr("PartWhole", "The whole part"),
+            "composite" => Loc.Tr("PartWhole", "Whole device"),
             _ => text,
         };
 

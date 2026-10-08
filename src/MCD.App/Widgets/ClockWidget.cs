@@ -221,12 +221,12 @@ public sealed partial class ClockWidget(WidgetContext context, WidgetConfig entr
                     Options, ("seconds", JsonValue.Create(on ? 1 : 0)))))));
 
         panel.Children.Add(Mcd.App.Settings.Braun.Field(
-            Loc.Tr("ClockDate", "Show the date underneath"),
+            Loc.Tr("ClockDate", "Show date"),
             Mcd.App.Settings.Braun.Switch(
                 WithDate,
                 on => changed(WidgetOptions.Merge(
                     Options, ("date", JsonValue.Create(on ? 1 : 0))))),
-            Loc.Tr("ClockDateHint", "A compact bar has one line, and the time is the line worth having.")));
+            Loc.Tr("ClockDateHint", "A compact bar has room for one line only.")));
 
         return panel;
     }

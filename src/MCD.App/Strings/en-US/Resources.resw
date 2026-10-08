@@ -33,7 +33,7 @@
     <value>Bars</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>Each screen has its own bar. This page is the bar of the screen chosen above; changes land on it as you make them.</value>
+    <value>Each bar belongs to one screen. Changes apply to the screen selected above.</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
     <value>Show the bar</value>
@@ -50,19 +50,19 @@
     <value>Appearance</value>
   </data>
   <data name="AppearanceIntro.Text" xml:space="preserve">
-    <value>How the bars are painted. Applies to all of them.</value>
+    <value>Theme, background and colors. Applies to all bars.</value>
   </data>
   <data name="BackgroundLabel" xml:space="preserve">
     <value>Background</value>
   </data>
   <data name="BackgroundHint" xml:space="preserve">
-    <value>Translucent lets the desktop through; solid is easier to read over a busy wallpaper and costs a little less to draw.</value>
+    <value>Translucent shows the desktop through the bar. Solid is easier to read.</value>
   </data>
   <data name="AccentLabel" xml:space="preserve">
-    <value>Colour of the readings</value>
+    <value>Reading color</value>
   </data>
   <data name="AccentHint" xml:space="preserve">
-    <value>The accent colour comes from your Windows settings. Readings past their warning level keep their warning colour either way.</value>
+    <value>Uses the Windows accent color. Readings above the warning level stay in the warning color.</value>
   </data>
   <!-- Icons page -->
   <!-- Sensors page -->
@@ -70,7 +70,7 @@
     <value>Sensors</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>The main readings, without the technical noise. A pencil renames one.</value>
+    <value>Main readings. Select the pencil to rename a reading.</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Live readings</value>
@@ -78,19 +78,19 @@
   <!-- Monitors page -->
   <!-- About page -->
   <data name="AboutIntro" xml:space="preserve">
-    <value>A bar for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence.</value>
+    <value>A bar for the edge of your screen. Free software (GPL-3.0-or-later). Some code is adapted from Microsoft PowerToys (MIT license).</value>
   </data>
   <data name="StartWithWindowsLabel" xml:space="preserve">
     <value>Start with Windows</value>
   </data>
   <data name="StartWithWindowsHint" xml:space="preserve">
-    <value>The bars come back when you sign in.</value>
+    <value>Starts the app when you sign in to Windows.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>The bars close until the program is started again.</value>
+    <value>Closes the bars until you start the app again.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
-    <value>Quit</value>
+    <value>Exit</value>
   </data>
   <!-- Media widget buttons on the bar -->
   <!-- Settings window, strings built in code -->
@@ -98,22 +98,22 @@
     <value>No screen has been set up yet.</value>
   </data>
   <data name="DockNotAttached" xml:space="preserve">
-    <value>not attached · its layout is kept and comes back with the screen</value>
+    <value>disconnected · bar settings are kept for when it reconnects</value>
   </data>
   <data name="Undo" xml:space="preserve">
     <value>Undo</value>
   </data>
   <data name="UndoWithLabel" xml:space="preserve">
-    <value>Undo - {0}</value>
+    <value>Undo — {0}</value>
   </data>
   <data name="UndoAdded" xml:space="preserve">
-    <value>added {0}</value>
+    <value>adding {0}</value>
   </data>
   <data name="UndoMoved" xml:space="preserve">
-    <value>moved</value>
+    <value>moving a widget</value>
   </data>
   <data name="UndoRemoved" xml:space="preserve">
-    <value>removed {0}</value>
+    <value>removing {0}</value>
   </data>
   <data name="ScreenFallback" xml:space="preserve">
     <value>Screen</value>
@@ -122,7 +122,7 @@
     <value>Version {0}</value>
   </data>
   <data name="SensorsNoneYet" xml:space="preserve">
-    <value>Nothing is answering yet.</value>
+    <value>No readings available yet.</value>
   </data>
   <data name="SensorsSummary" xml:space="preserve">
     <value>{0} readings. Sources: {1}.</value>
@@ -134,31 +134,31 @@
     <value>Reading</value>
   </data>
   <data name="WidgetGaugeDescription" xml:space="preserve">
-    <value>One figure: how busy a part of the machine is.</value>
+    <value>Shows the load of one component as a number.</value>
   </data>
   <data name="WidgetIconName" xml:space="preserve">
-    <value>Pinned icon</value>
+    <value>Pinned app</value>
   </data>
   <data name="WidgetIconDescription" xml:space="preserve">
-    <value>A program, folder or page, one press away.</value>
+    <value>Opens an app, folder or web page.</value>
   </data>
   <data name="OfferGauge" xml:space="preserve">
-    <value>A live figure on the bar.</value>
+    <value>Shows a live value.</value>
   </data>
   <data name="OfferHottest" xml:space="preserve">
-    <value>Temperature — the hottest</value>
+    <value>Hottest component</value>
   </data>
   <data name="OfferHottestDescription" xml:space="preserve">
-    <value>Whichever part is closest to its limit right now.</value>
+    <value>The component closest to its temperature limit.</value>
   </data>
   <data name="OfferSensor" xml:space="preserve">
-    <value>This part's temperature.</value>
+    <value>Temperature of this component.</value>
   </data>
   <data name="GaugeWhich" xml:space="preserve">
-    <value>Which reading</value>
+    <value>Reading</value>
   </data>
   <data name="TempWhich" xml:space="preserve">
-    <value>Which sensor</value>
+    <value>Sensor</value>
   </data>
   <data name="PinIconHeader" xml:space="preserve">
     <value>Icon</value>
@@ -167,13 +167,13 @@
     <value>Media</value>
   </data>
   <data name="WidgetMediaDescription" xml:space="preserve">
-    <value>Whatever is playing, with buttons for it. Hidden while nothing is.</value>
+    <value>Shows the current media with playback buttons. Hidden when nothing is playing.</value>
   </data>
   <data name="WidgetTemperatureName" xml:space="preserve">
     <value>Temperature</value>
   </data>
   <data name="WidgetTemperatureDescription" xml:space="preserve">
-    <value>Temperatures of the parts that report one.</value>
+    <value>Shows the temperature of components that report one.</value>
   </data>
   <!-- Reading labels, on the bar and in the settings -->
   <data name="LabelCpu" xml:space="preserve">
@@ -196,20 +196,20 @@
   </data>
   <!-- Temperature widget -->
   <data name="TempHottestSummary" xml:space="preserve">
-    <value>The hottest reading</value>
+    <value>Hottest component</value>
   </data>
   <!-- Media widget -->
   <data name="MediaPlayPause" xml:space="preserve">
     <value>Play or pause</value>
   </data>
   <data name="MediaSummaryShown" xml:space="preserve">
-    <value>Buttons, with the track written next to them</value>
+    <value>Buttons and track title</value>
   </data>
   <data name="MediaSummaryTooltip" xml:space="preserve">
-    <value>Buttons; the track is in their tooltip</value>
+    <value>Buttons; track title in tooltip</value>
   </data>
   <data name="MediaTitleHeader" xml:space="preserve">
-    <value>Write the track on the bar</value>
+    <value>Show track title on the bar</value>
   </data>
   <!-- Spacer widget -->
   <!-- Load widget -->
@@ -219,34 +219,34 @@
     <value>Language</value>
   </data>
   <data name="LanguageHint" xml:space="preserve">
-    <value>Takes effect the next time the program starts.</value>
+    <value>Takes effect after you restart the app.</value>
   </data>
   <data name="LanguageSystemItem" xml:space="preserve">
-    <value>Same as Windows</value>
+    <value>Match Windows</value>
   </data>
   <data name="TempLimitAuto" xml:space="preserve">
-    <value>the part's own</value>
+    <value>Default for this component</value>
   </data>
   <data name="TempWarnAt" xml:space="preserve">
-    <value>Warning at, °C</value>
+    <value>Warning threshold (°C)</value>
   </data>
   <data name="TempCritAt" xml:space="preserve">
-    <value>Critical at, °C</value>
+    <value>Critical threshold (°C)</value>
   </data>
   <data name="PickColour" xml:space="preserve">
-    <value>Choose a colour</value>
+    <value>Choose a color</value>
   </data>
   <data name="PickPicture" xml:space="preserve">
-    <value>Choose a picture</value>
+    <value>Choose an image</value>
   </data>
   <data name="NoPictureYet" xml:space="preserve">
-    <value>No picture chosen yet</value>
+    <value>No image selected</value>
   </data>
   <data name="TopmostLabel" xml:space="preserve">
-    <value>Keep above other windows</value>
+    <value>Always on top</value>
   </data>
   <data name="PinTargetHeader" xml:space="preserve">
-    <value>Program, folder or address</value>
+    <value>App, folder or web address</value>
   </data>
   <data name="PinNameHeader" xml:space="preserve">
     <value>Name</value>
@@ -255,7 +255,7 @@
     <value>optional</value>
   </data>
   <data name="PinBrowse" xml:space="preserve">
-    <value>Browse...</value>
+    <value>Browse…</value>
   </data>
   <data name="PinTitle" xml:space="preserve">
     <value>Pin to the bar</value>
@@ -267,37 +267,37 @@
     <value>Cancel</value>
   </data>
   <data name="DisplayNumber" xml:space="preserve">
-    <value>Display {0}</value>
+    <value>Screen {0}</value>
   </data>
   <data name="SeeThroughHeader" xml:space="preserve">
-    <value>How see-through</value>
+    <value>Transparency</value>
   </data>
   <data name="RestartNowText" xml:space="preserve">
     <value>Restart now</value>
   </data>
   <data name="MediaPriorityHeader" xml:space="preserve">
-    <value>Which player the buttons drive</value>
+    <value>Player to control</value>
   </data>
   <data name="MediaPriorityNone" xml:space="preserve">
-    <value>Automatic: whoever is playing now</value>
+    <value>Automatic (current player)</value>
   </data>
   <data name="MediaSummaryNominated" xml:space="preserve">
-    <value>The buttons always drive {0}</value>
+    <value>Buttons always control {0}</value>
   </data>
   <data name="PinDropCaption" xml:space="preserve">
     <value>Pin to the bar</value>
   </data>
   <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Previous</value>
+    <value>Previous track</value>
   </data>
   <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Next</value>
+    <value>Next track</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
     <value>On the bar</value>
   </data>
   <data name="PinProgramButton" xml:space="preserve">
-    <value>Pin a program...</value>
+    <value>Pin an app…</value>
   </data>
   <data name="RemoveFromBar" xml:space="preserve">
     <value>Remove from bar</value>
@@ -306,40 +306,40 @@
     <value>Placement and size</value>
   </data>
   <data name="BehaviourTitle" xml:space="preserve">
-    <value>Behaviour</value>
+    <value>Behavior</value>
   </data>
   <data name="ThicknessNote" xml:space="preserve">
-    <value>A bar down the side of the screen has one thickness.</value>
+    <value>Bars on the left or right edge have a fixed thickness.</value>
   </data>
   <data name="HideNote" xml:space="preserve">
-    <value>The taskbar already hides on this edge, so this bar stays visible.</value>
+    <value>The Windows taskbar hides on this edge, so this bar stays visible.</value>
   </data>
   <data name="NothingToSetUp" xml:space="preserve">
-    <value>This widget has nothing to set up.</value>
+    <value>This widget has no settings.</value>
   </data>
   <data name="UndoOptions" xml:space="preserve">
-    <value>widget options</value>
+    <value>changing widget options</value>
   </data>
   <data name="UndoRemovedOne" xml:space="preserve">
-    <value>removed</value>
+    <value>removing a widget</value>
   </data>
   <data name="UndoEdge" xml:space="preserve">
-    <value>edge</value>
+    <value>changing the edge</value>
   </data>
   <data name="UndoThickness" xml:space="preserve">
-    <value>thickness</value>
+    <value>changing the thickness</value>
   </data>
   <data name="UndoTopmost" xml:space="preserve">
-    <value>above other windows</value>
+    <value>changing Always on top</value>
   </data>
   <data name="UndoShown" xml:space="preserve">
-    <value>showing the bar</value>
+    <value>showing or hiding the bar</value>
   </data>
   <data name="LaunchIconAuto" xml:space="preserve">
-    <value>The program's own icon</value>
+    <value>Default app icon</value>
   </data>
   <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Open the player</value>
+    <value>Open player</value>
   </data>
   <data name="SegThemeSystem" xml:space="preserve">
     <value>Match Windows</value>
@@ -357,16 +357,16 @@
     <value>Solid</value>
   </data>
   <data name="SegBackdropColour" xml:space="preserve">
-    <value>A colour</value>
+    <value>Color</value>
   </data>
   <data name="SegBackdropImage" xml:space="preserve">
-    <value>A picture</value>
+    <value>Image</value>
   </data>
   <data name="SegBackdropBraun" xml:space="preserve">
     <value>Instrument</value>
   </data>
   <data name="SegAccentNeutral" xml:space="preserve">
-    <value>Plain text</value>
+    <value>Neutral</value>
   </data>
   <data name="SegAccentWindows" xml:space="preserve">
     <value>Windows accent</value>
@@ -390,58 +390,58 @@
     <value>Compact</value>
   </data>
   <data name="SenseCpuTemp" xml:space="preserve">
-    <value>How hot the processor is.</value>
+    <value>CPU temperature.</value>
   </data>
   <data name="SenseGpuTemp" xml:space="preserve">
-    <value>How hot the graphics chip is.</value>
+    <value>GPU temperature.</value>
   </data>
   <data name="SenseDiskTemp" xml:space="preserve">
-    <value>How hot this drive is.</value>
+    <value>Drive temperature.</value>
   </data>
   <data name="SenseRamTemp" xml:space="preserve">
-    <value>How hot the memory is – the warmest of the modules.</value>
+    <value>Memory temperature. Shows the hottest module.</value>
   </data>
   <data name="SenseBoardTemp" xml:space="preserve">
-    <value>How hot the motherboard is.</value>
+    <value>Motherboard temperature.</value>
   </data>
   <data name="SenseTemp" xml:space="preserve">
-    <value>A temperature this machine reports.</value>
+    <value>A temperature reported by this computer.</value>
   </data>
   <data name="SenseLoad" xml:space="preserve">
-    <value>How busy it is, as a share of what it can do.</value>
+    <value>Load as a percentage of capacity.</value>
   </data>
   <data name="SenseBytes" xml:space="preserve">
-    <value>How much data is moving right now.</value>
+    <value>Current data transfer rate.</value>
   </data>
   <data name="ThemeHint" xml:space="preserve">
-    <value>The bars and this window follow it together.</value>
+    <value>Applies to the bars and this window.</value>
   </data>
   <data name="ThemeLabel" xml:space="preserve">
     <value>Theme</value>
   </data>
   <data name="SenseCpuLoad" xml:space="preserve">
-    <value>How busy the processor is.</value>
+    <value>CPU load.</value>
   </data>
   <data name="SenseRamLoad" xml:space="preserve">
-    <value>How much of the memory is in use.</value>
+    <value>Percentage of memory in use.</value>
   </data>
   <data name="SenseUp" xml:space="preserve">
-    <value>What the machine is sending.</value>
+    <value>Network send rate.</value>
   </data>
   <data name="SenseDown" xml:space="preserve">
-    <value>What the machine is receiving.</value>
+    <value>Network receive rate.</value>
   </data>
   <data name="SenseGpuLoad" xml:space="preserve">
-    <value>How busy the graphics chip is.</value>
+    <value>GPU load.</value>
   </data>
   <data name="SenseAnyTemp" xml:space="preserve">
-    <value>Every temperature widget, whichever part it watches.</value>
+    <value>All temperature widgets, for any component.</value>
   </data>
   <data name="PartCpu" xml:space="preserve">
-    <value>Processor</value>
+    <value>CPU</value>
   </data>
   <data name="PartGpu" xml:space="preserve">
-    <value>Graphics</value>
+    <value>GPU</value>
   </data>
   <data name="PartDisk" xml:space="preserve">
     <value>Drive</value>
@@ -453,16 +453,16 @@
     <value>Motherboard</value>
   </data>
   <data name="PartWhole" xml:space="preserve">
-    <value>The whole part</value>
+    <value>Whole device</value>
   </data>
   <data name="RenameHeader" xml:space="preserve">
-    <value>What to call this reading</value>
+    <value>Name</value>
   </data>
   <data name="RenameSave" xml:space="preserve">
     <value>Rename</value>
   </data>
   <data name="RenameReset" xml:space="preserve">
-    <value>Its own name</value>
+    <value>Use default name</value>
   </data>
   <data name="StartupTitle" xml:space="preserve">
     <value>Startup</value>
@@ -471,274 +471,274 @@
     <value>Files and diagnostics</value>
   </data>
   <data name="QuitTitle" xml:space="preserve">
-    <value>Quitting</value>
+    <value>Exit</value>
   </data>
   <data name="SenseDiskBusyName" xml:space="preserve">
     <value>Drive activity</value>
   </data>
   <data name="SenseRamTotalName" xml:space="preserve">
-    <value>Memory installed</value>
+    <value>Installed memory</value>
   </data>
   <data name="SenseRamUsedName" xml:space="preserve">
     <value>Memory in use</value>
   </data>
   <data name="SenseCpuClockName" xml:space="preserve">
-    <value>Processor speed</value>
+    <value>CPU clock speed</value>
   </data>
   <data name="SenseGpuPowerName" xml:space="preserve">
-    <value>Graphics power</value>
+    <value>GPU power</value>
   </data>
   <data name="SenseClock" xml:space="preserve">
-    <value>What speed it is running at.</value>
+    <value>Current clock speed.</value>
   </data>
   <data name="SenseFan" xml:space="preserve">
-    <value>How fast this fan is turning.</value>
+    <value>Fan speed.</value>
   </data>
   <data name="SensePower" xml:space="preserve">
-    <value>How much power it is drawing.</value>
+    <value>Power consumption.</value>
   </data>
   <data name="SenseRamTotal" xml:space="preserve">
-    <value>How much memory is fitted in this machine.</value>
+    <value>Total installed memory.</value>
   </data>
   <data name="SenseRamUsed" xml:space="preserve">
-    <value>How much memory is taken up right now.</value>
+    <value>Memory in use right now.</value>
   </data>
   <data name="SenseSize" xml:space="preserve">
-    <value>An amount this machine reports.</value>
+    <value>A value reported by this computer.</value>
   </data>
   <data name="LookGroupBar" xml:space="preserve">
-    <value>The bar</value>
+    <value>Bar</value>
   </data>
   <data name="LookGroupLanguage" xml:space="preserve">
     <value>Language</value>
   </data>
   <data name="RestartRow" xml:space="preserve">
-    <value>The language has changed</value>
+    <value>Language changed</value>
   </data>
   <data name="RestartRowHint" xml:space="preserve">
-    <value>The language changes once the program starts again.</value>
+    <value>Restart the app to apply the new language.</value>
   </data>
   <data name="ColourRow" xml:space="preserve">
-    <value>The colour</value>
+    <value>Color</value>
   </data>
   <data name="PictureRow" xml:space="preserve">
-    <value>The picture</value>
+    <value>Image</value>
   </data>
   <data name="DockGroupScreen" xml:space="preserve">
-    <value>THIS SCREEN’S BAR</value>
+    <value>This screen’s bar</value>
   </data>
   <data name="EdgeHint" xml:space="preserve">
-    <value>Which side of the screen the bar sits on.</value>
+    <value>Screen edge where the bar appears.</value>
   </data>
   <data name="SizeHint" xml:space="preserve">
-    <value>How much room the bar takes up.</value>
+    <value>Space the bar takes on the screen.</value>
   </data>
   <data name="GalleryRow" xml:space="preserve">
-    <value>Every widget</value>
+    <value>All widgets</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>Drag one onto a bar and it lands where you drop it. Two of the same is fine.</value>
+    <value>Drag a widget onto a bar. You can add the same widget more than once.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
-    <value>A program of your own</value>
+    <value>Pin an app</value>
   </data>
   <data name="PinRowHint" xml:space="preserve">
-    <value>Pinned programs sit on the bar as icons. A file dropped straight onto the bar is pinned to the slot it lands on.</value>
+    <value>Pinned apps appear on the bar as icons. You can also drop a file onto the bar to pin it.</value>
   </data>
   <data name="ResetRow" xml:space="preserve">
-    <value>The standard set</value>
+    <value>Default widgets</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Puts back the set the bar came with. Ctrl+Z brings your own arrangement back.</value>
+    <value>Restores the default widgets. Press Ctrl+Z to undo.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
-    <value>Restore the standard bar</value>
+    <value>Restore default bar</value>
   </data>
   <data name="UndoReset" xml:space="preserve">
-    <value>the standard bar</value>
+    <value>restoring the default bar</value>
   </data>
   <data name="TopmostHint" xml:space="preserve">
-    <value>Off lets a maximised window cover the bar.</value>
+    <value>When off, maximized windows can cover the bar.</value>
   </data>
   <data name="WidgetOptions" xml:space="preserve">
-    <value>Its own settings</value>
+    <value>Widget settings</value>
   </data>
   <data name="RemoveRow" xml:space="preserve">
-    <value>Take it off the bar</value>
+    <value>Remove from bar</value>
   </data>
   <data name="RemoveRowHint" xml:space="preserve">
-    <value>The same as dragging it off the bar onto the desktop.</value>
+    <value>Same as dragging the widget off the bar.</value>
   </data>
   <data name="LogsRow" xml:space="preserve">
-    <value>The log</value>
+    <value>Log file</value>
   </data>
   <data name="LogsRowHint" xml:space="preserve">
-    <value>What the program wrote down about its own run - where to look when something went wrong.</value>
+    <value>Records what the app did. Check it if something goes wrong.</value>
   </data>
   <data name="ConfigRow" xml:space="preserve">
-    <value>The settings file</value>
+    <value>Settings file</value>
   </data>
   <data name="ConfigRowHint" xml:space="preserve">
-    <value>Everything on these pages, in one file.</value>
+    <value>Contains all settings from these pages.</value>
   </data>
   <data name="OpenFolder" xml:space="preserve">
-    <value>Open the folder</value>
+    <value>Open folder</value>
   </data>
   <data name="ExitRow" xml:space="preserve">
-    <value>Quit Master Control Dock</value>
+    <value>Exit Master Control Dock</value>
   </data>
   <data name="RenameTip" xml:space="preserve">
-    <value>Double-click to give this reading a name of your own</value>
+    <value>Double-click to rename</value>
   </data>
   <data name="SenseCpuClock" xml:space="preserve">
-    <value>How fast it is running, as a share of the speed it is rated for.</value>
+    <value>Clock speed as a percentage of rated speed.</value>
   </data>
   <data name="SenseGpuAll" xml:space="preserve">
-    <value>Everything the graphics hardware is doing, as Windows counts it.</value>
+    <value>Total GPU load, as reported by Windows.</value>
   </data>
   <data name="SenseGpuCoreName" xml:space="preserve">
-    <value>Graphics chip</value>
+    <value>GPU core</value>
   </data>
   <data name="SenseGpuCore" xml:space="preserve">
-    <value>How busy the chip itself is, straight from the driver.</value>
+    <value>GPU core load, as reported by the driver.</value>
   </data>
   <data name="SenseGpuVramName" xml:space="preserve">
-    <value>Graphics memory controller</value>
+    <value>GPU memory controller</value>
   </data>
   <data name="SenseGpuVram" xml:space="preserve">
-    <value>How busy the memory controller is - not how full the memory is.</value>
+    <value>Memory controller load, not memory in use.</value>
   </data>
   <data name="SenseGpuVramClockName" xml:space="preserve">
-    <value>Graphics memory speed</value>
+    <value>GPU memory clock speed</value>
   </data>
   <data name="SenseGpuVramClock" xml:space="preserve">
-    <value>What speed the memory on the graphics card is running at.</value>
+    <value>GPU memory clock speed.</value>
   </data>
   <data name="SenseGpuClock" xml:space="preserve">
-    <value>What speed the graphics chip is running at.</value>
+    <value>GPU core clock speed.</value>
   </data>
   <data name="SenseGpuFanName" xml:space="preserve">
-    <value>Graphics fan</value>
+    <value>GPU fan</value>
   </data>
   <data name="SenseGpuFan" xml:space="preserve">
-    <value>How fast the graphics card's fan is turning.</value>
+    <value>GPU fan speed.</value>
   </data>
   <data name="SenseGpuPower" xml:space="preserve">
-    <value>How much power the graphics card is drawing.</value>
+    <value>GPU power consumption.</value>
   </data>
   <data name="SenseGpuClockName" xml:space="preserve">
-    <value>Graphics speed</value>
+    <value>GPU clock speed</value>
   </data>
   <data name="SenseDiskBusy" xml:space="preserve">
-    <value>How much of the time this drive is busy.</value>
+    <value>Percentage of time the drive is active.</value>
   </data>
   <data name="SenseNetUp" xml:space="preserve">
-    <value>How much data is going out right now.</value>
+    <value>Current send rate.</value>
   </data>
   <data name="SenseNetDown" xml:space="preserve">
-    <value>How much data is coming in right now.</value>
+    <value>Current receive rate.</value>
   </data>
   <data name="WidgetClockName" xml:space="preserve">
     <value>Clock</value>
   </data>
   <data name="WidgetClockDescription" xml:space="preserve">
-    <value>The time, and the date under it on a full-size bar.</value>
+    <value>Shows the time, and the date on a full-size bar.</value>
   </data>
   <data name="ClockSeconds" xml:space="preserve">
     <value>Show seconds</value>
   </data>
   <data name="ClockDate" xml:space="preserve">
-    <value>Show the date underneath</value>
+    <value>Show date</value>
   </data>
   <data name="ClockWithSeconds" xml:space="preserve">
     <value>with seconds</value>
   </data>
   <data name="ModeLabel" xml:space="preserve">
-    <value>How the bar holds its edge</value>
+    <value>Docking mode</value>
   </data>
   <data name="ModePinned" xml:space="preserve">
-    <value>Keeps its place</value>
+    <value>Docked</value>
   </data>
   <data name="ModeHide" xml:space="preserve">
-    <value>Hides</value>
+    <value>Auto-hide</value>
   </data>
   <data name="ModeDesktop" xml:space="preserve">
-    <value>On the desktop</value>
+    <value>On desktop</value>
   </data>
   <data name="ModePinnedHint" xml:space="preserve">
-    <value>The bar keeps its strip of screen. A maximised window stops at it rather than covering it.</value>
+    <value>Reserves space on the screen edge. Maximized windows do not cover the bar.</value>
   </data>
   <data name="ModeHideHint" xml:space="preserve">
-    <value>The bar steps off the screen and comes back when the pointer reaches that edge.</value>
+    <value>Hides the bar off screen. Move the pointer to the edge to show it.</value>
   </data>
   <data name="ModeDesktopHint" xml:space="preserve">
-    <value>The bar lies on the desktop: it takes no room from other windows, and any window opened over it covers it.</value>
+    <value>The bar stays on the desktop and takes no space. Open windows cover it.</value>
   </data>
   <data name="UndoMode" xml:space="preserve">
-    <value>how it holds its edge</value>
+    <value>changing the docking mode</value>
   </data>
   <data name="UndoOnTheBar" xml:space="preserve">
     <value>on the bar</value>
   </data>
   <data name="WidgetDropCaption" xml:space="preserve">
-    <value>Put it here</value>
+    <value>Drop here</value>
   </data>
   <data name="UndoRow" xml:space="preserve">
-    <value>Take the last change back</value>
+    <value>Undo last change</value>
   </data>
   <data name="UndoRowHint" xml:space="preserve">
-    <value>Anything changed here or on a bar itself, on any screen.</value>
+    <value>Undoes the last change made here or on any bar.</value>
   </data>
   <data name="MediaTitleHint" xml:space="preserve">
-    <value>Off puts it in the tooltip instead.</value>
+    <value>When off, the title appears in the tooltip.</value>
   </data>
   <data name="ClockDateHint" xml:space="preserve">
-    <value>A compact bar has one line, and the time is the line worth having.</value>
+    <value>A compact bar has room for one line only.</value>
   </data>
   <data name="CrowdedRow" xml:space="preserve">
-    <value>{0} of these do not fit</value>
+    <value>{0} widgets do not fit</value>
   </data>
   <data name="CrowdedRowHint" xml:space="preserve">
-    <value>The bar has run out of slots. These are kept and come back when there is room - on another edge, or at compact thickness.</value>
+    <value>The bar is full. These widgets are kept and return when there is room, for example on another edge or at a smaller bar size.</value>
   </data>
   <data name="CrowdedButton" xml:space="preserve">
-    <value>Take them off</value>
+    <value>Remove</value>
   </data>
   <data name="UndoCrowded" xml:space="preserve">
-    <value>the ones that did not fit</value>
+    <value>removing widgets that did not fit</value>
   </data>
   <data name="WidgetSoundName" xml:space="preserve">
     <value>Sound</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>The speaker opens a volume slider and the wheel turns it; the figure silences the machine.</value>
+    <value>Click the icon for a volume slider, scroll to change volume, click the number to mute.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
-    <value>Write how loud it is</value>
+    <value>Show volume level</value>
   </data>
   <data name="SoundLevelHint" xml:space="preserve">
-    <value>The speaker alone already says whether there is any.</value>
+    <value>The icon already shows whether sound is muted.</value>
   </data>
   <data name="KeysGroup" xml:space="preserve">
-    <value>Keys</value>
+    <value>Keyboard shortcuts</value>
   </data>
   <data name="KeyBars" xml:space="preserve">
-    <value>Show or hide every bar</value>
+    <value>Show or hide all bars</value>
   </data>
   <data name="KeyBarsHint" xml:space="preserve">
-    <value>The bars go away and come back. Their layout is kept.</value>
+    <value>Hides or shows the bars. Their widgets are kept.</value>
   </data>
   <data name="KeySettings" xml:space="preserve">
-    <value>Open this window</value>
+    <value>Open settings</value>
   </data>
   <data name="KeySettingsHint" xml:space="preserve">
-    <value>From anywhere, including over a full-screen program.</value>
+    <value>Works anywhere, including over full-screen apps.</value>
   </data>
   <data name="KeyMute" xml:space="preserve">
     <value>Mute or unmute</value>
   </data>
   <data name="KeyMuteHint" xml:space="preserve">
-    <value>The same as the mute key, for keyboards that have not got one.</value>
+    <value>Works like the mute key, for keyboards without one.</value>
   </data>
   <data name="KeyNone" xml:space="preserve">
     <value>Assign…</value>
@@ -747,85 +747,85 @@
     <value>Clear</value>
   </data>
   <data name="KeyUse" xml:space="preserve">
-    <value>Use it</value>
+    <value>Assign</value>
   </data>
   <data name="KeyWaiting" xml:space="preserve">
-    <value>Hold Ctrl, Alt or Win and press a key.</value>
+    <value>Press a key combination that includes Ctrl, Alt or the Windows key.</value>
   </data>
   <data name="KeyBare" xml:space="preserve">
-    <value>A key on its own would take it away from every other program. Hold Ctrl, Alt or Win as well.</value>
+    <value>A single key would stop working in other apps. Add Ctrl, Alt or the Windows key.</value>
   </data>
   <data name="KeyTaken" xml:space="preserve">
-    <value>Another program already holds this combination, so it does nothing here. Choose a different one.</value>
+    <value>Another app already uses this shortcut. Choose a different one.</value>
   </data>
   <data name="WidgetBatteryName" xml:space="preserve">
     <value>Battery</value>
   </data>
   <data name="WidgetBatteryDescription" xml:space="preserve">
-    <value>How much charge is left. Only on a machine that runs on charge.</value>
+    <value>Shows battery charge. Appears only on devices with a battery.</value>
   </data>
   <data name="WidgetWifiName" xml:space="preserve">
     <value>Wi-Fi</value>
   </data>
   <data name="WidgetWifiDescription" xml:space="preserve">
-    <value>How good the signal is. Only while the machine is on a wireless network.</value>
+    <value>Shows Wi-Fi signal strength. Appears only when connected to Wi-Fi.</value>
   </data>
   <data name="BatteryCharge" xml:space="preserve">
-    <value>{0}% of a charge</value>
+    <value>{0}% charge</value>
   </data>
   <data name="BatteryCharging" xml:space="preserve">
     <value>charging</value>
   </data>
   <data name="BatteryPlugged" xml:space="preserve">
-    <value>on the mains</value>
+    <value>Plugged in</value>
   </data>
   <data name="BatteryLeft" xml:space="preserve">
     <value>about {0} h {1} min left</value>
   </data>
   <data name="BatteryUnknown" xml:space="preserve">
-    <value>Charge not reported</value>
+    <value>Battery charge unavailable</value>
   </data>
   <data name="WifiBars" xml:space="preserve">
     <value>signal {0} of 5</value>
   </data>
   <data name="WifiConnected" xml:space="preserve">
-    <value>On a wireless network</value>
+    <value>Connected to Wi-Fi</value>
   </data>
   <data name="WifiNameLabel" xml:space="preserve">
-    <value>Write the network's name</value>
+    <value>Show network name</value>
   </data>
   <data name="WifiNameHint" xml:space="preserve">
-    <value>Useful where two networks are within reach and both work.</value>
+    <value>Helps tell apart networks in range.</value>
   </data>
   <data name="QuietRow" xml:space="preserve">
-    <value>{0} are hidden until there is data</value>
+    <value>{0} widgets are hidden until data is available</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} - on the bar, taking no slot until it has something to show. It comes back where you left it.</value>
+    <value>{0}: kept on the bar, taking no space until there is data.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
-    <value>Take them off</value>
+    <value>Remove</value>
   </data>
   <data name="UndoQuiet" xml:space="preserve">
-    <value>the ones that were waiting</value>
+    <value>removing hidden widgets</value>
   </data>
   <data name="CrowdedRowOne" xml:space="preserve">
-    <value>One of these does not fit</value>
+    <value>1 widget does not fit</value>
   </data>
   <data name="QuietRowOne" xml:space="preserve">
-    <value>One is hidden until there is data</value>
+    <value>1 widget is hidden until data is available</value>
   </data>
   <data name="BraunRow" xml:space="preserve">
-    <value>What this is</value>
+    <value>About this style</value>
   </data>
   <data name="BraunHint" xml:space="preserve">
-    <value>A strict instrument look: graphite body, orange readings.</value>
+    <value>Graphite background with orange readings.</value>
   </data>
   <data name="CrowdedButtonOne" xml:space="preserve">
-    <value>Take it off</value>
+    <value>Remove</value>
   </data>
   <data name="QuietButtonOne" xml:space="preserve">
-    <value>Take it off</value>
+    <value>Remove</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -834,7 +834,7 @@
     <value>Settings</value>
   </data>
   <data name="WidgetSettingsDescription" xml:space="preserve">
-    <value>Opens the settings.</value>
+    <value>Opens settings.</value>
   </data>
   <data name="SettingsChipTip.Text" xml:space="preserve">
     <value>Settings</value>
@@ -846,34 +846,34 @@
     <value>Widgets</value>
   </data>
   <data name="WidgetsIntro.Text" xml:space="preserve">
-    <value>What is on this screen's bar, the programs pinned to it, and saved layouts.</value>
+    <value>Widgets on this screen’s bar, pinned apps and saved layouts.</value>
   </data>
   <data name="IconDefault" xml:space="preserve">
-    <value>The one it came with</value>
+    <value>Default icon</value>
   </data>
   <data name="CopyRow" xml:space="preserve">
-    <value>The other screens</value>
+    <value>Other screens</value>
   </data>
   <data name="CopyRowHint" xml:space="preserve">
-    <value>Gives every other screen the same widgets, refitted to the shape of this bar. Each bar keeps its own copies; Ctrl+Z puts the others back.</value>
+    <value>Copies this bar’s widgets to all other screens, adjusted to fit. Press Ctrl+Z to undo.</value>
   </data>
   <data name="CopyButton" xml:space="preserve">
-    <value>Make them the same</value>
+    <value>Copy to other screens</value>
   </data>
   <data name="UndoCopied" xml:space="preserve">
-    <value>the same widgets</value>
+    <value>copying widgets to other screens</value>
   </data>
   <data name="ListEarlier" xml:space="preserve">
-    <value>Move it earlier along the bar</value>
+    <value>Move up</value>
   </data>
   <data name="ListLater" xml:space="preserve">
-    <value>Move it later along the bar</value>
+    <value>Move down</value>
   </data>
   <data name="ListRemove" xml:space="preserve">
-    <value>Take it off the bar</value>
+    <value>Remove from bar</value>
   </data>
   <data name="ListEmpty" xml:space="preserve">
-    <value>Nothing on this bar yet.</value>
+    <value>This bar has no widgets.</value>
   </data>
   <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
     <value>Bars</value>
@@ -891,61 +891,61 @@
     <value>About</value>
   </data>
   <data name="UndoLook" xml:space="preserve">
-    <value>how the bars are painted</value>
+    <value>changing the appearance</value>
   </data>
   <data name="UndoLanguage" xml:space="preserve">
-    <value>the language</value>
+    <value>changing the language</value>
   </data>
   <data name="UndoKey" xml:space="preserve">
-    <value>a key</value>
+    <value>changing a shortcut</value>
   </data>
   <data name="UndoIcon" xml:space="preserve">
-    <value>a picture</value>
+    <value>changing an icon</value>
   </data>
   <data name="UndoRenamed" xml:space="preserve">
-    <value>a name</value>
+    <value>renaming a reading</value>
   </data>
   <data name="WifiBarsUnknown" xml:space="preserve">
-    <value>signal not reported</value>
+    <value>Signal strength unavailable</value>
   </data>
   <data name="BatteryLeftMinutes" xml:space="preserve">
     <value>about {0} min left</value>
   </data>
   <data name="SenseGpuBusyName" xml:space="preserve">
-    <value>Graphics - how busy</value>
+    <value>GPU load</value>
   </data>
   <data name="SenseGpuHeatName" xml:space="preserve">
-    <value>Graphics - temperature</value>
+    <value>GPU temperature</value>
   </data>
   <data name="CopyButtonCount" xml:space="preserve">
-    <value>Copy to the other {0}</value>
+    <value>Copy to other screens ({0})</value>
   </data>
   <data name="ListAtSlot" xml:space="preserve">
-    <value>slot {0}</value>
+    <value>Position {0}</value>
   </data>
   <data name="ListNoSlot" xml:space="preserve">
-    <value>waiting</value>
+    <value>Hidden</value>
   </data>
   <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
     <value>Rename this reading</value>
   </data>
   <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
-    <value>Give this reading a name of your own.</value>
+    <value>Rename this reading.</value>
   </data>
   <data name="ForgetRow" xml:space="preserve">
-    <value>Forget this screen</value>
+    <value>Remove this screen</value>
   </data>
   <data name="ForgetRowHint" xml:space="preserve">
-    <value>Takes its bar and its arrangement out of the settings. If the screen comes back it arrives as a new one.</value>
+    <value>Deletes this screen’s bar and its settings. If it reconnects, it is set up as new.</value>
   </data>
   <data name="ForgetButton" xml:space="preserve">
-    <value>Forget it</value>
+    <value>Remove screen</value>
   </data>
   <data name="UndoForgot" xml:space="preserve">
-    <value>a screen forgotten</value>
+    <value>removing a screen</value>
   </data>
   <data name="SourcePdh" xml:space="preserve">
-    <value>Windows counters</value>
+    <value>Windows performance counters</value>
   </data>
   <data name="SourceMem" xml:space="preserve">
     <value>Windows memory</value>
@@ -960,55 +960,55 @@
     <value>NVIDIA driver</value>
   </data>
   <data name="SourceAnswering" xml:space="preserve">
-    <value>answering ({0})</value>
+    <value>responding ({0})</value>
   </data>
   <data name="SourceNotRunning" xml:space="preserve">
     <value>not running</value>
   </data>
   <data name="SourceNotHere" xml:space="preserve">
-    <value>not on this machine</value>
+    <value>not available on this computer</value>
   </data>
   <data name="UndoElsewhereLabel" xml:space="preserve">
     <value>Undo — {0}, {1}</value>
   </data>
   <data name="LastDoorTitle" xml:space="preserve">
-    <value>This is the last way in</value>
+    <value>This is the last way to open settings</value>
   </data>
   <data name="LastDoorBody" xml:space="preserve">
-    <value>No key opens this window, and this is the only wheel left on any bar. After this, the way back in is a right click on a bar.</value>
+    <value>No shortcut opens settings, and this is the last Settings button on any bar. After you remove it, right-click a bar to open settings.</value>
   </data>
   <data name="LastDoorGo" xml:space="preserve">
-    <value>Take it off anyway</value>
+    <value>Remove anyway</value>
   </data>
   <data name="ExportRow" xml:space="preserve">
-    <value>Save a copy</value>
+    <value>Back up settings</value>
   </data>
   <data name="ExportRowHint" xml:space="preserve">
-    <value>Everything: the bars, the theme, the keys, what the readings are called.</value>
+    <value>Includes bars, theme, shortcuts and reading names.</value>
   </data>
   <data name="ExportButton" xml:space="preserve">
-    <value>Save to a file</value>
+    <value>Export to file</value>
   </data>
   <data name="ImportRow" xml:space="preserve">
-    <value>Load a copy</value>
+    <value>Restore settings</value>
   </data>
   <data name="ImportRowHint" xml:space="preserve">
-    <value>Replaces everything on these pages. The bars go to this machine's screens in the order they were saved. Ctrl+Z brings it all back.</value>
+    <value>Replaces all current settings. Bars are assigned to screens in the order they were saved. Press Ctrl+Z to undo.</value>
   </data>
   <data name="ImportButton" xml:space="preserve">
-    <value>Load from a file</value>
+    <value>Import from file</value>
   </data>
   <data name="SettingsFileKind" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="ImportDone" xml:space="preserve">
-    <value>Loaded. {0} of this machine's bars were filled in.</value>
+    <value>Settings imported. {0} bars were applied to this computer’s screens.</value>
   </data>
   <data name="ImportBad" xml:space="preserve">
-    <value>That file is not a settings file this program can read.</value>
+    <value>This file is not a valid settings file.</value>
   </data>
   <data name="UndoImported" xml:space="preserve">
-    <value>settings loaded from a file</value>
+    <value>importing settings</value>
   </data>
   <data name="SegSizeLarge" xml:space="preserve">
     <value>Large</value>
@@ -1023,58 +1023,58 @@
     <value>Layouts</value>
   </data>
   <data name="PresetSaveRow" xml:space="preserve">
-    <value>Keep this arrangement</value>
+    <value>Save current layout</value>
   </data>
   <data name="PresetSaveRowHint" xml:space="preserve">
-    <value>Saves what is on this bar, by name, to be put onto any bar later - here or on another screen.</value>
+    <value>Saves this bar’s widgets as a named layout you can apply to any bar.</value>
   </data>
   <data name="PresetSaveButton" xml:space="preserve">
-    <value>Save as a layout</value>
+    <value>Save layout</value>
   </data>
   <data name="PresetApply" xml:space="preserve">
-    <value>Put it on this bar</value>
+    <value>Apply to this bar</value>
   </data>
   <data name="PresetDelete" xml:space="preserve">
-    <value>Forget it</value>
+    <value>Delete</value>
   </data>
   <data name="PresetHint" xml:space="preserve">
     <value>{0} widgets</value>
   </data>
   <data name="PresetNameHeader" xml:space="preserve">
-    <value>What to call it</value>
+    <value>Name</value>
   </data>
   <data name="PresetSaveTitle" xml:space="preserve">
-    <value>Save this arrangement</value>
+    <value>Save layout</value>
   </data>
   <data name="PresetSaveGo" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="UndoPresetSaved" xml:space="preserve">
-    <value>a layout saved</value>
+    <value>saving a layout</value>
   </data>
   <data name="UndoPresetApplied" xml:space="preserve">
-    <value>a layout put on</value>
+    <value>applying a layout</value>
   </data>
   <data name="UndoPresetDropped" xml:space="preserve">
-    <value>a layout forgotten</value>
+    <value>deleting a layout</value>
   </data>
   <data name="SoundMutedTip" xml:space="preserve">
-    <value>Silenced</value>
+    <value>Muted</value>
   </data>
   <data name="SoundLevelTip" xml:space="preserve">
-    <value>Volume {0} %</value>
+    <value>Volume: {0}%</value>
   </data>
   <data name="SoundPressUnmuteTip" xml:space="preserve">
-    <value>a press lets it speak</value>
+    <value>Click to unmute</value>
   </data>
   <data name="SoundPressMuteTip" xml:space="preserve">
-    <value>a press silences it</value>
+    <value>Click to mute</value>
   </data>
   <data name="ReadingSizeLabel" xml:space="preserve">
-    <value>Size of the readings</value>
+    <value>Icon and number size</value>
   </data>
   <data name="ReadingSizeHint" xml:space="preserve">
-    <value>How large the icons and figures are drawn, on every bar.</value>
+    <value>Size of icons and numbers on all bars.</value>
   </data>
   <data name="NavGeneral.Text" xml:space="preserve">
     <value>General</value>
@@ -1098,19 +1098,19 @@
     <value>General</value>
   </data>
   <data name="GeneralIntro.Text" xml:space="preserve">
-    <value>Keys, language, startup and copies - the whole program, no one bar.</value>
+    <value>Shortcuts, language, startup and backup. These apply to the whole app.</value>
   </data>
   <data name="OpenFolderOf" xml:space="preserve">
-    <value>Open the folder: {0}</value>
+    <value>Open folder: {0}</value>
   </data>
   <data name="MediaResumes" xml:space="preserve">
     <value>Resumes {0}</value>
   </data>
   <data name="SenseGpuVramFillName" xml:space="preserve">
-    <value>Graphics memory used</value>
+    <value>GPU memory in use</value>
   </data>
   <data name="SenseGpuVramFill" xml:space="preserve">
-    <value>How full the card's own memory is.</value>
+    <value>GPU memory in use, as a percentage.</value>
   </data>
   <data name="RamDetail" xml:space="preserve">
     <value>{0} · {1} / {2} GB</value>
@@ -1119,10 +1119,10 @@
     <value>{0} readings.</value>
   </data>
   <data name="DeviceCpu" xml:space="preserve">
-    <value>Processor</value>
+    <value>CPU</value>
   </data>
   <data name="DeviceGpu" xml:space="preserve">
-    <value>Graphics</value>
+    <value>GPU</value>
   </data>
   <data name="DeviceMemory" xml:space="preserve">
     <value>Memory</value>
@@ -1134,7 +1134,7 @@
     <value>Network</value>
   </data>
   <data name="DeviceBoard" xml:space="preserve">
-    <value>Board</value>
+    <value>Motherboard</value>
   </data>
   <data name="PinIconChange" xml:space="preserve">
     <value>Change…</value>
@@ -1152,40 +1152,40 @@
     <value>Open {0}</value>
   </data>
   <data name="MediaOpenPlayer" xml:space="preserve">
-    <value>Open the player</value>
+    <value>Open player</value>
   </data>
   <data name="SenseCommitName" xml:space="preserve">
     <value>Committed memory</value>
   </data>
   <data name="SenseCommit" xml:space="preserve">
-    <value>How much of what Windows can promise - memory plus the page file - is already promised.</value>
+    <value>Committed memory as a percentage of the commit limit (RAM plus page file).</value>
   </data>
   <data name="SenseCommitUsedName" xml:space="preserve">
-    <value>Committed, in bytes</value>
+    <value>Committed memory (bytes)</value>
   </data>
   <data name="SenseCommitTotalName" xml:space="preserve">
     <value>Commit limit</value>
   </data>
   <data name="SenseCommitTotal" xml:space="preserve">
-    <value>Memory plus the page file: the most Windows can promise at once.</value>
+    <value>Maximum committed memory: RAM plus the page file.</value>
   </data>
   <data name="SenseRamFreeName" xml:space="preserve">
-    <value>Memory free</value>
+    <value>Free memory</value>
   </data>
   <data name="SenseRamFree" xml:space="preserve">
-    <value>How much of the installed memory is not taken up.</value>
+    <value>Installed memory not in use.</value>
   </data>
   <data name="SenseDiskReadName" xml:space="preserve">
-    <value>Drives - reading</value>
+    <value>Drive read rate</value>
   </data>
   <data name="SenseDiskRead" xml:space="preserve">
-    <value>How much the drives are reading right now, all of them together.</value>
+    <value>Current read rate, all drives combined.</value>
   </data>
   <data name="SenseDiskWriteName" xml:space="preserve">
-    <value>Drives - writing</value>
+    <value>Drive write rate</value>
   </data>
   <data name="SenseDiskWrite" xml:space="preserve">
-    <value>How much the drives are writing right now, all of them together.</value>
+    <value>Current write rate, all drives combined.</value>
   </data>
   <data name="WifiBand" xml:space="preserve">
     <value>{0:0.#} GHz</value>
@@ -1194,16 +1194,16 @@
     <value>{0} Mbit/s</value>
   </data>
   <data name="NavPins.Text" xml:space="preserve">
-    <value>Your programs</value>
+    <value>Pinned apps</value>
   </data>
   <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Your programs</value>
+    <value>Pinned apps</value>
   </data>
   <data name="PinsTitle.Text" xml:space="preserve">
-    <value>Your programs</value>
+    <value>Pinned apps</value>
   </data>
   <data name="PinsIntro.Text" xml:space="preserve">
-    <value>Programs, folders and addresses pinned to this screen's bar.</value>
+    <value>Apps, folders and web addresses pinned to this screen’s bar.</value>
   </data>
   <data name="PinnedListTitle" xml:space="preserve">
     <value>Pinned to this bar</value>
@@ -1221,10 +1221,10 @@
     <value>Layouts</value>
   </data>
   <data name="PresetsIntro.Text" xml:space="preserve">
-    <value>Saved arrangements of widgets. Any of them goes onto the chosen screen's bar.</value>
+    <value>Saved widget layouts. Apply any layout to the selected screen’s bar.</value>
   </data>
   <data name="ChipHint" xml:space="preserve">
-    <value>Drag it onto a bar, or press the plus to put one on the chosen bar.</value>
+    <value>Drag a widget onto a bar, or select + to add it to the selected bar.</value>
   </data>
   <data name="ToastDone" xml:space="preserve">
     <value>Done: {0}</value>
@@ -1233,31 +1233,31 @@
     <value>Undo</value>
   </data>
   <data name="PresetsEmpty" xml:space="preserve">
-    <value>None yet. A saved arrangement goes onto any screen with one press.</value>
+    <value>No saved layouts yet.</value>
   </data>
   <data name="LampOn" xml:space="preserve">
-    <value>the bar is on</value>
+    <value>Bar on</value>
   </data>
   <data name="LampOff" xml:space="preserve">
-    <value>the bar is off</value>
+    <value>Bar off</value>
   </data>
   <data name="EdgeBoardHint" xml:space="preserve">
-    <value>Press a side</value>
+    <value>Select an edge</value>
   </data>
   <data name="WidgetsBarGroup" xml:space="preserve">
     <value>The bar</value>
   </data>
   <data name="BarGestures" xml:space="preserve">
-    <value>Drag to move · off the edge to remove · right-click for the menu</value>
+    <value>Drag to move · Drag off the bar to remove · Right-click for the menu</value>
   </data>
   <data name="PinsEditorTitle" xml:space="preserve">
     <value>Name and icon</value>
   </data>
   <data name="LookIconsGroup" xml:space="preserve">
-    <value>Icons of the readings</value>
+    <value>Reading icons</value>
   </data>
   <data name="LookSampleGroup" xml:space="preserve">
-    <value>Sample</value>
+    <value>Preview</value>
   </data>
   <data name="IconChange" xml:space="preserve">
     <value>Change…</value>
@@ -1266,22 +1266,22 @@
     <value>Open folder</value>
   </data>
   <data name="PinDialogHint" xml:space="preserve">
-    <value>Or drop a file straight onto the bar: it is pinned where it lands.</value>
+    <value>You can also drop a file onto the bar to pin it.</value>
   </data>
   <data name="BarMenuSettings" xml:space="preserve">
     <value>Settings…</value>
   </data>
   <data name="BarMenuHideAll" xml:space="preserve">
-    <value>Hide the bars</value>
+    <value>Hide bars</value>
   </data>
   <data name="BarMenuExit" xml:space="preserve">
     <value>Exit</value>
   </data>
   <data name="BarWelcome" xml:space="preserve">
-    <value>Right-click for the menu and settings. Files can be dropped right here.</value>
+    <value>Right-click for the menu and settings. Drop files here to pin them.</value>
   </data>
   <data name="BarsShow" xml:space="preserve">
-    <value>Show the bars</value>
+    <value>Show bars</value>
   </data>
   <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
     <value>Hide or show the bars</value>
@@ -1290,64 +1290,64 @@
     <value>needs the PawnIO driver</value>
   </data>
   <data name="SourceCpu" xml:space="preserve">
-    <value>processor registers</value>
+    <value>CPU registers</value>
   </data>
   <data name="SourceDimm" xml:space="preserve">
     <value>memory modules</value>
   </data>
   <data name="DriverRow" xml:space="preserve">
-    <value>Processor and memory temperatures</value>
+    <value>CPU and memory temperatures</value>
   </data>
   <data name="DriverRowHint" xml:space="preserve">
-    <value>Processor and memory temperatures need the PawnIO driver. It is installed once and asks for administrator rights.</value>
+    <value>CPU and memory temperatures require the PawnIO driver. Installing it needs administrator rights.</value>
   </data>
   <data name="DriverRowInstalledHint" xml:space="preserve">
-    <value>PawnIO {0} is installed but did not answer. A restart of the program usually settles it.</value>
+    <value>PawnIO {0} is installed but not responding. Restarting the app usually fixes this.</value>
   </data>
   <data name="DriverGet" xml:space="preserve">
-    <value>Get the driver…</value>
+    <value>Download driver…</value>
   </data>
   <data name="SenseCpuCoreMaxName" xml:space="preserve">
-    <value>Processor – hottest core</value>
+    <value>Hottest CPU core</value>
   </data>
   <data name="SenseCpuCoreMax" xml:space="preserve">
-    <value>The warmest of the cores right now.</value>
+    <value>Temperature of the hottest CPU core.</value>
   </data>
   <data name="SenseCpuPowerName" xml:space="preserve">
-    <value>Processor power</value>
+    <value>CPU power</value>
   </data>
   <data name="SenseCpuPower" xml:space="preserve">
-    <value>How much power the processor is drawing.</value>
+    <value>CPU power consumption.</value>
   </data>
   <data name="SourceNeedsService" xml:space="preserve">
     <value>needs the sensor service</value>
   </data>
   <data name="ServiceRow" xml:space="preserve">
-    <value>The sensor service</value>
+    <value>Sensor service</value>
   </data>
   <data name="ServiceRowHint" xml:space="preserve">
-    <value>PawnIO {0} is in. The service that reads through it runs as the system and is put in once - this asks for administrator rights.</value>
+    <value>PawnIO {0} is installed. The sensor service reads data through it and needs administrator rights to install.</value>
   </data>
   <data name="ServiceRowMissing" xml:space="preserve">
-    <value>The service program is not in this build.</value>
+    <value>The sensor service is not included in this build.</value>
   </data>
   <data name="ServiceRowWaiting" xml:space="preserve">
-    <value>The service is running and the readings are on their way.</value>
+    <value>The service is running. Readings will appear shortly.</value>
   </data>
   <data name="ServiceInstall" xml:space="preserve">
-    <value>Install the service…</value>
+    <value>Install service…</value>
   </data>
   <data name="SenseCpuHeatName" xml:space="preserve">
-    <value>Processor – temperature</value>
+    <value>CPU temperature</value>
   </data>
   <data name="CatProcessor" xml:space="preserve">
-    <value>Processor</value>
+    <value>CPU</value>
   </data>
   <data name="CatMemory" xml:space="preserve">
     <value>Memory</value>
   </data>
   <data name="CatGraphics" xml:space="preserve">
-    <value>Graphics</value>
+    <value>GPU</value>
   </data>
   <data name="CatStorage" xml:space="preserve">
     <value>Drives</value>
@@ -1356,22 +1356,22 @@
     <value>Network</value>
   </data>
   <data name="CatOther" xml:space="preserve">
-    <value>Everything else</value>
+    <value>Other</value>
   </data>
   <data name="OfferCpuLoad" xml:space="preserve">
-    <value>Processor – load</value>
+    <value>CPU load</value>
   </data>
   <data name="OfferRamLoad" xml:space="preserve">
-    <value>Memory – load</value>
+    <value>Memory load</value>
   </data>
   <data name="OfferGpuLoad" xml:space="preserve">
-    <value>Graphics – load</value>
+    <value>GPU load</value>
   </data>
   <data name="OfferNetUp" xml:space="preserve">
-    <value>Network – sending</value>
+    <value>Network send rate</value>
   </data>
   <data name="OfferNetDown" xml:space="preserve">
-    <value>Network – receiving</value>
+    <value>Network receive rate</value>
   </data>
   <data name="ShortLoad" xml:space="preserve">
     <value>Load</value>
@@ -1380,16 +1380,16 @@
     <value>Temperature</value>
   </data>
   <data name="SenseRamHeatName" xml:space="preserve">
-    <value>Memory – temperature</value>
+    <value>Memory temperature</value>
   </data>
   <data name="SenseDiskHeatName" xml:space="preserve">
-    <value>Drive – temperature</value>
+    <value>Drive temperature</value>
   </data>
   <data name="WidgetDeviceName" xml:space="preserve">
-    <value>Device</value>
+    <value>Device battery</value>
   </data>
   <data name="WidgetDeviceDescription" xml:space="preserve">
-    <value>How much charge a wireless mouse, headset or keyboard has left.</value>
+    <value>Shows the battery charge of a wireless mouse, headset or keyboard.</value>
   </data>
   <data name="CatMice" xml:space="preserve">
     <value>Mice</value>
@@ -1404,13 +1404,13 @@
     <value>Other devices</value>
   </data>
   <data name="OfferDeviceCharge" xml:space="preserve">
-    <value>{0} – charge</value>
+    <value>{0} battery</value>
   </data>
   <data name="OfferDevice" xml:space="preserve">
-    <value>How much charge this device has left.</value>
+    <value>Battery charge of this device.</value>
   </data>
   <data name="SenseDeviceCharge" xml:space="preserve">
-    <value>How much charge this device has left.</value>
+    <value>Battery charge of this device.</value>
   </data>
   <data name="DevicePeripherals" xml:space="preserve">
     <value>Wireless devices</value>
@@ -1425,13 +1425,13 @@
     <value>Audio Switcher</value>
   </data>
   <data name="WidgetSwitcherDescription" xml:space="preserve">
-    <value>Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device.</value>
+    <value>Shows Master Audio Switcher on the bar. Click to switch sound output to the next device.</value>
   </data>
   <data name="SwitcherNoDevice" xml:space="preserve">
-    <value>No sound device</value>
+    <value>No audio output device</value>
   </data>
   <data name="SwitcherPressTip" xml:space="preserve">
-    <value>a press switches to the next</value>
+    <value>Click to switch to the next device</value>
   </data>
   <data name="SwitcherOpen" xml:space="preserve">
     <value>Open Master Audio Switcher</value>
@@ -1449,25 +1449,25 @@
     <value>Microphone</value>
   </data>
   <data name="WidgetMicDescription" xml:space="preserve">
-    <value>Switches the microphone off for the whole machine, and goes red while it is off.</value>
+    <value>Mutes the microphone system-wide. Turns red while muted.</value>
   </data>
   <data name="WidgetAwakeName" xml:space="preserve">
     <value>Keep awake</value>
   </data>
   <data name="WidgetAwakeDescription" xml:space="preserve">
-    <value>A full cup keeps the machine from sleeping and chat programs from turning amber.</value>
+    <value>Keeps the computer awake and chat apps from showing you as away.</value>
   </data>
   <data name="WidgetLayoutName" xml:space="preserve">
     <value>Keyboard layout</value>
   </data>
   <data name="WidgetLayoutDescription" xml:space="preserve">
-    <value>The language the keyboard types in, and whether Caps Lock is on.</value>
+    <value>Shows the keyboard layout language and the Caps Lock state.</value>
   </data>
   <data name="CatPrograms" xml:space="preserve">
-    <value>Programs</value>
+    <value>Apps</value>
   </data>
   <data name="OfferProgram" xml:space="preserve">
-    <value>Starts it from the bar.</value>
+    <value>Starts the app from the bar.</value>
   </data>
   <data name="ProgExplorer" xml:space="preserve">
     <value>File Explorer</value>
@@ -1512,16 +1512,16 @@
     <value>Sticky Notes</value>
   </data>
   <data name="AwakeOffTip" xml:space="preserve">
-    <value>The machine may sleep · a press keeps it awake</value>
+    <value>The computer can sleep · Click to keep it awake</value>
   </data>
   <data name="AwakeFor" xml:space="preserve">
-    <value>Awake for another {0}</value>
+    <value>Awake: {0} left</value>
   </data>
   <data name="AwakeUntilOff" xml:space="preserve">
     <value>Awake until turned off</value>
   </data>
   <data name="AwakeOnTip" xml:space="preserve">
-    <value>a press lets it sleep</value>
+    <value>Click to allow sleep</value>
   </data>
   <data name="AwakeMenu30" xml:space="preserve">
     <value>Keep awake for 30 minutes</value>
@@ -1536,10 +1536,10 @@
     <value>Keep awake until turned off</value>
   </data>
   <data name="AwakeMenuOff" xml:space="preserve">
-    <value>Let it sleep</value>
+    <value>Allow sleep</value>
   </data>
   <data name="AwakeLessThanMinute" xml:space="preserve">
-    <value>a minute</value>
+    <value>less than a minute</value>
   </data>
   <data name="AwakeMinutes" xml:space="preserve">
     <value>{0} min</value>
@@ -1548,31 +1548,31 @@
     <value>{0} h {1} min</value>
   </data>
   <data name="AwakeSummaryOn" xml:space="preserve">
-    <value>Keeping the machine awake</value>
+    <value>Keeping the computer awake</value>
   </data>
   <data name="AwakeSummaryOff" xml:space="preserve">
-    <value>The machine may sleep</value>
+    <value>The computer can sleep</value>
   </data>
   <data name="MicOffTip" xml:space="preserve">
-    <value>Microphone off · a press turns it on</value>
+    <value>Microphone muted · Click to unmute</value>
   </data>
   <data name="MicOnTip" xml:space="preserve">
-    <value>Microphone on · a press turns it off</value>
+    <value>Microphone on · Click to mute</value>
   </data>
   <data name="LayoutCapsOn" xml:space="preserve">
     <value>Caps Lock is on</value>
   </data>
   <data name="LayoutPressTip" xml:space="preserve">
-    <value>a press switches the layout</value>
+    <value>Click to switch layout</value>
   </data>
   <data name="SoundSliderTip" xml:space="preserve">
-    <value>a press opens the slider, the wheel turns it</value>
+    <value>Click for the volume slider · Scroll to change volume</value>
   </data>
   <data name="KeyMic" xml:space="preserve">
     <value>Mute or unmute the microphone</value>
   </data>
   <data name="KeyMicHint" xml:space="preserve">
-    <value>For the whole machine, from anywhere.</value>
+    <value>Works system-wide, from any app.</value>
   </data>
   <data name="IconSearch" xml:space="preserve">
     <value>Search by name</value>
@@ -1623,43 +1623,43 @@
     <value>People and faces</value>
   </data>
   <data name="KeyFocus" xml:space="preserve">
-    <value>Go to the bar</value>
+    <value>Focus the bar</value>
   </data>
   <data name="KeyFocusHint" xml:space="preserve">
-    <value>Arrow keys choose a widget, Enter presses it, Esc leaves.</value>
+    <value>Use the arrow keys to select a widget, Enter to activate it and Esc to exit.</value>
   </data>
   <data name="SourcesSomeSilent" xml:space="preserve">
-    <value>Some temperatures cannot be read yet. The row below says what is missing.</value>
+    <value>Some temperatures are unavailable. See below for what is missing.</value>
   </data>
   <data name="SourcesAllWell" xml:space="preserve">
-    <value>Everything this machine can report is being read.</value>
+    <value>All available readings are working.</value>
   </data>
   <data name="DeskOff" xml:space="preserve">
-    <value>Auto: never</value>
+    <value>Never apply automatically</value>
   </data>
   <data name="DeskScreens" xml:space="preserve">
     <value>With {0} screens</value>
   </data>
   <data name="DeskTip" xml:space="preserve">
-    <value>Put this layout on the main screen's bar by itself when this many screens are connected</value>
+    <value>Applies this layout to the main screen’s bar automatically when this many screens are connected</value>
   </data>
   <data name="UndoDesk" xml:space="preserve">
-    <value>layout {0} for {1} screens</value>
+    <value>automatic layout {0} for {1} screens</value>
   </data>
   <data name="UndoPresetDesk" xml:space="preserve">
-    <value>when a layout is used</value>
+    <value>changing automatic layout</value>
   </data>
   <data name="IdentifyRow" xml:space="preserve">
-    <value>Which screen is which</value>
+    <value>Identify screens</value>
   </data>
   <data name="IdentifyRowHint" xml:space="preserve">
-    <value>Shows each screen's number on it for a moment.</value>
+    <value>Shows a number on each screen for a few seconds.</value>
   </data>
   <data name="IdentifyButton" xml:space="preserve">
     <value>Identify</value>
   </data>
   <data name="BarMenuEdit" xml:space="preserve">
-    <value>Edit this bar...</value>
+    <value>Edit bar…</value>
   </data>
   <data name="BarMenuEditDone" xml:space="preserve">
     <value>Finish editing</value>
@@ -1671,7 +1671,7 @@
     <value>This version</value>
   </data>
   <data name="UpdateRowHint" xml:space="preserve">
-    <value>The program contacts nobody until you press the button.</value>
+    <value>Checks for updates only when you select Check.</value>
   </data>
   <data name="UpdateInstall" xml:space="preserve">
     <value>Install {0} and restart</value>
@@ -1680,70 +1680,70 @@
     <value>Check for updates</value>
   </data>
   <data name="UpdateChecking" xml:space="preserve">
-    <value>Looking for a newer version...</value>
+    <value>Checking for updates…</value>
   </data>
   <data name="UpdateFound" xml:space="preserve">
     <value>Version {0} is available. {1}</value>
   </data>
   <data name="UpdateLatest" xml:space="preserve">
-    <value>This is the newest version.</value>
+    <value>You have the latest version.</value>
   </data>
   <data name="UpdateFailed" xml:space="preserve">
-    <value>Could not reach the release page. Nothing was changed.</value>
+    <value>Couldn’t check for updates. No changes were made.</value>
   </data>
   <data name="UpdateDownloading" xml:space="preserve">
-    <value>Downloading and checking the installer...</value>
+    <value>Downloading and verifying the installer…</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
-    <value>The update was not installed: it could not be downloaded or did not pass the signature check.</value>
+    <value>The update was not installed. The download failed or the signature check did not pass.</value>
   </data>
   <data name="DeskOne" xml:space="preserve">
-    <value>Auto: with 1 screen</value>
+    <value>Automatic: 1 screen</value>
   </data>
   <data name="DeskMany" xml:space="preserve">
-    <value>Auto: with {0} screens</value>
+    <value>Automatic: {0} screens</value>
   </data>
   <data name="OfferCpuBoth" xml:space="preserve">
-    <value>Processor - load and temperature</value>
+    <value>CPU load and temperature</value>
   </data>
   <data name="OfferRamBoth" xml:space="preserve">
-    <value>Memory - load and temperature</value>
+    <value>Memory load and temperature</value>
   </data>
   <data name="OfferGpuBoth" xml:space="preserve">
-    <value>Graphics - load and temperature</value>
+    <value>GPU load and temperature</value>
   </data>
   <data name="OfferBoth" xml:space="preserve">
-    <value>Both figures side by side, under one icon.</value>
+    <value>Shows both values side by side under one icon.</value>
   </data>
   <data name="ShortBoth" xml:space="preserve">
     <value>Load + temp</value>
   </data>
   <data name="TempMissingRow" xml:space="preserve">
-    <value>Processor and memory temperature</value>
+    <value>CPU and memory temperature</value>
   </data>
   <data name="TempMissingHint" xml:space="preserve">
-    <value>Not readable yet. It needs a driver and a small service: two steps on the Readings page, and the widgets appear here by themselves.</value>
+    <value>Not available yet. Install the driver and the sensor service on the Sensors page.</value>
   </data>
   <data name="TempMissingButton" xml:space="preserve">
-    <value>Set it up...</value>
+    <value>Set up…</value>
   </data>
   <data name="RecycleEmpty" xml:space="preserve">
     <value>Empty Recycle Bin</value>
   </data>
   <data name="TrayLabel" xml:space="preserve">
-    <value>Show in the notification area</value>
+    <value>Show in notification area</value>
   </data>
   <data name="TrayHint" xml:space="preserve">
-    <value>An icon beside the clock: a click opens the settings, a right click has the menu.</value>
+    <value>Shows an icon near the clock. Click to open settings; right-click for the menu.</value>
   </data>
   <data name="UndoTray" xml:space="preserve">
-    <value>the notification-area icon</value>
+    <value>changing the notification area icon</value>
   </data>
   <data name="GalleryHeading" xml:space="preserve">
     <value>Widgets</value>
   </data>
   <data name="DragToBar" xml:space="preserve">
-    <value>Drop it on a bar</value>
+    <value>Drop on a bar</value>
   </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Search widgets</value>
@@ -1752,7 +1752,7 @@
     <value>Version {0} is ready</value>
   </data>
   <data name="UpdateReadyText" xml:space="preserve">
-    <value>Installing it asks for administrator rights; the bars come back by themselves.</value>
+    <value>Installation requires administrator rights. The bars reopen automatically.</value>
   </data>
   <data name="UpdateReadyButton" xml:space="preserve">
     <value>Install</value>
@@ -1761,34 +1761,34 @@
     <value>Version {0} is downloaded and checked.</value>
   </data>
   <data name="UpdateRowAutoHint" xml:space="preserve">
-    <value>Looks for a newer version once a day.</value>
+    <value>Checks for updates once a day.</value>
   </data>
   <data name="AutoUpdateRow" xml:space="preserve">
-    <value>Update by itself</value>
+    <value>Update automatically</value>
   </data>
   <data name="AutoUpdateHint" xml:space="preserve">
-    <value>Once a day, from GitHub, signature checked. Put in while nobody is at the machine; under Program Files it asks first.</value>
+    <value>Checks GitHub daily and verifies the signature. Installs when you are away; asks first if installed in Program Files.</value>
   </data>
   <data name="UndoAutoUpdate" xml:space="preserve">
-    <value>updating by itself</value>
+    <value>changing automatic updates</value>
   </data>
   <data name="HeatTitle" xml:space="preserve">
     <value>{0} is overheating</value>
   </data>
   <data name="HeatText" xml:space="preserve">
-    <value>{0:0} °C, past the {1:0} °C its maker calls critical.</value>
+    <value>{0:0} °C exceeds the critical temperature of {1:0} °C.</value>
   </data>
   <data name="HeatQuiet" xml:space="preserve">
-    <value>Not today</value>
+    <value>Dismiss for today</value>
   </data>
   <data name="HeatRow" xml:space="preserve">
     <value>Warn about overheating</value>
   </data>
   <data name="HeatRowHint" xml:space="preserve">
-    <value>A Windows notification when a part goes past the temperature its maker calls critical.</value>
+    <value>Shows a Windows notification when a component exceeds its critical temperature.</value>
   </data>
   <data name="UndoHeat" xml:space="preserve">
-    <value>the overheating warning</value>
+    <value>changing the overheating warning</value>
   </data>
   <data name="HistoryAgo" xml:space="preserve">
     <value>{0} min ago</value>
@@ -1800,16 +1800,16 @@
     <value>Lowest {0} · average {1} · highest {2}</value>
   </data>
   <data name="HistoryNothing" xml:space="preserve">
-    <value>Nothing has been read yet.</value>
+    <value>No data yet.</value>
   </data>
   <data name="PartCatalog" xml:space="preserve">
-    <value>Catalogue</value>
+    <value>Catalog</value>
   </data>
   <data name="PartOnBar" xml:space="preserve">
     <value>On the bar</value>
   </data>
   <data name="PartPrograms" xml:space="preserve">
-    <value>Programs</value>
+    <value>Apps</value>
   </data>
   <data name="PartLayouts" xml:space="preserve">
     <value>Layouts</value>
@@ -1827,7 +1827,7 @@
     <value>Bottom</value>
   </data>
   <data name="BarSizeLabel" xml:space="preserve">
-    <value>Size of the bar</value>
+    <value>Bar size</value>
   </data>
   <data name="BarSizeCompact" xml:space="preserve">
     <value>Compact</value>
@@ -1839,40 +1839,40 @@
     <value>Large</value>
   </data>
   <data name="BarSizeHint" xml:space="preserve">
-    <value>Its thickness, the icons and the figures, together.</value>
+    <value>Sets thickness, icon size and number size together.</value>
   </data>
   <data name="BarSizeSideHint" xml:space="preserve">
-    <value>The icons and the figures; a bar down the side has one thickness.</value>
+    <value>Sets icon and number size. Bars on the left or right have a fixed thickness.</value>
   </data>
   <data name="UndoBarSize" xml:space="preserve">
-    <value>the size of the bar</value>
+    <value>changing the bar size</value>
   </data>
   <data name="SensorsStateTitle" xml:space="preserve">
-    <value>Right now</value>
+    <value>Status</value>
   </data>
   <data name="SensorsVerdictWell" xml:space="preserve">
-    <value>Every main reading is available</value>
+    <value>All main readings are available</value>
   </data>
   <data name="SensorsVerdictWellHint" xml:space="preserve">
-    <value>Answering: {0}.</value>
+    <value>Available sources: {0}.</value>
   </data>
   <data name="SensorsVerdictSilent" xml:space="preserve">
-    <value>The temperatures of the processor and the memory are not read yet</value>
+    <value>CPU and memory temperatures are unavailable</value>
   </data>
   <data name="SensorsVerdictSilentHint" xml:space="preserve">
-    <value>They need the PawnIO driver and a small service of this program; the row below sets them up.</value>
+    <value>These need the PawnIO driver and the sensor service. Set them up below.</value>
   </data>
   <data name="SensorsListTitle" xml:space="preserve">
     <value>Readings</value>
   </data>
   <data name="SourcesTitle" xml:space="preserve">
-    <value>Where they come from</value>
-  </data>
-  <data name="SourcesRow" xml:space="preserve">
     <value>Sources</value>
   </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Reading sources</value>
+  </data>
   <data name="SourcesRowHint" xml:space="preserve">
-    <value>{0} of {1} answering: Windows counters, the graphics driver, drives, memory, the processor.</value>
+    <value>{0} of {1} sources available: Windows counters, GPU driver, drives, memory, CPU.</value>
   </data>
   <data name="SourcesShow" xml:space="preserve">
     <value>Show</value>
@@ -1884,7 +1884,7 @@
     <value>{0} readings</value>
   </data>
   <data name="SensorSearch" xml:space="preserve">
-    <value>Find a reading</value>
+    <value>Search readings</value>
   </data>
   <data name="SensorKindAll" xml:space="preserve">
     <value>All</value>
@@ -1896,10 +1896,10 @@
     <value>Load</value>
   </data>
   <data name="AboutLicence" xml:space="preserve">
-    <value>Free software, GPL-3.0-or-later. Parts adapted from Microsoft PowerToys, MIT.</value>
+    <value>Free software (GPL-3.0-or-later). Some code adapted from Microsoft PowerToys (MIT license).</value>
   </data>
   <data name="AboutNews" xml:space="preserve">
-    <value>What is new</value>
+    <value>What’s new</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Last checked: {0}.</value>
@@ -1917,12 +1917,12 @@
     <value>Open</value>
   </data>
   <data name="SavedByItself" xml:space="preserve">
-    <value>Changes are saved as they are made.</value>
+    <value>Changes are saved automatically.</value>
   </data>
   <data name="AboutTitle.Text" xml:space="preserve">
     <value>About</value>
   </data>
   <data name="AboutLead.Text" xml:space="preserve">
-    <value>The version, updates and the program’s own errands.</value>
+    <value>Version, updates and app maintenance.</value>
   </data>
 </root>

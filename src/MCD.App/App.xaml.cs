@@ -881,10 +881,10 @@ public partial class App : Application
                     string.Format(System.Globalization.CultureInfo.CurrentCulture, Loc.Tr("HeatTitle", "{0} is overheating"), "CPU"),
                     string.Format(
                         System.Globalization.CultureInfo.CurrentCulture,
-                        Loc.Tr("HeatText", "{0:0} °C, past the {1:0} °C its maker calls critical."),
+                        Loc.Tr("HeatText", "{0:0} °C exceeds the critical temperature of {1:0} °C."),
                         101.0,
                         100.0),
-                    (Loc.Tr("HeatQuiet", "Not today"), "heat-quiet")));
+                    (Loc.Tr("HeatQuiet", "Dismiss for today"), "heat-quiet")));
 
                 return;
             }
@@ -1019,8 +1019,8 @@ public partial class App : Application
                 (Loc.Tr("BarMenuSettings", "Settings..."), () => ShowSettings()),
                 (
                     _docks is { Visible: false }
-                        ? Loc.Tr("BarsShow", "Show the bars")
-                        : Loc.Tr("BarMenuHideAll", "Hide the bars"),
+                        ? Loc.Tr("BarsShow", "Show bars")
+                        : Loc.Tr("BarMenuHideAll", "Hide bars"),
                     ShowOrHideBars
                 ),
                 (Loc.Tr("BarMenuExit", "Exit"), () => { Shutdown(); Exit(); }),

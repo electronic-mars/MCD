@@ -282,7 +282,7 @@
                             x:Uid="DocksIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="One bar per screen. Changes land on it as you make them."
+                            Text="Each bar belongs to one screen. Changes apply to the screen selected above."
                             TextWrapping="Wrap" />
 
                         <!-- The display switcher, tiled the way Master Audio
@@ -327,7 +327,7 @@
                             x:Uid="WidgetsIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="What is on the bar of the screen chosen under Bars, and what else could be."
+                            Text="Widgets on this screen’s bar, pinned apps and saved layouts."
                             TextWrapping="Wrap" />
 
                         <ContentControl
@@ -368,13 +368,13 @@
                                 VerticalAlignment="Center"
                                 FontSize="24"
                                 FontWeight="SemiBold"
-                                Text="Your programs" />
+                                Text="Pinned apps" />
                         </StackPanel>
                         <TextBlock
                             x:Uid="PinsIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="Programs, folders and addresses pinned to the bar of the screen chosen under Bars."
+                            Text="Apps, folders and web addresses pinned to this screen’s bar."
                             TextWrapping="Wrap" />
 
                         <ContentControl
@@ -412,7 +412,7 @@
                             x:Uid="PresetsIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="Saved arrangements of widgets. Any of them can be put onto the bar chosen under Bars."
+                            Text="Saved widget layouts. Apply any layout to the selected screen’s bar."
                             TextWrapping="Wrap" />
 
                         <ContentControl
@@ -460,7 +460,7 @@
                             x:Uid="AppearanceIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="How the bars are drawn. This applies to every one of them."
+                            Text="Theme, background and colors. Applies to all bars."
                             TextWrapping="Wrap" />
                         <StackPanel x:Name="LookBody" />
                     </StackPanel>
@@ -506,7 +506,7 @@
                             x:Uid="SensorsIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running."
+                            Text="Main readings. Select the pencil to rename a reading."
                             TextWrapping="Wrap" />
 
                         <!-- One line per source: the silent ones are the point,
@@ -655,7 +655,7 @@
                             x:Uid="GeneralIntro"
                             Margin="0,8,0,0"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="Keys, language, startup and copies - the whole program, no one bar."
+                            Text="Shortcuts, language, startup and backup. These apply to the whole app."
                             TextWrapping="Wrap" />
                         <StackPanel x:Name="GeneralBody" />
                     </StackPanel>
@@ -687,7 +687,7 @@
                             x:Uid="AboutLead"
                             Margin="0,8,0,10"
                             Foreground="{ThemeResource BraunTx2}"
-                            Text="The version, updates and the program's own errands."
+                            Text="Version, updates and app maintenance."
                             TextWrapping="Wrap" />
                         <StackPanel x:Name="AboutBody" />
                     </StackPanel>

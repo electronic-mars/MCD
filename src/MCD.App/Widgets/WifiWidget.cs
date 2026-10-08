@@ -161,7 +161,7 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
         Name = room ? Shorten(_state.Name) : string.Empty;
 
         Detail = _state.Bars < 0 && _state.Name.Length > 0
-            ? _state.Name + " · " + Loc.Tr("WifiBarsUnknown", "signal not reported")
+            ? _state.Name + " · " + Loc.Tr("WifiBarsUnknown", "Signal strength unavailable")
             : _state.Name.Length > 0
             ? _state.Name + (_state.Bars >= 0
                 ? " · " + string.Format(
@@ -169,7 +169,7 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
                     Loc.Tr("WifiBars", "signal {0} of 5"),
                     _state.Bars)
                 : string.Empty)
-            : Loc.Tr("WifiConnected", "On a wireless network");
+            : Loc.Tr("WifiConnected", "Connected to Wi-Fi");
 
         // The physical side, when the WLAN service reports it: which band the
         // link is on, what standard it speaks, and what it negotiated. The
@@ -239,9 +239,9 @@ public sealed partial class WifiWidget(WidgetContext context, WidgetConfig entry
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed) =>
         Mcd.App.Settings.Braun.Field(
-            Loc.Tr("WifiNameLabel", "Write the network's name"),
+            Loc.Tr("WifiNameLabel", "Show network name"),
             Mcd.App.Settings.Braun.Switch(
                 WithName,
                 on => changed(WidgetOptions.Merge(Options, ("name", JsonValue.Create(on ? 1 : 0))))),
-            Loc.Tr("WifiNameHint", "Useful where two networks are within reach and both work."));
+            Loc.Tr("WifiNameHint", "Helps tell apart networks in range."));
 }

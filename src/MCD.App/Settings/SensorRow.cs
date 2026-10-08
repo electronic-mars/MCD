@@ -68,7 +68,7 @@ public sealed partial class SensorRow : ObservableObject
 
     /// <summary>What a double-click on this row does.</summary>
     public string RenameHint =>
-        Loc.Tr("RenameTip", "Double-click to give this reading a name of your own");
+        Loc.Tr("RenameTip", "Double-click to rename");
 
     /// <summary>
     /// What this reading means, in ordinary words. The name above it is the

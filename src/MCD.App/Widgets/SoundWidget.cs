@@ -262,17 +262,17 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         }
 
         string state = muted.Value
-            ? Loc.Tr("SoundMutedTip", "Silenced")
+            ? Loc.Tr("SoundMutedTip", "Muted")
             : string.Format(
                 System.Globalization.CultureInfo.CurrentCulture,
-                Loc.Tr("SoundLevelTip", "Volume {0} %"),
+                Loc.Tr("SoundLevelTip", "Volume: {0}%"),
                 Math.Round(loud * 100));
 
-        Detail = state + " · " + Loc.Tr("SoundSliderTip", "a press opens the slider, the wheel turns it");
+        Detail = state + " · " + Loc.Tr("SoundSliderTip", "Click for the volume slider · Scroll to change volume");
 
         MuteTip = muted.Value
-            ? Loc.Tr("SoundPressUnmuteTip", "a press lets it speak")
-            : Loc.Tr("SoundPressMuteTip", "a press silences it");
+            ? Loc.Tr("SoundPressUnmuteTip", "Click to unmute")
+            : Loc.Tr("SoundPressMuteTip", "Click to mute");
     }
 
     /// <summary>
@@ -321,9 +321,9 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed) =>
         Mcd.App.Settings.Braun.Field(
-            Loc.Tr("SoundLevelLabel", "Write how loud it is"),
+            Loc.Tr("SoundLevelLabel", "Show volume level"),
             Mcd.App.Settings.Braun.Switch(
                 WithLevel,
                 on => changed(WidgetOptions.Merge(Options, ("level", JsonValue.Create(on ? 1 : 0))))),
-            Loc.Tr("SoundLevelHint", "The speaker alone already says whether there is any."));
+            Loc.Tr("SoundLevelHint", "The icon already shows whether sound is muted."));
 }

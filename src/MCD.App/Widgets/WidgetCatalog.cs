@@ -83,98 +83,98 @@ public static class WidgetCatalog
         new(
             GaugeWidget.Type,
             Loc.Tr("WidgetGaugeName", "Reading"),
-            Loc.Tr("WidgetGaugeDescription", "One figure: how busy a part of the machine is."),
+            Loc.Tr("WidgetGaugeDescription", "Shows the load of one component as a number."),
             "Activity",
             (context, entry) => new GaugeWidget(context, entry)),
 
         new(
             TempWidget.Type,
             Loc.Tr("WidgetTemperatureName", "Temperature"),
-            Loc.Tr("WidgetTemperatureDescription", "Temperatures of the parts that report one."),
+            Loc.Tr("WidgetTemperatureDescription", "Shows the temperature of components that report one."),
             "Temperature",
             (context, entry) => new TempWidget(context, entry)),
 
         new(
             IconWidget.Type,
-            Loc.Tr("WidgetIconName", "Pinned icon"),
-            Loc.Tr("WidgetIconDescription", "A program, folder or page, one press away."),
+            Loc.Tr("WidgetIconName", "Pinned app"),
+            Loc.Tr("WidgetIconDescription", "Opens an app, folder or web page."),
             "Rocket",
             (context, entry) => new IconWidget(context, entry)),
 
         new(
             SoundWidget.Type,
             Loc.Tr("WidgetSoundName", "Sound"),
-            Loc.Tr("WidgetSoundDescription", "The speaker opens a volume slider and the wheel turns it; the figure silences the machine."),
+            Loc.Tr("WidgetSoundDescription", "Click the icon for a volume slider, scroll to change volume, click the number to mute."),
             "Speaker",
             (context, entry) => new SoundWidget(context, entry)),
 
         new(
             MicWidget.Type,
             Loc.Tr("WidgetMicName", "Microphone"),
-            Loc.Tr("WidgetMicDescription", "Switches the microphone off for the whole machine, and goes red while it is off."),
+            Loc.Tr("WidgetMicDescription", "Mutes the microphone system-wide. Turns red while muted."),
             "Mic",
             (context, entry) => new MicWidget(context, entry)),
 
         new(
             AwakeWidget.Type,
             Loc.Tr("WidgetAwakeName", "Keep awake"),
-            Loc.Tr("WidgetAwakeDescription", "A full cup keeps the machine from sleeping and chat programs from turning amber."),
+            Loc.Tr("WidgetAwakeDescription", "Keeps the computer awake and chat apps from showing you as away."),
             "CoffeeOn",
             (context, entry) => new AwakeWidget(context, entry)),
 
         new(
             LayoutWidget.Type,
             Loc.Tr("WidgetLayoutName", "Keyboard layout"),
-            Loc.Tr("WidgetLayoutDescription", "The language the keyboard types in, and whether Caps Lock is on."),
+            Loc.Tr("WidgetLayoutDescription", "Shows the keyboard layout language and the Caps Lock state."),
             "Keyboard",
             (context, entry) => new LayoutWidget(context, entry)),
 
         new(
             SwitcherWidget.Type,
             Loc.Tr("WidgetSwitcherName", "Audio Switcher"),
-            Loc.Tr("WidgetSwitcherDescription", "Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device."),
+            Loc.Tr("WidgetSwitcherDescription", "Shows Master Audio Switcher on the bar. Click to switch sound output to the next device."),
             "Headset",
             (context, entry) => new SwitcherWidget(context, entry)),
 
         new(
             BatteryWidget.Type,
             Loc.Tr("WidgetBatteryName", "Battery"),
-            Loc.Tr("WidgetBatteryDescription", "How much charge is left. Only on a machine that runs on charge."),
+            Loc.Tr("WidgetBatteryDescription", "Shows battery charge. Appears only on devices with a battery."),
             "Battery",
             (context, entry) => new BatteryWidget(context, entry)),
 
         new(
             WifiWidget.Type,
             Loc.Tr("WidgetWifiName", "Wi-Fi"),
-            Loc.Tr("WidgetWifiDescription", "How good the signal is. Only while the machine is on a wireless network."),
+            Loc.Tr("WidgetWifiDescription", "Shows Wi-Fi signal strength. Appears only when connected to Wi-Fi."),
             "WifiHigh",
             (context, entry) => new WifiWidget(context, entry)),
 
         new(
             SettingsWidget.Type,
             Loc.Tr("WidgetSettingsName", "Settings"),
-            Loc.Tr("WidgetSettingsDescription", "Opens this window. The way in, for anybody who has not found the right click."),
+            Loc.Tr("WidgetSettingsDescription", "Opens settings."),
             "Gear",
             (context, entry) => new SettingsWidget(context, entry)),
 
         new(
             ClockWidget.Type,
             Loc.Tr("WidgetClockName", "Clock"),
-            Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
+            Loc.Tr("WidgetClockDescription", "Shows the time, and the date on a full-size bar."),
             "Clock",
             (context, entry) => new ClockWidget(context, entry)),
 
         new(
             MediaWidget.Type,
             Loc.Tr("WidgetMediaName", "Media"),
-            Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
+            Loc.Tr("WidgetMediaDescription", "Shows the current media with playback buttons. Hidden when nothing is playing."),
             "Music",
             (context, entry) => new MediaWidget(context, entry)),
 
         new(
             DeviceWidget.Type,
-            Loc.Tr("WidgetDeviceName", "Device"),
-            Loc.Tr("WidgetDeviceDescription", "How much charge a wireless mouse, headset or keyboard has left."),
+            Loc.Tr("WidgetDeviceName", "Device battery"),
+            Loc.Tr("WidgetDeviceDescription", "Shows the battery charge of a wireless mouse, headset or keyboard."),
             "Bluetooth",
             (context, entry) => new DeviceWidget(context, entry)),
     ];
@@ -192,27 +192,27 @@ public static class WidgetCatalog
     /// <summary>The gallery's headings, in the order they are shown, with their names.</summary>
     public static IReadOnlyList<(string Id, string Name)> Categories =>
     [
-        ("cpu", Loc.Tr("CatProcessor", "Processor")),
+        ("cpu", Loc.Tr("CatProcessor", "CPU")),
         ("memory", Loc.Tr("CatMemory", "Memory")),
-        ("gpu", Loc.Tr("CatGraphics", "Graphics")),
+        ("gpu", Loc.Tr("CatGraphics", "GPU")),
         ("storage", Loc.Tr("CatStorage", "Drives")),
         ("network", Loc.Tr("CatNetwork", "Network")),
         ("mouse", Loc.Tr("CatMice", "Mice")),
         ("headset", Loc.Tr("CatHeadsets", "Headsets")),
         ("keyboard", Loc.Tr("CatKeyboards", "Keyboards")),
         ("device", Loc.Tr("CatDevices", "Other devices")),
-        ("apps", Loc.Tr("CatPrograms", "Programs")),
-        ("other", Loc.Tr("CatOther", "Everything else")),
+        ("apps", Loc.Tr("CatPrograms", "Apps")),
+        ("other", Loc.Tr("CatOther", "Other")),
     ];
 
     /// <summary>The heading a reading belongs under, and what to call it there.</summary>
     private static (string Category, string Name, string Short) Placed(string readingId) => readingId switch
     {
-        "cpu" => ("cpu", Loc.Tr("OfferCpuLoad", "Processor - load"), Loc.Tr("ShortLoad", "Load")),
-        "ram" => ("memory", Loc.Tr("OfferRamLoad", "Memory - load"), Loc.Tr("ShortLoad", "Load")),
-        "gpu" => ("gpu", Loc.Tr("OfferGpuLoad", "Graphics - load"), Loc.Tr("ShortLoad", "Load")),
-        "up" => ("network", Loc.Tr("OfferNetUp", "Network - sending"), Loc.Tr("LabelSend", "Send")),
-        "down" => ("network", Loc.Tr("OfferNetDown", "Network - receiving"), Loc.Tr("LabelReceive", "Receive")),
+        "cpu" => ("cpu", Loc.Tr("OfferCpuLoad", "CPU load"), Loc.Tr("ShortLoad", "Load")),
+        "ram" => ("memory", Loc.Tr("OfferRamLoad", "Memory load"), Loc.Tr("ShortLoad", "Load")),
+        "gpu" => ("gpu", Loc.Tr("OfferGpuLoad", "GPU load"), Loc.Tr("ShortLoad", "Load")),
+        "up" => ("network", Loc.Tr("OfferNetUp", "Network send rate"), Loc.Tr("LabelSend", "Send")),
+        "down" => ("network", Loc.Tr("OfferNetDown", "Network receive rate"), Loc.Tr("LabelReceive", "Receive")),
         _ => ("other", readingId, readingId),
     };
 
@@ -234,7 +234,7 @@ public static class WidgetCatalog
 
             yield return new WidgetOffer(
                 name,
-                Loc.Tr("OfferGauge", "A live figure on the bar."),
+                Loc.Tr("OfferGauge", "Shows a live value."),
                 reading.Icon,
                 () => DockContents.Gauge(reading.Id),
                 entry => entry.TypeId == GaugeWidget.Type
@@ -263,11 +263,11 @@ public static class WidgetCatalog
                 yield return new WidgetOffer(
                     reading.Id switch
                     {
-                        "cpu" => Loc.Tr("OfferCpuBoth", "Processor - load and temperature"),
-                        "ram" => Loc.Tr("OfferRamBoth", "Memory - load and temperature"),
-                        _ => Loc.Tr("OfferGpuBoth", "Graphics - load and temperature"),
+                        "cpu" => Loc.Tr("OfferCpuBoth", "CPU load and temperature"),
+                        "ram" => Loc.Tr("OfferRamBoth", "Memory load and temperature"),
+                        _ => Loc.Tr("OfferGpuBoth", "GPU load and temperature"),
                     },
-                    Loc.Tr("OfferBoth", "Both figures side by side, under one icon."),
+                    Loc.Tr("OfferBoth", "Shows both values side by side under one icon."),
                     reading.Icon,
                     () => DockContents.Gauge(reading.Id) with
                     {
@@ -311,7 +311,7 @@ public static class WidgetCatalog
 
             yield return new WidgetOffer(
                 twins ? $"{name} — {detail}" : name,
-                detail.Length > 0 ? detail : Loc.Tr("OfferSensor", "This part's temperature."),
+                detail.Length > 0 ? detail : Loc.Tr("OfferSensor", "Temperature of this component."),
                 TempWidget.IconFor(sensor.Group),
                 () => WidgetConfig.New(TempWidget.Type) with
                 {
@@ -340,9 +340,9 @@ public static class WidgetCatalog
             yield return new WidgetOffer(
                 string.Format(
                     System.Globalization.CultureInfo.CurrentCulture,
-                    Loc.Tr("OfferDeviceCharge", "{0} - charge"),
+                    Loc.Tr("OfferDeviceCharge", "{0} battery"),
                     device.Hardware),
-                Loc.Tr("OfferDevice", "How much charge this device has left."),
+                Loc.Tr("OfferDevice", "Battery charge of this device."),
                 DeviceWidget.IconFor(device.Key),
                 () => WidgetConfig.New(DeviceWidget.Type) with
                 {
@@ -357,7 +357,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetSoundName", "Sound"),
-            Loc.Tr("WidgetSoundDescription", "The speaker opens a volume slider and the wheel turns it; the figure silences the machine."),
+            Loc.Tr("WidgetSoundDescription", "Click the icon for a volume slider, scroll to change volume, click the number to mute."),
             "Speaker",
             () => WidgetConfig.New(SoundWidget.Type),
             entry => entry.TypeId == SoundWidget.Type,
@@ -365,7 +365,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetMicName", "Microphone"),
-            Loc.Tr("WidgetMicDescription", "Switches the microphone off for the whole machine, and goes red while it is off."),
+            Loc.Tr("WidgetMicDescription", "Mutes the microphone system-wide. Turns red while muted."),
             "Mic",
             () => WidgetConfig.New(MicWidget.Type),
             entry => entry.TypeId == MicWidget.Type,
@@ -373,7 +373,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetAwakeName", "Keep awake"),
-            Loc.Tr("WidgetAwakeDescription", "A full cup keeps the machine from sleeping and chat programs from turning amber."),
+            Loc.Tr("WidgetAwakeDescription", "Keeps the computer awake and chat apps from showing you as away."),
             "CoffeeOn",
             () => WidgetConfig.New(AwakeWidget.Type),
             entry => entry.TypeId == AwakeWidget.Type,
@@ -381,7 +381,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetLayoutName", "Keyboard layout"),
-            Loc.Tr("WidgetLayoutDescription", "The language the keyboard types in, and whether Caps Lock is on."),
+            Loc.Tr("WidgetLayoutDescription", "Shows the keyboard layout language and the Caps Lock state."),
             "Keyboard",
             () => WidgetConfig.New(LayoutWidget.Type),
             entry => entry.TypeId == LayoutWidget.Type,
@@ -393,7 +393,7 @@ public static class WidgetCatalog
         {
             yield return new WidgetOffer(
                 program.Name,
-                Loc.Tr("OfferProgram", "Starts it from the bar."),
+                Loc.Tr("OfferProgram", "Starts the app from the bar."),
                 program.Icon,
                 program.Pin,
                 program.Is,
@@ -408,7 +408,7 @@ public static class WidgetCatalog
         {
             yield return new WidgetOffer(
                 Loc.Tr("WidgetSwitcherName", "Audio Switcher"),
-                Loc.Tr("WidgetSwitcherDescription", "Master Audio Switcher on the bar instead of in the tray: a press moves the sound to the next device."),
+                Loc.Tr("WidgetSwitcherDescription", "Shows Master Audio Switcher on the bar. Click to switch sound output to the next device."),
                 "Headset",
                 () => WidgetConfig.New(SwitcherWidget.Type),
                 entry => entry.TypeId == SwitcherWidget.Type,
@@ -424,7 +424,7 @@ public static class WidgetCatalog
         {
             yield return new WidgetOffer(
                 Loc.Tr("WidgetBatteryName", "Battery"),
-                Loc.Tr("WidgetBatteryDescription", "How much charge is left. Only on a machine that runs on charge."),
+                Loc.Tr("WidgetBatteryDescription", "Shows battery charge. Appears only on devices with a battery."),
                 "Battery",
                 () => WidgetConfig.New(BatteryWidget.Type),
                 entry => entry.TypeId == BatteryWidget.Type,
@@ -435,7 +435,7 @@ public static class WidgetCatalog
         {
             yield return new WidgetOffer(
                 Loc.Tr("WidgetWifiName", "Wi-Fi"),
-                Loc.Tr("WidgetWifiDescription", "How good the signal is. Only while the machine is on a wireless network."),
+                Loc.Tr("WidgetWifiDescription", "Shows Wi-Fi signal strength. Appears only when connected to Wi-Fi."),
                 "WifiHigh",
                 () => WidgetConfig.New(WifiWidget.Type),
                 entry => entry.TypeId == WifiWidget.Type,
@@ -444,7 +444,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetSettingsName", "Settings"),
-            Loc.Tr("WidgetSettingsDescription", "Opens this window. The way in, for anybody who has not found the right click."),
+            Loc.Tr("WidgetSettingsDescription", "Opens settings."),
             "Gear",
             () => WidgetConfig.New(SettingsWidget.Type),
             entry => entry.TypeId == SettingsWidget.Type,
@@ -452,7 +452,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetClockName", "Clock"),
-            Loc.Tr("WidgetClockDescription", "The time, and the date under it on a full-size bar."),
+            Loc.Tr("WidgetClockDescription", "Shows the time, and the date on a full-size bar."),
             "Clock",
             () => WidgetConfig.New(ClockWidget.Type),
             entry => entry.TypeId == ClockWidget.Type,
@@ -460,7 +460,7 @@ public static class WidgetCatalog
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetMediaName", "Media"),
-            Loc.Tr("WidgetMediaDescription", "Whatever is playing, with buttons for it. Hidden while nothing is."),
+            Loc.Tr("WidgetMediaDescription", "Shows the current media with playback buttons. Hidden when nothing is playing."),
             "Music",
             () => WidgetConfig.New(MediaWidget.Type),
             entry => entry.TypeId == MediaWidget.Type,

@@ -523,7 +523,7 @@ public sealed class DockWindowManager : IDisposable
                 WriteReason.UserAction,
                 string.Format(
                     System.Globalization.CultureInfo.CurrentCulture,
-                    Loc.Tr("UndoDesk", "layout {0} for {1} screens"),
+                    Loc.Tr("UndoDesk", "automatic layout {0} for {1} screens"),
                     preset.Name,
                     count),
                 stableId);

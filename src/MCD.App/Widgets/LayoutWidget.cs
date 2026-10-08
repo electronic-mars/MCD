@@ -72,7 +72,7 @@ public sealed partial class LayoutWidget(WidgetContext context, WidgetConfig ent
         string state = layout.Name + (caps ? " · " + Loc.Tr("LayoutCapsOn", "Caps Lock is on") : string.Empty);
 
         Detail = KeyboardLayouts.Installed() > 1
-            ? state + " · " + Loc.Tr("LayoutPressTip", "a press switches the layout")
+            ? state + " · " + Loc.Tr("LayoutPressTip", "Click to switch layout")
             : state;
     }
 

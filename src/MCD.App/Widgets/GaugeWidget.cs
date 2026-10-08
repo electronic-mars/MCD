@@ -417,7 +417,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     private FrameworkElement Which(Action<JsonElement?> changed) =>
         Mcd.App.Settings.Braun.Field(
-            Loc.Tr("GaugeWhich", "Which reading"),
+            Loc.Tr("GaugeWhich", "Reading"),
             Mcd.App.Settings.Braun.Choice(
                 [.. Known.Select(r => r.Label)],
                 Array.FindIndex(Known, r => r.Id == Reading.Id),

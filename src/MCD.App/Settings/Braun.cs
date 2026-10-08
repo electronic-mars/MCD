@@ -563,7 +563,7 @@ public static class Braun
 
             ToolTipService.SetToolTip(
                 lamp,
-                items[i].On ? Loc.Tr("LampOn", "the bar is on") : Loc.Tr("LampOff", "the bar is off"));
+                items[i].On ? Loc.Tr("LampOn", "Bar on") : Loc.Tr("LampOff", "Bar off"));
 
             line.Children.Add(lamp);
 

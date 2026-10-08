@@ -33,13 +33,13 @@
     <value>Панели</value>
   </data>
   <data name="DocksIntro.Text" xml:space="preserve">
-    <value>У каждого экрана своя панель. Здесь — панель выбранного выше экрана; изменения попадают на неё сразу.</value>
+    <value>У каждого экрана своя панель. Изменения применяются к панели выбранного экрана сразу.</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
     <value>Показывать панель</value>
   </data>
   <data name="EdgeLabel" xml:space="preserve">
-    <value>Край</value>
+    <value>Край экрана</value>
   </data>
   <data name="SizeLabel" xml:space="preserve">
     <value>Толщина</value>
@@ -50,19 +50,19 @@
     <value>Оформление</value>
   </data>
   <data name="AppearanceIntro.Text" xml:space="preserve">
-    <value>Как раскрашены панели. Применяется ко всем.</value>
+    <value>Внешний вид панелей. Применяется ко всем панелям.</value>
   </data>
   <data name="BackgroundLabel" xml:space="preserve">
     <value>Фон</value>
   </data>
   <data name="BackgroundHint" xml:space="preserve">
-    <value>Полупрозрачный фон пропускает рабочий стол; сплошной легче читается на пёстрых обоях и чуть дешевле в отрисовке.</value>
+    <value>Сплошной фон лучше читается на пёстрых обоях и немного снижает нагрузку.</value>
   </data>
   <data name="AccentLabel" xml:space="preserve">
     <value>Цвет показаний</value>
   </data>
   <data name="AccentHint" xml:space="preserve">
-    <value>Акцентный цвет берётся из параметров Windows. Показания выше порога предупреждения в любом случае сохраняют предупреждающий цвет.</value>
+    <value>Акцентный цвет берётся из параметров Windows. Превышение порога выделяется отдельным цветом.</value>
   </data>
   <!-- Страница «Значки» -->
   <!-- Страница «Датчики» -->
@@ -70,7 +70,7 @@
     <value>Датчики</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>Главные показатели без технического шума. Карандаш переименовывает.</value>
+    <value>Основные показания. Значок карандаша — переименовать.</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Показания сейчас</value>
@@ -95,10 +95,10 @@
   <!-- Кнопки медиавиджета на панели -->
   <!-- Окно настроек, строки из кода -->
   <data name="DockNoScreen" xml:space="preserve">
-    <value>Ни один экран ещё не настроен.</value>
+    <value>Нет настроенных экранов.</value>
   </data>
   <data name="DockNotAttached" xml:space="preserve">
-    <value>не подключён · раскладка сохранена и вернётся вместе с экраном</value>
+    <value>не подключён · настройки панели сохранены</value>
   </data>
   <data name="Undo" xml:space="preserve">
     <value>Отменить</value>
@@ -122,7 +122,7 @@
     <value>Версия {0}</value>
   </data>
   <data name="SensorsNoneYet" xml:space="preserve">
-    <value>Пока ничего не отвечает.</value>
+    <value>Нет данных от датчиков.</value>
   </data>
   <data name="SensorsSummary" xml:space="preserve">
     <value>Показаний: {0}. Источники: {1}.</value>
@@ -131,34 +131,34 @@
   <!-- Контекстное меню панели -->
   <!-- Каталог виджетов: названия и описания -->
   <data name="WidgetGaugeName" xml:space="preserve">
-    <value>Показатель</value>
+    <value>Показание</value>
   </data>
   <data name="WidgetGaugeDescription" xml:space="preserve">
-    <value>Одна цифра: насколько занята часть машины.</value>
+    <value>Одно значение: загрузка компонента компьютера.</value>
   </data>
   <data name="WidgetIconName" xml:space="preserve">
     <value>Закреплённый значок</value>
   </data>
   <data name="WidgetIconDescription" xml:space="preserve">
-    <value>Программа, папка или страница — в одном нажатии.</value>
+    <value>Программа, папка или страница одним щелчком.</value>
   </data>
   <data name="OfferGauge" xml:space="preserve">
-    <value>Живая цифра на панели.</value>
+    <value>Текущее значение на панели.</value>
   </data>
   <data name="OfferHottest" xml:space="preserve">
-    <value>Температура — самая горячая</value>
+    <value>Температура — максимальная</value>
   </data>
   <data name="OfferHottestDescription" xml:space="preserve">
-    <value>Та часть, что сейчас ближе всех к своему пределу.</value>
+    <value>Компонент, температура которого ближе всего к предельной.</value>
   </data>
   <data name="OfferSensor" xml:space="preserve">
-    <value>Температура этой части.</value>
+    <value>Температура этого компонента.</value>
   </data>
   <data name="GaugeWhich" xml:space="preserve">
-    <value>Какой показатель</value>
+    <value>Показание</value>
   </data>
   <data name="TempWhich" xml:space="preserve">
-    <value>Какой датчик</value>
+    <value>Датчик</value>
   </data>
   <data name="PinIconHeader" xml:space="preserve">
     <value>Значок</value>
@@ -167,13 +167,13 @@
     <value>Медиа</value>
   </data>
   <data name="WidgetMediaDescription" xml:space="preserve">
-    <value>Что сейчас играет, с кнопками управления. Скрыт, пока ничего не играет.</value>
+    <value>Воспроизводимое сейчас, с кнопками управления. Скрыт, если ничего не воспроизводится.</value>
   </data>
   <data name="WidgetTemperatureName" xml:space="preserve">
     <value>Температура</value>
   </data>
   <data name="WidgetTemperatureDescription" xml:space="preserve">
-    <value>Температуры компонентов, которые её сообщают.</value>
+    <value>Температура компонентов, у которых есть датчик.</value>
   </data>
   <!-- Подписи показаний, на панели и в настройках -->
   <data name="LabelCpu" xml:space="preserve">
@@ -196,20 +196,20 @@
   </data>
   <!-- Виджет температуры -->
   <data name="TempHottestSummary" xml:space="preserve">
-    <value>Самое горячее показание</value>
+    <value>Максимальная температура</value>
   </data>
   <!-- Медиавиджет -->
   <data name="MediaPlayPause" xml:space="preserve">
     <value>Воспроизведение или пауза</value>
   </data>
   <data name="MediaSummaryShown" xml:space="preserve">
-    <value>Кнопки, рядом с ними — название трека</value>
+    <value>Кнопки и название трека</value>
   </data>
   <data name="MediaSummaryTooltip" xml:space="preserve">
     <value>Кнопки; название трека — в подсказке</value>
   </data>
   <data name="MediaTitleHeader" xml:space="preserve">
-    <value>Писать название трека на панели</value>
+    <value>Показывать название трека на панели</value>
   </data>
   <!-- Разделитель -->
   <!-- Виджет нагрузки -->
@@ -225,22 +225,22 @@
     <value>Как в Windows</value>
   </data>
   <data name="TempLimitAuto" xml:space="preserve">
-    <value>как у самой детали</value>
+    <value>по данным устройства</value>
   </data>
   <data name="TempWarnAt" xml:space="preserve">
-    <value>Предупреждение при, °C</value>
+    <value>Порог предупреждения, °C</value>
   </data>
   <data name="TempCritAt" xml:space="preserve">
-    <value>Критично при, °C</value>
+    <value>Критический порог, °C</value>
   </data>
   <data name="PickColour" xml:space="preserve">
     <value>Выбрать цвет</value>
   </data>
   <data name="PickPicture" xml:space="preserve">
-    <value>Выбрать картинку</value>
+    <value>Выбрать изображение</value>
   </data>
   <data name="NoPictureYet" xml:space="preserve">
-    <value>Картинка пока не выбрана</value>
+    <value>Изображение не выбрано</value>
   </data>
   <data name="TopmostLabel" xml:space="preserve">
     <value>Поверх других окон</value>
@@ -255,7 +255,7 @@
     <value>необязательно</value>
   </data>
   <data name="PinBrowse" xml:space="preserve">
-    <value>Обзор...</value>
+    <value>Обзор…</value>
   </data>
   <data name="PinTitle" xml:space="preserve">
     <value>Закрепить на панели</value>
@@ -267,22 +267,22 @@
     <value>Отмена</value>
   </data>
   <data name="DisplayNumber" xml:space="preserve">
-    <value>Дисплей {0}</value>
+    <value>Экран {0}</value>
   </data>
   <data name="SeeThroughHeader" xml:space="preserve">
-    <value>Насколько прозрачно</value>
+    <value>Прозрачность</value>
   </data>
   <data name="RestartNowText" xml:space="preserve">
     <value>Перезапустить сейчас</value>
   </data>
   <data name="MediaPriorityHeader" xml:space="preserve">
-    <value>Каким плеером управляют кнопки</value>
+    <value>Плеер для кнопок управления</value>
   </data>
   <data name="MediaPriorityNone" xml:space="preserve">
-    <value>Автоматически: кто сейчас играет</value>
+    <value>Автоматически: активный плеер</value>
   </data>
   <data name="MediaSummaryNominated" xml:space="preserve">
-    <value>Кнопки всегда управляют: {0}</value>
+    <value>Кнопки управляют плеером: {0}</value>
   </data>
   <data name="PinDropCaption" xml:space="preserve">
     <value>Закрепить на панели</value>
@@ -294,7 +294,7 @@
     <value>Следующий</value>
   </data>
   <data name="GalleryTitle" xml:space="preserve">
-    <value>Что на панели</value>
+    <value>На панели</value>
   </data>
   <data name="PinProgramButton" xml:space="preserve">
     <value>Закрепить программу…</value>
@@ -309,10 +309,10 @@
     <value>Поведение</value>
   </data>
   <data name="ThicknessNote" xml:space="preserve">
-    <value>У панели вдоль бока экрана толщина одна.</value>
+    <value>У боковой панели одна толщина.</value>
   </data>
   <data name="HideNote" xml:space="preserve">
-    <value>У этого края уже скрывается панель задач Windows, поэтому эта панель остаётся видимой.</value>
+    <value>На этом краю уже скрывается панель задач, поэтому эта панель всегда видна.</value>
   </data>
   <data name="NothingToSetUp" xml:space="preserve">
     <value>У этого виджета нет настроек.</value>
@@ -327,7 +327,7 @@
     <value>край</value>
   </data>
   <data name="UndoThickness" xml:space="preserve">
-    <value>толщину</value>
+    <value>толщина</value>
   </data>
   <data name="UndoTopmost" xml:space="preserve">
     <value>поверх окон</value>
@@ -360,13 +360,13 @@
     <value>Цвет</value>
   </data>
   <data name="SegBackdropImage" xml:space="preserve">
-    <value>Картинка</value>
+    <value>Изображение</value>
   </data>
   <data name="SegBackdropBraun" xml:space="preserve">
-    <value>Прибор</value>
+    <value>Приборный</value>
   </data>
   <data name="SegAccentNeutral" xml:space="preserve">
-    <value>Обычный текст</value>
+    <value>Нейтральный</value>
   </data>
   <data name="SegAccentWindows" xml:space="preserve">
     <value>Акцент Windows</value>
@@ -390,52 +390,52 @@
     <value>Компактная</value>
   </data>
   <data name="SenseCpuTemp" xml:space="preserve">
-    <value>Насколько горяч процессор.</value>
+    <value>Температура процессора.</value>
   </data>
   <data name="SenseGpuTemp" xml:space="preserve">
-    <value>Насколько горяча видеокарта.</value>
+    <value>Температура видеокарты.</value>
   </data>
   <data name="SenseDiskTemp" xml:space="preserve">
-    <value>Насколько горяч этот накопитель.</value>
+    <value>Температура накопителя.</value>
   </data>
   <data name="SenseRamTemp" xml:space="preserve">
-    <value>Насколько горяча память — самая тёплая из планок.</value>
+    <value>Температура памяти (самого горячего модуля).</value>
   </data>
   <data name="SenseBoardTemp" xml:space="preserve">
-    <value>Насколько горяча материнская плата.</value>
+    <value>Температура материнской платы.</value>
   </data>
   <data name="SenseTemp" xml:space="preserve">
-    <value>Температура, которую сообщает эта машина.</value>
+    <value>Температура, о которой сообщает компьютер.</value>
   </data>
   <data name="SenseLoad" xml:space="preserve">
-    <value>Насколько занят — в долях от возможного.</value>
+    <value>Загрузка в процентах от максимальной.</value>
   </data>
   <data name="SenseBytes" xml:space="preserve">
-    <value>Сколько данных передаётся прямо сейчас.</value>
+    <value>Скорость передачи данных.</value>
   </data>
   <data name="ThemeHint" xml:space="preserve">
-    <value>Панели и это окно перекрашиваются вместе.</value>
+    <value>Применяется к панелям и к этому окну.</value>
   </data>
   <data name="ThemeLabel" xml:space="preserve">
     <value>Тема</value>
   </data>
   <data name="SenseCpuLoad" xml:space="preserve">
-    <value>Насколько занят процессор.</value>
+    <value>Загрузка процессора.</value>
   </data>
   <data name="SenseRamLoad" xml:space="preserve">
-    <value>Сколько памяти занято.</value>
+    <value>Доля используемой памяти.</value>
   </data>
   <data name="SenseUp" xml:space="preserve">
-    <value>Что машина отправляет.</value>
+    <value>Скорость отправки данных.</value>
   </data>
   <data name="SenseDown" xml:space="preserve">
-    <value>Что машина получает.</value>
+    <value>Скорость получения данных.</value>
   </data>
   <data name="SenseGpuLoad" xml:space="preserve">
-    <value>Насколько занята видеокарта.</value>
+    <value>Загрузка видеокарты.</value>
   </data>
   <data name="SenseAnyTemp" xml:space="preserve">
-    <value>Все виджеты температуры, за какой бы частью они ни следили.</value>
+    <value>Все виджеты температуры независимо от компонента.</value>
   </data>
   <data name="PartCpu" xml:space="preserve">
     <value>Процессор</value>
@@ -456,13 +456,13 @@
     <value>Устройство целиком</value>
   </data>
   <data name="RenameHeader" xml:space="preserve">
-    <value>Как называть это показание</value>
+    <value>Название показания</value>
   </data>
   <data name="RenameSave" xml:space="preserve">
     <value>Переименовать</value>
   </data>
   <data name="RenameReset" xml:space="preserve">
-    <value>Своё имя</value>
+    <value>Сбросить имя</value>
   </data>
   <data name="StartupTitle" xml:space="preserve">
     <value>Запуск</value>
@@ -471,10 +471,10 @@
     <value>Файлы и диагностика</value>
   </data>
   <data name="QuitTitle" xml:space="preserve">
-    <value>Завершение работы</value>
+    <value>Выход</value>
   </data>
   <data name="SenseDiskBusyName" xml:space="preserve">
-    <value>Активность диска</value>
+    <value>Активность накопителя</value>
   </data>
   <data name="SenseRamTotalName" xml:space="preserve">
     <value>Всего памяти</value>
@@ -489,22 +489,22 @@
     <value>Мощность видеокарты</value>
   </data>
   <data name="SenseClock" xml:space="preserve">
-    <value>На какой частоте он работает.</value>
+    <value>Рабочая частота.</value>
   </data>
   <data name="SenseFan" xml:space="preserve">
-    <value>С какой скоростью крутится этот вентилятор.</value>
+    <value>Скорость вращения вентилятора.</value>
   </data>
   <data name="SensePower" xml:space="preserve">
-    <value>Сколько мощности он потребляет.</value>
+    <value>Потребляемая мощность.</value>
   </data>
   <data name="SenseRamTotal" xml:space="preserve">
-    <value>Сколько оперативной памяти установлено в компьютере.</value>
+    <value>Объём установленной оперативной памяти.</value>
   </data>
   <data name="SenseRamUsed" xml:space="preserve">
-    <value>Сколько оперативной памяти занято прямо сейчас.</value>
+    <value>Объём используемой оперативной памяти.</value>
   </data>
   <data name="SenseSize" xml:space="preserve">
-    <value>Величина, о которой сообщает компьютер.</value>
+    <value>Значение, о котором сообщает компьютер.</value>
   </data>
   <data name="LookGroupBar" xml:space="preserve">
     <value>Панель</value>
@@ -522,10 +522,10 @@
     <value>Цвет</value>
   </data>
   <data name="PictureRow" xml:space="preserve">
-    <value>Картинка</value>
+    <value>Изображение</value>
   </data>
   <data name="DockGroupScreen" xml:space="preserve">
-    <value>ПАНЕЛЬ ЭТОГО ЭКРАНА</value>
+    <value>Панель этого экрана</value>
   </data>
   <data name="EdgeHint" xml:space="preserve">
     <value>С какой стороны экрана стоит панель.</value>
@@ -537,28 +537,28 @@
     <value>Все виджеты</value>
   </data>
   <data name="GalleryRowHint" xml:space="preserve">
-    <value>Перетащите на панель — виджет встанет туда, куда вы его отпустили. Одинаковых можно ставить сколько угодно.</value>
+    <value>Перетащите виджет на панель. Один виджет можно добавить несколько раз.</value>
   </data>
   <data name="PinRow" xml:space="preserve">
     <value>Своя программа</value>
   </data>
   <data name="PinRowHint" xml:space="preserve">
-    <value>Закреплённые программы стоят на панели значками. Файл, брошенный прямо на панель, закрепляется на том месте, куда попал.</value>
+    <value>Закреплённые программы отображаются на панели значками. Файл, перетащенный на панель, закрепляется на месте сброса.</value>
   </data>
   <data name="ResetRow" xml:space="preserve">
-    <value>Стандартный набор</value>
+    <value>Виджеты по умолчанию</value>
   </data>
   <data name="ResetRowHint" xml:space="preserve">
-    <value>Вернёт на панель набор из установки. Ctrl+Z вернёт вашу расстановку.</value>
+    <value>Возвращает виджеты по умолчанию. Ctrl+Z отменяет сброс.</value>
   </data>
   <data name="ResetButton" xml:space="preserve">
-    <value>Вернуть стандартную панель</value>
+    <value>Сбросить панель</value>
   </data>
   <data name="UndoReset" xml:space="preserve">
-    <value>стандартная панель</value>
+    <value>сброс панели</value>
   </data>
   <data name="TopmostHint" xml:space="preserve">
-    <value>Если выключить, развёрнутое окно сможет закрыть панель.</value>
+    <value>Если выключено, развёрнутые окна могут закрывать панель.</value>
   </data>
   <data name="WidgetOptions" xml:space="preserve">
     <value>Настройки виджета</value>
@@ -567,7 +567,7 @@
     <value>Убрать с панели</value>
   </data>
   <data name="RemoveRowHint" xml:space="preserve">
-    <value>То же самое, что перетащить виджет с панели на рабочий стол.</value>
+    <value>То же, что перетащить виджет за пределы панели.</value>
   </data>
   <data name="LogsRow" xml:space="preserve">
     <value>Журнал работы</value>
@@ -588,61 +588,61 @@
     <value>Выйти из Master Control Dock</value>
   </data>
   <data name="RenameTip" xml:space="preserve">
-    <value>Двойной щелчок — дать этому показанию своё имя</value>
+    <value>Двойной щелчок — переименовать показание</value>
   </data>
   <data name="SenseCpuClock" xml:space="preserve">
-    <value>Насколько быстро он идёт — в долях от паспортной частоты.</value>
+    <value>Текущая частота в процентах от номинальной.</value>
   </data>
   <data name="SenseGpuAll" xml:space="preserve">
-    <value>Всё, чем занята видеокарта, по счётчикам Windows.</value>
+    <value>Общая загрузка видеокарты по счётчикам Windows.</value>
   </data>
   <data name="SenseGpuCoreName" xml:space="preserve">
-    <value>Графический чип</value>
+    <value>Графический процессор</value>
   </data>
   <data name="SenseGpuCore" xml:space="preserve">
-    <value>Насколько занят сам чип — прямо от драйвера.</value>
+    <value>Загрузка графического процессора по данным драйвера.</value>
   </data>
   <data name="SenseGpuVramName" xml:space="preserve">
     <value>Контроллер видеопамяти</value>
   </data>
   <data name="SenseGpuVram" xml:space="preserve">
-    <value>Насколько занят контроллер памяти — не её заполнение.</value>
+    <value>Загрузка контроллера памяти, а не её заполненность.</value>
   </data>
   <data name="SenseGpuVramClockName" xml:space="preserve">
     <value>Частота видеопамяти</value>
   </data>
   <data name="SenseGpuVramClock" xml:space="preserve">
-    <value>На какой частоте работает память видеокарты.</value>
+    <value>Частота памяти видеокарты.</value>
   </data>
   <data name="SenseGpuClock" xml:space="preserve">
-    <value>На какой частоте работает графический чип.</value>
+    <value>Частота графического процессора.</value>
   </data>
   <data name="SenseGpuFanName" xml:space="preserve">
     <value>Вентилятор видеокарты</value>
   </data>
   <data name="SenseGpuFan" xml:space="preserve">
-    <value>С какой скоростью крутится вентилятор видеокарты.</value>
+    <value>Скорость вращения вентилятора видеокарты.</value>
   </data>
   <data name="SenseGpuPower" xml:space="preserve">
-    <value>Сколько мощности потребляет видеокарта.</value>
+    <value>Потребляемая мощность видеокарты.</value>
   </data>
   <data name="SenseGpuClockName" xml:space="preserve">
     <value>Частота видеокарты</value>
   </data>
   <data name="SenseDiskBusy" xml:space="preserve">
-    <value>Какую долю времени накопитель занят работой.</value>
+    <value>Доля времени, когда накопитель занят.</value>
   </data>
   <data name="SenseNetUp" xml:space="preserve">
-    <value>Сколько данных уходит прямо сейчас.</value>
+    <value>Скорость отправки данных.</value>
   </data>
   <data name="SenseNetDown" xml:space="preserve">
-    <value>Сколько данных приходит прямо сейчас.</value>
+    <value>Скорость получения данных.</value>
   </data>
   <data name="WidgetClockName" xml:space="preserve">
     <value>Часы</value>
   </data>
   <data name="WidgetClockDescription" xml:space="preserve">
-    <value>Время, а под ним дата — на полноразмерной панели.</value>
+    <value>Время и дата; дата показывается на панели обычной толщины.</value>
   </data>
   <data name="ClockSeconds" xml:space="preserve">
     <value>Показывать секунды</value>
@@ -654,34 +654,34 @@
     <value>с секундами</value>
   </data>
   <data name="ModeLabel" xml:space="preserve">
-    <value>Как панель держит свой край</value>
+    <value>Режим панели</value>
   </data>
   <data name="ModePinned" xml:space="preserve">
-    <value>Держит место</value>
+    <value>Закреплена</value>
   </data>
   <data name="ModeHide" xml:space="preserve">
-    <value>Прячется</value>
+    <value>Автоскрытие</value>
   </data>
   <data name="ModeDesktop" xml:space="preserve">
     <value>На рабочем столе</value>
   </data>
   <data name="ModePinnedHint" xml:space="preserve">
-    <value>Панель удерживает свою полосу экрана. Развёрнутое окно останавливается перед ней, а не закрывает её.</value>
+    <value>Панель занимает полосу экрана. Развёрнутые окна не заходят под неё.</value>
   </data>
   <data name="ModeHideHint" xml:space="preserve">
-    <value>Панель уходит за край экрана и возвращается, когда курсор доходит до этого края.</value>
+    <value>Панель скрыта и появляется, когда курсор касается края экрана.</value>
   </data>
   <data name="ModeDesktopHint" xml:space="preserve">
-    <value>Панель лежит на рабочем столе: она не отнимает места у окон, и любое открытое поверх окно её закрывает.</value>
+    <value>Панель находится на рабочем столе и не занимает места. Окна закрывают её.</value>
   </data>
   <data name="UndoMode" xml:space="preserve">
-    <value>способ удержания края</value>
+    <value>режим панели</value>
   </data>
   <data name="UndoOnTheBar" xml:space="preserve">
     <value>на панели</value>
   </data>
   <data name="WidgetDropCaption" xml:space="preserve">
-    <value>Поставить сюда</value>
+    <value>Добавить сюда</value>
   </data>
   <data name="UndoRow" xml:space="preserve">
     <value>Вернуть последнее изменение</value>
@@ -690,85 +690,85 @@
     <value>Всё, что изменено здесь или на самой панели, на любом экране.</value>
   </data>
   <data name="MediaTitleHint" xml:space="preserve">
-    <value>Если выключено, название уходит во всплывающую подсказку.</value>
+    <value>Если выключено, название показывается во всплывающей подсказке.</value>
   </data>
   <data name="ClockDateHint" xml:space="preserve">
-    <value>На компактной панели одна строка, и время — та строка, которую стоит занять.</value>
+    <value>На компактной панели помещается одна строка, поэтому дата не показывается.</value>
   </data>
   <data name="CrowdedRow" xml:space="preserve">
-    <value>{0} из них не помещаются</value>
+    <value>Не помещается виджетов: {0}</value>
   </data>
   <data name="CrowdedRowHint" xml:space="preserve">
-    <value>На панели кончились места. Виджеты сохранены и вернутся, когда места появятся — на другом краю или в компактной толщине.</value>
+    <value>На панели не хватает места. Виджеты сохранены и вернутся, когда место появится: на другом краю или при меньшем размере панели.</value>
   </data>
   <data name="CrowdedButton" xml:space="preserve">
-    <value>Убрать их</value>
+    <value>Убрать</value>
   </data>
   <data name="UndoCrowded" xml:space="preserve">
-    <value>непоместившиеся</value>
+    <value>удаление не поместившихся виджетов</value>
   </data>
   <data name="WidgetSoundName" xml:space="preserve">
     <value>Звук</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Динамик открывает ползунок громкости, колесо мыши её меняет, а щелчок по цифрам выключает звук.</value>
+    <value>Щелчок по значку открывает регулятор громкости, колесо мыши меняет громкость, щелчок по цифрам выключает звук.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
-    <value>Писать громкость</value>
+    <value>Показывать громкость</value>
   </data>
   <data name="SoundLevelHint" xml:space="preserve">
-    <value>Динамик и сам говорит, есть звук или нет.</value>
+    <value>Значок динамика и так показывает, включён ли звук.</value>
   </data>
   <data name="KeysGroup" xml:space="preserve">
-    <value>Клавиши</value>
+    <value>Сочетания клавиш</value>
   </data>
   <data name="KeyBars" xml:space="preserve">
-    <value>Показать или спрятать все панели</value>
+    <value>Показать или скрыть все панели</value>
   </data>
   <data name="KeyBarsHint" xml:space="preserve">
-    <value>Панели уходят и возвращаются. Их расстановка сохраняется.</value>
+    <value>Панели скрываются и появляются. Их виджеты сохраняются.</value>
   </data>
   <data name="KeySettings" xml:space="preserve">
     <value>Открыть это окно</value>
   </data>
   <data name="KeySettingsHint" xml:space="preserve">
-    <value>Откуда угодно, в том числе поверх полноэкранной программы.</value>
+    <value>Работает в любой программе, в том числе в полноэкранной.</value>
   </data>
   <data name="KeyMute" xml:space="preserve">
     <value>Выключить или включить звук</value>
   </data>
   <data name="KeyMuteHint" xml:space="preserve">
-    <value>То же, что клавиша отключения звука, для клавиатур, где её нет.</value>
+    <value>Заменяет клавишу отключения звука, если её нет на клавиатуре.</value>
   </data>
   <data name="KeyNone" xml:space="preserve">
     <value>Назначить…</value>
   </data>
   <data name="KeyClear" xml:space="preserve">
-    <value>Убрать</value>
+    <value>Очистить</value>
   </data>
   <data name="KeyUse" xml:space="preserve">
     <value>Назначить</value>
   </data>
   <data name="KeyWaiting" xml:space="preserve">
-    <value>Удерживайте Ctrl, Alt или Win и нажмите клавишу.</value>
+    <value>Нажмите сочетание клавиш с Ctrl, Alt или Win.</value>
   </data>
   <data name="KeyBare" xml:space="preserve">
-    <value>Клавиша сама по себе отняла бы её у всех остальных программ. Удерживайте ещё Ctrl, Alt или Win.</value>
+    <value>Одна клавиша стала бы недоступна другим программам. Добавьте Ctrl, Alt или Win.</value>
   </data>
   <data name="KeyTaken" xml:space="preserve">
-    <value>Эту комбинацию уже держит другая программа, поэтому здесь она ничего не делает. Выберите другую.</value>
+    <value>Это сочетание уже занято другой программой. Выберите другое.</value>
   </data>
   <data name="WidgetBatteryName" xml:space="preserve">
     <value>Батарея</value>
   </data>
   <data name="WidgetBatteryDescription" xml:space="preserve">
-    <value>Сколько заряда осталось. Только на машине, которая работает от заряда.</value>
+    <value>Уровень заряда батареи. Только на устройствах с батареей.</value>
   </data>
   <data name="WidgetWifiName" xml:space="preserve">
     <value>Wi-Fi</value>
   </data>
   <data name="WidgetWifiDescription" xml:space="preserve">
-    <value>Насколько хорош сигнал. Только пока машина в беспроводной сети.</value>
+    <value>Уровень сигнала Wi-Fi. Показывается при подключении к беспроводной сети.</value>
   </data>
   <data name="BatteryCharge" xml:space="preserve">
     <value>{0}% заряда</value>
@@ -783,43 +783,43 @@
     <value>осталось примерно {0} ч {1} мин</value>
   </data>
   <data name="BatteryUnknown" xml:space="preserve">
-    <value>Заряд не сообщается</value>
+    <value>Уровень заряда неизвестен</value>
   </data>
   <data name="WifiBars" xml:space="preserve">
     <value>сигнал {0} из 5</value>
   </data>
   <data name="WifiConnected" xml:space="preserve">
-    <value>В беспроводной сети</value>
+    <value>Подключено к беспроводной сети</value>
   </data>
   <data name="WifiNameLabel" xml:space="preserve">
-    <value>Писать имя сети</value>
+    <value>Показывать имя сети</value>
   </data>
   <data name="WifiNameHint" xml:space="preserve">
-    <value>Пригодится там, где в досягаемости две сети и работают обе.</value>
+    <value>Полезно, если доступно несколько сетей.</value>
   </data>
   <data name="QuietRow" xml:space="preserve">
     <value>Скрыты, пока нет данных: {0}</value>
   </data>
   <data name="QuietRowHint" xml:space="preserve">
-    <value>{0} — на панели, но места не занимает, пока нечего показать. Вернётся туда, где стоял.</value>
+    <value>{0}: место на панели появится, когда будут данные.</value>
   </data>
   <data name="QuietButton" xml:space="preserve">
-    <value>Убрать их</value>
+    <value>Убрать</value>
   </data>
   <data name="UndoQuiet" xml:space="preserve">
-    <value>те, что ждали</value>
+    <value>скрытые виджеты</value>
   </data>
   <data name="CrowdedRowOne" xml:space="preserve">
-    <value>Одно из них не помещается</value>
+    <value>Не помещается один виджет</value>
   </data>
   <data name="QuietRowOne" xml:space="preserve">
     <value>Один скрыт, пока нет данных</value>
   </data>
   <data name="BraunRow" xml:space="preserve">
-    <value>Что это</value>
+    <value>Описание</value>
   </data>
   <data name="BraunHint" xml:space="preserve">
-    <value>Строгий приборный вид: графитовый корпус, оранжевые показания.</value>
+    <value>Строгий стиль: графитовый корпус, оранжевые показания.</value>
   </data>
   <data name="CrowdedButtonOne" xml:space="preserve">
     <value>Убрать</value>
@@ -846,28 +846,28 @@
     <value>Виджеты</value>
   </data>
   <data name="WidgetsIntro.Text" xml:space="preserve">
-    <value>Что стоит на панели этого экрана, закреплённые программы и сохранённые раскладки.</value>
+    <value>Виджеты на панели этого экрана, закреплённые программы и сохранённые наборы.</value>
   </data>
   <data name="IconDefault" xml:space="preserve">
-    <value>Тот, что был изначально</value>
+    <value>Значок по умолчанию</value>
   </data>
   <data name="CopyRow" xml:space="preserve">
     <value>Другие экраны</value>
   </data>
   <data name="CopyRowHint" xml:space="preserve">
-    <value>Даёт каждому другому экрану те же виджеты, расставленные по форме этой панели. У каждой панели свои копии; Ctrl+Z вернёт остальные как было.</value>
+    <value>Копирует виджеты этой панели на панели остальных экранов. Ctrl+Z отменяет копирование.</value>
   </data>
   <data name="CopyButton" xml:space="preserve">
-    <value>Сделать такими же</value>
+    <value>Копировать</value>
   </data>
   <data name="UndoCopied" xml:space="preserve">
-    <value>те же виджеты</value>
+    <value>копирование виджетов</value>
   </data>
   <data name="ListEarlier" xml:space="preserve">
-    <value>Передвинуть ближе к началу панели</value>
+    <value>Переместить к началу</value>
   </data>
   <data name="ListLater" xml:space="preserve">
-    <value>Передвинуть дальше по панели</value>
+    <value>Переместить к концу</value>
   </data>
   <data name="ListRemove" xml:space="preserve">
     <value>Убрать с панели</value>
@@ -897,16 +897,16 @@
     <value>язык</value>
   </data>
   <data name="UndoKey" xml:space="preserve">
-    <value>клавиша</value>
+    <value>сочетание клавиш</value>
   </data>
   <data name="UndoIcon" xml:space="preserve">
     <value>значок</value>
   </data>
   <data name="UndoRenamed" xml:space="preserve">
-    <value>имя показания</value>
+    <value>переименование показания</value>
   </data>
   <data name="WifiBarsUnknown" xml:space="preserve">
-    <value>сила сигнала не сообщается</value>
+    <value>уровень сигнала неизвестен</value>
   </data>
   <data name="BatteryLeftMinutes" xml:space="preserve">
     <value>осталось примерно {0} мин</value>
@@ -918,25 +918,25 @@
     <value>Видеокарта — температура</value>
   </data>
   <data name="CopyButtonCount" xml:space="preserve">
-    <value>Скопировать на остальные ({0})</value>
+    <value>Копировать на другие экраны ({0})</value>
   </data>
   <data name="ListAtSlot" xml:space="preserve">
     <value>место {0}</value>
   </data>
   <data name="ListNoSlot" xml:space="preserve">
-    <value>ждёт</value>
+    <value>скрыт</value>
   </data>
   <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
     <value>Переименовать показание</value>
   </data>
   <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
-    <value>Дать этому показанию своё имя.</value>
+    <value>Переименовать показание</value>
   </data>
   <data name="ForgetRow" xml:space="preserve">
     <value>Забыть этот экран</value>
   </data>
   <data name="ForgetRowHint" xml:space="preserve">
-    <value>Убирает его панель и расстановку из настроек. Если экран вернётся, он придёт как новый.</value>
+    <value>Удаляет панель этого экрана и её настройки. При повторном подключении экран настраивается заново.</value>
   </data>
   <data name="ForgetButton" xml:space="preserve">
     <value>Забыть</value>
@@ -951,10 +951,10 @@
     <value>память Windows</value>
   </data>
   <data name="SourceAcpi" xml:space="preserve">
-    <value>термозоны ACPI</value>
+    <value>температурные зоны ACPI</value>
   </data>
   <data name="SourceDisk" xml:space="preserve">
-    <value>температура дисков</value>
+    <value>температуры накопителей</value>
   </data>
   <data name="SourceNvml" xml:space="preserve">
     <value>драйвер NVIDIA</value>
@@ -966,16 +966,16 @@
     <value>не запущен</value>
   </data>
   <data name="SourceNotHere" xml:space="preserve">
-    <value>нет на этой машине</value>
+    <value>недоступно на этом компьютере</value>
   </data>
   <data name="UndoElsewhereLabel" xml:space="preserve">
     <value>Отменить — {0}, {1}</value>
   </data>
   <data name="LastDoorTitle" xml:space="preserve">
-    <value>Это последний вход</value>
+    <value>Последний способ открыть настройки</value>
   </data>
   <data name="LastDoorBody" xml:space="preserve">
-    <value>Ни одна клавиша не открывает это окно, и это последняя шестерёнка на всех панелях. После этого вернуться сюда можно правым кликом по панели.</value>
+    <value>Для этого окна не назначено сочетание клавиш, а это последний значок настроек на панелях. Потом окно можно открыть правым щелчком по панели.</value>
   </data>
   <data name="LastDoorGo" xml:space="preserve">
     <value>Всё равно убрать</value>
@@ -984,31 +984,31 @@
     <value>Сохранить копию</value>
   </data>
   <data name="ExportRowHint" xml:space="preserve">
-    <value>Всё: панели, тема, клавиши, имена показаний.</value>
+    <value>Панели, тема, сочетания клавиш и имена показаний.</value>
   </data>
   <data name="ExportButton" xml:space="preserve">
     <value>Сохранить в файл</value>
   </data>
   <data name="ImportRow" xml:space="preserve">
-    <value>Загрузить копию</value>
+    <value>Восстановить из копии</value>
   </data>
   <data name="ImportRowHint" xml:space="preserve">
-    <value>Заменяет всё на этих страницах. Панели лягут на экраны этой машины в том порядке, в каком были сохранены. Ctrl+Z вернёт как было.</value>
+    <value>Заменяет все настройки. Панели размещаются на экранах в сохранённом порядке. Ctrl+Z отменяет загрузку.</value>
   </data>
   <data name="ImportButton" xml:space="preserve">
-    <value>Загрузить из файла</value>
+    <value>Выбрать файл…</value>
   </data>
   <data name="SettingsFileKind" xml:space="preserve">
     <value>Настройки</value>
   </data>
   <data name="ImportDone" xml:space="preserve">
-    <value>Загружено. Панелей этой машины заполнено: {0}.</value>
+    <value>Настройки загружены. Применено к панелям: {0}.</value>
   </data>
   <data name="ImportBad" xml:space="preserve">
-    <value>Это не тот файл настроек, который программа умеет читать.</value>
+    <value>Не удалось прочитать файл настроек.</value>
   </data>
   <data name="UndoImported" xml:space="preserve">
-    <value>настройки из файла</value>
+    <value>загрузка настроек из файла</value>
   </data>
   <data name="SegSizeLarge" xml:space="preserve">
     <value>Крупный</value>
@@ -1020,43 +1020,43 @@
     <value>Мелкий</value>
   </data>
   <data name="PresetsGroup" xml:space="preserve">
-    <value>Раскладки</value>
+    <value>Наборы</value>
   </data>
   <data name="PresetSaveRow" xml:space="preserve">
-    <value>Сохранить эту расстановку</value>
+    <value>Сохранить набор</value>
   </data>
   <data name="PresetSaveRowHint" xml:space="preserve">
-    <value>Запоминает, что стоит на этой панели, под именем — чтобы потом поставить на любую панель, здесь или на другом экране.</value>
+    <value>Сохраняет виджеты этой панели под именем, чтобы применить их на любой панели.</value>
   </data>
   <data name="PresetSaveButton" xml:space="preserve">
-    <value>Сохранить как раскладку</value>
+    <value>Сохранить…</value>
   </data>
   <data name="PresetApply" xml:space="preserve">
-    <value>Поставить на эту панель</value>
+    <value>Применить к этой панели</value>
   </data>
   <data name="PresetDelete" xml:space="preserve">
-    <value>Забыть</value>
+    <value>Удалить</value>
   </data>
   <data name="PresetHint" xml:space="preserve">
     <value>Виджетов: {0}</value>
   </data>
   <data name="PresetNameHeader" xml:space="preserve">
-    <value>Как назвать</value>
+    <value>Название</value>
   </data>
   <data name="PresetSaveTitle" xml:space="preserve">
-    <value>Сохранить расстановку</value>
+    <value>Сохранить набор</value>
   </data>
   <data name="PresetSaveGo" xml:space="preserve">
     <value>Сохранить</value>
   </data>
   <data name="UndoPresetSaved" xml:space="preserve">
-    <value>сохранённая раскладка</value>
+    <value>сохранение набора</value>
   </data>
   <data name="UndoPresetApplied" xml:space="preserve">
-    <value>поставленная раскладка</value>
+    <value>применение набора</value>
   </data>
   <data name="UndoPresetDropped" xml:space="preserve">
-    <value>забытая раскладка</value>
+    <value>удаление набора</value>
   </data>
   <data name="SoundMutedTip" xml:space="preserve">
     <value>Звук выключен</value>
@@ -1065,16 +1065,16 @@
     <value>Громкость {0} %</value>
   </data>
   <data name="SoundPressUnmuteTip" xml:space="preserve">
-    <value>нажатие вернёт звук</value>
+    <value>щелчок включает звук</value>
   </data>
   <data name="SoundPressMuteTip" xml:space="preserve">
-    <value>нажатие выключит звук</value>
+    <value>щелчок выключает звук</value>
   </data>
   <data name="ReadingSizeLabel" xml:space="preserve">
     <value>Размер значков и цифр</value>
   </data>
   <data name="ReadingSizeHint" xml:space="preserve">
-    <value>Насколько крупно рисуются значки и цифры, на всех панелях.</value>
+    <value>Размер значков и цифр на всех панелях.</value>
   </data>
   <data name="NavGeneral.Text" xml:space="preserve">
     <value>Общие</value>
@@ -1098,7 +1098,7 @@
     <value>Общие</value>
   </data>
   <data name="GeneralIntro.Text" xml:space="preserve">
-    <value>Клавиши, язык, запуск и копии — всё, что относится к программе целиком.</value>
+    <value>Сочетания клавиш, язык, запуск и резервные копии.</value>
   </data>
   <data name="OpenFolderOf" xml:space="preserve">
     <value>Открыть папку: {0}</value>
@@ -1110,7 +1110,7 @@
     <value>Занято видеопамяти</value>
   </data>
   <data name="SenseGpuVramFill" xml:space="preserve">
-    <value>Насколько заполнена память самой видеокарты.</value>
+    <value>Заполненность памяти видеокарты.</value>
   </data>
   <data name="RamDetail" xml:space="preserve">
     <value>{0} · {1} / {2} ГБ</value>
@@ -1134,7 +1134,7 @@
     <value>Сеть</value>
   </data>
   <data name="DeviceBoard" xml:space="preserve">
-    <value>Плата</value>
+    <value>Материнская плата</value>
   </data>
   <data name="PinIconChange" xml:space="preserve">
     <value>Изменить…</value>
@@ -1158,7 +1158,7 @@
     <value>Выделенная память</value>
   </data>
   <data name="SenseCommit" xml:space="preserve">
-    <value>Сколько из того, что Windows может пообещать программам — память плюс файл подкачки — уже обещано.</value>
+    <value>Выделенная память в процентах от предела (память плюс файл подкачки).</value>
   </data>
   <data name="SenseCommitUsedName" xml:space="preserve">
     <value>Выделено, в байтах</value>
@@ -1167,25 +1167,25 @@
     <value>Предел выделения</value>
   </data>
   <data name="SenseCommitTotal" xml:space="preserve">
-    <value>Память плюс файл подкачки: больше Windows пообещать разом не может.</value>
+    <value>Память плюс файл подкачки: максимум, который может выделить Windows.</value>
   </data>
   <data name="SenseRamFreeName" xml:space="preserve">
     <value>Свободная память</value>
   </data>
   <data name="SenseRamFree" xml:space="preserve">
-    <value>Сколько установленной памяти сейчас не занято.</value>
+    <value>Объём свободной оперативной памяти.</value>
   </data>
   <data name="SenseDiskReadName" xml:space="preserve">
-    <value>Диски — чтение</value>
+    <value>Накопители — чтение</value>
   </data>
   <data name="SenseDiskRead" xml:space="preserve">
-    <value>Сколько диски сейчас читают, все вместе.</value>
+    <value>Суммарная скорость чтения со всех накопителей.</value>
   </data>
   <data name="SenseDiskWriteName" xml:space="preserve">
-    <value>Диски — запись</value>
+    <value>Накопители — запись</value>
   </data>
   <data name="SenseDiskWrite" xml:space="preserve">
-    <value>Сколько диски сейчас пишут, все вместе.</value>
+    <value>Суммарная скорость записи на все накопители.</value>
   </data>
   <data name="WifiBand" xml:space="preserve">
     <value>{0:0.#} ГГц</value>
@@ -1209,22 +1209,22 @@
     <value>Закреплено на этой панели</value>
   </data>
   <data name="PinsEmpty" xml:space="preserve">
-    <value>Пока ничего не закреплено. Бросьте файл на панель или закрепите кнопкой выше.</value>
+    <value>Ничего не закреплено. Перетащите файл на панель или нажмите кнопку выше.</value>
   </data>
   <data name="NavPresets.Text" xml:space="preserve">
-    <value>Раскладки</value>
+    <value>Наборы</value>
   </data>
   <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Раскладки</value>
+    <value>Наборы</value>
   </data>
   <data name="PresetsTitle.Text" xml:space="preserve">
-    <value>Раскладки</value>
+    <value>Наборы</value>
   </data>
   <data name="PresetsIntro.Text" xml:space="preserve">
-    <value>Сохранённые наборы виджетов. Любой можно поставить на панель выбранного экрана.</value>
+    <value>Сохранённые наборы виджетов. Любой можно применить к панели выбранного экрана.</value>
   </data>
   <data name="ChipHint" xml:space="preserve">
-    <value>Перетащите на панель или нажмите «+», чтобы поставить на выбранную панель.</value>
+    <value>Перетащите на панель или нажмите «+», чтобы добавить на выбранную панель.</value>
   </data>
   <data name="ToastDone" xml:space="preserve">
     <value>Готово: {0}</value>
@@ -1233,7 +1233,7 @@
     <value>Отменить</value>
   </data>
   <data name="PresetsEmpty" xml:space="preserve">
-    <value>Пока ни одного. Сохранённый набор можно поставить на любой экран одной кнопкой.</value>
+    <value>Наборов пока нет. Сохранённый набор можно применить к любому экрану.</value>
   </data>
   <data name="LampOn" xml:space="preserve">
     <value>панель включена</value>
@@ -1242,16 +1242,16 @@
     <value>панель выключена</value>
   </data>
   <data name="EdgeBoardHint" xml:space="preserve">
-    <value>Нажмите сторону</value>
+    <value>Выберите сторону</value>
   </data>
   <data name="WidgetsBarGroup" xml:space="preserve">
     <value>Панель</value>
   </data>
   <data name="BarGestures" xml:space="preserve">
-    <value>Тянуть — переставить · за край — убрать · правый клик — меню</value>
+    <value>Перетащить — переместить · за пределы панели — убрать · правый щелчок — меню</value>
   </data>
   <data name="PinsEditorTitle" xml:space="preserve">
-    <value>Имя и значок</value>
+    <value>Название и значок</value>
   </data>
   <data name="LookIconsGroup" xml:space="preserve">
     <value>Значки показаний</value>
@@ -1260,31 +1260,31 @@
     <value>Образец</value>
   </data>
   <data name="IconChange" xml:space="preserve">
-    <value>Сменить…</value>
+    <value>Изменить…</value>
   </data>
   <data name="PinOpenFolder" xml:space="preserve">
     <value>Открыть папку</value>
   </data>
   <data name="PinDialogHint" xml:space="preserve">
-    <value>Или просто бросьте файл на панель — он закрепится там, куда попал.</value>
+    <value>Можно также перетащить файл на панель: он закрепится на месте сброса.</value>
   </data>
   <data name="BarMenuSettings" xml:space="preserve">
-    <value>Настроить…</value>
+    <value>Настройки…</value>
   </data>
   <data name="BarMenuHideAll" xml:space="preserve">
-    <value>Спрятать панели</value>
+    <value>Скрыть панели</value>
   </data>
   <data name="BarMenuExit" xml:space="preserve">
     <value>Выход</value>
   </data>
   <data name="BarWelcome" xml:space="preserve">
-    <value>Правый клик — меню и настройки. Файлы можно бросать прямо сюда.</value>
+    <value>Правый щелчок — меню и настройки. Перетащите сюда файл, чтобы закрепить его.</value>
   </data>
   <data name="BarsShow" xml:space="preserve">
     <value>Показать панели</value>
   </data>
   <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Спрятать или показать панели</value>
+    <value>Скрыть или показать панели</value>
   </data>
   <data name="SourceNeedsDriver" xml:space="preserve">
     <value>нужен драйвер PawnIO</value>
@@ -1299,7 +1299,7 @@
     <value>Температура процессора и памяти</value>
   </data>
   <data name="DriverRowHint" xml:space="preserve">
-    <value>Для температуры процессора и памяти нужен драйвер PawnIO. Ставится один раз, нужны права администратора.</value>
+    <value>Для температуры процессора и памяти нужен драйвер PawnIO. Установка выполняется один раз и требует прав администратора.</value>
   </data>
   <data name="DriverRowInstalledHint" xml:space="preserve">
     <value>PawnIO {0} установлен, но не ответил. Обычно помогает перезапуск программы.</value>
@@ -1311,13 +1311,13 @@
     <value>Процессор — самое горячее ядро</value>
   </data>
   <data name="SenseCpuCoreMax" xml:space="preserve">
-    <value>Самое тёплое из ядер прямо сейчас.</value>
+    <value>Температура самого горячего ядра.</value>
   </data>
   <data name="SenseCpuPowerName" xml:space="preserve">
     <value>Мощность процессора</value>
   </data>
   <data name="SenseCpuPower" xml:space="preserve">
-    <value>Сколько процессор потребляет.</value>
+    <value>Потребляемая мощность процессора.</value>
   </data>
   <data name="SourceNeedsService" xml:space="preserve">
     <value>нужна служба датчиков</value>
@@ -1326,13 +1326,13 @@
     <value>Служба датчиков</value>
   </data>
   <data name="ServiceRowHint" xml:space="preserve">
-    <value>PawnIO {0} установлен. Служба, читающая через него, работает от имени системы и ставится один раз — это запросит права администратора.</value>
+    <value>PawnIO {0} установлен. Служба датчиков устанавливается один раз и требует прав администратора.</value>
   </data>
   <data name="ServiceRowMissing" xml:space="preserve">
-    <value>В этой сборке нет программы службы.</value>
+    <value>В этой сборке нет файла службы.</value>
   </data>
   <data name="ServiceRowWaiting" xml:space="preserve">
-    <value>Служба работает, показания на подходе.</value>
+    <value>Служба запущена. Ожидание первых показаний.</value>
   </data>
   <data name="ServiceInstall" xml:space="preserve">
     <value>Установить службу…</value>
@@ -1356,7 +1356,7 @@
     <value>Сеть</value>
   </data>
   <data name="CatOther" xml:space="preserve">
-    <value>Остальное</value>
+    <value>Прочее</value>
   </data>
   <data name="OfferCpuLoad" xml:space="preserve">
     <value>Процессор — загрузка</value>
@@ -1386,7 +1386,7 @@
     <value>Накопитель — температура</value>
   </data>
   <data name="WidgetDeviceName" xml:space="preserve">
-    <value>Устройство</value>
+    <value>Заряд устройства</value>
   </data>
   <data name="WidgetDeviceDescription" xml:space="preserve">
     <value>Сколько заряда осталось у беспроводной мыши, наушников или клавиатуры.</value>
@@ -1425,49 +1425,49 @@
     <value>Audio Switcher</value>
   </data>
   <data name="WidgetSwitcherDescription" xml:space="preserve">
-    <value>Master Audio Switcher на панели вместо трея: нажатие переводит звук на следующее устройство.</value>
+    <value>Master Audio Switcher на панели: щелчок переключает звук на следующее устройство.</value>
   </data>
   <data name="SwitcherNoDevice" xml:space="preserve">
     <value>Нет устройства вывода</value>
   </data>
   <data name="SwitcherPressTip" xml:space="preserve">
-    <value>нажатие — следующее устройство</value>
+    <value>щелчок — следующее устройство</value>
   </data>
   <data name="SwitcherOpen" xml:space="preserve">
     <value>Открыть Master Audio Switcher</value>
   </data>
   <data name="GaugeShowLoad" xml:space="preserve">
-    <value>Нагрузка</value>
+    <value>Загрузка</value>
   </data>
   <data name="GaugeShowTemp" xml:space="preserve">
     <value>Температура</value>
   </data>
   <data name="GaugeShowTempHint" xml:space="preserve">
-    <value>Рядом с нагрузкой, под тем же значком.</value>
+    <value>Рядом с загрузкой, под тем же значком.</value>
   </data>
   <data name="WidgetMicName" xml:space="preserve">
     <value>Микрофон</value>
   </data>
   <data name="WidgetMicDescription" xml:space="preserve">
-    <value>Выключает микрофон во всей системе и краснеет, пока он выключен.</value>
+    <value>Отключает микрофон во всей системе; пока он выключен, значок красный.</value>
   </data>
   <data name="WidgetAwakeName" xml:space="preserve">
-    <value>Не спать</value>
+    <value>Запрет сна</value>
   </data>
   <data name="WidgetAwakeDescription" xml:space="preserve">
-    <value>Полная чашка не даёт компьютеру уснуть, а чатам — показать «нет на месте».</value>
+    <value>Не даёт компьютеру перейти в спящий режим, а мессенджерам — сменить статус на «Отошёл».</value>
   </data>
   <data name="WidgetLayoutName" xml:space="preserve">
     <value>Раскладка клавиатуры</value>
   </data>
   <data name="WidgetLayoutDescription" xml:space="preserve">
-    <value>На каком языке печатает клавиатура и включён ли Caps Lock.</value>
+    <value>Язык ввода и состояние Caps Lock.</value>
   </data>
   <data name="CatPrograms" xml:space="preserve">
     <value>Программы</value>
   </data>
   <data name="OfferProgram" xml:space="preserve">
-    <value>Запускает его прямо с панели.</value>
+    <value>Запуск с панели.</value>
   </data>
   <data name="ProgExplorer" xml:space="preserve">
     <value>Проводник</value>
@@ -1512,28 +1512,28 @@
     <value>Записки</value>
   </data>
   <data name="AwakeOffTip" xml:space="preserve">
-    <value>Компьютер может уснуть · щелчок не даёт ему спать</value>
+    <value>Спящий режим разрешён · щелчок запретит его</value>
   </data>
   <data name="AwakeFor" xml:space="preserve">
-    <value>Не спит ещё {0}</value>
+    <value>Сон запрещён: осталось {0}</value>
   </data>
   <data name="AwakeUntilOff" xml:space="preserve">
-    <value>Не спит, пока не выключите</value>
+    <value>Сон запрещён до отключения</value>
   </data>
   <data name="AwakeOnTip" xml:space="preserve">
     <value>щелчок разрешает сон</value>
   </data>
   <data name="AwakeMenu30" xml:space="preserve">
-    <value>Не спать 30 минут</value>
+    <value>Запретить сон на 30 минут</value>
   </data>
   <data name="AwakeMenu60" xml:space="preserve">
-    <value>Не спать час</value>
+    <value>Запретить сон на 1 час</value>
   </data>
   <data name="AwakeMenu120" xml:space="preserve">
-    <value>Не спать два часа</value>
+    <value>Запретить сон на 2 часа</value>
   </data>
   <data name="AwakeMenuForever" xml:space="preserve">
-    <value>Не спать, пока не выключу</value>
+    <value>Запретить сон до отключения</value>
   </data>
   <data name="AwakeMenuOff" xml:space="preserve">
     <value>Разрешить сон</value>
@@ -1548,10 +1548,10 @@
     <value>{0} ч {1} мин</value>
   </data>
   <data name="AwakeSummaryOn" xml:space="preserve">
-    <value>Не даёт компьютеру уснуть</value>
+    <value>Сон запрещён</value>
   </data>
   <data name="AwakeSummaryOff" xml:space="preserve">
-    <value>Компьютер может уснуть</value>
+    <value>Сон разрешён</value>
   </data>
   <data name="MicOffTip" xml:space="preserve">
     <value>Микрофон выключен · щелчок включает</value>
@@ -1575,7 +1575,7 @@
     <value>Во всей системе, из любой программы.</value>
   </data>
   <data name="IconSearch" xml:space="preserve">
-    <value>Найти по имени</value>
+    <value>Поиск по названию</value>
   </data>
   <data name="IconGroup_ui" xml:space="preserve">
     <value>Интерфейс и стрелки</value>
@@ -1626,31 +1626,31 @@
     <value>Перейти на панель</value>
   </data>
   <data name="KeyFocusHint" xml:space="preserve">
-    <value>Стрелки выбирают виджет, Enter нажимает, Esc выходит.</value>
+    <value>Стрелки — выбор виджета, Enter — нажатие, Esc — выход.</value>
   </data>
   <data name="SourcesSomeSilent" xml:space="preserve">
-    <value>Часть температур пока не читается. Строка ниже говорит, чего не хватает.</value>
+    <value>Часть температур не читается. Что нужно, указано ниже.</value>
   </data>
   <data name="SourcesAllWell" xml:space="preserve">
-    <value>Всё, что эта машина умеет сообщать, читается.</value>
+    <value>Все доступные показания читаются.</value>
   </data>
   <data name="DeskOff" xml:space="preserve">
-    <value>Само: никогда</value>
+    <value>Автоматически: никогда</value>
   </data>
   <data name="DeskScreens" xml:space="preserve">
-    <value>При экранах: {0}</value>
+    <value>При числе экранов: {0}</value>
   </data>
   <data name="DeskTip" xml:space="preserve">
-    <value>Ставить эту раскладку на панель главного экрана само, когда подключено столько экранов</value>
+    <value>Автоматически применять этот набор к панели главного экрана при таком числе экранов</value>
   </data>
   <data name="UndoDesk" xml:space="preserve">
-    <value>раскладка «{0}» для экранов: {1}</value>
+    <value>набор «{0}» для экранов: {1}</value>
   </data>
   <data name="UndoPresetDesk" xml:space="preserve">
-    <value>когда применять раскладку</value>
+    <value>автоприменение набора</value>
   </data>
   <data name="IdentifyRow" xml:space="preserve">
-    <value>Какой экран какой</value>
+    <value>Определить экраны</value>
   </data>
   <data name="IdentifyRowHint" xml:space="preserve">
     <value>На каждом экране на секунду появится его номер.</value>
@@ -1659,10 +1659,10 @@
     <value>Определить</value>
   </data>
   <data name="BarMenuEdit" xml:space="preserve">
-    <value>Править панель…</value>
+    <value>Изменить панель…</value>
   </data>
   <data name="BarMenuEditDone" xml:space="preserve">
-    <value>Закончить правку</value>
+    <value>Готово</value>
   </data>
   <data name="UpdateTitle" xml:space="preserve">
     <value>Обновления</value>
@@ -1671,7 +1671,7 @@
     <value>Эта версия</value>
   </data>
   <data name="UpdateRowHint" xml:space="preserve">
-    <value>Программа ни с кем не связывается, пока вы не нажмёте кнопку.</value>
+    <value>Подключение к интернету только по нажатию кнопки.</value>
   </data>
   <data name="UpdateInstall" xml:space="preserve">
     <value>Установить {0} и перезапустить</value>
@@ -1680,28 +1680,28 @@
     <value>Проверить обновления</value>
   </data>
   <data name="UpdateChecking" xml:space="preserve">
-    <value>Ищу новую версию…</value>
+    <value>Поиск обновлений…</value>
   </data>
   <data name="UpdateFound" xml:space="preserve">
     <value>Доступна версия {0}. {1}</value>
   </data>
   <data name="UpdateLatest" xml:space="preserve">
-    <value>Это самая новая версия.</value>
+    <value>Установлена последняя версия.</value>
   </data>
   <data name="UpdateFailed" xml:space="preserve">
-    <value>Не удалось связаться со страницей релизов. Ничего не изменено.</value>
+    <value>Не удалось проверить обновления. Ничего не изменено.</value>
   </data>
   <data name="UpdateDownloading" xml:space="preserve">
-    <value>Скачиваю и проверяю установщик…</value>
+    <value>Скачивание и проверка установщика…</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
-    <value>Обновление не установлено: не скачалось или не прошло проверку подписи.</value>
+    <value>Обновление не установлено: не удалось скачать файл или проверить подпись.</value>
   </data>
   <data name="DeskOne" xml:space="preserve">
-    <value>Само: при 1 экране</value>
+    <value>Автоматически: при 1 экране</value>
   </data>
   <data name="DeskMany" xml:space="preserve">
-    <value>Само: при {0} экранах</value>
+    <value>Автоматически: при {0} экранах</value>
   </data>
   <data name="OfferCpuBoth" xml:space="preserve">
     <value>Процессор — загрузка и температура</value>
@@ -1713,7 +1713,7 @@
     <value>Видеокарта — загрузка и температура</value>
   </data>
   <data name="OfferBoth" xml:space="preserve">
-    <value>Обе цифры рядом, под одним значком.</value>
+    <value>Оба значения рядом, под одним значком.</value>
   </data>
   <data name="ShortBoth" xml:space="preserve">
     <value>Загрузка + t°</value>
@@ -1722,7 +1722,7 @@
     <value>Температура процессора и памяти</value>
   </data>
   <data name="TempMissingHint" xml:space="preserve">
-    <value>Пока не читается. Нужны драйвер и небольшая служба: два шага на странице «Показания», после них виджеты появятся здесь сами.</value>
+    <value>Не читается. Нужны драйвер и служба: установите их на странице «Датчики», и виджеты появятся здесь.</value>
   </data>
   <data name="TempMissingButton" xml:space="preserve">
     <value>Настроить…</value>
@@ -1731,13 +1731,13 @@
     <value>Очистить корзину</value>
   </data>
   <data name="TrayLabel" xml:space="preserve">
-    <value>Показывать в трее</value>
+    <value>Значок в области уведомлений</value>
   </data>
   <data name="TrayHint" xml:space="preserve">
-    <value>Значок рядом с часами: щелчок открывает настройки, правый щелчок даёт меню.</value>
+    <value>Щелчок открывает настройки, правый щелчок — меню.</value>
   </data>
   <data name="UndoTray" xml:space="preserve">
-    <value>значок в трее</value>
+    <value>значок в области уведомлений</value>
   </data>
   <data name="GalleryHeading" xml:space="preserve">
     <value>Виджеты</value>
@@ -1746,13 +1746,13 @@
     <value>Отпустите на панели</value>
   </data>
   <data name="GallerySearch" xml:space="preserve">
-    <value>Найти виджет</value>
+    <value>Поиск виджетов</value>
   </data>
   <data name="UpdateReadyTitle" xml:space="preserve">
     <value>Готова версия {0}</value>
   </data>
   <data name="UpdateReadyText" xml:space="preserve">
-    <value>Установка попросит права администратора; панели вернутся сами.</value>
+    <value>Для установки нужны права администратора. Панели появятся снова автоматически.</value>
   </data>
   <data name="UpdateReadyButton" xml:space="preserve">
     <value>Установить</value>
@@ -1761,13 +1761,13 @@
     <value>Версия {0} скачана и проверена.</value>
   </data>
   <data name="UpdateRowAutoHint" xml:space="preserve">
-    <value>Раз в сутки смотрит, нет ли новой версии.</value>
+    <value>Проверка обновлений раз в сутки.</value>
   </data>
   <data name="AutoUpdateRow" xml:space="preserve">
     <value>Обновлять автоматически</value>
   </data>
   <data name="AutoUpdateHint" xml:space="preserve">
-    <value>Раз в сутки с GitHub, с проверкой подписи. Ставится, пока за компьютером никого нет; из Program Files сначала спросит.</value>
+    <value>Раз в сутки с GitHub, подпись проверяется. Устанавливается, когда компьютером не пользуются; если программа установлена в Program Files, сначала появится запрос.</value>
   </data>
   <data name="UndoAutoUpdate" xml:space="preserve">
     <value>автообновление</value>
@@ -1776,16 +1776,16 @@
     <value>{0}: перегрев</value>
   </data>
   <data name="HeatText" xml:space="preserve">
-    <value>{0:0} °C — выше {1:0} °C, которые производитель считает критическими.</value>
+    <value>{0:0} °C — выше критической температуры ({1:0} °C).</value>
   </data>
   <data name="HeatQuiet" xml:space="preserve">
-    <value>Не сегодня</value>
+    <value>Не напоминать сегодня</value>
   </data>
   <data name="HeatRow" xml:space="preserve">
     <value>Предупреждать о перегреве</value>
   </data>
   <data name="HeatRowHint" xml:space="preserve">
-    <value>Уведомление Windows, когда деталь горячее критической температуры, названной её производителем.</value>
+    <value>Уведомление Windows, если температура компонента выше критической по данным производителя.</value>
   </data>
   <data name="UndoHeat" xml:space="preserve">
     <value>предупреждение о перегреве</value>
@@ -1800,7 +1800,7 @@
     <value>Минимум {0} · в среднем {1} · максимум {2}</value>
   </data>
   <data name="HistoryNothing" xml:space="preserve">
-    <value>Пока ничего не прочитано.</value>
+    <value>Нет данных.</value>
   </data>
   <data name="PartCatalog" xml:space="preserve">
     <value>Каталог</value>
@@ -1812,7 +1812,7 @@
     <value>Программы</value>
   </data>
   <data name="PartLayouts" xml:space="preserve">
-    <value>Раскладки</value>
+    <value>Наборы</value>
   </data>
   <data name="EdgeLeft" xml:space="preserve">
     <value>Слева</value>
@@ -1842,13 +1842,13 @@
     <value>Сразу меняет толщину, значки и цифры.</value>
   </data>
   <data name="BarSizeSideHint" xml:space="preserve">
-    <value>Значки и цифры; у панели сбоку экрана толщина одна.</value>
+    <value>Значки и цифры. У боковой панели одна толщина.</value>
   </data>
   <data name="UndoBarSize" xml:space="preserve">
     <value>размер панели</value>
   </data>
   <data name="SensorsStateTitle" xml:space="preserve">
-    <value>Состояние сейчас</value>
+    <value>Текущее состояние</value>
   </data>
   <data name="SensorsVerdictWell" xml:space="preserve">
     <value>Все основные показания доступны</value>
@@ -1857,22 +1857,22 @@
     <value>Отвечают: {0}.</value>
   </data>
   <data name="SensorsVerdictSilent" xml:space="preserve">
-    <value>Температура процессора и памяти пока не читается</value>
+    <value>Температура процессора и памяти не читается</value>
   </data>
   <data name="SensorsVerdictSilentHint" xml:space="preserve">
-    <value>Нужны драйвер PawnIO и небольшая служба программы — строка ниже их ставит.</value>
+    <value>Нужны драйвер PawnIO и служба датчиков. Установите их ниже.</value>
   </data>
   <data name="SensorsListTitle" xml:space="preserve">
     <value>Показания</value>
   </data>
   <data name="SourcesTitle" xml:space="preserve">
-    <value>Технические источники</value>
+    <value>Источники</value>
   </data>
   <data name="SourcesRow" xml:space="preserve">
     <value>Источники показаний</value>
   </data>
   <data name="SourcesRowHint" xml:space="preserve">
-    <value>Отвечают {0} из {1}: счётчики Windows, драйвер видеокарты, диски, память, процессор.</value>
+    <value>Доступно {0} из {1}: счётчики Windows, драйвер видеокарты, накопители, память, процессор.</value>
   </data>
   <data name="SourcesShow" xml:space="preserve">
     <value>Показать</value>
@@ -1884,7 +1884,7 @@
     <value>показаний: {0}</value>
   </data>
   <data name="SensorSearch" xml:space="preserve">
-    <value>Найти показание</value>
+    <value>Поиск показаний</value>
   </data>
   <data name="SensorKindAll" xml:space="preserve">
     <value>Все</value>
@@ -1893,7 +1893,7 @@
     <value>Температура</value>
   </data>
   <data name="SensorKindLoad" xml:space="preserve">
-    <value>Нагрузка</value>
+    <value>Загрузка</value>
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Свободное ПО · GPL-3.0-or-later. Часть кода — из Microsoft PowerToys (MIT).</value>

@@ -207,10 +207,10 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     private string Says()
     {
         string charge = _state.Percent < 0
-            ? Loc.Tr("BatteryUnknown", "Charge not reported")
+            ? Loc.Tr("BatteryUnknown", "Battery charge unavailable")
             : string.Format(
                 CultureInfo.CurrentCulture,
-                Loc.Tr("BatteryCharge", "{0}% of a charge"),
+                Loc.Tr("BatteryCharge", "{0}% charge"),
                 _state.Percent);
 
         if (_state.Charging)
@@ -220,7 +220,7 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
 
         if (_state.Plugged)
         {
-            return charge + " · " + Loc.Tr("BatteryPlugged", "on the mains");
+            return charge + " · " + Loc.Tr("BatteryPlugged", "Plugged in");
         }
 
         if (_state.Minutes < 0)

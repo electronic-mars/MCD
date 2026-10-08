@@ -739,7 +739,7 @@ public sealed partial class DockWindow : Window
             {
                 Text = Loc.Tr(
                     "BarWelcome",
-                    "Right-click for the menu and settings. Files can be dropped right here."),
+                    "Right-click for the menu and settings. Drop files here to pin them."),
                 FontSize = 12,
                 Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xE9, 0xEC, 0xF1)),
             },

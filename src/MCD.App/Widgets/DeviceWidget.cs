@@ -53,7 +53,7 @@ public sealed class DeviceWidget(WidgetContext context, WidgetConfig entry)
         var metric = new Metric(
             "device",
             key is { } k ? IconFor(k) : "Bluetooth",
-            Loc.Tr("WidgetDeviceName", "Device"),
+            Loc.Tr("WidgetDeviceName", "Device battery"),
             "%",
             sensors => key is { } wanted ? sensors.Catalog.FirstOrDefault(d => d.Key.Equals(wanted)) : null)
         {
@@ -104,7 +104,7 @@ public sealed class DeviceWidget(WidgetContext context, WidgetConfig entry)
     public override string Called =>
         Metrics.Count > 0 && Metrics[0].Sensor is { } sensor
             ? Names.For(sensor)
-            : Loc.Tr("WidgetDeviceName", "Device");
+            : Loc.Tr("WidgetDeviceName", "Device battery");
 
     public override string Summarise() => Called;
 

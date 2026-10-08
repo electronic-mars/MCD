@@ -132,7 +132,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             System.Globalization.CultureInfo.CurrentCulture,
             Loc.Tr("MediaOpenNamed", "Open {0}"),
             who)
-        : Loc.Tr("MediaOpenPlayer", "Open the player");
+        : Loc.Tr("MediaOpenPlayer", "Open player");
 
     partial void OnTitleChanged(string value) => OnPropertyChanged(nameof(PlayTip));
 
@@ -227,11 +227,11 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     public override string Summarise() => Nominated.Length > 0
         ? string.Format(
             System.Globalization.CultureInfo.CurrentCulture,
-            Loc.Tr("MediaSummaryNominated", "The buttons always drive {0}"),
+            Loc.Tr("MediaSummaryNominated", "Buttons always control {0}"),
             WidgetOptions.Text(Options, "playerName") ?? Short(Nominated))
         : ShowTitle
-            ? Loc.Tr("MediaSummaryShown", "Buttons, with the track written next to them")
-            : Loc.Tr("MediaSummaryTooltip", "Buttons; the track is in their tooltip");
+            ? Loc.Tr("MediaSummaryShown", "Buttons and track title")
+            : Loc.Tr("MediaSummaryTooltip", "Buttons; track title in tooltip");
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed)
     {
@@ -240,16 +240,16 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         // be describing where the track is now or where pressing would put it,
         // and there is no way to tell which.
         StackPanel title = Mcd.App.Settings.Braun.Field(
-            Loc.Tr("MediaTitleHeader", "Write the track on the bar"),
+            Loc.Tr("MediaTitleHeader", "Show track title on the bar"),
             Mcd.App.Settings.Braun.Switch(
                 ShowTitle,
                 on => changed(WidgetOptions.Merge(Options, ("title", on ? "shown" : null)))),
-            Loc.Tr("MediaTitleHint", "Off puts it in the tooltip instead."));
+            Loc.Tr("MediaTitleHint", "When off, the title appears in the tooltip."));
 
         // The nomination. The chosen player is always offered, running or
         // not, or the setting could not be seen - let alone taken away.
         var ids = new List<string> { string.Empty };
-        var names = new List<string> { Loc.Tr("MediaPriorityNone", "Automatic: whoever is playing now") };
+        var names = new List<string> { Loc.Tr("MediaPriorityNone", "Automatic (current player)") };
 
         Dictionary<string, string> offer = new(Seen);
 
@@ -265,7 +265,7 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         }
 
         StackPanel players = Mcd.App.Settings.Braun.Field(
-            Loc.Tr("MediaPriorityHeader", "Which player the buttons drive"),
+            Loc.Tr("MediaPriorityHeader", "Player to control"),
             Mcd.App.Settings.Braun.Choice(
                 names,
                 Math.Max(0, ids.IndexOf(Nominated)),

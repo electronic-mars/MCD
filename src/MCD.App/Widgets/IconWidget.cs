@@ -179,7 +179,7 @@ public sealed class IconWidget : WidgetViewModel
 
         var own = new Button
         {
-            Content = Loc.Tr("LaunchIconAuto", "The program's own icon"),
+            Content = Loc.Tr("LaunchIconAuto", "Default app icon"),
         };
 
         own.Click += (_, _) =>

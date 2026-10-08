@@ -98,7 +98,7 @@ internal sealed class AutoUpdate
                         System.Globalization.CultureInfo.CurrentCulture,
                         Loc.Tr("UpdateReadyTitle", "Version {0} is ready"),
                         ready.Offer.Version),
-                    Loc.Tr("UpdateReadyText", "Installing it asks for administrator rights; the bars come back by themselves."),
+                    Loc.Tr("UpdateReadyText", "Installation requires administrator rights. The bars reopen automatically."),
                     (Loc.Tr("UpdateReadyButton", "Install"), "update"));
             }
 

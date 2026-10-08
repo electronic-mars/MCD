@@ -102,10 +102,10 @@ internal sealed class HeatWatch
                 string.Format(CultureInfo.CurrentCulture, Loc.Tr("HeatTitle", "{0} is overheating"), name),
                 string.Format(
                     CultureInfo.CurrentCulture,
-                    Loc.Tr("HeatText", "{0:0} °C, past the {1:0} °C its maker calls critical."),
+                    Loc.Tr("HeatText", "{0:0} °C exceeds the critical temperature of {1:0} °C."),
                     reading.Value,
                     critical),
-                (Loc.Tr("HeatQuiet", "Not today"), "heat-quiet"));
+                (Loc.Tr("HeatQuiet", "Dismiss for today"), "heat-quiet"));
         }
     }
 }

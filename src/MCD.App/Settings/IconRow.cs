@@ -26,12 +26,12 @@ public sealed partial class IconRow : ObservableObject
     /// <summary>What this reading is, so a row is not four letters and a button.</summary>
     public string Explain => Id switch
     {
-        "cpu" => Loc.Tr("SenseCpuLoad", "How busy the processor is."),
-        "ram" => Loc.Tr("SenseRamLoad", "How much of the memory is in use."),
-        "up" => Loc.Tr("SenseUp", "What the machine is sending."),
-        "down" => Loc.Tr("SenseDown", "What the machine is receiving."),
-        "gpu" => Loc.Tr("SenseGpuLoad", "How busy the graphics chip is."),
-        "temp" => Loc.Tr("SenseAnyTemp", "Every temperature widget, whichever part it watches."),
+        "cpu" => Loc.Tr("SenseCpuLoad", "CPU load."),
+        "ram" => Loc.Tr("SenseRamLoad", "Percentage of memory in use."),
+        "up" => Loc.Tr("SenseUp", "Network send rate."),
+        "down" => Loc.Tr("SenseDown", "Network receive rate."),
+        "gpu" => Loc.Tr("SenseGpuLoad", "GPU load."),
+        "temp" => Loc.Tr("SenseAnyTemp", "All temperature widgets, for any component."),
         _ => string.Empty,
     };
 

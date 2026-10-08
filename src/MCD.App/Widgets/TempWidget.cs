@@ -162,7 +162,7 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
     /// second is not what it is called.
     /// </remarks>
     public override string Called => Chosen is null
-        ? Loc.Tr("OfferHottest", "Temperature - the hottest")
+        ? Loc.Tr("OfferHottest", "Hottest component")
             + (Metrics.Count > 0 && Metrics[0].Sensor is { } watching
                 ? " · " + Names.For(watching)
                 : string.Empty)
@@ -185,14 +185,14 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
         // The first entry is the roving one; each sensor after it is itself.
         List<string> names =
         [
-            Loc.Tr("TempHottestSummary", "The hottest reading"),
+            Loc.Tr("TempHottestSummary", "Hottest component"),
             .. found.Select(Describe),
         ];
 
         SensorKey? chosen = Chosen;
 
         panel.Children.Add(Mcd.App.Settings.Braun.Field(
-            Loc.Tr("TempWhich", "Which sensor"),
+            Loc.Tr("TempWhich", "Sensor"),
             Mcd.App.Settings.Braun.Choice(
                 names,
                 chosen is { } key ? Array.FindIndex(found, d => d.Key.Equals(key)) + 1 : 0,
@@ -218,7 +218,7 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
                 Maximum = 120,
                 SmallChange = 1,
                 SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Compact,
-                PlaceholderText = Loc.Tr("TempLimitAuto", "the part's own"),
+                PlaceholderText = Loc.Tr("TempLimitAuto", "Default for this component"),
                 Value = WidgetOptions.Number(Options, key) ?? double.NaN,
             };
 
@@ -229,8 +229,8 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             return number;
         }
 
-        limits.Children.Add(Limit(Loc.Tr("TempWarnAt", "Warning at, °C"), "warn"));
-        limits.Children.Add(Limit(Loc.Tr("TempCritAt", "Critical at, °C"), "crit"));
+        limits.Children.Add(Limit(Loc.Tr("TempWarnAt", "Warning threshold (°C)"), "warn"));
+        limits.Children.Add(Limit(Loc.Tr("TempCritAt", "Critical threshold (°C)"), "crit"));
         panel.Children.Add(limits);
 
         return panel;
