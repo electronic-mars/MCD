@@ -32,6 +32,19 @@ public sealed record AppSettings
     /// </summary>
     public bool TrayIcon { get; init; }
 
+    /// <summary>
+    /// Whether the program looks for a new version once a day by itself and
+    /// puts it in. Off unless asked for: until then it contacts nobody.
+    /// </summary>
+    public bool AutoUpdate { get; init; }
+
+    /// <summary>
+    /// Whether a Windows notification says so when a part goes past the
+    /// temperature its maker calls critical. Off unless asked for: the bar is
+    /// a quiet thing, and its colours already say it.
+    /// </summary>
+    public bool HeatAlert { get; init; }
+
     /// <summary>"system", "light" or "dark".</summary>
     public string Theme { get; init; } = "system";
 

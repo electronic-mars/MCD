@@ -7,6 +7,12 @@ machine that will tell you theirs.
 It looks and behaves like the Dock in the PowerToys Command Palette, and it
 exists because that one has two problems this one is built around.
 
+![The bar along the top of a screen](docs/screenshots/bar.png)
+
+| Every widget, drawn as it looks on the bar | A press on a reading: its last hour |
+|---|---|
+| ![The widget gallery in the settings](docs/screenshots/widgets.png) | ![The history panel of a reading](docs/screenshots/history.png) |
+
 ## Why this exists
 
 **Widgets go missing on a second monitor.** The PowerToys dock appears on an
@@ -80,17 +86,20 @@ up again when HWiNFO is restarted.
 ## Installing it
 
 Take **MasterControlDock-<version>-setup.exe** from
-[Releases](https://github.com/electronic-mars/MCD/releases/latest). It installs
-for the current user only and needs no administrator rights. The program is not
+[Releases](https://github.com/electronic-mars/MCD/releases/latest). By default it
+installs for the current user and needs no administrator rights; it can also
+install for all users under Program Files, and asks for rights only then. The program is not
 code-signed, so Windows SmartScreen warns once: **More info, Run anyway**. Every
 release carries `SHA256SUMS.txt`, and the installer is built in public by
 [this workflow](https://github.com/electronic-mars/MCD/actions).
 
 **Updating:** *About, Check for updates*. It fetches the new installer, checks a
 signature made with a key that exists only in this repository's secrets (the
-program carries the public half), and restarts. Nothing happens without that
-press; the program contacts nobody on its own. An installer the key did not
-sign is deleted rather than run.
+program carries the public half), and restarts. An installer the key did not
+sign is deleted rather than run. *Update by itself* on the same page does this
+once a day: it puts the update in while nobody is at the machine, or, for a copy
+under Program Files, shows a notification and asks first. Until that switch is
+on, the program contacts nobody on its own.
 
 From source, `pwsh tools/install-local.ps1` builds and installs a copy for
 development.
@@ -134,11 +143,11 @@ Every change is applied as you make it, and **Ctrl+Z** in the settings window
 takes the last one back. The bar at the foot of the window's navigation hides
 or shows all bars.
 
-**Do not end it from Task Manager.** The dock reserves part of the desktop work
-area through the shell, and only a proper shutdown gives that space back;
-killing the process leaves the desktop short until the next sign-out. Use Exit
-in the settings, or `MasterControlDock.exe --exit`, which asks a running copy
-to stop and is what the install script uses.
+To stop it, use *Quit* in the settings, *Exit* in the bar's menu, or
+`MasterControlDock.exe --exit`, which asks a running copy to stop and is what
+the installer uses. Ending it from Task Manager is safe as well: the bar reserves
+its strip of the screen through the shell, and Windows 11 gives the strip back
+within a second of the process being gone (checked on build 26200).
 
 ## Building
 
@@ -166,6 +175,10 @@ lists what has to be checked by hand on a real multi-monitor desk.
 Hugeicons, free set, MIT. `tools/fetch_icons.py` pulls them through Iconify,
 keeps the SVG sources in `assets/icons-src/` and generates the path data the
 program draws. Re-run it after changing the list at the top of that file.
+
+## Supporting it
+
+If it is useful to you: [Patreon](https://www.patreon.com/ElectronicMARS).
 
 ## Licence
 

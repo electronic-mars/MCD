@@ -127,4 +127,13 @@ public sealed class DeviceWidget(WidgetContext context, WidgetConfig entry)
                 Chosen is { } key ? Array.FindIndex(found, d => d.Key.Equals(key)) : -1,
                 i => changed(WidgetOptions.Merge(Options, ("sensor", JsonValue.Create(found[i].Key.Value))))));
     }
+
+    /// <summary>A press opens the last hour of what this widget reads, so it answers the pointer.</summary>
+    public override bool Pressable => true;
+
+    /// <summary>A press opens the last hour of what this widget reads.</summary>
+    public override Microsoft.UI.Xaml.FrameworkElement? Details() =>
+        Metrics.Any(m => m.Sensor is not null)
+            ? ReadingHistory.Panel(Metrics.Where(m => m.Sensor is not null).Select(m => (Names.For(m.Sensor!), m.Sensor!)))
+            : null;
 }

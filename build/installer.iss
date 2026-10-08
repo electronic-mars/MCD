@@ -85,6 +85,10 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; \
 ; Removed on uninstall even if it was switched on from inside the program later.
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; \
     ValueType: none; ValueName: "MasterControlDock"; Flags: uninsdeletevalue
+; The name and icon its notifications carry, which the program registers when
+; it starts.
+Root: HKCU; Subkey: "Software\Classes\AppUserModelId\ElectronicMars.MasterControlDock"; \
+    Flags: uninsdeletekey dontcreatekey
 
 [Run]
 ; runasoriginaluser: an install "for all users" runs Setup elevated, and a program

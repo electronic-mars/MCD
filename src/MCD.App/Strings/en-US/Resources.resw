@@ -87,7 +87,7 @@
     <value>The bars come back when you sign in.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind.</value>
+    <value>Closing this window leaves the bars running.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Quit</value>
@@ -1747,5 +1747,59 @@
   </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Search widgets</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Version {0} is ready</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Installing it asks for administrator rights; the bars come back by themselves.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Version {0} is downloaded and checked.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Looks for a newer version once a day.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Update by itself</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>Once a day, from GitHub, signature checked. Put in while nobody is at the machine; under Program Files it asks first.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>updating by itself</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} is overheating</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C, past the {1:0} °C its maker calls critical.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Not today</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Warn about overheating</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>A Windows notification when a part goes past the temperature its maker calls critical.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>the overheating warning</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} min ago</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>now</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>Lowest {0} · average {1} · highest {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Nothing has been read yet.</value>
   </data>
 </root>

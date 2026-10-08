@@ -334,4 +334,13 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
 
     private static double Pressure(double value, SensorDescriptor sensor) =>
         sensor.Critical is { } critical and > 0 ? value / critical : value / 100.0;
+
+    /// <summary>A press opens the last hour of what this widget reads, so it answers the pointer.</summary>
+    public override bool Pressable => true;
+
+    /// <summary>A press opens the last hour of what this widget reads.</summary>
+    public override Microsoft.UI.Xaml.FrameworkElement? Details() =>
+        Metrics.Any(m => m.Sensor is not null)
+            ? ReadingHistory.Panel(Metrics.Where(m => m.Sensor is not null).Select(m => (Names.For(m.Sensor!), m.Sensor!)))
+            : null;
 }

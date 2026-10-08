@@ -34,6 +34,8 @@ public partial class App : Application
     private DockWindowManager? _docks;
     private Microsoft.UI.Dispatching.DispatcherQueue? _uiQueue;
     private HotKeys? _keys;
+    private AutoUpdate? _autoUpdate;
+    private HeatWatch? _heat;
     private bool _shutDown;
 
     /// <remarks>
@@ -169,6 +171,21 @@ public partial class App : Application
         });
 
         Mcd.Audio.AudioWatch.Start();
+
+        // Windows notifications, for the overheat warning and an update that
+        // needs a yes; both are off unless asked for.
+        Notices.Start(_uiQueue!, start);
+        _autoUpdate = new AutoUpdate(
+            start,
+            _services.GetRequiredService<SettingsService>(),
+            _uiQueue!,
+            () => { Shutdown(); Exit(); });
+        Mcd.App.Widgets.ReadingHistory.Start(_services.GetRequiredService<SensorHub>());
+        _heat = new HeatWatch(
+            start,
+            _services.GetRequiredService<SettingsService>(),
+            _services.GetRequiredService<SensorHub>(),
+            _uiQueue!);
 
         // The keys the whole machine listens for. Taken again whenever the
         // settings change, because that is the only thing that alters them.
@@ -842,6 +859,32 @@ public partial class App : Application
                     Dock.IdentifyScreens.Flash(_docks!.Plans.Select(p => p.Monitor));
                     log.LogInformation("selftest.identify shown");
                 });
+
+                return;
+            }
+
+            // A press on a reading, after it has a little history, opens its
+            // last hour.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "history")
+            {
+                Later(100000, () => log.LogInformation(
+                    "selftest.history pressed={Count}", _docks?.Press(Mcd.App.Widgets.GaugeWidget.Type)));
+
+                return;
+            }
+
+            // One notification, the way the overheat warning shows one.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "notice")
+            {
+                Later(3000, () => Notices.Show(
+                    "selftest",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture, Loc.Tr("HeatTitle", "{0} is overheating"), "CPU"),
+                    string.Format(
+                        System.Globalization.CultureInfo.CurrentCulture,
+                        Loc.Tr("HeatText", "{0:0} °C, past the {1:0} °C its maker calls critical."),
+                        101.0,
+                        100.0),
+                    (Loc.Tr("HeatQuiet", "Not today"), "heat-quiet")));
 
                 return;
             }

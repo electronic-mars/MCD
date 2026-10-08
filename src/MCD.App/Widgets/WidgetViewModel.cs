@@ -96,7 +96,7 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     /// Which side of the widget a popup opens on: away from the edge the bar
     /// is fixed to, into the screen.
     /// </summary>
-    protected Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode PopupSide => Edge switch
+    public Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode PopupSide => Edge switch
     {
         AppBarEdge.Top => Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Bottom,
         AppBarEdge.Left => Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.Right,
@@ -226,6 +226,12 @@ public abstract partial class WidgetViewModel : ObservableObject, IDisposable
     public virtual void Press()
     {
     }
+
+    /// <summary>
+    /// What a press opens, for widgets that answer a press with a panel
+    /// rather than an action - a reading's last hour. Null for the rest.
+    /// </summary>
+    public virtual Microsoft.UI.Xaml.FrameworkElement? Details() => null;
 
     /// <summary>What this widget adds to the bar's right-click menu, above the bar's own items.</summary>
     public virtual IEnumerable<Microsoft.UI.Xaml.Controls.MenuFlyoutItemBase> Menu() => [];

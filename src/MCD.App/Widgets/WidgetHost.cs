@@ -110,7 +110,25 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
     /// The bar takes the pointer away from its widgets to watch for a drag,
     /// so a press that turned out not to be one has to be handed back.
     /// </remarks>
-    public void Press() => _widget.Press();
+    public void Press()
+    {
+        // A reading answers with its last hour, in a panel beside the bar.
+        if (_widget.Details() is { } details)
+        {
+            var flyout = new Flyout
+            {
+                Content = details,
+                Placement = _widget.PopupSide,
+                ShouldConstrainToRootBounds = false,
+                XamlRoot = XamlRoot,
+            };
+
+            flyout.ShowAt(this);
+            return;
+        }
+
+        _widget.Press();
+    }
 
     /// <summary>
     /// The press-and-hold outline: this element is in hand and can be dragged,

@@ -87,7 +87,7 @@
     <value>Панели возвращаются при входе в систему.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Закрытие окна оставляет панели работать. Снятие задачи в диспетчере оставит на экране занятое место.</value>
+    <value>Закрытие окна оставляет панели работать.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Выйти</value>
@@ -1747,5 +1747,59 @@
   </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Найти виджет</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Готова версия {0}</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Установка попросит права администратора; панели вернутся сами.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Установить</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Версия {0} скачана и проверена.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Раз в сутки смотрит, нет ли новой версии.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Обновлять автоматически</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>Раз в сутки с GitHub, с проверкой подписи. Ставится, пока за компьютером никого нет; из Program Files сначала спросит.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>автообновление</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0}: перегрев</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C — выше {1:0} °C, которые производитель считает критическими.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Не сегодня</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Предупреждать о перегреве</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>Уведомление Windows, когда деталь горячее критической температуры, названной её производителем.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>предупреждение о перегреве</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} мин назад</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>сейчас</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>Минимум {0} · в среднем {1} · максимум {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Пока ничего не прочитано.</value>
   </data>
 </root>

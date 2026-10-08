@@ -101,6 +101,22 @@ public sealed partial class SettingsWindow : Window
 
         SizeAndCentre(screen: null);
 
+        // Moved to a screen of another scale: the floor and the ceiling are
+        // in pixels, and are set again for it (see Limit).
+        Root.Loaded += (_, _) =>
+        {
+            double seen = Root.XamlRoot.RasterizationScale;
+
+            Root.XamlRoot.Changed += (root, _) =>
+            {
+                if (root.RasterizationScale != seen)
+                {
+                    seen = root.RasterizationScale;
+                    Limit(seen, Displays.BoundsFor(WinRT.Interop.WindowNative.GetWindowHandle(this)));
+                }
+            };
+        };
+
         SensorList.ItemsSource = _readings;
         _version = string.Format(
             CultureInfo.CurrentCulture, Loc.Tr("VersionFormat", "Version {0}"), AppInfo.Version);
@@ -298,8 +314,12 @@ public sealed partial class SettingsWindow : Window
     /// time it becomes a letterbox. Neither is a window anybody wanted, and
     /// the way to not have them is to not offer them.
     /// </para>
+    /// <para>
+    /// 920 rather than 820: the narrowest window that still holds three
+    /// widget cards a row on the Widgets page. At 820 it fell to two.
+    /// </para>
     /// </remarks>
-    private const double MinimumWide = 820;
+    private const double MinimumWide = 920;
 
     private const double MinimumTall = 660;
 
@@ -318,13 +338,18 @@ public sealed partial class SettingsWindow : Window
     /// </remarks>
     private const double Spare = 80;
 
-    public void SizeAndCentre(MonitorInfo? screen)
+    /// <summary>
+    /// Sets the floor and the ceiling of the window's size for a screen of this
+    /// scale and size, and says what they came to in points.
+    /// </summary>
+    /// <remarks>
+    /// In the physical pixels AppWindow works in, so they are set again when
+    /// the window moves to a screen of another scale: a floor of 820 points
+    /// set on a 125 % screen is 1025 pixels, and taken along to a 100 % screen
+    /// it held the window at 1025 points there.
+    /// </remarks>
+    private (double Widest, double Tallest) Limit(double scale, RECT bounds)
     {
-        nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-
-        double scale = screen?.Scale ?? WindowFrame.GetScale(hwnd);
-        RECT bounds = screen?.Bounds ?? Displays.BoundsFor(hwnd);
-
         // What the screen has, in the same units the sizes are written in.
         // Without this the window asked for 780 points of height whatever it
         // was opening on: on a 1920 by 1080 screen at 150 per cent that is a
@@ -337,15 +362,10 @@ public sealed partial class SettingsWindow : Window
         double widest = Math.Max(MinimumWide, Math.Min(MaximumWide, roomWide - Spare));
         double tallest = Math.Max(MinimumTall, Math.Min(MaximumTall, roomTall - Spare));
 
-        var size = new Windows.Graphics.SizeInt32(
-            (int)Math.Round(Math.Clamp(956, MinimumWide, widest) * scale),
-            (int)Math.Round(Math.Clamp(780, MinimumTall, tallest) * scale));
-
-        // A floor under the window, in the same physical pixels AppWindow
-        // works in. Without one the pane keeps its width while the content
-        // column is squeezed to nothing, and an explanation ends up set one
-        // word to a line - which is not a thing to notice in a screenshot, it
-        // is a thing the window should refuse to do.
+        // A floor under the window. Without one the pane keeps its width
+        // while the content column is squeezed to nothing, and an explanation
+        // ends up set one word to a line - which is not a thing to notice in
+        // a screenshot, it is a thing the window should refuse to do.
         if (AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
         {
             presenter.PreferredMinimumWidth =
@@ -363,6 +383,22 @@ public sealed partial class SettingsWindow : Window
             // gesture was being made by accident.
             presenter.IsMaximizable = false;
         }
+
+        return (widest, tallest);
+    }
+
+    public void SizeAndCentre(MonitorInfo? screen)
+    {
+        nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+        double scale = screen?.Scale ?? WindowFrame.GetScale(hwnd);
+        RECT bounds = screen?.Bounds ?? Displays.BoundsFor(hwnd);
+
+        (double widest, double tallest) = Limit(scale, bounds);
+
+        var size = new Windows.Graphics.SizeInt32(
+            (int)Math.Round(Math.Clamp(956, MinimumWide, widest) * scale),
+            (int)Math.Round(Math.Clamp(780, MinimumTall, tallest) * scale));
 
         AppWindow.Resize(size);
 
@@ -2869,13 +2905,19 @@ public sealed partial class SettingsWindow : Window
         {
             double room = size.NewSize.Width + 2 * FrameInset;
             int columns = Math.Max(2, (int)((room - MinGap) / (card + MinGap)));
-            double gap = (room - columns * card) / (columns + 1);
+
+            // Whole points, and a point to spare on the shelf: the wrap grid
+            // fits as many cells as its width holds after rounding, and three
+            // cells of 214.5 rounded to 215 did not fit in 643.5 - the third
+            // card went to the next row on a window just as wide as needed.
+            double gap = Math.Floor((room - columns * card) / (columns + 1));
+            double spare = room - columns * card - (columns + 1) * gap;
 
             foreach (VariableSizedWrapGrid shelf in shelves.Values)
             {
                 shelf.ItemWidth = card + gap;
-                shelf.Margin = new Thickness(gap - FrameInset, 0, 0, 0);
-                shelf.Width = columns * (card + gap);
+                shelf.Margin = new Thickness(gap + Math.Floor(spare / 2) - FrameInset, 0, 0, 0);
+                shelf.Width = columns * (card + gap) + 1;
             }
 
             foreach (var entry in chips)
@@ -3911,6 +3953,23 @@ public sealed partial class SettingsWindow : Window
         {
             SourcesList.Children.Add(DriverRow());
         }
+
+        // Off unless asked for: the bar's colours already say it, and this
+        // is for the moment somebody is looking somewhere else.
+        Border heat = Braun.Group(Braun.Row(
+            Loc.Tr("HeatRow", "Warn about overheating"),
+            Loc.Tr("HeatRowHint", "A Windows notification when a part goes past the temperature its maker calls critical."),
+            Braun.Switch(_settings.Current.App.HeatAlert, on =>
+            {
+                SettingsModel current = _settings.Current;
+                Write(
+                    current with { App = current.App with { HeatAlert = on } },
+                    WriteReason.UserAction,
+                    Loc.Tr("UndoHeat", "the overheating warning"));
+            })));
+
+        heat.Margin = new Thickness(0, 10, 0, 0);
+        SourcesList.Children.Add(heat);
     }
 
     /// <summary>
@@ -4336,23 +4395,54 @@ public sealed partial class SettingsWindow : Window
 
         AboutBody.Children.Add(mark);
 
-        // Nothing here runs by itself: the program contacts nobody until this
-        // is pressed.
+        // Nothing here runs by itself unless the second row says so: until
+        // then the program contacts nobody until the button is pressed.
         AboutBody.Children.Add(Braun.Heading("Download", Loc.Tr("UpdateTitle", "Updates")));
 
-        AboutBody.Children.Add(Braun.Group(Braun.Row(
-            Loc.Tr("UpdateRow", "This version"),
-            _updateNote.Length > 0
-                ? _updateNote
-                : Loc.Tr("UpdateRowHint", "The program contacts nobody until you press the button."),
-            _updating
-                ? null
-                : _offer is { } offer
-                    ? Braun.Action(
-                        string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), offer.Version),
-                        InstallUpdate,
-                        "Download")
-                    : Braun.Action(Loc.Tr("UpdateCheck", "Check for updates"), CheckUpdate, "Download"))));
+        bool auto = _settings.Current.App.AutoUpdate;
+
+        AboutBody.Children.Add(Braun.Group(
+            Braun.Row(
+                Loc.Tr("UpdateRow", "This version"),
+                _updateNote.Length > 0
+                    ? _updateNote
+                    : Mcd.App.AutoUpdate.Ready is { } waiting
+                        ? string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateWaiting", "Version {0} is downloaded and checked."), waiting.Offer.Version)
+                        : auto
+                            ? Loc.Tr("UpdateRowAutoHint", "Looks for a newer version once a day.")
+                            : Loc.Tr("UpdateRowHint", "The program contacts nobody until you press the button."),
+                _updating
+                    ? null
+                    : _offer is { } offer
+                        ? Braun.Action(
+                            string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), offer.Version),
+                            InstallUpdate,
+                            "Download")
+                        : Mcd.App.AutoUpdate.Ready is { } ready
+                            ? Braun.Action(
+                                string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), ready.Offer.Version),
+                                () =>
+                                {
+                                    _log.LogInformation("update.install version={Version}", ready.Offer.Version);
+                                    Mcd.Core.Update.Updater.Install(ready.Installer);
+                                    _onExit();
+                                },
+                                "Download")
+                            : Braun.Action(Loc.Tr("UpdateCheck", "Check for updates"), CheckUpdate, "Download")),
+            Braun.Row(
+                Loc.Tr("AutoUpdateRow", "Update by itself"),
+                Loc.Tr(
+                    "AutoUpdateHint",
+                    "Once a day, from GitHub, signature checked. Put in while nobody is at the machine; under Program Files it asks first."),
+                Braun.Switch(auto, on =>
+                {
+                    SettingsModel current = _settings.Current;
+                    Write(
+                        current with { App = current.App with { AutoUpdate = on } },
+                        WriteReason.UserAction,
+                        Loc.Tr("UndoAutoUpdate", "updating by itself"));
+                    ShowAbout();
+                }))));
 
         // Only the program's own papers. The machine's settings - keys,
         // language, startup, copies - have a page of their own; a page called
@@ -4387,7 +4477,7 @@ public sealed partial class SettingsWindow : Window
             Loc.Tr("ExitRow", "Stop the program"),
             Loc.Tr(
                 "ExitHint",
-                "Closing this window leaves the bars running. Ending the task in Task Manager leaves the reserved screen space behind."),
+                "Closing this window leaves the bars running."),
             Braun.Action(Loc.Tr("ExitButton", "Quit"), () => _onExit(), "Power"))));
     }
 

@@ -427,6 +427,15 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     /// <summary>The gap between readings, on whichever side the next one sits.</summary>
     internal static Thickness Gap(Orientation orientation) =>
         orientation == Orientation.Vertical ? new Thickness(0, 2, 0, 2) : new Thickness(1, 0, 1, 0);
+
+    /// <summary>A press opens the last hour of what this widget reads, so it answers the pointer.</summary>
+    public override bool Pressable => true;
+
+    /// <summary>A press opens the last hour of what this widget reads.</summary>
+    public override Microsoft.UI.Xaml.FrameworkElement? Details() =>
+        Metrics.Any(m => m.Sensor is not null)
+            ? ReadingHistory.Panel(Metrics.Where(m => m.Sensor is not null).Select(m => (Names.For(m.Sensor!), m.Sensor!)))
+            : null;
 }
 
 /// <summary>One thing a gauge can show, and where its figure comes from.</summary>
