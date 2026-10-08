@@ -15,11 +15,11 @@
          differs between the two modes goes through AppPaths.IsPackaged. -->
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-    <!-- Compiled ahead of time as well as shipped whole. Without it the
-         runtime compiles the WinUI projection, the service container and the
-         reflection-based settings reader on the way to the first bar, every
-         time the program starts. -->
-    <PublishReadyToRun>true</PublishReadyToRun>
+    <!-- Not compiled ahead of time. ReadyToRun doubled the Windows SDK
+         projection alone (25 MB to 56 MB) and added 46 MB in all; measured
+         on 08.10.2026 it bought 150 ms to the first bar on a warm start
+         (515 ms against 665 ms) and nothing on a cold one (2.8 s either way). -->
+    <PublishReadyToRun>false</PublishReadyToRun>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Platforms>x64;ARM64</Platforms>
@@ -41,7 +41,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Base" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Foundation" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.InteractiveExperiences" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.DWrite" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Runtime" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
