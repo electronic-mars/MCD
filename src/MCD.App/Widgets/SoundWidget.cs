@@ -8,6 +8,7 @@ using Mcd.Core.Settings;
 using Mcd.Sensors.Contracts;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.Extensions.Logging;
 
 namespace Mcd.App.Widgets;
 
@@ -38,6 +39,8 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     public const string Type = "mcd.sound";
 
     public override string TypeId => Type;
+
+    private bool? _said;
 
     /// <summary>Which speaker is drawn: silent, quiet, half, loud.</summary>
     [ObservableProperty]
@@ -215,6 +218,14 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         }
 
         Shown = Visibility.Visible;
+
+        // Written down when it changes, for the same reason as the microphone.
+        if (_said != muted)
+        {
+            _said = muted;
+            Context.Log.LogInformation("sound.muted {Muted}", muted);
+        }
+
         IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
         FontSize = ReadingFont;

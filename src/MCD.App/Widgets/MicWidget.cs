@@ -1,6 +1,7 @@
 using Mcd.Audio;
 using Mcd.Core.Settings;
 using Mcd.Sensors.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace Mcd.App.Widgets;
 
@@ -27,12 +28,22 @@ public sealed class MicWidget(WidgetContext context, WidgetConfig entry)
 
     public override string TypeId => Type;
 
+    private bool? _said;
+
     public override void Tick(SensorSnapshot snapshot)
     {
         if (Microphone.Muted() is not { } muted)
         {
             Vanish();
             return;
+        }
+
+        // Written down when it changes, so that "the bar did not show it" can
+        // be laid beside Master Audio Switcher's own log of the same minute.
+        if (_said != muted)
+        {
+            _said = muted;
+            Context.Log.LogInformation("mic.muted {Muted}", muted);
         }
 
         Draw(
