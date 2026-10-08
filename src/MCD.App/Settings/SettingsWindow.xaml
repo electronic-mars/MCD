@@ -336,6 +336,14 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
                             IsTabStop="False" />
+                        <!-- The page's four parts, one at a time: the catalogue,
+                             what is on the bar, the programs, the layouts. -->
+                        <ContentControl
+                            x:Name="WidgetsParts"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            IsTabStop="False" />
                         <StackPanel x:Name="WidgetsBody" Margin="0,4,0,0" />
                     </StackPanel>
 
@@ -479,6 +487,20 @@
                                 FontSize="24"
                                 FontWeight="SemiBold"
                                 Text="Sensors" />
+                            <!-- How many readings there are, beside the title. -->
+                            <Border
+                                Margin="6,0,0,0"
+                                Padding="10,3,10,4"
+                                VerticalAlignment="Center"
+                                Background="{ThemeResource BraunPanelHi}"
+                                BorderBrush="{ThemeResource BraunLine}"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                                <TextBlock
+                                    x:Name="SensorSummary"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BraunTx2}" />
+                            </Border>
                         </StackPanel>
                         <TextBlock
                             x:Uid="SensorsIntro"
@@ -487,38 +509,12 @@
                             Text="Graphics and drive temperatures work out of the box. The processor and the board join in while LibreHardwareMonitor (with its Remote Web Server on) or HWiNFO (with shared memory on) is running."
                             TextWrapping="Wrap" />
 
-                        <StackPanel
-                            Margin="0,14,0,7"
-                            Orientation="Horizontal"
-                            Spacing="7">
-                            <Viewbox Width="16" Height="16" VerticalAlignment="Center">
-                                <Canvas Width="24" Height="24">
-                                    <Path
-                                        Data="{x:Bind local:IconRow.Live}"
-                                        Stroke="{ThemeResource BraunTx3}"
-                                        StrokeEndLineCap="Round"
-                                        StrokeLineJoin="Round"
-                                        StrokeStartLineCap="Round"
-                                        StrokeThickness="1.7" />
-                                </Canvas>
-                            </Viewbox>
-                            <TextBlock
-                                x:Uid="LiveReadingsTitle"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource Micro}"
-                                Text="LIVE READINGS" />
-                        </StackPanel>
-                        <TextBlock
-                            x:Name="SensorSummary"
-                            Margin="0,-3,0,6"
-                            FontSize="12"
-                            Foreground="{ThemeResource BraunTx3}"
-                            LineHeight="17"
-                            TextWrapping="Wrap" />
-
                         <!-- One line per source: the silent ones are the point,
                              and a paragraph strung with semicolons hid them. -->
                         <StackPanel x:Name="SourcesList" Margin="0,0,0,10" />
+
+                        <!-- The readings themselves: found by name, or by kind. -->
+                        <StackPanel x:Name="SensorTools" Margin="0,0,0,8" />
 
                         <Border
                             Background="{ThemeResource BraunCard}"
@@ -624,6 +620,11 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </Border>
+
+                        <!-- Where the readings come from, folded away: for
+                             whoever wants the roll call, not on the way to
+                             the readings. -->
+                        <StackPanel x:Name="SourcesFoot" Margin="0,14,0,0" />
                     </StackPanel>
 
 
@@ -663,6 +664,31 @@
                          own: the mark, the name, the version, centred, with
                          nothing beside them competing. -->
                     <StackPanel x:Name="AboutSection" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageProgram}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock
+                                x:Uid="AboutTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="About" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Uid="AboutLead"
+                            Margin="0,8,0,10"
+                            Foreground="{ThemeResource BraunTx2}"
+                            Text="The version, updates and the program's own errands."
+                            TextWrapping="Wrap" />
                         <StackPanel x:Name="AboutBody" />
                     </StackPanel>
 

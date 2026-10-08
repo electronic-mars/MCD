@@ -23,7 +23,7 @@
     <value>Appearance</value>
   </data>
   <data name="NavSensors.Text" xml:space="preserve">
-    <value>Readings</value>
+    <value>Sensors</value>
   </data>
   <data name="NavAbout.Text" xml:space="preserve">
     <value>About</value>
@@ -36,7 +36,7 @@
     <value>Each screen has its own bar. This page is the bar of the screen chosen above; changes land on it as you make them.</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
-    <value>Show a bar on this display</value>
+    <value>Show the bar</value>
   </data>
   <data name="EdgeLabel" xml:space="preserve">
     <value>Edge</value>
@@ -67,10 +67,10 @@
   <!-- Icons page -->
   <!-- Sensors page -->
   <data name="SensorsTitle.Text" xml:space="preserve">
-    <value>Readings</value>
+    <value>Sensors</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>Everything the program reads on this machine, and what to call it - the pencil renames.</value>
+    <value>The main readings, without the technical noise. A pencil renames one.</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Live readings</value>
@@ -87,7 +87,7 @@
     <value>The bars come back when you sign in.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Closing this window leaves the bars running.</value>
+    <value>The bars close until the program is started again.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Quit</value>
@@ -303,7 +303,7 @@
     <value>Remove from bar</value>
   </data>
   <data name="PlacementTitle" xml:space="preserve">
-    <value>Placement</value>
+    <value>Placement and size</value>
   </data>
   <data name="BehaviourTitle" xml:space="preserve">
     <value>Behaviour</value>
@@ -468,7 +468,7 @@
     <value>Startup</value>
   </data>
   <data name="FilesTitle" xml:space="preserve">
-    <value>Its own files</value>
+    <value>Files and diagnostics</value>
   </data>
   <data name="QuitTitle" xml:space="preserve">
     <value>Quitting</value>
@@ -573,19 +573,19 @@
     <value>The log</value>
   </data>
   <data name="LogsRowHint" xml:space="preserve">
-    <value>What the program wrote down about its own run.</value>
+    <value>What the program wrote down about its own run - where to look when something went wrong.</value>
   </data>
   <data name="ConfigRow" xml:space="preserve">
     <value>The settings file</value>
   </data>
   <data name="ConfigRowHint" xml:space="preserve">
-    <value>Everything on these pages, as it is stored on disk.</value>
+    <value>Everything on these pages, in one file.</value>
   </data>
   <data name="OpenFolder" xml:space="preserve">
     <value>Open the folder</value>
   </data>
   <data name="ExitRow" xml:space="preserve">
-    <value>Stop the program</value>
+    <value>Quit Master Control Dock</value>
   </data>
   <data name="RenameTip" xml:space="preserve">
     <value>Double-click to give this reading a name of your own</value>
@@ -885,7 +885,7 @@
     <value>Appearance</value>
   </data>
   <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Readings</value>
+    <value>Sensors</value>
   </data>
   <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
     <value>About</value>
@@ -1801,5 +1801,128 @@
   </data>
   <data name="HistoryNothing" xml:space="preserve">
     <value>Nothing has been read yet.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Catalogue</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>On the bar</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Programs</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Layouts</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Size of the bar</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Its thickness, the icons and the figures, together.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>The icons and the figures; a bar down the side has one thickness.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>the size of the bar</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Right now</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Every main reading is available</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Answering: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>The temperatures of the processor and the memory are not read yet</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>They need the PawnIO driver and a small service of this program; the row below sets them up.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Readings</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Where they come from</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Sources</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>{0} of {1} answering: Windows counters, the graphics driver, drives, memory, the processor.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>{0} readings</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Find a reading</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Free software, GPL-3.0-or-later. Parts adapted from Microsoft PowerToys, MIT.</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>What is new</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Last checked: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>today, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Check now</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Changes are saved as they are made.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>The version, updates and the program’s own errands.</value>
   </data>
 </root>

@@ -108,12 +108,37 @@ public static class Updater
 
         Allowed(url);
 
+        // When the release page last answered, for the About page to say.
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(CheckedFile)!);
+            using var stamp = new StreamWriter(CheckedFile);
+            stamp.Write(DateTimeOffset.UtcNow.ToString("o", System.Globalization.CultureInfo.InvariantCulture));
+        }
+        catch (IOException)
+        {
+            // A stamp that could not be written changes nothing that matters.
+        }
+
         return new UpdateOffer(
             version,
             root.TryGetProperty("notes", out JsonElement notes) ? notes.GetString() ?? string.Empty : string.Empty,
             url,
             Convert.FromHexString(signature));
     }
+
+    private static string CheckedFile => Path.Combine(Infrastructure.AppPaths.Root, "update", "last-check.txt");
+
+    /// <summary>When the release page last answered a look for a newer version, or null if never.</summary>
+    public static DateTimeOffset? LastChecked =>
+        File.Exists(CheckedFile)
+        && DateTimeOffset.TryParse(
+            File.ReadAllText(CheckedFile),
+            System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.RoundtripKind,
+            out DateTimeOffset at)
+            ? at
+            : null;
 
     /// <summary>Whether this is the file our key signed.</summary>
     public static bool Verify(string path, byte[] signature) => Verify(path, signature, ReleaseKey.Public);

@@ -609,6 +609,76 @@ public static class Braun
         return Recessed(row);
     }
 
+    /// <summary>
+    /// A rail of words, one chosen: the parts of a page. The chosen one stands
+    /// off the rail like the chosen screen does, with the accent under its word.
+    /// </summary>
+    public static Grid Strip(IReadOnlyList<string> labels, int selected, Action<int> pick)
+    {
+        var row = new Grid { ColumnSpacing = 2 };
+
+        for (int i = 0; i < labels.Count; i++)
+        {
+            bool chosen = i == selected;
+
+            row.ColumnDefinitions.Add(
+                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            var body = new StackPanel
+            {
+                Spacing = 6,
+                Padding = new Thickness(6, 9, 6, 0),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
+
+            body.Children.Add(new TextBlock
+            {
+                Text = labels[i],
+                FontSize = 13,
+                FontWeight = chosen ? FontWeights.SemiBold : FontWeights.Normal,
+                Foreground = chosen ? Tx : Tx3,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+            });
+
+            body.Children.Add(new Rectangle
+            {
+                Height = 2,
+                Width = 64,
+                RadiusX = 1,
+                RadiusY = 1,
+                Fill = chosen ? Acc : Clear,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            });
+
+            FrameworkElement face = chosen
+                ? Raised(body, PanelHi, radius: 8, blur: 5.5, drop: 2, depth: 0.30)
+                : body;
+
+            var tile = new Button
+            {
+                Content = face,
+                MinWidth = 0,
+                MinHeight = 0,
+                Padding = new Thickness(0),
+                BorderThickness = new Thickness(0),
+                Background = Clear,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalContentAlignment = VerticalAlignment.Stretch,
+            };
+
+            Grid.SetColumn(tile, i);
+
+            int index = i;
+            tile.Click += (_, _) => pick(index);
+            row.Children.Add(tile);
+        }
+
+        return Recessed(row);
+    }
+
     /// <summary>A surface flush with what it sits on.</summary>
     private static Grid Flat(UIElement content, Brush fill, double radius, Brush? edge = null)
     {

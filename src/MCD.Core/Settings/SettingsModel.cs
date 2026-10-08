@@ -213,6 +213,13 @@ public sealed record MonitorConfig
 
     public DockDensity Density { get; init; } = DockDensity.Default;
 
+    /// <summary>
+    /// How large this bar draws its icons and figures - "small", "medium",
+    /// "large" - or null for the program-wide size. Set together with the
+    /// density by the one "size of the bar" choice on the Bars page.
+    /// </summary>
+    public string? Size { get; init; }
+
     /// <summary>Which end of the bar its contents are gathered at.</summary>
     public DockAnchor Anchor { get; init; } = DockAnchor.Start;
 

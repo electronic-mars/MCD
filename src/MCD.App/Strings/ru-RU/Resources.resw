@@ -23,7 +23,7 @@
     <value>Оформление</value>
   </data>
   <data name="NavSensors.Text" xml:space="preserve">
-    <value>Показания</value>
+    <value>Датчики</value>
   </data>
   <data name="NavAbout.Text" xml:space="preserve">
     <value>О программе</value>
@@ -36,7 +36,7 @@
     <value>У каждого экрана своя панель. Здесь — панель выбранного выше экрана; изменения попадают на неё сразу.</value>
   </data>
   <data name="ShowDockLabel" xml:space="preserve">
-    <value>Показывать панель на этом дисплее</value>
+    <value>Показывать панель</value>
   </data>
   <data name="EdgeLabel" xml:space="preserve">
     <value>Край</value>
@@ -67,10 +67,10 @@
   <!-- Страница «Значки» -->
   <!-- Страница «Датчики» -->
   <data name="SensorsTitle.Text" xml:space="preserve">
-    <value>Показания</value>
+    <value>Датчики</value>
   </data>
   <data name="SensorsIntro.Text" xml:space="preserve">
-    <value>Всё, что программа читает на этой машине, и как это называть — карандаш переименовывает.</value>
+    <value>Главные показатели без технического шума. Карандаш переименовывает.</value>
   </data>
   <data name="LiveReadingsTitle.Text" xml:space="preserve">
     <value>Показания сейчас</value>
@@ -87,7 +87,7 @@
     <value>Панели возвращаются при входе в систему.</value>
   </data>
   <data name="ExitHint" xml:space="preserve">
-    <value>Закрытие окна оставляет панели работать.</value>
+    <value>Панели закроются до следующего запуска программы.</value>
   </data>
   <data name="ExitButton" xml:space="preserve">
     <value>Выйти</value>
@@ -303,7 +303,7 @@
     <value>Убрать с панели</value>
   </data>
   <data name="PlacementTitle" xml:space="preserve">
-    <value>Расположение</value>
+    <value>Расположение и размер</value>
   </data>
   <data name="BehaviourTitle" xml:space="preserve">
     <value>Поведение</value>
@@ -468,10 +468,10 @@
     <value>Запуск</value>
   </data>
   <data name="FilesTitle" xml:space="preserve">
-    <value>Собственные файлы</value>
+    <value>Файлы и диагностика</value>
   </data>
   <data name="QuitTitle" xml:space="preserve">
-    <value>Выход</value>
+    <value>Завершение работы</value>
   </data>
   <data name="SenseDiskBusyName" xml:space="preserve">
     <value>Активность диска</value>
@@ -570,22 +570,22 @@
     <value>То же самое, что перетащить виджет с панели на рабочий стол.</value>
   </data>
   <data name="LogsRow" xml:space="preserve">
-    <value>Журнал</value>
+    <value>Журнал работы</value>
   </data>
   <data name="LogsRowHint" xml:space="preserve">
-    <value>Что программа записала о собственной работе.</value>
+    <value>Помогает разобраться, если что-то пошло не так.</value>
   </data>
   <data name="ConfigRow" xml:space="preserve">
     <value>Файл настроек</value>
   </data>
   <data name="ConfigRowHint" xml:space="preserve">
-    <value>Всё с этих страниц — так, как оно лежит на диске.</value>
+    <value>Все параметры программы в одном файле.</value>
   </data>
   <data name="OpenFolder" xml:space="preserve">
     <value>Открыть папку</value>
   </data>
   <data name="ExitRow" xml:space="preserve">
-    <value>Остановить программу</value>
+    <value>Выйти из Master Control Dock</value>
   </data>
   <data name="RenameTip" xml:space="preserve">
     <value>Двойной щелчок — дать этому показанию своё имя</value>
@@ -885,7 +885,7 @@
     <value>Оформление</value>
   </data>
   <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
-    <value>Показания</value>
+    <value>Датчики</value>
   </data>
   <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
     <value>О программе</value>
@@ -1801,5 +1801,128 @@
   </data>
   <data name="HistoryNothing" xml:space="preserve">
     <value>Пока ничего не прочитано.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Каталог</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>На панели</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Программы</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Раскладки</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Слева</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Сверху</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Справа</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Снизу</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Размер панели</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Компактная</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Обычная</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Крупная</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Сразу меняет толщину, значки и цифры.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>Значки и цифры; у панели сбоку экрана толщина одна.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>размер панели</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Состояние сейчас</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Все основные показания доступны</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Отвечают: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>Температура процессора и памяти пока не читается</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>Нужны драйвер PawnIO и небольшая служба программы — строка ниже их ставит.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Показания</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Технические источники</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Источники показаний</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>Отвечают {0} из {1}: счётчики Windows, драйвер видеокарты, диски, память, процессор.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Показать</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>показаний: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Найти показание</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Нагрузка</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Свободное ПО · GPL-3.0-or-later. Часть кода — из Microsoft PowerToys (MIT).</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>Что нового</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Последняя проверка: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>сегодня, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Проверить сейчас</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Изменения сохраняются автоматически.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>Версия, обновления и служебные действия.</value>
   </data>
 </root>

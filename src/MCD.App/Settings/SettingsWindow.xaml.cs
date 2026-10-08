@@ -118,6 +118,7 @@ public sealed partial class SettingsWindow : Window
         };
 
         SensorList.ItemsSource = _readings;
+        BuildSensorTools();
         _version = string.Format(
             CultureInfo.CurrentCulture, Loc.Tr("VersionFormat", "Version {0}"), AppInfo.Version);
 
@@ -431,6 +432,11 @@ public sealed partial class SettingsWindow : Window
             && _settings.Current.Monitors.FirstOrDefault(m => m.StableId == _editing)
                 ?.Widgets.FirstOrDefault(w => w.InstanceId == widgetId)?.TypeId == IconWidget.Type;
 
+        if (widgetId is not null)
+        {
+            _widgetsPart = pin ? 2 : 1;
+        }
+
         Nav.SelectedItem = widgetId is null
             ? Nav.MenuItems[0]
             : Nav.MenuItems.OfType<NavigationViewItem>()
@@ -470,6 +476,13 @@ public sealed partial class SettingsWindow : Window
         bool foot = tag.EndsWith('!');
         string wanted = foot ? tag[..^1] : tag;
 
+        // "widgets#2" opens the widgets page at its third part.
+        if (wanted.Split('#') is [var page, var which] && int.TryParse(which, out int index))
+        {
+            _widgetsPart = index;
+            wanted = page;
+        }
+
         foreach (object item in Nav.MenuItems)
         {
             if (item is not NavigationViewItem entry || (entry.Tag as string) != wanted)
@@ -478,6 +491,10 @@ public sealed partial class SettingsWindow : Window
             }
 
             Nav.SelectedItem = entry;
+
+            // The same page with another part asked for changes no selection,
+            // so nothing else would show it.
+            ShowParts();
 
             // After the pages have been laid out, not before: the page just
             // switched to has no extent yet.
@@ -1395,26 +1412,29 @@ public sealed partial class SettingsWindow : Window
         // ---------------------------------------------------------- the screen
         DockBody.Children.Add(Braun.Heading("Computer", Loc.Tr("DockGroupScreen", "This screen's bar")));
 
+        // The switch, and beside it the button that says which glass this is:
+        // each screen shows its number for a moment.
+        var shown = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 };
+
+        if (_docks.Plans.Length > 1)
+        {
+            shown.Children.Add(Braun.Action(
+                Loc.Tr("IdentifyButton", "Identify"),
+                () => Mcd.App.Dock.IdentifyScreens.Flash(_docks.Plans.Select(p => p.Monitor)),
+                "Computer"));
+        }
+
+        shown.Children.Add(Braun.Switch(
+            dock.Enabled,
+            on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "showing the bar"))));
+
         DockBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("ShowDockLabel", "Show a bar on this display"),
                 live is not null
-                    ? $"{live.Width} x {live.Height} · {live.Dpi * 100 / 96}%"
+                    ? $"{ScreenName(dock.StableId)} · {live.Dpi * 100 / 96}%"
                     : Loc.Tr("DockNotAttached", "not attached · its layout is kept and comes back with the screen"),
-                Braun.Switch(
-                    dock.Enabled,
-                    on => SetDock(d => d with { Enabled = on }, Loc.Tr("UndoShown", "showing the bar")))),
-
-            // Which glass is which: each screen shows its number for a moment.
-            _docks.Plans.Length > 1
-                ? Braun.Row(
-                    Loc.Tr("IdentifyRow", "Which screen is which"),
-                    Loc.Tr("IdentifyRowHint", "Shows each screen's number on it for a moment."),
-                    Braun.Action(
-                        Loc.Tr("IdentifyButton", "Identify"),
-                        () => Mcd.App.Dock.IdentifyScreens.Flash(_docks.Plans.Select(p => p.Monitor)),
-                        "Computer"))
-                : null,
+                shown),
 
             // Only for a screen that is not there. A list of screens that only
             // ever grows is a list somebody stops reading: every projector,
@@ -1443,52 +1463,72 @@ public sealed partial class SettingsWindow : Window
         DockBody.Children.Add(gated);
 
         // ------------------------------------------------------------- placing
+        // The edge as four words, and one size for the whole look of the bar
+        // - how thick it is and how large it draws - with the bar itself
+        // drawn beside them. The thickness and the size of the readings were
+        // two knobs on one wish, "smaller", and some of their six pairings
+        // made no sense (large figures on a compact strip).
         bool horizontal = DockMetrics.IsHorizontal(dock.Edge);
+        AppBarEdge[] edges = [AppBarEdge.Left, AppBarEdge.Top, AppBarEdge.Right, AppBarEdge.Bottom];
+        int step = Step(dock);
 
-        gated.Children.Add(Braun.Heading("Layout", Loc.Tr("PlacementTitle", "Placement")));
+        gated.Children.Add(Braun.Heading("Layout", Loc.Tr("PlacementTitle", "Placement and size")));
 
-        gated.Children.Add(Braun.Group(
-            Braun.Row(
-                Loc.Tr("EdgeLabel", "Edge"),
-                Loc.Tr("EdgeHint", "Which side of the screen the bar sits on."),
-                EdgeBoard(
-                    dock.Edge,
-                    edge => SetDock(d => d with { Edge = edge }, Loc.Tr("UndoEdge", "edge")))),
+        var choices = new StackPanel { Spacing = 14 };
 
-            // A bar down the side of the screen has one thickness. The row is
-            // replaced by its explanation rather than offered greyed and mute.
+        Panel edgeKeys = Braun.Segs(
+            [
+                Loc.Tr("EdgeLeft", "Left"),
+                Loc.Tr("EdgeTop", "Top"),
+                Loc.Tr("EdgeRight", "Right"),
+                Loc.Tr("EdgeBottom", "Bottom"),
+            ],
+            Array.IndexOf(edges, dock.Edge),
+            i => SetDock(d => d with { Edge = edges[i] }, Loc.Tr("UndoEdge", "edge")),
+            wide: true);
+
+        Panel sizeKeys = Braun.Segs(
+            [
+                Loc.Tr("BarSizeCompact", "Compact"),
+                Loc.Tr("BarSizeNormal", "Normal"),
+                Loc.Tr("BarSizeLarge", "Large"),
+            ],
+            step,
+            i => SetDock(
+                d => d with
+                {
+                    Density = i == 0 && horizontal ? DockDensity.Compact : DockDensity.Default,
+                    Size = i switch { 0 => "small", 1 => "medium", _ => "large" },
+                },
+                Loc.Tr("UndoBarSize", "the size of the bar")),
+            wide: true);
+
+        choices.Children.Add(Braun.Field(
+            Loc.Tr("EdgeLabel", "Edge"), edgeKeys, Loc.Tr("EdgeHint", "Which side of the screen the bar sits on.")));
+
+        choices.Children.Add(Braun.Field(
+            Loc.Tr("BarSizeLabel", "Size of the bar"),
+            sizeKeys,
             horizontal
-                ? Braun.Row(
-                    Loc.Tr("SizeLabel", "Thickness"),
-                    Loc.Tr("SizeHint", "How much room the bar takes up."),
-                    Braun.Segs(
-                        [Loc.Tr("SegThickDefault", "Default"), Loc.Tr("SegThickCompact", "Compact")],
-                        dock.Density == DockDensity.Compact ? 1 : 0,
-                        i => SetDock(
-                            d => d with { Density = i == 1 ? DockDensity.Compact : DockDensity.Default },
-                            Loc.Tr("UndoThickness", "thickness")),
-                        wide: true),
-                    stack: true)
-                : Braun.Row(
-                    Loc.Tr("SizeLabel", "Thickness"),
-                    Loc.Tr("ThicknessNote", "A bar down the side of the screen has one thickness."),
-                    null),
+                ? Loc.Tr("BarSizeHint", "Its thickness, the icons and the figures, together.")
+                : Loc.Tr("BarSizeSideHint", "The icons and the figures; a bar down the side has one thickness.")));
 
-            Braun.Row(
-            Loc.Tr("ReadingSizeLabel", "Size of the readings"),
-            Loc.Tr(
-                "ReadingSizeHint",
-                "How large the icons and figures are drawn. The bar itself stays the thickness chosen on its own page."),
-            Braun.Segs(
-                [
-                    Loc.Tr("SegSizeLarge", "Large"),
-                    Loc.Tr("SegSizeMedium", "Medium"),
-                    Loc.Tr("SegSizeSmall", "Small"),
-                ],
-                Math.Max(0, Array.IndexOf(Sizes, _settings.Current.App.Size)),
-                i => ApplyLook(size: Sizes[i]),
-                wide: true),
-            stack: true)));
+        // Across the column, not huddled at its left.
+        edgeKeys.HorizontalAlignment = HorizontalAlignment.Stretch;
+        sizeKeys.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+        var placing = new Grid { ColumnSpacing = 18 };
+        placing.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        placing.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        placing.Children.Add(choices);
+
+        FrameworkElement preview = BarPreview(dock.Edge, step);
+        Grid.SetColumn(preview, 1);
+        placing.Children.Add(preview);
+
+        var placingCard = Braun.Group(placing);
+        placing.Margin = new Thickness(16, 14, 16, 14);
+        gated.Children.Add(placingCard);
 
         // ----------------------------------------------------------- behaviour
         gated.Children.Add(Braun.Heading("Gear", Loc.Tr("BehaviourTitle", "Behaviour")));
@@ -1538,6 +1578,133 @@ public sealed partial class SettingsWindow : Window
     }
 
 
+    /// <summary>Where a bar stands on the one "size of the bar" choice: compact, normal or large.</summary>
+    private int Step(MonitorConfig dock)
+    {
+        bool across = DockMetrics.IsHorizontal(dock.Edge);
+
+        if (across && dock.Density == DockDensity.Compact)
+        {
+            return 0;
+        }
+
+        return (dock.Size ?? _settings.Current.App.Size) switch
+        {
+            "large" => 2,
+            "small" when !across => 0,
+            _ => 1,
+        };
+    }
+
+    /// <summary>
+    /// The bar as it will stand: a screen, and along the chosen edge a bar of
+    /// the chosen size with a few ordinary widgets on it.
+    /// </summary>
+    private static FrameworkElement BarPreview(AppBarEdge edge, int step)
+    {
+        bool across = DockMetrics.IsHorizontal(edge);
+        double thick = step switch { 0 => 15, 1 => 21, _ => 26 };
+
+        var screen = new Grid { Width = 250, Height = 156 };
+
+        screen.Children.Add(new Border
+        {
+            CornerRadius = new CornerRadius(10),
+            Background = Braun.Sunk,
+            BorderBrush = Braun.Line,
+            BorderThickness = new Thickness(1),
+        });
+
+        var items = new StackPanel
+        {
+            Orientation = across ? Orientation.Horizontal : Orientation.Vertical,
+            Spacing = 4,
+        };
+
+        WidgetSample[] samples = across
+            ? [WidgetSample.Of("Cpu", "37 %", "CPU"), WidgetSample.Of("Gpu", "51 °C", "GPU"), WidgetSample.Of("Speaker", "42 %"), new WidgetSample([], "12:34")]
+            : [WidgetSample.Of("Cpu"), WidgetSample.Of("Gpu"), WidgetSample.Of("Speaker"), WidgetSample.Of("WifiHigh")];
+
+        foreach (WidgetSample sample in samples)
+        {
+            Border plate = BarSample(sample);
+            plate.Background = null;
+            plate.MinWidth = 0;
+            items.Children.Add(plate);
+        }
+
+        var bar = new Border
+        {
+            Margin = new Thickness(8),
+            Padding = new Thickness(across ? 6 : 2, across ? 2 : 6, across ? 6 : 2, across ? 2 : 6),
+            CornerRadius = new CornerRadius(6),
+            Background = Braun.PanelHi,
+            BorderBrush = Braun.LineHi,
+            BorderThickness = new Thickness(1),
+            Child = new Viewbox
+            {
+                Stretch = Stretch.Uniform,
+                HorizontalAlignment = across ? HorizontalAlignment.Left : HorizontalAlignment.Center,
+                VerticalAlignment = across ? VerticalAlignment.Center : VerticalAlignment.Top,
+                Child = items,
+            },
+        };
+
+        if (across)
+        {
+            bar.Height = thick;
+            bar.VerticalAlignment = edge == AppBarEdge.Top ? VerticalAlignment.Top : VerticalAlignment.Bottom;
+        }
+        else
+        {
+            bar.Width = thick + 4;
+            bar.HorizontalAlignment = edge == AppBarEdge.Left ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+        }
+
+        screen.Children.Add(bar);
+        return screen;
+    }
+
+    /// <summary>Which part of the widgets page shows: the catalogue, the bar, the programs, the layouts.</summary>
+    private int _widgetsPart;
+
+    /// <summary>
+    /// The rail of the widgets page's four parts, with how many of each there
+    /// are, and the one chosen shown.
+    /// </summary>
+    /// <remarks>
+    /// One long page held the catalogue, the bar's list with the chosen
+    /// widget's settings, the pinned programs with their editor and the saved
+    /// layouts: a scroll past forty cards to reach the thing on the bar.
+    /// </remarks>
+    private void ShowParts()
+    {
+        MonitorConfig? dock = Dock();
+        bool page = WidgetsSection.Visibility == Visibility.Visible;
+
+        string Counted(string key, string english, int count) =>
+            Loc.Tr(key, english) + " · " + count.ToString(CultureInfo.CurrentCulture);
+
+        WidgetsParts.Content = Braun.Strip(
+            [
+                Loc.Tr("PartCatalog", "Catalogue"),
+                Counted("PartOnBar", "On the bar", dock?.Widgets.Length ?? 0),
+                Counted("PartPrograms", "Programs", dock?.Widgets.Count(w => w.TypeId == IconWidget.Type) ?? 0),
+                Counted("PartLayouts", "Layouts", _settings.Current.App.Presets.Length),
+            ],
+            _widgetsPart,
+            i =>
+            {
+                _widgetsPart = i;
+                ShowParts();
+            });
+
+        WidgetsBody.Visibility = Show(_widgetsPart == 0);
+        OnBarSection.Visibility = Show(page && _widgetsPart == 1);
+        PinsSection.Visibility = Show(page && _widgetsPart == 2);
+        PresetsSection.Visibility = Show(page && _widgetsPart == 3);
+    }
+
     /// <summary>
     /// Fills the page about what is on the bar.
     /// </summary>
@@ -1551,6 +1718,7 @@ public sealed partial class SettingsWindow : Window
     private void ShowWidgets()
     {
         Braun.Theme = Root.ActualTheme;
+        ShowParts();
 
         // The rows that point at widgets are about to be thrown away, and a
         // row that goes without a farewell leaves its line drawn on the bar.
@@ -1721,6 +1889,7 @@ public sealed partial class SettingsWindow : Window
     private void ShowPins()
     {
         Braun.Theme = Root.ActualTheme;
+        ShowParts();
         _docks.Point(string.Empty, null);
         PinsBody.Children.Clear();
 
@@ -1875,6 +2044,7 @@ public sealed partial class SettingsWindow : Window
     private void ShowPresets()
     {
         Braun.Theme = Root.ActualTheme;
+        ShowParts();
         PresetsBody.Children.Clear();
 
         var rows = new List<FrameworkElement?>
@@ -2185,135 +2355,6 @@ public sealed partial class SettingsWindow : Window
 
         EditDock(change, what);
         ShowDock();
-    }
-
-    /// <summary>
-    /// The screen as a little drawing, with a key on each of its four edges.
-    /// </summary>
-    /// <remarks>
-    /// The question is "which side of the screen", so the control is a screen
-    /// with sides: press the side the bar should stand on. The chosen edge
-    /// wears the accent, exactly where the bar itself will be. Four words in a
-    /// row said the same thing more slowly, and said nothing about geometry.
-    /// </remarks>
-    private FrameworkElement EdgeBoard(AppBarEdge chosen, Action<AppBarEdge> pick)
-    {
-        const double Wide = 176;
-        const double Tall = 110;
-        const double Bar = 15;
-        const double In = 8;
-
-        var face = new Grid { Width = Wide, Height = Tall };
-
-        face.Children.Add(new Microsoft.UI.Xaml.Shapes.Rectangle
-        {
-            RadiusX = 10,
-            RadiusY = 10,
-            Fill = Braun.CardHi,
-            Stroke = Braun.LineHi,
-            StrokeThickness = 1,
-        });
-
-        (AppBarEdge Edge, string Name)[] sides =
-        [
-            (AppBarEdge.Left, Loc.Tr("SegEdgeLeft", "Left")),
-            (AppBarEdge.Top, Loc.Tr("SegEdgeTop", "Top")),
-            (AppBarEdge.Right, Loc.Tr("SegEdgeRight", "Right")),
-            (AppBarEdge.Bottom, Loc.Tr("SegEdgeBottom", "Bottom")),
-        ];
-
-        foreach ((AppBarEdge edge, string name) in sides)
-        {
-            bool on = edge == chosen;
-
-            var strip = new Microsoft.UI.Xaml.Shapes.Rectangle
-            {
-                RadiusX = 4,
-                RadiusY = 4,
-                Fill = on ? Braun.Acc : Braun.Sunk,
-                Stroke = on ? null : Braun.LineHi,
-                StrokeThickness = on ? 0 : 1,
-            };
-
-            var key = new Button
-            {
-                Content = strip,
-                MinWidth = 0,
-                MinHeight = 0,
-                Padding = new Thickness(0),
-                BorderThickness = new Thickness(0),
-                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent),
-                HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                VerticalContentAlignment = VerticalAlignment.Stretch,
-            };
-
-            if (DockMetrics.IsHorizontal(edge))
-            {
-                key.Height = Bar;
-                key.HorizontalAlignment = HorizontalAlignment.Stretch;
-                key.VerticalAlignment = edge == AppBarEdge.Top
-                    ? VerticalAlignment.Top
-                    : VerticalAlignment.Bottom;
-                key.Margin = edge == AppBarEdge.Top
-                    ? new Thickness(In + Bar + 3, In, In + Bar + 3, 0)
-                    : new Thickness(In + Bar + 3, 0, In + Bar + 3, In);
-            }
-            else
-            {
-                key.Width = Bar;
-                key.VerticalAlignment = VerticalAlignment.Stretch;
-                key.HorizontalAlignment = edge == AppBarEdge.Left
-                    ? HorizontalAlignment.Left
-                    : HorizontalAlignment.Right;
-                key.Margin = edge == AppBarEdge.Left
-                    ? new Thickness(In, In + Bar + 3, 0, In + Bar + 3)
-                    : new Thickness(0, In + Bar + 3, In, In + Bar + 3);
-            }
-
-            ToolTipService.SetToolTip(key, name);
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(key, name);
-
-            // A key that answers the pointer is a key; a strip that does not
-            // is a picture of the state.
-            key.PointerEntered += (_, _) =>
-            {
-                if (!on)
-                {
-                    strip.Fill = Braun.LineHi;
-                }
-            };
-
-            key.PointerExited += (_, _) =>
-            {
-                if (!on)
-                {
-                    strip.Fill = Braun.Sunk;
-                }
-            };
-
-            AppBarEdge picked = edge;
-            key.Click += (_, _) =>
-            {
-                if (picked != chosen)
-                {
-                    pick(picked);
-                }
-            };
-
-            face.Children.Add(key);
-        }
-
-        var board = new StackPanel { Spacing = 6, HorizontalAlignment = HorizontalAlignment.Right };
-        board.Children.Add(face);
-        board.Children.Add(new TextBlock
-        {
-            Text = Loc.Tr("EdgeBoardHint", "Press a side"),
-            FontSize = 12,
-            Foreground = Braun.Tx3,
-            HorizontalAlignment = HorizontalAlignment.Center,
-        });
-
-        return board;
     }
 
     /// <summary>What this screen's bar is holding but has no room to show.</summary>
@@ -3763,12 +3804,11 @@ public sealed partial class SettingsWindow : Window
 
         DocksSection.Visibility = Show(tag == "docks");
         WidgetsSection.Visibility = Show(tag == "widgets");
+
         // Programs and saved layouts are parts of the same page: one answer
         // to "what is on the bar", where there used to be three pages to
-        // look through for it.
-        PinsSection.Visibility = Show(tag == "widgets");
-        PresetsSection.Visibility = Show(tag == "widgets");
-        OnBarSection.Visibility = Show(tag == "widgets");
+        // look through for it - shown one part at a time.
+        ShowParts();
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
         GeneralSection.Visibility = Show(tag == "general");
@@ -3806,9 +3846,25 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Fills the sensors page from whatever the hub has right now.</summary>
     private void ShowReadings()
     {
+        var named = new SensorNames(_settings.Current.Sensors.Names);
+        string wanted = _sensorWords.ToLower(CultureInfo.CurrentCulture);
+
+        // Found by name - the reading's own, its part's, its device's - and
+        // by kind; what does not match is left out of the list, its group
+        // heading with it.
         SensorDescriptor[] found =
         [
             .. _sensors.Catalog
+                .Where(d => _sensorKind switch
+                {
+                    1 => d.Kind == SensorKind.Temperature,
+                    2 => d.Kind == SensorKind.Load,
+                    _ => true,
+                })
+                .Where(d => wanted.Length == 0
+                    || $"{named.For(d)} {DeviceName(d)} {d.Hardware} {d.Label}"
+                        .ToLower(CultureInfo.CurrentCulture)
+                        .Contains(wanted, StringComparison.Ordinal))
                 .OrderBy(d => d.Group)
                 .ThenBy(d => d.Hardware, StringComparer.CurrentCulture)
                 .ThenBy(d => d.Kind)
@@ -3846,18 +3902,68 @@ public sealed partial class SettingsWindow : Window
             row.Update(snapshot);
         }
 
-        SensorSummary.Text = found.Length == 0
-            ? Loc.Tr("SensorsNoneYet", "Nothing is answering yet.")
-            : string.Format(
-                CultureInfo.CurrentCulture,
-                Loc.Tr("SensorsCount", "{0} readings."),
-                found.Length);
+        SensorSummary.Text = string.Format(
+            CultureInfo.CurrentCulture,
+            Loc.Tr("SensorsBadge", "{0} readings"),
+            _sensors.Catalog.Length);
 
         ShowSources();
     }
 
+    /// <summary>Which kind of reading the sensors page lists: all, temperatures, loads.</summary>
+    private int _sensorKind;
+
+    /// <summary>What the sensors page's search box holds.</summary>
+    private string _sensorWords = string.Empty;
+
+    private ContentControl? _sensorKinds;
+
+    /// <summary>The search box and the three kinds above the list of readings, built once.</summary>
+    private void BuildSensorTools()
+    {
+        var search = new TextBox { PlaceholderText = Loc.Tr("SensorSearch", "Find a reading") };
+
+        search.TextChanged += (_, _) =>
+        {
+            _sensorWords = search.Text.Trim();
+            ShowReadings();
+        };
+
+        _sensorKinds = new ContentControl
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            IsTabStop = false,
+        };
+
+        var row = new Grid { ColumnSpacing = 10 };
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        Grid.SetColumn(_sensorKinds, 1);
+        row.Children.Add(search);
+        row.Children.Add(_sensorKinds);
+
+        SensorTools.Children.Add(row);
+        Kinds();
+    }
+
+    private void Kinds() => _sensorKinds!.Content = Braun.Segs(
+        [
+            Loc.Tr("SensorKindAll", "All"),
+            Loc.Tr("SensorKindTemperature", "Temperature"),
+            Loc.Tr("SensorKindLoad", "Load"),
+        ],
+        _sensorKind,
+        i =>
+        {
+            _sensorKind = i;
+            Kinds();
+            ShowReadings();
+        });
+
     /// <summary>The device a reading belongs to, for the group headings.</summary>
-    private static string DeviceName(SensorDescriptor sensor) => sensor.Group switch
+    private static string DeviceName(SensorDescriptor sensor) => DeviceName(sensor.Group);
+
+    private static string DeviceName(HardwareGroup group) => group switch
     {
         HardwareGroup.Cpu => Loc.Tr("DeviceCpu", "Processor"),
         HardwareGroup.Gpu => Loc.Tr("DeviceGpu", "Graphics"),
@@ -3901,48 +4007,75 @@ public sealed partial class SettingsWindow : Window
 
         _sourcesShown = signature;
         SourcesList.Children.Clear();
+        SourcesFoot.Children.Clear();
 
-        // The verdict first, the roll call after it for whoever wants it.
+        // ------------------------------------------------------------ the verdict
+        // One sentence on whether everything is being read, with the parts that
+        // answer under it; the roll call of sources is folded away at the foot.
         bool silent = roll.Any(x => !x.Answering && x.Tier == Tier.Driver);
 
-        SourcesList.Children.Add(new TextBlock
+        string answering = string.Join(
+            ", ",
+            _sensors.Catalog
+                .Select(d => d.Group)
+                .Distinct()
+                .Order()
+                .Select(g => DeviceName(g).ToLower(CultureInfo.CurrentCulture)));
+
+        SourcesList.Children.Add(Braun.Heading("Pulse", Loc.Tr("SensorsStateTitle", "Right now")));
+
+        var verdict = new Grid { ColumnSpacing = 14, Padding = new Thickness(16, 14, 16, 14) };
+        verdict.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        verdict.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        Brush mark = silent
+            ? new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xF0, 0xA6, 0x3C))
+            : Braun.Led;
+
+        var badge = new Grid { Width = 34, Height = 34, VerticalAlignment = VerticalAlignment.Top };
+        badge.Children.Add(new Microsoft.UI.Xaml.Shapes.Ellipse { Stroke = mark, StrokeThickness = 1.6 });
+
+        var tick = new Canvas { Width = 24, Height = 24 };
+        tick.Children.Add(new Microsoft.UI.Xaml.Shapes.Path
         {
-            Text = silent
-                ? Loc.Tr("SourcesSomeSilent", "Some temperatures cannot be read yet. The row below says what is missing.")
-                : Loc.Tr("SourcesAllWell", "Everything this machine can report is being read."),
-            FontSize = 13,
-            Foreground = Braun.Tx2,
-            TextWrapping = TextWrapping.Wrap,
-            Margin = new Thickness(0, 0, 0, 6),
+            Data = (Geometry)Microsoft.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(
+                typeof(Geometry), silent ? "M 12 5 V 14 M 12 18.5 V 19" : "M 4.5 12.5 L 9.5 17.5 L 19.5 6.5"),
+            Stroke = mark,
+            StrokeThickness = 2.4,
+            StrokeStartLineCap = PenLineCap.Round,
+            StrokeEndLineCap = PenLineCap.Round,
+            StrokeLineJoin = PenLineJoin.Round,
         });
 
-        foreach (SourceRoll source in roll)
+        badge.Children.Add(new Viewbox { Width = 16, Height = 16, Child = tick });
+
+        var words = new StackPanel { Spacing = 4, VerticalAlignment = VerticalAlignment.Center };
+
+        words.Children.Add(new TextBlock
         {
-            var line = new Grid { ColumnSpacing = 8, Padding = new Thickness(0, 2, 0, 2) };
-            line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            line.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            Text = silent
+                ? Loc.Tr("SensorsVerdictSilent", "The temperatures of the processor and the memory are not read yet")
+                : Loc.Tr("SensorsVerdictWell", "Every main reading is available"),
+            FontSize = 15,
+            Foreground = Braun.Tx,
+            TextWrapping = TextWrapping.Wrap,
+        });
 
-            var name = new TextBlock
-            {
-                Text = SourceName(source.Id),
-                FontSize = 12,
-                Foreground = source.Answering ? Braun.Tx2 : Braun.Tx3,
-            };
+        words.Children.Add(new TextBlock
+        {
+            Text = silent
+                ? Loc.Tr("SensorsVerdictSilentHint", "They need the PawnIO driver and a small service of this program; the row below sets them up.")
+                : string.Format(CultureInfo.CurrentCulture, Loc.Tr("SensorsVerdictWellHint", "Answering: {0}."), answering),
+            FontSize = 12,
+            Foreground = Braun.Tx3,
+            TextWrapping = TextWrapping.Wrap,
+        });
 
-            var state = new TextBlock
-            {
-                Text = SourceState(source),
-                FontSize = 12,
-                Foreground = Braun.Tx3,
-                TextWrapping = TextWrapping.Wrap,
-            };
+        Grid.SetColumn(words, 1);
+        verdict.Children.Add(badge);
+        verdict.Children.Add(words);
 
-            Grid.SetColumn(name, 0);
-            Grid.SetColumn(state, 1);
-            line.Children.Add(name);
-            line.Children.Add(state);
-            SourcesList.Children.Add(line);
-        }
+        SourcesList.Children.Add(Braun.Group(verdict));
 
         // The one thing on this page a person can do about a silent source.
         // The processor's and the memory's own thermometers sit behind a
@@ -3970,7 +4103,72 @@ public sealed partial class SettingsWindow : Window
 
         heat.Margin = new Thickness(0, 10, 0, 0);
         SourcesList.Children.Add(heat);
+
+        SourcesList.Children.Add(Braun.Heading("Pulse", Loc.Tr("SensorsListTitle", "Readings")));
+
+        // ------------------------------------------------------------ the roll
+        SourcesFoot.Children.Add(Braun.Heading("Gear", Loc.Tr("SourcesTitle", "Where they come from")));
+
+        var rows = new List<FrameworkElement?>
+        {
+            Braun.Row(
+                Loc.Tr("SourcesRow", "Sources"),
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Loc.Tr("SourcesRowHint", "{0} of {1} answering: Windows counters, the graphics driver, drives, memory, the processor."),
+                    roll.Count(x => x.Answering),
+                    roll.Count),
+                Braun.Action(
+                    _sourcesOpen ? Loc.Tr("SourcesHide", "Hide") : Loc.Tr("SourcesShow", "Show"),
+                    () =>
+                    {
+                        _sourcesOpen = !_sourcesOpen;
+                        _sourcesShown = string.Empty;
+                        ShowSources();
+                    },
+                    "List")),
+        };
+
+        if (_sourcesOpen)
+        {
+            var lines = new StackPanel { Padding = new Thickness(13, 6, 13, 12) };
+
+            foreach (SourceRoll source in roll)
+            {
+                var line = new Grid { ColumnSpacing = 8, Padding = new Thickness(0, 2, 0, 2) };
+                line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                line.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+                var name = new TextBlock
+                {
+                    Text = SourceName(source.Id),
+                    FontSize = 12,
+                    Foreground = source.Answering ? Braun.Tx2 : Braun.Tx3,
+                };
+
+                var state = new TextBlock
+                {
+                    Text = SourceState(source),
+                    FontSize = 12,
+                    Foreground = Braun.Tx3,
+                    TextWrapping = TextWrapping.Wrap,
+                };
+
+                Grid.SetColumn(name, 0);
+                Grid.SetColumn(state, 1);
+                line.Children.Add(name);
+                line.Children.Add(state);
+                lines.Children.Add(line);
+            }
+
+            rows.Add(lines);
+        }
+
+        SourcesFoot.Children.Add(Braun.Group([.. rows]));
     }
+
+    /// <summary>Whether the roll call of sources at the foot of the sensors page is open.</summary>
+    private bool _sourcesOpen;
 
     /// <summary>
     /// The two steps between a bare machine and the processor's temperature,
@@ -4336,81 +4534,113 @@ public sealed partial class SettingsWindow : Window
         Braun.Theme = Root.ActualTheme;
         AboutBody.Children.Clear();
 
-        var mark = new StackPanel
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            Margin = new Thickness(0, 10, 0, 4),
-        };
+        bool light = Root.ActualTheme == ElementTheme.Light;
 
-        mark.Children.Add(new Border
+        // ------------------------------------------------------------ the card
+        // What it is, which version, under what licence, and what changed -
+        // one card, instead of a column of centred lines above the settings.
+        var card = new Grid { ColumnSpacing = 18, Padding = new Thickness(18, 16, 18, 16) };
+        card.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        card.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        card.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+        card.Children.Add(new Border
         {
-            Width = 96,
-            Height = 96,
-            CornerRadius = new CornerRadius(22),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            Margin = new Thickness(0, 4, 0, 14),
-            Shadow = new ThemeShadow(),
-            Translation = new System.Numerics.Vector3(0, 0, 24),
+            Width = 72,
+            Height = 72,
+            CornerRadius = new CornerRadius(16),
+            VerticalAlignment = VerticalAlignment.Center,
             Child = new Image
             {
                 Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(
-                    new Uri("ms-appx:///Assets/" + (Root.ActualTheme == ElementTheme.Light ? "icon-light-128.png" : "icon-128.png") + "")),
+                    new Uri("ms-appx:///Assets/" + (light ? "icon-light-128.png" : "icon-128.png"))),
                 Stretch = Microsoft.UI.Xaml.Media.Stretch.UniformToFill,
             },
         });
 
-        mark.Children.Add(new TextBlock
+        var words = new StackPanel { Spacing = 5, VerticalAlignment = VerticalAlignment.Center };
+
+        words.Children.Add(new TextBlock
         {
             Text = "MASTER CONTROL DOCK",
             FontSize = 12,
             FontWeight = Microsoft.UI.Text.FontWeights.Medium,
-            CharacterSpacing = 200,
+            CharacterSpacing = 160,
             Foreground = Braun.Tx,
-            HorizontalAlignment = HorizontalAlignment.Center,
         });
 
-        mark.Children.Add(new TextBlock
-        {
-            Text = _version,
-            FontSize = 11,
-            Foreground = Braun.Tx3,
-            Margin = new Thickness(0, 6, 0, 0),
-            HorizontalAlignment = HorizontalAlignment.Center,
-        });
+        words.Children.Add(new TextBlock { Text = _version, FontSize = 14, Foreground = Braun.Tx });
 
-        mark.Children.Add(new TextBlock
+        words.Children.Add(new TextBlock
         {
             Text = Loc.Tr(
-                "AboutIntro",
-                "A bar for the edge of your screen. Free software under GPL-3.0-or-later; parts adapted from Microsoft PowerToys under the MIT licence."),
-            FontSize = 12,
-            LineHeight = 20,
-            MaxWidth = 460,
-            Foreground = Braun.Tx2,
-            TextAlignment = TextAlignment.Center,
+                "AboutLicence",
+                "Free software, GPL-3.0-or-later. Parts adapted from Microsoft PowerToys, MIT."),
+            FontSize = 11,
+            Foreground = Braun.Tx3,
             TextWrapping = TextWrapping.Wrap,
-            Margin = new Thickness(0, 14, 0, 0),
-            HorizontalAlignment = HorizontalAlignment.Center,
         });
 
-        AboutBody.Children.Add(mark);
+        Grid.SetColumn(words, 1);
+        card.Children.Add(words);
 
-        // Nothing here runs by itself unless the second row says so: until
+        Button news = Braun.Action(
+            Loc.Tr("AboutNews", "What is new"),
+            () => Open("https://github.com/electronic-mars/MCD/releases"),
+            "Info");
+
+        news.VerticalAlignment = VerticalAlignment.Center;
+        Grid.SetColumn(news, 2);
+        card.Children.Add(news);
+
+        Border plate = Braun.Group(card);
+        plate.Background = new SolidColorBrush(light
+            ? Windows.UI.Color.FromArgb(0xFF, 0xE2, 0xF1, 0xEE)
+            : Windows.UI.Color.FromArgb(0xFF, 0x15, 0x2B, 0x2B));
+        plate.Margin = new Thickness(0, 4, 0, 0);
+        AboutBody.Children.Add(plate);
+
+        // ------------------------------------------------------------ updates
+        // Nothing here runs by itself unless the first row says so: until
         // then the program contacts nobody until the button is pressed.
         AboutBody.Children.Add(Braun.Heading("Download", Loc.Tr("UpdateTitle", "Updates")));
 
         bool auto = _settings.Current.App.AutoUpdate;
+        DateTime? checkedAt = Mcd.Core.Update.Updater.LastChecked?.LocalDateTime;
+
+        string state = _updateNote.Length > 0
+            ? _updateNote
+            : Mcd.App.AutoUpdate.Ready is { } waiting
+                ? string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateWaiting", "Version {0} is downloaded and checked."), waiting.Offer.Version)
+                : checkedAt is { } at
+                    ? string.Format(
+                        CultureInfo.CurrentCulture,
+                        Loc.Tr("UpdateLastChecked", "Last checked: {0}."),
+                        at.Date == DateTime.Today
+                            ? string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateToday", "today, {0:t}"), at)
+                            : at.ToString("g", CultureInfo.CurrentCulture))
+                    : auto
+                        ? Loc.Tr("UpdateRowAutoHint", "Looks for a newer version once a day.")
+                        : Loc.Tr("UpdateRowHint", "The program contacts nobody until you press the button.");
 
         AboutBody.Children.Add(Braun.Group(
             Braun.Row(
-                Loc.Tr("UpdateRow", "This version"),
-                _updateNote.Length > 0
-                    ? _updateNote
-                    : Mcd.App.AutoUpdate.Ready is { } waiting
-                        ? string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateWaiting", "Version {0} is downloaded and checked."), waiting.Offer.Version)
-                        : auto
-                            ? Loc.Tr("UpdateRowAutoHint", "Looks for a newer version once a day.")
-                            : Loc.Tr("UpdateRowHint", "The program contacts nobody until you press the button."),
+                Loc.Tr("AutoUpdateRow", "Update by itself"),
+                Loc.Tr(
+                    "AutoUpdateHint",
+                    "Once a day, from GitHub, signature checked. Put in while nobody is at the machine; under Program Files it asks first."),
+                Braun.Switch(auto, on =>
+                {
+                    SettingsModel current = _settings.Current;
+                    Write(
+                        current with { App = current.App with { AutoUpdate = on } },
+                        WriteReason.UserAction,
+                        Loc.Tr("UndoAutoUpdate", "updating by itself"));
+                    ShowAbout();
+                })),
+            Braun.Row(
+                Loc.Tr("UpdateCheckRow", "Check now"),
+                state,
                 _updating
                     ? null
                     : _offer is { } offer
@@ -4428,57 +4658,42 @@ public sealed partial class SettingsWindow : Window
                                     _onExit();
                                 },
                                 "Download")
-                            : Braun.Action(Loc.Tr("UpdateCheck", "Check for updates"), CheckUpdate, "Download")),
-            Braun.Row(
-                Loc.Tr("AutoUpdateRow", "Update by itself"),
-                Loc.Tr(
-                    "AutoUpdateHint",
-                    "Once a day, from GitHub, signature checked. Put in while nobody is at the machine; under Program Files it asks first."),
-                Braun.Switch(auto, on =>
-                {
-                    SettingsModel current = _settings.Current;
-                    Write(
-                        current with { App = current.App with { AutoUpdate = on } },
-                        WriteReason.UserAction,
-                        Loc.Tr("UndoAutoUpdate", "updating by itself"));
-                    ShowAbout();
-                }))));
+                            : Braun.Action(Loc.Tr("UpdateCheckButton", "Check"), CheckUpdate, "Download"))));
 
+        // ------------------------------------------------------------ papers
         // Only the program's own papers. The machine's settings - keys,
-        // language, startup, copies - have a page of their own; a page called
-        // "the program" that was mostly settings was a page nobody could
-        // guess the contents of.
-        AboutBody.Children.Add(Braun.Heading("Document", Loc.Tr("FilesTitle", "Its own files")));
+        // language, startup, copies - have a page of their own.
+        AboutBody.Children.Add(Braun.Heading("Document", Loc.Tr("FilesTitle", "Files and diagnostics")));
 
         AboutBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("LogsRow", "The log"),
-                Loc.Tr("LogsRowHint", "What the program wrote down about its own run."),
+                Loc.Tr("LogsRowHint", "What the program wrote down about its own run - where to look when something went wrong."),
                 Named(
-                    Braun.Action(
-                        Loc.Tr("OpenFolder", "Open the folder"),
-                        () => Open(AppPaths.LogDirectory),
-                        "Folder"),
+                    Braun.Action(Loc.Tr("OpenButton", "Open"), () => Open(AppPaths.LogDirectory), "Folder"),
                     Loc.Tr("LogsRow", "The log"))),
-
             Braun.Row(
                 Loc.Tr("ConfigRow", "The settings file"),
-                Loc.Tr("ConfigRowHint", "Everything on these pages, as it is stored on disk."),
+                Loc.Tr("ConfigRowHint", "Everything on these pages, in one file."),
                 Named(
-                    Braun.Action(
-                        Loc.Tr("OpenFolder", "Open the folder"),
-                        () => Open(AppPaths.Root),
-                        "Folder"),
+                    Braun.Action(Loc.Tr("OpenButton", "Open"), () => Open(AppPaths.Root), "Folder"),
                     Loc.Tr("ConfigRow", "The settings file")))));
 
+        // ------------------------------------------------------------ quitting
         AboutBody.Children.Add(Braun.Heading("Power", Loc.Tr("QuitTitle", "Quitting")));
 
         AboutBody.Children.Add(Braun.Group(Braun.Row(
-            Loc.Tr("ExitRow", "Stop the program"),
-            Loc.Tr(
-                "ExitHint",
-                "Closing this window leaves the bars running."),
+            Loc.Tr("ExitRow", "Quit Master Control Dock"),
+            Loc.Tr("ExitHint", "The bars close until the program is started again."),
             Braun.Action(Loc.Tr("ExitButton", "Quit"), () => _onExit(), "Power"))));
+
+        AboutBody.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr("SavedByItself", "Changes are saved as they are made."),
+            FontSize = 12,
+            Foreground = Braun.Tx3,
+            Margin = new Thickness(2, 14, 0, 0),
+        });
     }
 
     /// <summary>Whether Windows draws its taskbar light.</summary>

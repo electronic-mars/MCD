@@ -447,7 +447,7 @@ public sealed class DockWindowManager : IDisposable
     public IReadOnlyList<WidgetConfig> Quiet(string stableId) =>
         _windows.TryGetValue(stableId, out DockWindow? window) ? window.Quiet : [];
 
-    private WidgetContext Context()
+    private WidgetContext Context(MonitorConfig? config = null)
     {
         AppSettings app = _settings.Current.App;
 
@@ -471,7 +471,7 @@ public sealed class DockWindowManager : IDisposable
             BackdropColour = app.BackdropColour,
             BackdropImage = app.BackdropImage,
             Theme = Appearance.Of(app.Theme),
-            Size = app.Size,
+            Size = config?.Size ?? app.Size,
         };
     }
 
@@ -559,12 +559,12 @@ public sealed class DockWindowManager : IDisposable
                     // one machine, a hang on another run. The window already
                     // knows how to re-register its strip and rebuild its
                     // widgets at the new sizes.
-                    window.RefreshWidgets(plan.Config, Context());
+                    window.RefreshWidgets(plan.Config, Context(plan.Config));
                     window.ApplyPosition();
                 }
                 else if (!_dressed.TryGetValue(id, out string? dressed) || dressed != look)
                 {
-                    window.RefreshWidgets(plan.Config, Context());
+                    window.RefreshWidgets(plan.Config, Context(plan.Config));
                 }
                 else if (window.Config.Topmost != plan.Config.Topmost)
                 {
@@ -598,7 +598,7 @@ public sealed class DockWindowManager : IDisposable
             }
 
             var window = new DockWindow(
-                _loggers.CreateLogger<DockWindow>(), plan.Monitor, plan.Config, Context());
+                _loggers.CreateLogger<DockWindow>(), plan.Monitor, plan.Config, Context(plan.Config));
 
             window.SettingsRequested += (s, request) => SettingsRequested?.Invoke(s, request);
             window.ExitRequested += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
@@ -699,7 +699,7 @@ public sealed class DockWindowManager : IDisposable
             .Append(app.BackdropColour).Append('|')
             .Append(app.BackdropImage).Append('|')
             .Append(app.Accent).Append('|')
-            .Append(app.Size).Append('|');
+            .Append(config.Size ?? app.Size).Append('|');
 
         foreach (KeyValuePair<string, string> icon in app.Icons)
         {
