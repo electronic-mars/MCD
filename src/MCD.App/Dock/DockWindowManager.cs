@@ -293,7 +293,7 @@ public sealed class DockWindowManager : IDisposable
 
         foreach (DockWindow window in _windows.Values)
         {
-            hosts += window.Rehearse(Context());
+            hosts += window.Rehearse(Context(window.Config));
         }
 
         return hosts;

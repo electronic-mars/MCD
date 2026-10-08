@@ -896,7 +896,7 @@
                     </StackPanel>
                 </ToolTip>
             </ToolTipService.ToolTip>
-            <Grid Width="20" Height="20">
+            <Grid Width="{x:Bind Item.Box, Mode=OneWay}" Height="{x:Bind Item.Box, Mode=OneWay}">
                 <Viewbox Visibility="{x:Bind Item.ChosenVisible}">
                     <Canvas Width="24" Height="24">
                         <Path

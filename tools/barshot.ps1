@@ -27,6 +27,8 @@ if ($env:MCD_BAR_PAINT) { $env:MCD_PAINT = $env:MCD_BAR_PAINT }
 if ($Config) {
     New-Item -ItemType Directory -Force $env:MCD_DATA_DIR | Out-Null
     Copy-Item $Config (Join-Path $env:MCD_DATA_DIR 'config.json')
+    # Somebody's own settings: not a first run, so no first-run tip over the bar.
+    New-Item -ItemType File -Force (Join-Path $env:MCD_DATA_DIR 'welcomed') | Out-Null
 }
 
 Add-Type -AssemblyName System.Drawing

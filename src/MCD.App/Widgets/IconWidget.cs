@@ -59,10 +59,27 @@ public sealed class IconWidget : WidgetViewModel
 
     public string Target => Item.Target;
 
-    public override void Attach() =>
+    public override void Attach()
+    {
         Item.Spacing = Orientation == Orientation.Vertical
             ? new Thickness(0, 1, 0, 1)
             : new Thickness(1, 0, 1, 0);
+
+        Item.Box = Box;
+    }
+
+    /// <summary>
+    /// The icon's square: four points under the readings' icons, so a pinned
+    /// program follows the size of the bar like everything beside it.
+    /// </summary>
+    /// <remarks>
+    /// It was a fixed twenty points in a fixed thirty. The slots shrink with
+    /// the size of the bar, so at the smaller sizes thirty points rounded up to
+    /// a third or fourth slot: the pinned programs stood further apart on a
+    /// normal bar than on a large one, and on a compact bar a 28-point button
+    /// stood in a 24-point strip.
+    /// </remarks>
+    private double Box => Math.Max(14, ReadingIcon - 4);
 
     /// <summary>Nothing here changes with the readings.</summary>
     public override void Tick(SensorSnapshot snapshot)
@@ -73,8 +90,8 @@ public sealed class IconWidget : WidgetViewModel
 
     public override string Called => Item.Name;
 
-    /// <summary>A 22-point icon with its padding and margins: exactly one slot.</summary>
-    public override double Length() => 30;
+    /// <summary>The icon with the button's padding (2 a side) and margins (1 a side), and a point of air.</summary>
+    public override double Length() => Box + 8;
 
     /// <summary>The Recycle Bin gets its main verb: emptying it.</summary>
     public override IEnumerable<Microsoft.UI.Xaml.Controls.MenuFlyoutItemBase> Menu()
@@ -321,6 +338,10 @@ public sealed partial class LaunchButton : ObservableObject, IDisposable
 
     [ObservableProperty]
     public partial Thickness Spacing { get; set; }
+
+    /// <summary>How big the icon is drawn; it follows the size of the bar.</summary>
+    [ObservableProperty]
+    public partial double Box { get; set; } = 20;
 
     public void Dispose()
     {
