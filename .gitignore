@@ -35,3 +35,5 @@ assets/icons-selected.json
 /.update-signing-key.pem
 /build/app/
 /build/out/
+tools/untranslated/
+review.log

@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>Çubuklar</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>Görünüm</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>Sensörler</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Çubuklar</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>Her çubuk bir ekrana aittir. Değişiklikler yukarıda seçilen ekrana uygulanır.</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>Çubuğu göster</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>Kenar</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Kalınlık</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Görünüm</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>Tema, arka plan ve renkler. Tüm çubuklara uygulanır.</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>Arka plan</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>Saydam, masaüstünü çubuğun arkasından gösterir. Düz renk daha kolay okunur.</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>Okuma rengi</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Windows vurgu rengini kullanır. Uyarı düzeyinin üzerindeki okumalar uyarı renginde kalır.</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Sensörler</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Ana okumalar. Bir okumayı yeniden adlandırmak için kalemi seçin.</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Canlı okumalar</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>Ekranınızın kenarı için bir çubuk. Ücretsiz yazılım (GPL-3.0-or-later). Bazı kodlar Microsoft PowerToys kaynağından uyarlanmıştır (MIT lisansı).</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Windows ile başlat</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Windows'ta oturum açtığınızda uygulamayı başlatır.</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Uygulamayı yeniden başlatana kadar çubukları kapatır.</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>Henüz ekran ayarlanmadı.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>bağlantı kesildi · çubuk ayarları yeniden bağlandığında kullanılmak üzere saklanır</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Geri Al</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Geri Al — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>{0} ekleme</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>pencere öğesi taşıma</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>{0} kaldırma</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Ekran</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Sürüm {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Henüz okuma yok.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>Okuma: {0}. Kaynaklar: {1}.</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Okuma</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>Bir bileşenin yükünü sayı olarak gösterir.</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Sabitlenmiş uygulama</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>Bir uygulama, klasör veya web sayfası açar.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>Canlı bir değer gösterir.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>En sıcak bileşen</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Sıcaklık sınırına en yakın bileşen.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>Bu bileşenin sıcaklığı.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Okuma</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Sensör</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Simge</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Medya</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Geçerli medyayı oynatma düğmeleriyle gösterir. Hiçbir şey oynatılmıyorsa gizlenir.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Sıcaklık</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Sıcaklık bildiren bileşenlerin sıcaklığını gösterir.</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>Bellek</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Al</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Sıcaklık</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>En sıcak bileşen</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Oynat veya duraklat</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Düğmeler ve parça adı</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Düğmeler; parça adı araç ipucunda</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Parça adını çubukta göster</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>Uygulamayı yeniden başlattığınızda geçerli olur.</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>Windows ile eşleştir</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>Bu bileşen için varsayılan</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Uyarı eşiği (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Kritik eşik (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Renk seç</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Resim seç</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>Resim seçilmedi</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>Her zaman üstte</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>Uygulama, klasör veya web adresi</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>isteğe bağlı</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Gözat…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>Çubuğa sabitle</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Ekle</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Ekran {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>Şeffaflık</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>Şimdi yeniden başlat</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>Denetlenecek oynatıcı</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Otomatik (geçerli oynatıcı)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>Düğmeler her zaman {0} denetler</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>Çubuğa sabitle</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Önceki parça</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Sonraki parça</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>Çubukta</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>Uygulama sabitle…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>Çubuktan kaldır</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Yerleşim ve boyut</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Davranış</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>Sol veya sağ kenardaki çubukların kalınlığı sabittir.</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>Windows görev çubuğu bu kenarda gizlendiği için bu çubuk görünür kalır.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>Bu pencere öğesi için ayar yok.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>pencere öğesi seçeneklerini değiştirme</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>pencere öğesini kaldırma</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>kenarı değiştirme</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>kalınlığı değiştirme</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>Her zaman üstte ayarını değiştirme</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>çubuğu gösterme veya gizleme</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>Varsayılan uygulama simgesi</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Oynatıcıyı aç</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Windows ile eşleştir</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Koyu</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Yarı saydam</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Düz</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>Resim</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Enstrüman</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Nötr</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows vurgusu</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Sol</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Üst</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Sağ</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Varsayılan</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Kompakt</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>CPU sıcaklığı.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>GPU sıcaklığı.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>Sürücü sıcaklığı.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>Bellek sıcaklığı. En sıcak modülü gösterir.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>Anakart sıcaklığı.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>Bu bilgisayarın bildirdiği bir sıcaklık.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>Kapasiteye göre yük yüzdesi.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>Geçerli veri aktarım hızı.</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>Çubuklara ve bu pencereye uygulanır.</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>CPU yükü.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>Kullanılan bellek yüzdesi.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>Ağ gönderme hızı.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>Ağ alma hızı.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>GPU yükü.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Her bileşen için tüm sıcaklık pencere öğeleri.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Sürücü</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Bellek</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Anakart</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>Tüm cihaz</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Yeniden adlandır</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Varsayılan adı kullan</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Dosyalar ve tanılama</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Sürücü etkinliği</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Yüklü bellek</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Kullanılan bellek</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>CPU saat hızı</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>GPU gücü</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>Geçerli saat hızı.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>Fan hızı.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>Güç tüketimi.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>Toplam yüklü bellek.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>Şu anda kullanılan bellek.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>Bu bilgisayarın bildirdiği bir değer.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>Çubuk</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>Dil değiştirildi</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>Yeni dili uygulamak için uygulamayı yeniden başlatın.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>Resim</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>Bu ekranın çubuğu</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>Çubuğun görüneceği ekran kenarı.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>Çubuğun ekranda kapladığı alan.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Tüm pencere öğeleri</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>Bir pencere öğesini çubuğa sürükleyin. Aynı öğeyi birden fazla ekleyebilirsiniz.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>Uygulama sabitle</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Sabitlenen uygulamalar çubukta simge olarak görünür. Bir dosyayı çubuğa bırakarak da sabitleyebilirsiniz.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>Varsayılan pencere öğeleri</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Varsayılan pencere öğelerini geri yükler. Geri almak için Ctrl+Z tuşlarına basın.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Varsayılan çubuğu geri yükle</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>varsayılan çubuğu geri yükleme</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Kapalıyken, ekranı kaplayan pencereler çubuğun üzerine gelebilir.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Pencere öğesi ayarları</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Çubuktan kaldır</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>Pencere öğesini çubuktan dışarı sürüklemekle aynıdır.</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>Günlük dosyası</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>Uygulamanın yaptıklarını kaydeder. Bir sorun olursa buraya bakın.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>Ayarlar dosyası</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Bu sayfalardaki tüm ayarları içerir.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Klasörü aç</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Master Control Dock'tan çık</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Yeniden adlandırmak için çift tıklayın</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>Anma hızına göre saat hızı yüzdesi.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Windows tarafından bildirilen toplam GPU yükü.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>GPU çekirdeği</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>Sürücü tarafından bildirilen GPU çekirdek yükü.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>GPU bellek denetleyicisi</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>Bellek denetleyicisi yükü, kullanılan bellek değil.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>GPU bellek saat hızı</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>GPU bellek saat hızı.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>GPU çekirdek saat hızı.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>GPU fanı</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>GPU fan hızı.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>GPU güç tüketimi.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>GPU saat hızı</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>Sürücünün etkin olduğu sürenin yüzdesi.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>Geçerli gönderme hızı.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>Geçerli alma hızı.</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Saat</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>Saati, tam boyutlu çubukta ise tarihi gösterir.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Saniyeleri göster</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Tarihi göster</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>saniyeli</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>Yerleştirme modu</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Sabit</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Otomatik gizle</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>Masaüstünde</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>Ekran kenarında yer ayırır. Ekranı kaplayan pencereler çubuğun üzerine gelmez.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>Çubuğu ekran dışına gizler. Göstermek için işaretçiyi kenara getirin.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>Çubuk masaüstünde kalır ve yer kaplamaz. Açık pencereler onu örter.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>yerleştirme modunu değiştirme</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>çubukta</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Buraya bırakın</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Son değişikliği geri al</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>Burada veya herhangi bir çubukta yapılan son değişikliği geri alır.</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Kapalıyken başlık araç ipucunda görünür.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>Küçük çubukta yalnızca bir satır için yer vardır.</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>{0} pencere öğesi sığmıyor</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>Çubuk dolu. Bu pencere öğeleri saklanır ve yer açıldığında, örneğin başka bir kenarda veya daha küçük çubuk boyutunda geri döner.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>sığmayan pencere öğelerini kaldırma</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Ses</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Ses düzeyi kaydırıcısı için simgeye tıklayın, sesi değiştirmek için tekerleği kaydırın, sessize almak için sayıya tıklayın.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Ses düzeyini göster</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>Simge, sesin kapalı olup olmadığını zaten gösterir.</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Klavye kısayolları</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Tüm çubukları göster veya gizle</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>Çubukları gizler veya gösterir. Pencere öğeleri saklanır.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Ayarları aç</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>Tam ekran uygulamaların üzerinde de dahil her yerde çalışır.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Sesi kapat veya aç</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>Sessize alma tuşu olmayan klavyeler için o tuş gibi çalışır.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Ata…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Temizle</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Ctrl, Alt veya Windows tuşunu içeren bir tuş birleşimine basın.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>Tek bir tuş diğer uygulamalarda çalışmayı durdurur. Ctrl, Alt veya Windows tuşu ekleyin.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Bu kısayolu başka bir uygulama zaten kullanıyor. Farklı bir kısayol seçin.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Pil</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>Pil şarjını gösterir. Yalnızca pili olan cihazlarda görünür.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Wi-Fi sinyal gücünü gösterir. Yalnızca Wi-Fi bağlantısı varken görünür.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>%{0} şarj</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>şarj oluyor</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>Prize takılı</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>yaklaşık {0} sa {1} dk kaldı</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Pil şarjı kullanılamıyor</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>sinyal {0}/5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Wi-Fi ağına bağlı</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Ağ adını göster</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Kapsama alanındaki ağları ayırt etmeye yardımcı olur.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>{0} pencere öğesi, veri gelene kadar gizli</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: veri olana kadar çubukta yer kaplamadan tutulur.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>gizli pencere öğelerini kaldırma</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>1 pencere öğesi sığmıyor</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>1 pencere öğesi, veri gelene kadar gizli</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>Bu stil hakkında</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>Turuncu okumalarla grafit arka plan.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Ayarları açar.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>Pencere Öğeleri</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Pencere Öğeleri</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>Bu ekranın çubuğundaki pencere öğeleri, sabitlenmiş uygulamalar ve kaydedilmiş düzenler.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>Varsayılan simge</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>Diğer ekranlar</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Bu çubuğun pencere öğelerini diğer tüm ekranlara sığacak şekilde ayarlayarak kopyalar. Geri almak için Ctrl+Z tuşlarına basın.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Diğer ekranlara kopyala</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>pencere öğelerini diğer ekranlara kopyalama</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Yukarı taşı</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Aşağı taşı</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Çubuktan kaldır</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>Bu çubukta pencere öğesi yok.</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Çubuklar</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Pencere Öğeleri</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Görünüm</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Sensörler</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>görünümü değiştirme</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>dili değiştirme</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>kısayolu değiştirme</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>simgeyi değiştirme</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>okumayı yeniden adlandırma</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>Sinyal gücü kullanılamıyor</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>yaklaşık {0} dk kaldı</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>GPU yükü</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>GPU sıcaklığı</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Diğer ekranlara kopyala ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>Konum {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>Gizli</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Bu okumayı yeniden adlandır</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Bu okumayı yeniden adlandır.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Bu ekranı kaldır</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Bu ekranın çubuğunu ve ayarlarını siler. Yeniden bağlanırsa, yeni olarak ayarlanır.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Ekranı kaldır</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>ekranı kaldırma</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows performans sayaçları</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows belleği</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI ısıl bölgeleri</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>Sürücü sıcaklıkları</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA sürücüsü</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>yanıtlıyor ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>çalışmıyor</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>bu bilgisayarda kullanılamıyor</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>Geri Al — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>Bu, ayarları açmanın son yolu</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>Hiçbir kısayol ayarları açmıyor ve bu, tüm çubuklardaki son Ayarlar düğmesi. Bunu kaldırdıktan sonra ayarları açmak için bir çubuğa sağ tıklayın.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Yine de kaldır</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Ayarları yedekle</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Çubukları, temayı, kısayolları ve okuma adlarını içerir.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Dosyaya aktar</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Ayarları geri yükle</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Mevcut tüm ayarları değiştirir. Çubuklar, kaydedildikleri sırayla ekranlara atanır. Geri almak için Ctrl+Z tuşlarına basın.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Dosyadan içe aktar</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Ayarlar içe aktarıldı. {0} çubuk bu bilgisayarın ekranlarına uygulandı.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>Bu dosya geçerli bir ayarlar dosyası değil.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>ayarları içe aktarma</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Büyük</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Küçük</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Düzenler</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Geçerli düzeni kaydet</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Bu çubuğun pencere öğelerini, herhangi bir çubuğa uygulayabileceğiniz adlandırılmış bir düzen olarak kaydeder.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Düzeni kaydet</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Bu çubuğa uygula</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} pencere öğesi</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Düzeni kaydet</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>düzen kaydetme</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>düzen uygulama</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>düzen silme</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Sessiz</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Ses düzeyi: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>Sesi açmak için tıklayın</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>Sesi kapatmak için tıklayın</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Simge ve sayı boyutu</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>Tüm çubuklardaki simgelerin ve sayıların boyutu.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Yedekleme</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Sürücü</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Anakart</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Kısayollar, dil, başlangıç ve yedekleme. Bunlar tüm uygulamaya uygulanır.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Klasörü aç: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>{0} sürdürülüyor</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>Kullanılan GPU belleği</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>Kullanılan GPU belleği yüzdesi.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>Okuma: {0}</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Bellek</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Sürücüler</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Ağ</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Anakart</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Değiştir…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Otomatik</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>son dakika {0}–{1} · zirve {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>zirve {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>{0} uygulamasını aç</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Oynatıcıyı aç</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Kaydedilmiş bellek</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>Kaydedilmiş belleğin kaydetme sınırına (RAM artı sayfa dosyası) oranı.</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Kaydedilmiş bellek (bayt)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Kaydetme sınırı</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>En fazla kaydedilmiş bellek: RAM artı sayfa dosyası.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Boş bellek</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>Kullanılmayan yüklü bellek.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Sürücü okuma hızı</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>Tüm sürücülerin toplam mevcut okuma hızı.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Sürücü yazma hızı</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>Tüm sürücülerin toplam mevcut yazma hızı.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Sabitlenmiş uygulamlar</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Sabitlenmiş uygulamalar</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Sabitlenmiş uygulamalar</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Bu ekranın çubuğuna sabitlenmiş uygulamalar, klasörler ve web adresleri.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>Bu çubuğa sabitlenenler</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Henüz hiçbir şey sabitlenmedi. Çubuğa bir dosya sürükleyin veya yukarıdan bir tane sabitleyin.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Düzenler</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Düzenler</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Düzenler</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Kaydedilmiş pencere öğesi düzenleri. Herhangi bir düzeni seçili ekranın çubuğuna uygulayın.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>Bir pencere öğesini çubuğa sürükleyin veya seçili çubuğa eklemek için + simgesini seçin.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>Tamamlandı: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>Geri Al</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>Henüz kaydedilmiş düzen yok.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>Çubuk açık</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>Çubuk kapalı</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>Bir kenar seçin</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>Çubuk</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>Taşımak için sürükleyin · Kaldırmak için çubuk dışına sürükleyin · Menü için sağ tıklayın</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>Ad ve simge</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>Okuma simgeleri</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>Önizleme</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>Değiştir…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>Klasörü aç</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>Sabitlemek için çubuğa bir dosya da sürükleyebilirsiniz.</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>Ayarlar…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>Çubukları gizle</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>Menü ve ayarlar için sağ tıklayın. Sabitlemek için dosyaları buraya sürükleyin.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Çubukları göster</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Çubukları gizle veya göster</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>PawnIO sürücüsüne ihtiyaç duyuyor</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>CPU yazmaçları</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>bellek modülleri</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>CPU ve bellek sıcaklıkları</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>CPU ve bellek sıcaklıkları PawnIO sürücüsü gerektirir. Kurulum için yönetici hakları gereklidir.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} kurulu ancak yanıt vermiyor. Uygulamayı yeniden başlatmak genellikle bunu çözer.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Sürücüyü indir…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>En sıcak CPU çekirdeği</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>En sıcak CPU çekirdeğinin sıcaklığı.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>CPU gücü</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>CPU güç tüketimi.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>sensör hizmetine ihtiyaç duyuyor</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>Sensör hizmeti</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} kurulu. Sensör hizmeti verileri bunun üzerinden okur ve kurulum için yönetici hakları gerektirir.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>Sensör hizmeti bu sürümde mevcut değil.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>Hizmet çalışıyor. Okumalar kısa süre içinde görünecek.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Hizmeti kur…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>CPU sıcaklığı</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Bellek</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Sürücüler</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Ağ</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>CPU yükü</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Bellek yükü</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>GPU yükü</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Ağ gönderim hızı</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Ağ alım hızı</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Yük</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Sıcaklık</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Bellek sıcaklığı</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Sürücü sıcaklığı</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Cihaz pili</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>Kablosuz fare, kulaklık veya klavyenin pil şarjını gösterir.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Fareler</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Kulaklıklar</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Klavyeler</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Diğer cihazlar</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>{0} pili</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>Bu cihazın pil şarjı.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>Bu cihazın pil şarjı.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Kablosuz cihazlar</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Hangi cihaz</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>kablosuz cihazlar</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Ses Değiştirici</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Çubukta Master Audio Switcher'ı gösterir. Ses çıkışını bir sonraki cihaza geçirmek için tıklayın.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>Ses çıkış cihazı yok</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>Bir sonraki cihaza geçmek için tıklayın</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Master Audio Switcher'ı aç</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>Yük</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>Sıcaklık</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>Yükün yanında, aynı simgenin altında.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Mikrofonu sistem genelinde sessize alır. Sessizken kırmızıya döner.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Uyanık tut</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>Bilgisayarın uyanık kalmasını sağlar ve sohbet uygulamalarında durumunuzun uzakta görünmesini engeller.</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Klavye düzeni</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>Klavye düzeni dilini ve Caps Lock durumunu gösterir.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Uygulamalar</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Uygulamayı çubuktan başlatır.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>Dosya Gezgini</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Not Defteri</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Hesap Makinesi</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Komut İstemi</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Ekran Alıntı Aracı</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Görev Yöneticisi</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows Ayarları</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Denetim Masası</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>İndirilenler</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Geri Dönüşüm Kutusu</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Yapışkan Notlar</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>Bilgisayar uyku moduna girebilir · Uyanık tutmak için tıklayın</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Uyanık: {0} kaldı</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Kapatılana kadar uyanık</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>Uyku moduna izin vermek için tıklayın</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>30 dakika boyunca uyanık tut</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Bir saat boyunca uyanık tut</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>İki saat boyunca uyanık tut</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Kapatılana kadar uyanık tut</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Uykuya izin ver</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>bir dakikadan az</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} dk</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} sa {1} dk</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Bilgisayar uyanık tutuluyor</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>Bilgisayar uyku moduna girebilir</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Mikrofon sessize alındı · Sesi açmak için tıklayın</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Mikrofon açık · Sessize almak için tıklayın</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock açık</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>Düzeni değiştirmek için tıklayın</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>Ses sürgüsü için tıklayın · Sesi değiştirmek için kaydırın</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Mikrofonu sessize al veya aç</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Tüm sistemde, herhangi bir uygulamadan çalışır.</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>İsime göre ara</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Arayüz</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Şekiller ve çizim</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Dosyalar ve öğrenme</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Sosyal ve mesajlaşma</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Uygulamalar ve kod</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Para ve iş</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Cihazlar ve güç</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Ulaşım ve yerler</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Yiyecek</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Mutfak ve içecekler</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Tıp</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Spor</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Oyun ve eğlence</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Doğa ve uzay</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>Kişiler ve yüzler</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Çubuğa odaklan</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Pencere öğesi seçmek için ok tuşlarını, etkinleştirmek için Enter'ı ve çıkmak için Esc'yi kullanın.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>Bazı sıcaklıklar kullanılamıyor. Eksik olanlar için aşağıya bakın.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>Tüm mevcut okumalar çalışıyor.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>Asla otomatik uygulanmaz</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>{0} ekranla</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>Bu sayıda ekran bağlı olduğunda, bu düzeni ana ekranın çubuğuna otomatik olarak uygular</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>otomatik düzen {0}, {1} ekran için</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>otomatik düzen değişikliği</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Ekranları tanımla</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>Her ekranda birkaç saniye boyunca bir numara gösterir.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Tanımla</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Çubuğu düzenle…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>Düzenlemeyi bitir</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Güncellemeler</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>Bu sürüm</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>Yalnızca Denetle'yi seçtiğinizde güncellemeleri denetler.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>{0} sürümünü yükle ve yeniden başlat</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Güncellemeleri denetle</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Güncellemeler denetleniyor…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>{0} sürümü mevcut. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>En güncel sürümü kullanıyorsunuz.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Güncellemeler denetlenemedi. Herhangi bir değişiklik yapılmadı.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Yükleyici indiriliyor ve doğrulanıyor…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>Güncelleme yüklenemedi. İndirme başarısız oldu veya imza doğrulaması geçilemedi.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Otomatik: 1 ekran</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Otomatik: {0} ekran</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>CPU yükü ve sıcaklığı</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Bellek yükü ve sıcaklığı</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>GPU yükü ve sıcaklığı</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Her iki değeri tek bir simge altında yan yana gösterir.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Yük + Sıcak</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>CPU ve bellek sıcaklığı</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Henüz mevcut değil. Sensörler sayfasından sürücüyü ve sensör hizmetini yükleyin.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Ayarla…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>Geri Dönüşüm Kutusunu Boşalt</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Bildirim alanında göster</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>Saatin yanına bir simge ekler. Ayarları açmak için tıklayın; menü için sağ tıklayın.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>bildirim alanı simgesi değişikliği</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Pencere Öğeleri</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Çubuğa bırakın</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Pencere öğelerini ara</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Sürüm {0} hazır</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Yükleme için yönetici hakları gereklidir. Çubuklar otomatik olarak yeniden açılır.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Yükle</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Sürüm {0} indirildi ve doğrulandı.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Günde bir kez güncellemeleri denetler.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Otomatik güncelle</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>GitHub'ı günlük denetler ve imzayı doğrular. Siz yokken yükler; Program Files'a yüklendiyse önce sorar.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>otomatik güncellemeleri değiştirme</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} aşırı ısınıyor</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C, {1:0} °C kritik sıcaklığını aşıyor.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Bugün için kapat</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Aşırı ısınma uyarısı</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>Bir bileşen kritik sıcaklığını aştığında bir Windows bildirimi gösterir.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>aşırı ısınma uyarısını değiştirme</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} dk önce</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>şimdi</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>En düşük {0} · ortalama {1} · en yüksek {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Henüz veri yok.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>Çubukta</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Uygulamalar</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Düzenler</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Sol</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Üst</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Sağ</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Çubuk boyutu</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Kompakt</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Büyük</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Kalınlığı, simge boyutunu ve sayı boyutunu birlikte ayarlar.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>Simge ve sayı boyutunu ayarlar. Sol veya sağdaki çubukların kalınlığı sabittir.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>çubuk boyutu değişikliği</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Tüm ana okumalar mevcut</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Mevcut kaynaklar: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>CPU ve bellek sıcaklıkları mevcut değil</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>Bunlar için PawnIO sürücüsü ve sensör hizmeti gerekir. Aşağıdan kurulumu yapın.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Okumalar</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Kaynaklar</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Okuma kaynakları</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>{1} kaynaktan {0} tanesi mevcut: Windows sayaçları, GPU sürücüsü, sürücüler, bellek, CPU.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Göster</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Gizle</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>{0} okuma</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Okumalarda ara</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>Tümü</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Sıcaklık</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Yük</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Özgür yazılım (GPL-3.0-or-later). Bazı kodlar Microsoft PowerToys'tan (MIT lisansı) uyarlanmıştır.</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>Yenilikler</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Son denetim: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>bugün, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Şimdi denetle</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Denetle</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Aç</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Değişiklikler otomatik olarak kaydedilir.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>Sürüm, güncellemeler ve uygulama bakımı.</value>
+  </data>
+</root>

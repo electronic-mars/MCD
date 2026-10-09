@@ -741,8 +741,11 @@ public sealed partial class SettingsWindow : Window
                 continue;
             }
 
+            // A paragraph is a long run of text, and a Chinese or Japanese
+            // sentence says in twelve characters what takes forty letters
+            // elsewhere: each ideograph counts as three.
             if (child is TextBlock { TextWrapping: not TextWrapping.NoWrap } text
-                && text.Text.Length > 40
+                && text.Text.Sum(c => c >= 0x2E80 ? 3 : 1) > 40
                 && text.Visibility == Visibility.Visible
                 && text.ActualWidth > 0
                 && Room(text) < narrowest.Width)
@@ -4819,17 +4822,32 @@ public sealed partial class SettingsWindow : Window
 
         // A drop-down rather than a row of segments: the segments were laid
         // out for exactly three choices, and this list is meant to grow.
-        string[] languages = ["system", "en-US", "ru-RU"];
+        // Each in its own name: a person looks for their own word, not ours.
+        (string Tag, string Name)[] offered =
+        [
+            ("system", Loc.Tr("LanguageSystemItem", "Match Windows")),
+            ("en-US", "English"),
+            ("cs-CZ", "Čeština"),
+            ("de-DE", "Deutsch"),
+            ("es-ES", "Español"),
+            ("fr-FR", "Français"),
+            ("it-IT", "Italiano"),
+            ("nl-NL", "Nederlands"),
+            ("pl-PL", "Polski"),
+            ("pt-BR", "Português (Brasil)"),
+            ("tr-TR", "Türkçe"),
+            ("ru-RU", "Русский"),
+            ("uk-UA", "Українська"),
+            ("ja-JP", "日本語"),
+            ("zh-Hans", "简体中文"),
+            ("ko-KR", "한국어"),
+        ];
+        string[] languages = [.. offered.Select(o => o.Tag)];
 
         var combo = new ComboBox
         {
             MinWidth = 220,
-            ItemsSource = new List<string>
-            {
-                Loc.Tr("LanguageSystemItem", "Match Windows"),
-                "English",
-                "Русский",
-            },
+            ItemsSource = offered.Select(o => o.Name).ToList(),
             SelectedIndex = Math.Max(0, Array.IndexOf(languages, _settings.Current.App.Language)),
         };
 

@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>バー</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>センサー</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>バージョン情報</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>バー</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>各バーは1つの画面に属します。上で選択された画面に変更が適用されます。</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>バーを表示</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>端</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>太さ</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>テーマ、背景、色。すべてのバーに適用されます。</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>半透明だとバーを通してデスクトップが見えます。不透明だと見やすくなります。</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>測定値の色</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Windowsのアクセントカラーを使用します。警告レベル以上の測定値は警告色のままです。</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>センサー</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>主要な測定値。鉛筆アイコンを選択して測定値の名前を変更します。</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>リアルタイム測定値</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>画面の端に配置するバーです。フリーソフトウェア（GPL-3.0-or-later）。一部のコードは Microsoft PowerToys から改変されています（MITライセンス）。</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Windowsとともに起動</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Windowsにサインインするとアプリが起動します。</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>バーを閉じます。アプリをもう一度起動するまで表示されません。</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>まだ画面が設定されていません。</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>切断済み · バーの設定は再接続時に保持されます</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>元に戻す</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>元に戻す — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>追加: {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>ウィジェットの移動</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>{0} の削除</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>画面</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>バージョン {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>まだ測定値はありません。</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>測定値: {0}. ソース: {1}。</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>測定値</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>コンポーネントの負荷を数値で表示します。</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>ピン留め済みアプリ</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>アプリ、フォルダー、またはウェブページを開きます。</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>ライブ値を表示します。</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>最高温度コンポーネント</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>温度上限に最も近いコンポーネント。</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>このコンポーネントの温度。</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>測定値</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>センサー</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>アイコン</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>メディア</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>再生ボタンとともに現在のメディアを表示します。再生中でない場合は非表示になります。</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>温度を報告するコンポーネントの温度を表示します。</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>メモリ</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>送信</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>受信</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>最高温度コンポーネント</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>再生/一時停止</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>ボタンとトラックタイトル</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>ボタン；ツールチップにトラックタイトル</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>バーにトラックタイトルを表示</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>アプリの再起動後に適用されます。</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>Windowsに合わせる</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>このコンポーネントのデフォルト</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>警告しきい値 (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>危険しきい値 (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>色を選択</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>画像を選択</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>画像が選択されていません</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>常に手前に表示</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>アプリ、フォルダー、またはウェブアドレス</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>任意</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>参照…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>バーにピン留め</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>画面 {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>透明度</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>今すぐ再起動</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>制御するプレーヤー</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>自動 (現在のプレーヤー)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>ボタンは常に {0} を制御</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>バーにピン留め</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>前のトラック</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>次のトラック</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>バー上のアイテム</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>アプリをピン留め…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>バーから削除</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>配置とサイズ</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>動作</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>左右の端に配置されたバーの厚さは固定です。</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>Windows のタスクバーはこの端で非表示になるため、このバーは常に表示されます。</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>このウィジェットに設定はありません。</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>ウィジェット設定の変更</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>ウィジェットの削除</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>配置場所の変更</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>厚さの変更</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>常に手前に表示の設定変更</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>バーの表示/非表示</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>デフォルトのアプリ アイコン</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>プレーヤーを開く</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Windows に合わせる</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>半透明</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>不透明</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>色</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>インストルメント</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>ニュートラル</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows アクセントカラー</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>デフォルト</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>コンパクト</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>CPU 温度。</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>GPU温度</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>ドライブ温度</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>メモリ温度。最も温度の高いモジュールの温度を表示します。</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>マザーボード温度</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>このコンピューターで報告された温度</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>容量に対する負荷率</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>現在のデータ転送速度</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>バーとこのウィンドウに適用されます</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>CPU負荷</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>メモリ使用率</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>ネットワーク送信速度</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>ネットワーク受信速度</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>GPU負荷</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>全コンポーネントの温度ウィジェット</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>ドライブ</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>メモリ</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>マザーボード</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>デバイス全体</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>名前変更</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>デフォルト名を使用</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>スタートアップ</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>ファイルと診断</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>ドライブアクティビティ</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>搭載メモリ</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>使用中メモリ</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>CPUクロック速度</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>GPU電力</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>現在のクロック速度</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>ファン速度</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>消費電力</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>合計メモリ容量</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>使用中のメモリ</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>このコンピューターが報告した値</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>バー</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>言語が変更されました</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>新しい言語を適用するにはアプリを再起動してください</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>色</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>この画面のバー</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>バーを表示する画面の端</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>バーが画面で占めるスペース</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>すべてのウィジェット</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>ウィジェットをバーにドラッグしてください。同じウィジェットを複数追加できます</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>アプリをピン留め</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>ピン留めされたアプリはアイコンとしてバーに表示されます。ファイルをバーにドロップしてピン留めすることもできます</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>デフォルトのウィジェット</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>デフォルトのウィジェットに復元します。Ctrl+Zで元に戻せます</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>デフォルトのバーに復元</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>デフォルトバーへの復元</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>オフにすると、最大化したウィンドウでバーが隠れる場合があります</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>ウィジェット設定</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>バーから削除</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>ウィジェットをバーの外にドラッグするのと同じです</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>ログファイル</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>アプリの動作を記録します。問題が発生した際に確認してください。</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>設定ファイル</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>これらのページにあるすべての設定が含まれています。</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>フォルダーを開く</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Master Control Dock を終了する</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>ダブルクリックで名前変更</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>定格速度に対するクロック速度の割合。</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Windows が報告する GPU 全体の負荷。</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>GPU コア</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>ドライバーが報告する GPU コア負荷。</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>GPU メモリコントローラー</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>メモリコントローラーの負荷であり、使用中のメモリではありません。</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>GPU メモリ クロック速度</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>GPU メモリのクロック速度。</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>GPU コアのクロック速度。</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>GPU ファン</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>GPU ファンの速度。</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>GPU の消費電力。</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>GPU クロック速度</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>ドライブがアクティブな時間の割合。</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>現在の送信速度。</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>現在の受信速度。</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>時計</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>時刻を表示します。フルサイズバーでは日付も表示されます。</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>秒を表示</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>日付を表示</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>秒付き</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>ドッキングモード</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>固定</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>自動的に隠す</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>デスクトップ上</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>画面端にスペースを確保します。最大化したウィンドウでバーが隠れません。</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>バーを画面外に隠します。ポインターを端に移動すると表示されます。</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>バーはデスクトップ上に配置され、スペースを占有しません。開いているウィンドウで隠れます。</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>ドッキングモードの変更</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>バー上</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>ここにドロップ</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>最後の変更を取り消す</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>ここまたは任意のバーで行った最後の変更を取り消します。</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>オフにすると、タイトルがツールチップに表示されます。</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>コンパクトなバーでは1行分しかスペースがありません。</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>入りきらないウィジェット: {0} 個</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>バーがいっぱいです。これらのウィジェットは保持され、別の端に移動したりバーサイズを小さくしたりして空きができれば再表示されます。</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>入りきらなかったウィジェットの削除</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>サウンド</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>アイコンをクリックして音量スライダーを表示し、スクロールで音量を変更、数字をクリックしてミュートします。</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>音量レベルを表示</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>アイコンでミュート状態が既に表示されています。</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>ショートカット</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>すべてのバーを表示/非表示</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>バーを表示または非表示にします。ウィジェットは保持されます。</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>設定を開く</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>フルスクリーンアプリ上を含む、どこでも動作します。</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>ミュート/ミュート解除</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>ミュートキーのないキーボード向けに、ミュートキーと同様に動作します。</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>割り当て…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>割り当て</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Ctrl、Alt、または Windows キーを含むキーの組み合わせを押してください。</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>単一のキーでは他のアプリで動作しなくなります。Ctrl、Alt、またはWindowsキーを追加してください。</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>このショートカットは他のアプリで使用されています。別のものを選択してください。</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>バッテリー</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>バッテリー残量表示。バッテリー搭載デバイスでのみ表示されます。</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Wi-Fi信号強度表示。Wi-Fi接続時のみ表示されます。</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0}% の充電</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>充電中</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>電源接続済み</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>残り約 {0} 時間 {1} 分</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>バッテリー残量を取得できません</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>信号 {0}/5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Wi-Fi接続済み</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>ネットワーク名を表示</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>範囲内のネットワークを識別しやすくなります。</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>データが利用可能になるまで {0} 個のウィジェットを非表示にします</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: バーに保持されますが、データが出るまでスペースを消費しません。</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>非表示ウィジェットの削除</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>ウィジェット 1 個が入り切りません</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>データが利用可能になるまでウィジェット 1 個を非表示にします</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>このスタイルについて</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>グラファイトの背景にオレンジ色の測定値。</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>設定を開きます。</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>ウィジェット</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>ウィジェット</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>この画面のバーにあるウィジェット、ピン留めされたアプリ、保存済みレイアウト。</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>デフォルトアイコン</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>他の画面</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>このバーのウィジェットを他のすべての画面にコピーし、サイズを調整します。Ctrl+Zで元に戻せます。</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>他の画面にコピー</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>他の画面へのウィジェットコピー</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>上に移動</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>下に移動</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>バーから削除</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>このバーにウィジェットはありません。</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>バー</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>ウィジェット</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>センサー</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>バージョン情報</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>外観の変更</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>言語の変更</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>ショートカットの変更</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>アイコンの変更</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>測定値名の変更</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>信号強度を取得できません</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>残り約 {0} 分</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>GPU負荷</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>GPU温度</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>他の画面にコピー ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>位置 {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>非表示</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>この測定値名を変更</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>この測定値名を変更します。</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>この画面を削除</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>この画面のバーと設定を削除します。再接続された場合は、新規として設定されます。</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>画面を削除</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>画面の削除</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows パフォーマンス カウンター</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows メモリ</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI サーマルゾーン</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>ドライブ温度</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA ドライバー</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>応答中 ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>実行されていません</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>このコンピューターでは利用不可</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>元に戻す — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>設定を開く最後の方法です</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>設定を開くショートカットがなく、これがすべてのバーにある最後の設定ボタンです。これを削除した後は、バーを右クリックして設定を開いてください。</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>そのまま削除</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>設定のバックアップ</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>バー、テーマ、ショートカット、測定値名が含まれます。</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>ファイルにエクスポート</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>設定の復元</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>現在のすべての設定を置き換えます。バーは保存された順に画面に割り当てられます。Ctrl+Z で元に戻せます。</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>ファイルからインポート</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>設定をインポートしました。{0} 個のバーがこのコンピューターの画面に適用されました。</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>このファイルは有効な設定ファイルではありません。</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>設定のインポート</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>大</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>小</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>レイアウト</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>現在のレイアウトを保存</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>このバーのウィジェットを名前付きレイアウトとして保存し、他のバーに適用できます。</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>レイアウトを保存</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>このバーに適用</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} 個のウィジェット</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>レイアウトの保存</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>レイアウトの保存</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>レイアウトの適用</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>レイアウトの削除</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>ミュート</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>音量: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>クリックしてミュート解除</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>クリックしてミュート</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>アイコンと数字のサイズ</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>すべてのバーのアイコンと数字のサイズです。</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>全般</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>全般</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>バックアップ</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>全般</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>ドライブ</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>ボード</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>全般</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>ショートカット、言語、スタートアップ、バックアップ。これらはアプリ全体に適用されます。</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>フォルダーを開く: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>{0} を再開</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>GPUメモリ使用量</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>GPUメモリの使用率（%）。</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>測定値数: {0}</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>メモリ</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>ドライブ</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>ネットワーク</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>マザーボード</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>変更…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>直近1分 {0}–{1} · ピーク {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>ピーク {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>{0} を開く</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>プレーヤーを開く</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>コミット済みメモリ</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>コミット制限（RAMとページファイルの合計）に対するコミット済みメモリの割合。</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>コミット済みメモリ（バイト）</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>コミット制限</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>最大コミット済みメモリ: RAMとページファイルの合計。</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>空きメモリ</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>使用されていないインストール済みメモリ。</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>ドライブ読み取り速度</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>全ドライブ合計の現在の読み取り速度。</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>ドライブ書き込み速度</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>全ドライブ合計の現在の書き込み速度。</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>ピン留め済みアプリ</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>ピン留め済みアプリ</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>ピン留め済みアプリ</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>この画面のバーにピン留めされたアプリ、フォルダー、ウェブアドレスです。</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>このバーにピン留め済み</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>まだ何もピン留めされていません。ファイルをバーにドラッグするか、上記でピン留めしてください。</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>レイアウト</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>レイアウト</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>レイアウト</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>保存済みのウィジェットレイアウトです。選択した画面のバーにレイアウトを適用します。</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>ウィジェットをバーにドラッグするか、+ を選択して追加してください。</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>完了: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>元に戻す</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>保存済みのレイアウトはありません。</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>バー: オン</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>バー: オフ</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>端を選択</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>バー</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>ドラッグで移動 · バー外へドラッグで削除 · 右クリックでメニュー</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>名前とアイコン</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>測定値アイコン</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>プレビュー</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>変更…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>フォルダーを開く</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>ファイルをバーにドラッグしてピン留めすることもできます。</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>設定…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>バーを非表示</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>右クリックでメニューと設定を開きます。ファイルをここにドラッグしてピン留めしてください。</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>バーを表示</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>バーの表示/非表示</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>PawnIO ドライバーが必要です</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>CPU レジスタ</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>メモリ モジュール</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>CPU およびメモリの温度</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>CPU およびメモリの温度の表示には PawnIO ドライバーが必要です。インストールには管理者権限が必要です。</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} はインストールされていますが、応答していません。通常、アプリを再起動すると解決します。</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>ドライバーをダウンロード…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>CPUコア最高温度</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>最も温度が高いCPUコアの温度。</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>CPU電力</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>CPUの消費電力。</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>センサーサービスが必要です</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>センサーサービス</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} がインストールされています。センサーサービスはこれを介してデータを読み取り、インストールには管理者権限が必要です。</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>このビルドにセンサーサービスは含まれていません。</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>サービスが実行中です。まもなく測定値が表示されます。</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>サービスをインストール…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>CPU温度</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>メモリ</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>ドライブ</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>ネットワーク</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>CPU負荷</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>メモリ負荷</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>GPU負荷</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>ネットワーク送信速度</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>ネットワーク受信速度</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>負荷</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>メモリ温度</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>ドライブ温度</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>デバイスバッテリー</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>ワイヤレスマウス、ヘッドセット、またはキーボードのバッテリー残量を表示します。</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>マウス</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>ヘッドセット</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>キーボード</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>その他のデバイス</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>{0} バッテリー</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>このデバイスのバッテリー残量。</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>このデバイスのバッテリー残量。</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>ワイヤレスデバイス</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>デバイスを選択</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>ワイヤレスデバイス</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Audio Switcher</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>バーに Master Audio Switcher を表示します。クリックするとサウンド出力を次のデバイスに切り替えます。</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>オーディオ出力デバイスなし</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>クリックして次のデバイスに切り替え</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Master Audio Switcher を開く</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>負荷</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>負荷の横、同じアイコンの下に表示されます。</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>マイク</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>システム全体でマイクをミュートします。ミュート中は赤くなります。</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>スリープ防止</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>コンピューターのスリープを防ぎ、チャットアプリで離席状態になるのを防止します。</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>キーボードレイアウト</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>キーボードレイアウトの言語と Caps Lock の状態を表示します。</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>アプリ</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>バーからアプリを起動します。</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>エクスプローラー</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>メモ帳</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>電卓</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>ターミナル</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>コマンド プロンプト</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Snipping Tool</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>ペイント</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>タスク マネージャー</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows 設定</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>コントロール パネル</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>ごみ箱</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>付箋</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>スリープ可能です · クリックしてスリープを無効にする</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>スリープ防止: 残り {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>オフにするまでスリープを防止</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>クリックしてスリープを許可する</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>30 分間スリープを防止</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>1 時間スリープを防止</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>2 時間スリープを防止</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>オフにするまでスリープを防止</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>スリープを許可</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>1分未満</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} 分</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} 時間 {1} 分</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>コンピューターのスリープを防止しています</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>コンピューターはスリープ可能です</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>マイクがミュートです · クリックしてミュート解除</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>マイクがオンです · クリックしてミュート</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock がオンです</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>クリックしてレイアウトを切り替え</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>クリックして音量スライダーを表示 · スクロールして音量を変更</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>マイクのミュート切り替え</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>どのアプリからでも、システム全体で動作します。</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>名前で検索</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>インターフェース</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>図形と描画</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>ファイルと学習</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>SNSとメッセージ</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>アプリとコード</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>お金と仕事</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>デバイスと電源</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>交通と場所</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>食べ物</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>キッチンと飲み物</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>医療</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>スポーツ</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>ゲームと娯楽</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>自然と宇宙</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>人物と顔</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>バーにフォーカス</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>矢印キーでウィジェットを選択し、Enter で実行、Esc で終了します。</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>一部の温度が利用できません。不足している項目は以下を確認してください。</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>利用可能なすべての測定値が正常に動作しています。</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>自動適用しない</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>画面数: {0}</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>指定した数の画面が接続されているとき、メイン画面のバーにこのレイアウトを自動的に適用します</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>画面 {1} 用の自動レイアウト {0}</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>自動レイアウトの変更</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>画面の識別</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>各画面に数秒間番号を表示します。</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>識別</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>バーを編集…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>編集を終了</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>アップデート</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>現在のバージョン</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>「アップデートを確認」を選択したときのみ確認します。</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>{0} をインストールして再起動</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>アップデートを確認中…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>バージョン {0} が利用可能です。{1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>最新バージョンです。</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>アップデートを確認できませんでした。変更は行われませんでした。</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>インストーラーをダウンロードして検証中…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>アップデートはインストールされませんでした。ダウンロードに失敗したか、署名の検証に失敗しました。</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>自動: 1画面</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>自動: {0}画面</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>CPU 負荷と温度</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>メモリ負荷と温度</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>GPU 負荷と温度</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>1つのアイコンの下に両方の値を並べて表示します。</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>負荷 + 温度</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>CPU およびメモリ温度</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>まだ利用できません。「センサー」ページでドライバーとセンサーサービスをインストールしてください。</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>設定…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>ごみ箱を空にする</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>通知領域に表示</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>時計の近くにアイコンを表示します。クリックで設定を開き、右クリックでメニューを表示します。</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>通知領域アイコンの変更</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>ウィジェット</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>バーにドロップ</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>ウィジェットを検索</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>バージョン {0} の準備が完了しました</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>インストールには管理者権限が必要です。バーは自動的に再び開きます。</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>インストール</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>バージョン {0} のダウンロードと検証が完了しました。</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>1日1回アップデートを確認します。</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>自動更新</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>毎日GitHubを確認し、署名を検証します。離席中にインストールされます。Program Filesにインストールされている場合は事前に確認します。</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>自動更新設定の変更</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} が過熱しています</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C が限界温度の {1:0} °C を超えました。</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>本日は表示しない</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>過熱警告</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>コンポーネントが限界温度を超えたときにWindows通知を表示します。</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>過熱警告設定の変更</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} 分前</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>現在</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>最小 {0} · 平均 {1} · 最大 {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>データがありません。</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>カタログ</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>バーに配置済み</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>アプリ</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>レイアウト</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>バーのサイズ</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>コンパクト</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>標準</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>大</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>太さ、アイコンサイズ、数字サイズをまとめて設定します。</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>アイコンと数字のサイズを設定します。左右のバーの太さは固定です。</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>バーサイズの変更</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>主要な測定値はすべて利用可能です</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>利用可能なソース: {0}。</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>CPUとメモリの温度が利用できません</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>PawnIOドライバーとセンサーサービスが必要です。以下で設定してください。</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>測定値</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>ソース</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>測定値ソース</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>利用可能なソース: {0}/{1} (Windowsカウンター、GPUドライバー、ドライブ、メモリ、CPU)</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>表示</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>非表示</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>測定値: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>測定値を検索</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>負荷</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>フリーソフトウェア (GPL-3.0-or-later)。一部のコードは Microsoft PowerToys (MITライセンス) から改変・流用されています。</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>新機能</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>最終確認: {0}。</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>今日 {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>今すぐ確認</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>変更は自動的に保存されます。</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>バージョン情報</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>バージョン、更新、およびアプリのメンテナンス。</value>
+  </data>
+</root>

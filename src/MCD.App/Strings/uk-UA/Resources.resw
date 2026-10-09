@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>Панелі</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>Вигляд</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>Датчики</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>Про програму</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Панелі</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>Кожна панель належить одному екрану. Зміни застосовуються до екрана, вибраного вище.</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>Показати панель</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>Край екрана</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Товщина</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Вигляд</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>Тема, тло та кольори. Застосовується до всіх панелей.</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>Тло</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>Напівпрозоре тло показує робочий стіл крізь панель. Суцільне тло легше читати.</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>Колір показників</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Використовує акцентний колір Windows. Показники вище порогу попередження лишаються кольором попередження.</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Датчики</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Основні показники. Натисніть олівець, щоб перейменувати показник.</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Показники зараз</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>Панель для краю екрана. Вільне ПЗ (GPL-3.0-or-later). Частину коду адаптовано з Microsoft PowerToys (ліцензія MIT).</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Запускати з Windows</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Запускає програму під час входу в Windows.</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Закриває панелі до наступного запуску програми.</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>Ще не налаштовано жодного екрана.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>від’єднано · налаштування панелі збережено до повторного підключення</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Скасувати — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>додавання: {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>переміщення віджета</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>видалення: {0}</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Екран</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Версія {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Дані датчиків поки недоступні.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>Показників: {0}. Джерела: {1}.</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Показник</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>Показує завантаження одного компонента числом.</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Закріплена програма</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>Відкриває програму, папку або вебсторінку.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>Показує поточне значення.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>Найгарячіший компонент</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Компонент, температура якого найближча до граничної температури.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>Температура цього компонента.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Показник</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Датчик</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Значок</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Медіа</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Показує поточне медіа з кнопками відтворення. Приховано, коли нічого не відтворюється.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Показує температуру компонентів, які мають датчик.</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>RAM</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Надіслати</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Отримати</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>Найгарячіший компонент</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Відтворення або пауза</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Кнопки та назва треку</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Кнопки; назва треку — у підказці</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Показувати назву треку на панелі</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>Зміни набудуть чинності після перезапуску програми.</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>За системою Windows</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>За замовчуванням для цього компонента</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Поріг попередження (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Критичний поріг (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Вибрати колір</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Вибрати зображення</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>Зображення не вибрано</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>Завжди поверх інших вікон</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>Програма, папка або вебадреса</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>необов’язково</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Огляд…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>Закріпити на панелі</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Додати</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Екран {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>Прозорість</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>Перезапустити зараз</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>Програвач для керування</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Автоматично (поточний програвач)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>Кнопки завжди керують: {0}</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>Закріпити на панелі</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Попередній трек</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Наступний трек</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>На панелі</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>Закріпити програму…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>Видалити з панелі</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Розташування та розмір</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Поведінка</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>Панелі на лівому або правому краю мають фіксовану товщину.</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>На цьому краю панель завдань Windows прихована, тому ця панель завжди видима.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>У цього віджета немає налаштувань.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>зміна налаштувань віджета</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>видалення віджета</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>зміна краю</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>зміна товщини</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>зміна параметра «Завжди поверх інших вікон»</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>показ або приховування панелі</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>Стандартна піктограма програми</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Відкрити програвач</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>За системою Windows</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Світла</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Темна</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Напівпрозорий</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Суцільний</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>Колір</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>Зображення</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Приладовий</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Нейтральний</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Акцент Windows</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Зліва</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Згори</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Справа</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Знизу</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Звичайна</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Компактна</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>Температура процесора.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>Температура GPU.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>Температура диска.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>Температура пам’яті. Показано найгарячіший модуль.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>Температура материнської плати.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>Температура, про яку повідомляє цей комп’ютер.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>Навантаження у відсотках від максимального.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>Поточна швидкість передачі даних.</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>Застосовується до панелей і цього вікна.</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>Навантаження CPU.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>Відсоток використаної пам’яті.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>Швидкість надсилання даних.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>Швидкість отримання даних.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>Навантаження GPU.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Усі віджети температури для будь-якого компонента.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Диск</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Пам’ять</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Материнська плата</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>Увесь пристрій</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Перейменувати</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Використовувати стандартну назву</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Файли та діагностика</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Вихід</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Активність диска</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Установлено пам’яті</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Використано пам’яті</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>Тактова частота CPU</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>Споживання GPU</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>Поточна тактова частота.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>Швидкість вентилятора.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>Споживання енергії.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>Загальний обсяг встановленої RAM.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>Обсяг використовуваної оперативної пам’яті.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>Значення, про яке повідомляє цей комп’ютер.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>Панель</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>Мову змінено</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>Перезапустіть програму, щоб застосувати нову мову.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>Колір</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>Зображення</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>Панель цього екрана</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>Край екрана, де з’являється панель.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>Місце, яке займає панель на екрані.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Усі віджети</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>Перетягніть віджет на панель. Той самий віджет можна додати кілька разів.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>Закріпити програму</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Закріплені програми показуються на панелі як значки. Ви також можете перетягнути файл на панель, щоб закріпити його.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>Віджети за замовчуванням</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Відновлює віджети за замовчуванням. Натисніть Ctrl+Z, щоб скасувати.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Відновити панель за замовчуванням</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>відновлення панелі за замовчуванням</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Якщо вимкнено, розгорнуті вікна можуть закривати панель.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Налаштування віджета</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Видалити з панелі</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>Те саме, що перетягти віджет за межі панелі.</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>Файл журналу</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>Записує дії програми. Перегляньте журнал, якщо щось пішло не так.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>Файл налаштувань</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Містить усі налаштування з цих сторінок.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Відкрити папку</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Вийти з Master Control Dock</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Двічі клацніть, щоб перейменувати</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>Поточна частота у відсотках від номінальної.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Загальне навантаження GPU за даними Windows.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>Ядро GPU</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>Навантаження ядра GPU за даними драйвера.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>Контролер відеопам’яті</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>Навантаження контролера пам’яті, а не її заповненість.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>Частота відеопам’яті</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>Частота пам’яті GPU.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>Частота ядра GPU.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>Вентилятор GPU</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>Швидкість обертання вентилятора GPU.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>Споживана потужність GPU.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>Частота GPU</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>Відсоток часу, протягом якого диск активний.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>Поточна швидкість надсилання.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>Поточна швидкість отримання.</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Годинник</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>Показує час, а на повнорозмірній панелі — і дату.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Показувати секунди</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Показувати дату</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>із секундами</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>Режим закріплення</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Закріплено</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Автоприховування</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>На робочому столі</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>Резервує місце на краю екрана. Розгорнуті вікна не перекривають панель.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>Панель приховано за краєм екрана. Наведіть вказівник на край, щоб показати її.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>Панель лишається на робочому столі й не займає місця. Відкриті вікна перекривають її.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>зміна режиму закріплення</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>на панелі</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Перетягніть сюди</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Скасувати останню зміну</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>Скасовує останню зміну, зроблену тут або на будь-якій панелі.</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Якщо вимкнено, назва відображається в підказці.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>На компактній панелі є місце лише для одного рядка.</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>Не вміщається віджетів: {0}</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>Панель заповнена. Ці віджети збережено, і вони повернуться, коли з’явиться місце, наприклад на іншому краї або за меншого розміру панелі.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>видалення віджетів, які не вмістилися</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Звук</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Клацніть значок, щоб відкрити повзунок гучності, прокручуйте коліщатко, щоб змінити гучність, клацніть число, щоб вимкнути звук.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Показувати рівень гучності</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>Значок уже показує, чи вимкнено звук.</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Сполучення клавіш</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Показати або приховати всі панелі</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>Приховує або показує панелі. Їхні віджети зберігаються.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Відкрити налаштування</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>Працює будь-де, зокрема поверх повноекранних програм.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Вимкнути або ввімкнути звук</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>Працює як клавіша вимкнення звуку, для клавіатур без неї.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Призначити…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Очистити</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Призначити</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Натисніть комбінацію клавіш із Ctrl, Alt або клавішею Windows.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>Одна клавіша перестане працювати в інших програмах. Додайте Ctrl, Alt або клавішу Windows.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Це сполучення вже використовується іншою програмою. Виберіть інше.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Батарея</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>Показує заряд батареї. З’являється лише на пристроях із батареєю.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Показує рівень сигналу Wi-Fi. З’являється лише при підключенні до Wi-Fi.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0}% заряду</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>заряджається</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>Підключено до мережі</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>залишилося приблизно {0} год {1} хв</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Заряд батареї недоступний</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>сигнал {0} з 5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Підключено до Wi-Fi</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Показувати ім’я мережі</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Допомагає розрізняти доступні мережі.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>{0} віджетів приховано до появи даних</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: лишається на панелі й не займає місця, доки немає даних.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>видалення прихованих віджетів</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>1 віджет не вміщується</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>1 віджет приховано до появи даних</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>Про цей стиль</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>Графітовий фон з помаранчевими показниками.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Відкриває налаштування.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>Віджети</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Віджети</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>Віджети на панелі цього екрана, закріплені програми та збережені набори.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>Стандартний значок</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>Інші екрани</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Копіює віджети цієї панелі на всі інші екрани з підгонкою за розміром. Натисніть Ctrl+Z, щоб скасувати.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Копіювати на інші екрани</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>копіювання віджетів на інші екрани</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Перемістити вгору</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Перемістити вниз</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Видалити з панелі</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>На цій панелі немає віджетів.</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Панелі</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Віджети</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Оформлення</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Датчики</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Про програму</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>зміна оформлення</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>зміна мови</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>зміна сполучення клавіш</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>зміна значка</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>перейменування показника</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>Рівень сигналу недоступний</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>залишилось приблизно {0} хв</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>Навантаження GPU</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>Температура GPU</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Копіювати на інші екрани ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>Позиція {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>Приховано</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Перейменувати цей показник</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Перейменувати цей показник.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Видалити цей екран</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Видаляє панель цього екрана та її налаштування. При повторному підключенні екран налаштовується як новий.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Видалити екран</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>видалення екрана</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>лічильники продуктивності Windows</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>пам’ять Windows</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>теплові зони ACPI</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>температури дисків</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>драйвер NVIDIA</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>відповідає ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>не запущено</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>недоступно на цьому комп’ютері</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>Скасувати — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>Це останній спосіб відкрити налаштування</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>Жодне сполучення клавіш не відкриває налаштування, а це остання кнопка налаштувань на будь-якій панелі. Після її видалення налаштування можна відкрити, клацнувши панель правою кнопкою миші.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Усе одно видалити</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Резервна копія налаштувань</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Містить панелі, тему, сполучення клавіш та назви показників.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Експортувати у файл</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Відновити налаштування</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Замінює всі поточні налаштування. Панелі призначаються екранам у порядку, у якому їх зберегли. Натисніть Ctrl+Z, щоб скасувати.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Імпортувати з файлу</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Налаштування імпортовано. Застосовано {0} панелей до екранів цього комп’ютера.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>Цей файл не є допустимим файлом налаштувань.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>імпортування налаштувань</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Великий</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Середній</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Малий</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Набори</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Зберегти поточний набір</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Зберігає віджети цієї панелі під іменем, щоб застосувати їх на будь-якій панелі.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Зберегти набір</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Застосувати до цієї панелі</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>Віджетів: {0}</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Зберегти набір</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Зберегти</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>збереження набору</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>застосування набору</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>видалення набору</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Звук вимкнено</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Гучність: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>Клацніть, щоб увімкнути звук</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>Клацніть, щоб вимкнути звук</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Розмір значків і цифр</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>Розмір значків і цифр на всіх панелях.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>Загальні</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>Загальні</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Резервна копія</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Загальні</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Диск</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Мат. плата</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>Загальні</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Сполучення клавіш, мова, запуск і резервні копії. Застосовуються до всієї програми.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Відкрити папку: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>Відновить: {0}</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>Використано пам’яті GPU</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>Використання пам’яті GPU у відсотках.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} ГБ</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>{0} показників.</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>Процесор</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Пам’ять</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Диски</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Мережа</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Материнська плата</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Змінити…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>остання хвилина {0}–{1} · пік {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>пік {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>Відкрити {0}</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Відкрити програвач</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Зафіксована пам’ять</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>Зафіксована пам’ять у відсотках від ліміту (RAM плюс файл підкачування).</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Зафіксована пам’ять (байти)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Ліміт зафіксованості</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>Максимум зафіксованої пам’яті: RAM плюс файл підкачування.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Вільна пам’ять</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>Обсяг вільної оперативної пам’яті.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Швидкість читання</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>Сумарна швидкість читання з усіх дисків.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Швидкість запису</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>Сумарна швидкість запису на всі диски.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} ГГц</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Мбіт/с</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Закріплені програми</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Закріплені програми</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Закріплені програми</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Програми, папки та вебадреси, закріплені на панелі цього екрана.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>Закріплено на цій панелі</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Нічого не закріплено. Перетягніть файл на панель або закріпіть його вище.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Набори</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Набори</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Набори</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Збережені набори віджетів. Будь-який набір можна застосувати до панелі вибраного екрана.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>Перетягніть віджет на панель або натисніть «+», щоб додати його на вибрану панель.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>Готово: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>Збережених наборів поки немає.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>Увімкнено</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>Виберіть край</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>Панель</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>Перетягніть — перемістити · за межі панелі — прибрати · права кнопка миші — меню</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>Назва та значок</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>Значки показників</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>Перегляд</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>Змінити…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>Відкрити папку</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>Можна також перетягнути файл на панель, щоб закріпити його.</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>Налаштування…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>Сховати панелі</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>Вихід</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>Права кнопка миші — меню та налаштування. Перетягніть сюди файли, щоб закріпити їх.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Показати панелі</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Сховати або показати панелі</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>потрібен драйвер PawnIO</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>Регістри CPU</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>модулі пам’яті</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>Температури процесора та пам’яті</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>Для температури процесора та пам’яті потрібен драйвер PawnIO. Для його інсталяції потрібні права адміністратора.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} встановлено, але він не відповідає. Зазвичай допомагає перезапуск програми.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Завантажити драйвер…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>Найгарячіше ядро CPU</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>Температура найгарячішого ядра CPU.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>Потужність CPU</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>Споживана потужність CPU.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>потрібна служба датчиків</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>Служба датчиків</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} встановлено. Служба датчиків зчитує дані через нього, і для її встановлення потрібні права адміністратора.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>У цій збірці немає служби датчиків.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>Служба запущена. Показники з’являться незабаром.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Встановити службу…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>Температура CPU</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Пам’ять</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Диски</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Мережа</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Інше</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>Навантаження CPU</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Навантаження пам’яті</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>Навантаження GPU</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Швидкість надсилання</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Швидкість отримання</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Навантаження</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Температура пам’яті</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Температура диска</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Заряд пристрою</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>Показує заряд акумулятора бездротової миші, гарнітури або клавіатури.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Миші</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Гарнітури</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Клавіатури</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Інші пристрої</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>Батарея {0}</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>Заряд акумулятора цього пристрою.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>Заряд акумулятора цього пристрою.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Бездротові пристрої</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Який пристрій</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>бездротові пристрої</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Перемикач аудіо</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Показує Master Audio Switcher на панелі. Клацніть, щоб перемкнути вивід звуку на наступний пристрій.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>Немає пристрою виводу звуку</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>Клацніть, щоб перемкнути на наступний пристрій</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Відкрити Master Audio Switcher</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>Навантаження</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>Поруч із навантаженням, під тим самим значком.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Мікрофон</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Вимикає мікрофон у всій системі. Поки вимкнено, значок червоний.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Заборона сну</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>Не дає комп’ютеру переходити в режим сну, а месенджерам — показувати статус «Відійшов».</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Розкладка клавіатури</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>Показує мову розкладки клавіатури та стан Caps Lock.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Програми</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Запускає програму з панелі.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>Провідник</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Блокнот</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Калькулятор</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Термінал</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Командний рядок</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Ножиці</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Диспетчер завдань</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Параметри Windows</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Панель керування</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>Завантаження</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Кошик</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Нотатки</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>Комп’ютер може перейти в сплячий режим · Клацніть, щоб не давати йому засинати</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Сон заборонено: залишилося {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Сон заборонено до вимкнення</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>Клацніть, щоб дозволити сон</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>Не давати засинати на 30 хвилин</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Не давати засинати на 1 годину</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>Не давати засинати на 2 години</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Не давати засинати до вимкнення</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Дозволити сон</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>менше хвилини</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} хв</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} год {1} хв</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Комп’ютер не засинає</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>Комп’ютер може заснути</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Мікрофон вимкнено · Клацніть, щоб увімкнути</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Мікрофон увімкнено · Клацніть, щоб вимкнути</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock увімкнено</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>Клацніть, щоб перемкнути розкладку</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>Клацніть, щоб відкрити повзунок · Прокручуйте, щоб змінити гучність</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Вимкнути або ввімкнути мікрофон</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Працює в усій системі, з будь-якої програми.</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>Пошук за назвою</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Інтерфейс</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Фігури та малювання</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Файли та навчання</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Спілкування</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Програми та код</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Гроші та робота</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Пристрої та живлення</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Транспорт і місця</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Їжа</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Кухня та напої</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Медицина</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Спорт</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Ігри та дозвілля</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Природа і космос</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>Люди та обличчя</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Перейти на панель</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Стрілки — вибір віджета, Enter — активація, Esc — вихід.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>Деякі температури недоступні. Деталі нижче.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>Усі доступні показники працюють.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>Ніколи не застосовувати автоматично</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>Екрани: {0}</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>Автоматично застосовувати цей набір до панелі головного екрана при такій кількості екранів</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>автоматичний набір {0} при {1} екранах</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>зміна автоматичного набору</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Визначити екрани</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>На кожному екрані на кілька секунд з’явиться його номер.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Визначити</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Змінити панель…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Оновлення</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>Ця версія</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>Перевірка оновлень лише після натискання кнопки «Перевірити».</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>Встановити {0} і перезапустити</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Перевірити оновлення</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Перевірка оновлень…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>Доступна версія {0}. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>У вас остання версія.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Не вдалося перевірити оновлення. Змін не внесено.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Завантаження та перевірка інсталятора…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>Оновлення не встановлено: не вдалося завантажити файл або перевірити підпис.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Автоматично: 1 екран</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Автоматично: {0} екранів</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>Навантаження та температура CPU</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Навантаження та температура пам’яті</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>Навантаження та температура GPU</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Обидва значення поруч, під одним значком.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Навант. + t°</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>Температура CPU та пам’яті</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Поки недоступно. Встановіть драйвер і службу датчиків на сторінці «Датчики».</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Налаштувати…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>Очистити кошик</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Показати в області сповіщень</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>Показує значок біля годинника. Клацніть, щоб відкрити налаштування; клацніть правою кнопкою, щоб відкрити меню.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>зміна значка в області сповіщень</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Віджети</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Перетягніть на панель</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Пошук віджетів</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Версія {0} готова</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Для встановлення потрібні права адміністратора. Панелі відкриються знову автоматично.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Встановити</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Версію {0} завантажено та перевірено.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Перевірка оновлень раз на день.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Оновлювати автоматично</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>Щодня перевіряє GitHub та підпис. Встановлює, коли комп’ютером не користуються; якщо програму встановлено в Program Files, спочатку з’явиться запит.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>зміна автоматичного оновлення</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0}: перегрів</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C — вище критичної температури ({1:0} °C).</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Не нагадувати сьогодні</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Попереджати про перегрів</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>Показує сповіщення Windows, коли температура компонента перевищує критичну.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>зміна попередження про перегрів</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} хв тому</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>зараз</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>Мінімум {0} · у середньому {1} · максимум {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Даних ще немає.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Каталог</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>На панелі</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Програми</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Набори</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Ліворуч</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Зверху</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Праворуч</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Знизу</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Розмір панелі</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Компактна</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Звичайний</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Великий</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Одночасно змінює товщину, розмір значків і цифр.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>Змінює розмір значків і цифр. Панелі ліворуч і праворуч мають фіксовану товщину.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>зміна розміру панелі</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Стан</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Усі основні показники доступні</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Доступні джерела: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>Температура процесора та пам’яті недоступна</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>Потрібні драйвер PawnIO і служба датчиків. Налаштуйте їх нижче.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Показники</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Джерела</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Джерела показників</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>Доступно джерел: {0} з {1}: лічильники Windows, драйвер GPU, диски, пам’ять, CPU.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Показати</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Приховати</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>{0} показників</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Пошук показників</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>Усі</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Навантаження</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Вільне ПЗ (GPL-3.0-or-later). Частина коду адаптована з Microsoft PowerToys (ліцензія MIT).</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>Що нового</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Остання перевірка: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>сьогодні, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Перевірити зараз</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Перевірити</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Зміни зберігаються автоматично.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>Про програму</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>Версія, оновлення та обслуговування програми.</value>
+  </data>
+</root>

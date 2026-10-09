@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>Leisten</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>Aussehen</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>Sensoren</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Leisten</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>Jede Leiste gehört zu einem Bildschirm. Änderungen gelten für den oben ausgewählten Bildschirm.</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>Leiste anzeigen</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>Rand</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Stärke</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Aussehen</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>Design, Hintergrund und Farben. Gilt für alle Leisten.</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>Hintergrund</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>Eine durchscheinende Leiste lässt den Desktop durchscheinen. Eine undurchsichtige Leiste ist besser lesbar.</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>Messwertfarbe</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Verwendet die Windows-Akzentfarbe. Messwerte über der Warnstufe bleiben in der Warnfarbe.</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Sensoren</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Hauptmesswerte. Wählen Sie den Stift aus, um einen Messwert umzubenennen.</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Aktuelle Messwerte</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>Eine Leiste für den Rand Ihres Bildschirms. Freie Software (GPL-3.0-or-later). Ein Teil des Codes stammt aus Microsoft PowerToys (MIT-Lizenz).</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Mit Windows starten</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Startet die App, wenn Sie sich bei Windows anmelden.</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Schließt die Leisten, bis Sie die App erneut starten.</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>Es wurde noch kein Bildschirm eingerichtet.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>getrennt · Leisteneinstellungen bleiben für die Wiederverbindung erhalten</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Rückgängig</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Rückgängig — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>Hinzufügen von {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>Verschieben eines Widgets</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>Entfernen von {0}</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Bildschirm</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Noch keine Messwerte verfügbar.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>Messwerte: {0}. Quellen: {1}.</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Messwert</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>Zeigt die Auslastung einer Komponente als Zahl an.</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Angeheftete App</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>Öffnet eine App, einen Ordner oder eine Webseite.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>Zeigt einen aktuellen Wert an.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>Heißeste Komponente</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Die Komponente, die ihrem Temperaturlimit am nächsten ist.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>Temperatur dieser Komponente.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Messwert</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Sensor</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Medien</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Zeigt die aktuellen Medien mit Wiedergabeschaltflächen an. Ausgeblendet, wenn nichts wiedergegeben wird.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Temperatur</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Zeigt die Temperatur von Komponenten an, die eine Temperatur melden.</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>Speicher</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Senden</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Empfangen</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Temperatur</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>Heißeste Komponente</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Abspielen oder pausieren</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Schaltflächen und Titel</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Schaltflächen; Titel in QuickInfo</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Titel auf der Leiste anzeigen</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>Wird nach einem Neustart der App wirksam.</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>Wie Windows</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>Standard für diese Komponente</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Warnschwelle (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Kritische Schwelle (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Farbe auswählen</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Bild auswählen</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>Kein Bild ausgewählt</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>Immer im Vordergrund</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>App, Ordner oder Webadresse</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>optional</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Durchsuchen…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>An die Leiste anheften</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Bildschirm {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>Transparenz</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>Jetzt neu starten</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>Player zum Steuern</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Automatisch (aktueller Player)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>Schaltflächen steuern immer {0}</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>An die Leiste anheften</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Vorheriger Titel</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Nächster Titel</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>Auf der Leiste</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>App anheften…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>Von Leiste entfernen</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Position und Größe</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Verhalten</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>Leisten am linken oder rechten Rand haben eine feste Stärke.</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>Die Windows-Taskleiste wird an diesem Rand ausgeblendet, daher bleibt diese Leiste sichtbar.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>Dieses Widget hat keine Einstellungen.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>Ändern der Widget-Optionen</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>Entfernen eines Widgets</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>Ändern des Rands</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>Ändern der Stärke</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>Ändern von „Immer im Vordergrund“</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>Ein- oder Ausblenden der Leiste</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>Standard-App-Symbol</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Player öffnen</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Wie Windows</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Hell</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Dunkel</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Durchscheinend</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Undurchsichtig</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>Bild</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Instrument</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows-Akzent</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Oben</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Unten</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Kompakt</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>CPU-Temperatur.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>GPU-Temperatur.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>Laufwerkstemperatur.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>Speichertemperatur. Zeigt das heißeste Modul.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>Mainboard-Temperatur.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>Eine Temperatur, die dieser Computer meldet.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>Auslastung in Prozent der Kapazität.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>Aktuelle Datenübertragungsrate.</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>Gilt für die Leisten und dieses Fenster.</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>Design</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>CPU-Auslastung.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>Prozentsatz des verwendeten Speichers.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>Senderate des Netzwerks.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>Empfangsrate des Netzwerks.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>GPU-Auslastung.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Alle Temperatur-Widgets, für jede Komponente.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Laufwerk</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Speicher</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Mainboard</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>Gesamtes Gerät</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Umbenennen</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Standardname verwenden</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Autostart</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Dateien und Diagnose</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Laufwerkaktivität</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Installierter Speicher</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Verwendeter Speicher</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>CPU-Taktfrequenz</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>GPU-Leistung</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>Aktuelle Taktfrequenz.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>Lüfterdrehzahl.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>Leistungsaufnahme.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>Insgesamt installierter Arbeitsspeicher.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>Derzeit verwendeter Arbeitsspeicher.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>Ein von diesem Computer gemeldeter Wert.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>Leiste</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>Sprache geändert</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>Starten Sie die App neu, um die neue Sprache zu übernehmen.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>Bild</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>Leiste dieses Bildschirms</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>Bildschirmrand, an dem die Leiste angezeigt wird.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>Platz, den die Leiste auf dem Bildschirm einnimmt.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Alle Widgets</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>Ziehen Sie ein Widget auf eine Leiste. Sie können dasselbe Widget mehrmals hinzufügen.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>App anheften</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Angeheftete Apps werden als Symbole auf der Leiste angezeigt. Sie können auch eine Datei auf die Leiste ziehen, um sie anzuheften.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>Standard-Widgets</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Stellt die Standard-Widgets wieder her. Drücken Sie Ctrl+Z, um rückgängig zu machen.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Standardleiste wiederherstellen</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>Wiederherstellen der Standardleiste</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Wenn deaktiviert, können maximierte Fenster die Leiste überdecken.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Widget-Einstellungen</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Von Leiste entfernen</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>Entspricht dem Wegziehen des Widgets von der Leiste.</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>Protokolldatei</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>Zeichnet auf, was die App getan hat. Prüfen Sie dies, wenn etwas schiefgeht.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>Einstellungsdatei</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Enthält alle Einstellungen dieser Seiten.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Master Control Dock beenden</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Doppelklicken zum Umbenennen</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>Taktfrequenz in Prozent der Nenntaktfrequenz.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Gesamte GPU-Auslastung, wie von Windows gemeldet.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>GPU-Kern</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>Auslastung des GPU-Kerns, wie vom Treiber gemeldet.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>GPU-Speichercontroller</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>Auslastung des Speichercontrollers, nicht des belegten Speichers.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>GPU-Speichertakt</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>GPU-Speichertakt.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>GPU-Taktfrequenz.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>GPU-Lüfter</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>Drehzahl des GPU-Lüfters.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>Leistungsaufnahme der GPU.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>GPU-Taktfrequenz</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>Prozentsatz der Zeit, in der das Laufwerk aktiv ist.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>Aktuelle Senderate.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>Aktuelle Empfangsrate.</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Uhr</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>Zeigt die Uhrzeit an und auf einer großen Leiste auch das Datum.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Sekunden anzeigen</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Datum anzeigen</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>mit Sekunden</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>Andockmodus</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Angedockt</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Autom. ausblenden</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>Auf dem Desktop</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>Reserviert Platz am Bildschirmrand. Maximierte Fenster überdecken die Leiste nicht.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>Blendet die Leiste aus. Bewegen Sie den Zeiger an den Rand, um sie einzublenden.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>Die Leiste bleibt auf dem Desktop und nimmt keinen Platz weg. Geöffnete Fenster überdecken sie.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>Ändern des Andockmodus</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>auf der Leiste</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Hier ablegen</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Letzte Änderung rückgängig</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>Macht die letzte Änderung hier oder auf einer beliebigen Leiste rückgängig.</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Wenn deaktiviert, erscheint der Titel in der QuickInfo.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>Eine kompakte Leiste bietet nur Platz für eine Zeile.</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>{0} Widgets passen nicht</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>Die Leiste ist voll. Diese Widgets bleiben erhalten und kehren zurück, wenn Platz vorhanden ist, etwa an einem anderen Rand oder bei kleinerer Leistengröße.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>Entfernen von Widgets, die nicht passen</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Lautstärke</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Klicken Sie auf das Symbol für einen Lautstärkeregler, scrollen Sie zum Ändern der Lautstärke, klicken Sie auf die Zahl zum Stummschalten.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Lautstärke anzeigen</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>Das Symbol zeigt bereits an, ob der Ton stummgeschaltet ist.</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Tastenkombinationen</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Alle Leisten ein- oder ausblenden</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>Blendet die Leisten ein oder aus. Ihre Widgets bleiben erhalten.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Einstellungen öffnen</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>Funktioniert überall, auch über Vollbild-Apps.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Stummschalten oder Aufheben</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>Funktioniert wie die Stummschalttaste, für Tastaturen ohne diese Taste.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Zuweisen…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Zuweisen</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Drücken Sie eine Tastenkombination mit Ctrl, Alt oder der Windows-Taste.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>Eine einzelne Taste würde in anderen Apps nicht mehr funktionieren. Fügen Sie Ctrl, Alt oder die Windows-Taste hinzu.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Eine andere App verwendet diese Tastenkombination bereits. Wählen Sie eine andere.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Akku</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>Zeigt den Akkuladestand. Erscheint nur auf Geräten mit Akku.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Zeigt die Wi-Fi-Signalstärke. Erscheint nur bei bestehender Wi-Fi-Verbindung.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0} % geladen</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>wird geladen</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>Netzbetrieb</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>ca. {0} Std. {1} Min. verbleibend</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Akkuladestand nicht verfügbar</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>Signal {0} von 5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Mit Wi-Fi verbunden</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Netzwerkname anzeigen</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Hilft, Netzwerke in Reichweite zu unterscheiden.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>{0} Widgets sind ausgeblendet, bis Daten verfügbar sind</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: bleibt auf der Leiste und nimmt keinen Platz ein, bis Daten vorliegen.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>Entfernen der ausgeblendeten Widgets</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>1 Widget passt nicht</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>1 Widget ist ausgeblendet, bis Daten verfügbar sind</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>Über diesen Stil</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>Graphitfarbener Hintergrund mit orangefarbenen Messwerten.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Öffnet die Einstellungen.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>Widgets auf der Leiste dieses Bildschirms, angeheftete Apps und gespeicherte Layouts.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>Standardsymbol</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>Andere Bildschirme</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Kopiert die Widgets dieser Leiste auf alle anderen Bildschirme, angepasst an die Größe. Drücken Sie Ctrl+Z zum Rückgängigmachen.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Auf andere Bildschirme kopieren</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>Kopieren von Widgets auf andere Bildschirme</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Nach oben</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Nach unten</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Von Leiste entfernen</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>Diese Leiste hat keine Widgets.</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Leisten</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Darstellung</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Sensoren</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>Ändern der Darstellung</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>Ändern der Sprache</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>Ändern einer Tastenkombination</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>Ändern eines Symbols</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>Umbenennen eines Messwerts</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>Signalstärke nicht verfügbar</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>ca. {0} Min. verbleibend</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>GPU-Auslastung</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>GPU-Temperatur</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Auf andere Bildschirme kopieren ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>Position {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>Ausgeblendet</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Diesen Messwert umbenennen</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Diesen Messwert umbenennen.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Diesen Bildschirm entfernen</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Löscht die Leiste dieses Bildschirms und ihre Einstellungen. Bei erneuter Verbindung wird sie neu eingerichtet.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Bildschirm entfernen</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>Entfernen eines Bildschirms</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows-Leistungsindikatoren</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows-Arbeitsspeicher</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI-Temperaturzonen</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>Laufwerkstemperaturen</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA-Treiber</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>antwortet ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>wird nicht ausgeführt</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>auf diesem Computer nicht verfügbar</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>Rückgängig — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>Dies ist die letzte Möglichkeit, die Einstellungen zu öffnen</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>Keine Tastenkombination öffnet die Einstellungen, und dies ist die letzte Schaltfläche „Einstellungen“ auf einer Leiste. Klicken Sie nach dem Entfernen mit der rechten Maustaste auf eine Leiste, um die Einstellungen zu öffnen.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Trotzdem entfernen</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Einstellungen sichern</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Enthält Leisten, Design, Tastenkombinationen und Messwertnamen</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>In Datei exportieren</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Einstellungen wiederherstellen</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Ersetzt alle aktuellen Einstellungen. Leisten werden den Bildschirmen in der gespeicherten Reihenfolge zugewiesen. Drücken Sie Ctrl+Z, um rückgängig zu machen.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Aus Datei importieren</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Einstellungen importiert. {0} Leisten wurden den Bildschirmen dieses Computers zugewiesen.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>Diese Datei ist keine gültige Einstellungsdatei.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>Importieren der Einstellungen</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Groß</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Mittel</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Klein</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Layouts</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Aktuelles Layout speichern</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Speichert die Widgets dieser Leiste als benanntes Layout, das auf jede Leiste angewendet werden kann.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Layout speichern</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Auf diese Leiste anwenden</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} Widgets</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Layout speichern</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>Speichern eines Layouts</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>Anwenden eines Layouts</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>Löschen eines Layouts</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Stumm</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Lautstärke: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>Klicken zum Aufheben der Stummschaltung</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>Klicken zum Stummschalten</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Symbol- und Zahlengröße</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>Größe der Symbole und Zahlen auf allen Leisten.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Sicherung</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Laufwerk</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Mainboard</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Tastenkombinationen, Sprache, Start und Sicherung. Diese gelten für die gesamte App.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Ordner öffnen: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>{0} fortsetzen</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>Belegter GPU-Speicher</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>Belegter GPU-Speicher in Prozent.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>Messwerte: {0}.</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Arbeitsspeicher</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Laufwerke</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Netzwerk</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Mainboard</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Ändern…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>letzte Minute {0}–{1} · Spitze {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>Spitze {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>{0} öffnen</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Player öffnen</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Zugesicherter Speicher</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>Zugesicherter Speicher als Prozentsatz des Commitlimits (RAM plus Auslagerungsdatei).</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Zugesicherter Speicher (Bytes)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Commitlimit</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>Maximaler zugesicherter Speicher: RAM plus Auslagerungsdatei.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Freier Speicher</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>Installierter Speicher, der nicht verwendet wird.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Laufwerk-Leserate</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>Aktuelle Leserate, alle Laufwerke zusammen.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Laufwerk-Schreibrate</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>Aktuelle Schreibrate, alle Laufwerke zusammen.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Angeheftete Apps</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Angeheftete Apps</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Angeheftete Apps</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Apps, Ordner und Webadressen, die an die Leiste dieses Bildschirms angeheftet sind.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>An diese Leiste angeheftet</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Noch nichts angeheftet. Ziehen Sie eine Datei auf die Leiste oder heften Sie oben eine an.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Layouts</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Layouts</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Layouts</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Gespeicherte Widget-Layouts. Wenden Sie ein Layout auf die Leiste des ausgewählten Bildschirms an.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>Ziehen Sie ein Widget auf eine Leiste oder wählen Sie +, um es der ausgewählten Leiste hinzuzufügen.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>Fertig: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>Rückgängig</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>Noch keine gespeicherten Layouts.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>Leiste ein</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>Leiste aus</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>Bildschirmrand auswählen</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>Die Leiste</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>Ziehen zum Verschieben · Von der Leiste ziehen zum Entfernen · Rechtsklick für das Menü</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>Name und Symbol</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>Messwertsymbole</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>Ändern…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>Sie können auch eine Datei auf die Leiste ziehen, um sie anzuheften.</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>Einstellungen…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>Leisten ausblenden</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>Rechtsklick für Menü und Einstellungen. Ziehen Sie Dateien hierher, um sie anzuheften.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Leisten anzeigen</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Leisten ein- oder ausblenden</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>benötigt den PawnIO-Treiber</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>CPU-Register</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>Speichermodule</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>CPU- und Speichertemperaturen</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>CPU- und Speichertemperaturen erfordern den PawnIO-Treiber. Die Installation erfordert Administratorrechte.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} ist installiert, reagiert aber nicht. Ein Neustart der App behebt das Problem meist.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Treiber herunterladen…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>Heißester CPU-Kern</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>Temperatur des heißesten CPU-Kerns.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>CPU-Leistung</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>Leistungsaufnahme der CPU.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>erfordert den Sensordienst</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>Sensordienst</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} ist installiert. Der Sensordienst liest darüber Daten aus und benötigt Administratorrechte für die Installation.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>Der Sensordienst ist in diesem Build nicht enthalten.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>Der Dienst läuft. Messwerte erscheinen in Kürze.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Dienst installieren…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>CPU-Temperatur</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Speicher</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Laufwerke</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Netzwerk</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Sonstige</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>CPU-Auslastung</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Speicherauslastung</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>GPU-Auslastung</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Netzwerk-Sendegeschwindigkeit</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Netzwerk-Empfangsgeschwindigkeit</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Auslastung</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Temperatur</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Speichertemperatur</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Laufwerkstemperatur</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Geräteakku</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>Zeigt den Akkuladestand einer kabellosen Maus, eines Headsets oder einer Tastatur an.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Mäuse</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Headsets</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Tastaturen</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Andere Geräte</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>Akku: {0}</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>Akkuladestand dieses Geräts.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>Akkuladestand dieses Geräts.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Kabellose Geräte</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Welches Gerät</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>kabellose Geräte</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Audio-Umschalter</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Zeigt Master Audio Switcher auf der Leiste an. Klicken Sie, um die Tonausgabe auf das nächste Gerät umzuschalten.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>Kein Audioausgabegerät</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>Klicken Sie, um zum nächsten Gerät zu wechseln</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Master Audio Switcher öffnen</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>Auslastung</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>Temperatur</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>Neben der Auslastung, unter demselben Symbol.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Schaltet das Mikrofon systemweit stumm. Wird rot, solange es stummgeschaltet ist.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Wach halten</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>Hält den Computer wach und verhindert, dass Chat-Apps Sie als abwesend anzeigen.</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Tastaturlayout</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>Zeigt das Tastaturlayout und den Caps Lock-Zustand an.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Apps</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Startet die App von der Leiste aus.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>Datei-Explorer</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Editor</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Rechner</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Eingabeaufforderung</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Ausschnittstool</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Task-Manager</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows-Einstellungen</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Systemsteuerung</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Papierkorb</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Kurznotizen</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>Der Computer kann in den Energiesparmodus wechseln · Klicken, um ihn wach zu halten</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Wach: noch {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Wach bis zum Ausschalten</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>Klicken, um den Energiesparmodus zuzulassen</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>30 Minuten wach halten</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Eine Stunde wach halten</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>Zwei Stunden wach halten</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Bis zum Ausschalten wach halten</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Energiesparmodus zulassen</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>weniger als eine Minute</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} Min.</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} Std. {1} Min.</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Der Computer wird wach gehalten</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>Der Computer kann in den Energiesparmodus wechseln</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Mikrofon stummgeschaltet · Klicken zum Aufheben der Stummschaltung</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Mikrofon eingeschaltet · Klicken zum Stummschalten</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock ist eingeschaltet</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>Klicken, um das Layout zu wechseln</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>Klicken für den Lautstärkeregler · Scrollen zum Ändern der Lautstärke</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Mikrofon stummschalten oder Stummschaltung aufheben</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Funktioniert systemweit, aus jeder App.</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>Nach Name suchen</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Oberfläche</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Formen und Zeichnen</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Dateien und Lernen</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Soziales und Nachrichten</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Apps und Code</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Geld und Arbeit</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Geräte und Energie</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Verkehr und Orte</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Essen</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Küche und Getränke</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Medizin</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Sport</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Spiele und Spaß</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Natur und Weltall</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>Personen und Gesichter</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Leiste fokussieren</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Mit den Pfeiltasten ein Widget auswählen, mit Enter aktivieren und mit Esc beenden.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>Einige Temperaturen sind nicht verfügbar. Unten steht, was fehlt.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>Alle verfügbaren Messwerte funktionieren.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>Nie automatisch anwenden</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>Bei {0} Bildschirmen</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>Wendet dieses Layout automatisch auf die Leiste des Hauptbildschirms an, wenn so viele Bildschirme angeschlossen sind</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>automatisches Layout {0} für {1} Bildschirme</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>Ändern des automatischen Layouts</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Bildschirme identifizieren</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>Zeigt einige Sekunden lang eine Zahl auf jedem Bildschirm an.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Identifizieren</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Leiste bearbeiten…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>Bearbeiten abschließen</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>Diese Version</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>Sucht nur nach Updates, wenn Sie auf Suchen klicken.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>{0} installieren und neu starten</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Nach Updates suchen</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Suche nach Updates…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>Version {0} ist verfügbar. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>Sie haben die neueste Version.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Die Suche nach Updates ist fehlgeschlagen. Es wurden keine Änderungen vorgenommen.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Das Installationsprogramm wird heruntergeladen und überprüft…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>Das Update wurde nicht installiert. Der Download ist fehlgeschlagen oder die Signaturprüfung war nicht erfolgreich.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Automatisch: 1 Bildschirm</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Automatisch: {0} Bildschirme</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>CPU-Auslastung und -Temperatur</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Speicherauslastung und -Temperatur</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>GPU-Auslastung und -Temperatur</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Zeigt beide Werte nebeneinander unter einem Symbol an.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Auslastung + Temp</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>CPU- und Speichertemperatur</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Noch nicht verfügbar. Installieren Sie den Treiber und den Sensordienst auf der Seite Sensoren.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Einrichten…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>Papierkorb leeren</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Im Benachrichtigungsbereich anzeigen</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>Zeigt ein Symbol neben der Uhr. Ein Klick öffnet die Einstellungen, ein Rechtsklick öffnet das Menü.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>Ändern des Benachrichtigungsbereichssymbols</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Auf eine Leiste ziehen</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Widgets suchen</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Version {0} ist bereit</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Die Installation erfordert Administratorrechte. Die Leisten werden automatisch neu geöffnet.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Installieren</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Version {0} wurde heruntergeladen und geprüft.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Prüft einmal täglich auf Updates.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Automatisch aktualisieren</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>Prüft GitHub täglich und verifiziert die Signatur. Installiert, wenn Sie abwesend sind; fragt vorher, wenn in Program Files installiert.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>Ändern der automatischen Updates</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} überhitzt</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C überschreitet die kritische Temperatur von {1:0} °C.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Heute ausblenden</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Vor Überhitzung warnen</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>Zeigt eine Windows-Benachrichtigung, wenn eine Komponente ihre kritische Temperatur überschreitet.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>Ändern der Überhitzungswarnung</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>vor {0} Min.</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>jetzt</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>Niedrigster {0} · Mittelwert {1} · höchster {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Noch keine Daten.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>Auf der Leiste</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Apps</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Layouts</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Oben</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Unten</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Leistengröße</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Kompakt</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Groß</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Legt Dicke, Symbolgröße und Zifferngröße gemeinsam fest.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>Legt Symbol- und Zifferngröße fest. Leisten links oder rechts haben eine feste Dicke.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>Ändern der Leistengröße</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Alle wichtigen Messwerte sind verfügbar</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Verfügbare Quellen: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>CPU- und Speichertemperaturen sind nicht verfügbar</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>Dafür werden der PawnIO-Treiber und der Sensordienst benötigt. Richten Sie sie unten ein.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Messwerte</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Quellen</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Messwertquellen</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>{0} von {1} Quellen verfügbar: Windows-Leistungsindikatoren, GPU-Treiber, Laufwerke, Speicher, CPU.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Einblenden</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Ausblenden</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>Messwerte: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Messwerte suchen</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Temperatur</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Auslastung</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Freie Software (GPL-3.0-or-later). Ein Teil des Codes stammt aus Microsoft PowerToys (MIT-Lizenz).</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>Neuerungen</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Zuletzt geprüft: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>heute, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Jetzt prüfen</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Prüfen</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Änderungen werden automatisch gespeichert.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>Version, Updates und App-Wartung.</value>
+  </data>
+</root>

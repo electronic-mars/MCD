@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>Balken</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>Weergave</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>Sensoren</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Balken</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>Elke balk hoort bij één scherm. Wijzigingen gelden voor het hierboven geselecteerde scherm.</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>De balk weergeven</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>Rand</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Dikte</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Weergave</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>Thema, achtergrond en kleuren. Geldt voor alle balken.</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>Achtergrond</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>Doorzichtig toont het bureaublad door de balk heen. Ondoorzichtig is beter leesbaar.</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>Kleur van de metingen</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Gebruikt de Windows-accentkleur. Metingen boven de waarschuwingsgrens blijven in de waarschuwingskleur.</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Sensoren</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Hoofdmetingen. Selecteer het potlood om een meting een andere naam te geven.</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Live-metingen</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>Een balk voor de rand van je scherm. Vrije software (GPL-3.0-or-later). Een deel van de code is overgenomen uit Microsoft PowerToys (MIT-licentie).</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Starten met Windows</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Start de app wanneer je je aanmeldt bij Windows.</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Sluit de balken totdat je de app opnieuw start.</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>Er is nog geen scherm ingesteld.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>losgekoppeld · balkinstellingen worden bewaard voor als het scherm opnieuw wordt verbonden</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Ongedaan maken</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Ongedaan maken — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>toevoegen van {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>verplaatsen van een widget</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>{0} verwijderen</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Scherm</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Versie {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Nog geen metingen beschikbaar.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>Metingen: {0}. Bronnen: {1}.</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Meting</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>Toont de belasting van één onderdeel als getal.</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Vastgemaakte app</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>Opent een app, map of webpagina.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>Toont een actuele waarde.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>Heetste onderdeel</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Het onderdeel dat het dichtst bij de temperatuurlimiet is.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>Temperatuur van dit onderdeel.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Meting</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Sensor</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Pictogram</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Toont de huidige media met afspeelknoppen. Verborgen als er niets wordt afgespeeld.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Temperatuur</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Toont de temperatuur van onderdelen die deze rapporteren.</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>Geheugen</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Verzenden</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Ontvangen</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Temp.</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>Heetste onderdeel</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Afspelen of pauzeren</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Knoppen en tracktitel</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Knoppen; tracktitel in tooltip</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Tracktitel op de balk weergeven</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>Wordt van kracht nadat je de app opnieuw hebt opgestart.</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>Zoals Windows</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>Standaard voor dit onderdeel</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Waarschuwingsdrempel (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Kritieke drempel (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Kies een kleur</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Kies een afbeelding</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>Geen afbeelding geselecteerd</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>Altijd bovenop</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>App, map of webadres</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>optioneel</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Bladeren…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>Aan de balk vastmaken</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Toevoegen</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Scherm {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>Transparantie</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>Nu opnieuw opstarten</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>Speler om te bedienen</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Automatisch (huidige speler)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>Knoppen bedienen altijd {0}</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>Aan de balk vastmaken</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Vorige track</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Volgende track</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>Op de balk</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>Een app vastmaken…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>Van balk verwijderen</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Plaatsing en grootte</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Gedrag</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>Balken aan de linker- of rechterrand hebben een vaste dikte.</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>De Windows-taakbalk wordt op deze rand verborgen, dus deze balk blijft zichtbaar.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>Deze widget heeft geen instellingen.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>widgetopties wijzigen</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>widget verwijderen</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>rand wijzigen</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>dikte wijzigen</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>Altijd bovenop wijzigen</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>balk weergeven of verbergen</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>Standaardapp-pictogram</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Speler openen</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Zoals Windows</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Licht</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Donker</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Doorschijnend</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Ondoorzichtig</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>Kleur</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>Afbeelding</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Instrument</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Neutraal</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows-accent</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Boven</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Onder</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>CPU-temperatuur.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>GPU-temperatuur.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>Schijftemperatuur.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>Geheugentemperatuur. Toont de warmste module.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>Moederbordtemperatuur.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>Een temperatuur die door deze computer wordt gerapporteerd.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>Belasting als percentage van de capaciteit.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>Huidige gegevensoverdrachtsnelheid.</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>Van toepassing op de balken en dit venster.</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>Thema</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>CPU-belasting.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>Percentage van het geheugen in gebruik.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>Netwerkverzendsnelheid.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>Netwerkontvangstsnelheid.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>GPU-belasting.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Alle temperatuurwidgets, voor elk onderdeel.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Schijf</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Geheugen</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Moederbord</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>Volledige apparaat</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Hernoemen</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Standaardnaam gebruiken</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Opstarten</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Bestanden en diagnostische gegevens</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Schijfactiviteit</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Geïnstalleerd geheugen</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Geheugen in gebruik</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>CPU-kloksnelheid</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>GPU-vermogen</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>Huidige kloksnelheid.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>Ventilatorsnelheid.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>Energieverbruik.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>Totaal geïnstalleerd geheugen.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>Geheugen dat momenteel in gebruik is.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>Een waarde die door deze computer wordt gerapporteerd.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>Balk</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>Taal gewijzigd</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>Start de app opnieuw om de nieuwe taal toe te passen.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>Kleur</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>Afbeelding</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>Balk van dit scherm</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>Schermrand waar de balk wordt weergegeven.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>Ruimte die de balk op het scherm inneemt.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Alle widgets</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>Sleep een widget naar een balk. Je kunt dezelfde widget meerdere keren toevoegen.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>Een app vastmaken</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Vastgemaakte apps worden als pictogrammen op de balk weergegeven. Je kunt ook een bestand op de balk neerzetten om het vast te maken.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>Standaardwidgets</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Herstelt de standaardwidgets. Druk op Ctrl+Z om ongedaan te maken.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Standaardbalk herstellen</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>standaardbalk herstellen</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Als dit is uitgeschakeld, kunnen gemaximaliseerde vensters de balk bedekken.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Widgetinstellingen</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Van balk verwijderen</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>Hetzelfde als de widget van de balk slepen.</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>Logboekbestand</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>Registreert wat de app heeft gedaan. Controleer het als er iets misgaat.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>Instellingenbestand</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Bevat alle instellingen van deze pagina's.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Map openen</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Master Control Dock afsluiten</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Dubbelklik om te hernoemen</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>Kloksnelheid als percentage van de nominale snelheid.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Totale GPU-belasting, zoals gerapporteerd door Windows.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>GPU-kern</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>GPU-kernbelasting, zoals gerapporteerd door het stuurprogramma.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>GPU-geheugencontroller</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>Belasting van de geheugencontroller, niet het geheugengebruik.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>GPU-geheugenkloksnelheid</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>GPU-geheugenkloksnelheid.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>GPU-kernkloksnelheid.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>GPU-ventilator</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>GPU-ventilatorsnelheid.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>GPU-stroomverbruik.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>GPU-kloksnelheid</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>Percentage van de tijd dat de schijf actief is.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>Huidige verzendsnelheid.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>Huidige ontvangstsnelheid.</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Klok</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>Toont de tijd, en de datum op een balk op volledige grootte.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Seconden weergeven</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Datum weergeven</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>met seconden</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>Dockmodus</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Gedockt</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Auto-verbergen</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>Op bureaublad</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>Reserveert ruimte aan de schermrand. Gemaximaliseerde vensters bedekken de balk niet.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>Verbergt de balk buiten het scherm. Beweeg de aanwijzer naar de rand om de balk weer te geven.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>De balk blijft op het bureaublad en neemt geen ruimte in. Geopende vensters bedekken de balk.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>wijzigen van de dockmodus</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>op de balk</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Hier neerzetten</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Laatste wijziging ongedaan maken</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>Maakt de laatste wijziging ongedaan, hier of op een willekeurige balk.</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Als dit uit staat, verschijnt de titel in de knopinfo.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>Een compacte balk heeft alleen ruimte voor één regel.</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>{0} widgets passen niet</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>De balk is vol. Deze widgets blijven bewaard en komen terug zodra er ruimte is, bijvoorbeeld op een andere rand of bij een kleinere balkgrootte.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>verwijderen van widgets die niet pasten</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Geluid</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Klik op het pictogram voor een volumeschuifregelaar, scroll om het volume te wijzigen, klik op het getal om te dempen.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Volumeniveau weergeven</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>Het pictogram laat al zien of het geluid gedempt is.</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Sneltoetsen</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Alle balken weergeven of verbergen</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>Verbergt of toont de balken. De widgets blijven bewaard.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Instellingen openen</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>Werkt overal, ook boven apps in volledig scherm.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Dempen of dempen opheffen</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>Werkt zoals de demptoets, voor toetsenborden zonder die toets.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Toewijzen…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Wissen</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Toewijzen</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Druk op een toetscombinatie met Ctrl, Alt of de Windows-toets.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>Een enkele toets zou niet meer werken in andere apps. Voeg Ctrl, Alt of de Windows-toets toe.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Een andere app gebruikt deze sneltoets al. Kies een andere.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Batterij</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>Toont batterijlading. Verschijnt alleen op apparaten met een batterij.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Toont Wi-Fi-signaalsterkte. Verschijnt alleen bij verbinding met Wi-Fi.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0}% opgeladen</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>opladen</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>Aangesloten</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>nog ongeveer {0} u {1} min</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Batterijlading niet beschikbaar</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>signaal {0} van 5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Verbonden met Wi-Fi</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Netwerknaam tonen</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Helpt bij het onderscheiden van netwerken binnen bereik.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>Widgets: {0} verborgen tot er gegevens zijn</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: blijft op de balk, neemt geen ruimte in tot er gegevens zijn.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>het verwijderen van verborgen widgets</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>1 widget past niet</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>1 widget is verborgen tot er gegevens zijn</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>Over deze stijl</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>Grafietachtergrond met oranje metingen.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Instellingen</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Opent instellingen.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Instellingen</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>Widgets op de balk van dit scherm, vastgemaakte apps en opgeslagen indelingen.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>Standaardpictogram</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>Andere schermen</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Kopieert de widgets van deze balk naar alle andere schermen, aangepast aan de grootte. Druk op Ctrl+Z om ongedaan te maken.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Kopiëren naar andere schermen</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>het kopiëren van widgets naar andere schermen</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Omhoog verplaatsen</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Omlaag verplaatsen</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Verwijderen uit balk</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>Deze balk heeft geen widgets.</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Balken</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Uiterlijk</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Sensoren</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Over</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>het wijzigen van het uiterlijk</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>het wijzigen van de taal</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>het wijzigen van een sneltoets</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>het wijzigen van een pictogram</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>het hernoemen van een meting</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>Signaalsterkte niet beschikbaar</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>nog ongeveer {0} min</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>GPU-belasting</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>GPU-temperatuur</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Kopiëren naar andere schermen ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>Positie {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>Verborgen</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Hernoem deze meting</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Hernoem deze meting.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Dit scherm verwijderen</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Verwijdert de balk van dit scherm en de bijbehorende instellingen. Bij herverbinding wordt deze opnieuw ingesteld.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Scherm verwijderen</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>verwijderen van een scherm</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows prestatietellers</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows-geheugen</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI-thermische zones</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>schijftemperaturen</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA-stuurprogramma</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>reageert ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>niet actief</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>niet beschikbaar op deze computer</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>Ongedaan maken — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>Dit is de laatste manier om instellingen te openen</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>Er is geen sneltoets voor de instellingen en dit is de laatste knop Instellingen op een balk. Als je deze verwijdert, klik je met de rechtermuisknop op een balk om de instellingen te openen.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Toch verwijderen</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Back-up maken van instellingen</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Bevat balken, thema, sneltoetsen en namen van metingen.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Exporteren naar bestand</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Instellingen herstellen</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Vervangt alle huidige instellingen. Balken worden toegewezen aan schermen in de volgorde waarin ze zijn opgeslagen. Druk op Ctrl+Z om ongedaan te maken.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Importeren vanuit bestand</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Instellingen</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Instellingen geïmporteerd. {0} balken zijn toegepast op de schermen van deze computer.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>Dit is geen geldig instellingenbestand.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>importeren van instellingen</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Groot</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Middelgroot</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Klein</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Indelingen</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Huidige indeling opslaan</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Slaat de widgets van deze balk op als een benoemde indeling die je op elke balk kunt toepassen.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Indeling opslaan</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Toepassen op deze balk</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} widgets</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Indeling opslaan</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Opslaan</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>opslaan van een indeling</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>toepassen van een indeling</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>verwijderen van een indeling</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Gedempt</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Volume: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>Klik om dempen op te heffen</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>Klik om te dempen</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Icoon- en getalgrootte</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>Grootte van iconen en getallen op alle balken.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>Algemeen</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>Algemeen</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Reservekopie</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Algemeen</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Schijf</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Moederbord</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>Algemeen</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Sneltoetsen, taal, opstarten en reservekopie. Deze gelden voor de hele app.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Map openen: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>Hervat {0}</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>GPU-geheugengebruik</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>GPU-geheugen in gebruik, als percentage.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>{0} metingen.</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Geheugen</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Schijven</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Netwerk</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Moederbord</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Wijzigen…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>laatste minuut {0}–{1} · piek {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>piek {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>Open {0}</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Speler openen</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Vastgelegd geheugen</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>Vastgelegd geheugen als percentage van de commitlimiet (RAM plus wisselbestand).</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Vastgelegd geheugen (bytes)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Commitlimiet</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>Maximaal vastgelegd geheugen: RAM plus het wisselbestand.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Vrij geheugen</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>Geïnstalleerd geheugen dat niet in gebruik is.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Schijfleessnelheid</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>Huidige leessnelheid van alle schijven gecombineerd.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Schijfschrijfsnelheid</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>Huidige schrijfsnelheid van alle schijven gecombineerd.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Vastgemaakte apps</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Vastgemaakte apps</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Vastgemaakte apps</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Apps, mappen en webadressen die aan de balk van dit scherm zijn vastgemaakt.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>Vastgemaakt aan deze balk</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Nog niets vastgemaakt. Sleep een bestand naar de balk of maak er hierboven een vast.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Indelingen</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Indelingen</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Indelingen</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Opgeslagen widget-indelingen. Pas een indeling toe op de balk van het geselecteerde scherm.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>Sleep een widget naar een balk, of selecteer + om deze aan de geselecteerde balk toe te voegen.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>Klaar: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>Ongedaan maken</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>Nog geen opgeslagen indelingen.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>Balk aan</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>Balk uit</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>Selecteer een rand</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>De balk</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>Sleep om te verplaatsen · Sleep van de balk om te verwijderen · Klik met de rechtermuisknop voor het menu</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>Naam en pictogram</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>Pictogrammen voor metingen</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>Voorbeeld</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>Wijzigen…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>Map openen</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>Je kunt ook een bestand naar de balk slepen om het vast te maken.</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>Instellingen…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>Balken verbergen</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>Klik met de rechtermuisknop voor het menu en de instellingen. Sleep bestanden hierheen om ze vast te maken.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Balken tonen</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Balken verbergen of tonen</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>heeft de PawnIO-driver nodig</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>CPU-registers</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>geheugenmodules</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>CPU- en geheugentemperaturen</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>CPU- en geheugentemperaturen vereisen het PawnIO-stuurprogramma. Voor de installatie zijn beheerdersrechten vereist.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} is geïnstalleerd maar reageert niet. Dit wordt meestal opgelost door de app opnieuw te starten.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Stuurprogramma downloaden…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>Warmste CPU-kern</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>Temperatuur van de warmste CPU-kern.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>CPU-vermogen</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>CPU-stroomverbruik.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>vereist de sensorservice</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>Sensorservice</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} is geïnstalleerd. De sensorservice leest gegevens via dit stuurprogramma en heeft beheerdersrechten nodig voor de installatie.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>De sensorservice is niet opgenomen in deze build.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>De service wordt uitgevoerd. Metingen verschijnen binnenkort.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Service installeren…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>CPU-temperatuur</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Geheugen</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Schijven</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Netwerk</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Overig</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>CPU-belasting</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Geheugenbelasting</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>GPU-belasting</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Netwerkverzendsnelheid</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Netwerkontvangstsnelheid</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Belasting</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Temperatuur</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Geheugentemperatuur</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Schijftemperatuur</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Apparaatbatterij</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>Toont het batterijniveau van een draadloze muis, headset of toetsenbord.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Muizen</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Headsets</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Toetsenborden</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Overige apparaten</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>Batterij van {0}</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>Batterijniveau van dit apparaat.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>Batterijniveau van dit apparaat.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Draadloze apparaten</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Welk apparaat</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>draadloze apparaten</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Audio Switcher</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Toont Master Audio Switcher op de balk. Klik om de geluidsuitvoer naar het volgende apparaat over te schakelen.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>Geen audio-uitvoerapparaat</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>Klik om over te schakelen naar het volgende apparaat</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Master Audio Switcher openen</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>Belasting</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>Temperatuur</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>Naast de belasting, onder hetzelfde pictogram.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Microfoon</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Dempt de microfoon in het hele systeem. Wordt rood wanneer gedempt.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Wakker houden</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>Houdt de computer wakker en voorkomt dat chat-apps je als afwezig tonen.</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Toetsenbordindeling</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>Toont de taal van de toetsenbordindeling en de status van Caps Lock.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Apps</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Start de app vanaf de balk.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>Verkenner</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Kladblok</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Rekenmachine</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Opdrachtprompt</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Knipprogramma</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Taakbeheer</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows-instellingen</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Configuratiescherm</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Prullenbak</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Plaknotities</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>De computer kan in slaapstand gaan · Klik om wakker te houden</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Wakker: {0} over</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Wakker tot uitgeschakeld</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>Klik om slaapstand toe te staan</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>30 minuten wakker houden</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Een uur wakker houden</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>Twee uur wakker houden</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Wakker houden tot uitgeschakeld</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Slaapstand toestaan</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>minder dan een minuut</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} u {1} min</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Computer wakker houden</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>De computer kan in slaapstand gaan</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Microfoon is gedempt · Klik om demping op te heffen</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Microfoon is aan · Klik om te dempen</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock is aan</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>Klik om indeling te wijzigen</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>Klik voor volumeschuifregelaar · Scroll om volume te wijzigen</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Microfoon dempen of activeren</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Werkt systeembreed, vanuit elke app.</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>Zoeken op naam</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Vormen en tekenen</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Bestanden en leren</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Sociaal en berichten</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Apps en code</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Geld en werk</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Apparaten en stroom</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Transport en plaatsen</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Eten</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Keuken en drank</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Medicijnen</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Sport</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Games en plezier</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Natuur en ruimte</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>Mensen en gezichten</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Focus op de balk zetten</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Gebruik de pijltjestoetsen om een widget te selecteren, Enter om te activeren en Esc om te sluiten.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>Sommige temperaturen zijn niet beschikbaar. Zie hieronder wat er ontbreekt.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>Alle beschikbare metingen werken.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>Nooit automatisch toepassen</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>Met {0} schermen</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>Past deze indeling automatisch toe op de balk van het hoofdscherm wanneer dit aantal schermen is aangesloten</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>automatische indeling {0} voor {1} schermen</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>automatische indeling wijzigen</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Schermen identificeren</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>Toont een paar seconden een nummer op elk scherm.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Identificeren</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Balk bewerken…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>Bewerken beëindigen</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>Deze versie</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>Controleert alleen op updates wanneer je op Controleren klikt.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>{0} installeren en opnieuw opstarten</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Controleren op updates</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Controleren op updates…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>Versie {0} is beschikbaar. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>Je hebt de nieuwste versie.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Kan niet controleren op updates. Er zijn geen wijzigingen aangebracht.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Het installatieprogramma downloaden en verifiëren…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>De update is niet geïnstalleerd. De download is mislukt of de handtekeningcontrole is niet geslaagd.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Automatisch: 1 scherm</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Automatisch: {0} schermen</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>CPU-belasting en temperatuur</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Geheugenbelasting en temperatuur</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>GPU-belasting en temperatuur</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Toont beide waarden naast elkaar onder één pictogram.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Belast +°</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>CPU- en geheugentemperatuur</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Nog niet beschikbaar. Installeer het stuurprogramma en de sensorservice op de pagina Sensoren.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Instellen…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>Prullenbak legen</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Weergeven in systeemvak</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>Toont een pictogram bij de klok. Klik om instellingen te openen; klik met de rechtermuisknop voor het menu.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>wijziging van het systeemvakpictogram</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Sleep naar een balk</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Widgets zoeken</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Versie {0} is gereed</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Installatie vereist administratorrechten. De balken openen automatisch opnieuw.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Installeren</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Versie {0} is gedownload en gecontroleerd.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Controleert één keer per dag op updates.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Automatisch bijwerken</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>Controleert GitHub dagelijks en verifieert de handtekening. Installeert wanneer je afwezig bent; vraagt het eerst bij installatie in Program Files.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>wijziging van automatische updates</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} is oververhit</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C overschrijdt de kritieke temperatuur van {1:0} °C.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Voor vandaag negeren</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Waarschuwen bij oververhitting</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>Toont een Windows-melding wanneer een component de kritieke temperatuur overschrijdt.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>wijziging van de waarschuwing voor oververhitting</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} min geleden</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>nu</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>Laagst {0} · gemiddeld {1} · hoogst {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Nog geen gegevens.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Catalogus</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>Op de balk</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Apps</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Indelingen</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Boven</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Onder</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Balkgrootte</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Normaal</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Groot</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Stelt dikte, pictogramgrootte en getalgrootte samen in.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>Stelt pictogram- en getalgrootte in. Balken links of rechts hebben een vaste dikte.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>wijziging balkgrootte</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Alle hoofdmetingen zijn beschikbaar</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Beschikbare bronnen: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>CPU- en geheugentemperaturen zijn niet beschikbaar</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>Hiervoor zijn de PawnIO-driver en de sensorservice nodig. Stel deze hieronder in.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Metingen</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Bronnen</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Bronnen van metingen</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>{0} van {1} bronnen beschikbaar: Windows-tellers, GPU-driver, schijven, geheugen, CPU.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Tonen</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Verbergen</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>Metingen: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Metingen zoeken</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Temperatuur</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Belasting</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Gratis software (GPL-3.0-or-later). Deels overgenomen uit Microsoft PowerToys (MIT-licentie).</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>Wat is er nieuw</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Laatst gecontroleerd: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>vandaag, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Nu controleren</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Controleren</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Openen</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Wijzigingen worden automatisch opgeslagen.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>Over</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>Versie, updates en app-onderhoud.</value>
+  </data>
+</root>

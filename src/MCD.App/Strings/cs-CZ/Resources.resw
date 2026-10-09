@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>Panely</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>Vzhled</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>Senzory</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>O aplikaci</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>Panely</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>Každý panel patří k jedné obrazovce. Změny se použijí pro obrazovku vybranou výše.</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>Zobrazit panel</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>Okraj</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>Tloušťka</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>Vzhled</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>Motiv, pozadí a barvy. Platí pro všechny panely.</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>Pozadí</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>Průsvitné pozadí nechává pod panelem prosvítat plochu. Plná barva se čte snáze.</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>Barva hodnot</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Používá barvu zvýraznění Windows. Hodnoty nad varovnou úrovní zůstávají ve varovné barvě.</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>Senzory</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>Hlavní hodnoty. Výběrem tužky hodnotu přejmenujete.</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>Aktuální hodnoty</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>Panel pro okraj obrazovky. Svobodný software (GPL-3.0-or-later). Část kódu je upravena z Microsoft PowerToys (licence MIT).</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Spustit s Windows</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Spustí aplikaci při přihlášení do Windows.</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>Zavře panely, dokud aplikaci znovu nespustíte.</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>Zatím není nastavena žádná obrazovka.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>odpojeno · nastavení panelu se zachová pro opětovné připojení</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Zpět</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>Zpět — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>přidání {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>přesunutí widgetu</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>odebrání {0}</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>Obrazovka</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>Verze {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>Zatím nejsou k dispozici žádné hodnoty.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>Hodnoty: {0}. Zdroje: {1}.</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>Hodnota</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>Zobrazuje zatížení jedné součásti jako číslo.</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>Připnutá aplikace</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>Otevře aplikaci, složku nebo webovou stránku.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>Zobrazuje aktuální hodnotu.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>Nejteplejší součást</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>Součást nejblíže svému teplotnímu limitu.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>Teplota této součásti.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>Hodnota</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>Senzor</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>Ikona</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>Média</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>Zobrazuje právě přehrávaná média s tlačítky přehrávání. Skryté, když se nic nepřehrává.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>Teplota</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>Zobrazuje teplotu součástí, které ji hlásí.</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>RAM</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>Odesláno</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>Přijato</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>Teplota</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>Nejteplejší součást</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>Přehrát nebo pozastavit</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>Tlačítka a název skladby</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>Tlačítka; název skladby v popisku</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>Zobrazit název skladby na panelu</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>Změna se projeví po restartování aplikace.</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>K odpovídajícímu Windows</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>Výchozí pro tuto součást</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>Práh upozornění (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>Kritický práh (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>Vybrat barvu</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>Vybrat obrázek</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>Není vybrán žádný obrázek</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>Vždy navrchu</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>Aplikace, složka nebo webová adresa</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>volitelné</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>Procházet...</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>Připnout na panel</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>Přidat</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>Obrazovka {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>Průhlednost</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>Restartovat nyní</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>Ovládaný přehrávač</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>Automaticky (aktuální přehrávač)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>Tlačítka vždy ovládají {0}</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>Připnout na panel</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Předchozí skladba</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Další skladba</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>Na panelu</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>Připnout aplikaci…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>Odebrat z panelu</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>Umístění a velikost</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>Chování</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>Panely na levém nebo pravém okraji mají pevnou tloušťku.</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>Panel úloh Windows se na tomto okraji skrývá, takže tento panel zůstane viditelný.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>Tento widget nemá žádná nastavení.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>změna možností widgetu</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>odebrání widgetu</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>změna okraje</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>změna tloušťky</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>změna možnosti Vždy navrchu</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>zobrazení nebo skrytí panelu</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>Výchozí ikona aplikace</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Otevřít přehrávač</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Podle Windows</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>Světlý</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>Tmavý</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>Průsvitný</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>Plný</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>Barva</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>Obrázek</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>Přístroj</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>Neutrální</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Akcentní barva Windows</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>Vlevo</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>Nahoře</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>Vpravo</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>Dole</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>Výchozí</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>Kompaktní</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>Teplota CPU.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>Teplota GPU.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>Teplota disku.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>Teplota paměti. Zobrazuje nejteplejší modul.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>Teplota základní desky.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>Teplota hlášená tímto počítačem.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>Zatížení v procentech kapacity.</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>Aktuální rychlost přenosu dat.</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>Platí pro panely a toto okno.</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>Motiv</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>Zatížení CPU.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>Procento využité paměti.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>Rychlost odesílání v síti.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>Rychlost přijímání v síti.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>Zatížení GPU.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>Všechny widgety teploty pro libovolnou součást.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>Disk</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>Paměť</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>Základní deska</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>Celé zařízení</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>Přejmenovat</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>Použít výchozí název</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>Spuštění</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Soubory a diagnostika</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>Aktivita disku</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>Nainstalovaná paměť</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>Využitá paměť</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>Takt CPU</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>Příkon GPU</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>Aktuální takt.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>Otáčky ventilátoru.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>Spotřeba energie.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>Celková nainstalovaná paměť.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>Aktuálně využitá paměť.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>Hodnota hlášená tímto počítačem.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>Panel</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>Jazyk byl změněn</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>Nový jazyk se použije po restartování aplikace.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>Barva</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>Obrázek</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>Panel této obrazovky</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>Okraj obrazovky, kde se panel zobrazí.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>Místo, které panel zabírá na obrazovce.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>Všechny widgety</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>Přetáhněte widget na panel. Stejný widget můžete přidat vícekrát.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>Připnout aplikaci</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>Připnuté aplikace se zobrazí na panelu jako ikony. Aplikaci můžete připnout i přetažením souboru na panel.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>Výchozí widgety</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>Obnoví výchozí widgety. Zpět vrátíte stisknutím Ctrl+Z.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>Obnovit výchozí panel</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>obnovení výchozího panelu</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>Když je vypnuto, maximalizovaná okna mohou panel zakrýt.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>Nastavení widgetu</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>Odebrat z panelu</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>Stejné jako přetažení widgetu mimo panel.</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>Soubor protokolu</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>Zaznamenává aktivity aplikace. Zkontrolujte jej, pokud něco nefunguje.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>Soubor nastavení</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>Obsahuje všechna nastavení z těchto stránek.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Otevřít složku</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Ukončit Master Control Dock</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>Poklepáním přejmenujte</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>Taktovací frekvence v procentech jmenovité frekvence.</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Celkové zatížení GPU podle hlášení Windows.</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>Jádro GPU</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>Zatížení jádra GPU podle hlášení ovladače.</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>Řadič paměti GPU</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>Zatížení řadiče paměti, ne využitá paměť.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>Frekvence paměti GPU</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>Taktovací frekvence paměti GPU.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>Taktovací frekvence jádra GPU.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>Ventilátor GPU</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>Otáčky ventilátoru GPU.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>Spotřeba energie GPU.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>Frekvence GPU</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>Procento času, kdy je disk aktivní.</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>Aktuální rychlost odesílání.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>Aktuální rychlost přijímání.</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>Hodiny</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>Zobrazuje čas a na plnohodnotném panelu i datum.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>Zobrazit sekundy</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>Zobrazit datum</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>se sekundami</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>Režim ukotvení</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>Ukotveno</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>Automaticky skrýt</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>Na ploše</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>Vyhradí místo na okraji obrazovky. Maximalizovaná okna panel nepřekrývají.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>Skryje panel mimo obrazovku. Zobrazíte ho přejetím ukazatele na okraj.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>Panel zůstane na ploše a nezabírá místo. Otevřená okna ho překrývají.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>změnu režimu ukotvení</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>na panelu</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>Pusťte sem</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>Vrátit poslední změnu</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>Vrátí poslední změnu provedenou tady nebo na libovolném panelu.</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>Když je vypnuto, název se zobrazí v popisku.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>Na kompaktní panel se vejde jen jeden řádek.</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>Nevešlo se widgetů: {0}</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>Panel je plný. Tyto widgety zůstávají zachované a vrátí se, když bude místo, například na jiném okraji nebo při menší velikosti panelu.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>Odebrat</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>odebrání widgetů, které se nevešly</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>Zvuk</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>Kliknutím na ikonu zobrazíte jezdec hlasitosti, kolečkem změníte hlasitost, kliknutím na číslo zvuk ztlumíte.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>Zobrazit úroveň hlasitosti</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>Ikona už ukazuje, jestli je zvuk ztlumený.</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>Klávesové zkratky</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>Zobrazit nebo skrýt všechny panely</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>Skryje nebo zobrazí panely. Jejich widgety zůstávají zachované.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>Otevřít nastavení</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>Funguje kdekoli, i nad aplikacemi na celé obrazovce.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>Ztlumit nebo zrušit ztlumení</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>Funguje jako klávesa ztlumení, pro klávesnice, které ji nemají.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>Přiřadit…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>Přiřadit</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Stiskněte kombinaci kláves, která obsahuje Ctrl, Alt nebo klávesu Windows.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>Jedna klávesa by přestala fungovat v ostatních aplikacích. Přidejte Ctrl, Alt nebo klávesu Windows.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>Tuto klávesovou zkratku již používá jiná aplikace. Vyberte jinou.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>Baterie</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>Zobrazuje nabití baterie. Zobrazuje se pouze na zařízeních s baterií.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Zobrazuje sílu signálu Wi-Fi. Zobrazuje se pouze při připojení k Wi-Fi.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>{0}% nabití</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>nabíjí se</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>Zapojeno</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>zbývá přibližně {0} h {1} min</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>Nabití baterie není dostupné</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>signál {0} z 5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Připojeno k Wi-Fi</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>Zobrazit název sítě</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>Pomáhá rozlišit sítě v dosahu.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>Skryto, dokud nebudou data: {0}</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: ponecháno na panelu, nezabírá místo, dokud nejsou k dispozici data.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>Odebrat</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>odebrání skrytých widgetů</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>1 widget se nevejde</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>1 widget je skryt, dokud nejsou k dispozici data.</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>O tomto stylu</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>Grafitové pozadí s oranžovými hodnotami.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>Odebrat</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>Odebrat</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>Otevře nastavení</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>Widgety</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>Widgety</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>Widgety na panelu této obrazovky, připnuté aplikace a uložená rozložení.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>Výchozí ikona</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>Ostatní obrazovky</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>Zkopíruje widgety tohoto panelu na všechny ostatní obrazovky a přizpůsobí je. Pro vrácení stiskněte Ctrl+Z.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>Kopírovat na ostatní obrazovky</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>kopírování widgetů na ostatní obrazovky</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>Posunout nahoru</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>Posunout dolů</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>Odebrat z panelu</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>Tento panel nemá žádné widgety.</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Panely</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Widgety</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Vzhled</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Senzory</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>O aplikaci</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>změna vzhledu</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>změna jazyka</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>změna klávesové zkratky</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>změna ikony</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>přejmenování hodnoty</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>Síla signálu není k dispozici</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>zbývá asi {0} min</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>Zatížení GPU</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>Teplota GPU</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>Kopírovat na ostatní obrazovky ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>Pozice {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>Skrytý</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>Přejmenovat tuto hodnotu</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>Přejmenovat tuto hodnotu.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>Odebrat tuto obrazovku</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>Odstraní panel této obrazovky a jeho nastavení. Po opětovném připojení se nastaví jako nový.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>Odebrat obrazovku</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>odebrání obrazovky</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Čítače výkonu Windows</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Paměť systému Windows</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>Tepelné zóny ACPI</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>teploty disků</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>Ovladač NVIDIA</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>odpovídá ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>neběží</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>na tomto počítači není k dispozici</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>Zpět — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>Toto je poslední způsob otevření nastavení</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>Žádná klávesová zkratka neotevírá nastavení a toto je poslední tlačítko Nastavení na jakémkoli panelu. Po jeho odebrání otevřete nastavení pravým kliknutím na panel.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>Odebrat stejně</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>Zálohovat nastavení</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>Zahrnuje panely, motiv, klávesové zkratky a názvy hodnot.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Exportovat do souboru</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>Obnovit nastavení</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>Nahradí všechna aktuální nastavení. Panely se přiřadí k obrazovkám v pořadí, v jakém byly uloženy. Zpět provedete stisknutím Ctrl+Z.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>Importovat ze souboru</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>Nastavení byla importována. {0} panelů bylo použito na obrazovky tohoto počítače.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>Tento soubor není platný soubor nastavení.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>importování nastavení</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>Velký</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>Střední</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>Malý</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>Rozložení</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>Uložit aktuální rozložení</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>Uloží widgety tohoto panelu jako pojmenované rozložení, které lze použít na libovolný panel.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>Uložit rozložení</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>Použít na tento panel</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>Widgety: {0}</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>Uložit rozložení</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>uložení rozložení</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>použití rozložení</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>odstranění rozložení</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>Ztlumeno</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>Hlasitost: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>Kliknutím zrušte ztlumení</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>Kliknutím ztlumte</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>Velikost ikon a čísel</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>Velikost ikon a čísel na všech panelech.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>Obecné</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>Obecné</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>Zálohování</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Obecné</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>Disk</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>Deska</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>Obecné</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>Klávesové zkratky, jazyk, spuštění a zálohování. Platí pro celou aplikaci.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>Otevřít složku: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>Obnoví {0}</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>Využitá paměť GPU</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>Využitá paměť GPU v procentech.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>Počet hodnot: {0}.</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>Paměť</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>Disky</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>Síť</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>Základní deska</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>Změnit…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>poslední minuta {0}–{1} · maximum {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>maximum {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>Otevřít {0}</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>Otevřít přehrávač</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>Zavázaná paměť</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>Zavázaná paměť jako procento limitu zavázání (RAM plus stránkovací soubor).</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>Zavázaná paměť (bajty)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>Limit zavázání</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>Maximum zavázané paměti: RAM plus stránkovací soubor.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>Volná paměť</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>Nainstalovaná paměť, která se nepoužívá.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>Rychlost čtení disku</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>Aktuální rychlost čtení, součet všech disků.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>Rychlost zápisu disku</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>Aktuální rychlost zápisu, součet všech disků.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>Připnuté aplikace</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Připnuté aplikace</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>Připnuté aplikace</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>Aplikace, složky a webové adresy připnuté na panelu této obrazovky.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>Připnuté na tomto panelu</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>Zatím tu není nic připnutého. Přetáhněte soubor na panel, nebo ho připněte výše.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>Rozložení</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Rozložení</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>Rozložení</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>Uložená rozložení widgetů. Libovolné rozložení lze použít na panel vybrané obrazovky.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>Přetáhněte widget na panel, nebo ho přidejte na vybraný panel tlačítkem +.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>Hotovo: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>Zpět</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>Zatím nejsou uložená žádná rozložení.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>Panel zapnutý</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>Panel vypnutý</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>Vyberte okraj</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>Panel</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>Přetažením přesunete · Přetažením z panelu odeberete · Pravým tlačítkem otevřete nabídku</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>Název a ikona</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>Ikony hodnot</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>Náhled</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>Změnit…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>Otevřít složku</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>Soubor můžete připnout i přetažením na panel.</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>Nastavení…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>Skrýt panely</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>Pravým tlačítkem otevřete nabídku a nastavení. Soubory připnete přetažením sem.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>Zobrazit panely</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Skrýt nebo zobrazit panely</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>vyžaduje ovladač PawnIO</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>Registr CPU</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>moduly paměti</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>Teploty CPU a paměti</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>Teploty CPU a paměti vyžadují ovladač PawnIO. Jeho instalace vyžaduje oprávnění správce.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} je nainstalovaný, ale nereaguje. Obvykle pomůže restartovat aplikaci.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>Stáhnout ovladač…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>Nejteplejší jádro CPU</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>Teplota nejteplejšího jádra CPU.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>Příkon CPU</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>Spotřeba energie CPU.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>vyžaduje službu senzorů</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>Služba senzorů</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} je nainstalovaný. Služba senzorů přes něj čte data a její instalace vyžaduje oprávnění správce.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>Služba senzorů není součástí tohoto sestavení.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>Služba běží. Hodnoty se brzy zobrazí.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>Nainstalovat službu…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>Teplota CPU</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>Paměť</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>Disky</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>Síť</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>Ostatní</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>Zatížení CPU</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>Zatížení paměti</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>Zatížení GPU</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>Rychlost odesílání</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>Rychlost přijímání</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>Zatížení</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>Teplota</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>Teplota paměti</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>Teplota disku</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>Baterie zařízení</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>Zobrazuje stav nabití baterie bezdrátové myši, sluchátek nebo klávesnice.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>Myši</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>Sluchátka</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>Klávesnice</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>Ostatní zařízení</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>Baterie: {0}</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>Stav nabití baterie tohoto zařízení.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>Stav nabití baterie tohoto zařízení.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>Bezdrátová zařízení</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>Které zařízení</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>bezdrátová zařízení</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Přepínač zvuku</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>Zobrazuje Master Audio Switcher na panelu. Kliknutím přepnete výstup zvuku na další zařízení.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>Žádné zařízení pro výstup zvuku</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>Kliknutím přepnete na další zařízení</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Otevřít Master Audio Switcher</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>Zatížení</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>Teplota</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>Vedle zatížení, pod stejnou ikonou.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>Ztlumí mikrofon v celém systému. Při ztlumení se zčervená.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>Udržet vzhůru</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>Zabrání uspání počítače a tomu, aby vás chatovací aplikace zobrazovaly jako pryč.</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>Rozložení klávesnice</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>Zobrazuje jazyk rozložení klávesnice a stav Caps Lock.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>Aplikace</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>Spustí aplikaci z panelu.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>Průzkumník souborů</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>Poznámkový blok</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>Kalkulačka</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>Terminál</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>Příkazový řádek</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>Výstřižky</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>Malování</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>Správce úloh</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Nastavení Windows</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>Ovládací panely</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>Stažené soubory</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>Koš</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>Poznámky</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>Počítač může přejít do režimu spánku · Kliknutím ho udržíte vzhůru</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>Vzhůru: zbývá {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>Vzhůru do vypnutí</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>Kliknutím povolíte režim spánku</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>Udržet vzhůru 30 minut</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>Udržet vzhůru hodinu</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>Udržet vzhůru dvě hodiny</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>Udržet vzhůru do vypnutí</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>Povolit režim spánku</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>méně než minuta</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} h {1} min</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>Počítač je udržován vzhůru</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>Počítač může přejít do režimu spánku</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>Mikrofon je ztlumený · Kliknutím zrušíte ztlumení</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>Mikrofon je zapnutý · Kliknutím ho ztlumíte</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock je zapnutý</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>Kliknutím přepnete rozložení</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>Kliknutím otevřete posuvník hlasitosti · Otáčením kolečka měníte hlasitost</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>Ztlumit nebo zrušit ztlumení mikrofonu</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>Funguje v celém systému, z libovolné aplikace.</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>Hledat podle názvu</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>Rozhraní</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>Tvary a kreslení</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>Soubory a učení</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>Sociální sítě a zprávy</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>Aplikace a kód</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>Peníze a práce</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>Zařízení a napájení</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>Doprava a místa</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>Jídlo</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>Kuchyně a nápoje</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>Zdraví</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>Sport</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>Hry a zábava</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>Příroda a vesmír</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>Lidé a obličeje</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>Přesunout fokus na panel</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>Pomocí kláves se šipkami vyberte widget, klávesou Enter ho aktivujte a klávesou Esc ukončete.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>Některé teploty nejsou k dispozici. Co chybí, najdete níže.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>Všechny dostupné hodnoty fungují.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>Nikdy nepoužívat automaticky</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>Počet obrazovek: {0}</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>Použije toto rozložení na panelu hlavní obrazovky automaticky, když je připojen tento počet obrazovek</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>automatické rozložení {0} pro {1} obrazovky</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>změna automatického rozložení</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>Identifikovat obrazovky</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>Na několik sekund zobrazí na každé obrazovce číslo.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>Identifikovat</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>Upravit panel…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>Dokončit úpravy</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Aktualizace</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>Tato verze</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>Aktualizace se kontrolují jen po výběru možnosti Zkontrolovat.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>Nainstalovat {0} a restartovat</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Zkontrolovat aktualizace</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>Probíhá kontrola aktualizací…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>Je k dispozici verze {0}. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>Máte nejnovější verzi.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Nepodařilo se zkontrolovat aktualizace. Žádné změny se neprovedly.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Probíhá stahování a ověřování instalačního programu…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>Aktualizace nebyla nainstalována. Stažení se nezdařilo nebo neprošla kontrola podpisu.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>Automaticky: 1 obrazovka</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>Automaticky: {0} obrazovky</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>Zatížení a teplota CPU</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>Zatížení a teplota paměti</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>Zatížení a teplota GPU</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>Zobrazí obě hodnoty vedle sebe pod jednou ikonou.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>Zátěž+tepl.</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>Teplota CPU a paměti</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>Zatím není k dispozici. Nainstalujte ovladač a službu senzorů na stránce Senzory.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>Nastavit…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>Vyprázdnit Koš</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>Zobrazit v oznamovací oblasti</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>Zobrazí ikonu u hodin. Kliknutím otevřete nastavení, pravým tlačítkem nabídku.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>změna ikony v oznamovací oblasti</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>Widgety</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>Přetáhněte na panel</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>Hledat widgety</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>Verze {0} je připravena</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>Instalace vyžaduje oprávnění správce. Panely se znovu otevřou automaticky.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>Instalovat</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>Verze {0} je stažena a ověřena.</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>Kontroluje aktualizace jednou denně.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>Aktualizovat automaticky</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>Denně kontroluje GitHub a ověřuje podpis. Nainstaluje, když jste pryč; pokud je nainstalováno v Program Files, nejprve se zeptá.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>změna automatických aktualizací</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} se přehřívá</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C překračuje kritickou teplotu {1:0} °C.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>Dnes nezobrazovat</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>Varovat při přehřátí</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>Zobrazí oznámení Windows, když součástka překročí kritickou teplotu.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>změna varování při přehřátí</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>před {0} min</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>nyní</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>Nejnižší {0} · průměr {1} · nejvyšší {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>Zatím žádná data.</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>Na panelu</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>Aplikace</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>Rozložení</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>Vlevo</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>Nahoře</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>Vpravo</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>Dole</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>Velikost panelu</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>Kompaktní</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>Normální</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>Velká</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>Nastaví tloušťku, velikost ikon a velikost čísel společně.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>Nastaví velikost ikon a čísel. Panely vlevo nebo vpravo mají pevnou tloušťku.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>změnu velikosti panelu</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>Všechny hlavní hodnoty jsou k dispozici.</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>Dostupné zdroje: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>Teploty CPU a RAM jsou nedostupné.</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>K jejich fungování je vyžadován ovladač PawnIO a služba senzorů. Nastavte je níže.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>Hodnoty</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>Zdroje</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>Zdroje hodnot</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>{0} z {1} zdrojů je dostupných: čítače Windows, ovladač GPU, disky, RAM, CPU.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>Zobrazit</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>Skrýt</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>Hodnoty: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>Hledat hodnoty</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>Vše</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>Teplota</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>Zatížení</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>Volně šiřitelný software (GPL-3.0-or-later). Některý kód je upraven z Microsoft PowerToys (licence MIT).</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>Co je nového</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>Naposledy zkontrolováno: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>dnes, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>Zkontrolovat nyní</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>Zkontrolovat</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Otevřít</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>Změny jsou ukládány automaticky.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>O programu</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>Verze, aktualizace a údržba aplikace.</value>
+  </data>
+</root>

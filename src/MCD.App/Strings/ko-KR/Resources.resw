@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>바</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>모양</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>센서</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>바</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>각 바는 하나의 화면에 속합니다. 변경 내용은 위에서 선택한 화면에 적용됩니다.</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>바 표시</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>가장자리</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>두께</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>모양</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>테마, 배경 및 색입니다. 모든 바에 적용됩니다.</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>배경</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>반투명은 바 뒤의 바탕 화면을 보여 줍니다. 단색은 읽기 쉽습니다.</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>측정값 색</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>Windows 강조 색을 사용합니다. 경고 수준을 넘는 측정값은 경고 색으로 표시됩니다.</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>센서</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>주요 측정값입니다. 연필을 선택하면 측정값 이름을 바꿀 수 있습니다.</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>실시간 측정값</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>화면 가장자리에 놓는 바입니다. 무료 소프트웨어(GPL-3.0-or-later)입니다. 일부 코드는 Microsoft PowerToys(MIT 라이선스)에서 가져왔습니다.</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>Windows 시작 시 실행</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>Windows에 로그인할 때 앱을 시작합니다.</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>앱을 다시 시작할 때까지 바를 닫습니다.</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>종료</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>아직 설정된 화면이 없습니다.</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>연결 끊김 · 다시 연결될 때를 위해 바 설정이 유지됩니다</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>실행 취소</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>실행 취소 — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>{0} 추가</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>위젯 이동</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>{0} 제거</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>화면</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>버전 {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>아직 사용 가능한 측정값이 없습니다.</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>측정값: {0}개. 소스: {1}.</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>측정값</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>구성 요소 하나의 부하를 숫자로 표시합니다.</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>고정된 앱</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>앱, 폴더 또는 웹 페이지를 엽니다.</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>실시간 값을 표시합니다.</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>가장 온도가 높은 구성 요소</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>온도 제한에 가장 가까운 구성 요소입니다.</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>이 구성 요소의 온도입니다.</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>측정값</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>센서</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>아이콘</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>미디어</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>재생 중인 미디어와 재생 단추를 표시합니다. 재생 중인 항목이 없으면 숨겨집니다.</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>온도</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>온도를 보고하는 구성 요소의 온도를 표시합니다.</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>메모리</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>보내기</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>받기</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>온도</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>가장 온도가 높은 구성 요소</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>재생 또는 일시 중지</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>단추 및 트랙 제목</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>단추, 도구 설명에 트랙 제목</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>바에 트랙 제목 표시</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>앱을 다시 시작하면 적용됩니다.</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>Windows와 동일하게</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>이 구성 요소의 기본값</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>경고 임계값(°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>위험 임계값(°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>색 선택</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>이미지 선택</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>선택된 이미지 없음</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>항상 위에 표시</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>앱, 폴더 또는 웹 주소</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>선택 사항</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>찾아보기…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>바에 고정</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>추가</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>화면 {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>투명도</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>지금 다시 시작</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>제어할 플레이어</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>자동(현재 플레이어)</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>버튼이 항상 {0}을(를) 제어합니다.</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>바에 고정</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>이전 트랙</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>다음 트랙</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>바에 표시</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>앱 고정…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>바에서 제거</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>배치 및 크기</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>동작</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>왼쪽 또는 오른쪽 가장자리에 있는 바는 두께가 고정되어 있습니다.</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>이 가장자리에서 Windows 작업 표시줄이 숨겨지므로 이 바는 계속 표시됩니다.</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>이 위젯에는 설정이 없습니다.</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>위젯 옵션 변경</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>위젯 제거</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>가장자리 변경</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>두께 변경</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>항상 위에 표시 변경</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>바 표시 또는 숨기기</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>기본 앱 아이콘</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>플레이어 열기</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>Windows와 동일하게</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>라이트</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>다크</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>반투명</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>단색</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>색상</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>이미지</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>계기판</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>중립</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows 강조</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>왼쪽</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>위쪽</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>오른쪽</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>아래쪽</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>기본값</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>컴팩트</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>CPU 온도.</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>GPU 온도.</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>드라이브 온도.</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>메모리 온도. 가장 온도가 높은 모듈을 표시합니다.</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>마더보드 온도.</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>이 컴퓨터가 보고하는 온도입니다.</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>용량 대비 부하(백분율).</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>현재 데이터 전송 속도.</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>바와 이 창에 적용됩니다.</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>테마</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>CPU 부하.</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>사용 중인 메모리 비율.</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>네트워크 송신 속도.</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>네트워크 수신 속도.</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>GPU 부하.</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>모든 구성 요소의 온도 위젯.</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>드라이브</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>메모리</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>마더보드</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>전체 장치</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>이름 바꾸기</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>기본 이름 사용</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>시작</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>파일 및 진단</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>종료</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>드라이브 활동</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>설치된 메모리</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>사용 중인 메모리</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>CPU 클럭 속도</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>GPU 전력</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>현재 클럭 속도입니다.</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>팬 속도입니다.</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>전력 소비량입니다.</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>설치된 총 메모리입니다.</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>현재 사용 중인 메모리입니다.</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>이 컴퓨터가 보고하는 값입니다.</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>바</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>언어가 변경됨</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>새 언어를 적용하려면 앱을 다시 시작하세요.</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>색</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>이미지</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>이 화면의 바</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>바가 표시될 화면 가장자리입니다.</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>바가 화면에서 차지하는 공간입니다.</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>모든 위젯</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>위젯을 바에 끌어다 놓으세요. 같은 위젯을 여러 번 추가할 수 있습니다.</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>앱 고정</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>고정된 앱은 바에 아이콘으로 표시됩니다. 파일을 바에 끌어다 놓아 고정할 수도 있습니다.</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>기본 위젯</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>기본 위젯을 복원합니다. Ctrl+Z를 눌러 실행 취소할 수 있습니다.</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>기본 바 복원</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>기본 바 복원</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>끄면 최대화된 창이 바를 가릴 수 있습니다.</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>위젯 설정</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>바에서 제거</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>위젯을 바 밖으로 끄는 것과 같습니다.</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>로그 파일</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>앱이 수행한 작업을 기록합니다. 문제가 있으면 확인하세요.</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>설정 파일</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>이 페이지들의 모든 설정을 포함합니다.</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>폴더 열기</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>Master Control Dock 종료</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>두 번 클릭하여 이름 바꾸기</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>정격 속도에 대한 클럭 속도 비율</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Windows에서 보고한 전체 GPU 사용률</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>GPU 코어</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>드라이버에서 보고한 GPU 코어 사용률</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>GPU 메모리 컨트롤러</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>사용 중인 메모리가 아닌 메모리 컨트롤러 부하입니다.</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>GPU 메모리 클럭 속도</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>GPU 메모리 클럭 속도.</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>GPU 코어 클럭 속도.</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>GPU 팬</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>GPU 팬 속도.</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>GPU 전력 소비.</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>GPU 클럭 속도</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>드라이브 활성 시간 비율</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>현재 전송 속도.</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>현재 수신 속도.</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>시계</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>시간을 표시하고 전체 크기 바에서는 날짜도 표시.</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>초 표시</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>날짜 표시</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>초 포함</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>도킹 모드</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>고정</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>자동 숨기기</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>바탕 화면</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>화면 가장자리에 공간을 확보합니다. 최대화된 창이 바를 가리지 않습니다.</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>바를 화면 밖으로 숨깁니다. 포인터를 가장자리로 이동하면 표시됩니다.</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>바가 바탕 화면에 유지되며 공간을 차지하지 않습니다. 열린 창이 바를 가립니다.</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>도킹 모드 변경</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>바에서</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>여기에 드롭</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>마지막 변경 취소</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>여기 또는 모든 바에서 수행한 마지막 변경 사항을 취소합니다.</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>끄면 툴팁에 제목이 표시됩니다.</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>컴팩트 바는 한 줄만 표시할 공간이 있습니다.</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>위젯 {0}개를 배치할 수 없음</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>바가 가득 찼습니다. 이 위젯들은 유지되며 다른 가장자리로 이동하거나 바 크기를 줄여 공간이 생기면 다시 표시됩니다.</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>배치 불가 위젯 제거</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>소리</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>아이콘을 클릭하면 볼륨 슬라이더가 나타나고, 스크롤하여 볼륨을 조절하며, 숫자를 클릭하면 음소거됩니다.</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>볼륨 수준 표시</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>아이콘에 이미 음소거 여부가 표시됩니다.</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>바로 가기 키</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>모든 바 표시 또는 숨기기</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>바를 숨기거나 표시합니다. 위젯 설정은 유지됩니다.</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>설정 열기</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>전체 화면 앱 위를 포함하여 어디서든 작동합니다.</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>음소거 또는 해제</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>음소거 키가 없는 키보드를 위해 음소거 키와 동일하게 작동합니다.</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>할당...</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>지우기</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>할당</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>Ctrl, Alt 또는 Windows 키를 포함한 키 조합을 누르세요.</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>단일 키는 다른 앱에서 작동하지 않을 수 있습니다. Ctrl, Alt 또는 Windows 키를 추가하십시오.</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>다른 앱에서 이미 이 바로 가기 키를 사용하고 있습니다. 다른 키를 선택하십시오.</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>배터리</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>배터리 충전량을 표시합니다. 배터리가 있는 장치에서만 표시됩니다.</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>Wi-Fi 신호 강도를 표시합니다. Wi-Fi에 연결되었을 때만 표시됩니다.</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>충전량 {0}%</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>충전 중</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>전원 연결됨</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>약 {0}시간 {1}분 남음</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>배터리 충전량 확인 불가</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>신호 5단계 중 {0}단계</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>Wi-Fi 연결됨</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>네트워크 이름 표시</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>범위 내의 네트워크를 구분하는 데 도움이 됩니다.</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>데이터가 있을 때까지 {0}개의 위젯이 숨겨집니다</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}: 바에 유지되며 데이터가 나타날 때까지 공간을 차지하지 않습니다.</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>숨겨진 위젯 제거</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>위젯 1개가 공간이 부족하여 표시되지 않음</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>데이터가 있을 때까지 위젯 1개가 숨겨집니다</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>이 스타일에 대하여</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>그라파이트 배경에 주황색 측정값 표시.</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>설정을 엽니다.</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>위젯</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>위젯</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>이 화면의 바에 있는 위젯, 고정된 앱 및 저장된 레이아웃입니다.</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>기본 아이콘</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>다른 화면</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>이 바의 위젯을 다른 모든 화면에 맞게 조정하여 복사합니다. Ctrl+Z를 눌러 취소하십시오.</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>다른 화면으로 복사</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>다른 화면으로 위젯 복사</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>위로 이동</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>아래로 이동</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>바에서 제거</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>이 바에 위젯이 없습니다.</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>바</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>위젯</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>모양</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>센서</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>모양 변경</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>언어 변경</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>바로 가기 키 변경</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>아이콘 변경</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>측정값 이름 변경</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>신호 강도 사용 불가</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>약 {0}분 남음</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>GPU 부하</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>GPU 온도</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>다른 화면으로 복사 ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>위치 {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>숨김</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>이 측정값 이름 변경</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>이 측정값의 이름을 변경합니다.</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>이 화면 제거</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>이 화면의 바와 설정을 삭제합니다. 다시 연결되면 새로 설정됩니다.</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>화면 제거</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>화면 제거</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows 성능 카운터</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows 메모리</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI 열 구역</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>드라이브 온도</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA 드라이버</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>응답 중 ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>실행되지 않음</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>이 컴퓨터에서 사용할 수 없음</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>실행 취소 — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>설정을 여는 마지막 방법입니다</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>설정을 여는 바로 가기 키가 없으며, 이것이 모든 바에 있는 마지막 설정 버튼입니다. 제거한 후에는 바를 마우스 오른쪽 버튼으로 클릭하여 설정을 여십시오.</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>그대로 제거</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>설정 백업</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>바, 테마, 바로 가기 키 및 측정값 이름이 포함됩니다.</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>파일로 내보내기</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>설정 복원</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>현재의 모든 설정을 대체합니다. 바는 저장된 순서대로 화면에 할당됩니다. Ctrl+Z를 눌러 취소하십시오.</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>파일에서 가져오기</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>설정을 가져왔습니다. {0}개의 바가 이 컴퓨터의 화면에 적용되었습니다.</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>유효한 설정 파일이 아닙니다.</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>설정 가져오기</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>크게</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>중간</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>작게</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>레이아웃</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>현재 레이아웃 저장</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>현재 바의 위젯을 이름이 지정된 레이아웃으로 저장하여 다른 바에 적용할 수 있습니다.</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>레이아웃 저장</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>이 바에 적용</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} 위젯</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>레이아웃 저장</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>레이아웃 저장</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>레이아웃 적용</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>레이아웃 삭제</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>음소거됨</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>볼륨: {0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>클릭하여 음소거 해제</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>클릭하여 음소거</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>아이콘 및 숫자 크기</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>모든 바의 아이콘과 숫자 크기입니다.</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>일반</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>일반</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>백업</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>일반</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>드라이브</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>보드</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>일반</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>바로 가기 키, 언어, 시작 프로그램 및 백업. 앱 전체에 적용됩니다.</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>폴더 열기: {0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>{0} 재개</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>GPU 메모리 사용량</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>GPU 메모리 사용량을 백분율로 표시합니다.</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>측정값 {0}개</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>메모리</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>드라이브</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>네트워크</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>메인보드</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>변경…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>자동</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>최근 1분 {0}–{1} · 최대 {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>최대 {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>{0} 열기</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>플레이어 열기</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>커밋됨 메모리</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>커밋 한도(RAM 및 페이지 파일) 대비 커밋된 메모리 백분율입니다.</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>커밋됨 메모리(바이트)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>커밋 한도</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>최대 커밋 메모리: RAM 및 페이지 파일의 합계입니다.</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>사용 가능한 메모리</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>사용 중이지 않은 설치된 메모리입니다.</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>드라이브 읽기 속도</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>모든 드라이브의 현재 읽기 속도 합계입니다.</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>드라이브 쓰기 속도</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>모든 드라이브의 현재 쓰기 속도 합계입니다.</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>고정된 앱</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>고정된 앱</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>고정된 앱</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>이 화면의 바에 고정된 앱, 폴더 및 웹 주소입니다.</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>이 바에 고정됨</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>고정된 항목이 없습니다. 파일을 바 위로 끌어다 놓거나 위에서 고정하세요.</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>레이아웃</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>레이아웃</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>레이아웃</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>저장된 위젯 레이아웃입니다. 선택한 화면의 바에 레이아웃을 적용하세요.</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>위젯을 바 위로 끌어다 놓거나 +를 선택하여 선택한 바에 추가하세요.</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>완료: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>실행 취소</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>저장된 레이아웃이 없습니다.</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>바 켜짐</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>바 꺼짐</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>가장자리 선택</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>바</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>드래그하여 이동 · 바 밖으로 드래그하여 제거 · 마우스 오른쪽 클릭으로 메뉴 열기</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>이름 및 아이콘</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>측정값 아이콘</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>미리보기</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>변경…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>폴더 열기</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>파일을 바 위로 끌어다 놓아 고정할 수도 있습니다.</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>설정…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>바 숨기기</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>종료</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>마우스 오른쪽 클릭으로 메뉴와 설정을 엽니다. 파일을 여기로 끌어다 놓아 고정하세요.</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>바 표시</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>바 숨기기 또는 표시</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>PawnIO 드라이버가 필요합니다</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>CPU 레지스터</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>메모리 모듈</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>CPU 및 메모리 온도</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>CPU 및 메모리 온도를 확인하려면 PawnIO 드라이버가 필요합니다. 설치하려면 관리자 권한이 필요합니다.</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0}가 설치되었으나 응답하지 않습니다. 앱을 다시 시작하면 보통 해결됩니다.</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>드라이버 다운로드…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>가장 뜨거운 CPU 코어</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>가장 뜨거운 CPU 코어의 온도입니다.</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>CPU 전력</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>CPU 전력 소비량입니다.</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>센서 서비스가 필요함</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>센서 서비스</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0}가 설치되어 있습니다. 센서 서비스는 이를 통해 데이터를 읽으며 설치 시 관리자 권한이 필요합니다.</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>이 빌드에는 센서 서비스가 포함되어 있지 않습니다.</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>서비스가 실행 중입니다. 곧 측정값이 표시됩니다.</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>서비스 설치…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>CPU 온도</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>메모리</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>드라이브</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>네트워크</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>기타</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>CPU 부하</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>메모리 부하</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>GPU 부하</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>네트워크 전송 속도</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>네트워크 수신 속도</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>부하</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>온도</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>메모리 온도</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>드라이브 온도</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>장치 배터리</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>무선 마우스, 헤드셋 또는 키보드의 배터리 잔량을 표시합니다.</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>마우스</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>헤드셋</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>키보드</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>기타 장치</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>{0} 배터리</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>이 장치의 배터리 잔량.</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>이 장치의 배터리 잔량.</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>무선 장치</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>장치 선택</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>무선 장치</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>Audio Switcher</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>바에 Master Audio Switcher를 표시합니다. 클릭하면 다음 장치로 소리 출력을 전환합니다.</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>오디오 출력 장치 없음</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>클릭하여 다음 장치로 전환</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>Master Audio Switcher 열기</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>부하</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>온도</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>부하 옆, 동일한 아이콘 아래에 표시됩니다.</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>마이크</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>시스템 전체에서 마이크를 음소거합니다. 음소거 상태일 때 빨간색으로 변합니다.</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>깨움 유지</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>컴퓨터를 깨어 있는 상태로 유지하고 채팅 앱에서 상태가 '자리 비움'으로 표시되지 않게 합니다.</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>키보드 레이아웃</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>키보드 레이아웃 언어와 Caps Lock 상태를 표시합니다.</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>앱</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>바에서 앱을 시작합니다.</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>파일 탐색기</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>메모장</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>계산기</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>터미널</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>명령 프롬프트</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>캡처 도구</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>그림판</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>작업 관리자</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows 설정</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>제어판</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>다운로드</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>휴지통</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>스티커 메모</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>컴퓨터가 절전 모드로 전환될 수 있음 · 클릭하여 깨어 있는 상태 유지</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>깨어 있음: {0} 남음</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>끌 때까지 깨어 있음</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>클릭하여 절전 모드 허용</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>30분 동안 깨어 있기</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>1시간 동안 깨어 있기</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>2시간 동안 깨어 있기</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>끌 때까지 깨어 있기</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>절전 모드 허용</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>1분 미만</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0}분</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0}시간 {1}분</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>컴퓨터를 깨어 있는 상태로 유지 중</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>컴퓨터가 절전 모드로 전환될 수 있음</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>마이크 음소거됨 · 클릭하여 음소거 해제</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>마이크 켜짐 · 클릭하여 음소거</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock 켜짐</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>클릭하여 레이아웃 전환</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>클릭하여 볼륨 슬라이더 표시 · 스크롤하여 볼륨 조절</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>마이크 음소거 또는 음소거 해제</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>모든 앱에서 시스템 전체적으로 작동합니다.</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>이름으로 검색</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>인터페이스</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>도형 및 그리기</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>파일 및 학습</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>소셜 및 메시징</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>앱 및 코드</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>금융 및 업무</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>장치 및 전원</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>교통 및 장소</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>음식</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>주방 및 음료</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>의료</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>스포츠</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>게임 및 오락</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>자연 및 우주</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>사람 및 얼굴</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>바에 포커스</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>화살표 키로 위젯을 선택하고, Enter로 활성화하며, Esc로 종료합니다.</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>일부 온도를 사용할 수 없습니다. 누락된 항목은 아래를 확인하세요.</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>사용 가능한 모든 측정값이 정상 작동 중입니다.</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>자동으로 적용하지 않음</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>화면 {0}개 연결 시</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>지정된 수의 화면이 연결되었을 때 메인 화면의 바에 이 레이아웃을 자동으로 적용합니다</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>화면 {1}개에 대한 자동 레이아웃 {0}</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>자동 레이아웃 변경</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>화면 식별</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>각 화면에 몇 초 동안 숫자를 표시합니다.</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>식별</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>바 편집…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>편집 완료</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>업데이트</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>현재 버전</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>확인 버튼을 선택했을 때만 업데이트를 확인합니다.</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>{0} 설치 및 다시 시작</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>업데이트 확인</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>업데이트 확인 중…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>{0} 버전 사용 가능. {1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>최신 버전입니다.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>업데이트를 확인하지 못했습니다. 변경 사항이 없습니다.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>설치 프로그램 다운로드 및 확인 중…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>업데이트를 설치하지 못했습니다. 다운로드 실패 또는 서명 확인 실패.</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>자동: 화면 1</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>자동: 화면 {0}</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>CPU 부하 및 온도</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>메모리 부하 및 온도</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>GPU 부하 및 온도</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>하나의 아이콘 아래에 두 값을 나란히 표시합니다.</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>부하 + 온도</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>CPU 및 메모리 온도</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>현재 사용할 수 없습니다. Sensors 페이지에서 드라이버와 센서 서비스를 설치하세요.</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>설정…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>휴지통 비우기</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>알림 영역에 표시</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>시계 근처에 아이콘을 표시합니다. 클릭하면 설정이 열리고, 오른쪽 클릭하면 메뉴가 나타납니다.</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>알림 영역 아이콘 변경</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>위젯</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>바에 드롭하세요</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>위젯 검색</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>버전 {0} 준비 완료</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>설치하려면 관리자 권한이 필요합니다. 바가 자동으로 다시 열립니다.</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>설치</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>버전 {0} 다운로드 및 확인 완료</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>하루에 한 번 업데이트를 확인합니다.</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>자동 업데이트</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>매일 GitHub에서 확인하고 서명을 검증합니다. 자리를 비운 동안 설치하며, Program Files에 설치된 경우 먼저 확인합니다.</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>자동 업데이트 변경</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} 과열</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C가 임계 온도 {1:0} °C를 초과했습니다.</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>오늘 더 이상 표시하지 않음</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>과열 경고</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>구성 요소가 임계 온도를 초과하면 Windows 알림을 표시합니다.</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>과열 경고 변경</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0}분 전</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>지금</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>최저 {0} · 평균 {1} · 최고 {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>데이터 없음</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>카탈로그</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>바에 있음</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>앱</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>레이아웃</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>왼쪽</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>위쪽</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>오른쪽</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>아래쪽</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>바 크기</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>컴팩트</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>보통</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>큼</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>두께, 아이콘 크기 및 숫자 크기를 함께 설정합니다.</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>아이콘 및 숫자 크기를 설정합니다. 좌우 바의 두께는 고정되어 있습니다.</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>바 크기 변경</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>상태</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>모든 주요 측정값 사용 가능</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>사용 가능한 소스: {0}.</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>CPU 및 메모리 온도 사용 불가</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>PawnIO 드라이버와 센서 서비스가 필요합니다. 아래에서 설정하십시오.</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>측정값</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>소스</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>측정값 소스</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>사용 가능한 소스 {0}/{1}: Windows 카운터, GPU 드라이버, 드라이브, 메모리, CPU.</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>표시</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>숨기기</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>측정값: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>측정값 검색</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>전체</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>온도</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>부하</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>자유 소프트웨어 (GPL-3.0-or-later). 일부 코드는 Microsoft PowerToys (MIT 라이선스)에서 수정되었습니다.</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>새로운 기능</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>마지막 확인: {0}.</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>오늘, {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>지금 확인</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>열기</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>변경 사항이 자동으로 저장됩니다.</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>버전, 업데이트 및 앱 유지 관리.</value>
+  </data>
+</root>

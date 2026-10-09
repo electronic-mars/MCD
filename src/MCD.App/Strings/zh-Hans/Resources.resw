@@ -1,0 +1,1928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Settings window: title bar and navigation -->
+  <data name="TitleBarText.Text" xml:space="preserve">
+    <value>Master Control Dock</value>
+  </data>
+  <data name="NavDocks.Text" xml:space="preserve">
+    <value>停靠栏</value>
+  </data>
+  <data name="NavAppearance.Text" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="NavSensors.Text" xml:space="preserve">
+    <value>传感器</value>
+  </data>
+  <data name="NavAbout.Text" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <!-- Docks page -->
+  <data name="DocksTitle.Text" xml:space="preserve">
+    <value>停靠栏</value>
+  </data>
+  <data name="DocksIntro.Text" xml:space="preserve">
+    <value>每个停靠栏属于一个屏幕。更改将应用于上方选择的屏幕。</value>
+  </data>
+  <data name="ShowDockLabel" xml:space="preserve">
+    <value>显示停靠栏</value>
+  </data>
+  <data name="EdgeLabel" xml:space="preserve">
+    <value>边缘</value>
+  </data>
+  <data name="SizeLabel" xml:space="preserve">
+    <value>粗细</value>
+  </data>
+  <!-- Launcher page -->
+  <!-- Appearance page -->
+  <data name="AppearanceTitle.Text" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="AppearanceIntro.Text" xml:space="preserve">
+    <value>主题、背景和颜色。应用于所有停靠栏。</value>
+  </data>
+  <data name="BackgroundLabel" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="BackgroundHint" xml:space="preserve">
+    <value>半透明会透过停靠栏显示桌面。纯色更易于阅读。</value>
+  </data>
+  <data name="AccentLabel" xml:space="preserve">
+    <value>读数颜色</value>
+  </data>
+  <data name="AccentHint" xml:space="preserve">
+    <value>使用 Windows 强调色。超过警告级别的读数保持警告色。</value>
+  </data>
+  <!-- Icons page -->
+  <!-- Sensors page -->
+  <data name="SensorsTitle.Text" xml:space="preserve">
+    <value>传感器</value>
+  </data>
+  <data name="SensorsIntro.Text" xml:space="preserve">
+    <value>主要读数。选择铅笔以重命名读数。</value>
+  </data>
+  <data name="LiveReadingsTitle.Text" xml:space="preserve">
+    <value>实时读数</value>
+  </data>
+  <!-- Monitors page -->
+  <!-- About page -->
+  <data name="AboutIntro" xml:space="preserve">
+    <value>屏幕边缘的停靠栏。自由软件（GPL-3.0-or-later）。部分代码改编自 Microsoft PowerToys（MIT 许可证）。</value>
+  </data>
+  <data name="StartWithWindowsLabel" xml:space="preserve">
+    <value>随 Windows 启动</value>
+  </data>
+  <data name="StartWithWindowsHint" xml:space="preserve">
+    <value>登录 Windows 时启动应用。</value>
+  </data>
+  <data name="ExitHint" xml:space="preserve">
+    <value>关闭停靠栏，直到您再次启动应用。</value>
+  </data>
+  <data name="ExitButton" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <!-- Media widget buttons on the bar -->
+  <!-- Settings window, strings built in code -->
+  <data name="DockNoScreen" xml:space="preserve">
+    <value>尚未设置屏幕。</value>
+  </data>
+  <data name="DockNotAttached" xml:space="preserve">
+    <value>已断开连接 · 停靠栏设置将保留，以便重新连接</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="UndoWithLabel" xml:space="preserve">
+    <value>撤销 — {0}</value>
+  </data>
+  <data name="UndoAdded" xml:space="preserve">
+    <value>添加 {0}</value>
+  </data>
+  <data name="UndoMoved" xml:space="preserve">
+    <value>移动小组件</value>
+  </data>
+  <data name="UndoRemoved" xml:space="preserve">
+    <value>移除 {0}</value>
+  </data>
+  <data name="ScreenFallback" xml:space="preserve">
+    <value>屏幕</value>
+  </data>
+  <data name="VersionFormat" xml:space="preserve">
+    <value>版本 {0}</value>
+  </data>
+  <data name="SensorsNoneYet" xml:space="preserve">
+    <value>暂无可用读数。</value>
+  </data>
+  <data name="SensorsSummary" xml:space="preserve">
+    <value>{0} 个读数。来源：{1}。</value>
+  </data>
+  <!-- Widget cards in the settings list -->
+  <!-- The bar's right-click menu -->
+  <!-- Widget catalog: names and descriptions -->
+  <data name="WidgetGaugeName" xml:space="preserve">
+    <value>读数</value>
+  </data>
+  <data name="WidgetGaugeDescription" xml:space="preserve">
+    <value>以数字显示单个组件的负载。</value>
+  </data>
+  <data name="WidgetIconName" xml:space="preserve">
+    <value>固定应用</value>
+  </data>
+  <data name="WidgetIconDescription" xml:space="preserve">
+    <value>打开应用、文件夹或网页。</value>
+  </data>
+  <data name="OfferGauge" xml:space="preserve">
+    <value>显示实时数值。</value>
+  </data>
+  <data name="OfferHottest" xml:space="preserve">
+    <value>温度最高的组件</value>
+  </data>
+  <data name="OfferHottestDescription" xml:space="preserve">
+    <value>最接近温度上限的组件。</value>
+  </data>
+  <data name="OfferSensor" xml:space="preserve">
+    <value>此组件的温度。</value>
+  </data>
+  <data name="GaugeWhich" xml:space="preserve">
+    <value>读数</value>
+  </data>
+  <data name="TempWhich" xml:space="preserve">
+    <value>传感器</value>
+  </data>
+  <data name="PinIconHeader" xml:space="preserve">
+    <value>图标</value>
+  </data>
+  <data name="WidgetMediaName" xml:space="preserve">
+    <value>媒体</value>
+  </data>
+  <data name="WidgetMediaDescription" xml:space="preserve">
+    <value>显示当前媒体及播放按钮。无播放内容时隐藏。</value>
+  </data>
+  <data name="WidgetTemperatureName" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="WidgetTemperatureDescription" xml:space="preserve">
+    <value>显示报告温度的组件的温度。</value>
+  </data>
+  <!-- Reading labels, on the bar and in the settings -->
+  <data name="LabelCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="LabelMemory" xml:space="preserve">
+    <value>内存</value>
+  </data>
+  <data name="LabelSend" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="LabelReceive" xml:space="preserve">
+    <value>接收</value>
+  </data>
+  <data name="LabelGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="LabelTemperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <!-- Temperature widget -->
+  <data name="TempHottestSummary" xml:space="preserve">
+    <value>温度最高的组件</value>
+  </data>
+  <!-- Media widget -->
+  <data name="MediaPlayPause" xml:space="preserve">
+    <value>播放或暂停</value>
+  </data>
+  <data name="MediaSummaryShown" xml:space="preserve">
+    <value>按钮和曲目名称</value>
+  </data>
+  <data name="MediaSummaryTooltip" xml:space="preserve">
+    <value>按钮；曲目名称见工具提示</value>
+  </data>
+  <data name="MediaTitleHeader" xml:space="preserve">
+    <value>在停靠栏上显示曲目名称</value>
+  </data>
+  <!-- Spacer widget -->
+  <!-- Load widget -->
+  <!-- Launcher widget -->
+  <!-- Monitor rows -->
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="LanguageHint" xml:space="preserve">
+    <value>重启应用后生效。</value>
+  </data>
+  <data name="LanguageSystemItem" xml:space="preserve">
+    <value>与 Windows 一致</value>
+  </data>
+  <data name="TempLimitAuto" xml:space="preserve">
+    <value>此组件的默认值</value>
+  </data>
+  <data name="TempWarnAt" xml:space="preserve">
+    <value>警告阈值 (°C)</value>
+  </data>
+  <data name="TempCritAt" xml:space="preserve">
+    <value>严重阈值 (°C)</value>
+  </data>
+  <data name="PickColour" xml:space="preserve">
+    <value>选择颜色</value>
+  </data>
+  <data name="PickPicture" xml:space="preserve">
+    <value>选择图片</value>
+  </data>
+  <data name="NoPictureYet" xml:space="preserve">
+    <value>未选择图片</value>
+  </data>
+  <data name="TopmostLabel" xml:space="preserve">
+    <value>始终置顶</value>
+  </data>
+  <data name="PinTargetHeader" xml:space="preserve">
+    <value>应用、文件夹或网址</value>
+  </data>
+  <data name="PinNameHeader" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="PinNameOptional" xml:space="preserve">
+    <value>可选</value>
+  </data>
+  <data name="PinBrowse" xml:space="preserve">
+    <value>浏览…</value>
+  </data>
+  <data name="PinTitle" xml:space="preserve">
+    <value>固定到停靠栏</value>
+  </data>
+  <data name="PinAdd" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="PinCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="DisplayNumber" xml:space="preserve">
+    <value>屏幕 {0}</value>
+  </data>
+  <data name="SeeThroughHeader" xml:space="preserve">
+    <value>透明度</value>
+  </data>
+  <data name="RestartNowText" xml:space="preserve">
+    <value>立即重启</value>
+  </data>
+  <data name="MediaPriorityHeader" xml:space="preserve">
+    <value>要控制的播放器</value>
+  </data>
+  <data name="MediaPriorityNone" xml:space="preserve">
+    <value>自动（当前播放器）</value>
+  </data>
+  <data name="MediaSummaryNominated" xml:space="preserve">
+    <value>按钮始终控制 {0}</value>
+  </data>
+  <data name="PinDropCaption" xml:space="preserve">
+    <value>固定到停靠栏</value>
+  </data>
+  <data name="MediaPrevKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>上一曲</value>
+  </data>
+  <data name="MediaNextKey.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>下一曲</value>
+  </data>
+  <data name="GalleryTitle" xml:space="preserve">
+    <value>在停靠栏上</value>
+  </data>
+  <data name="PinProgramButton" xml:space="preserve">
+    <value>固定应用…</value>
+  </data>
+  <data name="RemoveFromBar" xml:space="preserve">
+    <value>从停靠栏中移除</value>
+  </data>
+  <data name="PlacementTitle" xml:space="preserve">
+    <value>位置和大小</value>
+  </data>
+  <data name="BehaviourTitle" xml:space="preserve">
+    <value>行为</value>
+  </data>
+  <data name="ThicknessNote" xml:space="preserve">
+    <value>位于屏幕左边缘或右边缘的停靠栏厚度固定。</value>
+  </data>
+  <data name="HideNote" xml:space="preserve">
+    <value>Windows 任务栏在此边缘隐藏，因此此停靠栏保持可见。</value>
+  </data>
+  <data name="NothingToSetUp" xml:space="preserve">
+    <value>此小组件没有设置。</value>
+  </data>
+  <data name="UndoOptions" xml:space="preserve">
+    <value>更改小组件选项</value>
+  </data>
+  <data name="UndoRemovedOne" xml:space="preserve">
+    <value>移除小组件</value>
+  </data>
+  <data name="UndoEdge" xml:space="preserve">
+    <value>更改边缘</value>
+  </data>
+  <data name="UndoThickness" xml:space="preserve">
+    <value>更改厚度</value>
+  </data>
+  <data name="UndoTopmost" xml:space="preserve">
+    <value>更改“始终置顶”</value>
+  </data>
+  <data name="UndoShown" xml:space="preserve">
+    <value>显示或隐藏停靠栏</value>
+  </data>
+  <data name="LaunchIconAuto" xml:space="preserve">
+    <value>默认应用图标</value>
+  </data>
+  <data name="MediaArtButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>打开播放器</value>
+  </data>
+  <data name="SegThemeSystem" xml:space="preserve">
+    <value>与 Windows 一致</value>
+  </data>
+  <data name="SegThemeLight" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="SegThemeDark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="SegBackdropTranslucent" xml:space="preserve">
+    <value>半透明</value>
+  </data>
+  <data name="SegBackdropSolid" xml:space="preserve">
+    <value>纯色</value>
+  </data>
+  <data name="SegBackdropColour" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="SegBackdropImage" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="SegBackdropBraun" xml:space="preserve">
+    <value>仪表</value>
+  </data>
+  <data name="SegAccentNeutral" xml:space="preserve">
+    <value>中性</value>
+  </data>
+  <data name="SegAccentWindows" xml:space="preserve">
+    <value>Windows 主题色</value>
+  </data>
+  <data name="SegEdgeLeft" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="SegEdgeTop" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="SegEdgeRight" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="SegEdgeBottom" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="SegThickDefault" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="SegThickCompact" xml:space="preserve">
+    <value>紧凑</value>
+  </data>
+  <data name="SenseCpuTemp" xml:space="preserve">
+    <value>CPU 温度。</value>
+  </data>
+  <data name="SenseGpuTemp" xml:space="preserve">
+    <value>GPU 温度。</value>
+  </data>
+  <data name="SenseDiskTemp" xml:space="preserve">
+    <value>驱动器温度。</value>
+  </data>
+  <data name="SenseRamTemp" xml:space="preserve">
+    <value>内存温度。显示温度最高的模块。</value>
+  </data>
+  <data name="SenseBoardTemp" xml:space="preserve">
+    <value>主板温度。</value>
+  </data>
+  <data name="SenseTemp" xml:space="preserve">
+    <value>此电脑报告的温度。</value>
+  </data>
+  <data name="SenseLoad" xml:space="preserve">
+    <value>以容量百分比表示的负载。</value>
+  </data>
+  <data name="SenseBytes" xml:space="preserve">
+    <value>当前数据传输速率。</value>
+  </data>
+  <data name="ThemeHint" xml:space="preserve">
+    <value>应用于停靠栏和此窗口。</value>
+  </data>
+  <data name="ThemeLabel" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="SenseCpuLoad" xml:space="preserve">
+    <value>CPU 负载。</value>
+  </data>
+  <data name="SenseRamLoad" xml:space="preserve">
+    <value>内存使用百分比。</value>
+  </data>
+  <data name="SenseUp" xml:space="preserve">
+    <value>网络发送速率。</value>
+  </data>
+  <data name="SenseDown" xml:space="preserve">
+    <value>网络接收速率。</value>
+  </data>
+  <data name="SenseGpuLoad" xml:space="preserve">
+    <value>GPU 负载。</value>
+  </data>
+  <data name="SenseAnyTemp" xml:space="preserve">
+    <value>所有温度小组件，适用于任何组件。</value>
+  </data>
+  <data name="PartCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="PartGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="PartDisk" xml:space="preserve">
+    <value>驱动器</value>
+  </data>
+  <data name="PartMemory" xml:space="preserve">
+    <value>内存</value>
+  </data>
+  <data name="PartBoard" xml:space="preserve">
+    <value>主板</value>
+  </data>
+  <data name="PartWhole" xml:space="preserve">
+    <value>整个设备</value>
+  </data>
+  <data name="RenameHeader" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="RenameSave" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="RenameReset" xml:space="preserve">
+    <value>使用默认名称</value>
+  </data>
+  <data name="StartupTitle" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>文件和诊断</value>
+  </data>
+  <data name="QuitTitle" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="SenseDiskBusyName" xml:space="preserve">
+    <value>驱动器活动</value>
+  </data>
+  <data name="SenseRamTotalName" xml:space="preserve">
+    <value>已安装内存</value>
+  </data>
+  <data name="SenseRamUsedName" xml:space="preserve">
+    <value>已用内存</value>
+  </data>
+  <data name="SenseCpuClockName" xml:space="preserve">
+    <value>CPU 时钟频率</value>
+  </data>
+  <data name="SenseGpuPowerName" xml:space="preserve">
+    <value>GPU 功耗</value>
+  </data>
+  <data name="SenseClock" xml:space="preserve">
+    <value>当前时钟频率。</value>
+  </data>
+  <data name="SenseFan" xml:space="preserve">
+    <value>风扇转速。</value>
+  </data>
+  <data name="SensePower" xml:space="preserve">
+    <value>功耗。</value>
+  </data>
+  <data name="SenseRamTotal" xml:space="preserve">
+    <value>已安装的内存总量。</value>
+  </data>
+  <data name="SenseRamUsed" xml:space="preserve">
+    <value>当前正在使用的内存。</value>
+  </data>
+  <data name="SenseSize" xml:space="preserve">
+    <value>此电脑报告的数值。</value>
+  </data>
+  <data name="LookGroupBar" xml:space="preserve">
+    <value>停靠栏</value>
+  </data>
+  <data name="LookGroupLanguage" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="RestartRow" xml:space="preserve">
+    <value>语言已更改</value>
+  </data>
+  <data name="RestartRowHint" xml:space="preserve">
+    <value>重启应用以应用新语言。</value>
+  </data>
+  <data name="ColourRow" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="PictureRow" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="DockGroupScreen" xml:space="preserve">
+    <value>此屏幕的停靠栏</value>
+  </data>
+  <data name="EdgeHint" xml:space="preserve">
+    <value>停靠栏显示的屏幕边缘。</value>
+  </data>
+  <data name="SizeHint" xml:space="preserve">
+    <value>停靠栏在屏幕上占用的空间。</value>
+  </data>
+  <data name="GalleryRow" xml:space="preserve">
+    <value>所有小组件</value>
+  </data>
+  <data name="GalleryRowHint" xml:space="preserve">
+    <value>将小组件拖到停靠栏上。同一小组件可添加多次。</value>
+  </data>
+  <data name="PinRow" xml:space="preserve">
+    <value>固定应用</value>
+  </data>
+  <data name="PinRowHint" xml:space="preserve">
+    <value>固定的应用以图标形式显示在停靠栏上。也可以将文件拖到停靠栏上进行固定。</value>
+  </data>
+  <data name="ResetRow" xml:space="preserve">
+    <value>默认小组件</value>
+  </data>
+  <data name="ResetRowHint" xml:space="preserve">
+    <value>恢复默认小组件。按 Ctrl+Z 可撤销。</value>
+  </data>
+  <data name="ResetButton" xml:space="preserve">
+    <value>恢复默认停靠栏</value>
+  </data>
+  <data name="UndoReset" xml:space="preserve">
+    <value>恢复默认停靠栏</value>
+  </data>
+  <data name="TopmostHint" xml:space="preserve">
+    <value>关闭后，最大化的窗口可以覆盖停靠栏。</value>
+  </data>
+  <data name="WidgetOptions" xml:space="preserve">
+    <value>小组件设置</value>
+  </data>
+  <data name="RemoveRow" xml:space="preserve">
+    <value>从停靠栏中移除</value>
+  </data>
+  <data name="RemoveRowHint" xml:space="preserve">
+    <value>与将小组件拖离停靠栏效果相同。</value>
+  </data>
+  <data name="LogsRow" xml:space="preserve">
+    <value>日志文件</value>
+  </data>
+  <data name="LogsRowHint" xml:space="preserve">
+    <value>记录应用执行的操作。出现问题时可查看。</value>
+  </data>
+  <data name="ConfigRow" xml:space="preserve">
+    <value>设置文件</value>
+  </data>
+  <data name="ConfigRowHint" xml:space="preserve">
+    <value>包含这些页面中的所有设置。</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="ExitRow" xml:space="preserve">
+    <value>退出 Master Control Dock</value>
+  </data>
+  <data name="RenameTip" xml:space="preserve">
+    <value>双击以重命名</value>
+  </data>
+  <data name="SenseCpuClock" xml:space="preserve">
+    <value>时钟速度占额定速度的百分比。</value>
+  </data>
+  <data name="SenseGpuAll" xml:space="preserve">
+    <value>Windows 报告的 GPU 总负载。</value>
+  </data>
+  <data name="SenseGpuCoreName" xml:space="preserve">
+    <value>GPU 核心</value>
+  </data>
+  <data name="SenseGpuCore" xml:space="preserve">
+    <value>驱动程序报告的 GPU 核心负载。</value>
+  </data>
+  <data name="SenseGpuVramName" xml:space="preserve">
+    <value>GPU 内存控制器</value>
+  </data>
+  <data name="SenseGpuVram" xml:space="preserve">
+    <value>内存控制器负载，而非已用内存。</value>
+  </data>
+  <data name="SenseGpuVramClockName" xml:space="preserve">
+    <value>GPU 内存时钟速度</value>
+  </data>
+  <data name="SenseGpuVramClock" xml:space="preserve">
+    <value>GPU 内存时钟速度。</value>
+  </data>
+  <data name="SenseGpuClock" xml:space="preserve">
+    <value>GPU 核心时钟速度。</value>
+  </data>
+  <data name="SenseGpuFanName" xml:space="preserve">
+    <value>GPU 风扇</value>
+  </data>
+  <data name="SenseGpuFan" xml:space="preserve">
+    <value>GPU 风扇转速。</value>
+  </data>
+  <data name="SenseGpuPower" xml:space="preserve">
+    <value>GPU 功耗。</value>
+  </data>
+  <data name="SenseGpuClockName" xml:space="preserve">
+    <value>GPU 时钟速度</value>
+  </data>
+  <data name="SenseDiskBusy" xml:space="preserve">
+    <value>驱动器处于活动状态的时间百分比。</value>
+  </data>
+  <data name="SenseNetUp" xml:space="preserve">
+    <value>当前发送速率。</value>
+  </data>
+  <data name="SenseNetDown" xml:space="preserve">
+    <value>当前接收速率。</value>
+  </data>
+  <data name="WidgetClockName" xml:space="preserve">
+    <value>时钟</value>
+  </data>
+  <data name="WidgetClockDescription" xml:space="preserve">
+    <value>显示时间，在全尺寸停靠栏上还显示日期。</value>
+  </data>
+  <data name="ClockSeconds" xml:space="preserve">
+    <value>显示秒</value>
+  </data>
+  <data name="ClockDate" xml:space="preserve">
+    <value>显示日期</value>
+  </data>
+  <data name="ClockWithSeconds" xml:space="preserve">
+    <value>含秒数</value>
+  </data>
+  <data name="ModeLabel" xml:space="preserve">
+    <value>停靠模式</value>
+  </data>
+  <data name="ModePinned" xml:space="preserve">
+    <value>停靠</value>
+  </data>
+  <data name="ModeHide" xml:space="preserve">
+    <value>自动隐藏</value>
+  </data>
+  <data name="ModeDesktop" xml:space="preserve">
+    <value>在桌面上</value>
+  </data>
+  <data name="ModePinnedHint" xml:space="preserve">
+    <value>在屏幕边缘保留空间。最大化的窗口不会覆盖该停靠栏。</value>
+  </data>
+  <data name="ModeHideHint" xml:space="preserve">
+    <value>将该停靠栏隐藏到屏幕外。将指针移到边缘即可显示。</value>
+  </data>
+  <data name="ModeDesktopHint" xml:space="preserve">
+    <value>该停靠栏停留在桌面上且不占用空间。打开的窗口会覆盖它。</value>
+  </data>
+  <data name="UndoMode" xml:space="preserve">
+    <value>更改停靠模式</value>
+  </data>
+  <data name="UndoOnTheBar" xml:space="preserve">
+    <value>在停靠栏上</value>
+  </data>
+  <data name="WidgetDropCaption" xml:space="preserve">
+    <value>拖放到此处</value>
+  </data>
+  <data name="UndoRow" xml:space="preserve">
+    <value>撤销上次更改</value>
+  </data>
+  <data name="UndoRowHint" xml:space="preserve">
+    <value>撤销在此处或任何停靠栏上所做的上次更改。</value>
+  </data>
+  <data name="MediaTitleHint" xml:space="preserve">
+    <value>关闭时，标题显示在工具提示中。</value>
+  </data>
+  <data name="ClockDateHint" xml:space="preserve">
+    <value>紧凑的停靠栏只有一行空间。</value>
+  </data>
+  <data name="CrowdedRow" xml:space="preserve">
+    <value>{0} 个小组件放不下</value>
+  </data>
+  <data name="CrowdedRowHint" xml:space="preserve">
+    <value>该停靠栏已满。这些小组件会被保留，在有空间时（例如在另一条边缘或较小的停靠栏尺寸下）会重新显示。</value>
+  </data>
+  <data name="CrowdedButton" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="UndoCrowded" xml:space="preserve">
+    <value>移除放不下的小组件</value>
+  </data>
+  <data name="WidgetSoundName" xml:space="preserve">
+    <value>声音</value>
+  </data>
+  <data name="WidgetSoundDescription" xml:space="preserve">
+    <value>单击图标打开音量滑块，滚动调节音量，单击数字可静音。</value>
+  </data>
+  <data name="SoundLevelLabel" xml:space="preserve">
+    <value>显示音量级别</value>
+  </data>
+  <data name="SoundLevelHint" xml:space="preserve">
+    <value>图标已显示声音是否静音。</value>
+  </data>
+  <data name="KeysGroup" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="KeyBars" xml:space="preserve">
+    <value>显示或隐藏所有停靠栏</value>
+  </data>
+  <data name="KeyBarsHint" xml:space="preserve">
+    <value>隐藏或显示各停靠栏。其中的小组件会被保留。</value>
+  </data>
+  <data name="KeySettings" xml:space="preserve">
+    <value>打开设置</value>
+  </data>
+  <data name="KeySettingsHint" xml:space="preserve">
+    <value>在任何位置都有效，包括全屏应用之上。</value>
+  </data>
+  <data name="KeyMute" xml:space="preserve">
+    <value>静音或取消静音</value>
+  </data>
+  <data name="KeyMuteHint" xml:space="preserve">
+    <value>作用与静音键相同，适用于没有静音键的键盘。</value>
+  </data>
+  <data name="KeyNone" xml:space="preserve">
+    <value>指定…</value>
+  </data>
+  <data name="KeyClear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="KeyUse" xml:space="preserve">
+    <value>指定</value>
+  </data>
+  <data name="KeyWaiting" xml:space="preserve">
+    <value>请按下包含 Ctrl、Alt 或 Windows 键的组合键。</value>
+  </data>
+  <data name="KeyBare" xml:space="preserve">
+    <value>单个按键会在其他应用中失效。请添加 Ctrl、Alt 或 Windows 键。</value>
+  </data>
+  <data name="KeyTaken" xml:space="preserve">
+    <value>其他应用已使用此快捷键。请选择其他快捷键。</value>
+  </data>
+  <data name="WidgetBatteryName" xml:space="preserve">
+    <value>电池</value>
+  </data>
+  <data name="WidgetBatteryDescription" xml:space="preserve">
+    <value>显示电池电量。仅在有电池的设备上显示。</value>
+  </data>
+  <data name="WidgetWifiName" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="WidgetWifiDescription" xml:space="preserve">
+    <value>显示 Wi-Fi 信号强度。仅在连接到 Wi-Fi 时显示。</value>
+  </data>
+  <data name="BatteryCharge" xml:space="preserve">
+    <value>电量 {0}%</value>
+  </data>
+  <data name="BatteryCharging" xml:space="preserve">
+    <value>正在充电</value>
+  </data>
+  <data name="BatteryPlugged" xml:space="preserve">
+    <value>已接通电源</value>
+  </data>
+  <data name="BatteryLeft" xml:space="preserve">
+    <value>大约剩余 {0} 小时 {1} 分钟</value>
+  </data>
+  <data name="BatteryUnknown" xml:space="preserve">
+    <value>电池电量不可用</value>
+  </data>
+  <data name="WifiBars" xml:space="preserve">
+    <value>信号 {0}/5</value>
+  </data>
+  <data name="WifiConnected" xml:space="preserve">
+    <value>已连接到 Wi-Fi</value>
+  </data>
+  <data name="WifiNameLabel" xml:space="preserve">
+    <value>显示网络名称</value>
+  </data>
+  <data name="WifiNameHint" xml:space="preserve">
+    <value>有助于区分范围内的网络。</value>
+  </data>
+  <data name="QuietRow" xml:space="preserve">
+    <value>{0} 个小组件在有数据之前处于隐藏状态</value>
+  </data>
+  <data name="QuietRowHint" xml:space="preserve">
+    <value>{0}：保留在停靠栏上，在有数据之前不占用空间。</value>
+  </data>
+  <data name="QuietButton" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="UndoQuiet" xml:space="preserve">
+    <value>移除隐藏的小组件</value>
+  </data>
+  <data name="CrowdedRowOne" xml:space="preserve">
+    <value>1 个小组件无法容纳</value>
+  </data>
+  <data name="QuietRowOne" xml:space="preserve">
+    <value>1 个小组件在有数据之前处于隐藏状态</value>
+  </data>
+  <data name="BraunRow" xml:space="preserve">
+    <value>关于此样式</value>
+  </data>
+  <data name="BraunHint" xml:space="preserve">
+    <value>石墨色背景配橙色读数。</value>
+  </data>
+  <data name="CrowdedButtonOne" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="QuietButtonOne" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="WidgetSettingsName" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="WidgetSettingsDescription" xml:space="preserve">
+    <value>打开设置。</value>
+  </data>
+  <data name="SettingsChipTip.Text" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="NavWidgets.Text" xml:space="preserve">
+    <value>小组件</value>
+  </data>
+  <data name="WidgetsTitle.Text" xml:space="preserve">
+    <value>小组件</value>
+  </data>
+  <data name="WidgetsIntro.Text" xml:space="preserve">
+    <value>此屏幕停靠栏上的小组件、固定应用和保存的布局。</value>
+  </data>
+  <data name="IconDefault" xml:space="preserve">
+    <value>默认图标</value>
+  </data>
+  <data name="CopyRow" xml:space="preserve">
+    <value>其他屏幕</value>
+  </data>
+  <data name="CopyRowHint" xml:space="preserve">
+    <value>将此停靠栏的小组件复制到所有其他屏幕并自动调整。按 Ctrl+Z 撤销。</value>
+  </data>
+  <data name="CopyButton" xml:space="preserve">
+    <value>复制到其他屏幕</value>
+  </data>
+  <data name="UndoCopied" xml:space="preserve">
+    <value>将小组件复制到其他屏幕</value>
+  </data>
+  <data name="ListEarlier" xml:space="preserve">
+    <value>上移</value>
+  </data>
+  <data name="ListLater" xml:space="preserve">
+    <value>下移</value>
+  </data>
+  <data name="ListRemove" xml:space="preserve">
+    <value>从停靠栏中移除</value>
+  </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>此停靠栏没有小组件。</value>
+  </data>
+  <data name="NavDocksItem.AutomationProperties.Name" xml:space="preserve">
+    <value>停靠栏</value>
+  </data>
+  <data name="NavWidgetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>小组件</value>
+  </data>
+  <data name="NavLookItem.AutomationProperties.Name" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="NavSensorsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>传感器</value>
+  </data>
+  <data name="NavProgramItem.AutomationProperties.Name" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="UndoLook" xml:space="preserve">
+    <value>更改外观</value>
+  </data>
+  <data name="UndoLanguage" xml:space="preserve">
+    <value>更改语言</value>
+  </data>
+  <data name="UndoKey" xml:space="preserve">
+    <value>更改快捷键</value>
+  </data>
+  <data name="UndoIcon" xml:space="preserve">
+    <value>更改图标</value>
+  </data>
+  <data name="UndoRenamed" xml:space="preserve">
+    <value>重命名读数</value>
+  </data>
+  <data name="WifiBarsUnknown" xml:space="preserve">
+    <value>信号强度不可用</value>
+  </data>
+  <data name="BatteryLeftMinutes" xml:space="preserve">
+    <value>大约剩余 {0} 分钟</value>
+  </data>
+  <data name="SenseGpuBusyName" xml:space="preserve">
+    <value>GPU 负载</value>
+  </data>
+  <data name="SenseGpuHeatName" xml:space="preserve">
+    <value>GPU 温度</value>
+  </data>
+  <data name="CopyButtonCount" xml:space="preserve">
+    <value>复制到其他屏幕 ({0})</value>
+  </data>
+  <data name="ListAtSlot" xml:space="preserve">
+    <value>位置 {0}</value>
+  </data>
+  <data name="ListNoSlot" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="SensorRename.AutomationProperties.Name" xml:space="preserve">
+    <value>重命名此读数</value>
+  </data>
+  <data name="SensorRename.[using:Microsoft.UI.Xaml.Controls]ToolTipService/ToolTip" xml:space="preserve">
+    <value>重命名此读数。</value>
+  </data>
+  <data name="ForgetRow" xml:space="preserve">
+    <value>移除此屏幕</value>
+  </data>
+  <data name="ForgetRowHint" xml:space="preserve">
+    <value>删除此屏幕的停靠栏及其设置。重新连接后将作为新设备配置。</value>
+  </data>
+  <data name="ForgetButton" xml:space="preserve">
+    <value>移除屏幕</value>
+  </data>
+  <data name="UndoForgot" xml:space="preserve">
+    <value>移除屏幕</value>
+  </data>
+  <data name="SourcePdh" xml:space="preserve">
+    <value>Windows 性能计数器</value>
+  </data>
+  <data name="SourceMem" xml:space="preserve">
+    <value>Windows 内存</value>
+  </data>
+  <data name="SourceAcpi" xml:space="preserve">
+    <value>ACPI 热区域</value>
+  </data>
+  <data name="SourceDisk" xml:space="preserve">
+    <value>驱动器温度</value>
+  </data>
+  <data name="SourceNvml" xml:space="preserve">
+    <value>NVIDIA 驱动程序</value>
+  </data>
+  <data name="SourceAnswering" xml:space="preserve">
+    <value>响应中 ({0})</value>
+  </data>
+  <data name="SourceNotRunning" xml:space="preserve">
+    <value>未运行</value>
+  </data>
+  <data name="SourceNotHere" xml:space="preserve">
+    <value>此计算机上不可用</value>
+  </data>
+  <data name="UndoElsewhereLabel" xml:space="preserve">
+    <value>撤销 — {0}, {1}</value>
+  </data>
+  <data name="LastDoorTitle" xml:space="preserve">
+    <value>这是打开设置的最后一种方式</value>
+  </data>
+  <data name="LastDoorBody" xml:space="preserve">
+    <value>没有快捷键可打开设置，且这是任何停靠栏上最后一个“设置”按钮。移除后，请右键单击停靠栏以打开设置。</value>
+  </data>
+  <data name="LastDoorGo" xml:space="preserve">
+    <value>仍要移除</value>
+  </data>
+  <data name="ExportRow" xml:space="preserve">
+    <value>备份设置</value>
+  </data>
+  <data name="ExportRowHint" xml:space="preserve">
+    <value>包括停靠栏、主题、快捷键和读数名称。</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>导出到文件</value>
+  </data>
+  <data name="ImportRow" xml:space="preserve">
+    <value>还原设置</value>
+  </data>
+  <data name="ImportRowHint" xml:space="preserve">
+    <value>替换所有当前设置。停靠栏将按保存顺序分配给屏幕。按 Ctrl+Z 撤销。</value>
+  </data>
+  <data name="ImportButton" xml:space="preserve">
+    <value>从文件导入</value>
+  </data>
+  <data name="SettingsFileKind" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="ImportDone" xml:space="preserve">
+    <value>设置已导入。已将 {0} 个停靠栏应用于此计算机的屏幕。</value>
+  </data>
+  <data name="ImportBad" xml:space="preserve">
+    <value>该文件不是有效的设置文件。</value>
+  </data>
+  <data name="UndoImported" xml:space="preserve">
+    <value>导入设置</value>
+  </data>
+  <data name="SegSizeLarge" xml:space="preserve">
+    <value>大</value>
+  </data>
+  <data name="SegSizeMedium" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="SegSizeSmall" xml:space="preserve">
+    <value>小</value>
+  </data>
+  <data name="PresetsGroup" xml:space="preserve">
+    <value>布局</value>
+  </data>
+  <data name="PresetSaveRow" xml:space="preserve">
+    <value>保存当前布局</value>
+  </data>
+  <data name="PresetSaveRowHint" xml:space="preserve">
+    <value>将此停靠栏的小组件保存为命名布局，可应用于任何停靠栏。</value>
+  </data>
+  <data name="PresetSaveButton" xml:space="preserve">
+    <value>保存布局</value>
+  </data>
+  <data name="PresetApply" xml:space="preserve">
+    <value>应用于此停靠栏</value>
+  </data>
+  <data name="PresetDelete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="PresetHint" xml:space="preserve">
+    <value>{0} 个小组件</value>
+  </data>
+  <data name="PresetNameHeader" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="PresetSaveTitle" xml:space="preserve">
+    <value>保存布局</value>
+  </data>
+  <data name="PresetSaveGo" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="UndoPresetSaved" xml:space="preserve">
+    <value>保存布局</value>
+  </data>
+  <data name="UndoPresetApplied" xml:space="preserve">
+    <value>应用布局</value>
+  </data>
+  <data name="UndoPresetDropped" xml:space="preserve">
+    <value>删除布局</value>
+  </data>
+  <data name="SoundMutedTip" xml:space="preserve">
+    <value>已静音</value>
+  </data>
+  <data name="SoundLevelTip" xml:space="preserve">
+    <value>音量：{0}%</value>
+  </data>
+  <data name="SoundPressUnmuteTip" xml:space="preserve">
+    <value>点击取消静音</value>
+  </data>
+  <data name="SoundPressMuteTip" xml:space="preserve">
+    <value>点击静音</value>
+  </data>
+  <data name="ReadingSizeLabel" xml:space="preserve">
+    <value>图标和数字大小</value>
+  </data>
+  <data name="ReadingSizeHint" xml:space="preserve">
+    <value>所有停靠栏上的图标和数字大小。</value>
+  </data>
+  <data name="NavGeneral.Text" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="GeneralTitle" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="CopiesTitle" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="NavGeneralItem.AutomationProperties.Name" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="GroupStorage" xml:space="preserve">
+    <value>驱动器</value>
+  </data>
+  <data name="GroupBoard" xml:space="preserve">
+    <value>主板</value>
+  </data>
+  <data name="GeneralPageTitle.Text" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="GeneralIntro.Text" xml:space="preserve">
+    <value>快捷键、语言、启动和备份。这些设置适用于整个应用。</value>
+  </data>
+  <data name="OpenFolderOf" xml:space="preserve">
+    <value>打开文件夹：{0}</value>
+  </data>
+  <data name="MediaResumes" xml:space="preserve">
+    <value>继续播放 {0}</value>
+  </data>
+  <data name="SenseGpuVramFillName" xml:space="preserve">
+    <value>GPU 显存占用</value>
+  </data>
+  <data name="SenseGpuVramFill" xml:space="preserve">
+    <value>GPU 显存占用百分比。</value>
+  </data>
+  <data name="RamDetail" xml:space="preserve">
+    <value>{0} · {1} / {2} GB</value>
+  </data>
+  <data name="SensorsCount" xml:space="preserve">
+    <value>{0} 个读数</value>
+  </data>
+  <data name="DeviceCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DeviceGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="DeviceMemory" xml:space="preserve">
+    <value>内存</value>
+  </data>
+  <data name="DeviceStorage" xml:space="preserve">
+    <value>驱动器</value>
+  </data>
+  <data name="DeviceNetwork" xml:space="preserve">
+    <value>网络</value>
+  </data>
+  <data name="DeviceBoard" xml:space="preserve">
+    <value>主板</value>
+  </data>
+  <data name="PinIconChange" xml:space="preserve">
+    <value>更改…</value>
+  </data>
+  <data name="LaunchIconAutoShort" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="MetricStory" xml:space="preserve">
+    <value>过去一分钟 {0}–{1} · 峰值 {2}</value>
+  </data>
+  <data name="MetricPeak" xml:space="preserve">
+    <value>峰值 {0}</value>
+  </data>
+  <data name="MediaOpenNamed" xml:space="preserve">
+    <value>打开 {0}</value>
+  </data>
+  <data name="MediaOpenPlayer" xml:space="preserve">
+    <value>打开播放器</value>
+  </data>
+  <data name="SenseCommitName" xml:space="preserve">
+    <value>已提交内存</value>
+  </data>
+  <data name="SenseCommit" xml:space="preserve">
+    <value>已提交内存占提交限制（RAM 加上分页文件）的百分比。</value>
+  </data>
+  <data name="SenseCommitUsedName" xml:space="preserve">
+    <value>已提交内存 (字节)</value>
+  </data>
+  <data name="SenseCommitTotalName" xml:space="preserve">
+    <value>提交限制</value>
+  </data>
+  <data name="SenseCommitTotal" xml:space="preserve">
+    <value>最大提交内存：RAM 加上分页文件。</value>
+  </data>
+  <data name="SenseRamFreeName" xml:space="preserve">
+    <value>可用内存</value>
+  </data>
+  <data name="SenseRamFree" xml:space="preserve">
+    <value>未被使用的已安装内存。</value>
+  </data>
+  <data name="SenseDiskReadName" xml:space="preserve">
+    <value>驱动器读取速度</value>
+  </data>
+  <data name="SenseDiskRead" xml:space="preserve">
+    <value>所有驱动器的当前读取速度总和。</value>
+  </data>
+  <data name="SenseDiskWriteName" xml:space="preserve">
+    <value>驱动器写入速度</value>
+  </data>
+  <data name="SenseDiskWrite" xml:space="preserve">
+    <value>所有驱动器的当前写入速度总和。</value>
+  </data>
+  <data name="WifiBand" xml:space="preserve">
+    <value>{0:0.#} GHz</value>
+  </data>
+  <data name="WifiRate" xml:space="preserve">
+    <value>{0} Mbit/s</value>
+  </data>
+  <data name="NavPins.Text" xml:space="preserve">
+    <value>固定应用</value>
+  </data>
+  <data name="NavPinsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>固定应用</value>
+  </data>
+  <data name="PinsTitle.Text" xml:space="preserve">
+    <value>固定应用</value>
+  </data>
+  <data name="PinsIntro.Text" xml:space="preserve">
+    <value>固定到此屏幕停靠栏的应用、文件夹和网址。</value>
+  </data>
+  <data name="PinnedListTitle" xml:space="preserve">
+    <value>固定到此停靠栏</value>
+  </data>
+  <data name="PinsEmpty" xml:space="preserve">
+    <value>尚未固定任何内容。将文件拖放到停靠栏，或在上方选择固定项。</value>
+  </data>
+  <data name="NavPresets.Text" xml:space="preserve">
+    <value>布局</value>
+  </data>
+  <data name="NavPresetsItem.AutomationProperties.Name" xml:space="preserve">
+    <value>布局</value>
+  </data>
+  <data name="PresetsTitle.Text" xml:space="preserve">
+    <value>布局</value>
+  </data>
+  <data name="PresetsIntro.Text" xml:space="preserve">
+    <value>已保存的小组件布局。将任何布局应用于所选屏幕的停靠栏。</value>
+  </data>
+  <data name="ChipHint" xml:space="preserve">
+    <value>将小组件拖到停靠栏，或选择 + 将其添加到所选停靠栏。</value>
+  </data>
+  <data name="ToastDone" xml:space="preserve">
+    <value>已完成: {0}</value>
+  </data>
+  <data name="ToastUndo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="PresetsEmpty" xml:space="preserve">
+    <value>尚无保存的布局。</value>
+  </data>
+  <data name="LampOn" xml:space="preserve">
+    <value>停靠栏开启</value>
+  </data>
+  <data name="LampOff" xml:space="preserve">
+    <value>停靠栏关闭</value>
+  </data>
+  <data name="EdgeBoardHint" xml:space="preserve">
+    <value>选择边缘</value>
+  </data>
+  <data name="WidgetsBarGroup" xml:space="preserve">
+    <value>停靠栏</value>
+  </data>
+  <data name="BarGestures" xml:space="preserve">
+    <value>拖动以移动 · 拖出停靠栏以移除 · 右键单击打开菜单</value>
+  </data>
+  <data name="PinsEditorTitle" xml:space="preserve">
+    <value>名称和图标</value>
+  </data>
+  <data name="LookIconsGroup" xml:space="preserve">
+    <value>读取图标</value>
+  </data>
+  <data name="LookSampleGroup" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="IconChange" xml:space="preserve">
+    <value>更改…</value>
+  </data>
+  <data name="PinOpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="PinDialogHint" xml:space="preserve">
+    <value>您也可以将文件拖放到停靠栏以将其固定。</value>
+  </data>
+  <data name="BarMenuSettings" xml:space="preserve">
+    <value>设置…</value>
+  </data>
+  <data name="BarMenuHideAll" xml:space="preserve">
+    <value>隐藏停靠栏</value>
+  </data>
+  <data name="BarMenuExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="BarWelcome" xml:space="preserve">
+    <value>右键单击以打开菜单和设置。将文件拖放到此处以固定。</value>
+  </data>
+  <data name="BarsShow" xml:space="preserve">
+    <value>显示停靠栏</value>
+  </data>
+  <data name="NavHideItem.AutomationProperties.Name" xml:space="preserve">
+    <value>隐藏或显示停靠栏</value>
+  </data>
+  <data name="SourceNeedsDriver" xml:space="preserve">
+    <value>需要 PawnIO 驱动程序</value>
+  </data>
+  <data name="SourceCpu" xml:space="preserve">
+    <value>CPU 寄存器</value>
+  </data>
+  <data name="SourceDimm" xml:space="preserve">
+    <value>内存模块</value>
+  </data>
+  <data name="DriverRow" xml:space="preserve">
+    <value>CPU 和内存温度</value>
+  </data>
+  <data name="DriverRowHint" xml:space="preserve">
+    <value>CPU 和内存温度需要 PawnIO 驱动程序。安装该驱动程序需要管理员权限。</value>
+  </data>
+  <data name="DriverRowInstalledHint" xml:space="preserve">
+    <value>PawnIO {0} 已安装但无响应。重启应用通常可解决此问题。</value>
+  </data>
+  <data name="DriverGet" xml:space="preserve">
+    <value>下载驱动程序…</value>
+  </data>
+  <data name="SenseCpuCoreMaxName" xml:space="preserve">
+    <value>CPU 最高核心温度</value>
+  </data>
+  <data name="SenseCpuCoreMax" xml:space="preserve">
+    <value>温度最高的 CPU 核心的温度。</value>
+  </data>
+  <data name="SenseCpuPowerName" xml:space="preserve">
+    <value>CPU 功耗</value>
+  </data>
+  <data name="SenseCpuPower" xml:space="preserve">
+    <value>CPU 功耗。</value>
+  </data>
+  <data name="SourceNeedsService" xml:space="preserve">
+    <value>需要传感器服务</value>
+  </data>
+  <data name="ServiceRow" xml:space="preserve">
+    <value>传感器服务</value>
+  </data>
+  <data name="ServiceRowHint" xml:space="preserve">
+    <value>PawnIO {0} 已安装。传感器服务通过该驱动程序读取数据，且安装时需要管理员权限。</value>
+  </data>
+  <data name="ServiceRowMissing" xml:space="preserve">
+    <value>此版本不包含传感器服务。</value>
+  </data>
+  <data name="ServiceRowWaiting" xml:space="preserve">
+    <value>服务正在运行。读数将很快出现。</value>
+  </data>
+  <data name="ServiceInstall" xml:space="preserve">
+    <value>安装服务…</value>
+  </data>
+  <data name="SenseCpuHeatName" xml:space="preserve">
+    <value>CPU 温度</value>
+  </data>
+  <data name="CatProcessor" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="CatMemory" xml:space="preserve">
+    <value>内存</value>
+  </data>
+  <data name="CatGraphics" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="CatStorage" xml:space="preserve">
+    <value>驱动器</value>
+  </data>
+  <data name="CatNetwork" xml:space="preserve">
+    <value>网络</value>
+  </data>
+  <data name="CatOther" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="OfferCpuLoad" xml:space="preserve">
+    <value>CPU 占用率</value>
+  </data>
+  <data name="OfferRamLoad" xml:space="preserve">
+    <value>内存占用率</value>
+  </data>
+  <data name="OfferGpuLoad" xml:space="preserve">
+    <value>GPU 占用率</value>
+  </data>
+  <data name="OfferNetUp" xml:space="preserve">
+    <value>网络发送速率</value>
+  </data>
+  <data name="OfferNetDown" xml:space="preserve">
+    <value>网络接收速率</value>
+  </data>
+  <data name="ShortLoad" xml:space="preserve">
+    <value>占用率</value>
+  </data>
+  <data name="ShortTemperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="SenseRamHeatName" xml:space="preserve">
+    <value>内存温度</value>
+  </data>
+  <data name="SenseDiskHeatName" xml:space="preserve">
+    <value>驱动器温度</value>
+  </data>
+  <data name="WidgetDeviceName" xml:space="preserve">
+    <value>设备电池</value>
+  </data>
+  <data name="WidgetDeviceDescription" xml:space="preserve">
+    <value>显示无线鼠标、耳机或键盘的电量。</value>
+  </data>
+  <data name="CatMice" xml:space="preserve">
+    <value>鼠标</value>
+  </data>
+  <data name="CatHeadsets" xml:space="preserve">
+    <value>耳机</value>
+  </data>
+  <data name="CatKeyboards" xml:space="preserve">
+    <value>键盘</value>
+  </data>
+  <data name="CatDevices" xml:space="preserve">
+    <value>其他设备</value>
+  </data>
+  <data name="OfferDeviceCharge" xml:space="preserve">
+    <value>{0} 电量</value>
+  </data>
+  <data name="OfferDevice" xml:space="preserve">
+    <value>此设备的电量。</value>
+  </data>
+  <data name="SenseDeviceCharge" xml:space="preserve">
+    <value>此设备的电量。</value>
+  </data>
+  <data name="DevicePeripherals" xml:space="preserve">
+    <value>无线设备</value>
+  </data>
+  <data name="DeviceWhich" xml:space="preserve">
+    <value>哪个设备</value>
+  </data>
+  <data name="SourceDev" xml:space="preserve">
+    <value>无线设备</value>
+  </data>
+  <data name="WidgetSwitcherName" xml:space="preserve">
+    <value>音频切换</value>
+  </data>
+  <data name="WidgetSwitcherDescription" xml:space="preserve">
+    <value>在停靠栏上显示 Master Audio Switcher。单击以切换声音输出到下一个设备。</value>
+  </data>
+  <data name="SwitcherNoDevice" xml:space="preserve">
+    <value>没有音频输出设备</value>
+  </data>
+  <data name="SwitcherPressTip" xml:space="preserve">
+    <value>单击以切换到下一个设备</value>
+  </data>
+  <data name="SwitcherOpen" xml:space="preserve">
+    <value>打开 Master Audio Switcher</value>
+  </data>
+  <data name="GaugeShowLoad" xml:space="preserve">
+    <value>占用率</value>
+  </data>
+  <data name="GaugeShowTemp" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="GaugeShowTempHint" xml:space="preserve">
+    <value>在占用率旁边，同一图标下方。</value>
+  </data>
+  <data name="WidgetMicName" xml:space="preserve">
+    <value>麦克风</value>
+  </data>
+  <data name="WidgetMicDescription" xml:space="preserve">
+    <value>在系统范围内将麦克风静音。静音时变为红色。</value>
+  </data>
+  <data name="WidgetAwakeName" xml:space="preserve">
+    <value>保持唤醒</value>
+  </data>
+  <data name="WidgetAwakeDescription" xml:space="preserve">
+    <value>让计算机保持唤醒状态，聊天应用不会将您显示为离开。</value>
+  </data>
+  <data name="WidgetLayoutName" xml:space="preserve">
+    <value>键盘布局</value>
+  </data>
+  <data name="WidgetLayoutDescription" xml:space="preserve">
+    <value>显示键盘布局语言和 Caps Lock 状态。</value>
+  </data>
+  <data name="CatPrograms" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="OfferProgram" xml:space="preserve">
+    <value>从停靠栏启动应用。</value>
+  </data>
+  <data name="ProgExplorer" xml:space="preserve">
+    <value>文件资源管理器</value>
+  </data>
+  <data name="ProgNotepad" xml:space="preserve">
+    <value>记事本</value>
+  </data>
+  <data name="ProgCalculator" xml:space="preserve">
+    <value>计算器</value>
+  </data>
+  <data name="ProgTerminal" xml:space="preserve">
+    <value>终端</value>
+  </data>
+  <data name="ProgPowerShell" xml:space="preserve">
+    <value>PowerShell</value>
+  </data>
+  <data name="ProgCommandPrompt" xml:space="preserve">
+    <value>命令提示符</value>
+  </data>
+  <data name="ProgSnipping" xml:space="preserve">
+    <value>截图工具</value>
+  </data>
+  <data name="ProgPaint" xml:space="preserve">
+    <value>画图</value>
+  </data>
+  <data name="ProgTaskManager" xml:space="preserve">
+    <value>任务管理器</value>
+  </data>
+  <data name="ProgSettings" xml:space="preserve">
+    <value>Windows 设置</value>
+  </data>
+  <data name="ProgControlPanel" xml:space="preserve">
+    <value>控制面板</value>
+  </data>
+  <data name="ProgDownloads" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="ProgRecycleBin" xml:space="preserve">
+    <value>回收站</value>
+  </data>
+  <data name="ProgStickyNotes" xml:space="preserve">
+    <value>便笺</value>
+  </data>
+  <data name="AwakeOffTip" xml:space="preserve">
+    <value>计算机可以进入睡眠状态 · 点击以保持唤醒</value>
+  </data>
+  <data name="AwakeFor" xml:space="preserve">
+    <value>唤醒：剩余 {0}</value>
+  </data>
+  <data name="AwakeUntilOff" xml:space="preserve">
+    <value>直到关闭前保持唤醒</value>
+  </data>
+  <data name="AwakeOnTip" xml:space="preserve">
+    <value>点击以允许睡眠</value>
+  </data>
+  <data name="AwakeMenu30" xml:space="preserve">
+    <value>保持唤醒 30 分钟</value>
+  </data>
+  <data name="AwakeMenu60" xml:space="preserve">
+    <value>保持唤醒 1 小时</value>
+  </data>
+  <data name="AwakeMenu120" xml:space="preserve">
+    <value>保持唤醒 2 小时</value>
+  </data>
+  <data name="AwakeMenuForever" xml:space="preserve">
+    <value>直到关闭前保持唤醒</value>
+  </data>
+  <data name="AwakeMenuOff" xml:space="preserve">
+    <value>允许睡眠</value>
+  </data>
+  <data name="AwakeLessThanMinute" xml:space="preserve">
+    <value>不到一分钟</value>
+  </data>
+  <data name="AwakeMinutes" xml:space="preserve">
+    <value>{0} 分钟</value>
+  </data>
+  <data name="AwakeHours" xml:space="preserve">
+    <value>{0} 小时 {1} 分钟</value>
+  </data>
+  <data name="AwakeSummaryOn" xml:space="preserve">
+    <value>正在保持计算机唤醒</value>
+  </data>
+  <data name="AwakeSummaryOff" xml:space="preserve">
+    <value>计算机可以进入睡眠状态</value>
+  </data>
+  <data name="MicOffTip" xml:space="preserve">
+    <value>麦克风已静音 · 点击以取消静音</value>
+  </data>
+  <data name="MicOnTip" xml:space="preserve">
+    <value>麦克风已开启 · 点击以静音</value>
+  </data>
+  <data name="LayoutCapsOn" xml:space="preserve">
+    <value>Caps Lock 已开启</value>
+  </data>
+  <data name="LayoutPressTip" xml:space="preserve">
+    <value>点击切换布局</value>
+  </data>
+  <data name="SoundSliderTip" xml:space="preserve">
+    <value>点击打开音量滑块 · 滚动更改音量</value>
+  </data>
+  <data name="KeyMic" xml:space="preserve">
+    <value>将麦克风静音或取消静音</value>
+  </data>
+  <data name="KeyMicHint" xml:space="preserve">
+    <value>在任何应用中均可全局生效。</value>
+  </data>
+  <data name="IconSearch" xml:space="preserve">
+    <value>按名称搜索</value>
+  </data>
+  <data name="IconGroup_ui" xml:space="preserve">
+    <value>界面</value>
+  </data>
+  <data name="IconGroup_design" xml:space="preserve">
+    <value>形状与绘图</value>
+  </data>
+  <data name="IconGroup_docs" xml:space="preserve">
+    <value>文件与学习</value>
+  </data>
+  <data name="IconGroup_comm" xml:space="preserve">
+    <value>社交与通讯</value>
+  </data>
+  <data name="IconGroup_soft" xml:space="preserve">
+    <value>应用与代码</value>
+  </data>
+  <data name="IconGroup_money" xml:space="preserve">
+    <value>财务与工作</value>
+  </data>
+  <data name="IconGroup_tech" xml:space="preserve">
+    <value>设备与电源</value>
+  </data>
+  <data name="IconGroup_places" xml:space="preserve">
+    <value>交通与地点</value>
+  </data>
+  <data name="IconGroup_food" xml:space="preserve">
+    <value>食物</value>
+  </data>
+  <data name="IconGroup_kitchen" xml:space="preserve">
+    <value>厨房与饮品</value>
+  </data>
+  <data name="IconGroup_health" xml:space="preserve">
+    <value>医疗</value>
+  </data>
+  <data name="IconGroup_sport" xml:space="preserve">
+    <value>运动</value>
+  </data>
+  <data name="IconGroup_fun" xml:space="preserve">
+    <value>游戏与娱乐</value>
+  </data>
+  <data name="IconGroup_nature" xml:space="preserve">
+    <value>自然与空间</value>
+  </data>
+  <data name="IconGroup_people" xml:space="preserve">
+    <value>人物与面孔</value>
+  </data>
+  <data name="KeyFocus" xml:space="preserve">
+    <value>聚焦停靠栏</value>
+  </data>
+  <data name="KeyFocusHint" xml:space="preserve">
+    <value>使用方向键选择小组件，Enter 激活，Esc 退出。</value>
+  </data>
+  <data name="SourcesSomeSilent" xml:space="preserve">
+    <value>部分温度不可用。缺失项详见下方。</value>
+  </data>
+  <data name="SourcesAllWell" xml:space="preserve">
+    <value>所有可用读数均正常工作。</value>
+  </data>
+  <data name="DeskOff" xml:space="preserve">
+    <value>从不自动应用</value>
+  </data>
+  <data name="DeskScreens" xml:space="preserve">
+    <value>屏幕数：{0}</value>
+  </data>
+  <data name="DeskTip" xml:space="preserve">
+    <value>当连接指定数量的屏幕时，自动将此布局应用于主屏幕停靠栏</value>
+  </data>
+  <data name="UndoDesk" xml:space="preserve">
+    <value>用于 {1} 个屏幕的自动布局 {0}</value>
+  </data>
+  <data name="UndoPresetDesk" xml:space="preserve">
+    <value>更改自动布局</value>
+  </data>
+  <data name="IdentifyRow" xml:space="preserve">
+    <value>识别屏幕</value>
+  </data>
+  <data name="IdentifyRowHint" xml:space="preserve">
+    <value>在每个屏幕上显示数字，持续几秒钟。</value>
+  </data>
+  <data name="IdentifyButton" xml:space="preserve">
+    <value>识别</value>
+  </data>
+  <data name="BarMenuEdit" xml:space="preserve">
+    <value>编辑停靠栏…</value>
+  </data>
+  <data name="BarMenuEditDone" xml:space="preserve">
+    <value>完成编辑</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="UpdateRow" xml:space="preserve">
+    <value>当前版本</value>
+  </data>
+  <data name="UpdateRowHint" xml:space="preserve">
+    <value>仅在单击“检查”时检查更新。</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>安装 {0} 并重启</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="UpdateChecking" xml:space="preserve">
+    <value>正在检查更新…</value>
+  </data>
+  <data name="UpdateFound" xml:space="preserve">
+    <value>版本 {0} 可用。{1}</value>
+  </data>
+  <data name="UpdateLatest" xml:space="preserve">
+    <value>您使用的已是最新版本。</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>无法检查更新。未进行任何更改。</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>正在下载并验证安装程序…</value>
+  </data>
+  <data name="UpdateRefused" xml:space="preserve">
+    <value>更新未安装。下载失败或签名验证未通过。</value>
+  </data>
+  <data name="DeskOne" xml:space="preserve">
+    <value>自动：1 个屏幕</value>
+  </data>
+  <data name="DeskMany" xml:space="preserve">
+    <value>自动：{0} 个屏幕</value>
+  </data>
+  <data name="OfferCpuBoth" xml:space="preserve">
+    <value>CPU 负载和温度</value>
+  </data>
+  <data name="OfferRamBoth" xml:space="preserve">
+    <value>内存负载和温度</value>
+  </data>
+  <data name="OfferGpuBoth" xml:space="preserve">
+    <value>GPU 负载和温度</value>
+  </data>
+  <data name="OfferBoth" xml:space="preserve">
+    <value>在一个图标下并排显示两个数值。</value>
+  </data>
+  <data name="ShortBoth" xml:space="preserve">
+    <value>负载 + 温度</value>
+  </data>
+  <data name="TempMissingRow" xml:space="preserve">
+    <value>CPU 和内存温度</value>
+  </data>
+  <data name="TempMissingHint" xml:space="preserve">
+    <value>暂不可用。请在“传感器”页面安装驱动程序和传感器服务。</value>
+  </data>
+  <data name="TempMissingButton" xml:space="preserve">
+    <value>设置…</value>
+  </data>
+  <data name="RecycleEmpty" xml:space="preserve">
+    <value>清空回收站</value>
+  </data>
+  <data name="TrayLabel" xml:space="preserve">
+    <value>在通知区域显示</value>
+  </data>
+  <data name="TrayHint" xml:space="preserve">
+    <value>在时钟附近显示图标。单击打开设置；右键单击打开菜单。</value>
+  </data>
+  <data name="UndoTray" xml:space="preserve">
+    <value>更改通知区域图标</value>
+  </data>
+  <data name="GalleryHeading" xml:space="preserve">
+    <value>小组件</value>
+  </data>
+  <data name="DragToBar" xml:space="preserve">
+    <value>拖放到停靠栏上</value>
+  </data>
+  <data name="GallerySearch" xml:space="preserve">
+    <value>搜索小组件</value>
+  </data>
+  <data name="UpdateReadyTitle" xml:space="preserve">
+    <value>版本 {0} 已就绪</value>
+  </data>
+  <data name="UpdateReadyText" xml:space="preserve">
+    <value>安装需要管理员权限。停靠栏将自动重新打开。</value>
+  </data>
+  <data name="UpdateReadyButton" xml:space="preserve">
+    <value>安装</value>
+  </data>
+  <data name="UpdateWaiting" xml:space="preserve">
+    <value>版本 {0} 已下载并验证。</value>
+  </data>
+  <data name="UpdateRowAutoHint" xml:space="preserve">
+    <value>每天检查一次更新。</value>
+  </data>
+  <data name="AutoUpdateRow" xml:space="preserve">
+    <value>自动更新</value>
+  </data>
+  <data name="AutoUpdateHint" xml:space="preserve">
+    <value>每天检查 GitHub 并验证签名。在您离开时安装；若安装在 Program Files 中，则会先询问。</value>
+  </data>
+  <data name="UndoAutoUpdate" xml:space="preserve">
+    <value>更改自动更新</value>
+  </data>
+  <data name="HeatTitle" xml:space="preserve">
+    <value>{0} 温度过高</value>
+  </data>
+  <data name="HeatText" xml:space="preserve">
+    <value>{0:0} °C 超过了 {1:0} °C 的临界温度。</value>
+  </data>
+  <data name="HeatQuiet" xml:space="preserve">
+    <value>今日不再提醒</value>
+  </data>
+  <data name="HeatRow" xml:space="preserve">
+    <value>过热警告</value>
+  </data>
+  <data name="HeatRowHint" xml:space="preserve">
+    <value>当组件超过临界温度时，显示 Windows 通知。</value>
+  </data>
+  <data name="UndoHeat" xml:space="preserve">
+    <value>更改过热警告</value>
+  </data>
+  <data name="HistoryAgo" xml:space="preserve">
+    <value>{0} 分钟前</value>
+  </data>
+  <data name="HistoryNow" xml:space="preserve">
+    <value>现在</value>
+  </data>
+  <data name="HistorySpread" xml:space="preserve">
+    <value>最低 {0} · 平均 {1} · 最高 {2}</value>
+  </data>
+  <data name="HistoryNothing" xml:space="preserve">
+    <value>暂无数据。</value>
+  </data>
+  <data name="PartCatalog" xml:space="preserve">
+    <value>目录</value>
+  </data>
+  <data name="PartOnBar" xml:space="preserve">
+    <value>已在停靠栏上</value>
+  </data>
+  <data name="PartPrograms" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="PartLayouts" xml:space="preserve">
+    <value>布局</value>
+  </data>
+  <data name="EdgeLeft" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="EdgeTop" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="EdgeRight" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="EdgeBottom" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="BarSizeLabel" xml:space="preserve">
+    <value>停靠栏大小</value>
+  </data>
+  <data name="BarSizeCompact" xml:space="preserve">
+    <value>紧凑</value>
+  </data>
+  <data name="BarSizeNormal" xml:space="preserve">
+    <value>普通</value>
+  </data>
+  <data name="BarSizeLarge" xml:space="preserve">
+    <value>大</value>
+  </data>
+  <data name="BarSizeHint" xml:space="preserve">
+    <value>同时设置厚度、图标大小和数字大小。</value>
+  </data>
+  <data name="BarSizeSideHint" xml:space="preserve">
+    <value>设置图标和数字大小。左右两侧的停靠栏厚度固定。</value>
+  </data>
+  <data name="UndoBarSize" xml:space="preserve">
+    <value>更改停靠栏大小</value>
+  </data>
+  <data name="SensorsStateTitle" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="SensorsVerdictWell" xml:space="preserve">
+    <value>所有主要读数均可用</value>
+  </data>
+  <data name="SensorsVerdictWellHint" xml:space="preserve">
+    <value>可用来源: {0}。</value>
+  </data>
+  <data name="SensorsVerdictSilent" xml:space="preserve">
+    <value>CPU 和内存温度不可用</value>
+  </data>
+  <data name="SensorsVerdictSilentHint" xml:space="preserve">
+    <value>这些需要 PawnIO 驱动程序和传感器服务。请在下方进行设置。</value>
+  </data>
+  <data name="SensorsListTitle" xml:space="preserve">
+    <value>读数</value>
+  </data>
+  <data name="SourcesTitle" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="SourcesRow" xml:space="preserve">
+    <value>读数来源</value>
+  </data>
+  <data name="SourcesRowHint" xml:space="preserve">
+    <value>可用来源: {0}/{1}：Windows 计数器、GPU 驱动程序、驱动器、内存、CPU。</value>
+  </data>
+  <data name="SourcesShow" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="SourcesHide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="SensorsBadge" xml:space="preserve">
+    <value>读数: {0}</value>
+  </data>
+  <data name="SensorSearch" xml:space="preserve">
+    <value>搜索读数</value>
+  </data>
+  <data name="SensorKindAll" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="SensorKindTemperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="SensorKindLoad" xml:space="preserve">
+    <value>负载</value>
+  </data>
+  <data name="AboutLicence" xml:space="preserve">
+    <value>自由软件 (GPL-3.0-or-later)。部分代码改编自 Microsoft PowerToys (MIT 许可证)。</value>
+  </data>
+  <data name="AboutNews" xml:space="preserve">
+    <value>更新日志</value>
+  </data>
+  <data name="UpdateLastChecked" xml:space="preserve">
+    <value>上次检查: {0}。</value>
+  </data>
+  <data name="UpdateToday" xml:space="preserve">
+    <value>今天 {0:t}</value>
+  </data>
+  <data name="UpdateCheckRow" xml:space="preserve">
+    <value>立即检查</value>
+  </data>
+  <data name="UpdateCheckButton" xml:space="preserve">
+    <value>检查</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="SavedByItself" xml:space="preserve">
+    <value>更改将自动保存。</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="AboutLead.Text" xml:space="preserve">
+    <value>版本、更新和应用维护。</value>
+  </data>
+</root>

@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <None Include="fixtures\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\src\MCD.App\Strings\**\Resources.resw" Link="strings\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

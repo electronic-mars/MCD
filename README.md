@@ -135,7 +135,10 @@ The settings window has these pages:
 - **Appearance** - theme, translucent or solid, size of the readings, colour of
   the readings, and which icon each reading wears.
 - **General** - keys, language, start with Windows, and a backup of everything.
-- **Readings** - everything the program reads, where it comes from, and what to
+  The interface speaks English, Russian, Ukrainian, German, Spanish, French,
+  Italian, Portuguese (Brazil), Polish, Czech, Dutch, Turkish, Chinese
+  (Simplified), Japanese and Korean, and starts in the one Windows is set to.
+- **Sensors** - everything the program reads, where it comes from, and what to
   call it.
 - **About** - version, the log, and *Quit*.
 
@@ -165,9 +168,16 @@ pwsh tools/smoke.ps1 -Lang ru-RU
 for the markers a healthy start leaves behind. It also makes the settings
 window as small as it is allowed to be and measures every page: a paragraph
 given less than two hundred points has collapsed, and a word wider than the box
-it was drawn in has lost letters off both ends. Run it in both languages - a
-caption that fits its key in English can be half again as long in Russian, and
-the check only ever sees the language it was run in. `docs/manual-checks.md`
+it was drawn in has lost letters off both ends. Run it in more than one language
+(`-Lang de-DE`, `-Lang ja-JP`) - a caption that fits its key in English can be
+half again as long in German, and the check only ever sees the language it was
+run in.
+
+English and Russian are written by hand. The other languages are translated
+from the English by free models through NVIDIA NIM with
+`tools/translate_strings.py`, which sends only the strings a language is
+missing, refuses an answer that loses a placeholder or overruns a label, and
+with `--review` has a second model read every language. `docs/manual-checks.md`
 lists what has to be checked by hand on a real multi-monitor desk.
 
 ## Icons
