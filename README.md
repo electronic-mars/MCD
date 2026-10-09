@@ -138,7 +138,7 @@ The settings window has these pages:
   The interface speaks English, Russian, Ukrainian, German, Spanish, French,
   Italian, Portuguese (Brazil), Polish, Czech, Dutch, Turkish, Chinese
   (Simplified), Japanese and Korean, and starts in the one Windows is set to.
-  The installer speaks all of them but Chinese, which is on the list.
+  The installer speaks all of them.
 - **Sensors** - everything the program reads, where it comes from, and what to
   call it.
 - **About** - version, the log, and *Quit*.

@@ -69,6 +69,8 @@ Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"
 Name: "tr"; MessagesFile: "compiler:Languages\Turkish.isl"
 Name: "ja"; MessagesFile: "compiler:Languages\Japanese.isl"
 Name: "ko"; MessagesFile: "compiler:Languages\Korean.isl"
+; Not shipped with the compiler; the file is Inno Setup's own, kept beside this script.
+Name: "zh"; MessagesFile: "languages\ChineseSimplified.isl"
 
 [CustomMessages]
 en.Autostart=Start with Windows
@@ -99,6 +101,8 @@ ja.Autostart=Windowsとともに起動
 ja.KeepSettings=設定を保持する
 ko.Autostart=Windows 시작 시 실행
 ko.KeepSettings=내 설정 유지
+zh.Autostart=随 Windows 启动
+zh.KeepSettings=保留我的设置
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked

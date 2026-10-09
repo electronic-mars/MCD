@@ -25,6 +25,14 @@ sources are kept in `assets/icons-src/` and turned into path data by
 `tools/fetch_icons.py`, so a build needs no network and a change to the set is a
 diff rather than a mystery.
 
+## Inno Setup Chinese messages
+
+`build/languages/ChineseSimplified.isl` is the Simplified Chinese message file
+of [Inno Setup](https://jrsoftware.org/isinfo.php), kept unchanged from its
+repository (tag `is-6_7_1`, maintained there by Zhenghan Yang) because the
+compiler does not ship it. The installer is built with Inno Setup, whose own
+licence permits this use and redistribution of the language files.
+
 ## HyperHeadset
 
 How a HyperX Cloud Flight S dongle is asked for the headset's charge - the
