@@ -49,16 +49,56 @@ ArchitecturesInstallIn64BitMode=x64
 CloseApplications=no
 RestartApplications=no
 SetupMutex=MasterControlDockSetup
+ShowLanguageDialog=auto
 
+; Shown in the language of Windows when there is one of ours, and in a list to
+; pick from when there is not. The program itself starts in the language of
+; Windows as well.
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "ru"; MessagesFile: "compiler:Languages\Russian.isl"
+Name: "uk"; MessagesFile: "compiler:Languages\Ukrainian.isl"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"
+Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
+Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"
+Name: "pt"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
+Name: "pl"; MessagesFile: "compiler:Languages\Polish.isl"
+Name: "cs"; MessagesFile: "compiler:Languages\Czech.isl"
+Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"
+Name: "tr"; MessagesFile: "compiler:Languages\Turkish.isl"
+Name: "ja"; MessagesFile: "compiler:Languages\Japanese.isl"
+Name: "ko"; MessagesFile: "compiler:Languages\Korean.isl"
 
 [CustomMessages]
 en.Autostart=Start with Windows
-ru.Autostart=Запускать с Windows
 en.KeepSettings=Keep my settings
+ru.Autostart=Запускать при входе в Windows
 ru.KeepSettings=Сохранить мои настройки
+uk.Autostart=Запускати з Windows
+uk.KeepSettings=Зберегти мої налаштування
+de.Autostart=Mit Windows starten
+de.KeepSettings=Meine Einstellungen behalten
+es.Autostart=Iniciar con Windows
+es.KeepSettings=Conservar mi configuración
+fr.Autostart=Démarrer avec Windows
+fr.KeepSettings=Conserver mes paramètres
+it.Autostart=Avvia con Windows
+it.KeepSettings=Mantieni le mie impostazioni
+pt.Autostart=Iniciar com o Windows
+pt.KeepSettings=Manter minhas configurações
+pl.Autostart=Uruchamiaj z systemem Windows
+pl.KeepSettings=Zachowaj moje ustawienia
+cs.Autostart=Spustit s Windows
+cs.KeepSettings=Zachovat moje nastavení
+nl.Autostart=Starten met Windows
+nl.KeepSettings=Mijn instellingen behouden
+tr.Autostart=Windows ile başlat
+tr.KeepSettings=Ayarlarımı koru
+ja.Autostart=Windowsとともに起動
+ja.KeepSettings=設定を保持する
+ko.Autostart=Windows 시작 시 실행
+ko.KeepSettings=내 설정 유지
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
