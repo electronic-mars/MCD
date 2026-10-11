@@ -56,10 +56,19 @@ public static class DockGrid
     /// A cell that means "the far end of the bar": the widget has never been
     /// placed, and is to stand against the end rather than in the first gap.
     /// The ones that carry it end up side by side, in order, ending at the last
-    /// slot. A bar's first start is where this is used: a pinned folder at the
-    /// near end, the readings and the clock at the far one.
+    /// slot. A bar's first start is where this is used: the pinned programs,
+    /// the player, the readings and the clock, in the groups they were drawn in.
     /// </summary>
+    /// <remarks>
+    /// A cell below it asks for the same, with empty slots before the widget:
+    /// <c>FromEnd - 3</c> stands three slots clear of the one before. That is
+    /// how a bar that has never been arranged can still come out in groups,
+    /// whatever the length of the screen.
+    /// </remarks>
     public const int FromEnd = -2;
+
+    /// <summary>The far end, standing this many empty slots clear of the widget before.</summary>
+    public static int FromEndAfter(int gap) => FromEnd - gap;
 
     public static List<Placement> Settle(
         IReadOnlyList<(WidgetConfig Entry, int Span)> items, int capacity)
@@ -96,7 +105,7 @@ public static class DockGrid
 
         // Then each new one, in the order it was given, in the first gap that
         // holds it - or after the last widget when no gap does.
-        foreach ((WidgetConfig entry, int span) in items.Where(x => x.Entry.Cell < 0 && x.Entry.Cell != FromEnd))
+        foreach ((WidgetConfig entry, int span) in items.Where(x => x.Entry.Cell < 0 && x.Entry.Cell > FromEnd))
         {
             if (span <= 0)
             {
@@ -123,14 +132,17 @@ public static class DockGrid
 
         // Those that asked for the far end, together, ending at the last slot -
         // or as near to it as what is already down allows.
-        var atEnd = items.Where(x => x.Entry.Cell == FromEnd && x.Span > 0).ToList();
+        var atEnd = items.Where(x => x.Entry.Cell <= FromEnd && x.Span > 0).ToList();
 
         if (atEnd.Count > 0)
         {
-            int from = Math.Max(placed.Count == 0 ? 0 : placed.Max(p => p.End), capacity - atEnd.Sum(x => x.Span));
+            int from = Math.Max(
+                placed.Count == 0 ? 0 : placed.Max(p => p.End),
+                capacity - atEnd.Sum(x => x.Span + (FromEnd - x.Entry.Cell)));
 
             foreach ((WidgetConfig entry, int span) in atEnd)
             {
+                from += FromEnd - entry.Cell;
                 placed.Add(new Placement(entry.InstanceId, from, span));
                 from += span;
             }

@@ -274,36 +274,35 @@ public sealed record DockBands
 public static class DockContents
 {
     /// <summary>
-    /// The player, then a reading each for the processor, the memory, both
-    /// directions of the network and the graphics chip, a temperature, and the
-    /// two that are only about some machines. Every one is placed on the first
-    /// free slots, in this order.
+    /// The way the bar was drawn to be met: the folder, the calculator and
+    /// the notepad; the player; the processor, the graphics chip and the
+    /// memory; the sound, the microphone and the clock. Standing against the
+    /// far end in these groups, a few slots clear of each other.
     /// </summary>
-    /// <remarks>
-    /// The battery and the Wi-Fi are in the standard bar on every machine and
-    /// draw on none that they are not about: a desktop never shows a battery,
-    /// and a laptop on a cable shows no aerial until the cable comes out. That
-    /// is the point of putting them here rather than leaving them to be found -
-    /// the thing a laptop most wants on its bar should not have to be looked
-    /// for, and the same list has to be right on a tower as well.
-    /// </remarks>
     public static ImmutableArray<WidgetConfig> Default =>
     [
-        .. Documents(),
-        .. new[]
-        {
-            WidgetConfig.New("mcd.media"),
-            WidgetConfig.New("mcd.sound"),
-            Gauge("cpu"),
-            WidgetConfig.New("mcd.temp"),
-            Gauge("ram"),
-            Gauge("gpu"),
-            WidgetConfig.New("mcd.battery"),
-            WidgetConfig.New("mcd.wifi"),
-            WidgetConfig.New("mcd.clock"),
-            WidgetConfig.New("mcd.settings"),
-        }.Select(w => w with { Cell = DockGrid.FromEnd }),
+        .. Documents().Select(w => w with { Cell = DockGrid.FromEnd }),
+        Program("calc.exe", "Calculator"),
+        Program("notepad.exe", "Notepad"),
+        WidgetConfig.New("mcd.media") with { Cell = DockGrid.FromEndAfter(3) },
+        Gauge("cpu") with { Cell = DockGrid.FromEndAfter(4) },
+        Gauge("gpu") with { Cell = DockGrid.FromEnd },
+        Gauge("ram") with { Cell = DockGrid.FromEnd },
+        WidgetConfig.New("mcd.sound") with { Cell = DockGrid.FromEndAfter(4) },
+        WidgetConfig.New("mcd.mic") with { Cell = DockGrid.FromEnd },
+        WidgetConfig.New("mcd.clock") with { Cell = DockGrid.FromEnd },
     ];
+
+    /// <summary>
+    /// A pinned program. Without a name: the icon says it in the person's own
+    /// language (see the pinned icon), which this project has no strings for.
+    /// </summary>
+    private static WidgetConfig Program(string target, string icon) =>
+        WidgetConfig.New("mcd.icon") with
+        {
+            Cell = DockGrid.FromEnd,
+            Config = WidgetJson.Object(("target", target), ("icon", icon)),
+        };
 
     /// <summary>
     /// A pinned link to the Documents folder, on a machine that has one.

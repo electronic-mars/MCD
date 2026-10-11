@@ -37,11 +37,26 @@ public sealed class IconWidget : WidgetViewModel
             new LaunchItem
             {
                 Id = entry.InstanceId,
-                Name = WidgetOptions.Text(entry.Config, "name") ?? string.Empty,
+                Name = NameOf(entry),
                 Target = WidgetOptions.Text(entry.Config, "target") ?? string.Empty,
                 Icon = WidgetOptions.Text(entry.Config, "icon") ?? string.Empty,
             },
             context.Log);
+    }
+
+    /// <summary>
+    /// The name it was given, or - for one of the programs Windows brings, pinned
+    /// without a name as the first bar is - what that program is called in
+    /// the person's language.
+    /// </summary>
+    private static string NameOf(WidgetConfig entry)
+    {
+        if (WidgetOptions.Text(entry.Config, "name") is { Length: > 0 } named)
+        {
+            return named;
+        }
+
+        return StandardPrograms.All.FirstOrDefault(p => p.Is(entry))?.Name ?? string.Empty;
     }
 
     public override string TypeId => Type;

@@ -40,6 +40,37 @@ public sealed class DockGridTests
     }
 
     [Fact]
+    public void ACellBelowTheFarEndLeavesThatManySlotsClearBeforeTheWidget()
+    {
+        List<Placement> placed = DockGrid.Settle(
+            [
+                (Entry("a") with { Cell = DockGrid.FromEnd }, 2),
+                (Entry("b") with { Cell = DockGrid.FromEndAfter(3) }, 4),
+                (Entry("c") with { Cell = DockGrid.FromEnd }, 1),
+            ],
+            capacity: 20);
+
+        // Ten slots with the gap, ending at the last: 10..11, then 15..18 after a gap of 3, then 19.
+        placed.Select(p => (p.InstanceId, p.Cell)).OrderBy(t => t.Cell)
+            .ShouldBe([("a", 10), ("b", 15), ("c", 19)]);
+    }
+
+    [Fact]
+    public void TheFirstBarComesOutInItsGroupsAtTheFarEnd()
+    {
+        ImmutableArray<WidgetConfig> bar = DockContents.Default;
+
+        bar.Select(w => w.TypeId).Where(t => t != "mcd.icon").ShouldBe(
+            ["mcd.media", "mcd.gauge", "mcd.gauge", "mcd.gauge", "mcd.sound", "mcd.mic", "mcd.clock"]);
+
+        bar.Where(w => w.TypeId == "mcd.gauge")
+            .Select(w => w.Config!.Value.GetProperty("reading").GetString())
+            .ShouldBe(["cpu", "gpu", "ram"]);
+
+        bar.ShouldAllBe(w => w.Cell <= DockGrid.FromEnd);
+    }
+
+    [Fact]
     public void UnplacedWidgetsTakeTheFirstFreeSlots()
     {
         List<Placement> placed = DockGrid.Settle(
