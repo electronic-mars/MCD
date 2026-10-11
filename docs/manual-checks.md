@@ -88,7 +88,8 @@ The log is at `%LOCALAPPDATA%\MCD\logs\mcd.log`.
 | 33d | Add the Brightness widget, drag its slider, then scroll over it | Every screen follows, the laptop's panel included; the figure is the average |
 | 33e | Switch on "Each screen on its own" in the Brightness widget and open it | A slider per screen, numbered as in Windows' display settings; moving the top one moves them all |
 | 33f | Mute the sound with headphones as the default, then unplug them | The speakers the sound falls back to are already muted; unmuting there unmutes the headphones' endpoint too |
-| 33f2 | With the headphones gone and the speakers in use, unmute, then bring the headphones back | The headphones come back unmuted, and the sound stays on |
+| 33f2 | Mute on the speakers, switch to the headphones, unmute there, switch back to the speakers | The speakers are unmuted; switching never re-mutes. Also with the headphones gone and back |
+| 33f3 | On the Sound widget click the speaker, then click the figure | The speaker mutes or unmutes; the figure opens the volume slider |
 | 33g | The same with a headset's microphone, then unmute it | The laptop's own microphone is muted too, the Microphone widget shows red at once, and unmuting one unmutes both |
 
 ## Launcher

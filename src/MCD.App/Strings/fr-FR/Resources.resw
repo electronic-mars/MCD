@@ -711,7 +711,7 @@
     <value>Son</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Cliquez sur l'icône pour afficher un curseur de volume, faites défiler pour régler le volume, cliquez sur le nombre pour couper le son.</value>
+    <value>Cliquez sur l'icône pour couper le son, sur le nombre pour afficher un curseur de volume, et faites défiler pour régler le volume.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Afficher le niveau de volume</value>

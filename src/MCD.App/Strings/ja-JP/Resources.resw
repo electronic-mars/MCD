@@ -711,7 +711,7 @@
     <value>サウンド</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>アイコンをクリックして音量スライダーを表示し、スクロールで音量を変更、数字をクリックしてミュートします。</value>
+    <value>アイコンをクリックしてミュート、数字をクリックして音量スライダーを表示し、スクロールで音量を変更します。</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>音量レベルを表示</value>

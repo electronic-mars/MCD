@@ -339,8 +339,9 @@
         </widgets:HoverChip>
     </DataTemplate>
 
-    <!-- Sound: two buttons. The speaker opens a slider, and the wheel over
-         either turns the volume; the figure beside it silences the machine.
+    <!-- Sound: two buttons. The speaker silences the machine, or lets it
+         speak again; the figure beside it opens a slider, and the wheel over
+         either turns the volume.
          The speaker's padding is 2 and the margin round the pair 1, so at the
          largest size the speaker alone is exactly one slot. Each wears the
          faint resting plate a button chip wears elsewhere on the bar. -->
@@ -356,37 +357,9 @@
             <Button
                 Padding="2,2,1,2"
                 Background="{ThemeResource McdChipRest}"
-                Loaded="{x:Bind SpeakerLoaded}"
+                Command="{x:Bind ToggleMuteCommand}"
                 Style="{StaticResource BarButton}"
-                ToolTipService.ToolTip="{x:Bind Detail, Mode=OneWay}">
-                <Button.Flyout>
-                    <!-- Not held to the bar's own bounds: the bar is a strip a
-                         few tens of points thick, and a slider squeezed
-                         into it lay over the very widget it belongs to. -->
-                    <Flyout
-                        Closed="{x:Bind FlyoutClosed}"
-                        Opened="{x:Bind FlyoutOpened}"
-                        Placement="Bottom"
-                        ShouldConstrainToRootBounds="False">
-                        <StackPanel
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal"
-                            Spacing="12">
-                            <Slider
-                                Width="180"
-                                VerticalAlignment="Center"
-                                Maximum="100"
-                                Minimum="0"
-                                StepFrequency="1"
-                                Value="{x:Bind Volume, Mode=TwoWay}" />
-                            <TextBlock
-                                Width="44"
-                                VerticalAlignment="Center"
-                                HorizontalTextAlignment="Right"
-                                Text="{x:Bind VolumeText, Mode=OneWay}" />
-                        </StackPanel>
-                    </Flyout>
-                </Button.Flyout>
+                ToolTipService.ToolTip="{x:Bind MuteTip, Mode=OneWay}">
                 <Viewbox
                     Width="{x:Bind IconSize, Mode=OneWay}"
                     Height="{x:Bind IconSize, Mode=OneWay}"
@@ -419,10 +392,38 @@
             <Button
                 Padding="2,2"
                 Background="{ThemeResource McdChipRest}"
-                Command="{x:Bind ToggleMuteCommand}"
+                Loaded="{x:Bind SliderLoaded}"
                 Style="{StaticResource BarButton}"
-                ToolTipService.ToolTip="{x:Bind MuteTip, Mode=OneWay}"
+                ToolTipService.ToolTip="{x:Bind Detail, Mode=OneWay}"
                 Visibility="{x:Bind LevelVisible, Mode=OneWay}">
+                <Button.Flyout>
+                    <!-- Not held to the bar's own bounds: the bar is a strip a
+                         few tens of points thick, and a slider squeezed
+                         into it lay over the very widget it belongs to. -->
+                    <Flyout
+                        Closed="{x:Bind FlyoutClosed}"
+                        Opened="{x:Bind FlyoutOpened}"
+                        Placement="Bottom"
+                        ShouldConstrainToRootBounds="False">
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="12">
+                            <Slider
+                                Width="180"
+                                VerticalAlignment="Center"
+                                Maximum="100"
+                                Minimum="0"
+                                StepFrequency="1"
+                                Value="{x:Bind Volume, Mode=TwoWay}" />
+                            <TextBlock
+                                Width="44"
+                                VerticalAlignment="Center"
+                                HorizontalTextAlignment="Right"
+                                Text="{x:Bind VolumeText, Mode=OneWay}" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
                 <Grid>
                     <TextBlock
                         MinWidth="{x:Bind FigureWidth, Mode=OneWay}"

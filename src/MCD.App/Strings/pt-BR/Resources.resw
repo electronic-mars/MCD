@@ -711,7 +711,7 @@
     <value>Som</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Clique no ícone para abrir o controle de volume, role para ajustar o volume, clique no número para ativar o mudo.</value>
+    <value>Clique no ícone para ativar o mudo, no número para abrir o controle de volume e role para ajustar o volume.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Mostrar nível de volume</value>

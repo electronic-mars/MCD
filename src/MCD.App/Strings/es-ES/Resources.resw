@@ -711,7 +711,7 @@
     <value>Sonido</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Haz clic en el icono para ver un control deslizante de volumen, desplázate para cambiar el volumen y haz clic en el número para silenciar.</value>
+    <value>Haz clic en el icono para silenciar, en el número para ver un control deslizante de volumen, y desplázate para cambiar el volumen.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Mostrar nivel de volumen</value>

@@ -711,7 +711,7 @@
     <value>Lautstärke</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Klicken Sie auf das Symbol für einen Lautstärkeregler, scrollen Sie zum Ändern der Lautstärke, klicken Sie auf die Zahl zum Stummschalten.</value>
+    <value>Klicken Sie auf das Symbol zum Stummschalten, auf die Zahl für einen Lautstärkeregler, und scrollen Sie zum Ändern der Lautstärke.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Lautstärke anzeigen</value>

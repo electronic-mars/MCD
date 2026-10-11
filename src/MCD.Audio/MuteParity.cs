@@ -119,7 +119,7 @@ internal static unsafe class MuteParity
     {
         if (com is not null && Marshal.IsComObject(com))
         {
-            Marshal.FinalReleaseComObject(com);
+            Marshal.ReleaseComObject(com);
         }
     }
 }

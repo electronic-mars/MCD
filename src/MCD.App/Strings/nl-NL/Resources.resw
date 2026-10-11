@@ -711,7 +711,7 @@
     <value>Geluid</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Klik op het pictogram voor een volumeschuifregelaar, scroll om het volume te wijzigen, klik op het getal om te dempen.</value>
+    <value>Klik op het pictogram om te dempen, klik op het getal voor een volumeschuifregelaar en scroll om het volume te wijzigen.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Volumeniveau weergeven</value>

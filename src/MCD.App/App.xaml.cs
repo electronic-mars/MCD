@@ -889,6 +889,21 @@ public partial class App : Application
                 });
 
                 Later(7000, () => Count("back"));
+
+                // The default device changing hands, as when the headphones go:
+                // the listener must have followed it, so that a switch thrown
+                // afterwards is still heard and copied.
+                Later(8000, Mcd.Audio.AudioWatch.Refollow);
+
+                Later(9500, () => Mcd.Audio.SystemVolume.Mute(!was));
+
+                Later(11500, () =>
+                {
+                    Count(was ? "unmuted after a change" : "muted after a change");
+                    Mcd.Audio.SystemVolume.Mute(was);
+                });
+
+                Later(13500, () => Count("back after a change"));
             }
 
             // Every screen a little dimmer for ten seconds, and back: what
@@ -925,22 +940,28 @@ public partial class App : Application
                 });
             }
 
-            // The brightness flyout, opened as a press opens it and left open
-            // to be photographed.
-            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "brightnessflyout")
+            // The brightness or the sound flyout, opened as a press opens it
+            // and left open to be photographed.
+            string? flyout = Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP");
+
+            if (flyout is "brightnessflyout" or "soundflyout")
             {
+                string kind = flyout == "soundflyout"
+                    ? Mcd.App.Widgets.SoundWidget.Type
+                    : Mcd.App.Widgets.BrightnessWidget.Type;
+
                 Later(1000, () => Mcd.Interop.Display.Brightness.Snapshot());
 
                 foreach (int after in new[] { 3000, 5000 })
                 {
                     Later(after, () => log.LogInformation(
-                        "selftest.flyout opened={Count}", _docks?.OpenFlyouts(Mcd.App.Widgets.BrightnessWidget.Type)));
+                        "selftest.flyout opened={Count}", _docks?.OpenFlyouts(kind)));
                 }
 
                 foreach (int after in new[] { 5500, 6500, 9000 })
                 {
                     Later(after, () => log.LogInformation(
-                        "selftest.flyout open={Count}", _docks?.FlyoutsOpen(Mcd.App.Widgets.BrightnessWidget.Type)));
+                        "selftest.flyout open={Count}", _docks?.FlyoutsOpen(kind)));
                 }
             }
 

@@ -711,7 +711,7 @@
     <value>Dźwięk</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Kliknij ikonę, aby wyświetlić suwak głośności, przewiń, aby zmienić głośność, kliknij liczbę, aby wyciszyć.</value>
+    <value>Kliknij ikonę, aby wyciszyć, kliknij liczbę, aby wyświetlić suwak głośności, przewiń, aby zmienić głośność.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Pokaż poziom głośności</value>

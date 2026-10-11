@@ -125,6 +125,12 @@ public static unsafe class SystemVolume
         // Every interface is let go the moment it has been used. Left to the
         // finalizer they hold registry keys of the endpoint's property store
         // open until the next collection: about three handles a second.
+        //
+        // One release for each time it was taken, never a final one: Windows
+        // hands the same object to everybody who asks, so the wrapper is
+        // shared, and a final release here cut it off under AudioWatch, which
+        // kept its enumerator and its listeners in it - the first change of
+        // device found it dead and the mute switch went deaf.
         object? enumerator = null;
         object? device = null;
         object? activated = null;
@@ -155,7 +161,7 @@ public static unsafe class SystemVolume
             {
                 if (com is not null && System.Runtime.InteropServices.Marshal.IsComObject(com))
                 {
-                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(com);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(com);
                 }
             }
         }

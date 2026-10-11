@@ -711,7 +711,7 @@
     <value>Zvuk</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Kliknutím na ikonu zobrazíte jezdec hlasitosti, kolečkem změníte hlasitost, kliknutím na číslo zvuk ztlumíte.</value>
+    <value>Kliknutím na ikonu zvuk ztlumíte, kliknutím na číslo zobrazíte jezdec hlasitosti, kolečkem změníte hlasitost.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Zobrazit úroveň hlasitosti</value>

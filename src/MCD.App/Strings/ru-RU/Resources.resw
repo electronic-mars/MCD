@@ -711,7 +711,7 @@
     <value>Звук</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Щелчок по значку открывает регулятор громкости, колесо мыши меняет громкость, щелчок по цифрам выключает звук.</value>
+    <value>Щелчок по значку выключает звук, щелчок по цифрам открывает регулятор громкости, колесо мыши меняет громкость.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Показывать громкость</value>

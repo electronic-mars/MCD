@@ -76,11 +76,11 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     [ObservableProperty]
     public partial double FontSize { get; set; } = 12;
 
-    /// <summary>The speaker's hover: how loud, and what it opens.</summary>
+    /// <summary>The figure's hover: how loud, and what it opens.</summary>
     [ObservableProperty]
     public partial string Detail { get; set; } = string.Empty;
 
-    /// <summary>The figure's hover: that a press silences, or lets it speak.</summary>
+    /// <summary>The speaker's hover: that a press silences, or lets it speak.</summary>
     [ObservableProperty]
     public partial string MuteTip { get; set; } = string.Empty;
 
@@ -125,7 +125,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     /// let out of the bar's bounds - is replaced by the side facing the
     /// screen.
     /// </summary>
-    public void SpeakerLoaded(object sender, RoutedEventArgs e)
+    public void SliderLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Microsoft.UI.Xaml.Controls.Button { Flyout: { } flyout } button)
         {
@@ -276,7 +276,7 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
     }
 
     /// <summary>
-    /// A press on the figure silences the machine, or lets it speak again.
+    /// A press on the speaker silences the machine, or lets it speak again.
     /// </summary>
     /// <remarks>
     /// Read back rather than assumed: something else may have changed it

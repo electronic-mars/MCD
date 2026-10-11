@@ -711,7 +711,7 @@
     <value>声音</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>单击图标打开音量滑块，滚动调节音量，单击数字可静音。</value>
+    <value>单击图标可静音，单击数字打开音量滑块，滚动调节音量。</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>显示音量级别</value>

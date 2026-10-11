@@ -711,7 +711,7 @@
     <value>Sound</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Click the icon for a volume slider, scroll to change volume, click the number to mute.</value>
+    <value>Click the icon to mute, click the number for a volume slider, scroll to change volume.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Show volume level</value>

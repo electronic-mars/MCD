@@ -711,7 +711,7 @@
     <value>Ses</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Ses düzeyi kaydırıcısı için simgeye tıklayın, sesi değiştirmek için tekerleği kaydırın, sessize almak için sayıya tıklayın.</value>
+    <value>Sessize almak için simgeye, ses düzeyi kaydırıcısı için sayıya tıklayın, sesi değiştirmek için tekerleği kaydırın.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Ses düzeyini göster</value>

@@ -711,7 +711,7 @@
     <value>Audio</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>Fai clic sull'icona per il cursore del volume, scorri per cambiare il volume, fai clic sul numero per disattivare l'audio.</value>
+    <value>Fai clic sull'icona per disattivare l'audio, sul numero per il cursore del volume, e scorri per cambiare il volume.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>Mostra livello volume</value>

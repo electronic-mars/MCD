@@ -711,7 +711,7 @@
     <value>소리</value>
   </data>
   <data name="WidgetSoundDescription" xml:space="preserve">
-    <value>아이콘을 클릭하면 볼륨 슬라이더가 나타나고, 스크롤하여 볼륨을 조절하며, 숫자를 클릭하면 음소거됩니다.</value>
+    <value>아이콘을 클릭하면 음소거되고, 숫자를 클릭하면 볼륨 슬라이더가 나타나며, 스크롤하여 볼륨을 조절합니다.</value>
   </data>
   <data name="SoundLevelLabel" xml:space="preserve">
     <value>볼륨 수준 표시</value>

@@ -109,7 +109,8 @@ public static unsafe class AudioWatch
                 // The device is already gone; so is its list of listeners.
             }
 
-            Marshal.FinalReleaseComObject(before);
+            // Not a final release: the wrapper is shared (see SystemVolume.With).
+            Marshal.ReleaseComObject(before);
         }
 
         object? device = null;
@@ -144,7 +145,7 @@ public static unsafe class AudioWatch
         {
             if (device is not null)
             {
-                Marshal.FinalReleaseComObject(device);
+                Marshal.ReleaseComObject(device);
             }
         }
     }
@@ -207,8 +208,8 @@ public static unsafe class AudioWatch
     public static (int Total, int Silent) Census(bool microphone) =>
         MuteParity.Count(microphone ? EDataFlow.eCapture : EDataFlow.eRender);
 
-    /// <summary>A device came, went or became the default: listen to whatever is default now.</summary>
-    private static void Refollow() => Task.Run(() =>
+    /// <summary>A device came, went or became the default: listen to whatever is default now. Public for the self-test.</summary>
+    public static void Refollow() => Task.Run(() =>
     {
         lock (Gate)
         {
