@@ -29,9 +29,9 @@ namespace Mcd.Audio;
 /// sound to speakers that were never muted, at the volume they were last left
 /// at, and a muted headset that drops off must not leave the laptop's own
 /// microphone open on a call. So when the device in use is switched off or on,
-/// every other plugged-in device of its kind follows. Only a change is
-/// copied, never a state: a device somebody has set apart is left alone until
-/// the switch is next thrown.
+/// every other plugged-in device of its kind follows, and one that was not
+/// plugged in at the time is brought into line when it comes back (see
+/// <see cref="MuteMemory"/>).
 /// </para>
 /// </remarks>
 public static unsafe class AudioWatch
@@ -49,9 +49,8 @@ public static unsafe class AudioWatch
     /// <summary>One at a time: two copies at once would undo each other.</summary>
     private static readonly Lock MatchGate = new();
 
-    private static readonly Lock StateGate = new();
-    private static bool? _speakerMuted;
-    private static bool? _microphoneMuted;
+    private static readonly MuteMemory Speakers = new();
+    private static readonly MuteMemory Microphones = new();
 
     private static readonly Lock Gate = new();
     private static readonly DeviceEar Devices = new();
@@ -130,7 +129,7 @@ public static unsafe class AudioWatch
             // change with. Moving to a device is not switching it.
             BOOL muted;
             volume.GetMute(&muted);
-            Remember(flow == EDataFlow.eCapture, (bool)muted);
+            Memory(flow == EDataFlow.eCapture).Followed((bool)muted);
 
             return volume;
         }
@@ -138,7 +137,7 @@ public static unsafe class AudioWatch
         {
             // No device of that kind just now; one being plugged in is
             // announced, and is listened to then.
-            Remember(flow == EDataFlow.eCapture, null);
+            Memory(flow == EDataFlow.eCapture).Followed(null);
             return null;
         }
         finally
@@ -150,40 +149,7 @@ public static unsafe class AudioWatch
         }
     }
 
-    private static void Remember(bool microphone, bool? muted)
-    {
-        lock (StateGate)
-        {
-            if (microphone)
-            {
-                _microphoneMuted = muted;
-            }
-            else
-            {
-                _speakerMuted = muted;
-            }
-        }
-    }
-
-    /// <summary>Records the state the device in use has just been put in; true when that is a change.</summary>
-    private static bool Moved(bool microphone, bool muted)
-    {
-        lock (StateGate)
-        {
-            bool? was = microphone ? _microphoneMuted : _speakerMuted;
-
-            if (microphone)
-            {
-                _microphoneMuted = muted;
-            }
-            else
-            {
-                _speakerMuted = muted;
-            }
-
-            return was is { } before && before != muted;
-        }
-    }
+    private static MuteMemory Memory(bool microphone) => microphone ? Microphones : Speakers;
 
     private static void Tell()
     {
@@ -202,25 +168,27 @@ public static unsafe class AudioWatch
     });
 
     /// <summary>
-    /// A device came, went or became the default while the one in use is
-    /// muted: the newcomer, or the one the sound falls back to, is muted too.
+    /// A device came, went or became the default: every plugged-in device is
+    /// brought to the state the machine was last switched to.
     /// </summary>
     /// <remarks>
-    /// Only the muted state, and only here: a state copied at every
-    /// notification would undo a device somebody had deliberately set apart.
+    /// Not to the state of the device now in use, which may be one that was
+    /// unplugged when the switch was last thrown and has been waiting, stale,
+    /// ever since. Read inside the lock, so that a switch thrown while this
+    /// waited for its turn is not undone by the answer it fetched before.
     /// </remarks>
     private static void Arrive() => Task.Run(() =>
     {
         lock (MatchGate)
         {
-            if (SystemVolume.Muted() is true)
+            if (Speakers.Wanted is { } speakers)
             {
-                Copy(microphone: false, muted: true);
+                Copy(microphone: false, muted: speakers);
             }
 
-            if (Microphone.Muted() is true)
+            if (Microphones.Wanted is { } microphones)
             {
-                Copy(microphone: true, muted: true);
+                Copy(microphone: true, muted: microphones);
             }
         }
     });
@@ -264,7 +232,7 @@ public static unsafe class AudioWatch
 
             Tell();
 
-            if (Moved(microphone, muted))
+            if (Memory(microphone).Thrown(muted))
             {
                 Mirror(microphone, muted);
             }

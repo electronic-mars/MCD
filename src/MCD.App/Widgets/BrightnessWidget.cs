@@ -44,8 +44,8 @@ public sealed partial class ScreenLevel(string gdi, string label, Action<ScreenL
 /// </summary>
 /// <remarks>
 /// <para>
-/// The sound widget's twin: the icon opens a slider, and the wheel over the
-/// widget turns it. One slider moves every screen to the same level, as the
+/// The sound widget's twin, without the figure: the icon alone opens a slider
+/// - the figure is beside the slider - and the wheel over it turns it. One slider moves every screen to the same level, as the
 /// volume slider moves every sound at once; screens differ in what they can
 /// do, so an option puts a slider for each screen under it.
 /// </para>
@@ -88,13 +88,6 @@ public sealed partial class BrightnessWidget(WidgetContext context, WidgetConfig
     public partial double Stroke { get; set; } = 1.5;
 
     [ObservableProperty]
-    public partial double FontSize { get; set; } = 12;
-
-    /// <summary>The box the figure is drawn in, wide enough for "100 %".</summary>
-    [ObservableProperty]
-    public partial double FigureWidth { get; set; }
-
-    [ObservableProperty]
     public partial string Detail { get; set; } = string.Empty;
 
     /// <summary>What the master slider is called when each screen has its own beneath it.</summary>
@@ -108,7 +101,6 @@ public sealed partial class BrightnessWidget(WidgetContext context, WidgetConfig
 
     private bool _reading;
     private bool _sliding;
-    private double? _figure;
 
     /// <summary>Each screen's own slider, as the widget is set.</summary>
     private bool Separate => WidgetOptions.Number(Options, "each") is 1;
@@ -182,11 +174,7 @@ public sealed partial class BrightnessWidget(WidgetContext context, WidgetConfig
         }
     }
 
-    public override void Attach()
-    {
-        _figure = null;
-        Tick(SensorSnapshot.Empty);
-    }
+    public override void Attach() => Tick(SensorSnapshot.Empty);
 
     public override void Tick(SensorSnapshot snapshot)
     {
@@ -202,8 +190,6 @@ public sealed partial class BrightnessWidget(WidgetContext context, WidgetConfig
 
         IconSize = ReadingIcon;
         Stroke = 36 / Math.Max(1, IconSize);
-        FontSize = ReadingFont;
-        FigureWidth = _figure ??= Metric.Wide("100 %", FontSize);
         EachVisible = Separate && screens.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
 
         int average = (int)Math.Round(screens.Average(s => s.Percent));
@@ -262,17 +248,12 @@ public sealed partial class BrightnessWidget(WidgetContext context, WidgetConfig
         }
     }
 
-    /// <summary>Sized for "100 %" whether it says that or not, as the sound widget is.</summary>
-    public override double Length()
-    {
-        _figure ??= Metric.Wide("100 %", ReadingFont);
-
-        // Margin 1 either side, the button's padding 2 either side, and four
-        // between the icon and the figure.
-        return Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical
-            ? 30
-            : 2 + 4 + ReadingIcon + 4 + _figure.Value;
-    }
+    /// <summary>
+    /// The icon alone, in the slot the sound widget's speaker takes: margin 1
+    /// either side and the button's padding of 2 and 1.
+    /// </summary>
+    public override double Length() =>
+        Orientation == Microsoft.UI.Xaml.Controls.Orientation.Vertical ? 30 : 2 + ReadingIcon + 3;
 
     public override FrameworkElement CreateEditor(Action<JsonElement?> changed) =>
         Mcd.App.Settings.Braun.Field(

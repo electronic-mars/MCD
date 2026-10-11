@@ -447,9 +447,10 @@
         </StackPanel>
     </DataTemplate>
 
-    <!-- Brightness: one button. The flyout holds a slider that moves every
-         screen to the same level and, when the widget is set to, one under it
-         for each screen. The wheel over the button turns them all. -->
+    <!-- Brightness: the icon alone, as small as the speaker on the sound
+         widget. The flyout holds a slider that moves every screen to the same
+         level, with its figure beside it, and, when the widget is set to, one
+         under it for each screen. The wheel over the icon turns them all. -->
     <DataTemplate x:Key="mcd.brightness" x:DataType="widgets:BrightnessWidget">
         <StackPanel
             Margin="1,0"
@@ -459,7 +460,7 @@
             PointerWheelChanged="{x:Bind OnWheel}"
             Visibility="{x:Bind Shown, Mode=OneWay}">
             <Button
-                Padding="2,2"
+                Padding="2,2,1,2"
                 Background="{ThemeResource McdChipRest}"
                 Loaded="{x:Bind SunLoaded}"
                 Style="{StaticResource BarButton}"
@@ -526,33 +527,20 @@
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
-                <StackPanel
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Spacing="4">
-                    <Viewbox
-                        Width="{x:Bind IconSize, Mode=OneWay}"
-                        Height="{x:Bind IconSize, Mode=OneWay}"
-                        VerticalAlignment="Center">
-                        <Canvas Width="24" Height="24">
-                            <Path
-                                Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
-                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
-                                StrokeEndLineCap="Round"
-                                StrokeLineJoin="Round"
-                                StrokeStartLineCap="Round"
-                                StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
-                        </Canvas>
-                    </Viewbox>
-                    <TextBlock
-                        MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
-                        MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
-                        VerticalAlignment="Center"
-                        HorizontalTextAlignment="Right"
-                        FontSize="{x:Bind FontSize, Mode=OneWay}"
-                        Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                        Text="{x:Bind LevelText, Mode=OneWay}" />
-                </StackPanel>
+                <Viewbox
+                    Width="{x:Bind IconSize, Mode=OneWay}"
+                    Height="{x:Bind IconSize, Mode=OneWay}"
+                    VerticalAlignment="Center">
+                    <Canvas Width="24" Height="24">
+                        <Path
+                            Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round"
+                            StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                    </Canvas>
+                </Viewbox>
             </Button>
         </StackPanel>
     </DataTemplate>

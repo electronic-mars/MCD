@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\src\MCD.Core\MCD.Core.csproj" />
     <ProjectReference Include="..\..\src\MCD.Sensors\MCD.Sensors.csproj" />
     <ProjectReference Include="..\..\src\MCD.Interop\MCD.Interop.csproj" />
+    <ProjectReference Include="..\..\src\MCD.Audio\MCD.Audio.csproj" />
   </ItemGroup>
 
   <ItemGroup>
