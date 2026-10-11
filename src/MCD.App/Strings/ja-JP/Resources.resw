@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>バージョン、更新、およびアプリのメンテナンス。</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>明るさ</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>アイコンをクリックすると明るさのスライダーが開き、スクロールするとすべての画面の明るさを一度に変更します。</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>明るさ: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>スライダーを表示するにはクリック ・ スクロールで明るさを変更</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>すべての画面</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>各画面を個別に</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>メインのスライダーの下に、各画面用のスライダーを追加します。</value>
+  </data>
 </root>

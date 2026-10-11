@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>版本、更新和应用维护。</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>亮度</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>点击图标以显示亮度滑块，滚动以同时更改所有屏幕的亮度。</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>亮度: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>点击以显示滑块 · 滚动以更改亮度</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>所有屏幕</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>每个屏幕单独设置</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>为每个屏幕添加一个滑块，位于主滑块下方。</value>
+  </data>
 </root>

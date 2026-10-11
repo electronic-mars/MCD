@@ -1,6 +1,8 @@
 // The device sound is coming out of, and its volume.
 IMMDeviceEnumerator
 MMDeviceEnumerator
+IMMDeviceCollection
+DEVICE_STATE
 IAudioEndpointVolume
 EDataFlow
 ERole

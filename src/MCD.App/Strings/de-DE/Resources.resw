@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Version, Updates und App-Wartung.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Helligkeit</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Ein Klick auf das Symbol öffnet den Helligkeitsregler, Scrollen ändert die Helligkeit aller Bildschirme gleichzeitig.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Helligkeit: {0} %</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Klicken für den Regler · Scrollen zum Ändern der Helligkeit</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Alle Bildschirme</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Jeder Bildschirm einzeln</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Fügt unter dem Hauptregler einen Regler für jeden Bildschirm hinzu.</value>
+  </data>
 </root>

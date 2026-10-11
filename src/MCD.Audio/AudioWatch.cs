@@ -29,6 +29,14 @@ public static unsafe class AudioWatch
     /// <summary>Raised on a thread of Windows' own: something about the sound or the microphone changed.</summary>
     public static event Action? Changed;
 
+    /// <summary>
+    /// Raised on a thread of its own: this many devices were silenced to match
+    /// the one in use. True for the microphones, false for the speakers.
+    /// </summary>
+    public static event Action<bool, int>? Matched;
+
+    private static readonly Lock MatchGate = new();
+
     private static readonly Lock Gate = new();
     private static readonly Listener Ear = new();
     private static IMMDeviceEnumerator? _enumerator;
@@ -60,6 +68,8 @@ public static unsafe class AudioWatch
 
             Follow();
         }
+
+        Match();
     });
 
     /// <summary>Listens to the default devices as they are now, letting go of the ones before.</summary>
@@ -120,6 +130,54 @@ public static unsafe class AudioWatch
         SystemVolume.Forget();
         Microphone.Forget();
         Changed?.Invoke();
+        Match();
+    }
+
+    /// <summary>
+    /// One silence for the whole machine, in one direction: when the device in
+    /// use is silenced, so is every other that is plugged in.
+    /// </summary>
+    /// <remarks>
+    /// Headphones are muted, then they drop off, and the switcher moves the
+    /// sound to the speakers - which were never muted, at the volume the
+    /// room was last set to. The microphone is the same and worse: a muted
+    /// headset goes, the laptop's own microphone becomes the default, and
+    /// somebody on a call believes they are not heard. Silence spreads and
+    /// speech does not: unmuting lets the one in use speak and leaves the
+    /// rest as they are, so the one that comes next starts quiet.
+    /// Done whenever anything changes, which also catches a device plugged
+    /// in while the silence is on.
+    /// </remarks>
+    private static void Match() => Task.Run(() =>
+    {
+        lock (MatchGate)
+        {
+            Spread(SystemVolume.Muted(), EDataFlow.eRender, microphone: false);
+            Spread(Microphone.Muted(), EDataFlow.eCapture, microphone: true);
+        }
+    });
+
+    /// <summary>How many devices of that kind are plugged in, and how many are silent. For the self-test.</summary>
+    public static (int Total, int Silent) Census(bool microphone) =>
+        MuteParity.Count(microphone ? EDataFlow.eCapture : EDataFlow.eRender);
+
+    /// <summary>Lets every device of that kind speak. For the self-test, which puts back what it found.</summary>
+    public static void Unsilence(bool microphone) =>
+        MuteParity.Unsilence(microphone ? EDataFlow.eCapture : EDataFlow.eRender);
+
+    private static void Spread(bool? inUse, EDataFlow flow, bool microphone)
+    {
+        if (inUse is not true)
+        {
+            return;
+        }
+
+        int silenced = MuteParity.Silence(flow);
+
+        if (silenced > 0)
+        {
+            Matched?.Invoke(microphone, silenced);
+        }
     }
 
     /// <summary>A device came, went or became the default: listen to whatever is default now.</summary>

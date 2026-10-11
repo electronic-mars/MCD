@@ -85,6 +85,10 @@ The log is at `%LOCALAPPDATA%\MCD\logs\mcd.log`.
 | 33a | Watch the strip under "The bar" while a widget is added or moved | It shows the change at once, with live figures, at the dock's real thickness |
 | 33b | Remove a widget, then press Undo | It comes back at the same position in the run |
 | 33c | Change a dock, switch to another screen in the picker, then press Undo | The picker returns to the screen that was changed |
+| 33d | Add the Brightness widget, drag its slider, then scroll over it | Every screen follows, the laptop's panel included; the figure is the average |
+| 33e | Switch on "Each screen on its own" in the Brightness widget and open it | A slider per screen, numbered as in Windows' display settings; moving the top one moves them all |
+| 33f | Mute the sound with headphones as the default, then unplug them | The speakers the sound falls back to are already muted; unmuting afterwards unmutes only the one in use |
+| 33g | The same with a headset's microphone | The laptop's own microphone is muted too, and the Microphone widget shows red at once |
 
 ## Launcher
 

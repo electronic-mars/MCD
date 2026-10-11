@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Wersja, aktualizacje i konserwacja aplikacji.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Jasność</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Kliknij ikonę, aby wyświetlić suwak jasności; przewiń, aby zmienić jasność wszystkich ekranów jednocześnie.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Jasność: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Kliknij, aby wyświetlić suwak · Przewiń, aby zmienić jasność</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Wszystkie ekrany</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Osobno dla ekranów</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Dodaje suwak dla każdego ekranu pod suwakiem głównym.</value>
+  </data>
 </root>

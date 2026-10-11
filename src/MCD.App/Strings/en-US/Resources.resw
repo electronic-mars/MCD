@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Version, updates and app maintenance.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Brightness</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Click the icon for a brightness slider, scroll to change every screen at once.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Brightness: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Click for the slider · Scroll to change brightness</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>All screens</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Each screen on its own</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Adds a slider for every screen under the main one.</value>
+  </data>
 </root>

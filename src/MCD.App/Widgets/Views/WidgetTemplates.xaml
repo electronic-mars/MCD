@@ -447,6 +447,116 @@
         </StackPanel>
     </DataTemplate>
 
+    <!-- Brightness: one button. The flyout holds a slider that moves every
+         screen to the same level and, when the widget is set to, one under it
+         for each screen. The wheel over the button turns them all. -->
+    <DataTemplate x:Key="mcd.brightness" x:DataType="widgets:BrightnessWidget">
+        <StackPanel
+            Margin="1,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            PointerWheelChanged="{x:Bind OnWheel}"
+            Visibility="{x:Bind Shown, Mode=OneWay}">
+            <Button
+                Padding="2,2"
+                Background="{ThemeResource McdChipRest}"
+                Loaded="{x:Bind SunLoaded}"
+                Style="{StaticResource BarButton}"
+                ToolTipService.ToolTip="{x:Bind Detail, Mode=OneWay}">
+                <Button.Flyout>
+                    <Flyout
+                        Closed="{x:Bind FlyoutClosed}"
+                        Opened="{x:Bind FlyoutOpened}"
+                        Placement="Bottom"
+                        ShouldConstrainToRootBounds="False">
+                        <StackPanel Spacing="8">
+                            <StackPanel
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="12">
+                                <TextBlock
+                                    Width="104"
+                                    VerticalAlignment="Center"
+                                    Text="{x:Bind AllLabel}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Visibility="{x:Bind EachVisible, Mode=OneWay}" />
+                                <Slider
+                                    Width="180"
+                                    VerticalAlignment="Center"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    StepFrequency="1"
+                                    Value="{x:Bind Level, Mode=TwoWay}" />
+                                <TextBlock
+                                    Width="44"
+                                    VerticalAlignment="Center"
+                                    HorizontalTextAlignment="Right"
+                                    Text="{x:Bind LevelText, Mode=OneWay}" />
+                            </StackPanel>
+                            <ItemsControl ItemsSource="{x:Bind Each}" Visibility="{x:Bind EachVisible, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="widgets:ScreenLevel">
+                                        <StackPanel
+                                            Margin="0,4,0,0"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Spacing="12">
+                                            <TextBlock
+                                                Width="104"
+                                                VerticalAlignment="Center"
+                                                Text="{x:Bind Label}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <Slider
+                                                Width="180"
+                                                VerticalAlignment="Center"
+                                                Maximum="100"
+                                                Minimum="0"
+                                                StepFrequency="1"
+                                                Value="{x:Bind Value, Mode=TwoWay}" />
+                                            <TextBlock
+                                                Width="44"
+                                                VerticalAlignment="Center"
+                                                HorizontalTextAlignment="Right"
+                                                Text="{x:Bind Text, Mode=OneWay}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="4">
+                    <Viewbox
+                        Width="{x:Bind IconSize, Mode=OneWay}"
+                        Height="{x:Bind IconSize, Mode=OneWay}"
+                        VerticalAlignment="Center">
+                        <Canvas Width="24" Height="24">
+                            <Path
+                                Data="{x:Bind Icon, Mode=OneWay, Converter={StaticResource Icon}}"
+                                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
+                                StrokeStartLineCap="Round"
+                                StrokeThickness="{x:Bind Stroke, Mode=OneWay}" />
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock
+                        MinWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                        MaxWidth="{x:Bind FigureWidth, Mode=OneWay}"
+                        VerticalAlignment="Center"
+                        HorizontalTextAlignment="Right"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                        Text="{x:Bind LevelText, Mode=OneWay}" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </DataTemplate>
+
     <!-- The microphone and the cup: one drawing, one press. Red is a second
          drawing laid over the first, so it follows the bar's theme. Written
          once; the microphone's key is the same template (see the dictionary's

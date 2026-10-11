@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Versione, aggiornamenti e manutenzione dell'app.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Luminosità</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Fai clic sull'icona per un cursore di luminosità, scorri per modificare tutti gli schermi contemporaneamente.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Luminosità: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Fai clic per il cursore · Scorri per modificare la luminosità</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Tutti gli schermi</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Ogni schermo separatamente</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Aggiunge un cursore per ogni schermo sotto quello principale.</value>
+  </data>
 </root>

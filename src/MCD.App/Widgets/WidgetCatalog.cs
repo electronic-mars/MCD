@@ -109,6 +109,13 @@ public static class WidgetCatalog
             (context, entry) => new SoundWidget(context, entry)),
 
         new(
+            BrightnessWidget.Type,
+            Loc.Tr("WidgetBrightnessName", "Brightness"),
+            Loc.Tr("WidgetBrightnessDescription", "Click the icon for a brightness slider, scroll to change every screen at once."),
+            "Sun03",
+            (context, entry) => new BrightnessWidget(context, entry)),
+
+        new(
             MicWidget.Type,
             Loc.Tr("WidgetMicName", "Microphone"),
             Loc.Tr("WidgetMicDescription", "Mutes the microphone system-wide. Turns red while muted."),
@@ -362,6 +369,14 @@ public static class WidgetCatalog
             () => WidgetConfig.New(SoundWidget.Type),
             entry => entry.TypeId == SoundWidget.Type,
             Sample: WidgetSample.Of("Speaker", "42 %"));
+
+        yield return new WidgetOffer(
+            Loc.Tr("WidgetBrightnessName", "Brightness"),
+            Loc.Tr("WidgetBrightnessDescription", "Click the icon for a brightness slider, scroll to change every screen at once."),
+            "Sun03",
+            () => WidgetConfig.New(BrightnessWidget.Type),
+            entry => entry.TypeId == BrightnessWidget.Type,
+            Sample: WidgetSample.Of("Sun03", "60 %"));
 
         yield return new WidgetOffer(
             Loc.Tr("WidgetMicName", "Microphone"),

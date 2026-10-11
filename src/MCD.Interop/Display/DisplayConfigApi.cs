@@ -83,6 +83,59 @@ public static unsafe class DisplayConfigApi
         return found;
     }
 
+    /// <summary>
+    /// The GDI names of the outputs that are a laptop's own panel.
+    /// </summary>
+    /// <remarks>
+    /// Brightness is asked of those through the display driver and of every
+    /// other output through the monitor itself, so which is which has to be
+    /// known. The output technology says it: internal, or one of the embedded
+    /// kinds.
+    /// </remarks>
+    public static IReadOnlySet<string> EmbeddedPanels()
+    {
+        var found = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        uint pathCount = 0;
+        uint modeCount = 0;
+        if (PInvoke.GetDisplayConfigBufferSizes(
+                QUERY_DISPLAY_CONFIG_FLAGS.QDC_ONLY_ACTIVE_PATHS, &pathCount, &modeCount) != 0)
+        {
+            return found;
+        }
+
+        var paths = new DISPLAYCONFIG_PATH_INFO[pathCount];
+        var modes = new DISPLAYCONFIG_MODE_INFO[modeCount];
+
+        fixed (DISPLAYCONFIG_PATH_INFO* pathPtr = paths)
+        fixed (DISPLAYCONFIG_MODE_INFO* modePtr = modes)
+        {
+            if (PInvoke.QueryDisplayConfig(
+                    QUERY_DISPLAY_CONFIG_FLAGS.QDC_ONLY_ACTIVE_PATHS,
+                    &pathCount, pathPtr,
+                    &modeCount, modePtr,
+                    null) != 0)
+            {
+                return found;
+            }
+
+            for (uint i = 0; i < pathCount; i++)
+            {
+                DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY technology = pathPtr[i].targetInfo.outputTechnology;
+
+                if (technology is DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY.DISPLAYCONFIG_OUTPUT_TECHNOLOGY_INTERNAL
+                    or DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY.DISPLAYCONFIG_OUTPUT_TECHNOLOGY_DISPLAYPORT_EMBEDDED
+                    or DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY.DISPLAYCONFIG_OUTPUT_TECHNOLOGY_UDI_EMBEDDED
+                    && SourceName(pathPtr[i]) is { Length: > 0 } name)
+                {
+                    found.Add(name);
+                }
+            }
+        }
+
+        return found;
+    }
+
     private static string SourceName(DISPLAYCONFIG_PATH_INFO path)
     {
         var request = new DISPLAYCONFIG_SOURCE_DEVICE_NAME

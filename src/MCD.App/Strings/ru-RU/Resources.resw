@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Версия, обновления и служебные действия.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Яркость</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Щелчок по значку открывает регулятор яркости, колесо мыши меняет её сразу на всех экранах.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Яркость: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Щелчок — регулятор · Колесо — изменить яркость</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Все экраны</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Каждый экран отдельно</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Добавляет ползунок для каждого экрана под общим.</value>
+  </data>
 </root>

@@ -170,6 +170,11 @@ public partial class App : Application
             }
         });
 
+        Mcd.Audio.AudioWatch.Matched += (microphone, count) =>
+            start.LogInformation("audio.parity {Kind} silenced={Count}", microphone ? "microphone" : "speaker", count);
+
+        Mcd.Interop.Display.Brightness.Refused += said => start.LogWarning("brightness {Said}", said);
+
         Mcd.Audio.AudioWatch.Start();
 
         // Windows notifications, for the overheat warning and an update that
@@ -852,6 +857,96 @@ public partial class App : Application
 
             // The keyboard taken onto the bar, as the hotkey does, moved once
             // with the arrow keys' own handler path, and given back.
+            // Silence on one speaker spreads to every plugged-in speaker, and
+            // unmuting does not. Opt-in, because it silences the machine for a
+            // couple of seconds: the state it found is put back afterwards.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "parity")
+            {
+                bool? wasSilent = null;
+                (int Total, int Silent) before = (0, 0);
+
+                Later(3000, () =>
+                {
+                    wasSilent = Mcd.Audio.SystemVolume.Muted();
+                    before = Mcd.Audio.AudioWatch.Census(microphone: false);
+                    Mcd.Audio.SystemVolume.Mute(true);
+                });
+
+                Later(5500, () =>
+                {
+                    (int total, int silent) = Mcd.Audio.AudioWatch.Census(microphone: false);
+
+                    // Back as found: when nothing was silent every speaker
+                    // speaks again; when something was, the state is left
+                    // as the silence made it, which is what it was already.
+                    if (before.Silent == 0)
+                    {
+                        Mcd.Audio.AudioWatch.Unsilence(microphone: false);
+                    }
+                    else if (wasSilent is false)
+                    {
+                        Mcd.Audio.SystemVolume.Mute(false);
+                    }
+
+                    log.LogInformation(
+                        "selftest.parity speakers={Total} silentBefore={Before} silentAfter={After} wasSilent={Was}",
+                        total, before.Silent, silent, wasSilent);
+                });
+            }
+
+            // Every screen a little dimmer for ten seconds, and back: what
+            // the screens really did is read by something else meanwhile.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "brightness")
+            {
+                var was = new List<Mcd.Interop.Display.ScreenBrightness>();
+
+                // The first look only starts the reading.
+                Later(1000, () => Mcd.Interop.Display.Brightness.Snapshot());
+
+                Later(4000, () =>
+                {
+                    was = [.. Mcd.Interop.Display.Brightness.Snapshot()];
+
+                    log.LogInformation(
+                        "selftest.brightness found {Screens}",
+                        string.Join("; ", was.Select(s => $"{s.Gdi}={s.Percent}{(s.Embedded ? " panel" : string.Empty)}")));
+
+                    foreach (Mcd.Interop.Display.ScreenBrightness screen in was)
+                    {
+                        Mcd.Interop.Display.Brightness.Set(screen.Gdi, Math.Max(0, screen.Percent - 3));
+                    }
+                });
+
+                Later(14000, () =>
+                {
+                    foreach (Mcd.Interop.Display.ScreenBrightness screen in was)
+                    {
+                        Mcd.Interop.Display.Brightness.Set(screen.Gdi, screen.Percent);
+                    }
+
+                    log.LogInformation("selftest.brightness restored");
+                });
+            }
+
+            // The brightness flyout, opened as a press opens it and left open
+            // to be photographed.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "brightnessflyout")
+            {
+                Later(1000, () => Mcd.Interop.Display.Brightness.Snapshot());
+
+                foreach (int after in new[] { 3000, 5000 })
+                {
+                    Later(after, () => log.LogInformation(
+                        "selftest.flyout opened={Count}", _docks?.OpenFlyouts(Mcd.App.Widgets.BrightnessWidget.Type)));
+                }
+
+                foreach (int after in new[] { 5500, 6500, 9000 })
+                {
+                    Later(after, () => log.LogInformation(
+                        "selftest.flyout open={Count}", _docks?.FlyoutsOpen(Mcd.App.Widgets.BrightnessWidget.Type)));
+                }
+            }
+
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "identify")
             {
                 Later(3000, () =>

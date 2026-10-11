@@ -48,6 +48,19 @@ PeekMessage
 MSG
 WM_*
 
+// Brightness: an external monitor through DDC/CI, a laptop's own panel through
+// its display driver.
+GetPhysicalMonitorsFromHMONITOR
+GetNumberOfPhysicalMonitorsFromHMONITOR
+GetMonitorBrightness
+SetMonitorBrightness
+DestroyPhysicalMonitors
+PHYSICAL_MONITOR
+CreateFile
+DeviceIoControl
+CloseHandle
+DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY
+
 // DPI: the dock's thickness is given in DIP and has to be scaled per monitor.
 GetDpiForWindow
 GetDpiForMonitor

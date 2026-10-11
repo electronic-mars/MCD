@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Версія, оновлення та обслуговування програми.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Яскравість</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Клацніть значок, щоб відкрити повзунок яскравості; прокручування змінює яскравість усіх екранів одночасно.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Яскравість: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Клацніть, щоб відкрити повзунок · Прокручування змінює яскравість</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Усі екрани</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Кожен екран окремо</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Додає повзунок для кожного екрана під загальним.</value>
+  </data>
 </root>

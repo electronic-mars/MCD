@@ -111,6 +111,14 @@ of a bar** for the menu: *Settings*, *Hide the bars*, *Exit*. Starting the
 shortcut again while it is running opens the settings too, which is also the
 way back in if every bar has been switched off.
 
+The **Sound** and **Microphone** widgets switch off the one in use, and the
+silence spreads to every other speaker or microphone that is plugged in:
+headphones that are muted and then drop off do not hand the sound to speakers
+that were never muted. Unmuting lets only the one in use speak, so the next one
+starts quiet. The **Brightness** widget moves every screen with one slider -
+a laptop's own panel and any monitor that answers DDC/CI - and, if set to,
+gives each screen a slider of its own under it.
+
 There is no icon in the notification area, on purpose: a program whose whole
 point is a bar of visible controls should not hide its own behind a chevron in
 somebody else's bar.

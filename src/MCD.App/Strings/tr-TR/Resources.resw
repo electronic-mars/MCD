@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Sürüm, güncellemeler ve uygulama bakımı.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Parlaklık</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Simgeye tıklayarak parlaklık kaydırıcısını açın; kaydırarak tüm ekranları aynı anda değiştirin.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Parlaklık: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Kaydırıcı için tıklayın · Parlaklığı değiştirmek için kaydırın</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Tüm ekranlar</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Her ekran ayrı ayrı</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Ana kaydırıcının altına her ekran için bir kaydırıcı ekler.</value>
+  </data>
 </root>

@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Versie, updates en app-onderhoud.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Helderheid</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Klik op het pictogram voor een schuifregelaar voor helderheid, scroll om elk scherm tegelijk te wijzigen.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Helderheid: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Klik voor schuifregelaar · Scroll om helderheid te wijzigen</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Alle schermen</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Per scherm</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Voegt een schuifregelaar toe voor elk scherm onder de hoofdregelaar.</value>
+  </data>
 </root>

@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Versão, atualizações e manutenção do app.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Brilho</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Clique no ícone para abrir o controle de brilho; role para alterar todas as telas de uma vez.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Brilho: {0}%</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Clique para o controle · Role para alterar o brilho</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Todas as telas</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Cada tela separadamente</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Adiciona controle deslizante para cada tela abaixo da principal.</value>
+  </data>
 </root>

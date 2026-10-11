@@ -1925,4 +1925,25 @@
   <data name="AboutLead.Text" xml:space="preserve">
     <value>Verze, aktualizace a údržba aplikace.</value>
   </data>
+  <data name="WidgetBrightnessName" xml:space="preserve">
+    <value>Jas</value>
+  </data>
+  <data name="WidgetBrightnessDescription" xml:space="preserve">
+    <value>Kliknutím na ikonu zobrazíte posuvník jasu, posouváním měníte jas na všech obrazovkách najednou.</value>
+  </data>
+  <data name="BrightnessTip" xml:space="preserve">
+    <value>Jas: {0} %</value>
+  </data>
+  <data name="BrightnessSliderTip" xml:space="preserve">
+    <value>Kliknutím zobrazíte posuvník · Posouváním měníte jas</value>
+  </data>
+  <data name="BrightnessAll" xml:space="preserve">
+    <value>Všechny obrazovky</value>
+  </data>
+  <data name="BrightnessEachLabel" xml:space="preserve">
+    <value>Každá obrazovka zvlášť</value>
+  </data>
+  <data name="BrightnessEachHint" xml:space="preserve">
+    <value>Pod hlavním posuvníkem přidá posuvník pro každou obrazovku.</value>
+  </data>
 </root>
