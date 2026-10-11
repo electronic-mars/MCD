@@ -7,32 +7,29 @@ using Windows.Win32.System.Com;
 namespace Mcd.Audio;
 
 /// <summary>
-/// Silences every device of one kind that is plugged in.
+/// Puts every device of one kind that is plugged in in the same state.
 /// </summary>
 internal static unsafe class MuteParity
 {
-    /// <summary>Silences each active device not already silent, and says how many it had to.</summary>
-    internal static int Silence(EDataFlow flow)
+    /// <summary>Puts each active device of that kind in a state, and says how many were not in it already.</summary>
+    internal static int Set(EDataFlow flow, bool muted)
     {
-        int silenced = 0;
+        int changed = 0;
 
         Visit(flow, volume =>
         {
-            BOOL muted;
-            volume.GetMute(&muted);
+            BOOL now;
+            volume.GetMute(&now);
 
-            if (!muted)
+            if ((bool)now != muted)
             {
-                volume.SetMute(true, null);
-                silenced++;
+                volume.SetMute(muted, null);
+                changed++;
             }
         });
 
-        return silenced;
+        return changed;
     }
-
-    /// <summary>Lets every active device of that kind speak. Only the self-test undoes a silence this way.</summary>
-    internal static void Unsilence(EDataFlow flow) => Visit(flow, volume => volume.SetMute(false, null));
 
     /// <summary>How many active devices of that kind there are, and how many of them are silent.</summary>
     internal static (int Total, int Silent) Count(EDataFlow flow)

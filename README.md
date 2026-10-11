@@ -111,11 +111,14 @@ of a bar** for the menu: *Settings*, *Hide the bars*, *Exit*. Starting the
 shortcut again while it is running opens the settings too, which is also the
 way back in if every bar has been switched off.
 
-The **Sound** and **Microphone** widgets switch off the one in use, and the
-silence spreads to every other speaker or microphone that is plugged in:
-headphones that are muted and then drop off do not hand the sound to speakers
-that were never muted. Unmuting lets only the one in use speak, so the next one
-starts quiet. The **Brightness** widget moves every screen with one slider -
+The **Sound** and **Microphone** widgets switch the machine, not one device:
+muting or unmuting the speaker (or microphone) in use does the same to every
+other one that is plugged in, so headphones that are muted and then drop off do
+not hand the sound to speakers that were never muted, and a muted headset that
+drops off does not leave the laptop's microphone open on a call. A device
+plugged in while the machine is muted starts muted. Only a change is copied,
+never a state, so a device is not overruled until the switch is next thrown.
+The **Brightness** widget moves every screen with one slider -
 a laptop's own panel and any monitor that answers DDC/CI - and, if set to,
 gives each screen a slider of its own under it.
 

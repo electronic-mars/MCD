@@ -170,8 +170,12 @@ public partial class App : Application
             }
         });
 
-        Mcd.Audio.AudioWatch.Matched += (microphone, count) =>
-            start.LogInformation("audio.parity {Kind} silenced={Count}", microphone ? "microphone" : "speaker", count);
+        Mcd.Audio.AudioWatch.Matched += (microphone, muted, count) =>
+            start.LogInformation(
+                "audio.parity {Kind} muted={Muted} changed={Count}",
+                microphone ? "microphone" : "speaker",
+                muted,
+                count);
 
         Mcd.Interop.Display.Brightness.Refused += said => start.LogWarning("brightness {Said}", said);
 
@@ -857,41 +861,34 @@ public partial class App : Application
 
             // The keyboard taken onto the bar, as the hotkey does, moved once
             // with the arrow keys' own handler path, and given back.
-            // Silence on one speaker spreads to every plugged-in speaker, and
-            // unmuting does not. Opt-in, because it silences the machine for a
-            // couple of seconds: the state it found is put back afterwards.
+            // The speaker in use switched to the other state and back: every
+            // plugged-in speaker follows it each way. Opt-in, because it
+            // silences or unsilences the machine for a few seconds; the state
+            // it found is the state it leaves.
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "parity")
             {
-                bool? wasSilent = null;
-                (int Total, int Silent) before = (0, 0);
+                bool was = false;
+
+                void Count(string when)
+                {
+                    (int total, int silent) = Mcd.Audio.AudioWatch.Census(microphone: false);
+                    log.LogInformation("selftest.parity {When} speakers={Total} silent={Silent}", when, total, silent);
+                }
 
                 Later(3000, () =>
                 {
-                    wasSilent = Mcd.Audio.SystemVolume.Muted();
-                    before = Mcd.Audio.AudioWatch.Census(microphone: false);
-                    Mcd.Audio.SystemVolume.Mute(true);
+                    was = Mcd.Audio.SystemVolume.Muted() is true;
+                    Count("found");
+                    Mcd.Audio.SystemVolume.Mute(!was);
                 });
 
-                Later(5500, () =>
+                Later(5000, () =>
                 {
-                    (int total, int silent) = Mcd.Audio.AudioWatch.Census(microphone: false);
-
-                    // Back as found: when nothing was silent every speaker
-                    // speaks again; when something was, the state is left
-                    // as the silence made it, which is what it was already.
-                    if (before.Silent == 0)
-                    {
-                        Mcd.Audio.AudioWatch.Unsilence(microphone: false);
-                    }
-                    else if (wasSilent is false)
-                    {
-                        Mcd.Audio.SystemVolume.Mute(false);
-                    }
-
-                    log.LogInformation(
-                        "selftest.parity speakers={Total} silentBefore={Before} silentAfter={After} wasSilent={Was}",
-                        total, before.Silent, silent, wasSilent);
+                    Count(was ? "unmuted" : "muted");
+                    Mcd.Audio.SystemVolume.Mute(was);
                 });
+
+                Later(7000, () => Count("back"));
             }
 
             // Every screen a little dimmer for ten seconds, and back: what
