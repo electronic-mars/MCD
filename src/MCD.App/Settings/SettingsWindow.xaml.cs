@@ -3068,13 +3068,49 @@ public sealed partial class SettingsWindow : Window
     /// draws a "will not go here" sign beside the pointer over everything
     /// that refuses the drop - the desktop between this window and the bar -
     /// and the sign sat over the very bar somebody was aiming at. Held, the
-    /// pointer still reports where it is when it leaves this window.
+    /// pointer still reports where it is when it leaves this window. The
+    /// widget's picture goes with it, as it did under Windows' drag; over a
+    /// bar it steps aside for the slots it would take, which are the answer
+    /// to "here?".
     /// </remarks>
     private void Carryable(UIElement picture, WidgetOffer offer)
     {
         WidgetConfig? carried = null;
         (int X, int Y) from = default;
         bool held = false;
+        Mcd.Interop.Windowing.Ghost? ghost = null;
+
+        void Drop()
+        {
+            ghost?.Dispose();
+            ghost = null;
+        }
+
+        // Taken at the press, so it is ready by the time the hand moves.
+        async void Photograph(Windows.Foundation.Point at)
+        {
+            try
+            {
+                var shot = new Microsoft.UI.Xaml.Media.Imaging.RenderTargetBitmap();
+                await shot.RenderAsync(picture);
+                byte[] pixels = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions
+                    .ToArray(await shot.GetPixelsAsync());
+
+                if (!held)
+                {
+                    return;
+                }
+
+                double scale = picture.XamlRoot.RasterizationScale;
+                ghost = new Mcd.Interop.Windowing.Ghost(
+                    pixels, shot.PixelWidth, shot.PixelHeight, (int)(at.X * scale), (int)(at.Y * scale));
+            }
+            catch (Exception e)
+            {
+                // Carried without its picture, which still works.
+                _log.LogWarning(e, "settings.carry picture not taken");
+            }
+        }
 
         picture.PointerPressed += (_, e) =>
         {
@@ -3087,6 +3123,11 @@ public sealed partial class SettingsWindow : Window
             from = Mcd.Interop.Windowing.WindowFrame.CursorAt();
             carried = null;
             e.Handled = true;
+
+            if (held)
+            {
+                Photograph(e.GetCurrentPoint(picture).Position);
+            }
         };
 
         picture.PointerMoved += (_, _) =>
@@ -3109,7 +3150,14 @@ public sealed partial class SettingsWindow : Window
                 carried = offer.Make();
             }
 
-            _docks.Carry(x, y, carried);
+            if (_docks.Carry(x, y, carried))
+            {
+                ghost?.Hide();
+            }
+            else
+            {
+                ghost?.MoveTo(x, y);
+            }
         };
 
         picture.PointerReleased += (_, e) =>
@@ -3120,6 +3168,7 @@ public sealed partial class SettingsWindow : Window
             }
 
             held = false;
+            Drop();
 
             if (carried is { } entry)
             {
@@ -3139,6 +3188,7 @@ public sealed partial class SettingsWindow : Window
             {
                 held = false;
                 carried = null;
+                Drop();
                 _docks.EndCarry();
             }
         };

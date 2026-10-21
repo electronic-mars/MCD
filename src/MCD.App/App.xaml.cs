@@ -988,6 +988,19 @@ public partial class App : Application
 
                     _docks.Carry(x, y, entry);
                     log.LogInformation("selftest.carry placed={Placed}", _docks.Deliver(x, y, entry));
+
+                    // The picture that follows the pointer, held still to be photographed.
+                    byte[] orange = new byte[160 * 48 * 4];
+
+                    for (int i = 0; i < orange.Length; i += 4)
+                    {
+                        (orange[i], orange[i + 1], orange[i + 2], orange[i + 3]) = (0x00, 0x80, 0xFF, 0xFF);
+                    }
+
+                    var ghost = new Mcd.Interop.Windowing.Ghost(orange, 160, 48, 0, 0);
+                    ghost.MoveTo(b.left + 200, b.top + 300);
+                    log.LogInformation("selftest.ghost at {X},{Y}", b.left + 200, b.top + 300);
+                    Later(5000, ghost.Dispose);
                 });
             }
 
