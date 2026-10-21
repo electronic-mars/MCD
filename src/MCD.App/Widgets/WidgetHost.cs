@@ -123,6 +123,7 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
                 XamlRoot = XamlRoot,
             };
 
+            Mcd.App.Dock.FlyoutDismissal.Watch(flyout);
             flyout.ShowAt(this);
             return;
         }

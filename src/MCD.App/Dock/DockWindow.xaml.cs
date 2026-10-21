@@ -673,6 +673,7 @@ public sealed partial class DockWindow : Window
         menu.Closed += (_, _) => Cool();
         Cool();
 
+        FlyoutDismissal.Watch(menu);
         menu.ShowAt(Root, at);
     }
 

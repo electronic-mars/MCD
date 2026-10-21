@@ -90,6 +90,7 @@ The log is at `%LOCALAPPDATA%\MCD\logs\mcd.log`.
 | 33f | Mute the sound with headphones as the default, then unplug them | The speakers the sound falls back to are already muted; unmuting there unmutes the headphones' endpoint too |
 | 33f2 | Mute on the speakers, switch to the headphones, unmute there, switch back to the speakers | The speakers are unmuted; switching never re-mutes. Also with the headphones gone and back |
 | 33f3 | On the Sound widget click the speaker, then click the figure | The speaker mutes or unmutes; the figure opens the volume slider |
+| 33f4 | Open the volume or brightness slider, or the bar's menu, then click the desktop; open it again and leave it | It closes on the click, and by itself after ten seconds with the pointer away |
 | 33g | The same with a headset's microphone, then unmute it | The laptop's own microphone is muted too, the Microphone widget shows red at once, and unmuting one unmutes both |
 
 ## Launcher

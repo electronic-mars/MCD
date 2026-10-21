@@ -183,6 +183,32 @@ public static unsafe class WindowFrame
         return (at.X, at.Y);
     }
 
+    /// <summary>
+    /// Where the pointer is, whether a mouse button is held, and whether the
+    /// window under it belongs to this program.
+    /// </summary>
+    public static (int X, int Y, bool Down, bool Ours) PointerNow()
+    {
+        PInvoke.GetCursorPos(out System.Drawing.Point at);
+
+        bool down = (PInvoke.GetAsyncKeyState(0x01) & 0x8000) != 0
+            || (PInvoke.GetAsyncKeyState(0x02) & 0x8000) != 0
+            || (PInvoke.GetAsyncKeyState(0x04) & 0x8000) != 0;
+
+        HWND under = PInvoke.WindowFromPoint(at);
+        uint pid = 0;
+
+        if (!under.IsNull)
+        {
+            unsafe
+            {
+                PInvoke.GetWindowThreadProcessId(PInvoke.GetAncestor(under, GET_ANCESTOR_FLAGS.GA_ROOT), &pid);
+            }
+        }
+
+        return (at.X, at.Y, down, pid == (uint)Environment.ProcessId);
+    }
+
     /// <summary>Puts the window exactly here, in physical pixels.</summary>
     /// <remarks>
     /// For the auto-hiding bar, which decides its own position rather than

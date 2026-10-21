@@ -958,7 +958,8 @@ public partial class App : Application
                         "selftest.flyout opened={Count}", _docks?.OpenFlyouts(kind)));
                 }
 
-                foreach (int after in new[] { 5500, 6500, 9000 })
+                // The last one past the ten idle seconds: put away by then.
+                foreach (int after in new[] { 5500, 6500, 9000, 16500 })
                 {
                     Later(after, () => log.LogInformation(
                         "selftest.flyout open={Count}", _docks?.FlyoutsOpen(kind)));

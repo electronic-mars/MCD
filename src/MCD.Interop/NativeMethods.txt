@@ -199,3 +199,9 @@ VIRTUAL_KEY
 GetKeyboardLayout
 GetKeyboardLayoutList
 GetKeyState
+
+// Whether a press happened outside this program, for the panels that open from
+// the bar: a click on the desktop never reaches a window that was not clicked.
+GetAsyncKeyState
+WindowFromPoint
+GetAncestor
