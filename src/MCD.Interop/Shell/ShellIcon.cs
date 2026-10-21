@@ -289,15 +289,21 @@ public static class ShellIcon
     /// </remarks>
     private static unsafe (int Width, int Height)? Measure(HDC dc, HBITMAP bitmap)
     {
-        BITMAPINFO header = Header(0, 0, bits: 0);
+        // Room behind the header for a colour table: asked only to describe
+        // the bitmap, some drivers still write the three colour masks of a
+        // 16- or 32-bit bitmap after the header, past the one entry the
+        // structure itself has.
+        byte* room = stackalloc byte[sizeof(BITMAPINFOHEADER) + (256 * sizeof(RGBQUAD))];
+        var header = (BITMAPINFO*)room;
+        *header = Header(0, 0, bits: 0);
 
-        if (PInvoke.GetDIBits(dc, bitmap, 0, 0, null, &header, DIB_USAGE.DIB_RGB_COLORS) == 0)
+        if (PInvoke.GetDIBits(dc, bitmap, 0, 0, null, header, DIB_USAGE.DIB_RGB_COLORS) == 0)
         {
             return null;
         }
 
-        int width = header.bmiHeader.biWidth;
-        int height = Math.Abs(header.bmiHeader.biHeight);
+        int width = header->bmiHeader.biWidth;
+        int height = Math.Abs(header->bmiHeader.biHeight);
 
         return width > 0 && height > 0 && (long)width * height <= 1024 * 1024
             ? (width, height)

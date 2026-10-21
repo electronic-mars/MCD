@@ -114,6 +114,7 @@ public static unsafe class AudioWatch
         }
 
         object? device = null;
+        IAudioEndpointVolume? listening = null;
 
         try
         {
@@ -124,6 +125,7 @@ public static unsafe class AudioWatch
             found.Activate(&iid, CLSCTX.CLSCTX_INPROC_SERVER, null, out object activated);
 
             var volume = (IAudioEndpointVolume)activated;
+            listening = volume;
             volume.RegisterControlChangeNotify(ear);
 
             // What the new default is now is the state to compare its next
@@ -136,6 +138,22 @@ public static unsafe class AudioWatch
         }
         catch (Exception)
         {
+            // Not left listening to a device this is not following: its
+            // switch would be taken for the one in use.
+            if (listening is not null)
+            {
+                try
+                {
+                    listening.UnregisterControlChangeNotify(ear);
+                }
+                catch (Exception)
+                {
+                    // Gone already, and its listeners with it.
+                }
+
+                Marshal.ReleaseComObject(listening);
+            }
+
             // No device of that kind just now; one being plugged in is
             // announced, and is listened to then.
             Memory(flow == EDataFlow.eCapture).Followed(null);
@@ -160,11 +178,22 @@ public static unsafe class AudioWatch
     }
 
     /// <summary>The device in use was switched off or on: so is every other.</summary>
-    private static void Mirror(bool microphone, bool muted) => Task.Run(() =>
+    /// <remarks>
+    /// To what the switch is now, read inside the lock - not to what it was
+    /// when this was asked for. Two presses close together queue two of these,
+    /// and they need not run in the order they were asked: the older one
+    /// running last put every device, the one in use included, back to the
+    /// state before the second press - a microphone left open that its owner
+    /// had just closed.
+    /// </remarks>
+    private static void Mirror(bool microphone) => Task.Run(() =>
     {
         lock (MatchGate)
         {
-            Copy(microphone, muted);
+            if (Memory(microphone).Wanted is { } muted)
+            {
+                Copy(microphone, muted);
+            }
         }
     });
 
@@ -235,7 +264,7 @@ public static unsafe class AudioWatch
 
             if (Memory(microphone).Thrown(muted))
             {
-                Mirror(microphone, muted);
+                Mirror(microphone);
             }
         }
     }

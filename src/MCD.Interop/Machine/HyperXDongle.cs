@@ -38,15 +38,23 @@ public sealed class HyperXDongle : IDisposable
 
     private readonly FileStream _stream;
     private readonly int _reportLength;
+
+    /// <summary>
+    /// What a read is given room for: the device's input reports, which need
+    /// not be as long as the ones written to it. A buffer shorter than an
+    /// input report fails every read.
+    /// </summary>
+    private readonly int _readLength;
     private readonly CancellationTokenSource _gone = new();
 
     private int _percent = -1;
     private long _heard = long.MinValue;
 
-    private HyperXDongle(SafeFileHandle handle, int reportLength, string name)
+    private HyperXDongle(SafeFileHandle handle, int reportLength, int readLength, string name)
     {
         _stream = new FileStream(handle, FileAccess.ReadWrite, 1, isAsync: true);
         _reportLength = reportLength;
+        _readLength = Math.Max(readLength, reportLength);
         Name = name;
         _ = Task.Run(Listen);
     }
@@ -84,7 +92,8 @@ public sealed class HyperXDongle : IDisposable
 
             if (Caps(handle) is { UsagePage: VendorPage, OutputReportByteLength: >= 16 } caps)
             {
-                return new HyperXDongle(handle, caps.OutputReportByteLength, Product(handle));
+                return new HyperXDongle(
+                    handle, caps.OutputReportByteLength, caps.InputReportByteLength, Product(handle));
             }
 
             handle.Dispose();
@@ -117,7 +126,7 @@ public sealed class HyperXDongle : IDisposable
 
     private async Task Listen()
     {
-        byte[] report = new byte[_reportLength];
+        byte[] report = new byte[_readLength];
 
         try
         {
@@ -226,15 +235,20 @@ public sealed class HyperXDongle : IDisposable
     private static extern SafeFileHandle CreateFileW(
         string name, uint access, uint share, IntPtr security, uint disposition, uint flags, IntPtr template);
 
+    // BOOLEAN, one byte, not BOOL: read as four, whatever was left in the
+    // rest of the register could turn a "no" into a "yes".
     [DllImport("hid.dll")]
+    [return: MarshalAs(UnmanagedType.U1)]
     private static extern bool HidD_GetPreparsedData(SafeFileHandle device, out IntPtr data);
 
     [DllImport("hid.dll")]
+    [return: MarshalAs(UnmanagedType.U1)]
     private static extern bool HidD_FreePreparsedData(IntPtr data);
 
     [DllImport("hid.dll")]
     private static extern int HidP_GetCaps(IntPtr data, out HidCaps caps);
 
     [DllImport("hid.dll", CharSet = CharSet.Unicode)]
+    [return: MarshalAs(UnmanagedType.U1)]
     private static extern bool HidD_GetProductString(SafeFileHandle device, char[] buffer, int length);
 }

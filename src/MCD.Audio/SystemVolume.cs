@@ -56,12 +56,12 @@ public static unsafe class SystemVolume
 
         lock (Gate)
         {
-            if (now - _asked < Fresh)
+            if (now - Volatile.Read(ref _asked) < Fresh)
             {
                 return _last;
             }
 
-            _asked = now;
+            Volatile.Write(ref _asked, now);
             _last = (Muted(), Level() ?? 0f);
 
             return _last;
@@ -75,13 +75,12 @@ public static unsafe class SystemVolume
     private static long _asked = -Fresh;
 
     /// <summary>Forgets the last answer: this call, or somebody else, just changed it.</summary>
-    internal static void Forget()
-    {
-        lock (Gate)
-        {
-            _asked = -Fresh;
-        }
-    }
+    /// <remarks>
+    /// Without the lock. Windows' audio callbacks call this, and must not
+    /// wait; the lock is held across the calls into the audio service that
+    /// fetch the answer, and the callback waited behind them.
+    /// </remarks>
+    internal static void Forget() => Volatile.Write(ref _asked, -Fresh);
 
     /// <summary>Silences the machine, or lets it speak again.</summary>
     public static bool Mute(bool on)

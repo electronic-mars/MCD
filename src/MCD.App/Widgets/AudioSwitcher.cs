@@ -235,7 +235,19 @@ public static partial class AudioSwitcher
                 continue;
             }
 
-            await Hello();
+            try
+            {
+                await Hello();
+            }
+            catch (Exception e) when (e is InvalidOperationException or FormatException or KeyNotFoundException)
+            {
+                // An answer of a shape this does not expect - a newer
+                // program, a field of another type. Escaping here ended this
+                // loop for good with the chip still showing the last state,
+                // and nothing would ever start it again.
+                _log?.LogWarning(e, "switcher.hello an answer not understood");
+            }
+
             await Task.Delay(Beat);
         }
 
@@ -411,23 +423,41 @@ public static partial class AudioSwitcher
 
         _ = Task.Run(async () =>
         {
-            JsonNode? state = await Call(line, method, arguments, quiet: true);
-            Interlocked.Decrement(ref _pending);
+            try
+            {
+                JsonNode? state;
 
-            if (state is JsonObject && state["outputs"] is not null)
-            {
-                IReadOnlyList<SwitcherDevice> outputs = await Take(line, state);
-                _log?.LogInformation(
-                    "switcher.{Method} answered: now {Current}",
-                    method,
-                    outputs.FirstOrDefault(d => d.Current)?.Name ?? "nothing");
+                try
+                {
+                    state = await Call(line, method, arguments, quiet: true);
+                }
+                finally
+                {
+                    // Counted down whatever happened: left counted, every hello
+                    // after it skipped the device list, and the chip never
+                    // showed a switch again.
+                    Interlocked.Decrement(ref _pending);
+                }
+
+                if (state is JsonObject && state["outputs"] is not null)
+                {
+                    IReadOnlyList<SwitcherDevice> outputs = await Take(line, state);
+                    _log?.LogInformation(
+                        "switcher.{Method} answered: now {Current}",
+                        method,
+                        outputs.FirstOrDefault(d => d.Current)?.Name ?? "nothing");
+                }
+                else
+                {
+                    // No answer in time is not a failure: the switch may well be
+                    // done, only slowly. What is true is read again instead.
+                    _log?.LogInformation("switcher.{Method} no answer in time, reading the state again", method);
+                    await Hello();
+                }
             }
-            else
+            catch (Exception e) when (e is InvalidOperationException or FormatException or KeyNotFoundException)
             {
-                // No answer in time is not a failure: the switch may well be
-                // done, only slowly. What is true is read again instead.
-                _log?.LogInformation("switcher.{Method} no answer in time, reading the state again", method);
-                await Hello();
+                _log?.LogWarning(e, "switcher.{Method} an answer not understood", method);
             }
 
             Answered?.Invoke();
@@ -457,10 +487,13 @@ public static partial class AudioSwitcher
 
             return body["result"];
         }
-        catch (Exception e) when (e is HttpRequestException or TaskCanceledException or JsonException)
+        catch (Exception e) when (e is HttpRequestException or TaskCanceledException or JsonException
+            or InvalidOperationException or FormatException)
         {
             // A hello that did not come back is counted where it is made; a
-            // press that did not is worth a line of its own.
+            // press that did not is worth a line of its own. An answer of the
+            // wrong shape - an array where an object was expected, a word
+            // where a yes or no was - counts as no answer.
             if (method != "dock_hello" && !quiet)
             {
                 _log?.LogWarning("switcher.{Method} failed: {Error}", method, e.Message);
