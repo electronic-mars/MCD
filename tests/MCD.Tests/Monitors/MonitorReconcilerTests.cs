@@ -147,6 +147,31 @@ public sealed class MonitorReconcilerTests
     }
 
     [Fact]
+    public void ADifferentScreenIsNotTakenForTheOneLeftOver()
+    {
+        // The home screen was seen this morning; the office has another model.
+        MonitorConfig home = Saved(Topology.Left()) with
+        {
+            Edge = AppBarEdge.Left,
+            LastSeenUtc = Now.AddHours(-3),
+        };
+
+        MonitorInfo office = Topology.Make(
+            @"\\?\DISPLAY#DEL4321#5&aaaa&0&UID1#{e6f07b5f}",
+            "DELL U2723QE", "DEL:4321", @"\\.\DISPLAY2", 2560, 0, 6400, 2160, 96, primary: false);
+
+        ReconcileResult result = MonitorReconciler.Reconcile(
+            Topology.Snapshot(Topology.Laptop(), office),
+            [Saved(Topology.Laptop()), home],
+            Now);
+
+        result.Registry.Length.ShouldBe(3);
+        result.Registry.Single(c => c.StableId == home.StableId).Edge.ShouldBe(AppBarEdge.Left);
+        result.Plans.Single(p => p.Monitor.Identity.DevicePath == office.Identity.DevicePath)
+            .Config.Edge.ShouldBe(Saved(Topology.Laptop()).Edge);
+    }
+
+    [Fact]
     public void AStaleLeftoverEntryIsNotReAssociated()
     {
         // A screen last seen a year ago is not evidence about the monitor plugged

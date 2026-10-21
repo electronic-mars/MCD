@@ -854,13 +854,21 @@
             <StackPanel.OpacityTransition>
                 <ScalarTransition Duration="0:0:0.2" />
             </StackPanel.OpacityTransition>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="0">
+            <!-- The keys run along the bar: across a bar at the top or bottom,
+                 down one at the side, which is narrower than three keys and
+                 the artwork side by side. -->
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="{x:Bind Orientation}"
+                Spacing="0">
 
                 <!-- The playing thing's own artwork. Pressing it brings that
                      program forward - the picture is the door to the player. -->
                 <Button
                     x:Uid="MediaArtButton"
-                    Margin="0,0,4,0"
+                    Margin="{x:Bind ArtMargin}"
+                    HorizontalAlignment="Center"
                     Padding="0"
                     VerticalAlignment="Center"
                     Background="Transparent"
@@ -947,8 +955,10 @@
                 </Button>
             </StackPanel>
 
+            <!-- 116 and the margin of 4 are the 120 the widget reserves for it:
+                 at 160 a long name ran past the widget's own slot. -->
             <TextBlock
-                MaxWidth="160"
+                MaxWidth="116"
                 Margin="4,0,0,0"
                 VerticalAlignment="Center"
                 FontSize="{x:Bind FontSize, Mode=OneWay}"

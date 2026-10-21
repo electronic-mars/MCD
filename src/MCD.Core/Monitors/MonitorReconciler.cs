@@ -183,6 +183,20 @@ public static class MonitorReconciler
             return;
         }
 
+        // A screen of another make or model is another screen, however alone
+        // it is. Without this, a laptop that met a monitor at home and a
+        // different one at the office within a day gave the office screen the
+        // home screen's bar, and from then on the two shared one layout.
+        if (monitor.Identity.EdidKey.Length > 0
+            && candidate.EdidKey.Length > 0
+            && !string.Equals(monitor.Identity.EdidKey, candidate.EdidKey, StringComparison.OrdinalIgnoreCase))
+        {
+            notes.Add(
+                $"{monitor.Identity.FriendlyName}: the only unmatched entry is for {candidate.FriendlyName}, "
+                + "a different screen, so it is not re-associated");
+            return;
+        }
+
         claimed.Add(candidate.StableId);
         matches[monitor.StableId] = candidate;
         pending.Clear();

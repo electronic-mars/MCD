@@ -214,15 +214,21 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     /// </remarks>
     public override double Length()
     {
-        // Down a bar at the side of the screen the keys stay in a row and the
-        // track's name goes under them, so its length is that stack's height.
+        // Down a bar at the side of the screen the artwork and the keys go one
+        // under another and the track's name under them. In a row they were
+        // wider than the bar, and the last key was cut off.
         if (Orientation == Orientation.Vertical)
         {
-            return 8 + IconSize + 10 + (TitleVisible == Visibility.Visible ? FontSize + 6 : 0);
+            return 8 + 24 + (3 * (IconSize + 4)) + (TitleVisible == Visibility.Visible ? FontSize + 6 : 0);
         }
 
         return 4 + 24 + (3 * (IconSize + 8)) + (TitleVisible == Visibility.Visible ? 120 : 0);
     }
+
+    /// <summary>The gap between the artwork and the keys, on the side the keys go on.</summary>
+    public Thickness ArtMargin => Orientation == Orientation.Vertical
+        ? new Thickness(0, 0, 0, 4)
+        : new Thickness(0, 0, 4, 0);
 
     public override string Summarise() => Nominated.Length > 0
         ? string.Format(

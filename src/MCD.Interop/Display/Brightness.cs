@@ -83,6 +83,8 @@ public static unsafe class Brightness
             {
                 _known[gdi] = screen with { Percent = percent };
             }
+
+            _setAt[gdi] = ++_sets;
         }
 
         Wanted[gdi] = percent;
@@ -121,6 +123,10 @@ public static unsafe class Brightness
     private static long _heard = -MonitorEvery;
     private static int _reading;
 
+    /// <summary>Counts every Set, and remembers which count each screen was last set at.</summary>
+    private static long _sets;
+    private static readonly Dictionary<string, long> _setAt = new(StringComparer.OrdinalIgnoreCase);
+
     private static readonly ConcurrentDictionary<string, int> Wanted = new(StringComparer.OrdinalIgnoreCase);
     private static readonly ConcurrentDictionary<string, bool> Writing = new(StringComparer.OrdinalIgnoreCase);
     private static readonly ConcurrentDictionary<string, (uint Minimum, uint Maximum)> Ranges = new(StringComparer.OrdinalIgnoreCase);
@@ -131,10 +137,12 @@ public static unsafe class Brightness
         IReadOnlySet<string> embedded = DisplayConfigApi.EmbeddedPanels();
 
         Dictionary<string, ScreenBrightness> before;
+        long started;
 
         lock (Gate)
         {
             before = new Dictionary<string, ScreenBrightness>(_known, StringComparer.OrdinalIgnoreCase);
+            started = _sets;
         }
 
         var next = new Dictionary<string, ScreenBrightness>(StringComparer.OrdinalIgnoreCase);
@@ -165,6 +173,19 @@ public static unsafe class Brightness
 
         lock (Gate)
         {
+            // A screen set while this was reading keeps what it was set to. A
+            // round over the cable takes seconds, and what it brought back for
+            // a screen being moved is the level from before the hand moved it:
+            // written over the new one, the slider jumped back and stayed back
+            // until the next round, twenty seconds later.
+            foreach ((string gdi, long at) in _setAt)
+            {
+                if (at > started && _known.TryGetValue(gdi, out ScreenBrightness set) && next.ContainsKey(gdi))
+                {
+                    next[gdi] = next[gdi] with { Percent = set.Percent };
+                }
+            }
+
             _known = next;
             _asked = Environment.TickCount64;
 
