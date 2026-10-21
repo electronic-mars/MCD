@@ -67,16 +67,16 @@ public static class FlyoutDismissal
 
         DispatcherQueue ui = DispatcherQueue.GetForCurrentThread();
 
-        // Called inside the hook, which has to answer at once: the window is
-        // asked about there, the closing is done after.
-        var presses = new Mcd.Interop.Windowing.PressWatch((x, y) =>
+        // Called inside the hook, which has to answer at once: the point is
+        // only handed over, and looked at here.
+        var presses = new Mcd.Interop.Windowing.PressWatch((x, y) => ui.TryEnqueue(() =>
         {
             if (!Mcd.Interop.Windowing.WindowFrame.PopupAt(x, y))
             {
                 dismissed.Value = DateTime.UtcNow;
-                ui.TryEnqueue(flyout.Hide);
+                flyout.Hide();
             }
-        });
+        }));
 
         void Stop(object? sender, object e)
         {
