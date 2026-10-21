@@ -518,6 +518,15 @@ public sealed class DockWindowManager : IDisposable
     /// </summary>
     private void FollowTheDesk(ImmutableArray<DockPlan> plans)
     {
+        // No plans at all is the bars being hidden, not the screens going:
+        // counted as nought, showing the bars again looked like screens
+        // arriving and put the layout for that many screens over the main
+        // bar somebody had arranged.
+        if (plans.IsEmpty)
+        {
+            return;
+        }
+
         int count = plans.Length;
         int? before = _screens;
         _screens = count;
@@ -678,6 +687,8 @@ public sealed class DockWindowManager : IDisposable
         {
             return;
         }
+
+        Mcd.App.Widgets.AwakeWidget.Gone(_settings.Current);
 
         ReconcileResult result = MonitorReconciler.Reconcile(
             _lastSnapshot, _settings.Current.Monitors, DateTimeOffset.UtcNow);

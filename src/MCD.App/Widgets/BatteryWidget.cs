@@ -78,10 +78,10 @@ public sealed partial class BatteryWidget(WidgetContext context, WidgetConfig en
     public partial Brush Colour { get; set; } = Ink;
 
     private static Brush Ink =>
-        (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
+        Palette.Get("TextFillColorPrimaryBrush");
 
     private static Brush Alarmed =>
-        (Brush)Application.Current.Resources["McdCriticalBrush"];
+        Palette.Get("McdCriticalBrush");
 
     [ObservableProperty]
     public partial double IconSize { get; set; } = 16;

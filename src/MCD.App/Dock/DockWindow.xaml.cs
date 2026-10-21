@@ -164,6 +164,14 @@ public sealed partial class DockWindow : Window
         _subclass.MessageReceived += OnMessage;
         Closed += (_, _) => TearDown();
 
+        // A bar is closed by the program, never by Windows on somebody's
+        // behalf. Alt+F4 reached it whenever the keyboard was on the bar, and
+        // a polite "close" from another program reached every bar: each was
+        // gone for good, and the program went on running with nothing on the
+        // screen. Only that kind of closing comes through here; the program's
+        // own does not.
+        AppWindow.Closing += (_, e) => e.Cancel = true;
+
         _appBar.Register();
 
         // Onto its own monitor before the shell is asked anything about that
@@ -1280,6 +1288,7 @@ public sealed partial class DockWindow : Window
     private void Dress(WidgetContext context)
     {
         Root.RequestedTheme = context.Theme;
+        Palette.Theme = context.Theme;
 
         if (context.Acrylic)
         {

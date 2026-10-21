@@ -39,19 +39,32 @@ public sealed class AwakeWidget(WidgetContext context, WidgetConfig entry)
     /// </summary>
     private static bool _decided;
 
-    public override void Attach()
+    /// <summary>
+    /// The machine is let sleep again once no bar has a cup on it: the cup
+    /// is the only thing that keeps it awake, and the only thing that shows
+    /// that it is. Taken off a bar, it used to leave the machine awake with
+    /// nothing anywhere to say so or to turn it off.
+    /// </summary>
+    public static void Gone(SettingsModel settings)
     {
+        if (KeepAwake.On && !settings.Monitors.Any(m => m.Enabled && m.Widgets.Any(w => w.TypeId == Type)))
+        {
+            KeepAwake.Stop();
+        }
+    }
+
+    public override void Tick(SensorSnapshot snapshot)
+    {
+        // On its first tick on a bar, not when it is made: a cup is also made
+        // just to be measured, when one is carried over a bar, and carrying
+        // one past a bar and letting go elsewhere switched the machine to
+        // staying awake with no cup anywhere to say so.
         if (!_decided)
         {
             _decided = true;
             KeepAwake.Start(null);
         }
 
-        base.Attach();
-    }
-
-    public override void Tick(SensorSnapshot snapshot)
-    {
         if (!KeepAwake.On)
         {
             Draw(

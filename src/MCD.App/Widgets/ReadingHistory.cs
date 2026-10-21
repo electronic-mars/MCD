@@ -131,7 +131,7 @@ public static class ReadingHistory
         {
             Width = wide,
             Height = tall,
-            Background = (Brush)Application.Current.Resources["SubtleFillColorSecondaryBrush"],
+            Background = Palette.Get("SubtleFillColorSecondaryBrush"),
         };
 
         if (known.Length > 1)
@@ -145,7 +145,7 @@ public static class ReadingHistory
 
             var line = new Microsoft.UI.Xaml.Shapes.Polyline
             {
-                Stroke = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"],
+                Stroke = Palette.Get("AccentFillColorDefaultBrush"),
                 StrokeThickness = 1.5,
                 StrokeLineJoin = PenLineJoin.Round,
             };

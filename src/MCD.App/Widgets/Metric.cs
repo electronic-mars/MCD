@@ -777,31 +777,31 @@ public sealed partial class Metric : ObservableObject
     }
 
     private static Brush Neutral =>
-        (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
+        Palette.Get("TextFillColorPrimaryBrush");
 
     private Brush Accented => Braun
-        ? (Brush)Application.Current.Resources["McdReadingAccent"]
-        : (Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"];
+        ? Palette.Get("McdReadingAccent")
+        : Palette.Get("AccentTextFillColorPrimaryBrush");
 
     private static Brush Secondary =>
-        (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+        Palette.Get("TextFillColorSecondaryBrush");
 
     /// <summary>
     /// A grey of its own, not the text colour at a low alpha: over a
     /// translucent bar that one was as visible as the wallpaper let it be.
     /// </summary>
     private static Brush Dimmed =>
-        (Brush)Application.Current.Resources["McdInactiveBrush"];
+        Palette.Get("McdInactiveBrush");
 
     /// <summary>
     /// Fluent's own caution and critical colours, which follow the theme:
     /// deep amber and a firm red on a light bar, brighter ones on a dark bar.
     /// </summary>
     private static Brush Warm =>
-        (Brush)Application.Current.Resources["SystemFillColorCautionBrush"];
+        Palette.Get("SystemFillColorCautionBrush");
 
     private static Brush Hot =>
-        (Brush)Application.Current.Resources["McdCriticalBrush"];
+        Palette.Get("McdCriticalBrush");
 
     private enum Level
     {
