@@ -212,6 +212,41 @@ public sealed class SettingsServiceTests : IDisposable
     }
 
     [Fact]
+    public void UndoTakesBackALayoutTheBarHasSinceSettled()
+    {
+        using SettingsService service = Open();
+
+        service.Commit(
+            service.Current with
+            {
+                Monitors = [new MonitorConfig { StableId = "one", Widgets = [new WidgetConfig { InstanceId = "a", Cell = 3 }] }],
+            },
+            WriteReason.UserAction);
+
+        // The default bar put back: nothing placed yet...
+        service.Commit(
+            service.Current with
+            {
+                Monitors = [service.Current.Monitors[0] with { Widgets = [new WidgetConfig { InstanceId = "b", Cell = -2 }] }],
+            },
+            WriteReason.UserAction,
+            "restoring the default bar");
+
+        // ...until the bar writes down where it put it.
+        service.Commit(
+            service.Current with
+            {
+                Monitors = [service.Current.Monitors[0] with { Widgets = [new WidgetConfig { InstanceId = "b", Cell = 40 }] }],
+            },
+            WriteReason.WidgetConfig);
+
+        service.Undo().ShouldBeTrue();
+
+        service.Current.Monitors[0].Widgets.Single().InstanceId.ShouldBe("a");
+        service.CanUndo.ShouldBeFalse();
+    }
+
+    [Fact]
     public void AForgottenScreenComesBackWithItsBar()
     {
         using SettingsService service = Open();

@@ -66,7 +66,13 @@ public sealed class DimmProvider(HostClient host, ILogger<DimmProvider> log) : I
 
     public void Poll(IDictionary<SensorKey, double> into)
     {
-        if (!host.Connected || host.Latest.Dimms.Length == 0)
+        // See CpuMsrProvider.Poll: a service that has gone is a failure.
+        if (!host.Connected && !host.EnsureConnected())
+        {
+            throw new IOException("the sensor service is not answering");
+        }
+
+        if (host.Latest.Dimms.Length == 0)
         {
             return;
         }

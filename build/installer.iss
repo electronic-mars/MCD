@@ -109,10 +109,11 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
 Name: "autostart"; Description: "{cm:Autostart}"
 
 [Files]
-; The sensor service lives in a folder of its own and, once installed, runs
-; as the system with its files held open. A per-user installer cannot stop it,
-; so its files are left alone while it runs; the program says on the Readings
-; page when the service is older than the program.
+; The sensor service ships here only to be installed from: its own button,
+; with its own prompt, copies it into a folder under Program Files that only
+; administrators can change, and runs it from there as the system. Its files
+; are left alone while a service registered by an older version still runs
+; from this folder.
 Source: "{#SourceDir}\*"; Excludes: "SensorHost\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#SourceDir}\SensorHost\*"; DestDir: "{app}\SensorHost"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist; Check: not ServiceRunning
 
@@ -145,6 +146,12 @@ Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; \
 ; line the update would end with the program simply gone. The flag is ours and
 ; is passed only on that path.
 Filename: "{app}\{#AppExe}"; Flags: nowait runasoriginaluser; Check: WasStartedByTheProgram
+
+[UninstallRun]
+; Only an uninstall for all users has the rights to take the service out; one
+; for a single person cannot, and leaves it where it is harmless - under
+; Program Files, where only administrators can change it.
+Filename: "{app}\SensorHost\MasterControlDock.Sensors.exe"; Parameters: "--uninstall";     Flags: runhidden skipifdoesntexist; RunOnceId: "RemoveSensorService"; Check: IsAdminInstallMode
 
 [Code]
 function ServiceRunning: Boolean;

@@ -85,9 +85,15 @@ public sealed class CpuMsrProvider(HostClient host, ILogger<CpuMsrProvider> log)
 
     public void Poll(IDictionary<SensorKey, double> into)
     {
-        if (!host.Connected)
+        // The service gone - restarted for an update, reinstalled, stopped -
+        // is a failure, not a quiet second: answered with nothing, the hub
+        // took the source for healthy, never asked it to connect again, and
+        // the last temperatures stayed on the bar until the bar restarted.
+        // A restarted service is found again here, at once; one that stays
+        // away makes the source unavailable, and it is looked for again later.
+        if (!host.Connected && !host.EnsureConnected())
         {
-            return;
+            throw new IOException("the sensor service is not answering");
         }
 
         HostSnapshot snapshot = host.Latest;

@@ -102,7 +102,10 @@ public sealed class SettingsService : IDisposable
 
     /// <summary>One change, as it was and as it left things.</summary>
     private readonly record struct Change(
-        SettingsModel Before, SettingsModel After, string What, string? Where);
+        SettingsModel Before, SettingsModel After, string What, string? Where, DateTime At);
+
+    /// <summary>How long after a change a bar's own write-back still counts as part of it.</summary>
+    private static readonly TimeSpan Settling = TimeSpan.FromSeconds(5);
 
     /// <summary>Whether there is anything to take back.</summary>
     public bool CanUndo => _undo.Count > 0;
@@ -177,7 +180,7 @@ public sealed class SettingsService : IDisposable
         // ask for back.
         if (what is not null)
         {
-            _undo.Add(new Change(previous, model, what, where));
+            _undo.Add(new Change(previous, model, what, where, DateTime.UtcNow));
 
             // Twenty-five is plenty, and unbounded is a session's worth of
             // settings held for a button nobody presses twenty-six times.
@@ -186,9 +189,63 @@ public sealed class SettingsService : IDisposable
                 _undo.RemoveAt(0);
             }
         }
+        else if (reason == WriteReason.WidgetConfig)
+        {
+            Absorb(previous, model);
+        }
 
         _log.LogInformation("settings.commit reason={Reason}", reason);
         Changed?.Invoke(this, model);
+    }
+
+    /// <summary>
+    /// A bar writing down where it settled what a change has just put on it
+    /// becomes part of that change.
+    /// </summary>
+    /// <remarks>
+    /// A bar given a fresh layout - the default one, a widget added with the
+    /// plus, a program pinned - places what has no place yet and writes the
+    /// places down a moment later. Undo puts a screen back only while it is
+    /// exactly as the change left it, and after that write-back it never was:
+    /// the button was pressed, the entry was used up, and nothing came back.
+    /// Only the screens the change itself touched, and only straight after it:
+    /// another bar's housekeeping is its own business, and undo leaves it alone.
+    /// </remarks>
+    private void Absorb(SettingsModel previous, SettingsModel model)
+    {
+        if (_undo.Count == 0 || DateTime.UtcNow - _undo[^1].At > Settling)
+        {
+            return;
+        }
+
+        Change last = _undo[^1];
+        var before = last.Before.Monitors.ToDictionary(m => m.StableId);
+        var was = previous.Monitors.ToDictionary(m => m.StableId);
+        var now = model.Monitors.ToDictionary(m => m.StableId);
+        bool absorbed = false;
+
+        MonitorConfig[] monitors =
+        [
+            .. last.After.Monitors.Select(m =>
+            {
+                bool touched = !before.TryGetValue(m.StableId, out MonitorConfig? original) || original != m;
+
+                if (touched
+                    && was.TryGetValue(m.StableId, out MonitorConfig? left) && left == m
+                    && now.TryGetValue(m.StableId, out MonitorConfig? settled) && settled != m)
+                {
+                    absorbed = true;
+                    return settled;
+                }
+
+                return m;
+            }),
+        ];
+
+        if (absorbed)
+        {
+            _undo[^1] = last with { After = last.After with { Monitors = [.. monitors] } };
+        }
     }
 
     /// <summary>
