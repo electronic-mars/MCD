@@ -95,6 +95,29 @@ public sealed class TopologyChangeCoalescerTests
         }
     }
 
+    [Fact]
+    public void AChangeAnnouncedWhileReadingIsReadAgain()
+    {
+        var (coalescer, monitors, time, settled) = Build();
+        using (coalescer)
+        {
+            monitors.Next = Authoritative();
+
+            // The second screen arrives while the first read is under way.
+            monitors.During = () =>
+            {
+                monitors.During = null;
+                coalescer.Poke(TopologyTrigger.MonitorArrivedOrLeft);
+            };
+
+            coalescer.Poke(TopologyTrigger.DisplayChange);
+            Advance(time, TimeSpan.FromSeconds(2));
+
+            monitors.Reads.ShouldBe(2);
+            settled.Count.ShouldBe(2);
+        }
+    }
+
     /// <summary>
     /// Moves the clock in small steps. One big jump would skip timers that the
     /// callback re-arms while the jump is being processed, which is exactly the
@@ -136,9 +159,13 @@ public sealed class TopologyChangeCoalescerTests
 
         public int Reads { get; private set; }
 
+        /// <summary>Run in the middle of a read, as another notification arriving would.</summary>
+        public Action? During { get; set; }
+
         public override MonitorSnapshot Enumerate()
         {
             Reads++;
+            During?.Invoke();
             return Next;
         }
     }

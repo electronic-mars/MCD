@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Immutable;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mcd.Core.Infrastructure;
 using Microsoft.Extensions.Logging;
@@ -78,8 +79,16 @@ internal sealed class SettingsStore(ILogger log, string? directory = null)
 
         // The one place in the program allowed to write a settings file. The ban
         // exists so that nothing else does; this is what it is protecting.
+        //
+        // Written through to the disk before the swap: the swap is in the
+        // file system's journal at once, and the bytes it points at were not
+        // - after a power cut the new file could come back full of zeroes.
 #pragma warning disable RS0030
-        File.WriteAllText(TempPath, JsonSerializer.Serialize(model, Json));
+        using (var temp = new FileStream(TempPath, FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            temp.Write(System.Text.Encoding.UTF8.GetBytes(JsonSerializer.Serialize(model, Json)));
+            temp.Flush(flushToDisk: true);
+        }
 #pragma warning restore RS0030
 
         if (File.Exists(ConfigPath))
@@ -107,8 +116,32 @@ internal sealed class SettingsStore(ILogger log, string? directory = null)
     }
 
     /// <summary>Reads a settings file from anywhere, or null if it is not one.</summary>
-    public SettingsModel? Import(string path) =>
-        TryRead(path, out SettingsModel model) ? model : null;
+    /// <remarks>
+    /// One of ours has to say so: any JSON object at all read as one, with
+    /// every missing part filled from the defaults, and importing the wrong
+    /// file put the theme, the keys and the layouts back to new.
+    /// </remarks>
+    public SettingsModel? Import(string path)
+    {
+        try
+        {
+            using JsonDocument document = JsonDocument.Parse(File.ReadAllText(path));
+
+            if (document.RootElement.ValueKind != JsonValueKind.Object
+                || !document.RootElement.EnumerateObject().Any(p =>
+                    p.Name.Equals("schemaVersion", StringComparison.OrdinalIgnoreCase)
+                    || p.Name.Equals("monitors", StringComparison.OrdinalIgnoreCase)))
+            {
+                return null;
+            }
+        }
+        catch (Exception e) when (e is JsonException or IOException or UnauthorizedAccessException)
+        {
+            return null;
+        }
+
+        return TryRead(path, out SettingsModel model) ? model : null;
+    }
 
     private bool TryRead(string path, out SettingsModel model)
     {
@@ -129,7 +162,7 @@ internal sealed class SettingsStore(ILogger log, string? directory = null)
                 return false;
             }
 
-            model = parsed;
+            model = Clean(parsed);
             return true;
         }
         catch (Exception e) when (e is JsonException or IOException or UnauthorizedAccessException)
@@ -138,6 +171,43 @@ internal sealed class SettingsStore(ILogger log, string? directory = null)
             return false;
         }
     }
+
+    /// <summary>
+    /// The file as read, with the holes taken out.
+    /// </summary>
+    /// <remarks>
+    /// Nullability is not checked when a file is read: <c>"widgets": [null]</c>
+    /// or <c>"app": null</c> loaded without complaint and failed later, deep in
+    /// the layout - and was written back as it was, so every start failed the
+    /// same way and nothing ever set the file aside.
+    /// </remarks>
+    private static SettingsModel Clean(SettingsModel model)
+    {
+        AppSettings app = model.App ?? new AppSettings();
+        SensorSettings sensors = model.Sensors ?? new SensorSettings();
+
+        return model with
+        {
+            App = app with
+            {
+                Launcher = Present(app.Launcher),
+                Presets = [.. Present(app.Presets).Select(p => p with { Widgets = Present(p.Widgets) })],
+            },
+            Sensors = sensors with { StorageBlacklist = Present(sensors.StorageBlacklist) },
+            Monitors =
+            [
+                .. Present(model.Monitors).Select(m => m with
+                {
+                    Widgets = Present(m.Widgets),
+                    PreviousStableIds = Present(m.PreviousStableIds),
+                }),
+            ],
+        };
+    }
+
+    private static ImmutableArray<T> Present<T>(ImmutableArray<T> items)
+        where T : class =>
+        items.IsDefault ? [] : [.. items.Where(item => item is not null)];
 
     private void Quarantine()
     {
@@ -148,7 +218,7 @@ internal sealed class SettingsStore(ILogger log, string? directory = null)
             File.Move(ConfigPath, kept);
             log.LogError("settings.load kept the unreadable file as {Path}", kept);
         }
-        catch (IOException e)
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
             log.LogError(e, "settings.load could not set aside the unreadable file");
         }

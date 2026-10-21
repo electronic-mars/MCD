@@ -666,6 +666,7 @@ public sealed class DockWindowManager : IDisposable
             }
 
             window.SettingsRequested += (s, request) => SettingsRequested?.Invoke(s, request);
+            window.SessionEnding += (_, _) => _settings.Flush();
             window.ExitRequested += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
 
             // A bar that has been rearranged by hand says so; writing it down

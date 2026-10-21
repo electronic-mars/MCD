@@ -169,17 +169,28 @@ begin
 end;
 
 { Asks a running copy to stop, the way the program itself understands, and
-  gives it a few seconds to give the desktop back. }
+  waits until it has: its single-instance mutex goes when it is done giving
+  the desktop back. A fixed four seconds was not always enough, and a copy
+  still holding its files made a silent update give up halfway - after the
+  program had already left, so there were no bars at all. }
 procedure StopRunningCopy;
 var
   Exe: String;
   Code: Integer;
+  Waited: Integer;
 begin
   Exe := ExpandConstant('{app}\{#AppExe}');
   if FileExists(Exe) then
   begin
     Exec(Exe, '--exit', '', SW_HIDE, ewWaitUntilTerminated, Code);
-    Sleep(4000);
+    Waited := 0;
+    while CheckForMutexes('Local\MasterControlDockSingleInstance') and (Waited < 30000) do
+    begin
+      Sleep(250);
+      Waited := Waited + 250;
+    end;
+    { The process itself ends a moment after it lets the mutex go. }
+    Sleep(1000);
   end;
 end;
 

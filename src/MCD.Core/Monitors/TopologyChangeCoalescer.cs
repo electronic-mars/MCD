@@ -83,6 +83,7 @@ public sealed class TopologyChangeCoalescer : IDisposable
             }
 
             _trigger = trigger;
+            _pokes++;
 
             if (!_pending)
             {
@@ -121,9 +122,13 @@ public sealed class TopologyChangeCoalescer : IDisposable
         _timer.Dispose();
     }
 
+    /// <summary>Counts every poke, so a read knows whether one came in while it was reading.</summary>
+    private long _pokes;
+
     private void Tick()
     {
         TopologyTrigger trigger;
+        long pokes;
 
         lock (_gate)
         {
@@ -133,6 +138,7 @@ public sealed class TopologyChangeCoalescer : IDisposable
             }
 
             trigger = _trigger;
+            pokes = _pokes;
         }
 
         MonitorSnapshot snapshot = _monitors.Enumerate();
@@ -141,7 +147,15 @@ public sealed class TopologyChangeCoalescer : IDisposable
         {
             lock (_gate)
             {
-                _pending = false;
+                // Only what was asked for before this read is answered by it.
+                // A change announced while it was reading - the next step of a
+                // Win+P, a second screen arriving - re-armed the timer and then
+                // found nothing pending, and was never read at all.
+                if (_pokes == pokes)
+                {
+                    _pending = false;
+                }
+
                 _retry = -1;
             }
 

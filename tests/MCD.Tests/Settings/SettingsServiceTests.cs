@@ -410,6 +410,34 @@ public sealed class SettingsServiceTests : IDisposable
         service.Import(junk, "loaded").ShouldBeNull();
     }
 
+    [Fact]
+    public void JsonThatIsNotOursIsNotTakenForSettings()
+    {
+        string other = Path.Combine(_dir, "other.json");
+        File.WriteAllText(other, "{ \"name\": \"some other program\" }");
+
+        using SettingsService service = Open();
+
+        service.Import(other, "loaded").ShouldBeNull();
+    }
+
+    [Fact]
+    public void HolesInTheFileAreTakenOutWhenItIsRead()
+    {
+        Write("""
+            {
+              "schemaVersion": 9,
+              "app": { "presets": [null] },
+              "monitors": [ null, { "stableId": "one", "widgets": [ null, { "instanceId": "a", "typeId": "mcd.clock" } ] } ]
+            }
+            """);
+
+        using SettingsService service = Open();
+
+        service.Current.Monitors.Single().Widgets.Single().InstanceId.ShouldBe("a");
+        service.Current.App.Presets.ShouldBeEmpty();
+    }
+
     private SettingsService Open() => new(NullLogger<SettingsService>.Instance, _dir);
 
     private string Config() => File.ReadAllText(Path.Combine(_dir, "config.json"));

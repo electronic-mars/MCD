@@ -2759,8 +2759,19 @@ public sealed partial class DockWindow : Window
 
     private bool _watched = true;
 
+    /// <summary>Windows is signing out or shutting down: whatever must be kept has to be written now.</summary>
+    public event EventHandler? SessionEnding;
+
     private void OnMessage(object? sender, WindowMessageEventArgs e)
     {
+        // WM_ENDSESSION with yes: the process is ended without the usual way
+        // out, and a change made in the last half second was never written.
+        if (e.Message == 0x0016 && e.WParam != 0)
+        {
+            SessionEnding?.Invoke(this, EventArgs.Empty);
+            return;
+        }
+
         if (e.Message != _appBar.CallbackMessage)
         {
             return;

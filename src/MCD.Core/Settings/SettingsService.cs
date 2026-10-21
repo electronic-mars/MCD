@@ -29,7 +29,7 @@ public enum WriteReason
 /// </para>
 /// <para>
 /// Writes are coalesced: dragging a slider must not produce a hundred files.
-/// The pending write is flushed on window close, WM_ENDSESSION and process exit.
+/// The pending write is flushed on window close, WM_ENDSESSION (through the bars) and process exit.
 /// </para>
 /// </remarks>
 public sealed class SettingsService : IDisposable
@@ -377,8 +377,25 @@ public sealed class SettingsService : IDisposable
         return filled;
     }
 
+    /// <summary>One save at a time: see <see cref="Flush"/>.</summary>
+    private readonly Lock _saving = new();
+
     /// <summary>Writes any pending change out now.</summary>
+    /// <remarks>
+    /// One at a time, and the whole of it. The timer's save marked the change
+    /// written before writing it; a flush on the way out then found nothing to
+    /// do and the process left while the file was half way through being
+    /// replaced, taking the last change with it.
+    /// </remarks>
     public void Flush()
+    {
+        lock (_saving)
+        {
+            Save();
+        }
+    }
+
+    private void Save()
     {
         SettingsModel snapshot;
 
