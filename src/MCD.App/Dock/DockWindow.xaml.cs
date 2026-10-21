@@ -959,15 +959,9 @@ public sealed partial class DockWindow : Window
     /// program on the taskbar. The settings window keeps a dialog as the way
     /// to pin an address, which has no file to drag.
     /// </remarks>
-    private async void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+    private void OnDragOverFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
-        bool files = e.DataView.Contains(
-            Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems);
-
-        bool widget = e.DataView.Contains(
-            Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text);
-
-        if (!files && !widget)
+        if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
         {
             return;
         }
@@ -991,73 +985,16 @@ public sealed partial class DockWindow : Window
         // saying nothing.
         ShowSlots(true);
 
-        // A file becomes an icon, which is one slot; a widget is as long as it
-        // says it is. Asked once for the whole drag rather than on every frame
-        // of it: the answer cannot change while the pointer moves, and reading
-        // the package is not free.
-        if (widget && !_measured)
-        {
-            _measured = true;
-
-            Microsoft.UI.Xaml.DragOperationDeferral held = e.GetDeferral();
-
-            try
-            {
-                string carried = await e.DataView.GetTextAsync();
-
-                if (WidgetDrag.Unwrap(carried) is { } coming)
-                {
-                    _incoming = SpanWanted(coming);
-                }
-            }
-            catch (Exception measuring)
-            {
-                // A package that will not read is a package this bar cannot
-                // size. One slot is the old answer and it is not worse.
-                _log.LogWarning(measuring, "dock.drag could not be measured");
-            }
-            finally
-            {
-                held.Complete();
-            }
-        }
-
-        Aim(CellAt(e.GetPosition(Bar)), _incoming, ignore: null);
+        // A file becomes an icon, which is one slot.
+        Aim(CellAt(e.GetPosition(Bar)), 1, ignore: null);
     }
 
-    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
-    {
-        Forget();
-        ShowSlots(false);
-    }
-
-    /// <summary>Forgets what the last drag was carrying.</summary>
-    private void Forget()
-    {
-        _incoming = 1;
-        _measured = false;
-    }
+    private void OnDragLeaveFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e) => ShowSlots(false);
 
     private async void OnDropFiles(object sender, Microsoft.UI.Xaml.DragEventArgs e)
     {
         int cell = CellAt(e.GetPosition(Bar));
         ShowSlots(false);
-        Forget();
-
-        // A widget carried over from the settings window. It lands on the slot
-        // it was dropped on, which is the whole point of carrying it: a press
-        // in another window puts a thing on a bar somewhere with nothing to
-        // watch, and a drag ends where the thing is going.
-        if (e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text))
-        {
-            string carried = await e.DataView.GetTextAsync();
-
-            if (WidgetDrag.Unwrap(carried) is { } dropped)
-            {
-                Place(dropped, cell);
-                return;
-            }
-        }
 
         if (!e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
         {
@@ -1800,11 +1737,89 @@ public sealed partial class DockWindow : Window
         }
     }
 
-    /// <summary>How many slots the thing being dragged in from outside wants.</summary>
-    private int _incoming = 1;
+    /// <summary>
+    /// The widget being carried over this bar from the settings window, and
+    /// how many slots it wants; null while nothing is.
+    /// </summary>
+    private (string Id, int Span)? _carried;
 
-    /// <summary>Whether this drag has already been asked how long it is.</summary>
-    private bool _measured;
+    /// <summary>
+    /// A widget carried from the settings window is over this point of the
+    /// desktop: the slots come up and the landing lights, if the point is on
+    /// this bar. False, and nothing shown, when it is not.
+    /// </summary>
+    /// <remarks>
+    /// The settings window carries it itself, with the pointer held, rather
+    /// than through Windows' drag and drop. That one draws its own sign beside
+    /// the pointer over anything that will not take the drop - the desktop on
+    /// the way from the window to the bar - and the sign covered the very bar
+    /// somebody was aiming at.
+    /// </remarks>
+    public bool Carry(int x, int y, WidgetConfig entry)
+    {
+        if (BarPoint(x, y) is not { } at)
+        {
+            EndCarry();
+            return false;
+        }
+
+        if (_carried?.Id != entry.InstanceId)
+        {
+            _carried = (entry.InstanceId, SpanWanted(entry));
+            ShowSlots(true);
+        }
+
+        Aim(CellAt(at), _carried.Value.Span, ignore: null);
+        return true;
+    }
+
+    /// <summary>The carried widget let go of at this point: put on this bar if the point is on it.</summary>
+    public bool Deliver(int x, int y, WidgetConfig entry)
+    {
+        Point? at = BarPoint(x, y);
+        EndCarry();
+
+        if (at is null)
+        {
+            return false;
+        }
+
+        Place(entry, CellAt(at.Value));
+        return true;
+    }
+
+    /// <summary>Takes down what a carried widget put up.</summary>
+    public void EndCarry()
+    {
+        if (_carried is null)
+        {
+            return;
+        }
+
+        _carried = null;
+        ShowSlots(false);
+    }
+
+    /// <summary>A point of the desktop in the bar's own coordinates, or null when it is not on this bar.</summary>
+    private Point? BarPoint(int x, int y)
+    {
+        if (_tornDown || Bar.XamlRoot is null)
+        {
+            return null;
+        }
+
+        Windows.Win32.Foundation.RECT rc = WindowFrame.RectOf(_hwnd);
+
+        if (x < rc.left || x >= rc.right || y < rc.top || y >= rc.bottom)
+        {
+            return null;
+        }
+
+        double scale = Bar.XamlRoot.RasterizationScale;
+        Point origin = Bar.TransformToVisual(null).TransformPoint(new Point(0, 0));
+
+        return new Point((x - rc.left) / scale - origin.X, (y - rc.top) / scale - origin.Y);
+    }
 
     /// <summary>Sizes a host to what its widget declares.</summary>
     private void Believe(WidgetHost host, WidgetViewModel widget)

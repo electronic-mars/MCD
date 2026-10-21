@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Widgety</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>Přetáhněte na panel</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Hledat widgety</value>
   </data>

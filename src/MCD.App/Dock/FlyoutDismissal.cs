@@ -1,6 +1,10 @@
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Media;
+using Mcd.Interop.Windowing;
 
 namespace Mcd.App.Dock;
 
@@ -13,11 +17,15 @@ namespace Mcd.App.Dock;
 /// A flyout closes by itself on a click inside the window it belongs to, or
 /// on one that takes the activation away from it. A click on the empty
 /// desktop does neither, and the slider stayed open over it. So while one is
-/// open, every press on the machine is heard (see <see cref="Mcd.Interop.Windowing.PressWatch"/>):
+/// open, every press on the machine is heard (see <see cref="PressWatch"/>):
 /// a press anywhere but on the panel itself closes it - another program, the
-/// desktop, the bar. And the pointer is
-/// looked at a few times a second: ten seconds with it away, or resting on
-/// the panel without moving, close it too.
+/// desktop, the bar. And ten seconds unused close it too: the pointer away
+/// from this program, or resting without moving, and no key pressed in it.
+/// </para>
+/// <para>
+/// A panel is told from everything else by the window it is drawn in, so
+/// every watched one is let out of its bar into a window of its own - which a
+/// panel on a strip a few tens of points thick has to be anyway.
 /// </para>
 /// </remarks>
 public static class FlyoutDismissal
@@ -25,87 +33,185 @@ public static class FlyoutDismissal
     private static readonly TimeSpan Idle = TimeSpan.FromSeconds(10);
     private static readonly TimeSpan Beat = TimeSpan.FromMilliseconds(120);
 
-    /// <summary>When each flyout was last put away by a press, so a press on its own button does not open it again.</summary>
-    private static readonly ConditionalWeakTable<FlyoutBase, object> Watched = [];
+    /// <summary>
+    /// Long enough to cover the button that opens a panel hearing the same
+    /// press that has just put the panel away.
+    /// </summary>
+    private static readonly TimeSpan Echo = TimeSpan.FromMilliseconds(600);
 
-    /// <summary>Held while running: a timer only a local refers to is garbage.</summary>
-    private static readonly HashSet<DispatcherQueueTimer> Running = [];
+    private sealed class Watched
+    {
+        /// <summary>When it was last put away by a press on the bar, which may be its own button.</summary>
+        public DateTime PressedOnBar = DateTime.MinValue;
+
+        /// <summary>The last time somebody did something with it.</summary>
+        public DateTime Used;
+    }
+
+    private static readonly ConditionalWeakTable<FlyoutBase, Watched> Known = [];
+
+    /// <summary>The panels open now.</summary>
+    private static readonly List<FlyoutBase> Open = [];
+
+    private static DispatcherQueueTimer? _timer;
+    private static (int X, int Y) _pointer;
 
     /// <summary>Watches this flyout every time it opens. Asking twice changes nothing.</summary>
     public static void Watch(FlyoutBase flyout)
     {
-        if (Watched.TryGetValue(flyout, out _))
+        if (Known.TryGetValue(flyout, out _))
         {
             return;
         }
 
-        var dismissed = new StrongBox<DateTime>(DateTime.MinValue);
-        Watched.Add(flyout, dismissed);
+        var watched = new Watched();
+        Known.Add(flyout, watched);
+
+        flyout.ShouldConstrainToRootBounds = false;
+
+        // Keys count as use: a slider worked with the arrows has no pointer
+        // moving over it. Heard even when the slider has handled them.
+        if (flyout is Flyout { Content: UIElement content })
+        {
+            content.AddHandler(
+                UIElement.KeyDownEvent,
+                new Microsoft.UI.Xaml.Input.KeyEventHandler((_, _) => watched.Used = DateTime.UtcNow),
+                handledEventsToo: true);
+        }
 
         flyout.Opened += (_, _) =>
         {
-            // The press that put it away was on the button that opens it:
-            // the button heard the same press and opened it again. A press
-            // on the button of an open panel means "close".
-            if (DateTime.UtcNow - dismissed.Value < TimeSpan.FromMilliseconds(600))
+            // The press that put it away was on the bar, perhaps on the button
+            // that opens it - which heard the same press and opened it again.
+            // A press on the button of an open panel means "close". A press
+            // anywhere else, then a quick press on the button, is a reopening
+            // and is left alone.
+            if (DateTime.UtcNow - watched.PressedOnBar < Echo)
             {
+                watched.PressedOnBar = DateTime.MinValue;
                 flyout.Hide();
                 return;
             }
 
-            Begin(flyout, dismissed);
+            watched.Used = DateTime.UtcNow;
+            Begin(flyout);
         };
+
+        flyout.Closed += (_, _) => End(flyout);
     }
 
-    private static void Begin(FlyoutBase flyout, StrongBox<DateTime> dismissed)
+    /// <summary>Watches every button with a panel inside this element, once it has been laid out.</summary>
+    public static void WatchWithin(FrameworkElement root) =>
+        root.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () => Walk(root));
+
+    private static void Walk(DependencyObject at)
     {
-        DispatcherQueueTimer timer = DispatcherQueue.GetForCurrentThread().CreateTimer();
-        timer.Interval = Beat;
-
-        DateTime used = DateTime.UtcNow;
-        (int X, int Y, bool Down, bool Ours) last = Mcd.Interop.Windowing.WindowFrame.PointerNow();
-
-        DispatcherQueue ui = DispatcherQueue.GetForCurrentThread();
-
-        // Called inside the hook, which has to answer at once: the point is
-        // only handed over, and looked at here.
-        var presses = new Mcd.Interop.Windowing.PressWatch((x, y) => ui.TryEnqueue(() =>
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(at); i++)
         {
-            if (!Mcd.Interop.Windowing.WindowFrame.PopupAt(x, y))
+            DependencyObject child = VisualTreeHelper.GetChild(at, i);
+
+            if (child is Button { Flyout: { } flyout })
             {
-                dismissed.Value = DateTime.UtcNow;
-                flyout.Hide();
+                Watch(flyout);
             }
-        }));
 
-        void Stop(object? sender, object e)
+            Walk(child);
+        }
+    }
+
+    private static void Begin(FlyoutBase flyout)
+    {
+        if (!Open.Contains(flyout))
         {
-            timer.Stop();
-            presses.Dispose();
-            Running.Remove(timer);
-            flyout.Closed -= Stop;
+            Open.Add(flyout);
         }
 
-        flyout.Closed += Stop;
-
-        timer.Tick += (_, _) =>
+        if (_timer is null)
         {
-            (int X, int Y, bool Down, bool Ours) now = Mcd.Interop.Windowing.WindowFrame.PointerNow();
+            _timer = DispatcherQueue.GetForCurrentThread().CreateTimer();
+            _timer.Interval = Beat;
+            _timer.Tick += (_, _) => Look();
+        }
 
-            if (now.Ours && (now.Down || now.X != last.X || now.Y != last.Y))
+        (int x, int y, _, _) = WindowFrame.PointerNow();
+        _pointer = (x, y);
+
+        if (!_timer.IsRunning)
+        {
+            DispatcherQueue ui = DispatcherQueue.GetForCurrentThread();
+
+            // Inside the hook, which has to answer at once: the window under
+            // the press is asked about there, at the moment of the press, and
+            // the closing is done after, on the window's thread.
+            PressWatch.On((px, py) =>
             {
-                used = DateTime.UtcNow;
+                bool panel = WindowFrame.PopupAt(px, py);
+                bool ours = !panel && WindowFrame.OursAt(px, py);
+
+                if (!panel)
+                {
+                    ui.TryEnqueue(() => Pressed(ours));
+                }
+            });
+
+            _timer.Start();
+        }
+    }
+
+    private static void Pressed(bool onBar)
+    {
+        foreach (FlyoutBase flyout in Open.ToList())
+        {
+            if (onBar && Known.TryGetValue(flyout, out Watched? watched))
+            {
+                watched.PressedOnBar = DateTime.UtcNow;
             }
 
-            last = now;
+            flyout.Hide();
+        }
+    }
 
-            if (DateTime.UtcNow - used >= Idle)
+    private static void Look()
+    {
+        (int x, int y, bool down, bool ours) = WindowFrame.PointerNow();
+        bool moved = (x, y) != _pointer;
+        _pointer = (x, y);
+
+        foreach (FlyoutBase flyout in Open.ToList())
+        {
+            // Its bar rebuilt under it, or closed without a word: nothing more
+            // to watch.
+            if (!flyout.IsOpen || flyout.XamlRoot is null)
+            {
+                End(flyout);
+                continue;
+            }
+
+            if (!Known.TryGetValue(flyout, out Watched? watched))
+            {
+                continue;
+            }
+
+            if (ours && (down || moved))
+            {
+                watched.Used = DateTime.UtcNow;
+            }
+
+            if (DateTime.UtcNow - watched.Used >= Idle)
             {
                 flyout.Hide();
             }
-        };
+        }
+    }
 
-        Running.Add(timer);
-        timer.Start();
+    private static void End(FlyoutBase flyout)
+    {
+        Open.Remove(flyout);
+
+        if (Open.Count == 0 && _timer is { IsRunning: true })
+        {
+            _timer.Stop();
+            PressWatch.Off();
+        }
     }
 }

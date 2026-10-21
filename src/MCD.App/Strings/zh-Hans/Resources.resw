@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>小组件</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>拖放到停靠栏上</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>搜索小组件</value>
   </data>

@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>ウィジェット</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>バーにドロップ</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>ウィジェットを検索</value>
   </data>

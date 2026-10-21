@@ -155,7 +155,6 @@ public sealed partial class BrightnessWidget(WidgetContext context, WidgetConfig
         {
             flyout.XamlRoot = button.XamlRoot;
             flyout.Placement = PopupSide;
-            Mcd.App.Dock.FlyoutDismissal.Watch(flyout);
         }
     }
 

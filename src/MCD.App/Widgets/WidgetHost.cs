@@ -42,6 +42,10 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
         IsTabStop = false;
         CornerRadius = new CornerRadius(4);
 
+        // Any panel a widget's own buttons open is put away when it is no
+        // longer used, whichever widget it is.
+        Loaded += (_, _) => Mcd.App.Dock.FlyoutDismissal.WatchWithin(this);
+
         // A control with no Background takes part in no hit testing at all, so
         // the click falls through to the bar behind and nothing happens. The
         // brush doubles as the whole-widget hover: the area under the pointer

@@ -966,6 +966,31 @@ public partial class App : Application
                 }
             }
 
+            // A widget carried from the settings window, as the pointer carries
+            // it: over the middle of the main screen's bar, then let go there.
+            if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "carry")
+            {
+                Later(3000, () =>
+                {
+                    if (_docks?.Plans.FirstOrDefault(p => p.ShouldShow && p.Monitor.IsPrimary) is not { } plan)
+                    {
+                        return;
+                    }
+
+                    var b = plan.Monitor.Bounds;
+                    (int x, int y) = ((b.left + b.right) / 2, b.top + 6);
+                    WidgetConfig entry = WidgetConfig.New(Mcd.App.Widgets.ClockWidget.Type);
+
+                    log.LogInformation(
+                        "selftest.carry over={Over} beside={Beside}",
+                        _docks.Carry(x, y, entry),
+                        _docks.Carry(b.left - 50, b.top - 50, entry));
+
+                    _docks.Carry(x, y, entry);
+                    log.LogInformation("selftest.carry placed={Placed}", _docks.Deliver(x, y, entry));
+                });
+            }
+
             if (Environment.GetEnvironmentVariable("MCD_SELFTEST_FLIP") == "identify")
             {
                 Later(3000, () =>

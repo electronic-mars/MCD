@@ -131,7 +131,6 @@ public sealed partial class SoundWidget(WidgetContext context, WidgetConfig entr
         {
             flyout.XamlRoot = button.XamlRoot;
             flyout.Placement = PopupSide;
-            Mcd.App.Dock.FlyoutDismissal.Watch(flyout);
         }
     }
 

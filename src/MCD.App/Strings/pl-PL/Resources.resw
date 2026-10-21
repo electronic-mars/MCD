@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Widżety</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>Upuść na pasku</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Szukaj widżetów</value>
   </data>

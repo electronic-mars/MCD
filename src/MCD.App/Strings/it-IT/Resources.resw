@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Widget</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>Rilascia sulla barra</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Cerca widget</value>
   </data>

@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>위젯</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>바에 드롭하세요</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>위젯 검색</value>
   </data>

@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Widgets</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>Sleep naar een balk</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Widgets zoeken</value>
   </data>

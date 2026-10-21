@@ -323,6 +323,41 @@ public sealed class DockWindowManager : IDisposable
         _windows.Values.SelectMany(w => w.Widgets(typeId));
 
     /// <summary>Opens the flyout of every widget of one kind, as a press does. For the self-test.</summary>
+    /// <summary>A widget carried from the settings window is over this point of the desktop; true when a bar is under it.</summary>
+    public bool Carry(int x, int y, WidgetConfig entry)
+    {
+        bool over = false;
+
+        foreach (DockWindow window in _windows.Values)
+        {
+            over |= window.Carry(x, y, entry);
+        }
+
+        return over;
+    }
+
+    /// <summary>The carried widget let go of here: put on the bar under the point, if there is one.</summary>
+    public bool Deliver(int x, int y, WidgetConfig entry)
+    {
+        bool placed = false;
+
+        foreach (DockWindow window in _windows.Values)
+        {
+            placed |= window.Deliver(x, y, entry);
+        }
+
+        return placed;
+    }
+
+    /// <summary>Nothing is being carried any more.</summary>
+    public void EndCarry()
+    {
+        foreach (DockWindow window in _windows.Values)
+        {
+            window.EndCarry();
+        }
+    }
+
     public int OpenFlyouts(string typeId) => _windows.Values.Sum(w => w.OpenFlyouts(typeId));
 
     /// <summary>Shows the bars as a drag over them shows them. For the self-test.</summary>

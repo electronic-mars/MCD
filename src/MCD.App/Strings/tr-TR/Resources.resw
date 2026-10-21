@@ -1742,9 +1742,6 @@
   <data name="GalleryHeading" xml:space="preserve">
     <value>Pencere Öğeleri</value>
   </data>
-  <data name="DragToBar" xml:space="preserve">
-    <value>Çubuğa bırakın</value>
-  </data>
   <data name="GallerySearch" xml:space="preserve">
     <value>Pencere öğelerini ara</value>
   </data>

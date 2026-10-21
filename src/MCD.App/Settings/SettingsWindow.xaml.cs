@@ -177,24 +177,6 @@ public sealed partial class SettingsWindow : Window
 
         Root.KeyboardAccelerators.Add(undoKey);
 
-        // A widget carried over this window says where it is going instead of
-        // showing the system's "forbidden" sign, which read as "this does not
-        // work" rather than "not here, on a bar".
-        Root.AllowDrop = true;
-        Root.DragOver += (_, e) =>
-        {
-            if (e.DataView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text)
-                && e.DragUIOverride is { } hint)
-            {
-                e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
-                hint.IsGlyphVisible = false;
-                hint.IsCaptionVisible = true;
-                hint.Caption = Loc.Tr("DragToBar", "Drop on a bar");
-            }
-        };
-
-        Root.Drop += (_, e) => e.Handled = true;
-
         Reload();
         // Their own titles and screen switchers are the widgets page's now.
         foreach (StackPanel part in new[] { PinsSection, PresetsSection })
@@ -2917,20 +2899,12 @@ public sealed partial class SettingsWindow : Window
 
             // What is picked up is the widget's own picture, not the whole
             // card with its caption, count and plus.
-            picture.CanDrag = true;
+            Carryable(picture, offer);
 
             ToolTipService.SetToolTip(
                 chip,
                 offer.Description + "\n" + Loc.Tr(
                     "ChipHint", "Drag a widget onto a bar, or select + to add it to the selected bar."));
-
-            WidgetOffer chosen = offer;
-
-            picture.DragStarting += (_, args) =>
-            {
-                args.Data.SetText(WidgetDrag.Wrap(chosen.Make()));
-                args.Data.RequestedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
-            };
 
             gallery.Children.Add(chip);
             chips.Add((chip, offer.Category, (offer.Name + " " + (offer.Short ?? string.Empty) + " " + offer.Description).ToLowerInvariant()));
@@ -3081,6 +3055,92 @@ public sealed partial class SettingsWindow : Window
                 : Windows.UI.Color.FromArgb(0x1A, 0x00, 0x00, 0x00)),
             VerticalAlignment = VerticalAlignment.Center,
             Child = line,
+        };
+    }
+
+    /// <summary>
+    /// A widget's picture in the gallery, carried to a bar with the pointer
+    /// held: the bar under the pointer lights the slots it would take, and
+    /// letting go there puts it on them.
+    /// </summary>
+    /// <remarks>
+    /// Carried by hand rather than through Windows' drag and drop. That one
+    /// draws a "will not go here" sign beside the pointer over everything
+    /// that refuses the drop - the desktop between this window and the bar -
+    /// and the sign sat over the very bar somebody was aiming at. Held, the
+    /// pointer still reports where it is when it leaves this window.
+    /// </remarks>
+    private void Carryable(UIElement picture, WidgetOffer offer)
+    {
+        WidgetConfig? carried = null;
+        (int X, int Y) from = default;
+        bool held = false;
+
+        picture.PointerPressed += (_, e) =>
+        {
+            if (!e.GetCurrentPoint(picture).Properties.IsLeftButtonPressed)
+            {
+                return;
+            }
+
+            held = picture.CapturePointer(e.Pointer);
+            from = Mcd.Interop.Windowing.WindowFrame.CursorAt();
+            carried = null;
+            e.Handled = true;
+        };
+
+        picture.PointerMoved += (_, _) =>
+        {
+            if (!held)
+            {
+                return;
+            }
+
+            (int x, int y) = Mcd.Interop.Windowing.WindowFrame.CursorAt();
+
+            // A few pixels of a shaking hand are not a journey.
+            if (carried is null)
+            {
+                if (Math.Abs(x - from.X) + Math.Abs(y - from.Y) < 8)
+                {
+                    return;
+                }
+
+                carried = offer.Make();
+            }
+
+            _docks.Carry(x, y, carried);
+        };
+
+        picture.PointerReleased += (_, e) =>
+        {
+            if (!held)
+            {
+                return;
+            }
+
+            held = false;
+
+            if (carried is { } entry)
+            {
+                (int x, int y) = Mcd.Interop.Windowing.WindowFrame.CursorAt();
+                bool placed = _docks.Deliver(x, y, entry);
+                _log.LogInformation("settings.carried {Widget} placed={Placed}", entry.TypeId, placed);
+            }
+
+            carried = null;
+            picture.ReleasePointerCapture(e.Pointer);
+        };
+
+        // Taken away - another window, Escape, the system - mid-journey.
+        picture.PointerCaptureLost += (_, _) =>
+        {
+            if (held)
+            {
+                held = false;
+                carried = null;
+                _docks.EndCarry();
+            }
         };
     }
 
