@@ -212,6 +212,41 @@ public sealed class SettingsServiceTests : IDisposable
     }
 
     [Fact]
+    public void OneHandOnASliderIsOneThingToTakeBack()
+    {
+        using SettingsService service = Open();
+        string first = service.Current.App.BackdropColour;
+
+        foreach (string colour in new[] { "#E0202020", "#C0202020", "#A0202020" })
+        {
+            service.Commit(
+                service.Current with { App = service.Current.App with { BackdropColour = colour } },
+                WriteReason.UserAction,
+                "changing the colour");
+        }
+
+        service.Undo().ShouldBeTrue();
+
+        service.Current.App.BackdropColour.ShouldBe(first);
+        service.CanUndo.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void AChangeThatChangesNothingIsNotOneToTakeBack()
+    {
+        using SettingsService service = Open();
+
+        // The same settings, made again: new lists of the same things.
+        bool changed = service.Commit(
+            service.Current with { Monitors = [.. service.Current.Monitors] },
+            WriteReason.UserAction,
+            "choosing the edge it already has");
+
+        changed.ShouldBeFalse();
+        service.CanUndo.ShouldBeFalse();
+    }
+
+    [Fact]
     public void UndoTakesBackALayoutTheBarHasSinceSettled()
     {
         using SettingsService service = Open();

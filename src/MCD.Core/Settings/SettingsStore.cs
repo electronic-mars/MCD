@@ -17,6 +17,9 @@ namespace Mcd.Core.Settings;
 /// </remarks>
 internal sealed class SettingsStore(ILogger log, string? directory = null)
 {
+    /// <summary>The settings as the file would hold them: two models that read the same are the same settings.</summary>
+    public static string Text(SettingsModel model) => JsonSerializer.Serialize(model, Json);
+
     private static readonly JsonSerializerOptions Json = new()
     {
         WriteIndented = true,

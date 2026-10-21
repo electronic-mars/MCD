@@ -92,7 +92,7 @@ public sealed partial class SettingsWindow : Window
         // The Braun body, painted from code: a ThemeResource on the root
         // element cannot see the root's own dictionary during the parse.
         PaintBody();
-        Root.ActualThemeChanged += (_, _) => PaintBody();
+        Root.ActualThemeChanged += (_, _) => Repaint();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(TitleBar);
         // The taskbar's own theme picks which of the two drawings the window wears.
@@ -1469,7 +1469,17 @@ public sealed partial class SettingsWindow : Window
                 Loc.Tr("EdgeBottom", "Bottom"),
             ],
             Array.IndexOf(edges, dock.Edge),
-            i => SetDock(d => d with { Edge = edges[i] }, Loc.Tr("UndoEdge", "changing the edge")),
+            // The size goes with it. "Compact" is a thinner bar across the
+            // top or bottom and smaller readings down a side; moved from a
+            // side to the top, a compact bar kept the side's way of saying it
+            // and the choice below lit "Normal" over a bar drawn small.
+            i => SetDock(
+                d => d with
+                {
+                    Edge = edges[i],
+                    Density = Step(d) == 0 && DockMetrics.IsHorizontal(edges[i]) ? DockDensity.Compact : DockDensity.Default,
+                },
+                Loc.Tr("UndoEdge", "changing the edge")),
             wide: true);
 
         Panel sizeKeys = Braun.Segs(
@@ -1940,7 +1950,7 @@ public sealed partial class SettingsWindow : Window
 
             keys.Children.Add(Braun.Action(
                 Loc.Tr("ListRemove", "Remove from bar"),
-                () => TakeOff(entry, Loc.Tr("UndoRemoved", "removing {0}")),
+                () => TakeOff(entry, Removing(name)),
                 "Delete"));
 
             Grid row = Braun.Row(name, Middle(target, 56), keys);
@@ -2129,10 +2139,15 @@ public sealed partial class SettingsWindow : Window
     /// <summary>Asks for a name and keeps this bar's arrangement under it.</summary>
     private async void SavePreset()
     {
-        if (Dock() is not { } dock || _docks.Slots(dock.StableId) is not { } slots)
+        if (Dock() is not { } dock)
         {
             return;
         }
+
+        // From the bar when it is up, or from what it last wrote down when it
+        // is not - switched off, hidden, or its screen unplugged. The button
+        // is offered for those too, and did nothing for them.
+        int slots = _docks.Slots(dock.StableId) ?? dock.Slots;
 
         var box = new TextBox
         {
@@ -2339,7 +2354,10 @@ public sealed partial class SettingsWindow : Window
         }
 
         EditDock(change, what);
-        ShowDock();
+
+        // The screen tabs too: their lamps say which screens have a bar, and
+        // switching one off left its lamp lit.
+        ReloadDocks();
     }
 
     /// <summary>What this screen's bar is holding but has no room to show.</summary>
@@ -2521,7 +2539,7 @@ public sealed partial class SettingsWindow : Window
             Button off = Small(
                 "Delete",
                 Loc.Tr("ListRemove", "Remove from bar"),
-                () => TakeOff(entry, Loc.Tr("UndoRemoved", "removing {0}")),
+                () => TakeOff(entry, Removing(called)),
                 danger: false);
 
             Grid.SetColumn(off, 4);
@@ -3078,6 +3096,7 @@ public sealed partial class SettingsWindow : Window
         WidgetConfig? carried = null;
         (int X, int Y) from = default;
         bool held = false;
+        int presses = 0;
         Mcd.Interop.Windowing.Ghost? ghost = null;
 
         void Drop()
@@ -3087,7 +3106,7 @@ public sealed partial class SettingsWindow : Window
         }
 
         // Taken at the press, so it is ready by the time the hand moves.
-        async void Photograph(Windows.Foundation.Point at)
+        async void Photograph(Windows.Foundation.Point at, int press)
         {
             try
             {
@@ -3096,12 +3115,16 @@ public sealed partial class SettingsWindow : Window
                 byte[] pixels = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions
                     .ToArray(await shot.GetPixelsAsync());
 
-                if (!held)
+                // Only for the press it was taken for, while it is still held:
+                // two quick presses gave two pictures, and the first was left
+                // on the screen for good.
+                if (!held || press != presses)
                 {
                     return;
                 }
 
                 double scale = picture.XamlRoot.RasterizationScale;
+                ghost?.Dispose();
                 ghost = new Mcd.Interop.Windowing.Ghost(
                     pixels, shot.PixelWidth, shot.PixelHeight, (int)(at.X * scale), (int)(at.Y * scale));
             }
@@ -3126,7 +3149,7 @@ public sealed partial class SettingsWindow : Window
 
             if (held)
             {
-                Photograph(e.GetCurrentPoint(picture).Position);
+                Photograph(e.GetCurrentPoint(picture).Position, ++presses);
             }
         };
 
@@ -3581,9 +3604,10 @@ public sealed partial class SettingsWindow : Window
         SettingsModel model, WriteReason reason, string? what = null, string? where = null)
     {
         _mine = model;
-        _settings.Commit(model, reason, what, where);
 
-        if (what is not null)
+        // Announced only when something changed: a toast offering to undo a
+        // change that never happened takes back an older one instead.
+        if (_settings.Commit(model, reason, what, where) && what is not null)
         {
             Say(what);
         }
@@ -3645,6 +3669,11 @@ public sealed partial class SettingsWindow : Window
             return;
         }
 
+        // The undo is this window's own change: not announced back to it as
+        // somebody else's, which said "Done:" about the change before it.
+        _mine = _settings.Current;
+        _said = _settings.UndoWhat;
+
         // Shown, not only done. A change taken back on a screen the window is
         // not looking at moves nothing anybody can see, and a button that
         // appears to do nothing is a button people press again.
@@ -3654,8 +3683,15 @@ public sealed partial class SettingsWindow : Window
             _editing = where;
         }
 
-        ReloadDocks();
+        // The appearance too: a theme taken back is a theme this window was
+        // still wearing.
+        Root.RequestedTheme = Appearance.Of(_settings.Current.App.Theme);
+        Repaint();
     }
+
+    /// <summary>"removing Clock": what a removal is called on the undo button.</summary>
+    private static string Removing(string name) =>
+        string.Format(CultureInfo.CurrentCulture, Loc.Tr("UndoRemoved", "removing {0}"), name);
 
     /// <summary>Builds a widget's view model, to ask it about itself.</summary>
     private WidgetViewModel? Build(WidgetConfig entry) => WidgetCatalog.Create(
@@ -3681,6 +3717,33 @@ public sealed partial class SettingsWindow : Window
         // dictionary, so they are told which way round the palette goes.
         Braun.Theme = Root.ActualTheme;
         PaintGround();
+    }
+
+    /// <summary>
+    /// Everything drawn from the settings and the palette, drawn again.
+    /// </summary>
+    /// <remarks>
+    /// The pages are built in code with brushes picked for one theme, so a
+    /// change of theme - chosen here, taken back, imported, or Windows'
+    /// own - left every page but the one it was chosen on in the old colours:
+    /// dark cards on a cream ground.
+    /// </remarks>
+    private void Repaint()
+    {
+        PaintBody();
+
+        if (!Root.IsLoaded)
+        {
+            return;
+        }
+
+        RefreshLook();
+        ReloadDocks();
+        ShowPresets();
+        ShowGeneral();
+        ShowAbout();
+        _sourcesShown = string.Empty;
+        ShowSources();
     }
 
     private void PaintGround() =>
@@ -5120,8 +5183,8 @@ public sealed partial class SettingsWindow : Window
 
         _mine = _settings.Current;
 
-        ReloadDocks();
-        ShowGeneral();
+        Root.RequestedTheme = Appearance.Of(_settings.Current.App.Theme);
+        Repaint();
     }
 
 

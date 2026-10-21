@@ -72,7 +72,20 @@ public sealed class Ghost : IDisposable
             module,
             0);
 
-        Paint(pixels);
+        if (_hwnd == 0)
+        {
+            throw new InvalidOperationException("the picture's window was not made");
+        }
+
+        try
+        {
+            Paint(pixels);
+        }
+        catch
+        {
+            DestroyWindow(_hwnd);
+            throw;
+        }
     }
 
     /// <summary>Puts the picture under the pointer at this point of the desktop, and shows it.</summary>
@@ -111,6 +124,14 @@ public sealed class Ghost : IDisposable
         };
 
         nint bitmap = CreateDIBSection(memory, ref info, 0, out nint bits, 0, 0);
+
+        if (bitmap == 0)
+        {
+            DeleteDC(memory);
+            ReleaseDC(0, screen);
+            throw new InvalidOperationException("no bitmap for the picture");
+        }
+
         Marshal.Copy(pixels, 0, bits, Math.Min(pixels.Length, _width * _height * 4));
         nint old = SelectObject(memory, bitmap);
 

@@ -158,16 +158,22 @@ public sealed class SettingsService : IDisposable
     /// The screen it happened on, when it happened on one - so the button can
     /// say whose change it is about to take back.
     /// </param>
-    public void Commit(
+    /// <returns>Whether anything changed.</returns>
+    public bool Commit(
         SettingsModel model, WriteReason reason, string? what = null, string? where = null)
     {
         SettingsModel previous;
 
         lock (_gate)
         {
-            if (model == _current)
+            // Compared by what they say, not by reference: a list of widgets
+            // made again with the same widgets is a new list of the same
+            // settings. Taken for a change, pressing the edge a bar already
+            // has put an entry on the undo stack, and the next undo did
+            // nothing anybody could see.
+            if (model == _current || SettingsStore.Text(model) == SettingsStore.Text(_current))
             {
-                return;
+                return false;
             }
 
             previous = _current;
@@ -178,7 +184,14 @@ public sealed class SettingsService : IDisposable
 
         // Only a change that actually happened, and only one somebody could
         // ask for back.
-        if (what is not null)
+        if (what is not null && Continues(previous, what, where))
+        {
+            // The same change again, straight after: one hand on a slider.
+            // Every step was an entry of its own, and twenty steps of one
+            // colour pushed everything before them off the stack.
+            _undo[^1] = _undo[^1] with { After = model, At = DateTime.UtcNow };
+        }
+        else if (what is not null)
         {
             _undo.Add(new Change(previous, model, what, where, DateTime.UtcNow));
 
@@ -196,7 +209,16 @@ public sealed class SettingsService : IDisposable
 
         _log.LogInformation("settings.commit reason={Reason}", reason);
         Changed?.Invoke(this, model);
+        return true;
     }
+
+    /// <summary>Whether a named change carries on the last one rather than starting another.</summary>
+    private bool Continues(SettingsModel previous, string what, string? where) =>
+        _undo.Count > 0
+        && _undo[^1].What == what
+        && _undo[^1].Where == where
+        && _undo[^1].After == previous
+        && DateTime.UtcNow - _undo[^1].At < Settling;
 
     /// <summary>
     /// A bar writing down where it settled what a change has just put on it
