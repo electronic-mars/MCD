@@ -34,7 +34,7 @@ public sealed class StorageTemperatureProvider(ILogger<StorageTemperatureProvide
     /// <summary>Every index that answered to its name at the last look, reporting or not.</summary>
     private readonly List<int> _seen = [];
 
-    private bool _looked;
+    private long _lookedAt = long.MinValue / 2;
     private uint _polls;
 
     public string Id => ProviderId;
@@ -45,13 +45,15 @@ public sealed class StorageTemperatureProvider(ILogger<StorageTemperatureProvide
 
     public bool IsAvailable()
     {
-        if (_looked)
+        // Looked for again while none has been found, every five minutes: a
+        // machine that started with no drive reporting a temperature - a USB
+        // enclosure plugged in later - otherwise never had one for the session.
+        if (_drives.Count == 0 && Environment.TickCount64 - _lookedAt >= 300_000)
         {
-            return _drives.Count != 0;
+            _lookedAt = Environment.TickCount64;
+            Look();
         }
 
-        _looked = true;
-        Look();
         return _drives.Count != 0;
     }
 

@@ -51,7 +51,11 @@ public sealed class HostClient(ILogger<HostClient> log) : IDisposable
             _pipe?.Dispose();
             _pipe = null;
 
-            var pipe = new NamedPipeClientStream(".", HostSnapshot.PipeName, PipeDirection.In);
+            // Identification only: whoever is at the other end may learn who
+            // is asking, and may not act as them.
+            var pipe = new NamedPipeClientStream(
+                ".", HostSnapshot.PipeName, PipeDirection.In, PipeOptions.None,
+                System.Security.Principal.TokenImpersonationLevel.Identification);
 
             try
             {
@@ -67,6 +71,18 @@ public sealed class HostClient(ILogger<HostClient> log) : IDisposable
                     log.LogInformation("sensors.host the sensor service is not running");
                 }
 
+                return false;
+            }
+
+            // The service runs in session nought, where no signed-in person's
+            // programs run. Anything else holding this name - which any
+            // program can take while the service is not there, the ordinary
+            // case on a machine without it - would be feeding the bar its
+            // own figures.
+            if (!GetNamedPipeServerSessionId(pipe.SafePipeHandle, out uint session) || session != 0)
+            {
+                pipe.Dispose();
+                log.LogWarning("sensors.host the pipe is held by something that is not the sensor service");
                 return false;
             }
 
@@ -98,22 +114,52 @@ public sealed class HostClient(ILogger<HostClient> log) : IDisposable
         {
             using var text = new StreamReader(pipe);
 
-            while (text.ReadLine() is { } line)
+            while (Line(text) is { } line)
             {
-                if (JsonSerializer.Deserialize(line, HostJson.Default.HostSnapshot) is { } snapshot)
+                // A reading the service is still sending but no longer
+                // taking is not heard: the source goes quiet and is looked
+                // for again, instead of showing old figures as new.
+                if (JsonSerializer.Deserialize(line, HostJson.Default.HostSnapshot) is { Stale: false } snapshot)
                 {
                     Volatile.Write(ref _latest, snapshot);
                     Volatile.Write(ref _heard, Environment.TickCount64);
                 }
             }
         }
-        catch (Exception e) when (e is IOException or ObjectDisposedException or JsonException)
+        catch (Exception e) when (e is IOException or ObjectDisposedException or JsonException or InvalidDataException)
         {
-            // The service went away, or the pipe was closed under us.
+            // The service went away, the pipe was closed under us, or what
+            // came down it was not a snapshot.
         }
 
         log.LogInformation("sensors.host the sensor service went quiet");
     }
+
+    /// <summary>One line, no longer than a snapshot can be. A line without end ran the bar out of memory.</summary>
+    private static string? Line(StreamReader text)
+    {
+        var line = new System.Text.StringBuilder();
+
+        for (int c = text.Read(); c >= 0; c = text.Read())
+        {
+            if (c == '\n')
+            {
+                return line.ToString();
+            }
+
+            if (line.Length >= 64 * 1024)
+            {
+                throw new InvalidDataException("a line longer than any snapshot");
+            }
+
+            line.Append((char)c);
+        }
+
+        return line.Length > 0 ? line.ToString() : null;
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool GetNamedPipeServerSessionId(Microsoft.Win32.SafeHandles.SafePipeHandle pipe, out uint session);
 
     public void Dispose()
     {

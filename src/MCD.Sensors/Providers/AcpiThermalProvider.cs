@@ -56,8 +56,13 @@ public sealed class AcpiThermalProvider(ILogger<AcpiThermalProvider> log) : ISen
 
         try
         {
+            // With a deadline: the default is to wait for ever, on the thread
+            // that reads every other sensor, and a firmware that hangs its
+            // answer froze them all with their figures still marked fresh.
             _searcher = new ManagementObjectSearcher(
-                @"root\WMI", "SELECT CurrentTemperature FROM MSAcpi_ThermalZoneTemperature");
+                @"root\WMI",
+                "SELECT CurrentTemperature FROM MSAcpi_ThermalZoneTemperature",
+                new System.Management.EnumerationOptions { Timeout = TimeSpan.FromSeconds(2), ReturnImmediately = true });
 
             _present = Read() is not null;
         }
@@ -124,7 +129,10 @@ public sealed class AcpiThermalProvider(ILogger<AcpiThermalProvider> log) : ISen
 
         double? hottest = null;
 
-        foreach (ManagementBaseObject zone in _searcher.Get())
+        // Disposed, not left to the finalizer every ten seconds.
+        using ManagementObjectCollection zones = _searcher.Get();
+
+        foreach (ManagementBaseObject zone in zones)
         {
             using (zone)
             {

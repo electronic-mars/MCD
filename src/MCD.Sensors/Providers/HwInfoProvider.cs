@@ -110,6 +110,16 @@ public sealed class HwInfoProvider(ILogger<HwInfoProvider> log, Func<bool> enabl
             return false;
         }
 
+        // Still mapped, no longer written: the free version's twelve hours
+        // are up. Opened again as if new, its frozen figures were shown as
+        // fresh for another minute, again and again.
+        if (DateTimeOffset.UtcNow - first.PolledAt > Stall)
+        {
+            Close("HWiNFO has stopped updating its shared memory. The free version "
+                + "publishes it for twelve hours at a time - restart HWiNFO to continue.");
+            return false;
+        }
+
         _sensors = [.. Describe(first)];
 
         if (_sensors.Count == 0)

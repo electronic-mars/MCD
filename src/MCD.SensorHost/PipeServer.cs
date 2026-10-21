@@ -20,6 +20,13 @@ namespace Mcd.SensorHost;
 /// </remarks>
 public sealed class PipeServer(Readings readings, ILogger<PipeServer> log) : BackgroundService
 {
+    /// <summary>
+    /// Bars at once. One per screen of one person is a handful; without a
+    /// limit, anything signed in could open connections until the service
+    /// ran out of memory, or the real bar could not get one.
+    /// </summary>
+    private readonly SemaphoreSlim _slots = new(8);
+
     protected override async Task ExecuteAsync(CancellationToken stopping)
     {
         var security = new PipeSecurity();
@@ -34,30 +41,50 @@ public sealed class PipeServer(Readings readings, ILogger<PipeServer> log) : Bac
             PipeAccessRights.FullControl,
             AccessControlType.Allow));
 
+        bool first = true;
+
         while (!stopping.IsCancellationRequested)
         {
             NamedPipeServerStream pipe;
 
             try
             {
-                pipe = NamedPipeServerStreamAcl.Create(
-                    HostSnapshot.PipeName,
-                    PipeDirection.Out,
-                    NamedPipeServerStream.MaxAllowedServerInstances,
-                    PipeTransmissionMode.Byte,
-                    PipeOptions.Asynchronous,
-                    0,
-                    0,
-                    security);
-
-                await pipe.WaitForConnectionAsync(stopping);
+                await _slots.WaitAsync(stopping);
             }
             catch (OperationCanceledException)
             {
                 break;
             }
-            catch (IOException e)
+
+            try
             {
+                // The first one insists on being the first: a name taken
+                // before the service started belongs to somebody else, who
+                // would be handing the bars figures of their own.
+                pipe = NamedPipeServerStreamAcl.Create(
+                    HostSnapshot.PipeName,
+                    PipeDirection.Out,
+                    NamedPipeServerStream.MaxAllowedServerInstances,
+                    PipeTransmissionMode.Byte,
+                    first ? PipeOptions.Asynchronous | PipeOptions.FirstPipeInstance : PipeOptions.Asynchronous,
+                    0,
+                    0,
+                    security);
+
+                first = false;
+                await pipe.WaitForConnectionAsync(stopping);
+            }
+            catch (OperationCanceledException)
+            {
+                _slots.Release();
+                break;
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                // Refused as well as failed: a name already held by another
+                // process with rules of its own. Stopping the service for it
+                // would hand that process the name for good.
+                _slots.Release();
                 log.LogWarning(e, "the pipe could not be opened; trying again");
                 await Task.Delay(TimeSpan.FromSeconds(2), stopping);
                 continue;
@@ -87,6 +114,10 @@ public sealed class PipeServer(Readings readings, ILogger<PipeServer> log) : Bac
             {
                 // The bar closed its end, or the service is stopping. Either
                 // way this client is done.
+            }
+            finally
+            {
+                _slots.Release();
             }
         }
     }

@@ -159,11 +159,13 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
             new(Key(provider), Kind, Group, Hardware, Label, Unit);
 
         /// <summary>
-        /// Percentages are held to 0-100. The summed GPU counter runs over every
+        /// Loads are held to 0-100. The summed GPU counter runs over every
         /// engine of every adapter, so a busy machine legitimately produces more
         /// than a hundred, and a bar drawn from that would overflow its track.
+        /// The processor's speed is a share of its nominal one and goes above a
+        /// hundred under turbo on purpose - capped, turbo never showed.
         /// </summary>
         public double Clamp(double value) =>
-            Unit == "%" ? Math.Clamp(value, 0, 100) : Math.Max(0, value);
+            Unit == "%" && Kind != SensorKind.Clock ? Math.Clamp(value, 0, 100) : Math.Max(0, value);
     }
 }

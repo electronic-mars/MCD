@@ -302,20 +302,29 @@ public sealed class SensorHub : IDisposable
         foreach ((SensorKey key, double value) in buffer)
         {
             source.Values[key] = new SensorReading(value, Quality.Fresh);
+            source.Absent.Remove(key);
         }
 
         // A key the provider knows about but did not return this time is ageing,
         // not gone: a drive that was busy for one tick should not blink out.
-        // Overwriting a value in place is safe to do mid-walk; only growing or
-        // shrinking the dictionary is not.
+        // Until it has been away too long - a graphics driver replaced under the
+        // program, a drive given up on, a device switched off - and then it is
+        // gone: aged without end, its last figure stayed on the bar dimmed for
+        // the rest of the day. Overwriting a value in place is safe to do
+        // mid-walk; only growing or shrinking the dictionary is not.
         foreach ((SensorKey key, SensorReading value) in source.Values)
         {
             if (!buffer.ContainsKey(key))
             {
-                source.Values[key] = value.Aging();
+                int away = source.Absent.GetValueOrDefault(key) + 1;
+                source.Absent[key] = away;
+                source.Values[key] = away >= AbsentBeforeMissing ? SensorReading.Missing : value.Aging();
             }
         }
     }
+
+    /// <summary>Polls in a row a reading may be left out before it is shown as missing.</summary>
+    private const int AbsentBeforeMissing = 30;
 
     private void Forget(string providerId, DateTimeOffset now)
     {
@@ -327,6 +336,7 @@ public sealed class SensorHub : IDisposable
             source.Ready = false;
             source.Failures = 0;
             source.Values.Clear();
+            source.Absent.Clear();
             source.Descriptors = [];
             source.NextProbe = now;
         }
@@ -510,6 +520,9 @@ public sealed class SensorHub : IDisposable
         public ISensorProvider Provider { get; } = provider;
 
         public Dictionary<SensorKey, SensorReading> Values { get; } = [];
+
+        /// <summary>How many polls in a row each reading has been left out of.</summary>
+        public Dictionary<SensorKey, int> Absent { get; } = [];
 
         /// <summary>Reused across polls; see the note where it is filled.</summary>
         public Dictionary<SensorKey, double> Buffer { get; } = [];

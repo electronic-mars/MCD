@@ -46,6 +46,9 @@ public sealed class Reader(Readings readings, ILogger<Reader> log) : BackgroundS
 
     private readonly List<(int Slot, IThermalSensor Sensor)> _dimms = [];
     private bool _dimmsLooked;
+
+    /// <summary>The round at which a bus that could not be scanned is tried again.</summary>
+    private int _dimmsAgainAt;
     private int _tick;
 
     protected override async Task ExecuteAsync(CancellationToken stopping)
@@ -145,7 +148,8 @@ public sealed class Reader(Readings readings, ILogger<Reader> log) : BackgroundS
             Package: package,
             CoreMax: coreMax,
             Watts: watts,
-            Dimms: dimms);
+            Dimms: dimms,
+            At: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
     }
 
     private void OpenIntel()
@@ -175,10 +179,14 @@ public sealed class Reader(Readings readings, ILogger<Reader> log) : BackgroundS
 
     private DimmReading[] ReadDimms()
     {
-        if (!_dimmsLooked)
+        // Looked for until found - the bus at the service's start is not
+        // always ready, and one failure there meant no module thermometers
+        // until the service was restarted - but not more than every five
+        // minutes.
+        if (!_dimmsLooked && _tick >= _dimmsAgainAt)
         {
-            _dimmsLooked = true;
-            LookForDimms();
+            _dimmsLooked = LookForDimms();
+            _dimmsAgainAt = _tick + 300;
         }
 
         var found = new List<DimmReading>();
@@ -201,14 +209,15 @@ public sealed class Reader(Readings readings, ILogger<Reader> log) : BackgroundS
         return [.. found];
     }
 
-    private void LookForDimms()
+    /// <returns>Whether the bus was scanned, whatever it found.</returns>
+    private bool LookForDimms()
     {
         try
         {
             if (!DriverManager.LoadDriver(DriverImplementation.PawnIO))
             {
                 log.LogWarning("the SMBus module would not load");
-                return;
+                return false;
             }
 
             SMBusManager.DetectSMBuses();
@@ -227,11 +236,13 @@ public sealed class Reader(Readings readings, ILogger<Reader> log) : BackgroundS
             }
 
             log.LogInformation("found {Count} memory module(s) with a thermometer", _dimms.Count);
+            return true;
         }
         catch (Exception e)
         {
             log.LogWarning(e, "the memory bus could not be scanned");
             _dimms.Clear();
+            return false;
         }
     }
 
