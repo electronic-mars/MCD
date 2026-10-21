@@ -4769,7 +4769,19 @@ public sealed partial class SettingsWindow : Window
                                 () =>
                                 {
                                     _log.LogInformation("update.install version={Version}", ready.Offer.Version);
-                                    Mcd.Core.Update.Updater.Install(ready.Installer);
+
+                                    try
+                                    {
+                                        Mcd.Core.Update.Updater.Install(ready.Installer, ready.Offer.Signature);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _log.LogWarning(ex, "update.install failed");
+                                        _updateNote = Loc.Tr("UpdateRefused", "The update was not installed. The download failed or the signature check did not pass.");
+                                        ShowAbout();
+                                        return;
+                                    }
+
                                     _onExit();
                                 },
                                 "Download")
@@ -4875,7 +4887,7 @@ public sealed partial class SettingsWindow : Window
             string installer = await Mcd.Core.Update.Updater.DownloadAsync(offer, null);
 
             _log.LogInformation("update.install version={Version}", offer.Version);
-            Mcd.Core.Update.Updater.Install(installer);
+            Mcd.Core.Update.Updater.Install(installer, offer.Signature);
 
             // The installer is already starting; the bars are given back
             // properly, not killed (a killed bar leaves its strip reserved).

@@ -58,16 +58,18 @@ jobs:
   installer:
     runs-on: windows-latest
 
+    # Only after the smoke runs above have passed: they start the program and
+    # open every window, which the unit tests here do not. A build that hangs
+    # on start was otherwise published and sent to every copy that updates
+    # itself.
+    needs: msix
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
 
       - name: Check the declared version
         run: pwsh tools/check-version.ps1
@@ -112,10 +114,12 @@ jobs:
         run: |
           # An unsigned release is one nobody can update to: stop here.
           if (-not $env:UPDATE_SIGNING_KEY) { throw "UPDATE_SIGNING_KEY is not set" }
-          python -m pip install --quiet cryptography
+          # Signed with .NET's own cryptography and nothing installed for the
+          # occasion: the key is never in the same process as code fetched
+          # from a package index.
           $tag = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME } else { "v$env:VERSION" }
           $url = "https://github.com/${{ github.repository }}/releases/download/$tag/$env:SETUP"
-          python tools/sign_release.py "$env:SETUP" "$tag" "$url"
+          dotnet run tools/sign-release/SignRelease.cs -- "$env:SETUP" "$tag" "$url"
           if ($LASTEXITCODE -ne 0) { throw "the release was not signed" }
           Get-Content latest.json
 

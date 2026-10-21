@@ -54,9 +54,16 @@ public sealed class FileLogger : ILoggerProvider
             line.Append(Environment.NewLine).Append(error);
         }
 
-        if (!_queue.IsAddingCompleted)
+        // TryAdd rather than asking first: a line from another thread can
+        // arrive between "not finished yet" and Add while the program is
+        // closing, and Add then throws - on the way out, from inside a log call.
+        try
         {
-            _queue.Add(line.ToString());
+            _queue.TryAdd(line.ToString());
+        }
+        catch (InvalidOperationException)
+        {
+            // Closed: the line is late and goes nowhere.
         }
     }
 
@@ -80,9 +87,11 @@ public sealed class FileLogger : ILoggerProvider
                 Rotate();
                 File.AppendAllText(_path, line + Environment.NewLine, Encoding.UTF8);
             }
-            catch (IOException)
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
             {
-                // A log that cannot be written must not take the program with it.
+                // A log that cannot be written must not take the program with
+                // it. Access refused is the same case: an old log held open by
+                // a viewer, or left read-only, when it is time to move it along.
             }
         }
     }

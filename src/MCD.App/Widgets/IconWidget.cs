@@ -164,7 +164,12 @@ public sealed class IconWidget : WidgetViewModel
             Opacity = 0.7,
         });
 
-        string wearing = WidgetOptions.Text(Options, "icon") ?? string.Empty;
+        // A name the library no longer has - saved by an older version, before
+        // the icons were redrawn - is shown as no choice, as the bar shows it,
+        // rather than looked up and thrown at the settings window.
+        string wearing = WidgetOptions.Text(Options, "icon") is { } named && IconLibrary.Paths.ContainsKey(named)
+            ? named
+            : string.Empty;
 
         var flyout = new Flyout();
         var content = new StackPanel { Spacing = 8 };

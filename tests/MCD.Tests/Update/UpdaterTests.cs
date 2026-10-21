@@ -41,4 +41,23 @@ public sealed class UpdaterTests
             File.Delete(file);
         }
     }
+
+    [Fact]
+    public void AnInstallerThatIsGoneOrChangedIsNotRun()
+    {
+        string file = Path.GetTempFileName();
+        File.WriteAllBytes(file, [1, 2, 3]);
+
+        try
+        {
+            // Not signed by the release key: refused before anything starts.
+            Should.Throw<InvalidOperationException>(() => Updater.Install(file, new byte[64]));
+        }
+        finally
+        {
+            File.Delete(file);
+        }
+
+        Should.Throw<InvalidOperationException>(() => Updater.Install(file, new byte[64]));
+    }
 }

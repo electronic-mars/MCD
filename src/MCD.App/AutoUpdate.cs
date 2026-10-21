@@ -157,7 +157,22 @@ internal sealed class AutoUpdate
 #endif
 
         _log.LogInformation("update.install version={Version}", ready.Offer.Version);
-        Updater.Install(ready.Installer);
+
+        try
+        {
+            Updater.Install(ready.Installer, ready.Offer.Signature);
+        }
+        catch (Exception e)
+        {
+            // Gone or changed since it was downloaded. The program carries on,
+            // and the next look fetches it again.
+            _log.LogWarning(e, "update.install the downloaded installer could not be run");
+            Ready = null;
+            _told = false;
+            _next = DateTimeOffset.Now;
+            return;
+        }
+
         _exit();
     }
 

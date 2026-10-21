@@ -227,9 +227,23 @@ public static class Updater
     /// the button. The installer closes the running copy properly and starts
     /// the program again itself.
     /// </summary>
-    public static void Install(string installer) =>
+    /// <remarks>
+    /// Checked again on the way out. The download may have been checked days
+    /// ago, and since then the file can have been taken away by an antivirus
+    /// or replaced by something else that writes to the same folder; a
+    /// program that ran it unchecked would be running whatever is there now.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">The file is gone, or is no longer the one that was signed.</exception>
+    public static void Install(string installer, byte[] signature)
+    {
+        if (!File.Exists(installer) || !Verify(installer, signature))
+        {
+            throw new InvalidOperationException("the downloaded installer is gone or no longer the one that was signed");
+        }
+
         Process.Start(new ProcessStartInfo(installer, "/SILENT /SUPPRESSMSGBOXES /NORESTART /NOCANCEL /RELAUNCH=1")
         {
             UseShellExecute = false,
         });
+    }
 }

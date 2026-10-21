@@ -7,7 +7,7 @@ namespace Mcd.Tests.Update;
 
 public sealed class PythonSignatureTests
 {
-    // One-off cross-check of tools/sign_release.py against this program's own
+    // One-off cross-check of tools/sign-release/SignRelease.cs against this program's own
     // verifier: runs only when MCD_SIGNED_DIR points at a folder holding an
     // installer and the latest.json made for it.
     [Fact]
