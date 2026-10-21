@@ -195,7 +195,13 @@ public static unsafe class WindowFrame
             || (PInvoke.GetAsyncKeyState(0x02) & 0x8000) != 0
             || (PInvoke.GetAsyncKeyState(0x04) & 0x8000) != 0;
 
-        HWND under = PInvoke.WindowFromPoint(at);
+        return (at.X, at.Y, down, OursAt(at.X, at.Y));
+    }
+
+    /// <summary>Whether the window at this point of the desktop belongs to this program.</summary>
+    public static bool OursAt(int x, int y)
+    {
+        HWND under = PInvoke.WindowFromPoint(new System.Drawing.Point(x, y));
         uint pid = 0;
 
         if (!under.IsNull)
@@ -206,7 +212,7 @@ public static unsafe class WindowFrame
             }
         }
 
-        return (at.X, at.Y, down, pid == (uint)Environment.ProcessId);
+        return pid == (uint)Environment.ProcessId;
     }
 
     /// <summary>Puts the window exactly here, in physical pixels.</summary>

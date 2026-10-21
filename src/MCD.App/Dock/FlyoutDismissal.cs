@@ -10,18 +10,13 @@ namespace Mcd.App.Dock;
 /// </summary>
 /// <remarks>
 /// <para>
-/// A flyout closes by itself on a click inside the window it belongs to, and
-/// the bar is a window nobody clicks into on the way to something else: a
-/// click on the desktop or on another program went to that window, and the
-/// slider stayed open over whatever was under it. So the pointer is watched
-/// while one is open. A press anywhere that is not this program closes it,
-/// and so do ten seconds with the pointer away from it, or resting on it
-/// without moving.
-/// </para>
-/// <para>
-/// Watched by polling, a few times a second and only while open, rather than
-/// with a mouse hook: a hook is called for every movement on the whole
-/// desktop for as long as the program runs.
+/// A flyout closes by itself on a click inside the window it belongs to, or
+/// on one that takes the activation away from it. A click on the empty
+/// desktop does neither, and the slider stayed open over it. So while one is
+/// open, every press on the machine is heard (see <see cref="Mcd.Interop.Windowing.PressWatch"/>):
+/// a press anywhere that is not this program closes it. And the pointer is
+/// looked at a few times a second: ten seconds with it away, or resting on
+/// the panel without moving, close it too.
 /// </para>
 /// </remarks>
 public static class FlyoutDismissal
@@ -54,9 +49,22 @@ public static class FlyoutDismissal
         DateTime used = DateTime.UtcNow;
         (int X, int Y, bool Down, bool Ours) last = Mcd.Interop.Windowing.WindowFrame.PointerNow();
 
+        DispatcherQueue ui = DispatcherQueue.GetForCurrentThread();
+
+        // Called inside the hook, which has to answer at once: the window is
+        // asked about there, the closing is done after.
+        var presses = new Mcd.Interop.Windowing.PressWatch((x, y) =>
+        {
+            if (!Mcd.Interop.Windowing.WindowFrame.OursAt(x, y))
+            {
+                ui.TryEnqueue(flyout.Hide);
+            }
+        });
+
         void Stop(object? sender, object e)
         {
             timer.Stop();
+            presses.Dispose();
             Running.Remove(timer);
             flyout.Closed -= Stop;
         }
@@ -72,10 +80,9 @@ public static class FlyoutDismissal
                 used = DateTime.UtcNow;
             }
 
-            bool pressedElsewhere = now.Down && !last.Down && !now.Ours;
             last = now;
 
-            if (pressedElsewhere || DateTime.UtcNow - used >= Idle)
+            if (DateTime.UtcNow - used >= Idle)
             {
                 flyout.Hide();
             }
