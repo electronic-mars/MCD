@@ -47,13 +47,18 @@ public static class IdentifyScreens
             nint hwnd = WindowNative.GetWindowHandle(window);
             WindowFrame.MakeChromeless(hwnd);
 
-            // Top-left corner of that screen, 240 by 200 physical pixels.
+            // Top-left corner of that screen, 240 by 200 at the screen's own
+            // scale. In physical pixels the digit, sized in points, was cut
+            // off at the bottom on a screen at 200%.
+            double scale = Math.Max(1, screen.Scale);
+            int inset = (int)(40 * scale);
+
             WindowFrame.MoveTo(hwnd, new Windows.Win32.Foundation.RECT
             {
-                left = screen.Bounds.left + 40,
-                top = screen.Bounds.top + 40,
-                right = screen.Bounds.left + 280,
-                bottom = screen.Bounds.top + 240,
+                left = screen.Bounds.left + inset,
+                top = screen.Bounds.top + inset,
+                right = screen.Bounds.left + inset + (int)(240 * scale),
+                bottom = screen.Bounds.top + inset + (int)(200 * scale),
             });
 
             WindowFrame.SetTopmost(hwnd, topmost: true);

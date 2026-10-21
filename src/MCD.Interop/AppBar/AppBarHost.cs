@@ -56,9 +56,12 @@ public sealed class AppBarHost : IDisposable
         _id = hwnd;
         _log = log;
 
-        // Per-window so two docks on two monitors never confuse each other's
-        // notifications.
-        CallbackMessage = PInvoke.RegisterWindowMessage($"MCD_ABM_{hwnd}");
+        // One name for every bar: the shell sends it to the bar it is about,
+        // so two bars cannot confuse each other's notifications anyway. A
+        // name per window took a new entry in the session's table of message
+        // names every time a bar was rebuilt, and that table is never emptied
+        // until sign-out.
+        CallbackMessage = PInvoke.RegisterWindowMessage("MasterControlDock.AppBar");
         if (CallbackMessage == 0)
         {
             throw new InvalidOperationException("RegisterWindowMessage failed for the AppBar callback");

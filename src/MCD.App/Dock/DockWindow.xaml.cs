@@ -320,6 +320,8 @@ public sealed partial class DockWindow : Window
         _slide?.Stop();
         _linger?.Stop();
         _watch?.Stop();
+        _welcome?.Stop();
+        _refusing.Stop();
 
         if (_hiding)
         {
@@ -954,6 +956,10 @@ public sealed partial class DockWindow : Window
 
         _keyed = null;
         WindowFrame.AllowActivation(_hwnd, allow: false);
+
+        // Back to its own layer: taking the keyboard brought it to the front,
+        // and a bar meant to lie under the windows stayed over them.
+        Raise(Config);
     }
 
     private readonly List<WidgetHost> _hosts = [];
@@ -1494,7 +1500,8 @@ public sealed partial class DockWindow : Window
     {
         // Whatever was in hand is let go of first: the rebuild disposes every
         // host, and a drag that carried on afterwards would be dragging an
-        // element that is no longer on the bar.
+        // element that is no longer on the bar. The keyboard likewise.
+        LeaveKeyboard();
         LetGo();
 
         Config = config;
@@ -1929,6 +1936,9 @@ public sealed partial class DockWindow : Window
     /// </remarks>
     public void RefreshContents(MonitorConfig config)
     {
+        // The keyboard is let go of too: it was holding the hosts about to
+        // be disposed, and the arrows went on choosing widgets no longer there.
+        LeaveKeyboard();
         LetGo();
         Config = config;
         Measure();
@@ -2210,6 +2220,16 @@ public sealed partial class DockWindow : Window
     {
         if (_grabbed is null || _tornDown)
         {
+            return;
+        }
+
+        // Moving with nothing held is a press whose release never came here -
+        // Win+L in the middle of a drag, or a flick off the bar. Left as it
+        // was, the next pass of the pointer dragged a ghost of the widget, and
+        // a hiding bar would not hide.
+        if (!e.Pointer.IsInContact)
+        {
+            LetGo();
             return;
         }
 

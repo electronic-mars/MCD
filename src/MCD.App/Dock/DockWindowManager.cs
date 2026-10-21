@@ -610,16 +610,23 @@ public sealed class DockWindowManager : IDisposable
                 {
                     window.RefreshWidgets(plan.Config, Context(plan.Config));
                 }
-                else if (window.Config.Topmost != plan.Config.Topmost)
+                else
                 {
-                    // One window style bit. Rebuilding every widget on the bar
-                    // to change whether it sits above other windows is a great
-                    // deal of work for a call to SetWindowPos.
-                    window.SetTopmost(plan.Config);
-                }
-                else if (!_held.TryGetValue(id, out string? shown) || shown != held)
-                {
-                    window.RefreshContents(plan.Config);
+                    // Both, when both changed - an undo or an import can carry
+                    // the two at once, and as alternatives the widgets were
+                    // left as they were while the bar was marked up to date.
+                    if (window.Config.Topmost != plan.Config.Topmost)
+                    {
+                        // One window style bit. Rebuilding every widget on the
+                        // bar to change whether it sits above other windows is
+                        // a great deal of work for a call to SetWindowPos.
+                        window.SetTopmost(plan.Config);
+                    }
+
+                    if (!_held.TryGetValue(id, out string? shown) || shown != held)
+                    {
+                        window.RefreshContents(plan.Config);
+                    }
                 }
 
                 _dressed[id] = look;
@@ -641,8 +648,22 @@ public sealed class DockWindowManager : IDisposable
                 continue;
             }
 
-            var window = new DockWindow(
-                _loggers.CreateLogger<DockWindow>(), plan.Monitor, plan.Config, Context(plan.Config));
+            DockWindow window;
+
+            try
+            {
+                window = new DockWindow(
+                    _loggers.CreateLogger<DockWindow>(), plan.Monitor, plan.Config, Context(plan.Config));
+            }
+            catch (InvalidOperationException e)
+            {
+                // The shell refusing a bar - Explorer between two lives, mid
+                // restart - is not a reason to end the program. The bar is
+                // asked for again on the next rebuild, which the taskbar
+                // coming back brings.
+                _log.LogWarning(e, "dock.window not made monitor={Monitor}", plan.Monitor.Identity.FriendlyName);
+                continue;
+            }
 
             window.SettingsRequested += (s, request) => SettingsRequested?.Invoke(s, request);
             window.ExitRequested += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);

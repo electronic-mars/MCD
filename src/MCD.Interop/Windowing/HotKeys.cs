@@ -194,7 +194,15 @@ public sealed unsafe class HotKeys : IDisposable
     }
 
     /// <summary>The combinations the system would not give us.</summary>
-    public IReadOnlySet<string> Refused => _refused;
+    /// <remarks>
+    /// A finished copy, swapped in whole: the list is built on the hotkeys'
+    /// own thread, again on every settings write, and read on the window's.
+    /// Read halfway, it said a key was free that was not, and a set being
+    /// filled while it is read can throw.
+    /// </remarks>
+    public IReadOnlySet<string> Refused => Volatile.Read(ref _published);
+
+    private IReadOnlySet<string> _published = new HashSet<string>();
 
     /// <summary>
     /// Takes a set of combinations, dropping whatever was held before.
@@ -251,6 +259,8 @@ public sealed unsafe class HotKeys : IDisposable
             _refused.Add(chord.ToString());
             _log.LogWarning("hotkey.refused {Chord}", chord);
         }
+
+        Volatile.Write(ref _published, new HashSet<string>(_refused, StringComparer.OrdinalIgnoreCase));
     }
 
     public void Dispose()
