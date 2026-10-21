@@ -571,12 +571,32 @@ public sealed partial class Metric : ObservableObject
     /// </remarks>
     public static double Wide(string text, double size)
     {
+        // Remembered: the same few strings are measured again and again - a
+        // gauge's caption on every tick, "88" and " %" whenever a figure
+        // moves - and a measure is a pass through the text engine. Asked
+        // only on the window's thread, like the ruler itself.
+        if (Widths.TryGetValue((text, size), out double known))
+        {
+            return known;
+        }
+
         Ruler.FontSize = size;
         Ruler.Text = text;
         Ruler.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
 
-        return Math.Ceiling(Ruler.DesiredSize.Width) + 1;
+        double wide = Math.Ceiling(Ruler.DesiredSize.Width) + 1;
+
+        // Bounded: track names and sensor names pass through here too.
+        if (Widths.Count > 1024)
+        {
+            Widths.Clear();
+        }
+
+        Widths[(text, size)] = wide;
+        return wide;
     }
+
+    private static readonly Dictionary<(string Text, double Size), double> Widths = [];
 
     public void Update(SensorHub sensors, SensorSnapshot snapshot)
     {
@@ -592,6 +612,12 @@ public sealed partial class Metric : ObservableObject
         // nothing - and never asked again.
         if ((Sensor is null || Roving) && _find(sensors) is { } found && !ReferenceEquals(found, Sensor))
         {
+            // A different part: its peak is its own, not the last one's.
+            if (Sensor is not null)
+            {
+                _peak = double.MinValue;
+            }
+
             Sensor = found;
 
             if (IconFound is not null)

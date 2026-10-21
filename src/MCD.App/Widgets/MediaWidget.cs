@@ -363,14 +363,25 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             return;
         }
 
-        IReadOnlyList<GlobalSystemMediaTransportControlsSession> all = _sessions.GetSessions();
-
-        foreach (GlobalSystemMediaTransportControlsSession s in all)
+        try
         {
-            Seen[s.SourceAppUserModelId] = Short(s.SourceAppUserModelId);
-        }
+            IReadOnlyList<GlobalSystemMediaTransportControlsSession> all = _sessions.GetSessions();
 
-        Follow(Pick(all));
+            foreach (GlobalSystemMediaTransportControlsSession s in all)
+            {
+                Seen[s.SourceAppUserModelId] = Short(s.SourceAppUserModelId);
+            }
+
+            Follow(Pick(all));
+        }
+        catch (Exception e) when (e is System.Runtime.InteropServices.COMException or InvalidOperationException or UnauthorizedAccessException)
+        {
+            // A player that went away while it was being asked about - a
+            // browser tab closed as the list of sessions changed. Its
+            // neighbours are guarded for the same reason. Unguarded here, it
+            // ended the whole program; the next change of sessions asks again.
+            Context.Log.LogInformation("media.repick a session went away: {Error}", e.Message);
+        }
     }
 
     private GlobalSystemMediaTransportControlsSession? Pick(
@@ -639,19 +650,27 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
         // Starting the nominated player pauses everyone else first. Without
         // this a short video in a browser and the music simply play on top
         // of each other - the very thing nominating is there to end.
-        if (Nominated.Length > 0
-            && _playing is { } mine
-            && mine.SourceAppUserModelId == Nominated
-            && !IsPlaying(mine)
-            && _sessions is not null)
+        try
         {
-            foreach (GlobalSystemMediaTransportControlsSession other in _sessions.GetSessions())
+            if (Nominated.Length > 0
+                && _playing is { } mine
+                && mine.SourceAppUserModelId == Nominated
+                && !IsPlaying(mine)
+                && _sessions is not null)
             {
-                if (other.SourceAppUserModelId != Nominated && IsPlaying(other))
+                foreach (GlobalSystemMediaTransportControlsSession other in _sessions.GetSessions())
                 {
-                    Hush(other);
+                    if (other.SourceAppUserModelId != Nominated && IsPlaying(other))
+                    {
+                        Hush(other);
+                    }
                 }
             }
+        }
+        catch (Exception e) when (e is System.Runtime.InteropServices.COMException or InvalidOperationException or UnauthorizedAccessException)
+        {
+            // See Repick: a player gone while being asked.
+            Context.Log.LogInformation("media.playpause a session went away: {Error}", e.Message);
         }
 
         Ask(s => s.TryTogglePlayPauseAsync());

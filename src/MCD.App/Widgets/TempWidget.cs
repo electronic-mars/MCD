@@ -312,6 +312,7 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
         // every second on the interface thread.
         SensorDescriptor? warmest = null;
         double worst = double.MinValue;
+        double? holding = null;
 
         foreach (SensorDescriptor d in sensors.Catalog)
         {
@@ -322,6 +323,11 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
 
             double pressure = Pressure(snapshot[d.Key].Value, d);
 
+            if (_warmest is { } held && d.Key.Equals(held.Key))
+            {
+                holding = pressure;
+            }
+
             if (pressure > worst)
             {
                 worst = pressure;
@@ -329,8 +335,23 @@ public sealed class TempWidget(WidgetContext context, WidgetConfig entry)
             }
         }
 
+        // The one shown keeps its place until another is clearly warmer. Two
+        // parts a degree apart took turns every second, and the name, the
+        // icon and the hover all flickered with them.
+        if (holding is { } kept && worst - kept < Overtake)
+        {
+            return _warmest;
+        }
+
+        _warmest = warmest;
         return warmest;
     }
+
+    /// <summary>The part shown last.</summary>
+    private SensorDescriptor? _warmest;
+
+    /// <summary>How much nearer its own limit another part must be to take over: three hundredths of it.</summary>
+    private const double Overtake = 0.03;
 
     private static double Pressure(double value, SensorDescriptor sensor) =>
         sensor.Critical is { } critical and > 0 ? value / critical : value / 100.0;

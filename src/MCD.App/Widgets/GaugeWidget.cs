@@ -318,8 +318,13 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     public override string Summarise() => Reading.Label;
 
+    /// <remarks>
+    /// The reading's own name when the first chip has none to give: a gauge
+    /// showing only the temperature carries an unlabelled chip, and its line
+    /// in the settings was left blank.
+    /// </remarks>
     public override string Called =>
-        Metrics.Count > 0 ? Metrics[0].Label : Reading.Label;
+        Metrics.Count > 0 && Metrics[0].Label.Length > 0 ? Metrics[0].Label : Reading.Label;
 
     /// <summary>Along the bar: the chip's width across it, its height down it.</summary>
     /// <remarks>

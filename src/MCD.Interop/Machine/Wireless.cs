@@ -37,7 +37,30 @@ public readonly record struct WirelessState(
 public static class Wireless
 {
     /// <summary>Whether this machine has a wireless card at all.</summary>
+    /// <remarks>
+    /// Asked several times a second by every bar with the widget on it, and
+    /// answered from the last look for ten seconds: going through every
+    /// adapter - virtual ones, VPNs - each time was work done all day for an
+    /// answer that changes when a card is plugged in.
+    /// </remarks>
     public static bool Fitted()
+    {
+        long now = Environment.TickCount64;
+
+        if (now - Volatile.Read(ref _fittedAt) < 10_000)
+        {
+            return _fitted;
+        }
+
+        _fitted = Look();
+        Volatile.Write(ref _fittedAt, now);
+        return _fitted;
+    }
+
+    private static bool _fitted;
+    private static long _fittedAt = long.MinValue / 2;
+
+    private static bool Look()
     {
         try
         {
