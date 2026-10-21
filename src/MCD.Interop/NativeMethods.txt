@@ -205,3 +205,4 @@ GetKeyState
 GetAsyncKeyState
 WindowFromPoint
 GetAncestor
+GetClassName

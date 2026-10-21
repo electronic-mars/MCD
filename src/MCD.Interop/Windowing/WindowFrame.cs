@@ -199,20 +199,47 @@ public static unsafe class WindowFrame
     }
 
     /// <summary>Whether the window at this point of the desktop belongs to this program.</summary>
-    public static bool OursAt(int x, int y)
-    {
-        HWND under = PInvoke.WindowFromPoint(new System.Drawing.Point(x, y));
-        uint pid = 0;
+    public static bool OursAt(int x, int y) => RootAt(x, y).Ours;
 
-        if (!under.IsNull)
+    /// <summary>
+    /// Whether this point of the desktop is on one of this program's popups -
+    /// the separate window a flyout let out of its bar is drawn in.
+    /// </summary>
+    public static bool PopupAt(int x, int y)
+    {
+        (HWND root, bool ours) = RootAt(x, y);
+
+        if (!ours)
         {
-            unsafe
-            {
-                PInvoke.GetWindowThreadProcessId(PInvoke.GetAncestor(under, GET_ANCESTOR_FLAGS.GA_ROOT), &pid);
-            }
+            return false;
         }
 
-        return pid == (uint)Environment.ProcessId;
+        unsafe
+        {
+            char* name = stackalloc char[64];
+            int length = PInvoke.GetClassName(root, name, 64);
+            return new string(name, 0, Math.Max(0, length)) == "Microsoft.UI.Content.PopupWindowSiteBridge";
+        }
+    }
+
+    private static (HWND Root, bool Ours) RootAt(int x, int y)
+    {
+        HWND under = PInvoke.WindowFromPoint(new System.Drawing.Point(x, y));
+
+        if (under.IsNull)
+        {
+            return (under, false);
+        }
+
+        HWND root = PInvoke.GetAncestor(under, GET_ANCESTOR_FLAGS.GA_ROOT);
+        uint pid = 0;
+
+        unsafe
+        {
+            PInvoke.GetWindowThreadProcessId(root, &pid);
+        }
+
+        return (root, pid == (uint)Environment.ProcessId);
     }
 
     /// <summary>Puts the window exactly here, in physical pixels.</summary>
