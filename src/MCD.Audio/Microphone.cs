@@ -1,4 +1,4 @@
-using Windows.Win32.Media.Audio;
+﻿using Windows.Win32.Media.Audio;
 
 namespace Mcd.Audio;
 
@@ -17,6 +17,11 @@ public static unsafe class Microphone
     /// <summary>Whether recording is switched off, or null when there is nothing to record with.</summary>
     public static bool? Muted()
     {
+        if (Demo.On)
+        {
+            return Demo.MicMuted;
+        }
+
         long now = Environment.TickCount64;
 
         lock (Gate)
@@ -54,6 +59,12 @@ public static unsafe class Microphone
     public static bool Mute(bool on)
     {
         Forget();
+
+        if (Demo.On)
+        {
+            Demo.MicMuted = on;
+            return true;
+        }
 
         return SystemVolume.With<bool>(
             volume =>

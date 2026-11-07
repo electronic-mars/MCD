@@ -23,6 +23,11 @@ public static class KeyboardLayouts
     /// <summary>The layout of the window in front.</summary>
     public static unsafe KeyboardLayout Current()
     {
+        if (Demo.On)
+        {
+            return new KeyboardLayout("EN", "English");   // the demo is in English, whatever this machine types in
+        }
+
         Windows.Win32.Foundation.HWND front = PInvoke.GetForegroundWindow();
         uint thread = front.IsNull ? 0 : PInvoke.GetWindowThreadProcessId(front, out _);
 

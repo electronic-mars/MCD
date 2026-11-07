@@ -178,6 +178,16 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
             ? Visibility.Visible
             : Visibility.Collapsed;
 
+        // A recording shows a made-up track, playing, not what this machine is playing.
+        if (Mcd.Interop.Demo.On)
+        {
+            Title = "Demo Artist — Demo Track";
+            Dim = 1.0;
+            PlayShown = 0;
+            PauseShown = 1;
+            return;
+        }
+
         Listen();
     }
 
@@ -647,6 +657,12 @@ public sealed partial class MediaWidget(WidgetContext context, WidgetConfig entr
     [RelayCommand]
     private void PlayPause()
     {
+        if (Mcd.Interop.Demo.On)
+        {
+            (PlayShown, PauseShown) = (PauseShown, PlayShown);
+            return;
+        }
+
         // Starting the nominated player pauses everyone else first. Without
         // this a short video in a browser and the music simply play on top
         // of each other - the very thing nominating is there to end.

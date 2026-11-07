@@ -381,7 +381,9 @@ public sealed class SensorHub : IDisposable
         {
             foreach ((SensorKey key, SensorReading reading) in source.Values)
             {
-                builder[key] = reading;
+                builder[key] = Mcd.Interop.Demo.On
+                    ? new SensorReading(Mcd.Interop.Demo.Value(key.Value, now), Quality.Fresh)
+                    : reading;
             }
         }
 
@@ -453,6 +455,13 @@ public sealed class SensorHub : IDisposable
                     ? d with { Prominent = false }
                     : d)
         ];
+
+        // The made-up readings change colour where a recording can show it:
+        // amber at 75, red with the warning at 100.
+        if (Mcd.Interop.Demo.On)
+        {
+            _catalog = [.. _catalog.Select(d => d with { Warning = Mcd.Interop.Demo.Warm, Critical = Mcd.Interop.Demo.Peak })];
+        }
     }
 
     private void RebuildRoll() =>

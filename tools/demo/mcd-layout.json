@@ -1,0 +1,91 @@
+{
+  "monitors": [
+    {
+      "edge": "Top",
+      "mode": "Pinned",
+      "density": "Default",
+      "anchor": "Start",
+      "widgets": [
+        {
+          "instanceId": "d1",
+          "typeId": "mcd.icon",
+          "cell": 4,
+          "config": {
+            "target": "explorer.exe",
+            "name": "Files",
+            "icon": "Folder"
+          }
+        },
+        {
+          "instanceId": "d2",
+          "typeId": "mcd.icon",
+          "cell": 6,
+          "config": {
+            "target": "calc.exe",
+            "icon": "Calculator"
+          }
+        },
+        {
+          "instanceId": "d3",
+          "typeId": "mcd.icon",
+          "cell": 8,
+          "config": {
+            "target": "notepad.exe",
+            "icon": "Notepad"
+          }
+        },
+        {
+          "instanceId": "d4",
+          "typeId": "mcd.gauge",
+          "cell": 16,
+          "config": {
+            "reading": "cpu",
+            "temp": 1
+          }
+        },
+        {
+          "instanceId": "d5",
+          "typeId": "mcd.gauge",
+          "cell": 30,
+          "config": {
+            "reading": "gpu",
+            "temp": 1
+          }
+        },
+        {
+          "instanceId": "d6",
+          "typeId": "mcd.gauge",
+          "cell": 44,
+          "config": {
+            "reading": "ram"
+          }
+        },
+        {
+          "instanceId": "d11",
+          "typeId": "mcd.temp",
+          "cell": 55
+        },
+        {
+          "instanceId": "d7",
+          "typeId": "mcd.brightness",
+          "cell": 66
+        },
+        {
+          "instanceId": "d8",
+          "typeId": "mcd.sound",
+          "cell": 69
+        },
+        {
+          "instanceId": "d9",
+          "typeId": "mcd.mic",
+          "cell": 75
+        },
+        {
+          "instanceId": "d10",
+          "typeId": "mcd.clock",
+          "cell": 79
+        }
+      ]
+    }
+  ]
+}

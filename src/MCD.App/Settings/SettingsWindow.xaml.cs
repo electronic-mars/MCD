@@ -954,8 +954,8 @@ public sealed partial class SettingsWindow : Window
 
         (string Glyph, string Figure, string Label)[] readings =
         [
-            (chosen.For("cpu", "Cpu"), "37 %", Loc.Tr("LabelCpu", "CPU")),
-            (chosen.For("temp", "Temperature"), "51 \u00b0C", Loc.Tr("LabelGpu", "GPU")),
+            (chosen.For("cpu", "Cpu"), WidgetSample.Figure21("37 %"), Loc.Tr("LabelCpu", "CPU")),
+            (chosen.For("temp", "Temperature"), WidgetSample.Figure21("51 \u00b0C"), Loc.Tr("LabelGpu", "GPU")),
             ("Clock", "12:54", string.Empty),
         ];
 

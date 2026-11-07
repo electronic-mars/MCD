@@ -7,11 +7,15 @@ machine that will tell you theirs.
 It looks and behaves like the Dock in the PowerToys Command Palette, and it
 exists because that one has two problems this one is built around.
 
-![The bar along the top of a screen](docs/screenshots/bar.png)
+![The bar along the top of a screen: readings turn amber at 75 and red with a warning at 100, a press shows the last hour, and the volume, the speaker, the microphone and the brightness answer from the bar](docs/demo/hero.gif)
 
-| Every widget, drawn as it looks on the bar | A press on a reading: its last hour |
+| A reading at 100: red, with a warning | A press on a reading: its last hour |
 |---|---|
-| ![The widget gallery in the settings](docs/screenshots/widgets.png) | ![The history panel of a reading](docs/screenshots/history.png) |
+| ![The bar along the top of a screen, the CPU load and temperature at 100 in red with a warning triangle](docs/screenshots/bar.png) | ![The history panel of the CPU: load and temperature over the last hour](docs/screenshots/history.png) |
+| **Every widget, drawn as it looks on the bar** | **Light or dark, the Windows accent on the readings** |
+| ![The widget gallery in the settings](docs/screenshots/widgets.png) | ![The appearance settings: the light theme and the Windows accent colour](docs/screenshots/appearance.png) |
+
+![The settings: a widget dragged from the gallery onto the bar, saved layouts applied in turn, the light theme and the accent colour on the readings](docs/demo/settings.gif)
 
 ## Why this exists
 

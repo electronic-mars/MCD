@@ -46,6 +46,7 @@ public partial class App : Application
     /// </remarks>
     public App()
     {
+        Mcd.Interop.Demo.Prepare();
         InitializeComponent();
         DispatcherShutdownMode = DispatcherShutdownMode.OnExplicitShutdown;
     }
@@ -179,7 +180,12 @@ public partial class App : Application
 
         Mcd.Interop.Display.Brightness.Refused += said => start.LogWarning("brightness {Said}", said);
 
-        Mcd.Audio.AudioWatch.Start();
+        // Not in a recording: it carries one device's mute to every other,
+        // and the recording's mute is not any device's.
+        if (!Mcd.Interop.Demo.On)
+        {
+            Mcd.Audio.AudioWatch.Start();
+        }
 
         // Windows notifications, for the overheat warning and an update that
         // needs a yes; both are off unless asked for.

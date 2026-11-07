@@ -65,7 +65,13 @@ public sealed record WidgetOffer(
 /// <param name="Label">The small name above the figure on a full-size bar.</param>
 public sealed record WidgetSample(string[] Icons, string Figure = "", string Label = "")
 {
-    public static WidgetSample Of(string icon, string figure = "", string label = "") => new([icon], figure, label);
+    public static WidgetSample Of(string icon, string figure = "", string label = "") => new([icon], Figure21(figure), label);
+
+    /// <summary>In the demo the pictures read 21, like every reading on the bar; a time stays a time.</summary>
+    public static string Figure21(string figure) =>
+        Mcd.Interop.Demo.On && !figure.Contains(':')
+            ? System.Text.RegularExpressions.Regex.Replace(figure, @"\d+(\.\d+)?", "21")
+            : figure;
 }
 
 /// <summary>

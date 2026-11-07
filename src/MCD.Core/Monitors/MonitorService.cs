@@ -1,5 +1,7 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using Mcd.Interop;
 using Mcd.Interop.Display;
+using Windows.Win32.Foundation;
 using Microsoft.Extensions.Logging;
 
 namespace Mcd.Core.Monitors;
@@ -48,6 +50,11 @@ public class MonitorService(ILogger<MonitorService> log)
         ImmutableArray<MonitorInfo> result = monitors.ToImmutable();
         defect ??= FindDefect(raw.Count, result);
 
+        if (Demo.On && defect is null)
+        {
+            result = [DemoScreen(result.First(m => m.IsPrimary))];
+        }
+
         if (defect is null)
         {
             log.LogDebug("monitors.snapshot authoritative count={Count}", result.Length);
@@ -56,6 +63,23 @@ public class MonitorService(ILogger<MonitorService> log)
 
         log.LogInformation("monitors.snapshot provisional count={Count} reason={Reason}", result.Length, defect);
         return new ProvisionalSnapshot(result, now, defect);
+    }
+
+    /// <summary>
+    /// The one small screen a recording is made on, in the primary screen's
+    /// top left corner, so that the real desk around it stays out of the frame.
+    /// </summary>
+    public static MonitorInfo DemoScreen(MonitorInfo primary)
+    {
+        RECT bounds = new()
+        {
+            left = primary.Bounds.left,
+            top = primary.Bounds.top,
+            right = primary.Bounds.left + Demo.ScreenWidth,
+            bottom = primary.Bounds.top + Demo.ScreenHeight,
+        };
+
+        return primary with { Bounds = bounds, WorkArea = bounds };
     }
 
     private static string? FindDefect(int gdiCount, ImmutableArray<MonitorInfo> monitors)

@@ -37,3 +37,6 @@ assets/icons-selected.json
 /build/out/
 tools/untranslated/
 review.log
+
+# Demo recordings, raw and encoded (tools/demo)
+tools/demo/out/

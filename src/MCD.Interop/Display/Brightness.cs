@@ -44,6 +44,11 @@ public static unsafe class Brightness
     /// <summary>What is known about each screen, from the last time anyone asked it. Never waits.</summary>
     public static IReadOnlyList<ScreenBrightness> Snapshot()
     {
+        if (Demo.On)
+        {
+            return [.. Demo.Screens.Select(s => new ScreenBrightness(s.Key, s.Value, Embedded: false))];
+        }
+
         long now = Environment.TickCount64;
 
         if (now - _asked > PanelEvery && Interlocked.CompareExchange(ref _reading, 1, 0) == 0)
@@ -76,6 +81,12 @@ public static unsafe class Brightness
     public static void Set(string gdi, int percent)
     {
         percent = Math.Clamp(percent, 0, 100);
+
+        if (Demo.On)
+        {
+            Demo.Screens[gdi] = percent;
+            return;
+        }
 
         lock (Gate)
         {

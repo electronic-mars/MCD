@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Mcd.Sensors;
 using Mcd.Sensors.Contracts;
 using Microsoft.UI.Xaml;
@@ -43,6 +43,16 @@ public static class ReadingHistory
                 if (!Rings.TryGetValue(key, out Ring? ring))
                 {
                     Rings[key] = ring = new Ring();
+
+                    // An hour that has already happened, so the panel of a
+                    // recording is not a line that starts at its right edge.
+                    if (Mcd.Interop.Demo.On)
+                    {
+                        for (int ago = Hour - 1; ago > 0; ago--)
+                        {
+                            ring.Add((float)Mcd.Interop.Demo.Past(key.Value, ago));
+                        }
+                    }
                 }
 
                 ring.Add(reading.HasValue ? (float)reading.Value : float.NaN);

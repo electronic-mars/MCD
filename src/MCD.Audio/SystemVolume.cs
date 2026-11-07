@@ -24,7 +24,7 @@ namespace Mcd.Audio;
 public static unsafe class SystemVolume
 {
     /// <summary>Whether sound is silenced, or null when nothing can say.</summary>
-    public static bool? Muted() => With(volume =>
+    public static bool? Muted() => Demo.On ? Demo.VolumeMuted : With(volume =>
     {
         Windows.Win32.Foundation.BOOL muted;
         volume.GetMute(&muted);
@@ -33,7 +33,7 @@ public static unsafe class SystemVolume
     });
 
     /// <summary>How loud it is, nought to one, or null when nothing can say.</summary>
-    public static float? Level() => With(volume =>
+    public static float? Level() => Demo.On ? Demo.Volume : With(volume =>
     {
         volume.GetMasterVolumeLevelScalar(out float level);
 
@@ -87,6 +87,12 @@ public static unsafe class SystemVolume
     {
         Forget();
 
+        if (Demo.On)
+        {
+            Demo.VolumeMuted = on;
+            return true;
+        }
+
         return With<bool>(volume =>
         {
             volume.SetMute(on, null);
@@ -98,6 +104,12 @@ public static unsafe class SystemVolume
     public static bool Set(float level)
     {
         Forget();
+
+        if (Demo.On)
+        {
+            Demo.Volume = Math.Clamp(level, 0f, 1f);
+            return true;
+        }
 
         return With<bool>(volume =>
         {
