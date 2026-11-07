@@ -143,7 +143,7 @@ First release in the Microsoft Store.
 - System-wide microphone switch that turns red while muted
 - One brightness slider for every screen, DDC/CI monitors included
 - Media widget with cover art and playback buttons
-- Pinned programs, folders and websites; drop a file to pin it
+- Pinned programs, folders and websites, or a file dropped on the bar
 - Docked, auto-hide or on-desktop, on any edge
 - Saved layouts for any screen
 - Light and dark themes, Windows accent colour
