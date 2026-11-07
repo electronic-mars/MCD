@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>メインのスライダーの下に、各画面用のスライダーを追加します。</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>プロジェクトを支援</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>開発者のサイト</value>
+  </data>
 </root>

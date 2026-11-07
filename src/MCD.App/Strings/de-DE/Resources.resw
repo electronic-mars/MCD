@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Fügt unter dem Hauptregler einen Regler für jeden Bildschirm hinzu.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Projekt unterstützen</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Website des Entwicklers</value>
+  </data>
 </root>

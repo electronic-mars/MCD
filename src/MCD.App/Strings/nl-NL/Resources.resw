@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Voegt een schuifregelaar toe voor elk scherm onder de hoofdregelaar.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Steun het project</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Website van de ontwikkelaar</value>
+  </data>
 </root>

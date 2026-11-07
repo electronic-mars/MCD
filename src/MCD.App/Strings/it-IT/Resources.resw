@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Aggiunge un cursore per ogni schermo sotto quello principale.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Sostieni il progetto</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Sito dello sviluppatore</value>
+  </data>
 </root>

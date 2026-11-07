@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Ana kaydırıcının altına her ekran için bir kaydırıcı ekler.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Projeyi destekle</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Geliştirici sitesi</value>
+  </data>
 </root>

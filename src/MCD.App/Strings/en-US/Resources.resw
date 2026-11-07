@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Adds a slider for every screen under the main one.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Support the project</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Developer website</value>
+  </data>
 </root>

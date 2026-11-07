@@ -4362,7 +4362,17 @@ public sealed partial class SettingsWindow : Window
         string version = Mcd.Interop.PawnIo.PawnIo.InstalledVersion() ?? string.Empty;
         Grid row;
 
-        if (version.Length == 0)
+        if (AppPaths.IsPackaged && !_host.Connected)
+        {
+            // The Store package carries no service and installs none: a
+            // program from the Store does not put a service of its own on the
+            // machine. One put in by the developer's installer is still read.
+            row = Braun.Row(
+                Loc.Tr("DriverRow", "CPU and memory temperatures"),
+                Loc.Tr("ServiceRowMissing", "The sensor service is not included in this build."),
+                null);
+        }
+        else if (version.Length == 0)
         {
             row = Braun.Row(
                 Loc.Tr("DriverRow", "CPU and memory temperatures"),
@@ -4771,6 +4781,27 @@ public sealed partial class SettingsWindow : Window
         Grid.SetColumn(news, 2);
         card.Children.Add(news);
 
+        // The developer's site and a way to say thanks, as in Master Audio
+        // Switcher. Both open in the browser; nothing is bought or unlocked.
+        card.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        card.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+        var links = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Margin = new Thickness(0, 12, 0, 0) };
+        links.Children.Add(Braun.Action(
+            Loc.Tr("AboutSupport", "Support the project"),
+            () => Open("https://electronic-mars.github.io/#support"),
+            "HandHeart",
+            ghost: false));
+        links.Children.Add(Braun.Action(
+            Loc.Tr("AboutSite", "Developer website"),
+            () => Open("https://electronic-mars.github.io/#mcd"),
+            "Globe"));
+
+        Grid.SetRow(links, 1);
+        Grid.SetColumn(links, 1);
+        Grid.SetColumnSpan(links, 2);
+        card.Children.Add(links);
+
         Border plate = Braun.Group(card);
         plate.Background = new SolidColorBrush(light
             ? Windows.UI.Color.FromArgb(0xFF, 0xE2, 0xF1, 0xEE)
@@ -4781,6 +4812,18 @@ public sealed partial class SettingsWindow : Window
         // ------------------------------------------------------------ updates
         // Nothing here runs by itself unless the first row says so: until
         // then the program contacts nobody until the button is pressed.
+        // Installed from the Store, updates are the Store's: no section at all.
+        if (!AppPaths.IsPackaged)
+        {
+            ShowUpdates();
+        }
+
+        ShowPapers();
+    }
+
+    /// <summary>The About page's updates section, for a copy installed from the developer's installer.</summary>
+    private void ShowUpdates()
+    {
         AboutBody.Children.Add(Braun.Heading("Download", Loc.Tr("UpdateTitle", "Updates")));
 
         bool auto = _settings.Current.App.AutoUpdate;
@@ -4849,7 +4892,11 @@ public sealed partial class SettingsWindow : Window
                                 },
                                 "Download")
                             : Braun.Action(Loc.Tr("UpdateCheckButton", "Check"), CheckUpdate, "Download"))));
+    }
 
+    /// <summary>The About page from the program's papers down to quitting.</summary>
+    private void ShowPapers()
+    {
         // ------------------------------------------------------------ papers
         // Only the program's own papers. The machine's settings - keys,
         // language, startup, copies - have a page of their own.

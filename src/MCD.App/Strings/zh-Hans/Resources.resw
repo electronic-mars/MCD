@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>为每个屏幕添加一个滑块，位于主滑块下方。</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>支持本项目</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>开发者网站</value>
+  </data>
 </root>

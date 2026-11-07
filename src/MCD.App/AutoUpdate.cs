@@ -67,6 +67,15 @@ internal sealed class AutoUpdate
         }
 #endif
         _timer.Tick += (_, _) => Tick();
+
+        // Installed from the Store, the Store updates it. Doing it here as
+        // well is against its rules, and would replace a package with an
+        // installer that does not belong to it.
+        if (AppPaths.IsPackaged)
+        {
+            return;
+        }
+
         _timer.Start();
 
         Notices.On("update", () => Install());

@@ -256,7 +256,16 @@ public partial class App : Application
 
         if (chosen is not { Length: > 0 } || chosen == "system")
         {
-            return;
+            // Installed from the Store, Windows offers the program only the
+            // languages its package declares - the ones the Store listing is
+            // written in, not the fifteen it speaks. Picked here instead, from
+            // the person's own list, as an unpackaged copy gets it.
+            if (!AppPaths.IsPackaged || Spoken(Windows.System.UserProfile.GlobalizationPreferences.Languages) is not { } spoken)
+            {
+                return;
+            }
+
+            chosen = spoken;
         }
 
         try
@@ -269,6 +278,42 @@ public partial class App : Application
             // An invalid tag. The program is no worse off in its default language.
             log.LogWarning(e, "app.language could not apply {Language}", chosen);
         }
+    }
+
+    /// <summary>The first of the person's Windows languages this program has a translation for.</summary>
+    internal static string? Spoken(IEnumerable<string> wanted)
+    {
+        string[] ours =
+        [
+            "en-US", "cs-CZ", "de-DE", "es-ES", "fr-FR", "it-IT", "nl-NL", "pl-PL",
+            "pt-BR", "tr-TR", "ru-RU", "uk-UA", "ja-JP", "zh-Hans", "ko-KR",
+        ];
+
+        foreach (string tag in wanted)
+        {
+            string language = tag.Split('-')[0];
+
+            // Chinese by script, not by country: Traditional is not what we have.
+            if (language.Equals("zh", StringComparison.OrdinalIgnoreCase))
+            {
+                if (tag.Contains("Hant", StringComparison.OrdinalIgnoreCase)
+                    || tag.EndsWith("-TW", StringComparison.OrdinalIgnoreCase)
+                    || tag.EndsWith("-HK", StringComparison.OrdinalIgnoreCase)
+                    || tag.EndsWith("-MO", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                return "zh-Hans";
+            }
+
+            if (ours.FirstOrDefault(o => o.StartsWith(language + "-", StringComparison.OrdinalIgnoreCase)) is { } found)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

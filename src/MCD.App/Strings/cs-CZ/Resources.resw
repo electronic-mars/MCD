@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Pod hlavním posuvníkem přidá posuvník pro každou obrazovku.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Podpořit projekt</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Web vývojáře</value>
+  </data>
 </root>

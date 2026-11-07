@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Додає повзунок для кожного екрана під загальним.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Підтримати проєкт</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Сайт розробника</value>
+  </data>
 </root>

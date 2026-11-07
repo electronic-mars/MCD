@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Adiciona controle deslizante para cada tela abaixo da principal.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Apoiar o projeto</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Site do desenvolvedor</value>
+  </data>
 </root>

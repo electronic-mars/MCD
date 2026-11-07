@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>메인 슬라이더 아래에 각 화면별 슬라이더를 추가합니다.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>프로젝트 후원</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>개발자 사이트</value>
+  </data>
 </root>

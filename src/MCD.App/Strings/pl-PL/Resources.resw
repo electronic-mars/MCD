@@ -1943,4 +1943,10 @@
   <data name="BrightnessEachHint" xml:space="preserve">
     <value>Dodaje suwak dla każdego ekranu pod suwakiem głównym.</value>
   </data>
+  <data name="AboutSupport" xml:space="preserve">
+    <value>Wesprzyj projekt</value>
+  </data>
+  <data name="AboutSite" xml:space="preserve">
+    <value>Strona twórcy</value>
+  </data>
 </root>

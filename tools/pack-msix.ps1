@@ -8,18 +8,14 @@ no packaging project, no Visual Studio workload. The result is unsigned: the
 Store signs what it publishes, and a local install of an unsigned package is
 done with Add-AppxPackage after enabling developer mode, or not at all.
 
-Identity comes from Partner Center once the app name is reserved there; until
-then the defaults below produce a package that packs and uploads but will be
-renamed by the Store submission.
+The identity Partner Center assigned is in packaging/Package.appxmanifest
+itself; only the version is patched in here.
 
 .EXAMPLE
 tools/pack-msix.ps1
-tools/pack-msix.ps1 -IdentityName "12345ElectronicMars.MasterControlDock" -Publisher "CN=ABCDEF01-2345-..."
 #>
 [CmdletBinding()]
 param(
-    [string]$IdentityName = 'ElectronicMars.MasterControlDock',
-    [string]$Publisher = 'CN=00000000-0000-0000-0000-000000000000',
     [string]$Architecture = 'x64',
     [switch]$SkipPublish
 )
@@ -58,12 +54,12 @@ New-Item -ItemType Directory -Path $staging -Force | Out-Null
 Copy-Item -Path (Join-Path $publishDir '*') -Destination $staging -Recurse
 Get-ChildItem $staging -Filter *.pdb | Remove-Item
 
-# The manifest, with the real identity and version patched in.
+# The manifest, with the version patched in.
 $manifest = Get-Content (Join-Path $root 'packaging\Package.appxmanifest') -Raw
-$manifest = $manifest -replace 'Name="ElectronicMars\.MasterControlDock"', "Name=`"$IdentityName`""
-$manifest = $manifest -replace 'Publisher="CN=00000000-0000-0000-0000-000000000000"', "Publisher=`"$Publisher`""
 # -creplace: -replace is case-blind and would also rewrite version="1.0" in the XML declaration.
-$manifest = $manifest -creplace 'Version="[\d\.]+"', "Version=`"$version.0`""
+# Only a Version standing on its own: without the space before it this also
+# rewrote MinVersion, and the package claimed to run on Windows "0.1.19".
+$manifest = $manifest -creplace '(?<=\s)Version="[\d\.]+"', "Version=`"$version.0`""
 $manifest = $manifest -replace 'ProcessorArchitecture="x64"', "ProcessorArchitecture=`"$Architecture`""
 Set-Content -Path (Join-Path $staging 'AppxManifest.xml') -Value $manifest -Encoding utf8
 

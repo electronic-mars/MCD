@@ -153,7 +153,8 @@ The settings window has these pages:
   The installer speaks all of them.
 - **Sensors** - everything the program reads, where it comes from, and what to
   call it.
-- **About** - version, the log, and *Quit*.
+- **About** - version, the developer's site, a way to say thanks, the log,
+  and *Quit*.
 
 Every change is applied as you make it, and **Ctrl+Z** in the settings window
 takes the last one back. The bar at the foot of the window's navigation hides
@@ -199,9 +200,17 @@ Hugeicons, free set, MIT. `tools/fetch_icons.py` pulls them through Iconify,
 keeps the SVG sources in `assets/icons-src/` and generates the path data the
 program draws. Re-run it after changing the list at the top of that file.
 
-## Supporting it
+## Ways to say thanks
 
-If it is useful to you: [Patreon](https://www.patreon.com/ElectronicMARS).
+If one of my programs saved you some time and you want to say thanks, pick
+whatever is easiest for you. It buys time to keep working on them.
+
+**[Ways to say thanks →](https://electronic-mars.github.io/#support)**
+
+## Privacy
+
+Nothing is collected and nothing is sent. The details, including what the log
+contains before you attach it to a bug report, are in [PRIVACY.md](PRIVACY.md).
 
 ## Licence
 
