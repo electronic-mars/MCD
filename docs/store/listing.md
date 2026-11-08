@@ -133,7 +133,7 @@ Free and open source (GPL-3.0). No account, no ads, no telemetry. Nothing leaves
 your computer unless you open a link.
 
 ### What's new in this version
-First release in the Microsoft Store.
+If the program ever closes unexpectedly, Windows now starts it again by itself.
 
 ### Product features
 *(one per line, up to 20)*
@@ -225,7 +225,7 @@ Master Control Dock ставит тонкую полосу с любой сто�
 телеметрии. Ничего не уходит с компьютера, пока вы сами не откроете ссылку.
 
 ### What's new in this version
-Первый выпуск в Microsoft Store.
+Если программа неожиданно закроется, Windows теперь сама запустит её снова.
 
 ### Product features
 
