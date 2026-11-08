@@ -89,7 +89,12 @@ up again when HWiNFO is restarted.
 
 ## Installing it
 
-Take **MasterControlDock-<version>-setup.exe** from
+From the [Microsoft Store](https://apps.microsoft.com/detail/9NJRSBM7J146), which
+is the easy way: it installs and updates the program for you, and Windows already
+trusts what the Store hands it. The Store copy is updated by the Store, so it has
+no update button of its own.
+
+Or take **MasterControlDock-<version>-setup.exe** from
 [Releases](https://github.com/electronic-mars/MCD/releases/latest). By default it
 installs for the current user and needs no administrator rights; it can also
 install for all users under Program Files, and asks for rights only then. The program is not
