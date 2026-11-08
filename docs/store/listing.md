@@ -85,38 +85,41 @@ Free. All markets. Public. No trial, no in-app purchases.
 Master Control Dock
 
 ### Short description
-A bar on the edge of every screen: CPU, GPU, memory and drive readings with
-temperatures, media buttons, volume, microphone, brightness and your pinned
-programs.
+A bar on any side of the screen: the player, volume, sound and microphone mute,
+brightness, keep-awake, the charge of your mouse and headset, and CPU, GPU and
+drive load and temperatures.
 
 ### Description
 
-Master Control Dock puts a slim bar along the edge of every screen you have,
-and fills it with the things you glance at all day.
+Master Control Dock puts a slim bar on any side of the screen and gathers on it
+the controls Windows keeps a few clicks away, next to live readings of how the
+computer is doing.
+
+**Controls in one click.** The player: play, pause and skip whatever is
+playing, with its cover. Volume: click the icon to mute, click the figure for a
+slider, or scroll over it. The microphone switches off for the whole system and
+turns red while it is off. One brightness slider for every screen, the laptop's
+own panel and any monitor that answers DDC/CI. A cup that keeps the computer
+from going to sleep while it is full.
+
+**The charge of what is wireless.** A wireless mouse and headset show how much
+charge is left, and so does the laptop's battery.
 
 **Readings that mean something.** Processor, graphics, memory, drive and
 network load, and the temperatures of the parts that report one. A figure turns
 amber as it climbs and red with a warning when it is at the limit, so you notice
 it without reading it. Press a reading to see its last hour.
 
-**Controls you reach for.** Mute the speakers with one click on the icon, or
-click the figure for a volume slider; scroll over it to turn the sound up and
-down. Switch the microphone off for the whole system, and see it go red while it
-is off. Brightness moves every screen at once, the laptop's own panel and any
-monitor that answers DDC/CI. The media widget shows what is playing, with its
-cover and the buttons to control it.
-
 **Your programs, folders and websites.** Pin them to the bar, or drop a file
 straight onto it.
 
-**Every screen its own bar.** Top, bottom, left or right; docked so maximised
-windows stop at it, hidden until you need it, or lying on the desktop. A monitor
-plugged in later gets a bar of its own, never an empty one. Drag widgets from
-the gallery onto the bar, keep layouts and put any of them on any screen.
+**Placed the way you like.** Top, bottom, left or right: docked so maximised
+windows stop at it, hidden until you need it, or lying on the desktop. Drag
+widgets from the gallery onto the bar and keep layouts. With more than one
+monitor, each gets a bar of its own.
 
-**And the small things:** the clock and date, Wi-Fi and battery, the charge of a
-wireless mouse or headset, the keyboard layout and Caps Lock, a switch that
-keeps the computer awake, and keys that work from any program.
+**And the small things:** the clock and date, Wi-Fi, the keyboard layout and
+Caps Lock, and keys that work from any program.
 
 It follows the Windows theme, light or dark, translucent or solid, with the
 Windows accent colour on the readings if you like. It speaks fifteen languages.
@@ -135,26 +138,26 @@ First release in the Microsoft Store.
 ### Product features
 *(one per line, up to 20)*
 
-- A bar on the edge of every screen, each with its own widgets
-- CPU, GPU, memory, drive and network load and temperatures
-- Readings turn amber, then red with a warning, as they climb
-- Press a reading to see its last hour
+- A bar on any side of the screen: top, bottom, left or right
+- Media widget: play, pause and skip, with cover art
 - Mute, volume slider and scroll-to-change from the bar
 - System-wide microphone switch that turns red while muted
 - One brightness slider for every screen, DDC/CI monitors included
-- Media widget with cover art and playback buttons
+- Keep-awake switch and global keys that work from any program
+- Charge of wireless mice and headsets, and of the laptop battery
+- CPU, GPU, memory, drive and network load and temperatures
+- Readings turn amber, then red with a warning, as they climb
+- Press a reading to see its last hour
 - Pinned programs, folders and websites, or a file dropped on the bar
-- Docked, auto-hide or on-desktop, on any edge
-- Saved layouts for any screen
+- Docked, auto-hide or on the desktop, with saved layouts
+- Keyboard layout, Caps Lock, Wi-Fi and the clock
 - Light and dark themes, Windows accent colour
-- Battery of wireless mice and headsets
-- Keep-awake switch and global keys
 - 15 languages, free and open source
 
 ### Search terms
 *(up to seven)*
 
-system monitor, taskbar, cpu temperature, dock, toolbar, widgets, multi monitor
+system monitor, taskbar, cpu temperature, dock, toolbar, widgets, media controls
 
 ### Copyright and trademark info
 © electronic-mars. GPL-3.0-or-later.
@@ -173,37 +176,41 @@ Electronic MARS
 Master Control Dock
 
 ### Short description
-Полоса у края каждого экрана: загрузка и температура процессора, видеокарты,
-памяти и дисков, кнопки плеера, громкость, микрофон, яркость и ваши программы.
+Полоса с любой стороны экрана: плеер, громкость, выключение звука и микрофона,
+яркость, режим «не засыпать», заряд мыши и гарнитуры, загрузка и температура
+процессора, видеокарты и дисков.
 
 ### Description
 
-Master Control Dock ставит у края каждого экрана тонкую полосу и собирает на
-ней то, на что вы смотрите весь день.
+Master Control Dock ставит тонкую полосу с любой стороны экрана и собирает на
+ней то, что в Windows спрятано за несколькими щелчками, а рядом — показания
+того, как работает компьютер.
+
+**Управление в один щелчок.** Плеер: пауза, воспроизведение и переключение
+треков в том, что сейчас играет, с обложкой. Громкость: щелчок по значку
+выключает звук, щелчок по числу открывает ползунок, колесо мыши над ним
+прибавляет и убавляет. Микрофон выключается для всей системы и горит красным,
+пока выключен. Один ползунок яркости для всех экранов: экрана ноутбука и
+мониторов с DDC/CI. Чашка, которая не даёт компьютеру уснуть, пока она полная.
+
+**Заряд беспроводных устройств.** Сколько заряда осталось у беспроводной мыши и
+гарнитуры, а заодно и у батареи ноутбука.
 
 **Показания, которые что-то значат.** Загрузка процессора, видеокарты, памяти,
 дисков и сети, и температура тех частей, что её сообщают. Число желтеет, когда
 растёт, и краснеет с предупреждением у предела, так что это заметно без чтения.
 Нажмите на показание, и откроется его последний час.
 
-**Управление под рукой.** Звук выключается одним щелчком по значку, щелчок по
-числу открывает ползунок громкости, колесо мыши над ним прибавляет и убавляет.
-Микрофон выключается для всей системы и горит красным, пока выключен. Яркость
-меняется на всех экранах сразу: на экране ноутбука и на мониторах с DDC/CI.
-Виджет плеера показывает, что играет, с обложкой и кнопками.
-
 **Ваши программы, папки и сайты.** Закрепите их на полосе или просто бросьте
 файл на неё.
 
-**У каждого экрана своя полоса.** Сверху, снизу, слева или справа; закреплённая,
-чтобы развёрнутые окна останавливались у неё, скрытая до наведения или лежащая
-на рабочем столе. Монитор, подключённый позже, получает свою полосу, а не
-пустую. Виджеты перетаскиваются из галереи на полосу, раскладки сохраняются и
-ставятся на любой экран.
+**Где вам удобно.** Сверху, снизу, слева или справа: закреплённая, чтобы
+развёрнутые окна останавливались у неё, скрытая до наведения или лежащая на
+рабочем столе. Виджеты перетаскиваются из галереи на полосу, раскладки
+сохраняются. Если мониторов несколько, у каждого своя полоса.
 
-**И мелочи:** часы и дата, Wi-Fi и батарея, заряд беспроводной мыши или
-гарнитуры, раскладка клавиатуры и Caps Lock, переключатель «не засыпать» и
-клавиши, работающие из любой программы.
+**И мелочи:** часы и дата, Wi-Fi, раскладка клавиатуры и Caps Lock, клавиши,
+работающие из любой программы.
 
 Следует теме Windows, светлой или тёмной, полупрозрачной или сплошной, а
 показания по желанию окрашиваются в цвет акцента Windows. Говорит на
@@ -222,25 +229,25 @@ Master Control Dock ставит у края каждого экрана тон�
 
 ### Product features
 
-- Полоса у края каждого экрана, у каждой свои виджеты
-- Загрузка и температура процессора, видеокарты, памяти, дисков и сети
-- Показания желтеют, а затем краснеют с предупреждением
-- Нажатие на показание открывает его последний час
+- Полоса с любой стороны экрана: сверху, снизу, слева или справа
+- Виджет плеера: пауза, воспроизведение и переключение треков, с обложкой
 - Выключение звука, ползунок громкости и колесо мыши прямо на полосе
 - Выключатель микрофона для всей системы, красный, пока выключен
 - Один ползунок яркости для всех экранов, включая мониторы с DDC/CI
-- Виджет плеера с обложкой и кнопками
+- Режим «не засыпать» и клавиши, работающие из любой программы
+- Заряд беспроводных мышей и гарнитур и батареи ноутбука
+- Загрузка и температура процессора, видеокарты, памяти, дисков и сети
+- Показания желтеют, а затем краснеют с предупреждением
+- Нажатие на показание открывает его последний час
 - Закреплённые программы, папки и сайты; файл можно бросить на полосу
-- Закреплённая, скрытая или на рабочем столе, у любого края
-- Сохранённые раскладки для любого экрана
+- Закреплённая, скрытая или на рабочем столе, с сохранёнными раскладками
+- Раскладка клавиатуры, Caps Lock, Wi-Fi и часы
 - Светлая и тёмная темы, цвет акцента Windows
-- Заряд беспроводных мышей и гарнитур
-- Режим «не засыпать» и глобальные клавиши
 - 15 языков, бесплатно и с открытым кодом
 
 ### Search terms
 
-мониторинг системы, температура процессора, панель задач, док, виджеты, несколько мониторов, загрузка процессора
+мониторинг системы, температура процессора, панель задач, док, виджеты, управление громкостью, загрузка процессора
 
 ### Copyright and trademark info
 © electronic-mars. GPL-3.0-or-later.
