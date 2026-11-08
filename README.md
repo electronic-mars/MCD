@@ -1,11 +1,21 @@
 # Master Control Dock
 
-A dock for the edge of your screen: pinned programs and folders, live readings
-for CPU, memory, disks and network, and temperatures for the parts of the
-machine that will tell you theirs.
+A bar on any side of the screen with the controls Windows keeps out of reach,
+and live readings of how the machine is doing. What can go on it:
 
-It looks and behaves like the Dock in the PowerToys Command Palette, and it
-exists because that one has two problems this one is built around.
+- **The player**: play, pause and skip for whatever is playing, with its cover;
+  press the cover to bring the player forward.
+- **Volume, and mute for the sound and the microphone**, which covers every
+  device plugged in, not only the one in use.
+- **Screen brightness**, for a laptop's own panel and for monitors that answer
+  DDC/CI.
+- **Keep awake**: a cup that stops the computer from going to sleep while it
+  is full.
+- **Charge** of a wireless mouse and headset, and of the laptop's battery.
+- **Load and temperature** of the processor, graphics, memory and drives, and
+  the network. Press any reading to see its last hour.
+- **The keyboard language and Caps Lock, Wi-Fi and the clock.**
+- **Pinned programs, folders and web addresses**, one click away.
 
 ![The bar along the top of a screen: readings turn amber at 75 and red with a warning at 100, a press shows the last hour, and the volume, the speaker, the microphone and the brightness answer from the bar](docs/demo/hero.gif)
 
@@ -16,36 +26,6 @@ exists because that one has two problems this one is built around.
 | ![The widget gallery in the settings](docs/screenshots/widgets.png) | ![The appearance settings: the light theme and the Windows accent colour](docs/screenshots/appearance.png) |
 
 ![The settings: a widget dragged from the gallery onto the bar, saved layouts applied in turn, the light theme and the accent colour on the readings](docs/demo/settings.gif)
-
-## Why this exists
-
-**Widgets go missing on a second monitor.** The PowerToys dock appears on an
-additional screen as an empty bar
-([microsoft/PowerToys#49604](https://github.com/microsoft/PowerToys/issues/49604),
-still open). Their own analysis says why: the per-monitor configuration is filed
-under a hardware id, and during a display change that id briefly cannot be read.
-The monitor then looks new, and a new secondary monitor is given a configuration
-that is disabled with no widgets in it. Because settings are written on every
-intermediate reading, that state sticks.
-
-Master Control Dock is built so that this cannot happen:
-
-- A topology reading that has not settled is a *different type* from one that
-  has, and only the settled one can be passed to the code that decides what a
-  monitor is. Not a rule to remember - the other case does not compile.
-- A monitor that matches nothing inherits the primary screen's dock and is
-  switched on. The worst outcome of a failed match is a duplicated layout, never
-  an empty bar.
-- Settings are written only when the set of monitors genuinely changed.
-- Entries are never dropped automatically. Forgetting a monitor is a button.
-- The listener for display changes lives in the process, not in a dock window,
-  so it keeps working when every dock is switched off.
-
-**There is no temperature widget.** Adding one to PowerToys is awkward because
-their widgets reuse the Command Palette's command model, which affords an icon,
-a title and a subtitle and nothing else. Here a widget brings its own view model
-and its own template, so a reading can have a colour that changes at a threshold
-and a panel behind it showing every sensor with a minute of history.
 
 ## What it can read
 
@@ -115,7 +95,7 @@ development.
 
 ## Using it
 
-Starting it puts a bar on the edge of every screen. **Right-click an empty part
+Starting it puts a bar on every screen, on the side you choose. **Right-click an empty part
 of a bar** for the menu: *Settings*, *Hide the bars*, *Exit*. Starting the
 shortcut again while it is running opens the settings too, which is also the
 way back in if every bar has been switched off.
@@ -174,6 +154,39 @@ To stop it, use *Quit* in the settings, *Exit* in the bar's menu, or
 the installer uses. Ending it from Task Manager is safe as well: the bar reserves
 its strip of the screen through the shell, and Windows 11 gives the strip back
 within a second of the process being gone (checked on build 26200).
+
+## Why another dock
+
+It looks and behaves like the Dock in the PowerToys Command Palette, and it
+exists because that one has two problems this one is built around.
+
+**Widgets go missing on a second monitor.** The PowerToys dock appears on an
+additional screen as an empty bar
+([microsoft/PowerToys#49604](https://github.com/microsoft/PowerToys/issues/49604),
+still open). Their own analysis says why: the per-monitor configuration is filed
+under a hardware id, and during a display change that id briefly cannot be read.
+The monitor then looks new, and a new secondary monitor is given a configuration
+that is disabled with no widgets in it. Because settings are written on every
+intermediate reading, that state sticks.
+
+Master Control Dock is built so that this cannot happen:
+
+- A topology reading that has not settled is a *different type* from one that
+  has, and only the settled one can be passed to the code that decides what a
+  monitor is. Not a rule to remember - the other case does not compile.
+- A monitor that matches nothing inherits the primary screen's dock and is
+  switched on. The worst outcome of a failed match is a duplicated layout, never
+  an empty bar.
+- Settings are written only when the set of monitors genuinely changed.
+- Entries are never dropped automatically. Forgetting a monitor is a button.
+- The listener for display changes lives in the process, not in a dock window,
+  so it keeps working when every dock is switched off.
+
+**There is no temperature widget.** Adding one to PowerToys is awkward because
+their widgets reuse the Command Palette's command model, which affords an icon,
+a title and a subtitle and nothing else. Here a widget brings its own view model
+and its own template, so a reading can have a colour that changes at a threshold
+and a panel behind it showing every sensor with a minute of history.
 
 ## Building
 
