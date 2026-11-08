@@ -126,6 +126,7 @@ public partial class App : Application
         }
 
         ListenForSignals(start);
+        AskToBeRestarted(start);
 
         _loggers = loggers;
         _services = BuildServices(loggers);
@@ -344,6 +345,41 @@ public partial class App : Application
         _onlyInstance = null;
         return false;
     }
+
+    /// <summary>
+    /// Has Windows start the program again if it crashes.
+    /// </summary>
+    /// <remarks>
+    /// Some crashes are not ours to prevent. On 3 and 8 November 2026 the
+    /// process died in Windows.Media.MediaControl.dll: the GC finalizer
+    /// released a playback-info object the media widget had read, and that
+    /// object had already been freed - a double free inside the system DLL.
+    /// The widget never frees it itself, and its reference count does not
+    /// move however often it is read. Nothing in the log marks such a death,
+    /// and the bar was then gone for hours until someone noticed. With this,
+    /// Windows starts it again once its error report is written. It does
+    /// so only for a copy that had been running at least a minute, so a
+    /// copy that dies on start is not restarted in a loop. A clean exit
+    /// (Quit, --exit, an update) is not a crash and does not restart.
+    /// </remarks>
+    private static void AskToBeRestarted(ILogger log)
+    {
+        if (Environment.GetEnvironmentVariable("MCD_SELFTEST") == "1")
+        {
+            return;
+        }
+
+        // Not after a reboot for an update or a patch: "start with Windows"
+        // already covers a restart, and two copies would be one too many.
+        const int RestartNoPatch = 4;
+        const int RestartNoReboot = 8;
+
+        int result = RegisterApplicationRestart(null, RestartNoPatch | RestartNoReboot);
+        log.LogInformation("start.restart-on-crash registered: {Result}", result == 0 ? "yes" : $"no, 0x{result:X8}");
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    private static extern int RegisterApplicationRestart(string? commandLine, int flags);
 
     /// <summary>
     /// True when this launch is only here to stop the copy that is already
