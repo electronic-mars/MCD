@@ -23,6 +23,18 @@ ASSETS = ROOT / "src" / "MCD.App" / "Assets"
 # the taskbar and Alt+Tab take 32-48, the Store and the shell take the rest.
 ICO_SIZES = (16, 20, 24, 28, 32, 40, 48, 56, 60, 64, 72, 80, 96, 128, 256)
 
+MSIX = (
+    ("StoreLogo", (50, 50), 50),
+    ("Square44x44Logo", (44, 44), 44),
+    ("Square44x44Logo.targetsize-24_altform-unplated", (24, 24), 24),
+    ("Square44x44Logo.targetsize-32_altform-unplated", (32, 32), 32),
+    ("Square44x44Logo.targetsize-48_altform-unplated", (48, 48), 48),
+    ("Square150x150Logo", (150, 150), 100),
+    ("Square310x310Logo", (310, 310), 206),
+    ("Wide310x150Logo", (310, 150), 100),
+    ("SplashScreen", (620, 300), 134),
+)
+
 import icon_dark
 import icon_light
 
@@ -68,7 +80,15 @@ def main() -> None:
         draw(size).save(ASSETS / f"icon-{size}.png")
         draw(size, light=True).save(ASSETS / f"icon-light-{size}.png")
 
-    print(f"wrote icon.ico and icon-light.ico at {', '.join(str(s) for s in ICO_SIZES)}")
+    # The MSIX's own images: the Store page, Start and the taskbar of the
+    # packaged copy take these, not icon.ico. Name, canvas, icon size; the
+    # icon is centred on a transparent canvas.
+    for name, canvas, size in MSIX:
+        image = Image.new("RGBA", canvas, (0, 0, 0, 0))
+        image.alpha_composite(draw(size), ((canvas[0] - size) // 2, (canvas[1] - size) // 2))
+        image.save(ASSETS / "Msix" / f"{name}.png")
+
+    print(f"wrote icon.ico and icon-light.ico at {', '.join(str(s) for s in ICO_SIZES)}, and {len(MSIX)} MSIX images")
 
 
 if __name__ == "__main__":

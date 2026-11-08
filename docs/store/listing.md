@@ -264,6 +264,21 @@ first is the one shown in search results.
 | 4 | `docs/screenshots/widgets.png` | Drag any widget onto the bar. | Любой виджет перетаскивается на полосу. |
 | 5 | `docs/screenshots/appearance.png` | Light or dark, with the Windows accent. | Светлая или тёмная, с цветом акцента Windows. |
 
+## Trailer (from 0.1.21)
+
+`docs/store/0.1.21/trailer.mp4`: the site's two demo clips (`demo-bar`, then
+`demo-settings`) joined and scaled to 1920×1080, H.264 High, a silent AAC
+stereo track, 47 s. Thumbnail `trailer-thumbnail.png` and the 16:9 hero image
+`hero-16x9.png` (it lets the trailer play at the top of the page and must not
+carry the product name) are both `bar.png` at 1920×1080. Same files on both
+listings.
+
+- Title (English): The bar on every screen, and its settings
+- Название (русский): Полоса на каждом экране и её настройки
+
+What's new in 0.1.21: «The program's own icon in Start, on the taskbar and in
+the Store.» / «Своя иконка программы в «Пуске», на панели задач и в Store.»
+
 ---
 
 ## Submission options — notes for certification
