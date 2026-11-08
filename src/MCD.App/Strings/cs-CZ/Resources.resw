@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Nepodařilo se zkontrolovat aktualizace. Žádné změny se neprovedly.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Probíhá stahování a ověřování instalačního programu…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Stahování verze {0}… {1} %</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Ověřování podpisu…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Spouští se instalační program. Panely se znovu otevřou samy.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>Aktualizace nebyla nainstalována. Stažení se nezdařilo nebo neprošla kontrola podpisu.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Volně šiřitelný software (GPL-3.0-or-later). Některý kód je upraven z Microsoft PowerToys (licence MIT).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Co je nového</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Naposledy zkontrolováno: {0}.</value>

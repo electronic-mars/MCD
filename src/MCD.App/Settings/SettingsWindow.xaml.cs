@@ -4730,7 +4730,6 @@ public sealed partial class SettingsWindow : Window
         var card = new Grid { ColumnSpacing = 18, Padding = new Thickness(18, 16, 18, 16) };
         card.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         card.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        card.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
         card.Children.Add(new Border
         {
@@ -4772,15 +4771,6 @@ public sealed partial class SettingsWindow : Window
         Grid.SetColumn(words, 1);
         card.Children.Add(words);
 
-        Button news = Braun.Action(
-            Loc.Tr("AboutNews", "What’s new"),
-            () => Open("https://github.com/electronic-mars/MCD/releases"),
-            "Info");
-
-        news.VerticalAlignment = VerticalAlignment.Center;
-        Grid.SetColumn(news, 2);
-        card.Children.Add(news);
-
         // The developer's site and a way to say thanks, as in Master Audio
         // Switcher. Both open in the browser; nothing is bought or unlocked.
         card.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -4799,7 +4789,6 @@ public sealed partial class SettingsWindow : Window
 
         Grid.SetRow(links, 1);
         Grid.SetColumn(links, 1);
-        Grid.SetColumnSpan(links, 2);
         card.Children.Add(links);
 
         Border plate = Braun.Group(card);
@@ -4844,6 +4833,54 @@ public sealed partial class SettingsWindow : Window
                         ? Loc.Tr("UpdateRowAutoHint", "Checks for updates once a day.")
                         : Loc.Tr("UpdateRowHint", "Checks for updates only when you select Check.");
 
+        Grid check = Braun.Row(
+            Loc.Tr("UpdateCheckRow", "Check now"),
+            state,
+            _updating
+                ? null
+                : _offer is { } offer
+                    ? Braun.Action(
+                        string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), offer.Version),
+                        InstallUpdate,
+                        "Download")
+                    : Mcd.App.AutoUpdate.Ready is { } ready
+                        ? Braun.Action(
+                            string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), ready.Offer.Version),
+                            () =>
+                            {
+                                _log.LogInformation("update.install version={Version}", ready.Offer.Version);
+
+                                try
+                                {
+                                    Mcd.Core.Update.Updater.Install(ready.Installer, ready.Offer.Signature);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _log.LogWarning(ex, "update.install failed");
+                                    _updateNote = Loc.Tr("UpdateRefused", "The update was not installed. The download failed or the signature check did not pass.");
+                                    ShowAbout();
+                                    return;
+                                }
+
+                                _onExit();
+                            },
+                            "Download")
+                        : Braun.Action(Loc.Tr("UpdateCheckButton", "Check"), CheckUpdate, "Download"));
+
+        // The sentence under "Check now" and a bar under it, both changed in
+        // place while the installer downloads: rebuilding the page for every
+        // percent would flicker it.
+        _updateText = ((StackPanel)check.Children[0]).Children.OfType<TextBlock>().Skip(1).FirstOrDefault();
+        _updateBar = new ProgressBar
+        {
+            Minimum = 0,
+            Maximum = 1,
+            Value = _progress ?? 0,
+            IsIndeterminate = _progress is 0,
+            Visibility = _progress is null ? Visibility.Collapsed : Visibility.Visible,
+            Margin = new Thickness(13, 0, 13, 12),
+        };
+
         AboutBody.Children.Add(Braun.Group(
             Braun.Row(
                 Loc.Tr("AutoUpdateRow", "Update automatically"),
@@ -4859,39 +4896,7 @@ public sealed partial class SettingsWindow : Window
                         Loc.Tr("UndoAutoUpdate", "changing automatic updates"));
                     ShowAbout();
                 })),
-            Braun.Row(
-                Loc.Tr("UpdateCheckRow", "Check now"),
-                state,
-                _updating
-                    ? null
-                    : _offer is { } offer
-                        ? Braun.Action(
-                            string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), offer.Version),
-                            InstallUpdate,
-                            "Download")
-                        : Mcd.App.AutoUpdate.Ready is { } ready
-                            ? Braun.Action(
-                                string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateInstall", "Install {0} and restart"), ready.Offer.Version),
-                                () =>
-                                {
-                                    _log.LogInformation("update.install version={Version}", ready.Offer.Version);
-
-                                    try
-                                    {
-                                        Mcd.Core.Update.Updater.Install(ready.Installer, ready.Offer.Signature);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        _log.LogWarning(ex, "update.install failed");
-                                        _updateNote = Loc.Tr("UpdateRefused", "The update was not installed. The download failed or the signature check did not pass.");
-                                        ShowAbout();
-                                        return;
-                                    }
-
-                                    _onExit();
-                                },
-                                "Download")
-                            : Braun.Action(Loc.Tr("UpdateCheckButton", "Check"), CheckUpdate, "Download"))));
+            new StackPanel { Children = { check, _updateBar } }));
     }
 
     /// <summary>The About page from the program's papers down to quitting.</summary>
@@ -4946,6 +4951,11 @@ public sealed partial class SettingsWindow : Window
     private Mcd.Core.Update.UpdateOffer? _offer;
     private bool _updating;
 
+    // How much of the installer is in, 0 to 1; null while nothing downloads.
+    private double? _progress;
+    private TextBlock? _updateText;
+    private ProgressBar? _updateBar;
+
     private async void CheckUpdate()
     {
         _updating = true;
@@ -4989,12 +4999,45 @@ public sealed partial class SettingsWindow : Window
         }
 
         _updating = true;
-        _updateNote = Loc.Tr("UpdateDownloading", "Downloading and verifying the installer…");
+        _progress = 0;
+        _updateNote = string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateProgress", "Downloading version {0}… {1}%"), offer.Version, 0);
         ShowAbout();
+
+        // Reported on this thread (Progress posts back to where it was made).
+        // The signature is checked once the last byte is in, so a full bar
+        // says so rather than sitting at 100% in silence.
+        var progress = new Progress<double>(part =>
+        {
+            if (_progress is null)
+            {
+                // A report that arrived after the download had finished.
+                return;
+            }
+
+            _progress = part;
+            _updateNote = part >= 1
+                ? Loc.Tr("UpdateVerifying", "Checking the signature…")
+                : string.Format(CultureInfo.CurrentCulture, Loc.Tr("UpdateProgress", "Downloading version {0}… {1}%"), offer.Version, (int)(part * 100));
+
+            if (_updateText is { } text)
+            {
+                text.Text = _updateNote;
+            }
+
+            if (_updateBar is { } bar)
+            {
+                bar.IsIndeterminate = false;
+                bar.Value = part;
+            }
+        });
 
         try
         {
-            string installer = await Mcd.Core.Update.Updater.DownloadAsync(offer, null);
+            string installer = await Mcd.Core.Update.Updater.DownloadAsync(offer, progress);
+
+            _progress = null;
+            _updateNote = Loc.Tr("UpdateStarting", "Starting the installer. The bars will reopen by themselves.");
+            ShowAbout();
 
             _log.LogInformation("update.install version={Version}", offer.Version);
             Mcd.Core.Update.Updater.Install(installer, offer.Signature);
@@ -5006,6 +5049,7 @@ public sealed partial class SettingsWindow : Window
         catch (Exception ex)
         {
             _log.LogWarning(ex, "update.install failed");
+            _progress = null;
             _updateNote = Loc.Tr("UpdateRefused", "The update was not installed. The download failed or the signature check did not pass.");
             _updating = false;
             ShowAbout();

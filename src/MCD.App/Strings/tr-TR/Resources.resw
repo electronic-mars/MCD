@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Güncellemeler denetlenemedi. Herhangi bir değişiklik yapılmadı.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Yükleyici indiriliyor ve doğrulanıyor…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Sürüm {0} indiriliyor… %{1}</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>İmza doğrulanıyor…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Yükleyici başlatılıyor. Çubuklar kendiliğinden yeniden açılır.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>Güncelleme yüklenemedi. İndirme başarısız oldu veya imza doğrulaması geçilemedi.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Özgür yazılım (GPL-3.0-or-later). Bazı kodlar Microsoft PowerToys'tan (MIT lisansı) uyarlanmıştır.</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Yenilikler</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Son denetim: {0}.</value>

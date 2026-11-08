@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Kan niet controleren op updates. Er zijn geen wijzigingen aangebracht.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Het installatieprogramma downloaden en verifiëren…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Versie {0} downloaden… {1}%</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Handtekening controleren…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Het installatieprogramma wordt gestart. De balken openen vanzelf opnieuw.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>De update is niet geïnstalleerd. De download is mislukt of de handtekeningcontrole is niet geslaagd.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Gratis software (GPL-3.0-or-later). Deels overgenomen uit Microsoft PowerToys (MIT-licentie).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Wat is er nieuw</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Laatst gecontroleerd: {0}.</value>

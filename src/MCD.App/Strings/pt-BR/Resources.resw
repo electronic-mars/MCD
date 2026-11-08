@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Não foi possível verificar atualizações. Nenhuma alteração foi feita.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Baixando e verificando o instalador…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Baixando a versão {0}… {1}%</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Verificando a assinatura…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Iniciando o instalador. As barras reabrirão sozinhas.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>A atualização não foi instalada. O download falhou ou a verificação de assinatura não passou.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Software livre (GPL-3.0-or-later). Algum código adaptado do Microsoft PowerToys (licença MIT).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Novidades</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Última verificação: {0}</value>

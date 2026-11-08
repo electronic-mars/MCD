@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>无法检查更新。未进行任何更改。</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>正在下载并验证安装程序…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>正在下载版本 {0}… {1}%</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>正在验证签名…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>正在启动安装程序。停靠栏将自动重新打开。</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>更新未安装。下载失败或签名验证未通过。</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>自由软件 (GPL-3.0-or-later)。部分代码改编自 Microsoft PowerToys (MIT 许可证)。</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>更新日志</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>上次检查: {0}。</value>

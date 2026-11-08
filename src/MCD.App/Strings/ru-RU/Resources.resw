@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Не удалось проверить обновления. Ничего не изменено.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Скачивание и проверка установщика…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Скачивание версии {0}… {1}%</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Проверка подписи…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Запуск установщика. Панели появятся снова сами.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>Обновление не установлено: не удалось скачать файл или проверить подпись.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Свободное ПО · GPL-3.0-or-later. Часть кода — из Microsoft PowerToys (MIT).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Что нового</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Последняя проверка: {0}.</value>

@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Nie udało się sprawdzić aktualizacji. Nie wprowadzono zmian.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Pobieranie i weryfikacja instalatora…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Pobieranie wersji {0}… {1}%</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Sprawdzanie podpisu…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Uruchamianie instalatora. Paski otworzą się ponownie same.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>Aktualizacja nie została zainstalowana. Pobieranie nie powiodło się lub weryfikacja podpisu nie przeszła pomyślnie.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Wolne oprogramowanie (GPL-3.0-or-later). Część kodu zaadaptowana z Microsoft PowerToys (licencja MIT).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Co nowego</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Ostatnie sprawdzenie: {0}.</value>

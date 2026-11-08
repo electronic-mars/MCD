@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Die Suche nach Updates ist fehlgeschlagen. Es wurden keine Änderungen vorgenommen.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Das Installationsprogramm wird heruntergeladen und überprüft…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Version {0} wird heruntergeladen… {1} %</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Signatur wird geprüft…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Das Installationsprogramm wird gestartet. Die Leisten öffnen sich von selbst wieder.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>Das Update wurde nicht installiert. Der Download ist fehlgeschlagen oder die Signaturprüfung war nicht erfolgreich.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Freie Software (GPL-3.0-or-later). Ein Teil des Codes stammt aus Microsoft PowerToys (MIT-Lizenz).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Neuerungen</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Zuletzt geprüft: {0}.</value>

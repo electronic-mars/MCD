@@ -193,6 +193,12 @@ public static class Updater
             long got = 0;
             int read;
 
+            // Reported once per whole percent, not once per block: a report
+            // is a post to the interface thread, and a block's worth of them
+            // (over a thousand for the installer) kept the settings window
+            // from drawing, its bar stuck at 2% until the end.
+            int told = -1;
+
             while ((read = await from.ReadAsync(block, cancel)) > 0)
             {
                 got += read;
@@ -204,8 +210,9 @@ public static class Updater
 
                 await to.WriteAsync(block.AsMemory(0, read), cancel);
 
-                if (total > 0)
+                if (total > 0 && (int)(got * 100 / total) is int percent && percent != told)
                 {
+                    told = percent;
                     progress?.Report((double)got / total);
                 }
             }

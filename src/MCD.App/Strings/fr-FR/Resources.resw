@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Impossible de rechercher des mises à jour. Aucune modification n’a été apportée.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Téléchargement et vérification du programme d’installation…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Téléchargement de la version {0}… {1} %</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Vérification de la signature…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Lancement du programme d’installation. Les barres se rouvriront d’elles-mêmes.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>La mise à jour n’a pas été installée. Le téléchargement a échoué ou la vérification de la signature n’a pas abouti.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Logiciel libre (GPL-3.0-or-later). Une partie du code est adaptée de Microsoft PowerToys (licence MIT).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Nouveautés</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Dernière vérification : {0}.</value>

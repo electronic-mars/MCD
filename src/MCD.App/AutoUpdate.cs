@@ -88,7 +88,10 @@ internal sealed class AutoUpdate
             return;
         }
 
-        if (Ready is { } ready)
+        // A download waiting to be put in still gets its daily look: under
+        // Program Files it may wait days for a yes, and meanwhile a newer
+        // release replaces it rather than being offered after it.
+        if (Ready is { } ready && DateTimeOffset.Now < _next)
         {
             if (Quietly())
             {
@@ -125,10 +128,14 @@ internal sealed class AutoUpdate
         {
             UpdateOffer offer = await Updater.LatestAsync();
 
-            if (Updater.IsNewer(offer.Version, AppInfo.Version))
+            if (Updater.IsNewer(offer.Version, Ready?.Offer.Version ?? AppInfo.Version))
             {
+                // The same file name as the one waiting: until this one is in
+                // and checked, the old one is gone, so forget it first.
+                Ready = null;
                 string installer = await Updater.DownloadAsync(offer, null);
                 Ready = (offer, installer);
+                _told = false;
                 _log.LogInformation("update.auto ready {Version}", offer.Version);
             }
             else

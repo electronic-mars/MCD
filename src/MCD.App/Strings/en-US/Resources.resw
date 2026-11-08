@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>Couldn’t check for updates. No changes were made.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Downloading and verifying the installer…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Downloading version {0}… {1}%</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Checking the signature…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Starting the installer. The bars will reopen by themselves.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>The update was not installed. The download failed or the signature check did not pass.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Free software (GPL-3.0-or-later). Some code adapted from Microsoft PowerToys (MIT license).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>What’s new</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Last checked: {0}.</value>

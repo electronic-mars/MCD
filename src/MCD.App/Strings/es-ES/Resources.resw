@@ -1691,8 +1691,14 @@
   <data name="UpdateFailed" xml:space="preserve">
     <value>No se pudo buscar actualizaciones. No se realizaron cambios.</value>
   </data>
-  <data name="UpdateDownloading" xml:space="preserve">
-    <value>Descargando y verificando el instalador…</value>
+  <data name="UpdateProgress" xml:space="preserve">
+    <value>Descargando la versión {0}… {1} %</value>
+  </data>
+  <data name="UpdateVerifying" xml:space="preserve">
+    <value>Comprobando la firma…</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Iniciando el instalador. Las barras se volverán a abrir solas.</value>
   </data>
   <data name="UpdateRefused" xml:space="preserve">
     <value>La actualización no se instaló. La descarga falló o la verificación de la firma no fue correcta.</value>
@@ -1894,9 +1900,6 @@
   </data>
   <data name="AboutLicence" xml:space="preserve">
     <value>Software libre (GPL-3.0-or-later). Parte del código adaptado de Microsoft PowerToys (licencia MIT).</value>
-  </data>
-  <data name="AboutNews" xml:space="preserve">
-    <value>Novedades</value>
   </data>
   <data name="UpdateLastChecked" xml:space="preserve">
     <value>Última comprobación: {0}.</value>
