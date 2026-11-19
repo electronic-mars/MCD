@@ -116,7 +116,9 @@ public static class ReadingHistory
         var block = new StackPanel { Spacing = 6 };
         float[] known = [.. values.Where(v => !float.IsNaN(v))];
 
-        string Say(double v) => Readable.Value(v, sensor.Unit);
+        // The figure and its unit stay on one line when the summary wraps:
+        // "69" ending one line and "°C" starting the next read as two things.
+        string Say(double v) => Readable.Value(v, sensor.Unit).Replace(' ', ' ');
 
         var title = new Grid();
         title.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });

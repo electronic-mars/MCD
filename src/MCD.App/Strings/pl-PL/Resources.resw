@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>Strona twórcy</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>Procesor</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Procesor</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>Procesor</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>Profile dla trybu turbo i limitów częstotliwości oraz programy przypisane do rdzeni P lub E. Działa bez sterownika.</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>Rdzenie P</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>Średnie obciążenie rdzeni wydajnościowych.</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>Rdzenie E</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>Średnie obciążenie rdzeni efektywnościowych.</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>Taktowanie rdzeni P</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>Średnie taktowanie rdzeni wydajnościowych.</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>Taktowanie rdzeni E</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>Średnie taktowanie rdzeni efektywnościowych.</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>Rdzenie P i E osobno</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>Dwie wartości zamiast jednej: dla rdzeni wydajnościowych i efektywnościowych.</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>Profil procesora</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>Cichy</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>Normalny</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>Maksymalny</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>zmiana profilu procesora</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>Podczas działania {0} obowiązuje jego własny profil.</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows nie zaakceptował wszystkich ustawień tego profilu.</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>Profil procesora</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>Normalny pozostawia plan zasilania Windows. Profil pozostaje aktywny po zamknięciu aplikacji.</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>Bez zmian</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>Na baterii</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>Przełącza na ten profil po odłączeniu ładowarki.</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>Zasilanie sieciowe</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>Przełącza na ten profil po podłączeniu ładowarki.</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>zmiana warunków przełączania profilu</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>Chłodniej i ciszej, wolniej w szczycie.</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>Maksymalna prędkość, maksymalny hałas.</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>zmiana profilu procesora</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>Jak w Windows</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Tryb zasilania Windows</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>Najlepsza wydajność energetyczna</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>Zrównoważony</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>Najlepsza wydajność</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>Turbo Boost</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>Wyłączone utrzymuje procesor przy prędkości bazowej: najchłodniej i najwolniej.</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>Wyłączone</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>Włączone</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>Rdzenie P do</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>Rdzenie E do</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>Wszystkie rdzenie do</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>Bez limitu</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>Programy</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>Dodaj program</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>Przypisz program do rdzeni P lub E lub zmień profil podczas jego działania.</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>Zmień profil podczas działania programu.</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>Wybierz program…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>Dowolne rdzenie</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>Tylko rdzenie P</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>Tylko rdzenie E</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>Profil bez zmian</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows nie zezwolił na zmianę rdzeni: program może działać jako administrator lub być chroniony przez antycheat.</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>dodanie {0}</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>zmiana {0}</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>usunięcie {0}</value>
+  </data>
 </root>

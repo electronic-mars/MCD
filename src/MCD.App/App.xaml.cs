@@ -36,6 +36,9 @@ public partial class App : Application
     private HotKeys? _keys;
     private AutoUpdate? _autoUpdate;
     private HeatWatch? _heat;
+
+    /// <summary>The processor's profile and the programs kept to one kind of core.</summary>
+    private Mcd.Core.Processor.CpuControl? _cpu;
     private bool _shutDown;
 
     /// <remarks>
@@ -202,6 +205,12 @@ public partial class App : Application
             _services.GetRequiredService<SettingsService>(),
             _services.GetRequiredService<SensorHub>(),
             _uiQueue!);
+
+        // Asleep until a profile or a program is chosen; on a fresh start it
+        // reads the plan and writes nothing at all.
+        _cpu = new Mcd.Core.Processor.CpuControl(
+            loggers.CreateLogger<Mcd.Core.Processor.CpuControl>(),
+            _services.GetRequiredService<SettingsService>());
 
         // The keys the whole machine listens for. Taken again whenever the
         // settings change, because that is the only thing that alters them.
@@ -1296,6 +1305,11 @@ public partial class App : Application
 
         _docks?.Dispose();
         _docks = null;
+
+        // Before the settings go: giving a running game's profile back to the
+        // chosen one is a write.
+        _cpu?.Dispose();
+        _cpu = null;
 
         // The switcher's tray icon back now, not after its fifteen seconds.
         Mcd.App.Widgets.AudioSwitcher.HandBack();

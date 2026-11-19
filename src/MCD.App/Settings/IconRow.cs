@@ -85,6 +85,10 @@ public sealed partial class IconRow : ObservableObject
 
     public static Geometry TabGeneral => Draw("Sliders");
 
+    public static Geometry TabProcessor => Draw("Cpu");
+
+    public static Geometry PageProcessor => Draw("Cpu");
+
     public static Geometry PageGeneral => Draw("Sliders");
 
     public static Geometry PagePins => Draw("Rocket");

@@ -71,6 +71,14 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     public Visibility SecondShown => Second is null ? Visibility.Collapsed : Visibility.Visible;
 
     /// <summary>
+    /// The third figure: the temperature, when the processor's load is shown
+    /// as two figures, one per kind of core.
+    /// </summary>
+    public Metric? Third => Metrics.Count > 2 ? Metrics[2] : null;
+
+    public Visibility ThirdShown => Third is null ? Visibility.Collapsed : Visibility.Visible;
+
+    /// <summary>
     /// The part's name, drawn by the widget rather than by either chip.
     /// </summary>
     /// <remarks>
@@ -112,6 +120,18 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
     /// <summary>The load is shown unless it was switched off and the temperature is there instead.</summary>
     private bool WithLoad => !WithTemp || WidgetOptions.Number(Options, "load") is not 0;
+
+    /// <summary>
+    /// Whether the processor's load is shown per kind of core - "P 34 % E 12 %"
+    /// - on a processor that has two kinds.
+    /// </summary>
+    private bool Split => Reading.Id == "cpu" && WithLoad && Mcd.Interop.Machine.Cores.Here.Hybrid
+        && WidgetOptions.Number(Options, "cores") is 1;
+
+    private static readonly SensorKey LoadP = SensorKey.Make("pdh", "cpu", SensorKind.Load, "p");
+    private static readonly SensorKey LoadE = SensorKey.Make("pdh", "cpu", SensorKind.Load, "e");
+    private static readonly SensorKey SpeedP = SensorKey.Make("pdh", "cpu", SensorKind.Clock, "p");
+    private static readonly SensorKey SpeedE = SensorKey.Make("pdh", "cpu", SensorKind.Clock, "e");
 
     /// <summary>Which of the known readings this gauge is.</summary>
     public GaugeReading Reading =>
@@ -171,13 +191,54 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             if (!pair)
             {
                 Metrics.Add(warmth);
-                OnPropertyChanged(nameof(Front));
-                OnPropertyChanged(nameof(Second));
-                OnPropertyChanged(nameof(SecondShown));
+                Announce();
                 return;
             }
 
             _warmth = warmth;
+        }
+
+        if (Split)
+        {
+            // One figure per kind of core under the one icon: the first
+            // carries the icon, the second follows it as closely as a
+            // temperature does.
+            Metrics.Add(Kind("p", LoadP, new Thickness(stacked ? 0 : gap.Left, 0, 0, 0), bare: stacked));
+            Metrics.Add(Kind("e", LoadE, new Thickness(0, 0, pair ? 0 : gap.Right, 0), bare: true));
+
+            Metric Kind(string slot, SensorKey key, Thickness along, bool bare)
+            {
+                var kind = new Metric(
+                    "cpu-" + slot,
+                    Icons.For(reading.Id, reading.Icon),
+                    reading.Label,
+                    reading.Unit,
+                    sensors => sensors.Catalog.FirstOrDefault(d => d.Key.Equals(key)))
+                {
+                    Prefix = slot.ToUpperInvariant(),
+                    Spacing = Orientation == Orientation.Horizontal ? along : gap,
+                    Accent = Context.Accent,
+                    Braun = Context.Backdrop == "braun",
+                    Bare = bare,
+
+                    // Its own name in the hover, in the reader's language:
+                    // "P-cores", not the caption the widget shares.
+                    NameFound = found => Context.Names.For(found),
+                    Sample = "99 %",
+                };
+
+                kind.SizeFor(ReadingIcon, ReadingFont, narrow: Orientation == Orientation.Vertical, subtitle: false);
+                return kind;
+            }
+
+            if (_warmth is not null)
+            {
+                Metrics.Add(_warmth);
+                _warmth = null;
+            }
+
+            Announce();
+            return;
         }
 
 
@@ -224,9 +285,16 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             _warmth = null;
         }
 
+        Announce();
+    }
+
+    private void Announce()
+    {
         OnPropertyChanged(nameof(Front));
         OnPropertyChanged(nameof(Second));
         OnPropertyChanged(nameof(SecondShown));
+        OnPropertyChanged(nameof(Third));
+        OnPropertyChanged(nameof(ThirdShown));
     }
 
     private Metric? _warmth;
@@ -368,11 +436,13 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
         // and each switch also has to say where the other one stands.
         bool load = WithLoad;
         bool temp = WithTemp;
+        bool cores = WidgetOptions.Number(Options, "cores") is 1;
 
         void Write() => changed(WidgetOptions.Merge(
             Options,
             ("load", JsonValue.Create(load ? 1 : 0)),
-            ("temp", JsonValue.Create(temp ? 1 : 0))));
+            ("temp", JsonValue.Create(temp ? 1 : 0)),
+            ("cores", JsonValue.Create(cores ? 1 : 0))));
 
         Microsoft.UI.Xaml.Controls.Button? warmth = null;
 
@@ -412,6 +482,19 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
 
         editor.Children.Add(Mcd.App.Settings.Braun.Field(Loc.Tr("GaugeShowLoad", "Load"), busy));
 
+        // Only where there are two kinds of core to tell apart.
+        if (Reading.Id == "cpu" && Mcd.Interop.Machine.Cores.Here.Hybrid)
+        {
+            editor.Children.Add(Mcd.App.Settings.Braun.Field(
+                Loc.Tr("GaugeShowCores", "P- and E-cores separately"),
+                Mcd.App.Settings.Braun.Switch(cores, on =>
+                {
+                    cores = on;
+                    Write();
+                }),
+                Loc.Tr("GaugeShowCoresHint", "Two figures instead of one: the performance cores and the efficient ones.")));
+        }
+
         editor.Children.Add(Mcd.App.Settings.Braun.Field(
             Loc.Tr("GaugeShowTemp", "Temperature"),
             warmth,
@@ -436,11 +519,143 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     /// <summary>A press opens the last hour of what this widget reads, so it answers the pointer.</summary>
     public override bool Pressable => true;
 
-    /// <summary>A press opens the last hour of what this widget reads.</summary>
-    public override Microsoft.UI.Xaml.FrameworkElement? Details() =>
-        Metrics.Any(m => m.Sensor is not null)
-            ? ReadingHistory.Panel(Metrics.Where(m => m.Sensor is not null).Select(m => (Names.For(m.Sensor!), m.Sensor!)))
-            : null;
+    /// <summary>
+    /// A press opens the last hour of what this widget reads - and, for the
+    /// processor, the profile it runs under.
+    /// </summary>
+    public override Microsoft.UI.Xaml.FrameworkElement? Details()
+    {
+        List<(string, SensorDescriptor)> lines =
+        [
+            .. Metrics.Where(m => m.Sensor is not null).Select(m => (Names.For(m.Sensor!), m.Sensor!)),
+        ];
+
+        // Each kind's speed goes with its load: the figure that says whether
+        // a ceiling or the heat is holding it back.
+        if (Split)
+        {
+            foreach (SensorKey key in new[] { SpeedP, SpeedE })
+            {
+                if (Sensors.Catalog.FirstOrDefault(d => d.Key.Equals(key)) is { } speed)
+                {
+                    lines.Add((Names.For(speed), speed));
+                }
+            }
+        }
+
+        FrameworkElement? history = lines.Count > 0 ? ReadingHistory.Panel(lines) : null;
+
+        if (Reading.Id != "cpu" || Mcd.Core.Processor.CpuControl.Current is not { } cpu)
+        {
+            return history;
+        }
+
+        var panel = new StackPanel { Spacing = 16, Width = 280 };
+        panel.Children.Add(ProfileSwitch(cpu));
+
+        if (history is not null)
+        {
+            panel.Children.Add(history);
+        }
+
+        return panel;
+    }
+
+    /// <summary>
+    /// The three profiles as three buttons, the chosen one in the accent.
+    /// </summary>
+    /// <remarks>
+    /// Here because this is where somebody looks when the fan is loud or the
+    /// game is slow - one press from the figure that told them.
+    /// </remarks>
+    private static FrameworkElement ProfileSwitch(Mcd.Core.Processor.CpuControl cpu)
+    {
+        var block = new StackPanel { Spacing = 8 };
+
+        block.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr("CpuProfileTitle", "Processor profile"),
+            FontSize = 13,
+        });
+
+        var keys = new Grid { ColumnSpacing = 6 };
+        var buttons = new List<Button>();
+
+        (string Id, string Name)[] profiles =
+        [
+            (CpuProfile.Quiet, Loc.Tr("CpuProfileQuiet", "Quiet")),
+            (CpuProfile.Normal, Loc.Tr("CpuProfileNormal", "Normal")),
+            (CpuProfile.Max, Loc.Tr("CpuProfileMax", "Maximum")),
+        ];
+
+        void Paint(string chosen)
+        {
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                buttons[i].Style = profiles[i].Id == chosen
+                    ? (Style)Application.Current.Resources["AccentButtonStyle"]
+                    : null;
+            }
+        }
+
+        foreach ((string id, string name) in profiles)
+        {
+            keys.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            // A third of the panel is narrow for some languages' names: the
+            // padding gives the text what room there is, and a name still too
+            // long is drawn a little smaller rather than cut short.
+            var button = new Button
+            {
+                Content = new Viewbox
+                {
+                    StretchDirection = StretchDirection.DownOnly,
+                    Child = new TextBlock { Text = name },
+                },
+                Padding = new Thickness(4, 5, 4, 6),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
+
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(button, name);
+
+            button.Click += (_, _) =>
+            {
+                cpu.Choose(id, Loc.Tr("UndoCpuProfile", "switching the processor profile"));
+                Paint(id);
+            };
+
+            Grid.SetColumn(button, buttons.Count);
+            keys.Children.Add(button);
+            buttons.Add(button);
+        }
+
+        Paint(cpu.Chosen);
+        block.Children.Add(keys);
+
+        // A running program's profile wins over the chosen one, and the
+        // panel says so rather than looking as if the press did nothing.
+        string? note = cpu.Because is { } program
+            ? string.Format(
+                System.Globalization.CultureInfo.CurrentCulture,
+                Loc.Tr("CpuProfileBecause", "While {0} runs, its own profile is in force."),
+                program)
+            : cpu.Refusing
+                ? Loc.Tr("CpuProfileRefused", "Windows did not accept every setting of this profile.")
+                : null;
+
+        if (note is not null)
+        {
+            block.Children.Add(new TextBlock
+            {
+                Text = note,
+                FontSize = 12,
+                Opacity = 0.8,
+                TextWrapping = TextWrapping.Wrap,
+            });
+        }
+
+        return block;
+    }
 }
 
 /// <summary>One thing a gauge can show, and where its figure comes from.</summary>

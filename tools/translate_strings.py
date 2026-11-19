@@ -36,21 +36,23 @@ ROOT = Path(__file__).resolve().parents[1]
 STRINGS = ROOT / "src" / "MCD.App" / "Strings"
 SOURCE = "en-US"
 API = "https://integrate.api.nvidia.com/v1/chat/completions"
-KIMI = "moonshotai/kimi-k3"
-GEMMA = "google/gemma-4-31b-it"
-NEMOTRON = "nvidia/nemotron-3-super-120b-a12b"
-# Kimi writes the best text but the free tier lets few requests through at a
-# time; most languages go to Gemma, which has its own allowance and wrote the same text on trial.
-# Each language is then read by the model that did not write it.
-BY_GEMMA = {"zh-Hans", "ja-JP", "ko-KR", "tr-TR", "es-ES", "pt-BR", "it-IT", "nl-NL", "pl-PL"}
+# Kimi K3 and Nemotron 3 Super were taken off NIM in November 2026 (410 Gone)
+# and Gemma kept the gateway waiting (504) the same week. Probed then with
+# three strings into German: Nemotron 3.5 Super answered best, in six seconds;
+# Nemotron 3 Ultra in twelve, with "P-cores" left in English; Kimi 3.1, Mistral
+# Large 4 and Gemma not within 150. The catalog lists models that no longer
+# answer, so a name is probed before it is trusted.
+SUPER = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+ULTRA = "nvidia/nemotron-3-ultra-550b-a55b"
 
 
 def translators(code: str) -> list:
-    return [GEMMA if code in BY_GEMMA else KIMI, NEMOTRON]
+    return [SUPER, ULTRA]
 
 
+# Each language is read by the model that did not write it.
 def reviewers(code: str) -> list:
-    return [KIMI if code in BY_GEMMA else GEMMA, NEMOTRON]
+    return [ULTRA, SUPER]
 
 CHUNK = 30
 REVIEW_CHUNK = 60
@@ -205,7 +207,7 @@ def _ask(key: str, model: str, prompt: str) -> dict:
     req = urllib.request.Request(API, data=body, headers={
         "Authorization": f"Bearer {key}", "Content-Type": "application/json", "Accept": "text/event-stream"})
     text = []
-    with urllib.request.urlopen(req, timeout=1800) as res:
+    with urllib.request.urlopen(req, timeout=300) as res:   # a silent model gives way to the next one
         for raw in res:
             line = raw.decode("utf-8", "replace").strip()
             if not line.startswith("data:") or line == "data: [DONE]":

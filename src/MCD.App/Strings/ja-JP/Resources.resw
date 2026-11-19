@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>開発者のサイト</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>プロセッサー</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>プロセッサー</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>プロセッサー</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>ターボと周波数制限のプロファイル、および P コアまたは E コアに固定するプログラムです。ドライバーなしで動作します。</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>P コア</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>パフォーマンス コアの平均使用率</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>E コア</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>効率コアの平均使用率</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>P コア クロック速度</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>パフォーマンス コアの平均クロック速度</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>E コア クロック速度</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>効率コアの平均クロック速度</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>P コアと E コアを個別に</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>1 つの数値ではなく 2 つ: パフォーマンス コアと効率コア。</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>プロセッサー プロファイル</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>静音</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>通常</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>最大</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>プロセッサー プロファイルの切り替え</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>{0} が実行されている間、独自のプロファイルが適用されます。</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows がこのプロファイルのすべての設定を受け入れませんでした。</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>プロファイル</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>プロセッサー プロファイル</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>通常は Windows の電源プランをそのまま使用します。プロファイルはアプリを閉じても有効なままです。</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>そのままにする</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>バッテリ駆動時</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>充電器を抜くとこのプロファイルに切り替わります。</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>電源接続時</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>充電器を接続するとこのプロファイルに切り替わります。</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>プロファイルの切り替えタイミングの変更</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>静かで涼しく、最高速度は遅くなります。</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>最大速度で動作し、騒音も大きくなります。</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>プロセッサプロファイルの変更</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>Windows の既定のまま</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Windows の電源モード</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>電力効率を最優先</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>バランス</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>最高パフォーマンス</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>ターボブースト</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>オフにするとプロセッサはベース速度で動作し、最も涼しく最も遅くなります。</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>オフ</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>オン</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>P コア最大</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>E コア最大</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>コア最大</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>制限なし</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>プログラム</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>プログラムを追加</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>プログラムを P コアまたは E コアに固定するか、実行中にプロファイルを切り替えます。</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>プログラム実行中にプロファイルを切り替えます。</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>プログラムを選択…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>任意のコア</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>P コアのみ</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>E コアのみ</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>プロファイル変更なし</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows がコアの変更を許可しませんでした。管理者として実行されているか、アンチチートによって保護されている可能性があります。</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>{0}を追加</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>{0}を変更</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>{0}を削除</value>
+  </data>
 </root>

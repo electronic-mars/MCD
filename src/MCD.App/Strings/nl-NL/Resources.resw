@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>Website van de ontwikkelaar</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>Profielen voor turbo en frequentielimieten, en programma's op P- of E-kernen. Werkt zonder stuurprogramma.</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>P-kernen</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>Gemiddelde belasting van de prestatiekernen.</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>E-kernen</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>Gemiddelde belasting van de efficiënte kernen.</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>Kloksnelheid P-kern</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>Gemiddelde kloksnelheid van de prestatiekernen.</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>Kloksnelheid E-kern</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>Gemiddelde kloksnelheid van de efficiënte kernen.</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>P- en E-kernen afzonderlijk</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>Twee cijfers in plaats van één: de prestatiekernen en de efficiënte kernen.</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>Processorprofiel</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>Stil</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>Normaal</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>Maximaal</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>wisselen van processorprofiel</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>Terwijl {0} actief is, geldt het eigen profiel.</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows heeft niet elke instelling van dit profiel geaccepteerd.</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>Profiel</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>Processorprofiel</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>Normaal laat het stroomplan zoals Windows het heeft. Een profiel blijft van kracht wanneer de app wordt gesloten.</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>Zo laten</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>Op accu</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>Schakelt over naar dit profiel wanneer de oplader wordt losgekoppeld.</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>Aangesloten</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>Schakelt over naar dit profiel wanneer de oplader wordt aangesloten.</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>wijzigen van profielwisseling</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>Koeler en stiller, langzamer bij maximale belasting.</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>Zo snel als de pc kan, en even luid.</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>wijzigen van een processorprofiel</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>Zoals Windows het instelt</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Windows-energiemodus</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>Beste energie-efficiëntie</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>Gebalanceerd</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>Beste prestaties</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>Turbo-boost</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>Uit houdt de processor op de basissnelheid: het koelst en het langzaamst.</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>Aan</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>P-kernen tot</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>E-kernen tot</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>Kernen tot</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>Geen limiet</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>Programma's</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>Programma toevoegen</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>Wijs een programma toe aan P- of E-kernen, of schakel het profiel over terwijl het wordt uitgevoerd.</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>Schakel het profiel over terwijl een programma wordt uitgevoerd.</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>Kies een programma…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>Alle kernen</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>Alleen P-kernen</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>Alleen E-kernen</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>Profiel ongewijzigd</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows staat het wijzigen van de kernen niet toe: het programma wordt mogelijk als beheerder uitgevoerd of wordt beschermd door anti-cheat.</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>toevoegen van {0}</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>wijzigen van {0}</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>verwijderen van {0}</value>
+  </data>
 </root>

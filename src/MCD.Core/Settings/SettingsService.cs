@@ -16,6 +16,12 @@ public enum WriteReason
 
     /// <summary>A schema upgrade on load.</summary>
     Migration,
+
+    /// <summary>
+    /// The processor's housekeeping: what the power plan had before a profile
+    /// changed it, or the profile following the power source.
+    /// </summary>
+    PowerPlan,
 }
 
 /// <summary>
@@ -317,6 +323,7 @@ public sealed class SettingsService : IDisposable
         {
             App = now.App == then.App ? was.App : now.App,
             Sensors = now.Sensors == then.Sensors ? was.Sensors : now.Sensors,
+            Processor = now.Processor == then.Processor ? was.Processor : now.Processor,
             Monitors = [.. monitors],
         };
     }

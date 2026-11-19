@@ -49,6 +49,10 @@ public static class Readable
     {
         "B" => Size(value),
         "B/s" => Rate(value, narrow),
+
+        // A processor's speed: "4.2 GHz". Whole gigahertz alone would hide
+        // every change that matters, and megahertz is four digits of noise.
+        "GHz" => Trim(value) + " GHz",
         _ => Round(value) + " " + unit,
     };
 

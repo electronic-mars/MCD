@@ -1,4 +1,5 @@
-﻿using Mcd.Interop.Pdh;
+﻿using Mcd.Interop.Machine;
+using Mcd.Interop.Pdh;
 using Mcd.Sensors.Contracts;
 using Microsoft.Extensions.Logging;
 
@@ -61,6 +62,13 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
     private PdhQuery? _query;
     private readonly List<Counter> _live = [];
 
+    /// <summary>
+    /// The performance cores and the efficient ones, on a processor that has
+    /// both: each kind's load and speed, worked out from the same counters per
+    /// logical processor that Task Manager's per-core graphs come from.
+    /// </summary>
+    private readonly List<Kind> _kinds = [];
+
     public string Id => ProviderId;
 
     public Tier Tier => Tier.Platform;
@@ -70,7 +78,7 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
     public bool IsAvailable() => Open();
 
     public IReadOnlyList<SensorDescriptor> Discover() =>
-        [.. _live.Select(c => c.Describe(ProviderId))];
+        [.. _live.Select(c => c.Describe(ProviderId)), .. _kinds.SelectMany(k => k.Describe())];
 
     public void Poll(IDictionary<SensorKey, double> into)
     {
@@ -88,6 +96,11 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
                 into[counter.Key(ProviderId)] = counter.Clamp(value);
             }
         }
+
+        foreach (Kind kind in _kinds)
+        {
+            kind.Read(values, into);
+        }
     }
 
     public void Dispose()
@@ -95,6 +108,7 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
         _query?.Dispose();
         _query = null;
         _live.Clear();
+        _kinds.Clear();
     }
 
     private bool Open()
@@ -125,14 +139,109 @@ public sealed class PdhSensorProvider(ILogger<PdhSensorProvider> log) : ISensorP
             }
         }
 
+        if (Cores.Here.Hybrid)
+        {
+            AddKind(query, "p", Cores.Here.Performance);
+            AddKind(query, "e", Cores.Here.Efficient);
+
+            // Half a split says nothing: "P 34 %" with no E beside it reads
+            // as the whole processor.
+            if (_kinds.Count < 2)
+            {
+                _kinds.Clear();
+            }
+        }
+
         if (_live.Count == 0)
         {
             query.Dispose();
+            _kinds.Clear();
             return false;
         }
 
         _query = query;
         return true;
+    }
+
+    private void AddKind(PdhQuery query, string slot, IEnumerable<LogicalProcessor> processors)
+    {
+        var instances = new List<string>();
+
+        foreach (LogicalProcessor processor in processors)
+        {
+            string at = processor.Instance;
+
+            // Three per logical processor: how busy, how fast against its
+            // own nominal speed, and that nominal speed - which differs
+            // between the kinds (2.2 GHz against 1.5 on a 14900HX), so a
+            // percentage averaged across both would mean nothing.
+            if (query.TryAdd($"util {at}", $@"\Processor Information({at})\% Processor Utility")
+                && query.TryAdd($"perf {at}", $@"\Processor Information({at})\% Processor Performance")
+                && query.TryAdd($"freq {at}", $@"\Processor Information({at})\Processor Frequency"))
+            {
+                instances.Add(at);
+            }
+        }
+
+        if (instances.Count > 0)
+        {
+            _kinds.Add(new Kind(slot, [.. instances]));
+        }
+        else
+        {
+            log.LogInformation("sensors.pdh no per-processor counters for the {Slot} cores", slot);
+        }
+    }
+
+    /// <summary>One kind of core, and the logical processors it is made of.</summary>
+    private sealed record Kind(string Slot, string[] Instances)
+    {
+        private SensorKey Load => SensorKey.Make(ProviderId, "cpu", SensorKind.Load, Slot);
+
+        private SensorKey Speed => SensorKey.Make(ProviderId, "cpu", SensorKind.Clock, Slot);
+
+        public IEnumerable<SensorDescriptor> Describe() =>
+        [
+            new(Load, SensorKind.Load, HardwareGroup.Cpu, "cpu", Slot == "p" ? "P-cores" : "E-cores", "%"),
+            new(Speed, SensorKind.Clock, HardwareGroup.Cpu, "cpu", Slot == "p" ? "P-core speed" : "E-core speed", "GHz"),
+        ];
+
+        /// <summary>
+        /// The kind's load is the average over its logical processors, as the
+        /// processor's total is; its speed is the average of what each runs at
+        /// - nominal speed times the performance counter - in gigahertz.
+        /// </summary>
+        public void Read(IReadOnlyDictionary<string, double> values, IDictionary<SensorKey, double> into)
+        {
+            double busy = 0, speed = 0;
+            int counted = 0, timed = 0;
+
+            foreach (string at in Instances)
+            {
+                if (values.TryGetValue($"util {at}", out double util) && double.IsFinite(util))
+                {
+                    busy += Math.Clamp(util, 0, 100);
+                    counted++;
+                }
+
+                if (values.TryGetValue($"perf {at}", out double perf) && double.IsFinite(perf)
+                    && values.TryGetValue($"freq {at}", out double nominal) && nominal > 0)
+                {
+                    speed += nominal * perf / 100;
+                    timed++;
+                }
+            }
+
+            if (counted > 0)
+            {
+                into[Load] = busy / counted;
+            }
+
+            if (timed > 0)
+            {
+                into[Speed] = speed / timed / 1000;
+            }
+        }
     }
 
     private enum Aggregate

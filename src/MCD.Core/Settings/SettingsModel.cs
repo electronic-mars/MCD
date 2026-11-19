@@ -22,6 +22,19 @@ public sealed record SettingsModel
     public ImmutableArray<MonitorConfig> Monitors { get; init; } = [];
 
     public SensorSettings Sensors { get; init; } = new();
+
+    /// <summary>The processor's profiles, and the programs kept to one kind of core.</summary>
+    public ProcessorSettings Processor { get; init; } = new();
+
+    /// <summary>
+    /// What the power plan said before this program first changed it, so that
+    /// the Normal profile can put it back.
+    /// </summary>
+    /// <remarks>
+    /// Kept apart from the person's choices: undoing a choice must never undo
+    /// the record of what Windows had.
+    /// </remarks>
+    public PlanBackup PlanBefore { get; init; } = new();
 }
 
 public sealed record AppSettings
@@ -448,4 +461,101 @@ public sealed record SensorSettings
 
     /// <summary>Drives whose temperature IOCTL timed out twice; not asked again.</summary>
     public ImmutableArray<string> StorageBlacklist { get; init; } = [];
+}
+
+/// <summary>
+/// The processor: how hard it may run, and which kind of core a program gets.
+/// </summary>
+public sealed record ProcessorSettings
+{
+    /// <summary>
+    /// The profile in force: "quiet", "normal" or "max". Normal is the power
+    /// plan exactly as Windows had it, so it is also how nothing is changed.
+    /// </summary>
+    public string Profile { get; init; } = CpuProfile.Normal;
+
+    /// <summary>The profile to switch to on unplugging, or empty to leave it.</summary>
+    public string OnBattery { get; init; } = string.Empty;
+
+    /// <summary>The profile to switch to on plugging in, or empty to leave it.</summary>
+    public string OnMains { get; init; } = string.Empty;
+
+    /// <summary>Cooler and quieter: the turbo off and Windows' efficiency mode.</summary>
+    public CpuProfile Quiet { get; init; } = new()
+    {
+        Mode = CpuProfile.Efficiency,
+        Boost = 0,
+    };
+
+    /// <summary>As fast as the machine goes: the turbo at its keenest and no ceilings.</summary>
+    public CpuProfile Max { get; init; } = new()
+    {
+        Mode = CpuProfile.Performance,
+        Boost = 2,
+        MaxP = 0,
+        MaxE = 0,
+    };
+
+    /// <summary>Programs with a kind of core or a profile of their own.</summary>
+    public ImmutableArray<ProgramRule> Programs { get; init; } = [];
+}
+
+/// <summary>
+/// What a profile changes in the power plan. Anything left at its "as
+/// Windows has it" value is not touched.
+/// </summary>
+public sealed record CpuProfile
+{
+    public const string Quiet = "quiet";
+    public const string Normal = "normal";
+    public const string Max = "max";
+
+    public const string Efficiency = "efficiency";
+    public const string Balanced = "balanced";
+    public const string Performance = "performance";
+
+    /// <summary>The Windows power mode - efficiency, balanced, performance - or empty to leave it.</summary>
+    public string Mode { get; init; } = string.Empty;
+
+    /// <summary>The turbo: 0 off, 2 on and keen, -1 as Windows has it.</summary>
+    public int Boost { get; init; } = -1;
+
+    /// <summary>
+    /// The highest frequency of the performance cores in MHz - of every core,
+    /// on a processor with one kind - 0 for no ceiling, -1 as Windows has it.
+    /// </summary>
+    public int MaxP { get; init; } = -1;
+
+    /// <summary>The same for the efficient cores. Unused on a processor with one kind.</summary>
+    public int MaxE { get; init; } = -1;
+}
+
+/// <summary>A program with a kind of core or a profile of its own.</summary>
+public sealed record ProgramRule
+{
+    /// <summary>The program's file, without its folder: "game.exe".</summary>
+    public string Program { get; init; } = string.Empty;
+
+    /// <summary>"p" for the performance cores only, "e" for the efficient ones, empty for any.</summary>
+    public string Cores { get; init; } = string.Empty;
+
+    /// <summary>The profile while it runs, or empty to leave the profile alone.</summary>
+    public string Profile { get; init; } = string.Empty;
+}
+
+/// <summary>What the power plan said before this program changed it.</summary>
+public sealed record PlanBackup
+{
+    /// <summary>
+    /// The computer the values were read on. Settings carried to another
+    /// computer must not put this one's values onto it.
+    /// </summary>
+    public string Machine { get; init; } = string.Empty;
+
+    /// <summary>
+    /// "{plan}/{setting}/ac" or "/dc" to the value it had, and "mode" to the
+    /// power mode it had.
+    /// </summary>
+    public ImmutableDictionary<string, string> Values { get; init; } =
+        ImmutableDictionary<string, string>.Empty;
 }

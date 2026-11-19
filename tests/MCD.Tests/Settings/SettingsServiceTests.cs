@@ -438,6 +438,71 @@ public sealed class SettingsServiceTests : IDisposable
         service.Current.App.Presets.ShouldBeEmpty();
     }
 
+    [Fact]
+    public void WhatThePowerPlanHadSurvivesARestartKeyForKey()
+    {
+        const string boost = "381b4222-f694-41f0-9685-ff5bb260df2e/be337238-0d82-4146-a960-4f3749d470c7/ac";
+        var rule = new ProgramRule { Program = "game.exe", Cores = "p", Profile = CpuProfile.Max };
+
+        using (SettingsService first = Open())
+        {
+            first.Commit(
+                first.Current with
+                {
+                    Processor = first.Current.Processor with { Profile = CpuProfile.Quiet, Programs = [rule] },
+                    PlanBefore = new PlanBackup
+                    {
+                        Machine = "THIS-PC",
+                        Values = System.Collections.Immutable.ImmutableDictionary<string, string>.Empty
+                            .Add(boost, "4")
+                            .Add("mode", Guid.Empty.ToString("D")),
+                    },
+                },
+                WriteReason.PowerPlan);
+
+            first.Flush();
+        }
+
+        using SettingsService second = Open();
+
+        // The keys come back exactly as written: the only record of what the
+        // plan had is no use under a name nothing looks for.
+        second.Current.PlanBefore.Machine.ShouldBe("THIS-PC");
+        second.Current.PlanBefore.Values[boost].ShouldBe("4");
+        second.Current.PlanBefore.Values["mode"].ShouldBe(Guid.Empty.ToString("D"));
+        second.Current.Processor.Profile.ShouldBe(CpuProfile.Quiet);
+        second.Current.Processor.Programs.Single().ShouldBe(rule);
+    }
+
+    [Fact]
+    public void UndoingAProfileLeavesTheRecordOfThePlanAlone()
+    {
+        using SettingsService service = Open();
+
+        service.Commit(
+            service.Current with { Processor = service.Current.Processor with { Profile = CpuProfile.Quiet } },
+            WriteReason.UserAction,
+            "switching the processor profile");
+
+        // Written down by the profile going in: nobody's change to take back,
+        // and the one thing that can put the plan back afterwards.
+        service.Commit(
+            service.Current with
+            {
+                PlanBefore = new PlanBackup
+                {
+                    Machine = "THIS-PC",
+                    Values = System.Collections.Immutable.ImmutableDictionary<string, string>.Empty.Add("a/b/ac", "4"),
+                },
+            },
+            WriteReason.PowerPlan);
+
+        service.Undo().ShouldBeTrue();
+
+        service.Current.Processor.Profile.ShouldBe(CpuProfile.Normal);
+        service.Current.PlanBefore.Values["a/b/ac"].ShouldBe("4");
+    }
+
     private SettingsService Open() => new(NullLogger<SettingsService>.Instance, _dir);
 
     private string Config() => File.ReadAllText(Path.Combine(_dir, "config.json"));

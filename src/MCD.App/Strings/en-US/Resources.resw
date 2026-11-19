@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>Developer website</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>Processor</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>Profiles for the turbo and the frequency limits, and programs kept to P- or E-cores. Works without the driver.</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>P-cores</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>Average load of the performance cores.</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>E-cores</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>Average load of the efficient cores.</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>P-core clock speed</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>Average clock speed of the performance cores.</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>E-core clock speed</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>Average clock speed of the efficient cores.</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>P- and E-cores separately</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>Two figures instead of one: the performance cores and the efficient ones.</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>Processor profile</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>Quiet</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>switching the processor profile</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>While {0} runs, its own profile is in force.</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows did not accept every setting of this profile.</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>Processor profile</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>Normal leaves the power plan as Windows has it. A profile stays in force when the app is closed.</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>Leave as it is</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>On battery</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>Switches to this profile when the charger is unplugged.</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>Plugged in</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>Switches to this profile when the charger is plugged in.</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>changing when the profile switches</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>Cooler and quieter, slower at its peak.</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>As fast as the machine goes, and as loud.</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>changing a processor profile</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>As Windows has it</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Windows power mode</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>Best power efficiency</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>Balanced</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>Best performance</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>Turbo boost</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>Off keeps the processor at its base speed: the coolest and the slowest.</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>P-cores up to</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>E-cores up to</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>Cores up to</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>No limit</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>Programs</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>Add a program</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>Keep a program to the P- or E-cores, or switch the profile while it runs.</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>Switch the profile while a program runs.</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>Choose a program…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>Any cores</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>P-cores only</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>E-cores only</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>Profile unchanged</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows did not allow changing its cores: it may run as administrator or be protected by anti-cheat.</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>adding {0}</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>changing {0}</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>removing {0}</value>
+  </data>
 </root>

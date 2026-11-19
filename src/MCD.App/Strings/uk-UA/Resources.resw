@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>Сайт розробника</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>Процесор</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Процесор</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>Процесор</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>Профілі турборежиму та меж частоти, а також програми, закріплені за P- або E-ядрами. Працює без драйвера.</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>P-ядра</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>Середнє навантаження продуктивних ядер.</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>E-ядра</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>Середнє навантаження ефективних ядер.</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>Частота P-ядер</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>Середня частота продуктивних ядер.</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>Частота E-ядер</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>Середня частота ефективних ядер.</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>P- та E-ядра окремо</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>Два числа замість одного: продуктивні ядра та ефективні.</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>Профіль процесора</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>Тихий</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>Звичайний</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>Максимум</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>перемикання профілю процесора</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>Поки працює {0}, діє його власний профіль.</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows не прийняла всі налаштування цього профілю.</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>Профіль</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>Профіль процесора</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>«Звичайний» залишає схему живлення такою, якою її має Windows. Профіль діє і після закриття додатка.</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>Залишити як є</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>На акумуляторі</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>Перемикається на цей профіль, коли зарядний пристрій відключено.</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>З мережею</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>Перемикається на цей профіль, коли зарядний пристрій підключено.</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>зміна умов перемикання профілю</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>Холодніше і тише, але повільніше на піку.</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>Так швидко, як може комп'ютер, і так само гучним.</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>зміна профілю процесора</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>Як у Windows</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Режим живлення Windows</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>Найкраща енергоефективність</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>Збалансований</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>Найкраща продуктивність</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>Турборежим</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>Вимкнено залишає процесор на базовій швидкості: найхолодніше і найповільніше.</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>Увімкнено</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>P-ядра до</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>E-ядра до</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>Ядра до</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>Без обмеження</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>Програми</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>Додати програму</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>Залишати програму на P- або E-ядрах або перемикати профиль під час її роботи.</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>Перемикати профиль під час роботи програми.</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>Обрати програму…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>Будь-які ядра</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>Тільки P-ядра</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>Тільки E-ядра</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>Профіль без змін</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows не дозволила змінити її ядра: можливо, програма запущена від імені адміністратора або захищена античитом.</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>додавання {0}</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>зміна {0}</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>видалення {0}</value>
+  </data>
 </root>

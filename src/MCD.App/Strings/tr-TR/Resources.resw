@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>Geliştirici sitesi</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>İşlemci</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>İşlemci</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>İşlemci</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>Turbo ve frekans sınırları için profiller ve P- veya E-çekirdeklerine sabitlenen programlar. Sürücü olmadan çalışır.</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>P-çekirdekleri</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>Performans çekirdeklerinin ortalama yükü.</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>E-çekirdekleri</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>E-çekirdeklerinin ortalama yükü.</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>P-çekirdek saat hızı</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>Performans çekirdeklerinin ortalama saat hızı.</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>E-çekirdek saat hızı</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>E-çekirdeklerinin ortalama saat hızı.</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>P- ve E-çekirdekleri ayrı ayrı</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>Bir yerine iki sayı: performans çekirdekleri ve etkin olanlar.</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>İşlemci profili</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>Sessiz</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>Maksimum</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>işlemci profilini değiştirme</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>{0} çalışırken kendi profili geçerlidir.</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows bu profilin tüm ayarlarını kabul etmedi.</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>İşlemci profili</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>Normal, güç planını Windows'ın olduğu gibi bırakır. Bir profil uygulama kapalıyken de geçerli kalır.</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>Aynı bırak</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>Pilde</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>Şarj cihazı çıkarıldığında bu profile geçer.</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>Takılı</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>Şarj cihazı takıldığında bu profile geçer.</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>profili geçiş zamanının değiştirilmesi</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>Daha serin ve sessiz, yüksek hızda daha yavaş.</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>Maksimum hızda ve en yüksek ses seviyesinde.</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>İşlemci profilini değiştirme</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>Windows'ta olduğu gibi</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Windows güç modu</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>En iyi güç verimliliği</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>Dengeli</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>En iyi performans</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>Turbo modu</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>İşlemciyi temel hızında tutar: en serin ve en yavaş.</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>P-çekirdekler: en fazla</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>E-çekirdekler: en fazla</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>Çekirdekler: en fazla</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>Sınır yok</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>Programlar</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>Program ekle</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>Programı P- veya E-çekirdeklere sabitleyin veya çalışırken profili değiştirin.</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>Bir program çalışırken profili değiştirin.</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>Bir program seçin…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>Herhangi bir çekirdek</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>Yalnızca P-çekirdekler</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>Yalnızca E-çekirdekler</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>Profil değişmedi</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows çekirdek değişikliğine izin vermedi: program yönetici olarak çalışıyor veya anti-cheat tarafından korunuyor olabilir.</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>{0} ekleme</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>{0} değiştirme</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>{0} kaldırma</value>
+  </data>
 </root>

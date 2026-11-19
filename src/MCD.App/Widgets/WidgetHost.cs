@@ -125,6 +125,16 @@ public sealed partial class WidgetHost : ContentControl, IDisposable
                 Placement = _widget.PopupSide,
                 ShouldConstrainToRootBounds = false,
                 XamlRoot = XamlRoot,
+
+                // The theme stops a flyout at 758 px. The processor's hour -
+                // five charts under the profile keys - is taller, and its last
+                // chart sat behind a scroll bar that shows only on hover. The
+                // screen is the limit instead: WinUI still fits the panel to
+                // the monitor and scrolls whatever does not fit there.
+                FlyoutPresenterStyle = new Style(typeof(FlyoutPresenter))
+                {
+                    Setters = { new Setter(FrameworkElement.MaxHeightProperty, double.PositiveInfinity) },
+                },
             };
 
             Mcd.App.Dock.FlyoutDismissal.Watch(flyout);

@@ -154,6 +154,15 @@
                          for them and the unit stays where it is; nothing on
                          the chip moves when a reading crosses ten. -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <!-- "P" or "E" before a processor's figures, a shade
+                             back like the unit: which kind of core, not a
+                             reading of its own. -->
+                        <TextBlock
+                            Margin="0,0,3,0"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Prefix}"
+                            Visibility="{x:Bind PrefixShown}" />
                         <!-- Centred in its box, not pushed to the right of
                              it: a one-digit reading right-aligned in a box
                              kept for two stood a digit's width away from its
@@ -265,6 +274,11 @@
                         Content="{x:Bind Second, Mode=OneWay}"
                         ContentTemplate="{StaticResource MetricTemplate}"
                         Visibility="{x:Bind SecondShown, Mode=OneWay}" />
+                    <ContentControl
+                        IsTabStop="False"
+                        Content="{x:Bind Third, Mode=OneWay}"
+                        ContentTemplate="{StaticResource MetricTemplate}"
+                        Visibility="{x:Bind ThirdShown, Mode=OneWay}" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>

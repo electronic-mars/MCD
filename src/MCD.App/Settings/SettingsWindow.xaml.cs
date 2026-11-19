@@ -150,6 +150,14 @@ public sealed partial class SettingsWindow : Window
         _settings.Changed += OnSettingsChanged;
         Closed += (_, _) => _settings.Changed -= OnSettingsChanged;
 
+        // A program Windows would not move, or a profile it would not take,
+        // is said on the page while the page is open.
+        if (Mcd.Core.Processor.CpuControl.Current is { } cpu)
+        {
+            cpu.Changed += OnCpuChanged;
+            Closed += (_, _) => cpu.Changed -= OnCpuChanged;
+        }
+
         // A line left round a widget because the window shut while the pointer
         // was over its row would stay there until something else redrew the
         // bar - a mark nobody made and nobody can clear.
@@ -3741,6 +3749,7 @@ public sealed partial class SettingsWindow : Window
         ReloadDocks();
         ShowPresets();
         ShowGeneral();
+        ShowProcessor();
         ShowAbout();
         _sourcesShown = string.Empty;
         ShowSources();
@@ -3971,6 +3980,14 @@ public sealed partial class SettingsWindow : Window
         _log.LogInformation("settings.dock {What} monitor={Monitor}", what, stableId);
     }
 
+    private void OnCpuChanged() => DispatcherQueue.TryEnqueue(() =>
+    {
+        if (ProcessorSection.Visibility == Visibility.Visible)
+        {
+            ShowProcessor();
+        }
+    });
+
     private MonitorConfig? Dock() =>
         _settings.Current.Monitors.FirstOrDefault(m => m.StableId == _editing);
 
@@ -3987,6 +4004,7 @@ public sealed partial class SettingsWindow : Window
         ShowParts();
         AppearanceSection.Visibility = Show(tag == "appearance");
         SensorsSection.Visibility = Show(tag == "sensors");
+        ProcessorSection.Visibility = Show(tag == "processor");
         GeneralSection.Visibility = Show(tag == "general");
         AboutSection.Visibility = Show(tag == "about");
 
@@ -4003,6 +4021,11 @@ public sealed partial class SettingsWindow : Window
         if (tag == "general")
         {
             ShowGeneral();
+        }
+
+        if (tag == "processor")
+        {
+            ShowProcessor();
         }
 
         // Only while the page that shows live figures is on screen. A window

@@ -10,8 +10,11 @@
 # set of photographs of the wrong pages.
 param(
     [string]$Out = "$env:TEMP\mcd-pages",
-    [string]$Pages = 'docks,widgets,appearance,general,sensors,about',
-    [int]$Seconds = 22
+    [string]$Pages = 'docks,widgets,appearance,general,sensors,processor,about',
+    [int]$Seconds = 22,
+    # Settings to start from, as barshot.ps1 takes them: a page that lists
+    # things (programs, presets) shows its rows only when there are some.
+    [string]$Config = ""
 )
 
 $ErrorActionPreference = 'Stop'
@@ -70,6 +73,11 @@ New-Item -ItemType Directory -Force $scratch | Out-Null
 $logDir = Join-Path $scratch 'MCD\logs'
 
 $env:MCD_DATA_DIR = Join-Path $scratch 'MCD'
+if ($Config) {
+    New-Item -ItemType Directory -Force $env:MCD_DATA_DIR | Out-Null
+    Copy-Item $Config (Join-Path $env:MCD_DATA_DIR 'config.json')
+    New-Item -ItemType File -Force (Join-Path $env:MCD_DATA_DIR 'welcomed') | Out-Null
+}
 $env:MCD_SELFTEST = '1'
 $env:MCD_SELFTEST_SECONDS = "$Seconds"
 $env:MCD_SELFTEST_PAGE = $Pages

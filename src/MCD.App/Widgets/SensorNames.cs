@@ -96,6 +96,24 @@ public sealed class SensorNames(ImmutableDictionary<string, string> chosen)
 
         return (sensor.Group, sensor.Kind, slot) switch
         {
+            // The two kinds of core on a hybrid processor, each the average
+            // of its own logical processors.
+            (HardwareGroup.Cpu, SensorKind.Load, "p") => (
+                Loc.Tr("SenseCpuPName", "P-cores"),
+                Loc.Tr("SenseCpuP", "Average load of the performance cores.")),
+
+            (HardwareGroup.Cpu, SensorKind.Load, "e") => (
+                Loc.Tr("SenseCpuEName", "E-cores"),
+                Loc.Tr("SenseCpuE", "Average load of the efficient cores.")),
+
+            (HardwareGroup.Cpu, SensorKind.Clock, "p") => (
+                Loc.Tr("SenseCpuPClockName", "P-core clock speed"),
+                Loc.Tr("SenseCpuPClock", "Average clock speed of the performance cores.")),
+
+            (HardwareGroup.Cpu, SensorKind.Clock, "e") => (
+                Loc.Tr("SenseCpuEClockName", "E-core clock speed"),
+                Loc.Tr("SenseCpuEClock", "Average clock speed of the efficient cores.")),
+
             (HardwareGroup.Cpu, SensorKind.Load, _) => (
                 Loc.Tr("PartCpu", "CPU"),
                 Loc.Tr("SenseCpuLoad", "CPU load.")),

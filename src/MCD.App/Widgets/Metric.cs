@@ -219,6 +219,17 @@ public sealed partial class Metric : ObservableObject
     [ObservableProperty]
     public partial string Suffix { get; set; } = string.Empty;
 
+    /// <summary>
+    /// A letter before the figure, saying which of two figures under one icon
+    /// this is: "P" and "E" for a processor's two kinds of core.
+    /// </summary>
+    public string Prefix { get; init; } = string.Empty;
+
+    public Visibility PrefixShown => Prefix.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>The prefix's width with the gap after it, or nothing without one.</summary>
+    private double PrefixWidth => Prefix.Length > 0 ? Wide(Prefix, FontSize) + 3 : 0;
+
     /// <summary>The box the number is right-aligned in. Fixed for the chip's life.</summary>
     [ObservableProperty]
     public partial double FigureWidth { get; set; }
@@ -528,7 +539,7 @@ public sealed partial class Metric : ObservableObject
         // everything this program did while idle.
         _labelWide ??= Math.Min(100, Wide(Label, LabelFontSize));
 
-        double value = FigureWidth + SuffixWidth;
+        double value = PrefixWidth + FigureWidth + SuffixWidth;
 
         // A caption nobody will keep buys no width. Until the sensor turns
         // up the chip is captioned with a placeholder - the word
@@ -632,8 +643,12 @@ public sealed partial class Metric : ObservableObject
             string? given = NameFound?.Invoke(found);
             string called = given ?? found.Label;
 
-            Detail = found.Hardware.Length > 0 && found.Hardware != called
-                ? $"{called} · {found.Hardware}"
+            // The part's own name only where it says something: "cpu" is the
+            // source's shorthand, and "CPU · cpu" read like a stammer.
+            string part = SensorNames.Detail(found);
+
+            Detail = part.Length > 0 && part != called
+                ? $"{called} · {part}"
                 : called;
 
             if (Roving || given is not null)

@@ -206,6 +206,22 @@
                         <TextBlock x:Uid="NavSensors" VerticalAlignment="Center" Text="Readings" />
                     </StackPanel>
                 </NavigationViewItem>
+                <NavigationViewItem x:Uid="NavProcessorItem" Tag="processor">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Viewbox Width="17" Height="17" VerticalAlignment="Center">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="{x:Bind local:IconRow.TabProcessor}"
+                                    Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2.1" />
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock x:Uid="NavProcessor" VerticalAlignment="Center" Text="Processor" />
+                    </StackPanel>
+                </NavigationViewItem>
                 <!-- With the others rather than in the pane's footer: parked
                      alone at the bottom it read as a different kind of thing,
                      and it is just another page. -->
@@ -627,6 +643,37 @@
                         <StackPanel x:Name="SourcesFoot" Margin="0,14,0,0" />
                     </StackPanel>
 
+
+                    <!-- The processor: how hard it may run, and which kind of
+                         core a program gets. Built in code, like General. -->
+                    <StackPanel x:Name="ProcessorSection" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Viewbox Width="22" Height="22" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path
+                                        Data="{x:Bind local:IconRow.PageProcessor}"
+                                        Stroke="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeLineJoin="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1.7" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock
+                                x:Uid="ProcessorPageTitle"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="SemiBold"
+                                Text="Processor" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Uid="ProcessorIntro"
+                            Margin="0,8,0,0"
+                            Foreground="{ThemeResource BraunTx2}"
+                            Text="Profiles for the turbo and the frequency limits, and programs kept to P- or E-cores. Works without the driver."
+                            TextWrapping="Wrap" />
+                        <StackPanel x:Name="ProcessorBody" />
+                    </StackPanel>
 
                     <!-- The whole machine's settings: keys, language, startup,
                          copies. Not about any one bar, and not about the

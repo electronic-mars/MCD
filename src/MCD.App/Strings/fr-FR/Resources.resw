@@ -1952,4 +1952,184 @@
   <data name="AboutSite" xml:space="preserve">
     <value>Site du développeur</value>
   </data>
+  <data name="NavProcessor.Text" xml:space="preserve">
+    <value>Processeur</value>
+  </data>
+  <data name="NavProcessorItem.AutomationProperties.Name" xml:space="preserve">
+    <value>Processeur</value>
+  </data>
+  <data name="ProcessorPageTitle.Text" xml:space="preserve">
+    <value>Processeur</value>
+  </data>
+  <data name="ProcessorIntro.Text" xml:space="preserve">
+    <value>Profils pour le turbo et les limites de fréquence, et programmes maintenus sur les cœurs P ou E. Fonctionne sans le pilote.</value>
+  </data>
+  <data name="SenseCpuPName" xml:space="preserve">
+    <value>Cœurs P</value>
+  </data>
+  <data name="SenseCpuP" xml:space="preserve">
+    <value>Charge moyenne des cœurs de performance.</value>
+  </data>
+  <data name="SenseCpuEName" xml:space="preserve">
+    <value>Cœurs E</value>
+  </data>
+  <data name="SenseCpuE" xml:space="preserve">
+    <value>Charge moyenne des cœurs efficaces.</value>
+  </data>
+  <data name="SenseCpuPClockName" xml:space="preserve">
+    <value>Vitesse d'horloge des cœurs P</value>
+  </data>
+  <data name="SenseCpuPClock" xml:space="preserve">
+    <value>Vitesse d'horloge moyenne des cœurs de performance.</value>
+  </data>
+  <data name="SenseCpuEClockName" xml:space="preserve">
+    <value>Vitesse d'horloge des cœurs E</value>
+  </data>
+  <data name="SenseCpuEClock" xml:space="preserve">
+    <value>Vitesse d'horloge moyenne des cœurs efficaces.</value>
+  </data>
+  <data name="GaugeShowCores" xml:space="preserve">
+    <value>Cœurs P et E séparément</value>
+  </data>
+  <data name="GaugeShowCoresHint" xml:space="preserve">
+    <value>Deux chiffres au lieu d'un : les cœurs de performance et les cœurs efficaces.</value>
+  </data>
+  <data name="CpuProfileTitle" xml:space="preserve">
+    <value>Profil du processeur</value>
+  </data>
+  <data name="CpuProfileQuiet" xml:space="preserve">
+    <value>Silencieux</value>
+  </data>
+  <data name="CpuProfileNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="CpuProfileMax" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="UndoCpuProfile" xml:space="preserve">
+    <value>Changement de profil du processeur</value>
+  </data>
+  <data name="CpuProfileBecause" xml:space="preserve">
+    <value>Tant que {0} s'exécute, son propre profil est appliqué.</value>
+  </data>
+  <data name="CpuProfileRefused" xml:space="preserve">
+    <value>Windows n'a pas accepté tous les paramètres de ce profil.</value>
+  </data>
+  <data name="CpuProfilesGroup" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="CpuProfileNow" xml:space="preserve">
+    <value>Profil du processeur</value>
+  </data>
+  <data name="CpuProfileNowHint" xml:space="preserve">
+    <value>Normal conserve le plan d'alimentation tel que défini par Windows. Un profil reste appliqué après la fermeture de l'application.</value>
+  </data>
+  <data name="CpuFollowNone" xml:space="preserve">
+    <value>Laisser tel quel</value>
+  </data>
+  <data name="CpuOnBattery" xml:space="preserve">
+    <value>Sur batterie</value>
+  </data>
+  <data name="CpuOnBatteryHint" xml:space="preserve">
+    <value>Passe à ce profil lorsque le chargeur est débranché.</value>
+  </data>
+  <data name="CpuOnMains" xml:space="preserve">
+    <value>Branché</value>
+  </data>
+  <data name="CpuOnMainsHint" xml:space="preserve">
+    <value>Passe à ce profil lorsque le chargeur est branché.</value>
+  </data>
+  <data name="UndoCpuFollow" xml:space="preserve">
+    <value>Changement de règle de basculement du profil</value>
+  </data>
+  <data name="CpuQuietHint" xml:space="preserve">
+    <value>Plus frais et silencieux, mais plus lent à pleine charge.</value>
+  </data>
+  <data name="CpuMaxHint" xml:space="preserve">
+    <value>Vitesse maximale, et aussi bruyant que possible.</value>
+  </data>
+  <data name="UndoCpuEdit" xml:space="preserve">
+    <value>modification d'un profil de processeur</value>
+  </data>
+  <data name="CpuAsWindows" xml:space="preserve">
+    <value>Comme Windows</value>
+  </data>
+  <data name="CpuMode" xml:space="preserve">
+    <value>Mode d'alimentation Windows</value>
+  </data>
+  <data name="CpuModeEfficiency" xml:space="preserve">
+    <value>Meilleure efficacité énergétique</value>
+  </data>
+  <data name="CpuModeBalanced" xml:space="preserve">
+    <value>Équilibré</value>
+  </data>
+  <data name="CpuModePerformance" xml:space="preserve">
+    <value>Meilleures performances</value>
+  </data>
+  <data name="CpuBoost" xml:space="preserve">
+    <value>Boost turbo</value>
+  </data>
+  <data name="CpuBoostHint" xml:space="preserve">
+    <value>Désactivé, le processeur reste à sa vitesse de base : le plus frais et le plus lent.</value>
+  </data>
+  <data name="CpuBoostOff" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
+  <data name="CpuBoostOn" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="CpuMaxP" xml:space="preserve">
+    <value>Cœurs P jusqu'à</value>
+  </data>
+  <data name="CpuMaxE" xml:space="preserve">
+    <value>Cœurs E jusqu'à</value>
+  </data>
+  <data name="CpuMaxAll" xml:space="preserve">
+    <value>Cœurs jusqu'à</value>
+  </data>
+  <data name="CpuNoLimit" xml:space="preserve">
+    <value>Sans limite</value>
+  </data>
+  <data name="CpuProgramsGroup" xml:space="preserve">
+    <value>Programmes</value>
+  </data>
+  <data name="CpuProgramAdd" xml:space="preserve">
+    <value>Ajouter un programme</value>
+  </data>
+  <data name="CpuProgramAddHint" xml:space="preserve">
+    <value>Assigne un programme aux cœurs P ou E, ou change de profil pendant son exécution.</value>
+  </data>
+  <data name="CpuProgramAddHintOneKind" xml:space="preserve">
+    <value>Change de profil pendant l'exécution d'un programme.</value>
+  </data>
+  <data name="CpuProgramAddButton" xml:space="preserve">
+    <value>Choisir un programme…</value>
+  </data>
+  <data name="CpuCoresAny" xml:space="preserve">
+    <value>Tous les cœurs</value>
+  </data>
+  <data name="CpuCoresP" xml:space="preserve">
+    <value>Cœurs P uniquement</value>
+  </data>
+  <data name="CpuCoresE" xml:space="preserve">
+    <value>Cœurs E uniquement</value>
+  </data>
+  <data name="CpuProgramNoProfile" xml:space="preserve">
+    <value>Profil inchangé</value>
+  </data>
+  <data name="CpuProgramRemove" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="CpuProgramRefused" xml:space="preserve">
+    <value>Windows n'autorise pas la modification de ses cœurs : il peut s'exécuter en tant qu'administrateur ou être protégé par un anti-triche.</value>
+  </data>
+  <data name="UndoCpuProgramAdded" xml:space="preserve">
+    <value>ajout de {0}</value>
+  </data>
+  <data name="UndoCpuProgramChanged" xml:space="preserve">
+    <value>modification de {0}</value>
+  </data>
+  <data name="UndoCpuProgramRemoved" xml:space="preserve">
+    <value>suppression de {0}</value>
+  </data>
 </root>

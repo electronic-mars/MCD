@@ -206,3 +206,26 @@ GetAsyncKeyState
 WindowFromPoint
 GetAncestor
 GetClassName
+
+// Which logical processors are performance cores and which are efficient
+// ones, and keeping a program to one kind: the CPU sets a process may use,
+// changed through the limited right that any program of the same person has.
+GetSystemCpuSetInformation
+SYSTEM_CPU_SET_INFORMATION
+SetProcessDefaultCpuSets
+K32EnumProcesses
+OpenProcess
+QueryFullProcessImageName
+PROCESS_ACCESS_RIGHTS
+PROCESS_NAME_FORMAT
+
+// The power plan's processor settings: the turbo, and the frequency ceiling
+// of each kind of core. Written into the plan that is active and applied by
+// activating it again, the way the Control Panel's own page does it.
+PowerGetActiveScheme
+PowerReadACValueIndex
+PowerReadDCValueIndex
+PowerWriteACValueIndex
+PowerWriteDCValueIndex
+PowerSetActiveScheme
+LocalFree
