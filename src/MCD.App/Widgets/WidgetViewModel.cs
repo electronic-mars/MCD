@@ -44,6 +44,9 @@ public sealed record WidgetContext(
 
     /// <summary>"large", "medium" or "small" - how big the readings are drawn.</summary>
     public string Size { get; init; } = "large";
+
+    /// <summary>Whether the bar is left out of screenshots, recordings and screen sharing.</summary>
+    public bool HideFromCapture { get; init; }
 }
 
 /// <summary>

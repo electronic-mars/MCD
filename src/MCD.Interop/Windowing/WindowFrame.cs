@@ -76,6 +76,12 @@ public static unsafe class WindowFrame
         PInvoke.SetWindowLongPtr(handle, (WINDOW_LONG_PTR_INDEX)GwlExStyle, wanted);
     }
 
+    /// <summary>Keeps the window out of screenshots, recordings and screen sharing, or lets it back in.</summary>
+    public static void ExcludeFromCapture(nint hwnd, bool exclude) =>
+        PInvoke.SetWindowDisplayAffinity(
+            new HWND(hwnd),
+            exclude ? WINDOW_DISPLAY_AFFINITY.WDA_EXCLUDEFROMCAPTURE : WINDOW_DISPLAY_AFFINITY.WDA_NONE);
+
     public static void SetTopmost(nint hwnd, bool topmost)
     {
         PInvoke.SetWindowPos(

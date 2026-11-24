@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>«Без обмеження» знімає обмеження виробника ноутбука: більше тепла, гучні вентилятори, сповільнення через перегрів.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Приховати панелі при записі екрана</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Панелі залишаються на екрані, але не потрапляють у знімки екрана, записи та демонстрацію екрана.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>зміна видимості панелей при записі екрана</value>
+  </data>
 </root>

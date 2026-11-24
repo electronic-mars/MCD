@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>Bez limitu se překročí strop stanovený výrobcem notebooku: vyšší teplota, větší hluk a zpomalení vlivem tepla.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Skrýt lišty při záznamu obrazovky</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Lišty zůstanou na obrazovce, ale nebudou v snímcích obrazovky, nahrávkách ani sdílení obrazovky.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>změna zobrazení lišt při snímání obrazovky</value>
+  </data>
 </root>

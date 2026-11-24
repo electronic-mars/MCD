@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>Sınır yok: dizüstü bilgisayar üreticisinin belirlediği üst sınır kaldırılıyor, daha sıcak, daha sesli ve ısından yavaşlar.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Çubukları ekran kaydında gizle</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Çubuklar ekranınızda kalır ancak ekran görüntülerinden, ekran kayıtlarından ve ekran paylaşımından hariç tutulur.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>Ekran yakalamasında çubukların görünürlüğünü değiştirme</value>
+  </data>
 </root>

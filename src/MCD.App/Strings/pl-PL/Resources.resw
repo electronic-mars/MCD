@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>„Bez limitu” usuwa ograniczenie ustawione przez producenta laptopa: wyższa temperatura, głośniej i spowolnienie od ciepła.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Ukryj paski podczas przechwytywania ekranu</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Paski pozostają na ekranie, ale nie są uwzględniane w zrzutach ekranu, nagraniach ani udostępnianiu ekranu.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>zmiana, czy paski pojawiają się w przechwytywaniu ekranu</value>
+  </data>
 </root>

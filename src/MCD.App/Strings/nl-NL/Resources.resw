@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>Geen limiet verhoogt het plafond dat de laptopfabrikant heeft ingesteld: heter, luider en vertraagd door de hitte.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Balken verbergen bij schermopnamen</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Balken blijven op uw scherm, maar worden weggelaten bij schermafbeeldingen, opnamen en scherm delen.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>wijzigen of balken verschijnen bij schermopname</value>
+  </data>
 </root>

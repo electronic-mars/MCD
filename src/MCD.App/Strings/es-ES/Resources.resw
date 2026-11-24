@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>Sin límite se elimina el tope que estableció el fabricante del portátil: más temperatura, más ruido y ralentización por el calor.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Ocultar las barras en capturas de pantalla</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Las barras siguen en tu pantalla, pero no aparecen en capturas de pantalla, grabaciones ni uso compartido de pantalla.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>cambiar si las barras aparecen en capturas de pantalla</value>
+  </data>
 </root>

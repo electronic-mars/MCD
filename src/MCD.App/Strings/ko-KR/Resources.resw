@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>'제한 없음'은 노트북 제조사가 정한 상한을 해제합니다. 더 뜨겁고 시끄러워지며 열 때문에 느려집니다.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>바 캡처 숨기기</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>바는 화면에 표시되지만 스크린샷, 녹화, 화면 공유에는 포함되지 않습니다.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>바 캡처 표시 변경</value>
+  </data>
 </root>

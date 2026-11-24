@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>Kein Limit hebt die vom Laptop-Hersteller festgelegte Obergrenze auf: heißer, lauter, durch Hitze verlangsamt.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Leisten bei Bildschirmaufnahmen ausblenden</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Die Leisten bleiben auf Ihrem Bildschirm, werden aber bei Screenshots, Aufnahmen und Bildschirmfreigabe nicht erfasst.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>Ändern, ob Leisten bei Bildschirmaufnahme angezeigt werden</value>
+  </data>
 </root>

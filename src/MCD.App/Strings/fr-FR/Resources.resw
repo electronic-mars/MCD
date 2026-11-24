@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>« Sans limite » supprime le plafond fixé par le fabricant de l'ordinateur portable : plus chaud, plus bruyant et ralenti par la chaleur.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Masquer les barres lors des captures d'écran</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Les barres restent sur votre écran mais sont exclues des captures d'écran, des enregistrements et du partage d'écran.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>Modification de la visibilité des barres dans la capture d'écran</value>
+  </data>
 </root>

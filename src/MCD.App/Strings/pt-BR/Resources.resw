@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>Sem limite, remove o teto definido pelo fabricante do laptop: mais quente, mais barulhento e reduzido pelo calor.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Ocultar barras em capturas de tela</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>As barras ficam na tela, mas não aparecem em capturas de tela, gravações ou compartilhamento de tela.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>alterar se as barras aparecem na captura de tela</value>
+  </data>
 </root>

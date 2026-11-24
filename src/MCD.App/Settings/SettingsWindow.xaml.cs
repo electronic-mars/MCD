@@ -5197,6 +5197,18 @@ public sealed partial class SettingsWindow : Window
                         WriteReason.UserAction,
                         Loc.Tr("UndoTray", "changing the notification area icon"));
                     ShowGeneral();
+                })),
+            Braun.Row(
+                Loc.Tr("HideFromCaptureLabel", "Hide bars from screen capture"),
+                Loc.Tr("HideFromCaptureHint", "Bars stay on your screen but are left out of screenshots, recordings and screen sharing."),
+                Braun.Switch(_settings.Current.App.HideFromCapture, on =>
+                {
+                    SettingsModel current = _settings.Current;
+                    Write(
+                        current with { App = current.App with { HideFromCapture = on } },
+                        WriteReason.UserAction,
+                        Loc.Tr("UndoHideFromCapture", "changing whether bars appear in screen capture"));
+                    ShowGeneral();
                 }))));
 
         GeneralBody.Children.Add(Braun.Heading("Document", Loc.Tr("CopiesTitle", "Copies")));

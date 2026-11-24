@@ -46,6 +46,12 @@ public sealed record AppSettings
     public bool TrayIcon { get; init; }
 
     /// <summary>
+    /// Whether the bars are left out of screenshots, recordings and screen
+    /// sharing. Off unless asked for.
+    /// </summary>
+    public bool HideFromCapture { get; init; }
+
+    /// <summary>
     /// Whether the program looks for a new version once a day by itself and
     /// puts it in. Off unless asked for: until then it contacts nobody.
     /// </summary>

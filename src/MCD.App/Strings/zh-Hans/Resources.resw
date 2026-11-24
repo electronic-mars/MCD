@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>“无限制”会解除笔记本电脑制造商设定的上限：温度更高、噪声更大，并因发热而降频。</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>屏幕捕获中隐藏栏</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>栏仍显示在你的屏幕上，但不出现在截图、录制和屏幕共享中。</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>更改栏在屏幕捕获中的显示</value>
+  </data>
 </root>

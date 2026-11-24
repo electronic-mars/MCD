@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>«Nessun limite» rimuove il limite impostato dal produttore del portatile: più caldo, più rumoroso e rallentato dal calore.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Nascondi le barre nelle catture dello schermo</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Le barre restano sullo schermo ma vengono escluse da screenshot, registrazioni e condivisione schermo.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>modifica della visibilità delle barre nell'acquisizione schermo</value>
+  </data>
 </root>

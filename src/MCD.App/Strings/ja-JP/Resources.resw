@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>制限なし。ノート PC 製造元が設定した上限を解除すると、発熱とファン音が増え、熱で動作が遅くなります。</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>画面キャプチャ非表示</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>バーは画面に表示されたまま、スクリーンショット、録画、画面共有には含まれません。</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>バーのキャプチャ表示の切り替え</value>
+  </data>
 </root>

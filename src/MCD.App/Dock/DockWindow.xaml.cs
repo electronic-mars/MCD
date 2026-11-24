@@ -1295,6 +1295,7 @@ public sealed partial class DockWindow : Window
     {
         Root.RequestedTheme = context.Theme;
         Palette.Theme = context.Theme;
+        WindowFrame.ExcludeFromCapture(_hwnd, context.HideFromCapture);
 
         if (context.Acrylic)
         {

@@ -2150,4 +2150,13 @@
   <data name="CpuCeilingHint" xml:space="preserve">
     <value>No limit lifts the ceiling the laptop's maker set: hotter, louder, and slowed by the heat.</value>
   </data>
+  <data name="HideFromCaptureLabel" xml:space="preserve">
+    <value>Hide bars from screen capture</value>
+  </data>
+  <data name="HideFromCaptureHint" xml:space="preserve">
+    <value>Bars stay on your screen but are left out of screenshots, recordings and screen sharing.</value>
+  </data>
+  <data name="UndoHideFromCapture" xml:space="preserve">
+    <value>changing whether bars appear in screen capture</value>
+  </data>
 </root>

@@ -507,6 +507,7 @@ public sealed class DockWindowManager : IDisposable
             BackdropImage = app.BackdropImage,
             Theme = Appearance.Of(app.Theme),
             Size = config?.Size ?? app.Size,
+            HideFromCapture = app.HideFromCapture,
         };
     }
 
