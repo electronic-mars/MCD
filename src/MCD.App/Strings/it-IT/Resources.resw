@@ -2130,13 +2130,13 @@
     <value>Queste impostazioni modificano il piano di alimentazione di Windows</value>
   </data>
   <data name="CpuWarning" xml:space="preserve">
-    <value>Restano in vigore quando l'app viene chiusa. Rimuovere un limite di frequenza consente al processore di funzionare al massimo: ventole più rumorose, rallentamento per il calore, scatti. Disattivare il turbo, o limitare un programma ai core E, lo rende più lento. Se qualcosa non funziona, ripristina i valori predefiniti qui sotto. Scegli Normal prima di disinstallare l'app.</value>
+    <value>Restano in vigore anche ad app chiusa. Rimuovere un limite di frequenza lascia scaldare il processore al massimo: ventole più rumorose, rallentamenti per il calore, scatti. Disattivare il turbo o limitare un programma ai core E lo rende più lento. Se qualcosa non va, ripristina le impostazioni predefinite qui sotto. Prima di disinstallare l'app scegli «Normale».</value>
   </data>
   <data name="CpuResetRow" xml:space="preserve">
     <value>Impostazioni predefinite del processore</value>
   </data>
   <data name="CpuResetHint" xml:space="preserve">
-    <value>Normal, piano di alimentazione originale, profili come forniti e nessuna regola per i programmi. Premi Ctrl+Z per annullare.</value>
+    <value>«Normale», piano di alimentazione com'era, profili predefiniti e nessuna regola per i programmi. Premi Ctrl+Z per annullare.</value>
   </data>
   <data name="CpuResetButton" xml:space="preserve">
     <value>Ripristina valori predefiniti</value>
@@ -2148,6 +2148,6 @@
     <value>Modalità prestazioni ottimali di Windows, entro i limiti impostati dal produttore del portatile.</value>
   </data>
   <data name="CpuCeilingHint" xml:space="preserve">
-    <value>Rimuove il limite impostato dal produttore del portatile: più caldo, più rumoroso e rallentato dal calore.</value>
+    <value>«Nessun limite» rimuove il limite impostato dal produttore del portatile: più caldo, più rumoroso e rallentato dal calore.</value>
   </data>
 </root>

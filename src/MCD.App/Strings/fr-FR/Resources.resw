@@ -2148,6 +2148,6 @@
     <value>Mode Meilleures performances de Windows, dans les limites définies par le constructeur de l'ordinateur portable.</value>
   </data>
   <data name="CpuCeilingHint" xml:space="preserve">
-    <value>Aucune limite ne supprime le plafond défini par le constructeur de l'ordinateur portable : plus chaud, plus bruyant, ralenti par la chaleur.</value>
+    <value>« Sans limite » supprime le plafond fixé par le fabricant de l'ordinateur portable : plus chaud, plus bruyant et ralenti par la chaleur.</value>
   </data>
 </root>

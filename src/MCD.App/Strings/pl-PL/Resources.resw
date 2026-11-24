@@ -2148,6 +2148,6 @@
     <value>Najlepszy tryb wydajności systemu Windows, w ramach limitów ustawionych przez producenta laptopa.</value>
   </data>
   <data name="CpuCeilingHint" xml:space="preserve">
-    <value>Brak limitu usuwa ograniczenie ustawione przez producenta laptopa: wyższa temperatura, głośniej, spowolnienie przez ciepło.</value>
+    <value>„Bez limitu” usuwa ograniczenie ustawione przez producenta laptopa: wyższa temperatura, głośniej i spowolnienie od ciepła.</value>
   </data>
 </root>

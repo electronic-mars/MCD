@@ -2148,6 +2148,6 @@
     <value>Windows 최고의 성능 모드이며, 노트북 제조사가 설정한 한도 내에서 적용됩니다.</value>
   </data>
   <data name="CpuCeilingHint" xml:space="preserve">
-    <value>제한이 없으면 노트북 제조사가 설정한 상한이 해제됩니다. 더 뜨거워지고, 더 시끄러우며, 열로 인해 속도가 느려집니다.</value>
+    <value>'제한 없음'은 노트북 제조사가 정한 상한을 해제합니다. 더 뜨겁고 시끄러워지며 열 때문에 느려집니다.</value>
   </data>
 </root>

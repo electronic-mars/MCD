@@ -264,12 +264,16 @@ public sealed class CpuControl : IDisposable
             return;
         }
 
-        SettingsModel current = _settings.Current;
-        ProfileResult result = Profiles.Apply(_plan, values, Cores.Here.Hybrid, current.PlanBefore, Environment.MachineName);
+        ProfileResult result = Profiles.Apply(
+            _plan, values, Cores.Here.Hybrid, _settings.Current.PlanBefore, Environment.MachineName);
 
-        if (SettingsKeys(result.Before) != SettingsKeys(current.PlanBefore))
+        // Onto the settings as they are now, not as they were before the plan
+        // was written: whatever the window committed meanwhile stays.
+        SettingsModel now = _settings.Current;
+
+        if (SettingsKeys(result.Before) != SettingsKeys(now.PlanBefore))
         {
-            _settings.Commit(current with { PlanBefore = result.Before }, WriteReason.PowerPlan);
+            _settings.Commit(now with { PlanBefore = result.Before }, WriteReason.PowerPlan);
         }
 
         _applied = (id, values);

@@ -214,6 +214,15 @@ public sealed class SettingsService : IDisposable
         }
 
         _log.LogInformation("settings.commit reason={Reason}", reason);
+
+        // What the power plan said before a profile changed it is the only
+        // way back to it, and the plan is already changed by now: it goes to
+        // disk at once rather than after the usual pause a crash could fall in.
+        if (reason == WriteReason.PowerPlan)
+        {
+            Flush();
+        }
+
         Changed?.Invoke(this, model);
         return true;
     }
