@@ -1,6 +1,7 @@
 ﻿using Mcd.Core.Processor;
 using Mcd.Core.Settings;
 using Mcd.Interop.Machine;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 
 namespace Mcd.Tests.Processor;
@@ -256,5 +257,34 @@ public sealed class ProfilesTests
         normal.Done.ShouldBeTrue();
         plan.Values.ShouldBe(original);
         plan.Applied.ShouldBe(0);
+    }
+
+    [Fact]
+    public void TheUninstallersPutBackLeavesThePlanAsFoundAndTheRecordEmpty()
+    {
+        var plan = new FakePlan();
+        Dictionary<(Guid, Guid, bool), uint> original = plan.Copy();
+        string dir = Path.Combine(Path.GetTempPath(), "mcd-putback-" + Guid.NewGuid().ToString("N"));
+
+        try
+        {
+            using (var settings = new SettingsService(NullLogger<SettingsService>.Instance, dir))
+            {
+                PlanBackup before = Profiles.Apply(plan, Hot, hybrid: true, new PlanBackup(), Environment.MachineName).Before;
+                settings.Commit(settings.Current with { PlanBefore = before }, WriteReason.PowerPlan);
+
+                CpuControl.PutBack(settings, NullLogger.Instance, plan).ShouldBeTrue();
+            }
+
+            plan.Values.ShouldBe(original);
+            plan.CurrentMode.ShouldBe(PowerPlan.Balanced);
+
+            using var reread = new SettingsService(NullLogger<SettingsService>.Instance, dir);
+            reread.Current.PlanBefore.Values.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
     }
 }

@@ -203,9 +203,17 @@ end;
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
   Data: String;
+  Code: Integer;
 begin
   if CurUninstallStep = usUninstall then
+  begin
     StopRunningCopy;
+    { A processor profile changes the Windows power plan, and the change
+      outlives the program: the program puts the plan back while its files
+      are still here to do it. }
+    if FileExists(ExpandConstant('{app}\{#AppExe}')) then
+      Exec(ExpandConstant('{app}\{#AppExe}'), '--restore-plan', '', SW_HIDE, ewWaitUntilTerminated, Code);
+  end;
 
   { Settings live outside the program folder so that an update does not lose
     them; that also means an uninstall leaves them behind unless we ask. }

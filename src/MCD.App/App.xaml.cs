@@ -78,6 +78,20 @@ public partial class App : Application
             return;
         }
 
+        // The uninstaller's: a profile's changes to the power plan outlive the
+        // program, so they go before it does.
+        if (Environment.GetCommandLineArgs().Skip(1).Any(a => string.Equals(a, "--restore-plan", StringComparison.OrdinalIgnoreCase)))
+        {
+            using (var settings = new SettingsService(loggers.CreateLogger<SettingsService>()))
+            {
+                Mcd.Core.Processor.CpuControl.PutBack(settings, start);
+            }
+
+            _logProvider.Dispose();
+            Exit();
+            return;
+        }
+
         // Started with administrator rights - by an installer that was itself
         // elevated, say - the program would run, but an elevated WinUI program
         // takes no part in drag and drop: nothing from the settings could be

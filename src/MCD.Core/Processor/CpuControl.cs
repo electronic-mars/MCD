@@ -291,6 +291,22 @@ public sealed class CpuControl : IDisposable
         Changed?.Invoke();
     }
 
+    /// <summary>
+    /// Takes every change out of the plan, for an uninstall: once the program
+    /// is gone nothing is left to take it back. The chosen profile stays in
+    /// the settings, so a reinstall that kept them picks it up again.
+    /// </summary>
+    public static bool PutBack(SettingsService settings, ILogger log, IPowerPlan? plan = null)
+    {
+        // Hybrid only matters for a profile's ceilings; there is none here.
+        ProfileResult result = Profiles.Apply(
+            plan ?? new WindowsPlan(), null, hybrid: false, settings.Current.PlanBefore, Environment.MachineName);
+
+        settings.Commit(settings.Current with { PlanBefore = result.Before }, WriteReason.PowerPlan);
+        log.LogInformation("cpu.plan put back done={Done} left={Left}", result.Done, result.Before.Values.Count);
+        return result.Done;
+    }
+
     private static CpuProfile? Values(ProcessorSettings chosen, string id) => id switch
     {
         CpuProfile.Quiet => chosen.Quiet,
