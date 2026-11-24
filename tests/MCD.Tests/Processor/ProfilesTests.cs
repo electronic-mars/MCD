@@ -1,4 +1,4 @@
-using Mcd.Core.Processor;
+﻿using Mcd.Core.Processor;
 using Mcd.Core.Settings;
 using Mcd.Interop.Machine;
 using Shouldly;
@@ -81,6 +81,9 @@ public sealed class ProfilesTests
     private static readonly CpuProfile Quiet = new ProcessorSettings().Quiet;
     private static readonly CpuProfile Max = new ProcessorSettings().Max;
 
+    /// <summary>A profile with every value set, the ceilings lifted: the hardest one to take out again.</summary>
+    private static readonly CpuProfile Hot = new() { Mode = CpuProfile.Performance, Boost = 2, MaxP = 0, MaxE = 0 };
+
     [Fact]
     public void NormalAfterQuietPutsEveryValueBackAndForgetsThem()
     {
@@ -110,7 +113,7 @@ public sealed class ProfilesTests
         var original = plan.Copy();
 
         PlanBackup before = Profiles.Apply(plan, Quiet, hybrid: true, new PlanBackup(), Here).Before;
-        before = Profiles.Apply(plan, Max, hybrid: true, before, Here).Before;
+        before = Profiles.Apply(plan, Hot, hybrid: true, before, Here).Before;
 
         plan.Values[(Balanced, PowerPlan.Boost, true)].ShouldBe(2u);
         plan.Values[(Balanced, PowerPlan.MaxFrequencyFast, true)].ShouldBe(0u);
@@ -128,9 +131,9 @@ public sealed class ProfilesTests
         var plan = new FakePlan();
         var original = plan.Copy();
 
-        PlanBackup before = Profiles.Apply(plan, Max, hybrid: true, new PlanBackup(), Here).Before;
+        PlanBackup before = Profiles.Apply(plan, Hot, hybrid: true, new PlanBackup(), Here).Before;
 
-        // Quiet sets no ceilings, so Max's are taken out on the way in.
+        // Quiet sets no ceilings, so the lifted ones are taken out on the way in.
         Profiles.Apply(plan, Quiet, hybrid: true, before, Here);
 
         plan.Values[(Balanced, PowerPlan.MaxFrequencyFast, true)].ShouldBe(original[(Balanced, PowerPlan.MaxFrequencyFast, true)]);
@@ -207,6 +210,39 @@ public sealed class ProfilesTests
         quiet.Done.ShouldBeTrue();
         quiet.ModeRefused.ShouldBeTrue();
         quiet.Before.Values.ShouldNotContainKey("mode");
+    }
+
+    [Fact]
+    public void MaximumOnlyChoosesThePowerModeAndLeavesTheMakersLimits()
+    {
+        var plan = new FakePlan();
+        var original = plan.Copy();
+
+        ProfileResult max = Profiles.Apply(plan, Max, hybrid: true, new PlanBackup(), Here);
+
+        max.Done.ShouldBeTrue();
+        plan.Values.ShouldBe(original);
+        plan.Applied.ShouldBe(0);
+        plan.CurrentMode.ShouldBe(PowerPlan.Performance);
+    }
+
+    [Fact]
+    public void TheSoftMaximumAfterTheHotOnePutsTheLimitsBackAndKeepsOnlyTheMode()
+    {
+        var plan = new FakePlan();
+        var original = plan.Copy();
+
+        // A plan left as 0.1.24's Maximum left it, then the soft one.
+        PlanBackup before = Profiles.Apply(plan, Hot, hybrid: true, new PlanBackup(), Here).Before;
+        before = Profiles.Apply(plan, Max, hybrid: true, before, Here).Before;
+
+        plan.Values.ShouldBe(original);
+        plan.CurrentMode.ShouldBe(PowerPlan.Performance);
+        before.Values.Keys.ShouldBe(["mode"]);
+
+        Profiles.Apply(plan, null, hybrid: true, before, Here);
+
+        plan.CurrentMode.ShouldBe(PowerPlan.Balanced);
     }
 
     [Fact]

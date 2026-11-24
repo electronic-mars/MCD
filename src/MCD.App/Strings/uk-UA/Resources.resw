@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Два числа замість одного: продуктивні ядра та ефективні.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Профіль процесора</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Тихий</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Холодніше і тише, але повільніше на піку.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Так швидко, як може комп'ютер, і так само гучним.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>зміна профілю процесора</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>видалення {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Ці налаштування змінюють схему живлення Windows</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Вони діють і після закриття додатка. Зняття обмеження частоти дозволяє процесорі гретися максимально: гучні вентилятори, сповільнення через перегрів, підриви. Вимкнення турбо або прив’язка додатка до E-ядр робить його повільнішим. Якщо щось не так, відновіть налаштування за замовчуванням нижче. Перед видаленням додатка оберіть «Нормальний».</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Налаштування процесора за замовчуванням</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>«Нормальний», схема живлення як була, профілі як при установці, без правил для додатків. Натисніть Ctrl+Z, щоб скасувати.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Відновити за замовчуванням</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>відновлення налаштувань процесора за замовчуванням</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Режим найкращої продуктивності Windows в межах обмежень виробника ноутбука.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>«Без обмеження» знімає обмеження виробника ноутбука: більше тепла, гучні вентилятори, сповільнення через перегрів.</value>
   </data>
 </root>

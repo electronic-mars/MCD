@@ -519,10 +519,12 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
     /// <summary>A press opens the last hour of what this widget reads, so it answers the pointer.</summary>
     public override bool Pressable => true;
 
-    /// <summary>
-    /// A press opens the last hour of what this widget reads - and, for the
-    /// processor, the profile it runs under.
-    /// </summary>
+    /// <summary>A press opens the last hour of what this widget reads.</summary>
+    /// <remarks>
+    /// The processor's profiles are not offered here: they change the power
+    /// plan, and that is chosen on the Processor page, next to what each
+    /// profile does and what it can cost - not by a press on the bar.
+    /// </remarks>
     public override Microsoft.UI.Xaml.FrameworkElement? Details()
     {
         List<(string, SensorDescriptor)> lines =
@@ -543,118 +545,7 @@ public sealed class GaugeWidget(WidgetContext context, WidgetConfig entry)
             }
         }
 
-        FrameworkElement? history = lines.Count > 0 ? ReadingHistory.Panel(lines) : null;
-
-        if (Reading.Id != "cpu" || Mcd.Core.Processor.CpuControl.Current is not { } cpu)
-        {
-            return history;
-        }
-
-        var panel = new StackPanel { Spacing = 16, Width = 280 };
-        panel.Children.Add(ProfileSwitch(cpu));
-
-        if (history is not null)
-        {
-            panel.Children.Add(history);
-        }
-
-        return panel;
-    }
-
-    /// <summary>
-    /// The three profiles as three buttons, the chosen one in the accent.
-    /// </summary>
-    /// <remarks>
-    /// Here because this is where somebody looks when the fan is loud or the
-    /// game is slow - one press from the figure that told them.
-    /// </remarks>
-    private static FrameworkElement ProfileSwitch(Mcd.Core.Processor.CpuControl cpu)
-    {
-        var block = new StackPanel { Spacing = 8 };
-
-        block.Children.Add(new TextBlock
-        {
-            Text = Loc.Tr("CpuProfileTitle", "Processor profile"),
-            FontSize = 13,
-        });
-
-        var keys = new Grid { ColumnSpacing = 6 };
-        var buttons = new List<Button>();
-
-        (string Id, string Name)[] profiles =
-        [
-            (CpuProfile.Quiet, Loc.Tr("CpuProfileQuiet", "Quiet")),
-            (CpuProfile.Normal, Loc.Tr("CpuProfileNormal", "Normal")),
-            (CpuProfile.Max, Loc.Tr("CpuProfileMax", "Maximum")),
-        ];
-
-        void Paint(string chosen)
-        {
-            for (int i = 0; i < buttons.Count; i++)
-            {
-                buttons[i].Style = profiles[i].Id == chosen
-                    ? (Style)Application.Current.Resources["AccentButtonStyle"]
-                    : null;
-            }
-        }
-
-        foreach ((string id, string name) in profiles)
-        {
-            keys.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
-            // A third of the panel is narrow for some languages' names: the
-            // padding gives the text what room there is, and a name still too
-            // long is drawn a little smaller rather than cut short.
-            var button = new Button
-            {
-                Content = new Viewbox
-                {
-                    StretchDirection = StretchDirection.DownOnly,
-                    Child = new TextBlock { Text = name },
-                },
-                Padding = new Thickness(4, 5, 4, 6),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-            };
-
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(button, name);
-
-            button.Click += (_, _) =>
-            {
-                cpu.Choose(id, Loc.Tr("UndoCpuProfile", "switching the processor profile"));
-                Paint(id);
-            };
-
-            Grid.SetColumn(button, buttons.Count);
-            keys.Children.Add(button);
-            buttons.Add(button);
-        }
-
-        Paint(cpu.Chosen);
-        block.Children.Add(keys);
-
-        // A running program's profile wins over the chosen one, and the
-        // panel says so rather than looking as if the press did nothing.
-        string? note = cpu.Because is { } program
-            ? string.Format(
-                System.Globalization.CultureInfo.CurrentCulture,
-                Loc.Tr("CpuProfileBecause", "While {0} runs, its own profile is in force."),
-                program)
-            : cpu.Refusing
-                ? Loc.Tr("CpuProfileRefused", "Windows did not accept every setting of this profile.")
-                : null;
-
-        if (note is not null)
-        {
-            block.Children.Add(new TextBlock
-            {
-                Text = note,
-                FontSize = 12,
-                Opacity = 0.8,
-                TextWrapping = TextWrapping.Wrap,
-            });
-        }
-
-        return block;
+        return lines.Count > 0 ? ReadingHistory.Panel(lines) : null;
     }
 }
 

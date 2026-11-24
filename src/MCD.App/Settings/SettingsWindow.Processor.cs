@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Mcd.App.Widgets;
 using Mcd.Core.Processor;
 using Mcd.Core.Settings;
@@ -34,6 +34,19 @@ public sealed partial class SettingsWindow
         CpuControl? cpu = CpuControl.Current;
         bool hybrid = Cores.Here.Hybrid;
         (string Id, string Name)[] profiles = ProfileNames();
+
+        // What these settings reach, said before any of them: they outlive
+        // the app, and a wrong one is felt as heat, noise or a slow machine.
+        ProcessorBody.Children.Add(new InfoBar
+        {
+            Severity = InfoBarSeverity.Warning,
+            IsOpen = true,
+            IsClosable = false,
+            Title = Loc.Tr("CpuWarningTitle", "These settings change the Windows power plan"),
+            Message = Loc.Tr(
+                "CpuWarning",
+                "They stay in force when the app is closed. Lifting a frequency limit lets the processor run as hot as it can: louder fans, slowing down from the heat, stutters. Turning the turbo off, or keeping a program to the E-cores, makes it slower. If something feels wrong, restore the defaults below. Choose Normal before uninstalling the app."),
+        });
 
         ProcessorBody.Children.Add(Braun.Heading("Cpu", Loc.Tr("CpuProfilesGroup", "Profile")));
 
@@ -82,7 +95,16 @@ public sealed partial class SettingsWindow
                         i => ChangeCpu(
                             c => c with { OnMains = i == 0 ? string.Empty : profiles[i - 1].Id },
                             Loc.Tr("UndoCpuFollow", "changing when the profile switches"))))
-                : null));
+                : null,
+            Braun.Row(
+                Loc.Tr("CpuResetRow", "Default processor settings"),
+                Loc.Tr(
+                    "CpuResetHint",
+                    "Normal, the power plan as it was, the profiles as shipped and no program rules. Press Ctrl+Z to undo."),
+                Braun.Action(
+                    Loc.Tr("CpuResetButton", "Restore defaults"),
+                    () => ChangeCpu(_ => new ProcessorSettings(), Loc.Tr("UndoCpuReset", "restoring the processor defaults")),
+                    "Undo"))));
 
         ProfileEditor(
             Loc.Tr("CpuProfileQuiet", "Quiet"),
@@ -93,7 +115,7 @@ public sealed partial class SettingsWindow
 
         ProfileEditor(
             Loc.Tr("CpuProfileMax", "Maximum"),
-            Loc.Tr("CpuMaxHint", "As fast as the machine goes, and as loud."),
+            Loc.Tr("CpuMaxSoftHint", "Windows' best performance mode, within the limits the laptop's maker set."),
             chosen.Max,
             hybrid,
             values => ChangeCpu(c => c with { Max = values }, Loc.Tr("UndoCpuEdit", "changing a processor profile")));
@@ -117,7 +139,9 @@ public sealed partial class SettingsWindow
             Loc.Tr("CpuModePerformance", "Best performance"),
         ];
 
-        int[] boosts = [0, 2];
+        // On is the turbo as Windows ordinarily runs it (1), not the keenest
+        // setting (2), which the maker's own plan does not use either.
+        int[] boosts = [0, 1];
         string[] boostNames = [asIs, Loc.Tr("CpuBoostOff", "Off"), Loc.Tr("CpuBoostOn", "On")];
 
         ProcessorBody.Children.Add(Braun.Group(
@@ -134,19 +158,20 @@ public sealed partial class SettingsWindow
                 Loc.Tr("CpuBoostHint", "Off keeps the processor at its base speed: the coolest and the slowest."),
                 Braun.Choice(
                     boostNames,
-                    Array.IndexOf(boosts, values.Boost) + 1,
+                    values.Boost switch { 0 => 1, > 0 => 2, _ => 0 },
                     i => set(values with { Boost = i == 0 ? -1 : boosts[i - 1] }))),
             Ceiling(
                 hybrid ? Loc.Tr("CpuMaxP", "P-cores up to") : Loc.Tr("CpuMaxAll", "Cores up to"),
+                Loc.Tr("CpuCeilingHint", "No limit lifts the ceiling the laptop's maker set: hotter, louder, and slowed by the heat."),
                 values.MaxP,
                 v => set(values with { MaxP = v })),
             hybrid
-                ? Ceiling(Loc.Tr("CpuMaxE", "E-cores up to"), values.MaxE, v => set(values with { MaxE = v }))
+                ? Ceiling(Loc.Tr("CpuMaxE", "E-cores up to"), null, values.MaxE, v => set(values with { MaxE = v }))
                 : null));
     }
 
     /// <summary>A frequency ceiling: as Windows has it, none, or one of the offered speeds.</summary>
-    private static Grid Ceiling(string name, int value, Action<int> set)
+    private static Grid Ceiling(string name, string? hint, int value, Action<int> set)
     {
         // A value from the file that is not one of the offered ones is
         // offered too, rather than shown as nothing.
@@ -160,7 +185,7 @@ public sealed partial class SettingsWindow
             .. speeds.Select(v => Readable.Value(v / 1000.0, "GHz")),
         ];
 
-        return Braun.Row(name, null, Braun.Choice(names, Array.IndexOf(all, value), i => set(all[i])));
+        return Braun.Row(name, hint, Braun.Choice(names, Array.IndexOf(all, value), i => set(all[i])));
     }
 
     private void ShowPrograms(ProcessorSettings chosen, CpuControl? cpu, bool hybrid, (string Id, string Name)[] profiles)

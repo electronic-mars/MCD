@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Zwei Werte statt einem: P-Kerne und E-Kerne.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Prozessorprofil</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Leise</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Kühler und leiser, langsamer bei maximaler Last.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>So schnell wie möglich, und so laut.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>Änderung des Prozessorsprofils</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>Entfernen von {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Diese Einstellungen ändern den Windows-Energieplan</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Diese Einstellungen bleiben auch nach dem Schließen der App aktiv. Das Aufheben eines Frequenzlimits lässt den Prozessor so heiß laufen wie möglich: lautere Lüfter, Drosselung durch Hitze, Ruckler. Das Deaktivieren des Turbos oder das Festlegen eines Programms auf die E-Kerne macht es langsamer. Wenn etwas nicht stimmt, stellen Sie die Standardeinstellungen unten wieder her. Wählen Sie Normal, bevor Sie die App deinstallieren.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Standardeinstellungen des Prozessors</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normal, der Energieplan wie zuvor, die Profile wie ausgeliefert und keine Programmregeln. Drücken Sie Ctrl+Z, um dies rückgängig zu machen.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Auf Standard zurücksetzen</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>Wiederherstellen der Prozessorstandardeinstellungen</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows' bester Leistungsmodus innerhalb der vom Laptop-Hersteller festgelegten Grenzen.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>Kein Limit hebt die vom Laptop-Hersteller festgelegte Obergrenze auf: heißer, lauter, durch Hitze verlangsamt.</value>
   </data>
 </root>

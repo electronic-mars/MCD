@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>하나 대신 두 개 표시: 성능 코어와 효율 코어</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>프로세서 프로파일</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>조용함</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>최고 성능 시 속도가 느려지고 온도와 소음이 낮습니다.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>최대 속도로 작동하며 소음도 가장 큽니다.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>프로세서 프로필 변경</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>{0} 제거</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>이 설정은 Windows 전원 계획을 변경합니다</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>앱을 닫아도 계속 적용됩니다. 주파수 제한을 해제하면 프로세서가 가능한 한 뜨겁게 작동합니다. 팬 소음이 커지고, 열로 인해 속도가 느려지며, 끊김이 발생합니다. 터보를 끄거나 프로그램을 E 코어에 고정하면 속도가 느려집니다. 문제가 있으면 아래의 기본값을 복원하세요. 앱을 제거하기 전에 보통을 선택하세요.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>기본 프로세서 설정</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>보통, 이전 전원 계획, 출하 시 프로필, 프로그램 규칙 없음. Ctrl+Z를 눌러 실행 취소합니다.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>기본값 복원</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>프로세서 기본값 복원</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows 최고의 성능 모드이며, 노트북 제조사가 설정한 한도 내에서 적용됩니다.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>제한이 없으면 노트북 제조사가 설정한 상한이 해제됩니다. 더 뜨거워지고, 더 시끄러우며, 열로 인해 속도가 느려집니다.</value>
   </data>
 </root>

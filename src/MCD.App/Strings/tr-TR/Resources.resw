@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Bir yerine iki sayı: performans çekirdekleri ve etkin olanlar.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>İşlemci profili</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Sessiz</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Daha serin ve sessiz, yüksek hızda daha yavaş.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Maksimum hızda ve en yüksek ses seviyesinde.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>İşlemci profilini değiştirme</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>{0} kaldırma</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Bu ayarlar Windows güç planını değiştirir</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Uygulama kapatıldığında geçerliliğini korur. Frekans sınırının kaldırılması işlemcinin ısıya dayanabildiği kadar sıcak çalışmasına izin verir: daha yüksek fan gürültüsü, ısından yavaşlama, donmalar. Turbo kapatılması veya bir programın E-çekirdeklerinde tutulması onu yavaşlatır. Bir şey yanlış hissederseniz aşağıdaki varsayılanları geri yükleyin. Uygulamayı kaldırmadan önce Normal'i seçin.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>İşlemci varsayılan ayarları</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normal, önceki güç planı, fabrika ayarlarıyla gelen profiller ve hiçbir program kuralı yok. Geri almak için Ctrl+Z'ye basın.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Varsayılanları geri yükle</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>İşlemci varsayılanlarını geri yükleme</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows'ın en iyi performans modu, dizüstü bilgisayar üreticisinin belirlediği sınırlar içinde.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>Sınır yok: dizüstü bilgisayar üreticisinin belirlediği üst sınır kaldırılıyor, daha sıcak, daha sesli ve ısından yavaşlar.</value>
   </data>
 </root>

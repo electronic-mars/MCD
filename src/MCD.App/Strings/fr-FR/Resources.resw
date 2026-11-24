@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Deux chiffres au lieu d'un : les cœurs de performance et les cœurs efficaces.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Profil du processeur</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Silencieux</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Plus frais et silencieux, mais plus lent à pleine charge.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Vitesse maximale, et aussi bruyant que possible.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>modification d'un profil de processeur</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>suppression de {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Ces paramètres modifient le schéma d'alimentation Windows</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Ils restent en vigueur lorsque l'application est fermée. Supprimer une limite de fréquence permet au processeur de monter en température autant qu'il le peut : ventilateurs plus bruyants, ralentissement dû à la chaleur, saccades. Désactiver le turbo, ou maintenir un programme sur les cœurs E, le rend plus lent. Si quelque chose ne fonctionne pas correctement, restaurez les valeurs par défaut ci-dessous. Choisissez Normal avant de désinstaller l'application.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Paramètres par défaut du processeur</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normal, le schéma d'alimentation tel qu'il était, les profils d'origine et aucune règle d'application. Appuyez sur Ctrl+Z pour annuler.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Restaurer les valeurs par défaut</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>restauration des valeurs par défaut du processeur</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Mode Meilleures performances de Windows, dans les limites définies par le constructeur de l'ordinateur portable.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>Aucune limite ne supprime le plafond défini par le constructeur de l'ordinateur portable : plus chaud, plus bruyant, ralenti par la chaleur.</value>
   </data>
 </root>

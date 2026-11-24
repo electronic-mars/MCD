@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>1 つの数値ではなく 2 つ: パフォーマンス コアと効率コア。</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>プロセッサー プロファイル</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>静音</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>静かで涼しく、最高速度は遅くなります。</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>最大速度で動作し、騒音も大きくなります。</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>プロセッサプロファイルの変更</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>{0}を削除</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>これらの設定は Windows の電源プランを変更します</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>アプリを閉じても設定は有効のままです。周波数制限を解除すると、プロセッサは可能な限り高温で動作し、ファンの騒音が大きくなり、発熱による動作低下やカクつきが発生することがあります。ターボをオフにするか、プログラムを Eコアに限定すると、動作が遅くなります。何か異常を感じた場合は、以下の既定値に戻してください。アプリをアンインストールする前に、標準を選択してください。</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>プロセッサの既定設定</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>標準、以前の電源プラン、出荷時のプロファイル、プログラム ルールなし。Ctrl+Z を押すと元に戻せます。</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>既定値に戻す</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>プロセッサ既定値の復元</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows の最適なパフォーマンス モードです。ノート PC 製造元が設定した制限範囲内です。</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>制限なし。ノート PC 製造元が設定した上限を解除すると、発熱とファン音が増え、熱で動作が遅くなります。</value>
   </data>
 </root>

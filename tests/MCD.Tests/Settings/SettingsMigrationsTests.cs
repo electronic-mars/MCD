@@ -332,4 +332,22 @@ public sealed class SettingsMigrationsTests
         after[0].Widgets.Select(w => w.TypeId).ShouldBe(["mcd.media", "mcd.settings"]);
         after[1].Widgets.Count(w => w.TypeId == "mcd.settings").ShouldBe(1);
     }
+
+    [Fact]
+    public void TheHotMaximumOfZeroOneTwentyFourBecomesTheSoftOne()
+    {
+        var hot = new CpuProfile { Mode = CpuProfile.Performance, Boost = 2, MaxP = 0, MaxE = 0 };
+        var old = new SettingsModel { SchemaVersion = 9, Processor = new ProcessorSettings { Max = hot } };
+
+        SettingsMigrations.Apply(old, NullLogger.Instance).Processor.Max.ShouldBe(new ProcessorSettings().Max);
+    }
+
+    [Fact]
+    public void AMaximumSomebodyEditedIsTheirsAndStays()
+    {
+        var own = new CpuProfile { Mode = CpuProfile.Performance, Boost = 2, MaxP = 4500, MaxE = 0 };
+        var old = new SettingsModel { SchemaVersion = 9, Processor = new ProcessorSettings { Max = own } };
+
+        SettingsMigrations.Apply(old, NullLogger.Instance).Processor.Max.ShouldBe(own);
+    }
 }

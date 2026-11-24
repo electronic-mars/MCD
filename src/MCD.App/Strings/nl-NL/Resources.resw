@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Twee cijfers in plaats van één: de prestatiekernen en de efficiënte kernen.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Processorprofiel</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Stil</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Koeler en stiller, langzamer bij maximale belasting.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Zo snel als de pc kan, en even luid.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>wijzigen van een processorprofiel</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>verwijderen van {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Deze instellingen wijzigen het Windows-energieplan</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Ze blijven van kracht als de app wordt gesloten. Een frequentielimiet opheffen laat de processor zo heet draaien als hij kan: luider ventilatoren, vertraging door hitte, haperingen. De turbo uitzetten, of een programma beperken tot de E-kernen, maakt het langzamer. Als iets niet goed werkt, herstel dan de standaardinstellingen hieronder. Kies Normaal voordat u de app verwijdert.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Standaardprocessorinstellingen</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normaal, het energieplan zoals het was, de profielen zoals geleverd en geen programmaregels. Druk op Ctrl+Z om ongedaan te maken.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Standaardinstellingen herstellen</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>herstellen van standaardprocessorinstellingen</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows' beste prestatiemodus, binnen de limieten die de laptopfabrikant heeft ingesteld.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>Geen limiet verhoogt het plafond dat de laptopfabrikant heeft ingesteld: heter, luider en vertraagd door de hitte.</value>
   </data>
 </root>

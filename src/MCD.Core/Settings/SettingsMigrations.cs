@@ -34,6 +34,7 @@ public static class SettingsMigrations
                 6 => ToSeven(current),
                 7 => ToEight(current),
                 8 => ToNine(current),
+                9 => ToTen(current),
                 _ => current with { SchemaVersion = SettingsDefaults.SchemaVersion },
             };
 
@@ -206,6 +207,31 @@ public static class SettingsMigrations
         SchemaVersion = 9,
         Monitors = [.. model.Monitors.Select(WithTheDoor)],
     };
+
+    /// <summary>
+    /// Version 10 makes the Maximum profile the soft one.
+    /// </summary>
+    /// <remarks>
+    /// 0.1.24 shipped a Maximum that lifted the laptop maker's frequency
+    /// ceilings and set the keenest turbo; on an i9-14900HX that took the
+    /// processor to its 100 °C limit in seconds, and the machine stuttered as
+    /// it throttled. That version wrote the profile into every settings file
+    /// on its first start, so a new default alone would never reach them: a
+    /// Maximum still exactly as 0.1.24 left it is replaced. One somebody
+    /// changed by hand is theirs, and stays.
+    /// </remarks>
+    private static SettingsModel ToTen(SettingsModel model)
+    {
+        var hot = new CpuProfile { Mode = CpuProfile.Performance, Boost = 2, MaxP = 0, MaxE = 0 };
+
+        return model with
+        {
+            SchemaVersion = 10,
+            Processor = model.Processor.Max == hot
+                ? model.Processor with { Max = new ProcessorSettings().Max }
+                : model.Processor,
+        };
+    }
 
     private static MonitorConfig WithTheDoor(MonitorConfig monitor) =>
         monitor.Widgets.Any(w => w.TypeId == "mcd.settings")

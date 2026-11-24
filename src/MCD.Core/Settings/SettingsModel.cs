@@ -487,13 +487,15 @@ public sealed record ProcessorSettings
         Boost = 0,
     };
 
-    /// <summary>As fast as the machine goes: the turbo at its keenest and no ceilings.</summary>
+    /// <summary>
+    /// Faster within the machine's own limits: Windows' "Best performance"
+    /// mode, and nothing else. The turbo and the frequency ceilings stay as
+    /// the maker set them - those ceilings are what keeps a laptop's processor
+    /// within what its cooling can carry.
+    /// </summary>
     public CpuProfile Max { get; init; } = new()
     {
         Mode = CpuProfile.Performance,
-        Boost = 2,
-        MaxP = 0,
-        MaxE = 0,
     };
 
     /// <summary>Programs with a kind of core or a profile of their own.</summary>
@@ -517,7 +519,7 @@ public sealed record CpuProfile
     /// <summary>The Windows power mode - efficiency, balanced, performance - or empty to leave it.</summary>
     public string Mode { get; init; } = string.Empty;
 
-    /// <summary>The turbo: 0 off, 2 on and keen, -1 as Windows has it.</summary>
+    /// <summary>The turbo: 0 off, 1 on, -1 as Windows has it. (2, the keenest, is honoured if found.)</summary>
     public int Boost { get; init; } = -1;
 
     /// <summary>

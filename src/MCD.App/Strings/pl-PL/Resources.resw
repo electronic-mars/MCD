@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Dwie wartości zamiast jednej: dla rdzeni wydajnościowych i efektywnościowych.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Profil procesora</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Cichy</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Chłodniej i ciszej, wolniej w szczycie.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Maksymalna prędkość, maksymalny hałas.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>zmiana profilu procesora</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>usunięcie {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Te ustawienia zmieniają plan zasilania systemu Windows</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Pozostają w mocy po zamknięciu aplikacji. Zdjęcie limitu częstotliwości pozwala procesorowi pracować przy maksymalnej temperaturze: głośniejsze wentylatory, spowolnienie przez ciepło, zacięcia. Wyłączenie trybu Turbo lub ograniczenie programu do rdzeni E sprawia, że działa wolniej. Jeśli coś nie działa poprawnie, przywróć ustawienia domyślne poniżej. Wybierz Normalny przed odinstalowaniem aplikacji.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Domyślne ustawienia procesora</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normalny, plan zasilania jak wcześniej, profile fabryczne i brak reguł programów. Naciśnij Ctrl+Z, aby cofnąć.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Przywróć ustawienia domyślne</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>przywracanie ustawień domyślnych procesora</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Najlepszy tryb wydajności systemu Windows, w ramach limitów ustawionych przez producenta laptopa.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>Brak limitu usuwa ograniczenie ustawione przez producenta laptopa: wyższa temperatura, głośniej, spowolnienie przez ciepło.</value>
   </data>
 </root>

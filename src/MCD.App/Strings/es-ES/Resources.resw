@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Dos cifras en lugar de una: los núcleos de rendimiento y los de eficiencia.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Perfil del procesador</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Silencioso</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Más fresco y silencioso, más lento en su punto máximo.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Tan rápido como la máquina lo permite, y tan ruidoso.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>cambio de perfil de procesador</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>quitar {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Esta configuración cambia el plan de energía de Windows</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Siguen vigentes al cerrar la app. Quitar un límite de frecuencia permite que el procesador funcione a su temperatura máxima: ventiladores más ruidosos, ralentización por el calor y tirones. Desactivar el turbo, o limitar un programa a los núcleos E, lo hace más lento. Si algo va mal, restaura los valores predeterminados de abajo. Elige Normal antes de desinstalar la app.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Configuración predeterminada del procesador</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normal, el plan de energía tal como estaba, los perfiles tal como venían y sin reglas de programa. Presiona Ctrl+Z para deshacer.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Restablecer predeterminados</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>restaurando los valores predeterminados del procesador</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Modo de mejor rendimiento de Windows, dentro de los límites que estableció el fabricante del portátil.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>Sin límite se elimina el tope que estableció el fabricante del portátil: más temperatura, más ruido y ralentización por el calor.</value>
   </data>
 </root>

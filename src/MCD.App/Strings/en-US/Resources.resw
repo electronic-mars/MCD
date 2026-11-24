@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Two figures instead of one: the performance cores and the efficient ones.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Processor profile</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Quiet</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Cooler and quieter, slower at its peak.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>As fast as the machine goes, and as loud.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>changing a processor profile</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>removing {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>These settings change the Windows power plan</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>They stay in force when the app is closed. Lifting a frequency limit lets the processor run as hot as it can: louder fans, slowing down from the heat, stutters. Turning the turbo off, or keeping a program to the E-cores, makes it slower. If something feels wrong, restore the defaults below. Choose Normal before uninstalling the app.</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Default processor settings</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>Normal, the power plan as it was, the profiles as shipped and no program rules. Press Ctrl+Z to undo.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Restore defaults</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>restoring the processor defaults</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows' best performance mode, within the limits the laptop's maker set.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>No limit lifts the ceiling the laptop's maker set: hotter, louder, and slowed by the heat.</value>
   </data>
 </root>

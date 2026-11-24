@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>Два числа вместо одного: производительные ядра и энергоэффективные.</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>Профиль процессора</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>Тихий</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>Холоднее и тише, но медленнее на пике.</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>Так быстро, как может машина, — и так же громко.</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>изменение профиля процессора</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>удаление: {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>Эти настройки меняют план электропитания Windows</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>Они действуют и при закрытой программе. Снятый предел частоты даёт процессору греться до предела: громче вентиляторы, процессор сбрасывает частоту от перегрева, система подтормаживает. Выключенный турбо или программа только на E-ядрах работают медленнее. Если что-то не так, верните настройки по умолчанию ниже. Перед удалением программы выберите «Обычный».</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>Настройки процессора по умолчанию</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>«Обычный», план электропитания как был, профили как при установке, без правил для программ. Ctrl+Z отменяет сброс.</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>сброс настроек процессора</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Режим «Лучшая производительность» Windows в пределах, заданных производителем ноутбука.</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>«Без ограничения» снимает предел производителя ноутбука: горячее, громче и медленнее от перегрева.</value>
   </data>
 </root>

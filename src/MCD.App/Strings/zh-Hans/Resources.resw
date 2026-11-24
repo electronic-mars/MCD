@@ -1994,9 +1994,6 @@
   <data name="GaugeShowCoresHint" xml:space="preserve">
     <value>显示两个数值而非一个：性能核心和能效核心。</value>
   </data>
-  <data name="CpuProfileTitle" xml:space="preserve">
-    <value>处理器配置文件</value>
-  </data>
   <data name="CpuProfileQuiet" xml:space="preserve">
     <value>安静</value>
   </data>
@@ -2044,9 +2041,6 @@
   </data>
   <data name="CpuQuietHint" xml:space="preserve">
     <value>温度更低、噪音更小，峰值速度更慢。</value>
-  </data>
-  <data name="CpuMaxHint" xml:space="preserve">
-    <value>以最大速度运行，噪音最大。</value>
   </data>
   <data name="UndoCpuEdit" xml:space="preserve">
     <value>更改处理器配置文件</value>
@@ -2131,5 +2125,29 @@
   </data>
   <data name="UndoCpuProgramRemoved" xml:space="preserve">
     <value>移除 {0}</value>
+  </data>
+  <data name="CpuWarningTitle" xml:space="preserve">
+    <value>这些设置更改 Windows 电源计划</value>
+  </data>
+  <data name="CpuWarning" xml:space="preserve">
+    <value>关闭应用后这些设置仍然生效。解除频率限制会让处理器尽可能高温运行：风扇噪声变大、因发热而降频、出现卡顿。关闭睿频，或将程序限制在 E 核心上运行，会使其变慢。如果感觉有问题，请恢复下面的默认设置。卸载应用前请选择“正常”。</value>
+  </data>
+  <data name="CpuResetRow" xml:space="preserve">
+    <value>默认处理器设置</value>
+  </data>
+  <data name="CpuResetHint" xml:space="preserve">
+    <value>“正常”，电源计划恢复原状，配置文件恢复出厂设置，且无程序规则。按 Ctrl+Z 撤销。</value>
+  </data>
+  <data name="CpuResetButton" xml:space="preserve">
+    <value>恢复默认设置</value>
+  </data>
+  <data name="UndoCpuReset" xml:space="preserve">
+    <value>恢复处理器默认设置</value>
+  </data>
+  <data name="CpuMaxSoftHint" xml:space="preserve">
+    <value>Windows 最佳性能模式，在笔记本电脑制造商设定的限制范围内。</value>
+  </data>
+  <data name="CpuCeilingHint" xml:space="preserve">
+    <value>“无限制”会解除笔记本电脑制造商设定的上限：温度更高、噪声更大，并因发热而降频。</value>
   </data>
 </root>
